@@ -21,6 +21,9 @@
   bd is unavailable; upstream issue records untouched.
 - Created the persistent documentation baseline, including roadmap/approval
   policy. No application source, schema or machining behavior changed.
+- Baseline commit `15b3d58667599af5a4e445d3cc52c0ae1b7d702a` pushed to the feature
+  branch; separate handoff commit records its SHA in STATUS. HTTPS push used
+  gh's credential helper transiently; no global Git config changed.
 - M0 commit/push state is recorded in STATUS. No PR, default-branch merge, M1
   qualification, ShopBot implementation or waterjet implementation authorized.
 
