@@ -1575,13 +1575,19 @@ mod tests {
                 (dx_out * dx_out + dy_out * dy_out).sqrt()
             }
         };
-        // Find vertices near the island wall (< 2·tool_r away on the
-        // outside) — these are the first ring around the island.
+        // First island ring is nominally 2·tool_r away here. Include
+        // the bounded conservative padding from both inflation stages;
+        // a strict < 2·tool_r gate relied on inscribed chords undercutting
+        // their requested radius. Check ALL vertices for intrusion first.
         let mut near: Vec<f64> = Vec::new();
         for ring in &rings {
             for pt in ring {
                 let d = dist_to_raw(*pt);
-                if (0.0..2.0 * tool_r).contains(&d) {
+                assert!(
+                    d >= tool_r - 0.05,
+                    "cascade vertex intrudes into island: {pt:?}, distance {d}"
+                );
+                if (0.0..2.0 * tool_r + 0.01).contains(&d) {
                     near.push(d);
                 }
             }

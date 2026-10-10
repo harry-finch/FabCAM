@@ -153,6 +153,32 @@ impl BBox {
         for s in segments {
             bbox.extend_point(s.start);
             bbox.extend_point(s.end);
+            // Endpoints alone miss the extrema of arcs (and give two
+            // semicircles a zero-height bounding box). Include only cardinal
+            // points on this signed sweep, not the entire supporting circle.
+            if matches!(s.kind, SegmentKind::Arc | SegmentKind::Circle) && s.bulge.abs() >= 1e-12 {
+                let (center, start, _, radius) = crate::math::bulge_to_arc(s.start, s.end, s.bulge);
+                let sweep = 4.0 * s.bulge.atan();
+                for angle in [
+                    0.0,
+                    std::f64::consts::FRAC_PI_2,
+                    std::f64::consts::PI,
+                    3.0 * std::f64::consts::FRAC_PI_2,
+                ] {
+                    let distance = if sweep > 0.0 {
+                        (angle - start).rem_euclid(std::f64::consts::TAU)
+                    } else {
+                        (start - angle).rem_euclid(std::f64::consts::TAU)
+                    };
+                    // Angular roundoff only; no dimensional/topology tolerance.
+                    if distance <= sweep.abs() + 1e-12 {
+                        bbox.extend_point(Point2::new(
+                            center.x + radius * angle.cos(),
+                            center.y + radius * angle.sin(),
+                        ));
+                    }
+                }
+            }
         }
         if !bbox.is_finite() {
             // No segments / all rejected. Mimic the Python default 0,0–10,10.
@@ -301,5 +327,49 @@ mod tests {
         assert_eq!(bbox.min_x, -3.0);
         assert_eq!(bbox.max_x, 1.0);
         assert_eq!(bbox.max_y, 4.0);
+    }
+
+    #[test]
+    fn arc_bounds_include_extrema_without_expanding_to_full_circle() {
+        let q = std::f64::consts::FRAC_1_SQRT_2;
+        for (a, b, bulge) in [
+            (
+                Point2::new(q, q),
+                Point2::new(-q, q),
+                (std::f64::consts::PI / 8.0).tan(),
+            ),
+            (
+                Point2::new(-q, q),
+                Point2::new(q, q),
+                -(std::f64::consts::PI / 8.0).tan(),
+            ),
+        ] {
+            let bbox = BBox::from_segments(&[Segment::arc(a, b, bulge, None, "0", 7)]);
+            assert!((bbox.max_y - 1.0).abs() < 1e-12);
+            assert!((bbox.min_y - q).abs() < 1e-12);
+            assert!((bbox.max_x - q).abs() < 1e-12);
+            assert!((bbox.min_x + q).abs() < 1e-12);
+        }
+    }
+
+    #[test]
+    fn major_arc_bounds_include_all_cardinal_extrema() {
+        let arc = Segment::arc(
+            Point2::new(1.0, 0.0),
+            Point2::new(0.0, -1.0),
+            (3.0 * std::f64::consts::PI / 8.0).tan(),
+            None,
+            "0",
+            7,
+        );
+        let bbox = BBox::from_segments(&[arc]);
+        for (actual, expected) in [
+            (bbox.min_x, -1.0),
+            (bbox.min_y, -1.0),
+            (bbox.max_x, 1.0),
+            (bbox.max_y, 1.0),
+        ] {
+            assert!((actual - expected).abs() < 1e-12);
+        }
     }
 }

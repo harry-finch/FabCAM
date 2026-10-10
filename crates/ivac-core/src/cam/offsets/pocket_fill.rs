@@ -608,6 +608,13 @@ pub fn pocket_for_object(
     // The caller passes the step (typically tool_diameter * (1 - overlap));
     // we clamp to a safe minimum so a 100% overlap doesn't loop forever.
     let step = xy_step.max(tool_radius * 0.05);
+    // Treat stepover as an upper bound. A cascade step above the cutter
+    // radius can collapse the final inner ring while leaving a residual
+    // strip wider than the cutter diameter (e.g. an 8 mm strip at a
+    // requested 4.5 mm step with a 6 mm tool). The radius cap makes the
+    // final collapsed strip coverable from the preceding ring. Raster
+    // strategies retain the requested stride.
+    let cascade_step = step.min(tool_radius);
     // Islands handed in are already inflated by tool_radius
     // (cutter-centerline safe boundary). When the cascade per-pass step
     // is SMALLER than tool_radius (high overlap, e.g. 80% engagement ⇒
@@ -619,7 +626,7 @@ pub fn pocket_for_object(
     // /trochoidal stay on the bare inflation; zigzag's per-row
     // inset is already tool_r and trochoidal's loop disc enforces its
     // own engagement bound.
-    let cascade_islands = over_inflate_islands_for_high_overlap(islands, tool_radius, step);
+    let cascade_islands = over_inflate_islands_for_high_overlap(islands, tool_radius, cascade_step);
     for offset in &boundary {
         if !nocontour {
             // When there's no XY allowance AND no dual-tool finish,
@@ -700,7 +707,7 @@ pub fn pocket_for_object(
                 let rings = crate::cam::geometry_cache::pocket_cascade_with_islands_cached(
                     &pts,
                     &cascade_islands,
-                    step,
+                    cascade_step,
                 );
                 if rings.is_empty() {
                     continue;
@@ -784,7 +791,7 @@ pub fn pocket_for_object(
         let rings = crate::cam::geometry_cache::pocket_cascade_with_islands_cached(
             &pts,
             &cascade_islands,
-            step,
+            cascade_step,
         );
         // No silent fallback to zigzag here: the user picked cascade or
         // spiral explicitly, and substituting zigzag when no ring fits

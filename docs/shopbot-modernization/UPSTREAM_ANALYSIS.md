@@ -61,3 +61,20 @@ instructions describe upstream context and conflict in places. The user's M0
 authorization and fork policy control this work: feature branch, authorized M0
 push, no merge or PR. `bd prime` was attempted but bd is unavailable. Upstream
 Beads records were left untouched; their current issue state was not verified.
+
+
+## M1 fork delta
+
+Imports and milling remain KEEP with targeted corrections, not replacements.
+The fork now changes `geometry.rs` (arc extrema bounds),
+`cam/offsets/parallel.rs` (conservative island join clearance),
+`cam/offsets/pocket_fill.rs` (cascade/spiral ring stride cap), and the existing
+island test in `cam/offsets/mod.rs`. New qualification integration tests and
+16 SVG/DXF fixtures document regressions. No model/schema/dependency change.
+These four upstream files may conflict during future synchronization: preserve
+or rerun the independent M1 invariants when incorporating upstream fixes.
+See M1_QUALIFICATION for altered stepover behavior and performance limits.
+
+Beads 1.3.1 imported the original 1,165 records; upstream statuses preserved.
+Only two new M1 issue records are appended, both closed after software validation.
+No upstream sync, commit/push, PR or merge was performed in M1.

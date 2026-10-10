@@ -307,14 +307,20 @@ fn inflate_islands_by_delta(islands: &[Vec<Point2>], delta: f64) -> Vec<Vec<Poin
         // disc of radius `delta`, i.e. the safe centerline boundary the
         // cutter must stay outside.
         let path: PathD = island.iter().map(|p| ClipperPoint::new(p.x, p.y)).collect();
+        // Round joins become INSCRIBED chords. Pad by their sagitta plus
+        // one Clipper grid unit so the chord, not just its vertices, keeps
+        // the requested cutter clearance. The previous 0.25 mm sagitta
+        // let island-wall finishing passes cut into convex island corners.
+        const ISLAND_JOIN_SAGITTA_MM: f64 = 0.001;
+        const CLIPPER_GRID_MM: f64 = 0.0001;
         let inflated = inflate_paths_d(
             &vec![path],
-            delta,
+            delta + ISLAND_JOIN_SAGITTA_MM + CLIPPER_GRID_MM,
             JoinType::Round,
             EndType::Polygon,
             2.0,
             4,
-            0.25,
+            ISLAND_JOIN_SAGITTA_MM,
         );
         if inflated.is_empty() {
             out.push(island.clone());

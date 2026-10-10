@@ -87,3 +87,59 @@ pnpm run build
 M1 must establish dimensional and topological assertions rather than relying
 on visual plausibility or snapshot identity. Reuse existing tests first and
 extend with the approved corpus. Controller and hardware gates remain human-led.
+
+
+## M1 — restored tooling and executed gates (2026-10-10)
+
+The tables above are the historical M0 baseline. M1 used the pinned Rust
+1.88.0 toolchain installed through the [official rustup installer](https://rust-lang.org/tools/install/),
+with rustfmt/clippy and wasm32-unknown-unknown. Homebrew provided wasm-pack
+0.15.0, sccache 0.18.0, Node 24.21.0 and Beads 1.3.1 (Dolt 2.4.2).
+pnpm 10.34.6 is installed under `~/.local/share/ivacam-tools/node_modules/.bin`.
+No repository manifest or lockfile change was required.
+
+Homebrew updated simdjson during installation, which broke the pre-existing
+Node 26.8.2 binary. It was repaired by upgrading that Homebrew Node to 26.10.0;
+Node 24 was used for final validation. The first Rust run's CPS differential
+failure was an environment failure from the broken Node binary. The repeated
+unchanged-source baseline with Node 24 passed 1,136 tests before CAM fixes.
+
+For reproducible commands on this host:
+
+```sh
+export PATH="/opt/homebrew/opt/node@24/bin:$HOME/.cargo/bin:$HOME/.local/share/ivacam-tools/node_modules/.bin:$PATH"
+export RUSTC_WRAPPER=""
+cargo build --workspace --exclude ivac-tauri --locked
+cargo test --workspace --exclude ivac-tauri --all-features --locked
+cargo test -p ivac-core --locked
+cargo test -p ivac-core --test shopbot_m1_qualification --locked
+cargo fmt --all -- --check
+cargo clippy --workspace --exclude ivac-tauri --all-features --all-targets --locked -- -D warnings
+cargo xtask schema-check
+cargo xtask version-check
+wasm-pack build crates/ivac-wasm --target web --release
+cd frontend
+pnpm install --frozen-lockfile
+pnpm check
+pnpm test
+pnpm build
+```
+
+| Gate | Final observation |
+| --- | --- |
+| Headless Rust build | Pass, workspace excluding ivac-tauri |
+| All-features workspace tests | 1,149 passed, 0 failed/ignored, including unit/integration/doc tests |
+| Core without CPS | 1,060 passed, 0 failed/ignored, including doc tests |
+| New M1 qualification suite | 11 passed across 16 static required fixtures; no optional skip |
+| Clippy and formatting | Pass; all workspace non-Tauri targets/features, warnings denied |
+| Schema/version guards | OpenAPI unchanged; Tauri version matches workspace 0.5.0 |
+| Release WASM build | Pass; wasm-bindgen 0.2.120 built/cached by wasm-pack, wasm-opt cached |
+| Frozen frontend install | Pass under pnpm 10; ignored esbuild lifecycle script warning, platform binary worked |
+| Frontend check/test/build | Svelte 0 errors/warnings; 106 files, 1,044 pass and 1 optional locale skip; production Vite build passes |
+
+Counts include upstream optional tests that return success when refs are absent;
+those external DXF/Autodesk oracles remain unqualified. Test logs were saved
+under `/private/tmp/ivacam-m1-*.log` for this session; durable evidence is this
+record and the regression tests. No Tauri bundle, Windows/Linux execution,
+cargo-deny audit, controller preview, VCarve or hardware check performed.
+The final frontend build reran the WASM freshness guard after core source changes.

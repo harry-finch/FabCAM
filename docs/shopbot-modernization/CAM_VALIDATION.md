@@ -1,25 +1,28 @@
 # CAM validation register
 
-M0 does not qualify machining correctness. No new CAM corpus was implemented.
-Existing Rust geometry/volume/snapshot tests could not run without cargo.
+M1 software evidence obtained 2026-10-10 on the uncommitted working tree based
+on `7752ef281350faca18f737b3cb13986e6abd0474`. Exact tolerances and reproduction
+notes: [M1_QUALIFICATION](M1_QUALIFICATION.md). M0 environment limitations are
+historical; Rust is now available.
 
 | ID | Evidence required | Current status |
 | --- | --- | --- |
-| BASE-UI | Existing frontend logic/type checks | 1,044 tests pass, 1 skipped; Svelte clean; see TESTING_STRATEGY |
-| BASE-CPS-JS | Existing prelude behavior | 39 Node tests pass; Boa execution not tested |
-| BASE-RUST | Existing Rust unit/integration tests, feature matrices | Not executed; environment blocked |
-| M1-IMPORT | Required deterministic SVG/DXF geometry, units/transforms/open paths | Awaiting M1 approval |
-| M1-PROFILE | Ø6 compensation, inside/outside/on-line, Z schedule, tolerances | Awaiting M1 approval |
-| M1-POCKET | Islands/concavity/coverage, stepover/stepdown, allowance | Awaiting M1 approval |
-| M1-DRILL | Hole locations, depth, peck/retract semantics | Awaiting M1 approval |
-| M2-SBP | Deterministic square/circle/pocket/drill/multiple-op output and unsupported cases | Not implemented |
-| M4-TEXT | Human review of exact exported program | Not performed |
-| M4-PREVIEW | ShopBot Preview Mode on identified software/controller | Not performed |
-| M4-AIR | Supervised air cut with documented setup | Not performed |
-| M4-PART | Sacrificial reference part, dimensions/depth/order, equivalent VCarve job | Not performed |
+| BASE-UI | Frontend logic/type checks | 1,044 pass, 1 skipped; Svelte clean; production build passes |
+| BASE-CPS-JS | Prelude/runtime behavior | M0: 39 Node tests pass; M1: CPS Boa/V8 differential suite passes |
+| BASE-RUST | Rust tests and feature matrices | 1,149 pass all-features workspace excluding Tauri; 1,060 core without CPS; optional absent oracles unqualified |
+| M1-IMPORT | SVG/DXF units, bounds, topology | Pass: eight cases in each format, closure and containment |
+| M1-PROFILE | Ø6 outside/inside/on-line, depth passes | Pass: analytic square/rectangle bounds, circle radii, -2/-4/-5 mm, open and disconnected paths |
+| M1-POCKET | Concavity/islands, floor, stepover, stepdown, allowance | Pass: independent polygon checks and heightmap; overlaps 25/50/75%; 1 mm rough allowance and final finishing ring |
+| M1-ISLAND | Rounded chord cutter clearance | Pass: radii 0.1/3/10 mm and bounded padding |
+| M1-DRILL | One/multiple holes, depth and peck/retract | Pass: Ø6 118° tip compensation, 2 mm pecks, authored 1.5 mm clearance plane |
+| M1-DETERMINISM | Repeated generation | Pass: square profile and island pocket exact G-code/toolpath equality |
+| M2-SBP | OpenSBP output and unsupported cases | Not implemented |
+| M4-TEXT | Human review of exact program | Not performed |
+| M4-PREVIEW | Identified ShopBot controller/software Preview Mode | Not performed |
+| M4-AIR | Supervised air cut | Not performed |
+| M4-PART | Measured sacrificial part and VCarve comparison | Not performed |
 
-Future records should identify source fixture, parameters, code SHA, machine and
-controller/software version, units/origins/tool/material, expected invariant,
-tolerance, observed result, reviewer/operator, date and supporting evidence.
-Do not report physical validation unless a human operator supplies results.
-One successful part does not establish production readiness.
+Future records must identify fixture, parameters, code SHA, machine/controller,
+units/origins/tool/material, invariant, tolerance, observation, reviewer/operator,
+date and evidence. Record the M1 SHA after commit authorization. Software checks
+do not establish controller or hardware qualification.

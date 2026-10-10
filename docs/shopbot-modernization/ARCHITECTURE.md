@@ -80,3 +80,11 @@ types, schema, algorithm, post or UI behavior changed. ShopBot should extend
 existing post seams; ProtoMAX needs explicit process semantics later, assessed
 separately in FUTURE_PROCESSES. No architecture ADR selecting a new subsystem
 is warranted yet.
+
+
+M1 keeps these boundaries. Qualification adds static fixture inputs and analytic
+integration tests using existing import/pipeline/preview/simulation seams.
+Minimal corrections stay in `geometry.rs` and existing pocket offset modules.
+No serialized model, schema, cache-key contract or process interface changed;
+no new subsystem/ADR required. ShopBot remains deferred to M2; ProtoMAX assessment
+B is unaffected. Algorithmic behavior and limits are in M1_QUALIFICATION.
