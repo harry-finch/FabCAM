@@ -16,10 +16,16 @@ pub struct BundledPost {
 }
 
 /// Every bundled post, in display order.
-pub const BUNDLED: &[BundledPost] = &[BundledPost {
-    id: "grbl",
-    source: include_str!("../posts/grbl.cps"),
-}];
+pub const BUNDLED: &[BundledPost] = &[
+    BundledPost {
+        id: "grbl",
+        source: include_str!("../posts/grbl.cps"),
+    },
+    BundledPost {
+        id: "shopbot",
+        source: include_str!("../posts/shopbot.cps"),
+    },
+];
 
 /// Look a bundled post up by id.
 #[must_use]

@@ -1,0 +1,47 @@
+' ivaCAM ShopBot MVP - metric XYZ - manual spindle
+' ivaCAM
+VD,,1
+SA
+' Stop spindle. Verify work zero, stock, clearances and controller jog speeds before continuing.
+PAUSE
+JZ,5.0000
+' Spindle OFF and stationary. Load tool 1 D=6.0000; set work Z zero for this tool. Return to clearance before OK.
+PAUSE
+JZ,5.0000
+' Start spindle CW manually at 18000 RPM. Wait until ready before OK.
+PAUSE
+' drill
+' OP 1
+PAUSE 1.000
+' drill object=0 x=60.0000 y=60.0000 z=-6.8026
+J2,60.0000,60.0000
+JZ,1.5000
+MS,3.333333,3.333333
+M3,60.0000,60.0000,-0.5000
+PAUSE 0.200
+JZ,1.5000
+JZ,0.0000
+M3,60.0000,60.0000,-0.5000
+M3,60.0000,60.0000,-2.5000
+PAUSE 0.200
+JZ,1.5000
+JZ,-2.0000
+M3,60.0000,60.0000,-2.5000
+M3,60.0000,60.0000,-4.5000
+PAUSE 0.200
+JZ,1.5000
+JZ,-4.0000
+M3,60.0000,60.0000,-4.5000
+M3,60.0000,60.0000,-6.5000
+PAUSE 0.200
+JZ,1.5000
+JZ,-6.0000
+M3,60.0000,60.0000,-6.5000
+M3,60.0000,60.0000,-6.8026
+PAUSE 0.200
+JZ,1.5000
+JZ,5.0000
+JZ,5.0000
+' Stop spindle manually and wait until stationary before OK.
+PAUSE
+END

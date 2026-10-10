@@ -78,3 +78,17 @@ See M1_QUALIFICATION for altered stepover behavior and performance limits.
 Beads 1.3.1 imported the original 1,165 records; upstream statuses preserved.
 Only two new M1 issue records are appended, both closed after software validation.
 No upstream sync, commit/push, PR or merge was performed in M1.
+
+
+## M2 fork delta
+
+EXTEND `ivac-cps/src/library.rs` with an authored ShopBot script. KEEP the existing
+recorder, CPS engine, native posts, picker and extension-aware export. Generic
+optional metadata is added in `gcode/cps_recorder.rs` and `pipeline/cps_ctx.rs`;
+no model/schema/dependency change. Add owned-post guard tests, six pipeline tests
+and five full SBP goldens. Future sync must preserve preflight for omitted IR
+records and machine-policy context; run both M1 and M2 suites after integration.
+ADR-0001 explains browser limits/private IR coupling/manual spindle policy.
+Two existing infrastructure weaknesses surfaced, tracked separately rather than
+rewriting caches or build scripts in this milestone: ivac-htc8 and ivac-5g51.
+M1 publication authorized and completed; M2 remains uncommitted pending approval.

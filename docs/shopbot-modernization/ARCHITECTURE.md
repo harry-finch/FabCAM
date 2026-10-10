@@ -88,3 +88,12 @@ Minimal corrections stay in `geometry.rs` and existing pocket offset modules.
 No serialized model, schema, cache-key contract or process interface changed;
 no new subsystem/ADR required. ShopBot remains deferred to M2; ProtoMAX assessment
 B is unaffected. Algorithmic behavior and limits are in M1_QUALIFICATION.
+
+
+M2 extends the CPS library with `shopbot`; [ADR-0001](adr/ADR-0001-shopbot-cps.md)
+records native/CPS tradeoffs. Recorder and section-builder optional metadata
+expose existing machine scaffold policy/clearance/static-shift presence without
+changing serialized types or IR version. The owned post checks IR v1 before
+using existing dispatch. Generic CAM, simulation and public API are retained.
+Pure WASM has no CPS; CPS-enabled transport is required. ProtoMAX process-event
+gaps remain deferred; the ShopBot post introduces no universal process layer.

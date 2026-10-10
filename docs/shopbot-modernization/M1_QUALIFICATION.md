@@ -2,9 +2,9 @@
 
 Completed 2026-10-10 on macOS after approval to continue from M0. Scope:
 SVG/DXF imports, profile, cascade pocket and drill machining intent. No ShopBot
-post or machine profile implemented. Evidence applies to the uncommitted tree
-based on `7752ef281350faca18f737b3cb13986e6abd0474`; record the eventual commit
-SHA after authorization.
+post or machine profile implemented. Evidence was obtained on the M1 working tree
+based on `7752ef281350faca18f737b3cb13986e6abd0474`; Published with human approval as
+`7737a2a5c8e3766b03869b8e6618e3e32c7e1f0f`.
 
 ## Corpus and method
 
@@ -87,7 +87,8 @@ software checks. Existing upstream statuses preserved.
 
 ## Handoff
 
-Review and explicitly authorize M1 commit/push. M2 requires separate approval:
+M1 commit/push and starting M2 were subsequently approved. See STATUS for the
+current handoff. M2 scope:
 CPS/native ADR, authoritative OpenSBP syntax research, minimal deterministic
 post and unsupported-semantics tests.
 

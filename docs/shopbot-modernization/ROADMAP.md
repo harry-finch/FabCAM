@@ -5,8 +5,8 @@ Every milestone ends with a human approval gate. Never proceed automatically.
 | Milestone | Included work / acceptance | Status |
 | --- | --- | --- |
 | M0 | Fork/remotes/feature branch; code and feature audit; known build/test baseline; post and future-process assessment; committed/pushed documentation | Complete with recorded environment limitations; see STATUS |
-| M1 | Deterministic SVG/DXF corpus; analytical profile outside/inside/on-line, pocket and drill checks; regressions and unresolved issues recorded | Software qualification complete; review and commit/push authorization pending; see M1_QUALIFICATION |
-| M2 | CPS vs native ADR; authoritative OpenSBP research; minimal deterministic post; unsupported semantics explicit; output tests | Not authorized |
+| M1 | Deterministic SVG/DXF corpus; analytical profile outside/inside/on-line, pocket and drill checks; regressions and unresolved issues recorded | Approved, committed/pushed at 7737a2a; see M1_QUALIFICATION |
+| M2 | CPS vs native ADR; authoritative OpenSBP research; minimal deterministic post; unsupported semantics explicit; output tests | Software implementation complete; review and commit/push approval pending; see M2_QUALIFICATION |
 | M3 | Actual lab machine profile; known values sourced; unknown values marked TO VERIFY ON MACHINE | Not authorized |
 | M4 | Human textual review, Preview Mode, supervised air cut, sacrificial machining, measurement, VCarve comparison; no unexpected motion | Not authorized |
 

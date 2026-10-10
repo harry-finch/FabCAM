@@ -58,3 +58,32 @@ STOP at M0; next milestone requires explicit human approval.
   authorization after M0. No M2 implementation, PR or merge started.
 
 STOP at M1; next milestone and Git publication require explicit approval.
+
+
+## 2026-10-10 — M1 approval/publication and M2 implementation
+
+- Human approved M1 commit/push and starting M2. Committed/pushed M1 as
+  7737a2a5c8e3766b03869b8e6618e3e32c7e1f0f, origin/feature/shopbot-mvp.
+- Applied ShopBot, validation, architecture and documentation skills. Compared
+  existing CPS/native interfaces, recorded ADR-0001 and verified the emitted
+  subset against official 2007 command reference and 2010 programming handbook.
+  No third-party post source copied.
+- Added authored bundled shopbot CPS post: metric XYZ, manual spindle/tool/zero
+  prompts, arc linearization, explicit drill expansion, .sbp extension. Whole-IR
+  preflight rejects unsupported motion/events/machine policies. Added generic
+  optional metadata, no schema or generic CAM change. Browser CPS remains absent.
+- Added six integration and three guard tests, five required full-text output
+  goldens with analytic checks on the emitted motions. Manually reviewed numeric
+  command forms, initialization/finalization, drill retracts and tool sequence.
+  The 31,733-line pocket is a buffering/performance qualification limit.
+- All-features suite 1,158 pass serial; core without CPS 1,060 pass. Clippy,
+  format, schema/version, headless/WASM/frontend builds pass; frontend 1,044 pass,
+  one optional skip. Verified CLI registry listing.
+- Parallel global-cache count race recorded as ivac-htc8. Sandbox-interrupted
+  WASM output exposed incomplete freshness detection, ivac-5g51; full rebuild
+  repaired current packaging. Both remain explicit follow-ups, no scope creep.
+- Closed M2 tracking issue ivac-732u after software qualification. Documentation
+  and exported M2 issue records prepared for review. M2 is uncommitted; no PR,
+  merge, M3 profile or physical validation started. ProtoMAX remains deferred.
+
+STOP at M2; publication and M3 require explicit human approval.

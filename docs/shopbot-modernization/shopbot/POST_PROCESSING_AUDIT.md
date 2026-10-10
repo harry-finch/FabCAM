@@ -62,3 +62,12 @@ silently alter intent. Actual PRS controller/software, arc behavior, zeroing,
 spindle wiring, tool handling and safe positions are not established by M0.
 The ProtoMAX implication is different: its process event gaps are recorded in
 FUTURE_PROCESSES and cannot be solved by merely choosing a different dialect.
+
+
+## M2 follow-up
+
+ADR-0001 selects CPS with whole-IR preflight, generic scaffold-policy metadata,
+manual spindle/tool changes and explicit planar arc/drill expansion. See
+[command map](OPEN_SBP_COMMANDS.md) and [M2 evidence](../M2_QUALIFICATION.md).
+The original M0 table remains the audit baseline, not a statement of implemented
+ShopBot capabilities. Actual controller/wiring remains TO VERIFY ON MACHINE.

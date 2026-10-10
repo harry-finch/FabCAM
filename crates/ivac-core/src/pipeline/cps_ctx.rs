@@ -121,6 +121,15 @@ pub(crate) fn build_section_ctx(
     let rpm = super::setup_resolver::clamp_rpm_silent(speed, &project.machine);
     let params = vec![
         (
+            "ivacam:uses-static-tool-z-shift".to_string(),
+            CpsParamValue::Bool(
+                project
+                    .tools
+                    .iter()
+                    .any(|t| t.z_shift_mm.unwrap_or(0.0) != 0.0),
+            ),
+        ),
+        (
             "operation-comment".to_string(),
             CpsParamValue::Text(op.name.clone()),
         ),

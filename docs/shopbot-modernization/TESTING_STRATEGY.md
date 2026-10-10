@@ -143,3 +143,44 @@ under `/private/tmp/ivacam-m1-*.log` for this session; durable evidence is this
 record and the regression tests. No Tauri bundle, Windows/Linux execution,
 cargo-deny audit, controller preview, VCarve or hardware check performed.
 The final frontend build reran the WASM freshness guard after core source changes.
+
+
+## M2 — OpenSBP qualification (2026-10-10)
+
+Use the M1 PATH/RUSTC_WRAPPER environment above. Executed:
+
+```sh
+cargo test --workspace --exclude ivac-tauri --all-features --locked -- --test-threads=1
+cargo test -p ivac-core --locked -- --test-threads=1
+cargo test -p ivac-core --features cps --test shopbot_m2_post --locked
+cargo clippy --workspace --exclude ivac-tauri --all-features --all-targets --locked -- -D warnings
+cargo fmt --all -- --check
+cargo xtask schema-check
+cargo xtask version-check
+cargo build --workspace --exclude ivac-tauri --locked
+cargo run -p ivac-cli --locked -- posts
+wasm-pack build crates/ivac-wasm --target web --release
+# frontend: pnpm check; pnpm test; pnpm build
+```
+
+Observed: all-features workspace 1,158 pass, zero failed/ignored; feature-off
+core 1,060 pass. Nine M2 tests added (six pipeline, three owned-post guards),
+with parameter loops and five required goldens; all 11 M1 corpus tests pass.
+Clippy, format, schema/version and headless build pass. CLI lists shopbot/sbp.
+Frontend 106 files, 1,044 pass and one optional locale skip; Svelte clean.
+Release WASM and production frontend build pass after packaging recovery.
+
+A parallel workspace run failed the pre-existing global-cache count test
+`pocket_cascade_cached_islands_change_key`: expected 2, observed 3. Its local
+mutex does not exclude other pipeline callers. Serial suite passes; open issue
+ivac-htc8. No cache source or synchronization change is hidden in M2.
+
+Sandbox blocked wasm-opt during automatic freshness rebuilding, leaving JS/WASM
+but no package.json. A retry skipped compilation because the current guard
+considered partial output fresh; Vite could not resolve ivac-wasm. A complete
+wasm-pack build with permission restored package metadata, then pnpm build
+passed. Guard hardening is tracked as ivac-5g51; no fake package or config change.
+
+Logs: `/private/tmp/ivacam-m2-*.log`, temporary session evidence. Goldens and
+M2_QUALIFICATION are durable. Missing external refs remain unqualified; no
+Tauri desktop bundle, Windows/Linux run, controller/VCarve/hardware validation.

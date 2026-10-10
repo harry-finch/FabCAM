@@ -278,6 +278,22 @@ impl PostProcessor for CpsRecorder {
     fn begin_program(&mut self, ctx: &ProgramCtx<'_>) {
         self.header.program_name.clone_from(&ctx.program_name);
         self.header.program_comment.clone_from(&ctx.program_comment);
+        // Generic scaffold context for posts that must reject machine policies
+        // they cannot honor. Existing posts may ignore these optional parameters.
+        // Keep the public IR shape unchanged: MachineConfig already has a stable
+        // serialized representation; clearance remains in the IR's mm units.
+        self.header.parameters.extend([
+            ir::Parameter {
+                name: "ivacam:machine-config".into(),
+                value: ir::ParamValue::Text(
+                    serde_json::to_string(ctx.machine).expect("MachineConfig serializes"),
+                ),
+            },
+            ir::Parameter {
+                name: "ivacam:clearance-z".into(),
+                value: ir::ParamValue::Number(ctx.fast_move_z),
+            },
+        ]);
         // The physical program-start pose: XY at part zero, Z at the
         // program-wide clearance — what program_begin's first rapid
         // would establish for a dialect post.
