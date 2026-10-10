@@ -1,0 +1,134 @@
+// Exercise the actual machine file import/export path. Only desktop I/O and
+// application stores are mocked; the checked-in snapshot and migrations are real.
+import { readFileSync } from 'node:fs';
+import { describe, expect, it, vi } from 'vitest';
+import type { MachineSettings } from '../state/project-types';
+import { profileFromCurrent, profilePayload } from '../state/machine_profiles';
+import { buildProject } from '../api/build-project';
+import { toCpsPostRequest } from '../components/cps-post-form';
+
+const io = vi.hoisted(() => ({
+  text: '',
+  project: {
+    data: { machine: {} as MachineSettings },
+    setMachine: vi.fn(),
+    setError: vi.fn(),
+  },
+  write: vi.fn(),
+  invoke: vi.fn(),
+}));
+vi.mock('../state/project.svelte', () => ({ project: io.project }));
+vi.mock('../state/workspace.svelte', () => ({ workspace: {} }));
+vi.mock('../state/confirm.svelte', () => ({ confirmStore: {} }));
+vi.mock('../api/env', () => ({ isTauri: () => true, isAndroid: () => false }));
+vi.mock('../api/http', () => ({ defaultClient: {} }));
+vi.mock('../api/client', () => ({ tryParseStructuredError: () => null }));
+vi.mock('../i18n', () => ({ t: (key: string) => key }));
+vi.mock('@tauri-apps/plugin-dialog', () => ({
+  open: async () => '/profile.ivac-machine.json',
+  save: async () => '/saved.ivac-machine.json',
+}));
+vi.mock('@tauri-apps/plugin-fs', () => ({
+  readTextFile: async () => io.text,
+  writeTextFile: io.write,
+}));
+vi.mock('@tauri-apps/api/core', () => ({ invoke: io.invoke }));
+import { loadMachine, saveMachine } from './file_ops';
+
+describe('Sorbonne ShopBot M3 snapshot', () => {
+  it('loads, selects the owned post, and survives workspace/profile and file round trips', async () => {
+    io.text = readFileSync(
+      new URL('../../../../machines/sorbonne-shopbot-prs.ivac-machine.json', import.meta.url),
+      'utf8',
+    );
+    io.project.setMachine.mockImplementation((machine: MachineSettings) => {
+      io.project.data.machine = machine;
+    });
+    await loadMachine();
+    expect(io.project.setError).not.toHaveBeenCalled();
+    expect(io.invoke).toHaveBeenCalledWith('clear_pipeline_cache_cmd');
+    expect(io.project.setMachine).toHaveBeenCalledOnce();
+    const machine = io.project.data.machine;
+    expect(toCpsPostRequest(machine.cpsPost)).toEqual({
+      source: { kind: 'bundled', id: 'shopbot' },
+      properties: {},
+    });
+    const wire = buildProject({
+      transformedImport: {
+        bbox: { min_x: 0, min_y: 0, max_x: 10, max_y: 10 },
+        filename: 'test.svg',
+        format: 'svg',
+        layers: [],
+        object_meta: [],
+        objects: [],
+        segments: [],
+        unit_scale: 1,
+        warnings: [],
+      },
+      machine,
+      tools: [
+        {
+          id: 1,
+          name: 'test only',
+          kind: 'endmill',
+          diameter: 6,
+          flutes: 2,
+          speed: 18000,
+          plungeRate: 100,
+          feedRate: 600,
+          coolant: 'off',
+        },
+      ],
+      operations: [
+        {
+          id: 1,
+          name: 'test only',
+          enabled: true,
+          kind: 'profile',
+          toolId: 1,
+          sourceLayers: null,
+          depth: -1,
+          startDepth: 0,
+          step: null,
+          offset: 'outside',
+        },
+      ],
+    });
+    expect(wire).not.toBeNull();
+    expect(wire!.operations[0].params.fast_move_z).toBe(0);
+    expect(wire!.machine.work_area).toEqual({ x: 1200, y: 600, z: 0 });
+    expect(machine.name).toContain('TO VERIFY ON MACHINE');
+    expect(machine).toMatchObject({
+      unit: 'mm',
+      mode: 'mill',
+      arcs: false,
+      fastMoveZ: 0,
+      workArea: { x: 1200, y: 600, z: 0 },
+      toolchangeStrategy: 'manual_m0_pause',
+      parkAtHome: false,
+      optionalStop: false,
+      cpsPost: { source: 'bundled', bundledId: 'shopbot', properties: {} },
+    });
+    for (const unknown of [
+      'rapidSpeed',
+      'maxFeedMmMin',
+      'spindleRpmMin',
+      'spindleRpmMax',
+      'parkXy',
+      'accel',
+      'jerk',
+    ]) {
+      expect(machine).not.toHaveProperty(unknown);
+    }
+    const profile = profileFromCurrent(machine, [], [], 'mp-sorbonne-shopbot');
+    expect(profilePayload(profile)).toEqual({ machine, tools: [] });
+    await saveMachine();
+    const saved = JSON.parse(io.write.mock.calls[0][1] as string);
+    expect(saved.kind).toBe('machine');
+    expect(saved.format_version).toBe(1);
+    expect(saved.payload).toEqual(machine);
+    io.text = JSON.stringify(saved);
+    await loadMachine();
+    expect(io.project.data.machine).toEqual(machine);
+  });
+});

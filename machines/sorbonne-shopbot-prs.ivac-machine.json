@@ -1,0 +1,21 @@
+{
+  "kind": "machine",
+  "format_version": 1,
+  "updated_at": "2026-10-10T00:00:00Z",
+  "payload": {
+    "name": "Sorbonne ShopBot PRS 2011 / SB3.8 — TO VERIFY ON MACHINE",
+    "unit": "mm",
+    "mode": "mill",
+    "capabilities": ["mill"],
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 0,
+    "workArea": { "x": 1200, "y": 600, "z": 0 },
+    "gcodeDialect": "cps",
+    "cpsPost": { "source": "bundled", "bundledId": "shopbot", "properties": {} },
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false
+  }
+}

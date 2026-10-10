@@ -17,6 +17,7 @@ historical; Rust is now available.
 | M1-DRILL | One/multiple holes, depth and peck/retract | Pass: Ø6 118° tip compensation, 2 mm pecks, authored 1.5 mm clearance plane |
 | M1-DETERMINISM | Repeated generation | Pass: square profile and island pocket exact G-code/toolpath equality |
 | M2-SBP | OpenSBP output and unsupported cases | Software pass: nine tests, five required goldens; actual output coordinate/sequence checks; see M2_QUALIFICATION |
+| M3-PROFILE | Native machine load/save, workspace profile, post selection and unverified clearance rejection | Software pass: frontend integration and Rust CAM/post guard; see M3_QUALIFICATION; no physical measurements |
 | M4-TEXT | Human review of exact program | Not performed |
 | M4-PREVIEW | Identified ShopBot controller/software Preview Mode | Not performed |
 | M4-AIR | Supervised air cut | Not performed |
@@ -29,7 +30,8 @@ do not establish controller or hardware qualification.
 
 
 M1 subsequently approved and published at `7737a2a5c8e3766b03869b8e6618e3e32c7e1f0f`.
-M2 evidence refers to uncommitted work on that base. Rust workspace now 1,158
+M2 subsequently approved and published at `047a75872ca7ea7d28077555c9859f92fa9a7411`.
+Its evidence was collected on the working tree before that commit. Rust workspace 1,158
 pass (serial), core without CPS 1,060. Optional external oracles still absent.
 The independent M2 parser checks this emitted subset; it is not ShopBot Control
 Software and does not establish controller acceptance.

@@ -87,3 +87,22 @@ STOP at M1; next milestone and Git publication require explicit approval.
   merge, M3 profile or physical validation started. ProtoMAX remains deferred.
 
 STOP at M2; publication and M3 require explicit human approval.
+
+## 2026-10-10 — M2 publication and M3 machine profile
+
+- User approved M2 and M3; committed and pushed M2 as
+  `047a75872ca7ea7d28077555c9859f92fa9a7411` on feature/shopbot-mvp.
+- User supplied nominal gantry 120 × 60 cm, year 2011 and SB3.8; all other
+  machine details remain unverified. Recorded provenance and converted XY to mm.
+- Added a native version-1 machine snapshot and loading instructions using the
+  existing import/profile UI. No production code, public schema or UI changes.
+  Owned ShopBot CPS selection and manual policies preserved; no tooling presets.
+- Zero clearance is an explicit unconfigured sentinel: frontend wire propagation
+  and Rust CAM-to-post refusal tested. Unknown Z travel is zero and documented;
+  omitted speeds/RPM and existing simulation defaults are not measured values.
+- Actual import/save/reload path tested with desktop I/O/store doubles, including
+  workspace profile round trip and CPS request. Both new integration tests pass;
+  frontend type checking has zero errors/warnings. Physical qualification absent.
+- Tracking: ivac-c5lt. M3 remains uncommitted pending approval; M4 not started.
+
+STOP at M3; publication and M4 require explicit human approval.

@@ -2,7 +2,10 @@
 
 2026-10-10. User approved publication of M1 and starting M2. M1 is committed
 and pushed at `7737a2a5c8e3766b03869b8e6618e3e32c7e1f0f`. M2 is reviewable and
-uncommitted on that base; no authorization to publish M2 or begin M3 yet.
+uncommitted on that base at the original handoff. Subsequently the user approved
+M2 publication and M3: M2 was committed and pushed at
+`047a75872ca7ea7d28077555c9859f92fa9a7411`. The evidence below was obtained
+before that publication.
 
 ## Architecture and supported contract
 

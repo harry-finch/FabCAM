@@ -14,6 +14,8 @@ the existing engine, replacing the lab's VCarve 8 workflow progressively.
 - [TESTING_STRATEGY](TESTING_STRATEGY.md): build procedure and executed baseline.
 - [CAM_VALIDATION](CAM_VALIDATION.md): qualification and physical evidence status.
 - [M2 qualification](M2_QUALIFICATION.md): OpenSBP contract, output evidence and limits.
+- [M3 qualification](M3_QUALIFICATION.md): loadable machine profile and unverified parameters.
+- [Sorbonne machine record](shopbot/SORBONNE_MACHINE.md): reported facts and physical verification requirements.
 - [M1 qualification](M1_QUALIFICATION.md): corpus, defects, fixes and limits.
 - [FUTURE_PROCESSES](FUTURE_PROCESSES.md): deferred ProtoMAX assessment.
 - [ShopBot post audit](shopbot/POST_PROCESSING_AUDIT.md): existing extension seams.

@@ -370,3 +370,22 @@ fn unsupported_machine_policies_fail() {
         assert!(err.contains("ShopBot MVP"), "{err}");
     }
 }
+
+#[test]
+fn m3_unverified_clearance_refuses_sbp_export() {
+    let snapshot: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../machines/sorbonne-shopbot-prs.ivac-machine.json"
+    ))
+    .unwrap();
+    let mut p = project("square", "svg");
+    let clearance = snapshot["payload"]["fastMoveZ"].as_f64().unwrap();
+    assert_eq!(clearance, 0.0, "unverified sentinel, not a safe height");
+    for op in &mut p.operations {
+        op.params.fast_move_z = clearance;
+    }
+    let err = post(p).unwrap_err().to_string();
+    assert!(
+        err.contains("positive authored clearance Z required"),
+        "{err}"
+    );
+}
