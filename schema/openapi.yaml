@@ -292,6 +292,10 @@ components:
           type: string
         doc_origin:
           $ref: '#/components/schemas/CuttingOrigin'
+        knowledge:
+          anyOf:
+          - $ref: '#/components/schemas/FsKnowledgeSummary'
+          - type: 'null'
         proposal:
           anyOf:
           - $ref: '#/components/schemas/FsRecommendation'
@@ -504,6 +508,20 @@ components:
       - min_x
       - min_y
       type: object
+    CatalogEntry:
+      additionalProperties: false
+      properties:
+        identity:
+          $ref: '#/components/schemas/FsIdentity'
+        label:
+          type: string
+        notes:
+          type: string
+      required:
+      - identity
+      - label
+      - notes
+      type: object
     ContourParams:
       description: Parameters shared by every closed-contour op (Profile / Pocket / Engrave / `DragKnife`). Embedded in the matching [`super::op::OpKind`] variants. Holds tab shape + placement, lead-in / lead-out, cut direction, corner-feed reduction, and the optional user-picked approach point.
       properties:
@@ -644,6 +662,41 @@ components:
       - manual
       - legacy_snapshot
       type: string
+    DatasetDocument:
+      additionalProperties: false
+      description: Self-contained authoring document; no implicit inheritance or remote references.
+      properties:
+        description:
+          type: string
+        format_version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        license:
+          type: string
+        machines:
+          items:
+            $ref: '#/components/schemas/CatalogEntry'
+          type: array
+        materials:
+          items:
+            $ref: '#/components/schemas/CatalogEntry'
+          type: array
+        profile_set:
+          $ref: '#/components/schemas/FsProfileSet'
+        tools:
+          items:
+            $ref: '#/components/schemas/ToolDefinition'
+          type: array
+      required:
+      - description
+      - format_version
+      - license
+      - machines
+      - materials
+      - profile_set
+      - tools
+      type: object
     DowelPinConfig:
       description: Auto-placed dowel-pin registration for a two-sided job. The front program drills `count` holes of `diameter_mm`, inset `margin_mm` from the stock edge and placed symmetrically about the flip axis so the same holes line up once the stock is flipped. Exact positions are derived in a later phase; this struct is only the operator-facing knobs.
       properties:
@@ -999,6 +1052,10 @@ components:
           - $ref: '#/components/schemas/Op'
           - type: 'null'
           description: Native op with authoritative geometry/rates only on explicit Apply.
+        knowledge:
+          anyOf:
+          - $ref: '#/components/schemas/FsKnowledgeExplanation'
+          - type: 'null'
         recommendation:
           $ref: '#/components/schemas/FsFeedsSpeedsRecommendation'
         scope_rejections:
@@ -1144,6 +1201,12 @@ components:
         required:
         - kind
         type: object
+    FsDistribution:
+      enum:
+      - bundled
+      - local_only
+      - external_reference
+      type: string
     FsEngagement:
       description: Nominal stepover is not a bound on instantaneous physical engagement.
       oneOf:
@@ -1353,6 +1416,229 @@ components:
         - id
         - kind
         type: object
+    FsKnowledgeContributor:
+      additionalProperties: false
+      properties:
+        pack:
+          $ref: '#/components/schemas/FsIdentity'
+        record_id:
+          type: string
+      required:
+      - pack
+      - record_id
+      type: object
+    FsKnowledgeExplanation:
+      properties:
+        disagreement:
+          type: boolean
+        records:
+          items:
+            $ref: '#/components/schemas/FsKnowledgeRecord'
+          type: array
+        reference_chipload_range:
+          anyOf:
+          - $ref: '#/components/schemas/FsRange'
+          - type: 'null'
+        selection_reason:
+          type: string
+        summary:
+          $ref: '#/components/schemas/FsKnowledgeSummary'
+      required:
+      - disagreement
+      - records
+      - selection_reason
+      - summary
+      type: object
+    FsKnowledgeRecord:
+      properties:
+        evidence:
+          $ref: '#/components/schemas/FsEvidence'
+        local_only:
+          type: boolean
+        normalized:
+          $ref: '#/components/schemas/FsNormalizedQuantities'
+        origin:
+          $ref: '#/components/schemas/FsRecordOrigin'
+        pack:
+          $ref: '#/components/schemas/FsIdentity'
+        profile:
+          $ref: '#/components/schemas/FsIdentity'
+        rank:
+          items:
+            format: uint32
+            minimum: 0.0
+            type: integer
+          type: array
+        record_id:
+          type: string
+      required:
+      - evidence
+      - local_only
+      - normalized
+      - origin
+      - pack
+      - profile
+      - rank
+      - record_id
+      type: object
+    FsKnowledgeSummary:
+      description: 'Safe to save/share: no original records, source notes, paths or derived source quantities.'
+      properties:
+        compatible_sources:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        contributors:
+          items:
+            $ref: '#/components/schemas/FsKnowledgeContributor'
+          type: array
+        engine_version:
+          type: string
+        evidence:
+          $ref: '#/components/schemas/FsEvidence'
+        local_only:
+          type: boolean
+        policy:
+          type: string
+        selected_pack:
+          $ref: '#/components/schemas/FsIdentity'
+        selected_record:
+          type: string
+      required:
+      - compatible_sources
+      - engine_version
+      - evidence
+      - local_only
+      - policy
+      - selected_pack
+      - selected_record
+      type: object
+    FsLabCapture:
+      properties:
+        feed_mm_min:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        finishing_context:
+          type: string
+        machine_name:
+          type: string
+        operation_name:
+          type: string
+        plunge_mm_min:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        request:
+          $ref: '#/components/schemas/FsFeedsSpeedsRequest'
+        rpm:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        tool_name:
+          type: string
+      required:
+      - feed_mm_min
+      - finishing_context
+      - machine_name
+      - operation_name
+      - plunge_mm_min
+      - request
+      - rpm
+      - tool_name
+      type: object
+    FsLabPreset:
+      additionalProperties: false
+      properties:
+        created_at:
+          type: string
+        deleted:
+          type: boolean
+        detailed_notes:
+          type: string
+        enabled:
+          type: boolean
+        finishing_context:
+          type: string
+        job_reference:
+          type: string
+        name:
+          type: string
+        no_critical_failure:
+          type: boolean
+        observations:
+          type: string
+        operator:
+          type: string
+        physically_tested:
+          type: boolean
+        review:
+          anyOf:
+          - $ref: '#/components/schemas/FsLabReview'
+          - type: 'null'
+        state:
+          $ref: '#/components/schemas/FsLabState'
+        tested_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type: string
+      required:
+      - created_at
+      - deleted
+      - detailed_notes
+      - enabled
+      - finishing_context
+      - job_reference
+      - name
+      - no_critical_failure
+      - observations
+      - operator
+      - physically_tested
+      - state
+      - updated_at
+      type: object
+    FsLabReview:
+      additionalProperties: false
+      properties:
+        acceptable_finish_and_behavior:
+          type: boolean
+        no_overheating_chatter_or_overload:
+          type: boolean
+        notes:
+          type: string
+        policy:
+          type: string
+        reviewed_at:
+          type: string
+        suitable_for_lab_use:
+          type: boolean
+      required:
+      - acceptable_finish_and_behavior
+      - no_overheating_chatter_or_overload
+      - notes
+      - policy
+      - reviewed_at
+      - suitable_for_lab_use
+      type: object
+    FsLabRevision:
+      additionalProperties: false
+      properties:
+        metadata:
+          $ref: '#/components/schemas/FsLabPreset'
+        profile:
+          $ref: '#/components/schemas/FsProfile'
+      required:
+      - metadata
+      - profile
+      type: object
+    FsLabState:
+      enum:
+      - draft
+      - tested
+      - validated
+      type: string
     FsMachineSnapshot:
       additionalProperties: false
       properties:
@@ -1399,6 +1685,54 @@ components:
           - number
           - 'null'
       type: object
+    FsMaterialTaxon:
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        parent:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - label
+      type: object
+    FsNormalizedQuantities:
+      properties:
+        chipload_derived:
+          type: boolean
+        chipload_mm_tooth:
+          format: double
+          type:
+          - number
+          - 'null'
+        cutting_speed_m_min:
+          format: double
+          type:
+          - number
+          - 'null'
+        derived:
+          description: The block is normalized; these flags distinguish copied source values.
+          type: boolean
+        doc_ratio:
+          format: double
+          type:
+          - number
+          - 'null'
+        radial_engagement_derived:
+          type: boolean
+        radial_engagement_ratio:
+          format: double
+          type:
+          - number
+          - 'null'
+      required:
+      - chipload_derived
+      - derived
+      - radial_engagement_derived
+      type: object
     FsOperationContext:
       additionalProperties: false
       properties:
@@ -1427,6 +1761,60 @@ components:
       - surfacing
       - engraving
       type: string
+    FsPackManifest:
+      additionalProperties: false
+      properties:
+        attribution:
+          type: string
+        default_evidence:
+          $ref: '#/components/schemas/FsEvidence'
+        distribution:
+          $ref: '#/components/schemas/FsDistribution'
+        identity:
+          $ref: '#/components/schemas/FsIdentity'
+        license:
+          type: string
+        license_url:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        notes:
+          type: string
+        origin:
+          type: string
+        publisher:
+          type: string
+        redistributable:
+          type: boolean
+        schema_version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        source_url:
+          type:
+          - string
+          - 'null'
+        transformation_permitted:
+          type: boolean
+        visibility:
+          $ref: '#/components/schemas/FsVisibility'
+      required:
+      - attribution
+      - default_evidence
+      - distribution
+      - identity
+      - license
+      - name
+      - notes
+      - origin
+      - publisher
+      - redistributable
+      - schema_version
+      - transformation_permitted
+      - visibility
+      type: object
     FsPass:
       enum:
       - rough
@@ -1527,6 +1915,35 @@ components:
       - machine
       - material
       - operation
+      type: object
+    FsProfileSet:
+      additionalProperties: false
+      description: FS1 in-memory domain input, not the FS2 distribution/authoring file format.
+      properties:
+        identity:
+          $ref: '#/components/schemas/FsIdentity'
+        machine_families:
+          items:
+            $ref: '#/components/schemas/FsFamilyMembership'
+          type: array
+        material_families:
+          items:
+            $ref: '#/components/schemas/FsFamilyMembership'
+          type: array
+        profiles:
+          items:
+            $ref: '#/components/schemas/FsProfile'
+          type: array
+        schema_version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - identity
+      - machine_families
+      - material_families
+      - profiles
+      - schema_version
       type: object
     FsProvenance:
       additionalProperties: false
@@ -1643,6 +2060,37 @@ components:
       - plunge_mm_min
       - rpm
       type: object
+    FsRecordOrigin:
+      additionalProperties: false
+      properties:
+        lab:
+          anyOf:
+          - $ref: '#/components/schemas/FsLabPreset'
+          - type: 'null'
+        lab_history:
+          items:
+            $ref: '#/components/schemas/FsLabRevision'
+          type: array
+        material_taxon:
+          description: Explicit taxonomy applicability, including descendants. None preserves original identity.
+          type:
+          - string
+          - 'null'
+        original_classification:
+          type: string
+        profile:
+          $ref: '#/components/schemas/FsIdentity'
+        source_record_id:
+          type: string
+        tool:
+          anyOf:
+          - $ref: '#/components/schemas/FsToolClassification'
+          - type: 'null'
+      required:
+      - original_classification
+      - profile
+      - source_record_id
+      type: object
     FsReductionRule:
       additionalProperties: false
       description: Named empirical reductions apply only within the enclosing profile's scope. FS1 allows factors (0,1]; expansions require a separately qualified policy.
@@ -1705,6 +2153,22 @@ components:
       - permission_or_license
       - reference
       type: object
+    FsSourcePack:
+      additionalProperties: false
+      properties:
+        dataset:
+          $ref: '#/components/schemas/DatasetDocument'
+        manifest:
+          $ref: '#/components/schemas/FsPackManifest'
+        records:
+          items:
+            $ref: '#/components/schemas/FsRecordOrigin'
+          type: array
+      required:
+      - dataset
+      - manifest
+      - records
+      type: object
     FsToolBinding:
       additionalProperties: false
       properties:
@@ -1723,6 +2187,30 @@ components:
       required:
       - identity
       - tool_id
+      type: object
+    FsToolClassification:
+      additionalProperties: false
+      properties:
+        coating:
+          type:
+          - string
+          - 'null'
+        family:
+          $ref: '#/components/schemas/FsCuttingFamily'
+        helix:
+          type:
+          - string
+          - 'null'
+        material:
+          type:
+          - string
+          - 'null'
+        shape:
+          type:
+          - string
+          - 'null'
+      required:
+      - family
       type: object
     FsToolSnapshot:
       additionalProperties: false
@@ -1849,6 +2337,11 @@ components:
       - field
       - message
       type: object
+    FsVisibility:
+      enum:
+      - public
+      - private
+      type: string
     GcodeIndex:
       description: 'Lookup table the frontend uses to wire the gcode text panel to the 3D toolpath: line N in the gcode corresponds to `segments[lines_to_segment[N]]`, and `segments_to_line[i]` is the 1-based gcode line that produced segment `i`. Both vectors are dense — gcode lines that don''t move the tool map to `usize::MAX` so callers can detect the gap.'
       properties:
@@ -5032,6 +5525,38 @@ components:
       - rate_h
       - rate_v
       - speed
+      type: object
+    ToolDefinition:
+      additionalProperties: false
+      properties:
+        cutting_family:
+          $ref: '#/components/schemas/FsCuttingFamily'
+        diameter_mm:
+          format: double
+          type: number
+        flute_count:
+          format: uint8
+          minimum: 0.0
+          type: integer
+        identity:
+          $ref: '#/components/schemas/FsIdentity'
+        label:
+          type: string
+        max_rpm:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
+        notes:
+          type: string
+      required:
+      - cutting_family
+      - diameter_mm
+      - flute_count
+      - identity
+      - label
+      - notes
       type: object
     ToolEntry:
       properties:

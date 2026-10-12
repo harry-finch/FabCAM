@@ -264,7 +264,6 @@ export type MsgKey =
   | "fs35.fallback"
   | "fs35.fallback_help"
   | "fs35.finishing"
-  | "fs35.import"
   | "fs35.job_material"
   | "fs35.kept"
   | "fs35.loading"
@@ -289,15 +288,12 @@ export type MsgKey =
   | "fs35.schedule"
   | "fs35.select_material"
   | "fs35.settings"
-  | "fs35.sienci"
-  | "fs35.sienci_scope"
   | "fs35.source"
   | "fs35.source_details"
   | "fs35.source_scope_help"
   | "fs35.source_unavailable"
   | "fs35.sources"
   | "fs35.sources_disabled"
-  | "fs35.sources_help"
   | "fs35.suggest"
   | "fs35.suggested"
   | "fs35.tested"
@@ -340,6 +336,72 @@ export type MsgKey =
   | "fs36.suggested"
   | "fs36.suggested_hint"
   | "fs36.unknown"
+  | "fs37.built_in"
+  | "fs37.compatible_source"
+  | "fs37.compatible_sources"
+  | "fs37.disagreement"
+  | "fs37.enabled_source"
+  | "fs37.enabled_sources"
+  | "fs37.import"
+  | "fs37.local"
+  | "fs37.local_only"
+  | "fs37.no_local"
+  | "fs37.privacy"
+  | "fs37.provenance_missing"
+  | "fs37.public"
+  | "fs37.reference_range"
+  | "fs37.references"
+  | "fs37.sources_help"
+  | "fs37.too_large"
+  | "fs38.actual_values"
+  | "fs38.backup_help"
+  | "fs38.confirm_promotion"
+  | "fs38.create_identity"
+  | "fs38.created"
+  | "fs38.delete"
+  | "fs38.delete_help"
+  | "fs38.deleted"
+  | "fs38.destination"
+  | "fs38.detailed_notes"
+  | "fs38.details"
+  | "fs38.draft"
+  | "fs38.draft_help"
+  | "fs38.duplicate"
+  | "fs38.engagement"
+  | "fs38.evidence"
+  | "fs38.export"
+  | "fs38.full_width"
+  | "fs38.history"
+  | "fs38.identity"
+  | "fs38.identity_help"
+  | "fs38.job_reference"
+  | "fs38.manage"
+  | "fs38.name"
+  | "fs38.observations"
+  | "fs38.operator"
+  | "fs38.physical_confirm"
+  | "fs38.preset"
+  | "fs38.promote"
+  | "fs38.restore"
+  | "fs38.review_notes"
+  | "fs38.revision_help"
+  | "fs38.save"
+  | "fs38.save_action"
+  | "fs38.save_new"
+  | "fs38.save_notes"
+  | "fs38.save_title"
+  | "fs38.search"
+  | "fs38.select_preset"
+  | "fs38.show_deleted"
+  | "fs38.sorbonne"
+  | "fs38.stale"
+  | "fs38.success_confirm"
+  | "fs38.test_date"
+  | "fs38.unknown_engagement"
+  | "fs38.update_existing"
+  | "fs38.use_preset"
+  | "fs38.validation_confirm"
+  | "fs38.validation_policy"
   | "gcode.label"
   | "gcode.line_sync_unavailable"
   | "gcode.line_sync_unavailable.title"
@@ -2041,7 +2103,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.fallback",
   "fs35.fallback_help",
   "fs35.finishing",
-  "fs35.import",
   "fs35.job_material",
   "fs35.kept",
   "fs35.loading",
@@ -2066,15 +2127,12 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.schedule",
   "fs35.select_material",
   "fs35.settings",
-  "fs35.sienci",
-  "fs35.sienci_scope",
   "fs35.source",
   "fs35.source_details",
   "fs35.source_scope_help",
   "fs35.source_unavailable",
   "fs35.sources",
   "fs35.sources_disabled",
-  "fs35.sources_help",
   "fs35.suggest",
   "fs35.suggested",
   "fs35.tested",
@@ -2117,6 +2175,72 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs36.suggested",
   "fs36.suggested_hint",
   "fs36.unknown",
+  "fs37.built_in",
+  "fs37.compatible_source",
+  "fs37.compatible_sources",
+  "fs37.disagreement",
+  "fs37.enabled_source",
+  "fs37.enabled_sources",
+  "fs37.import",
+  "fs37.local",
+  "fs37.local_only",
+  "fs37.no_local",
+  "fs37.privacy",
+  "fs37.provenance_missing",
+  "fs37.public",
+  "fs37.reference_range",
+  "fs37.references",
+  "fs37.sources_help",
+  "fs37.too_large",
+  "fs38.actual_values",
+  "fs38.backup_help",
+  "fs38.confirm_promotion",
+  "fs38.create_identity",
+  "fs38.created",
+  "fs38.delete",
+  "fs38.delete_help",
+  "fs38.deleted",
+  "fs38.destination",
+  "fs38.detailed_notes",
+  "fs38.details",
+  "fs38.draft",
+  "fs38.draft_help",
+  "fs38.duplicate",
+  "fs38.engagement",
+  "fs38.evidence",
+  "fs38.export",
+  "fs38.full_width",
+  "fs38.history",
+  "fs38.identity",
+  "fs38.identity_help",
+  "fs38.job_reference",
+  "fs38.manage",
+  "fs38.name",
+  "fs38.observations",
+  "fs38.operator",
+  "fs38.physical_confirm",
+  "fs38.preset",
+  "fs38.promote",
+  "fs38.restore",
+  "fs38.review_notes",
+  "fs38.revision_help",
+  "fs38.save",
+  "fs38.save_action",
+  "fs38.save_new",
+  "fs38.save_notes",
+  "fs38.save_title",
+  "fs38.search",
+  "fs38.select_preset",
+  "fs38.show_deleted",
+  "fs38.sorbonne",
+  "fs38.stale",
+  "fs38.success_confirm",
+  "fs38.test_date",
+  "fs38.unknown_engagement",
+  "fs38.update_existing",
+  "fs38.use_preset",
+  "fs38.validation_confirm",
+  "fs38.validation_policy",
   "gcode.label",
   "gcode.line_sync_unavailable",
   "gcode.line_sync_unavailable.title",

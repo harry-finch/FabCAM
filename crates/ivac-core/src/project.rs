@@ -393,6 +393,9 @@ impl Wcs {
 /// a same-file edit; `crate::schema::components_schemas` composes these.
 pub(crate) fn register_schemas(map: &mut crate::schema::SchemaMap) {
     crate::schema::insert::<Project>(map, "Project");
+    crate::schema::insert::<crate::feeds_speeds::FsLabCapture>(map, "FsLabCapture");
+    crate::schema::insert::<ivac_feeds_speeds::SourcePack>(map, "FsSourcePack");
+    crate::schema::insert::<ivac_feeds_speeds::MaterialTaxon>(map, "FsMaterialTaxon");
     crate::schema::insert::<crate::feeds_speeds::FsCamRequest>(map, "FsCamRequest");
     crate::schema::insert::<crate::feeds_speeds::FsCamResponse>(map, "FsCamResponse");
     crate::schema::insert::<Op>(map, "Op");

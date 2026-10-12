@@ -19,7 +19,9 @@ mod dataset;
 mod engine;
 mod matching;
 mod model;
+mod source_pack;
 mod validation;
+pub use source_pack::*;
 
 pub use dataset::{
     load_dataset_json, CatalogEntry, DatasetDocument, DatasetLoadError, LoadedDataset,

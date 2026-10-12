@@ -1017,3 +1017,16 @@ export async function loadMachine() {
   // of `toolchangeStrategy` — migrate before applying.
   project.setMachine(migrateMachineSettings(env.payload));
 }
+
+/// Explicit user-local source backup. Never publishes, synchronizes or changes a project.
+export async function exportLocalSourcePack(
+  pack: import('../state/feeds-speeds-sources').SourcePack,
+) {
+  if (pack.manifest.distribution !== 'local_only')
+    throw new Error('Only local source packs can be backed up here');
+  await writeJson(
+    `${pack.manifest.identity.id}-${pack.manifest.identity.revision}.source-pack.json`,
+    JSON.stringify(pack, null, 2),
+    [{ name: 'Local source pack', extensions: ['json'] }],
+  );
+}

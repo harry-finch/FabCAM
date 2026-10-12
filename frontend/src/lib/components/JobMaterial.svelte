@@ -2,6 +2,7 @@
   import { project } from '../state/project.svelte';
   import { setMaterialCommand } from '../state/commands';
   import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
+  import { NORMALIZED_MATERIALS } from '../state/feeds-speeds-sources';
   import { t } from '../i18n';
   $effect(() => {
     void project.data.settings.feedsSpeedsSources;
@@ -9,9 +10,10 @@
   });
   const materials = $derived([
     ...new Map(
-      recommendationSources.rows
-        .flatMap((s) => s.catalog.materials)
-        .map((m) => [JSON.stringify(m.identity), m]),
+      [
+        ...NORMALIZED_MATERIALS,
+        ...recommendationSources.rows.flatMap((s) => s.catalog.materials),
+      ].map((m) => [JSON.stringify(m.identity), m]),
     ).values(),
   ]);
   let custom = $state(false);

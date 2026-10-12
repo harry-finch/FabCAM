@@ -8,7 +8,8 @@ the existing engine, replacing the lab's VCarve 8 workflow progressively.
 ## Navigation
 
 - [STATUS](STATUS.md): current handoff and Git baseline.
-- [Feeds & Speeds planning](feeds-speeds/README.md): future milling assistant contract; FS0 unstarted.
+- [Feeds & Speeds planning](feeds-speeds/README.md): milling assistant contract and FS3.7 multi-source handoff.
+- [Source packs](feeds-speeds/SOURCE_PACKS.md), [data license matrix](feeds-speeds/DATA_SOURCES.md) and [FS3.7 qualification](feeds-speeds/FS3_7_QUALIFICATION.md).
 - [ROADMAP](ROADMAP.md): scope, milestone gates and approval policy.
 - [ARCHITECTURE](ARCHITECTURE.md): verified module map and boundaries.
 - [UPSTREAM_ANALYSIS](UPSTREAM_ANALYSIS.md): feature evidence and dispositions.
@@ -28,3 +29,7 @@ Repository-local skills live in `.agents/skills/`. Apply only relevant skills.
 This documentation supplements upstream `docs/`; it does not replace it.
 Evidence is pinned to upstream `9168104b4fc4e02e916740a54bd1e56b5019f662`.
 Source presence and passing UI tests do not establish machining correctness.
+
+- FS3.8: [capture qualification](feeds-speeds/FS3_8_QUALIFICATION.md),
+  [preset authoring](feeds-speeds/PRESET_AUTHORING.md),
+  [local validation policy](feeds-speeds/LOCAL_VALIDATION_POLICY.md).

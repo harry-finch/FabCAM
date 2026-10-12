@@ -11,6 +11,7 @@
 //! mobile `cdylib` compiles cleanly.
 
 mod commands;
+mod source_packs;
 mod watcher;
 
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
@@ -213,6 +214,9 @@ fn run_app() -> tauri::Result<()> {
             commands::render_text_layer,
             commands::compute_helix_radius_cmd,
             commands::feeds_speeds_cmd,
+            source_packs::import_source_pack,
+            source_packs::save_lab_pack,
+            source_packs::list_source_packs,
             commands::rasterize_stl_cmd,
             commands::read_workspace_file,
             commands::write_workspace_file,

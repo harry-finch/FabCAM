@@ -153,3 +153,20 @@ REORGANIZE operation/source/library/machine UI; KEEP inventory/profile IDs and
 non-milling paths. Source Settings reuse per-installation persistence. Generated
 schema/types must follow optional proposal. No engine coefficients or ShopBot
 post delta. See ADR-0004 and FS3.5 qualification before future upstream merging.
+
+
+## FS3.7 fork delta
+
+EXTEND ivac-feeds-speeds with source-pack envelope, application taxonomy and
+conservative per-record resolver; KEEP existing numerical Engine and post paths.
+EXTEND applied metadata and guarded portable v4 for private-safe identity summaries.
+REPLACE production Sienci toggle/import-body architecture with generic reviewed
+registry and installation-local storage; retain legacy migration inputs. EXTEND
+native IPC and local WASM validation without a private HTTP data route. Schema/types
+must be regenerated together. New public source licensing is independently reviewed;
+no automatic upstream sync, source-data relicensing or process-model change.
+
+FS3.8 adds fork-local SourcePack authoring metadata (schema 2, schema 1 compatible),
+read-only core/WASM capture and private native/browser revision writes plus compact
+Settings UI. No upstream sync, mathematical change or ShopBot post modification.
+See ADR-0006 for identity, validation and compatibility decisions.

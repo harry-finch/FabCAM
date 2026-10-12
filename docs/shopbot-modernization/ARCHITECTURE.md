@@ -146,3 +146,30 @@ are display metadata; closest rejected scopes never become recommendations.
 The field defaults empty for old responses and is omitted when empty. It is not
 stored in AppliedCutting or project files. Math/precedence/data and post-time
 consumption remain unchanged. The frontend formats reasons without matching data.
+
+
+### Generic cutting source packs (FS3.7)
+
+[ADR-0005](adr/ADR-0005-source-packs-and-cutting-knowledge.md) extends the pure
+engine with DATA-only schema-1 packs and a deterministic knowledge resolver;
+[contract](feeds-speeds/SOURCE_PACKS.md) defines taxonomy, quantities and ranking.
+The CAM adapter accepts legacy datasets or enabled-pack collections. Numerical
+calculations still call the same Engine; generation reads only saved rates.
+Settings read an explicitly reviewed public registry and installation-local packs.
+Tauri path APIs own native storage; browser storage is origin-local IndexedDB.
+Pack JSON never uses the HTTP transport; native IPC/local WASM handle calculations.
+
+AppliedCutting optionally carries a safe identity/evidence/policy summary. Private
+Apply omits the source profile snapshot; authoritative slots and native geometry
+remain persisted. Public snapshots remain compatible. Portable version 4 guards
+new knowledge metadata, while versions 1/2/3 remain readable. Local pack absence
+is informative and does not trigger recommendations during generation. This is
+milling-specific infrastructure; no waterjet/knife coupling is introduced.
+
+## FS3.8 local authoring boundary
+
+[ADR-0006](adr/ADR-0006-local-preset-authoring-and-validation.md) extends SourcePack
+schema 2 and existing app-data/IndexedDB storage, with read-only core capture,
+immutable revisions/head comparison and retained authoring history. Draft is inactive;
+Tested/Validated use existing resolver categories. Existing project identity fields
+support explicit local UUID setup. No parallel database, math or post change.

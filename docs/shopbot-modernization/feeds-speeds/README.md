@@ -76,3 +76,20 @@ Recommendations are optional proposals with provenance, applied only explicitly.
 Material is job context edited at Stock; source configuration is global Settings.
 Read [FS3.5 audit](FS3_5_AUDIT.md), [qualification](FS3_5_QUALIFICATION.md),
 [human review](FS3_5_TEST_LOGICIEL.md) and ADR-0004. Human FS3.5 approval precedes FS4.
+
+
+## FS3.7 source-pack architecture
+
+Read [source-pack contract](SOURCE_PACKS.md), [licensing matrix](DATA_SOURCES.md),
+[phase audit](FS3_7_AUDIT.md), [qualification](FS3_7_QUALIFICATION.md) and
+[ADR-0005](../adr/ADR-0005-source-packs-and-cutting-knowledge.md). One engine handles
+reviewed public and user-local data. Existing cutting math remains intact; v4 saves
+protect private source bodies while retaining reproducible values. Human FS3.7
+approval precedes FS4; no physical calibration or new public lab-data license.
+
+## FS3.8 local authoring
+
+See [preset workflow](PRESET_AUTHORING.md), [validation policy](LOCAL_VALIDATION_POLICY.md),
+[audit](FS3_8_AUDIT.md), [qualification](FS3_8_QUALIFICATION.md) and ADR-0006.
+Current operation values become private exact Sorbonne records through explicit
+capture; no automatic application or physical-evidence promotion. FS4 awaits approval.

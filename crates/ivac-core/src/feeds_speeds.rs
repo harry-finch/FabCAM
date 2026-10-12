@@ -56,6 +56,8 @@ pub struct AppliedCutting {
     pub proposal: Option<fs::Recommendation>,
     /// Saved native context after Apply; never used to overwrite parameters.
     pub context_key: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub knowledge: Option<fs::KnowledgeSummary>,
     pub doc_origin: CuttingOrigin,
     pub stepover_origin: Option<CuttingOrigin>,
 }
@@ -72,6 +74,8 @@ pub struct FsCamRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct FsCamResponse {
     pub recommendation: fs::FeedsSpeedsRecommendation,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub knowledge: Option<fs::KnowledgeExplanation>,
     /// Native op with authoritative geometry/rates only on explicit Apply.
     pub applied_op: Option<Op>,
     /// Optional transient explanation; never persisted with cutting parameters.
@@ -232,29 +236,56 @@ pub fn saved_rates(op: &Op, tool: &ToolEntry, pass: PassKind) -> Result<(u32, u3
 }
 
 pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
-    let loaded = fs::load_dataset_json(&request.dataset_json).map_err(|e| e.to_string())?;
+    if request.dataset_json.len() > 16 * 1024 * 1024 {
+        return Err("Enabled source data exceeds 16 MiB".into());
+    }
     let op = request
         .project
         .operations
         .iter()
         .find(|o| o.id == request.op_id)
         .ok_or("Operation missing")?;
-    let r = cam_request(
-        &request.project,
-        op,
-        loaded.document().profile_set.identity.clone(),
-        request.aggressiveness,
-    )?;
-    let recommendation = loaded.engine().recommend(&r);
-    let scope_rejections = if matches!(
-        recommendation,
-        fs::FeedsSpeedsRecommendation::Unavailable {
-            reason: fs::UnavailableReason::MissingCuttingData
-        }
-    ) {
-        loaded.engine().scope_rejections(&r)
+    let value: serde_json::Value =
+        serde_json::from_str(&request.dataset_json).map_err(|e| e.to_string())?;
+    let (r, recommendation, scope_rejections, knowledge) = if value.get("source_packs").is_some() {
+        let collection: fs::PackCollection =
+            serde_json::from_value(value).map_err(|e| e.to_string())?;
+        let r = cam_request(
+            &request.project,
+            op,
+            fs::Identity {
+                id: "cutting-knowledge".into(),
+                revision: "1".into(),
+            },
+            request.aggressiveness,
+        )?;
+        let result = fs::recommend_packs(&collection.source_packs, &r)?;
+        (
+            r,
+            result.recommendation,
+            result.scope_rejections,
+            result.explanation,
+        )
     } else {
-        vec![]
+        let loaded = fs::load_dataset_json(&request.dataset_json).map_err(|e| e.to_string())?;
+        let r = cam_request(
+            &request.project,
+            op,
+            loaded.document().profile_set.identity.clone(),
+            request.aggressiveness,
+        )?;
+        let recommendation = loaded.engine().recommend(&r);
+        let rejections = if matches!(
+            recommendation,
+            fs::FeedsSpeedsRecommendation::Unavailable {
+                reason: fs::UnavailableReason::MissingCuttingData
+            }
+        ) {
+            loaded.engine().scope_rejections(&r)
+        } else {
+            vec![]
+        };
+        (r, recommendation, rejections, None)
     };
     let applied_op = if request.apply {
         let fs::FeedsSpeedsRecommendation::Available {
@@ -343,7 +374,12 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
         let key = context_key(&request.project, &next);
         next.params.applied_cutting = Some(AppliedCutting {
             slots,
-            proposal: Some((**proposal).clone()),
+            proposal: if knowledge.as_ref().is_some_and(|k| k.summary.local_only) {
+                None
+            } else {
+                Some((**proposal).clone())
+            },
+            knowledge: knowledge.as_ref().map(|k| k.summary.clone()),
             context_key: key,
             doc_origin: CuttingOrigin::Recommendation,
             stepover_origin: proposal
@@ -361,6 +397,7 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
         None
     };
     Ok(FsCamResponse {
+        knowledge,
         recommendation,
         applied_op,
         scope_rejections,
@@ -432,6 +469,81 @@ pub(crate) fn validate_applied_project(
     Ok(())
 }
 
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
+pub struct FsLabCapture {
+    pub request: fs::FeedsSpeedsRequest,
+    pub rpm: u32,
+    pub feed_mm_min: u32,
+    pub plunge_mm_min: u32,
+    pub machine_name: String,
+    pub tool_name: String,
+    pub operation_name: String,
+    pub finishing_context: String,
+}
+/// Read-only capture of the same rates and context consumed by generation.
+pub fn capture_lab_preset(project: &Project, op_id: u32) -> Result<FsLabCapture, String> {
+    let op = project
+        .operations
+        .iter()
+        .find(|op| op.id == op_id)
+        .ok_or("Operation is missing")?;
+    let request = cam_request(
+        project,
+        op,
+        fs::Identity {
+            id: fs::LAB_PACK_ID.into(),
+            revision: "capture".into(),
+        },
+        op.params
+            .applied_cutting
+            .as_ref()
+            .and_then(|a| a.proposal.as_ref())
+            .map_or(fs::Aggressiveness::Prudent, |p| p.aggressiveness),
+    )?;
+    if request.machine.identity.is_none()
+        || request.material.identity.is_none()
+        || request.tool.identity.is_none()
+    {
+        return Err("Set stable machine, material and tool identities in Machine, Stock and Tool library before saving a reusable lab preset".into());
+    }
+    let tool = project
+        .tools
+        .iter()
+        .find(|t| t.id == op.tool_id)
+        .ok_or("Tool is missing")?;
+    let pass = if matches!(op.kind, OpKind::Profile { .. }) {
+        PassKind::Finish
+    } else {
+        PassKind::Rough
+    };
+    let (rpm, plunge_mm_min, feed_mm_min) = saved_rates(op, tool, pass)?;
+    let finishing_context = if matches!(op.kind, OpKind::Pocket { .. }) {
+        let finish_tool = project
+            .tools
+            .iter()
+            .find(|t| t.id == op.finish_tool_id.unwrap_or(op.tool_id))
+            .ok_or("Finish tool is missing")?;
+        let rates = saved_rates(op, finish_tool, PassKind::Finish)?;
+        format!("Primary pocket roughing preset; secondary finish context only: tool #{}; RPM {}; plunge {}; feed {}. Radial finish engagement is not inferred.", finish_tool.id, rates.0, rates.1, rates.2)
+    } else {
+        "Profile cutting role; no separate finish engagement inferred".into()
+    };
+    Ok(FsLabCapture {
+        request,
+        rpm,
+        feed_mm_min,
+        plunge_mm_min,
+        machine_name: project.machine.name.clone(),
+        tool_name: tool.name.clone(),
+        operation_name: op.name.clone(),
+        finishing_context,
+    })
+}
+
+pub fn validate_source_pack_json(json: &str) -> Result<fs::SourcePack, String> {
+    fs::load_source_pack_json(json)
+}
+
 #[cfg(test)]
 #[allow(clippy::float_cmp)]
 mod tests {
@@ -465,6 +577,59 @@ mod tests {
             ..Project::default()
         }
     }
+    #[test]
+    fn lab_capture_reads_manual_resolved_rates_without_mutating_operation() {
+        let mut project = fixture();
+        project.operations[0].params.feed_rate_override = Some(4000);
+        project.operations[0].params.plunge_rate_override = Some(900);
+        let before = serde_json::to_string(&project).unwrap();
+        let captured = capture_lab_preset(&project, project.operations[0].id).unwrap();
+        assert_eq!(captured.feed_mm_min, 4000);
+        assert_eq!(captured.plunge_mm_min, 900);
+        assert_eq!(captured.request.tool.diameter_mm, 6.35);
+        assert_eq!(captured.request.operation.doc_mm, Some(2.8));
+        assert_eq!(
+            captured.request.operation.engagement,
+            fs::Engagement::KnownFullWidth
+        );
+        assert_eq!(serde_json::to_string(&project).unwrap(), before);
+    }
+    #[test]
+    fn lab_capture_preserves_unknown_engagement_and_rejects_missing_identity() {
+        let mut project = fixture();
+        project.operations[0].params.fs_full_width = false;
+        assert_eq!(
+            capture_lab_preset(&project, project.operations[0].id)
+                .unwrap()
+                .request
+                .operation
+                .engagement,
+            fs::Engagement::Unknown
+        );
+        project.fs_context = None;
+        assert!(capture_lab_preset(&project, project.operations[0].id).is_err());
+    }
+    #[test]
+    fn lab_capture_uses_applied_manual_slot_instead_of_original_recommendation() {
+        let mut project = fixture();
+        let mut op = action(&project, true).applied_op.unwrap();
+        op.params
+            .applied_cutting
+            .as_mut()
+            .unwrap()
+            .slots
+            .iter_mut()
+            .find(|s| s.pass == FsPass::Finish)
+            .unwrap()
+            .feed_mm_min = 4000;
+        op.params.applied_cutting.as_mut().unwrap().slots[0]
+            .origins
+            .feed = CuttingOrigin::Manual;
+        project.operations[0] = op;
+        let c = capture_lab_preset(&project, project.operations[0].id).unwrap();
+        assert_eq!(c.feed_mm_min, 4000);
+        assert_eq!(c.rpm, 17000);
+    }
     fn action(p: &Project, apply: bool) -> FsCamResponse {
         feeds_speeds(FsCamRequest {
             project: p.clone(),
@@ -477,6 +642,85 @@ mod tests {
     }
     fn apply(p: &mut Project) {
         p.operations[0] = action(p, true).applied_op.unwrap();
+    }
+    #[test]
+    fn private_pack_apply_saves_values_and_ids_without_record_body() {
+        let p = fixture();
+        let mut pack = fs::load_source_pack_json(include_str!(
+            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+        ))
+        .unwrap();
+        pack.manifest.distribution = fs::Distribution::LocalOnly;
+        for profile in &mut pack.dataset.profile_set.profiles {
+            profile.source.notes = "PRIVATE-DATA-SENTINEL".into();
+        }
+        let result = feeds_speeds(FsCamRequest {
+            project: p.clone(),
+            op_id: 1,
+            dataset_json: serde_json::to_string(&fs::PackCollection {
+                source_packs: vec![pack],
+            })
+            .unwrap(),
+            aggressiveness: fs::Aggressiveness::Prudent,
+            apply: true,
+        })
+        .unwrap();
+        let next = result.applied_op.unwrap();
+        let json = serde_json::to_string(&next).unwrap();
+        assert!(!json.contains("PRIVATE-DATA-SENTINEL"));
+        assert!(next
+            .params
+            .applied_cutting
+            .as_ref()
+            .unwrap()
+            .proposal
+            .is_none());
+        assert!(
+            next.params
+                .applied_cutting
+                .as_ref()
+                .unwrap()
+                .knowledge
+                .as_ref()
+                .unwrap()
+                .local_only
+        );
+        // No packs or engine call on reopen; saved roles remain authoritative.
+        let restored: Op = serde_json::from_str(&json).unwrap();
+        assert_eq!(
+            saved_rates(&restored, &p.tools[0], PassKind::Finish).unwrap(),
+            (17000, 810, 1620)
+        );
+    }
+    #[test]
+    fn public_pack_migration_preserves_single_source_values() {
+        let p = fixture();
+        let legacy = action(&p, false);
+        let pack = fs::load_source_pack_json(include_str!(
+            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+        ))
+        .unwrap();
+        let result = feeds_speeds(FsCamRequest {
+            project: p,
+            op_id: 1,
+            dataset_json: serde_json::to_string(&fs::PackCollection {
+                source_packs: vec![pack],
+            })
+            .unwrap(),
+            aggressiveness: fs::Aggressiveness::Prudent,
+            apply: false,
+        })
+        .unwrap();
+        let fs::FeedsSpeedsRecommendation::Available { recommendation: a } = legacy.recommendation
+        else {
+            panic!("legacy unavailable")
+        };
+        let fs::FeedsSpeedsRecommendation::Available { recommendation: b } = result.recommendation
+        else {
+            panic!("pack unavailable")
+        };
+        assert_eq!(a.parameters, b.parameters);
+        assert!(result.knowledge.is_some());
     }
     #[test]
     fn rejected_scope_is_transient_and_old_responses_remain_readable() {

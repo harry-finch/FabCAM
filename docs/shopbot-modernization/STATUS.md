@@ -17,7 +17,7 @@ M3 approved and pushed. On 2026-10-12 the user authorized the M4 commit/push.
 - Branch: `feature/shopbot-mvp`.
 - M4 source base: `b8a073a` (approved M3); M2 is `047a758`.
 - M4 baseline/publication: `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1` on `feature/shopbot-mvp`.
-- Latest published source: `f6d17dd89be9229c243709d7c2df06dc49df45fa` (governance and feeds-speeds skill); pushed on explicit user instruction 2026-10-12. HEAD and origin tracking ref match; FS0–FS3.6 work is uncommitted.
+- Published foundation: `8271dd3bc892559fecbcaf3d80a64abff59aa299` (FS0–FS3.6). Latest publication: FS3.7/FS3.8 on `feature/shopbot-mvp`, explicitly authorized for commit/push on 2026-10-12; the publication commit is identified in branch history. Publication does not close human qualification gates or authorize FS4.
 - No PR, merge or upstream synchronization is included in M4 publication.
 - Current ready-to-launch macOS arm64 app: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/ivaCAM.app`.
 - Current machine file: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/M4-r2-carre-MDF.sbp`.
@@ -102,8 +102,78 @@ preserved; no engine/domain/persistence changes. Frontend 1,068 pass / one skip,
 check/lint/build and browser disclosure/240 px/kept-manual-feed verification pass.
 See the focused-review addendum and captures in FS3.6 qualification.
 
-STOP at human **FS3.6 approval** (ivac-vgu4). Engineering ivac-n23x is complete;
+FS3.6 human review (ivac-vgu4) remains recorded separately. Engineering ivac-n23x is complete;
 FS3.5 human gate ivac-eh1g closed on explicit user approval. FS4 remains
 unstarted. User explicitly authorized committing and pushing the accumulated FS0–FS3.6
 work on 2026-10-12. This publication does not close the FS3.6 human qualification
-gate. Review the qualification screenshots; visual approval is the next action.
+gate. The subsequent user request explicitly authorizes FS3.7 phases A–G.
+
+
+## FS3.7 — source packs handoff (2026-10-12)
+
+The explicitly requested [FS3.7 audit](feeds-speeds/FS3_7_AUDIT.md) and
+[ADR-0005](adr/ADR-0005-source-packs-and-cutting-knowledge.md) guide one shared
+JSON pack loader and pure multi-source resolver. Existing numerical engine rules
+remain intact. Reviewed public packs use an explicit registry; imported packs
+use Tauri app-data files or origin-local IndexedDB, never the HTTP transport.
+Preferences retain IDs/versions and enablement. Legacy imports migrate only after
+successful validated storage. Generic Settings and compact operation summaries
+retain collapsed calculation context and detailed record provenance.
+
+The application-owned material taxonomy supports explicit parent fallback and
+exact preference; composite Sienci categories are deliberately unmapped. Original
+values/classifications remain traceable beside normalized quantities. The resolver
+prioritizes scoped local trial presets, ranks specificity and reconciles only
+comparable authored same-mode records without averaging. Noncomparable contexts
+remain ambiguous; disagreement is visible and never promotes evidence.
+
+[License matrix](feeds-speeds/DATA_SOURCES.md): APPROVED_PUBLIC is only the pinned
+six-row Sienci CC BY-SA subset. LOCAL_ONLY is the framework for user-entitled
+original measurements; no production private pack is populated. FabCAM/Sorbonne
+public records, Onsrud, Amana, DATRON and Sorotec require licensing review. No new
+lab-data license is chosen. Source licenses remain separate from application GPL.
+
+[Qualification](feeds-speeds/FS3_7_QUALIFICATION.md): 69 engine/data/pack tests plus
+one doctest, 13 adapter tests, two native storage tests, eight ShopBot goldens and
+four CPS integration tests pass. Frontend 1,074 pass / one optional skip;
+Svelte/TypeScript zero errors/warnings, lint/format/Clippy/schema and production
+WASM/frontend build pass. Real browser import/refusal/duplicate, two-source
+proposal/explicit Apply, actual v4 save and missing-local-pack reopen/generation
+pass. Local data bodies are absent from the saved project. No new desktop bundle,
+Windows/Linux execution, physical trial or lab-qualified preset is claimed.
+
+New knowledge saves use guarded version 4; v1/v2/v3 files and legacy dataset
+requests remain supported. Missing local data never changes saved rates or blocks
+generation. See [source-pack contract](feeds-speeds/SOURCE_PACKS.md).
+
+FS3.7 human review ivac-tm7u remains recorded. The subsequent explicit user
+request authorizes FS3.8 engineering; it does not authorize FS4.
+
+
+## FS3.8 — local capture and validation handoff
+
+Explicit user checkpoint request authorizes FS3.8. The pure core capture adapter
+reads actual generation rates including manual edits, exact stable identities and
+native depth/entry/engagement. Secondary Save as lab preset writes only private
+Sorbonne knowledge using FS3.7 storage/resolution. Existing Tool/CuttingParameters,
+recommendation mathematics and ShopBot posts remain unchanged.
+
+Schema 2 adds optional authoring metadata and retained revision snapshots; schema 1
+public references remain readable and unchanged. Draft is inactive, Tested requires
+dated physical-use/success attestation, Validated requires later deliberate review
+under sorbonne-local-validation-1. Unknown engagement cannot be qualified. Revisions
+are immutable with stale-head refusal; deletion is confirmed and reversible.
+Settings supports search/context/trial/history/notes/disable/restore/promotion and
+explicit private backup/restore. Missing local packs still preserve saved values.
+
+Read [qualification](feeds-speeds/FS3_8_QUALIFICATION.md),
+[authoring guide](feeds-speeds/PRESET_AUTHORING.md),
+[validation policy](feeds-speeds/LOCAL_VALIDATION_POLICY.md) and
+[ADR-0006](adr/ADR-0006-local-preset-authoring-and-validation.md).
+Software tests and browser captures do not constitute a physical trial. No new
+macOS desktop bundle or Windows/Linux runtime qualification is claimed.
+Software checks: 77 engine tests + doctest, 16 core adapter, 3 native storage,
+1,087 frontend passes/1 optional skip and 8 ShopBot post regressions; check/lint/
+Clippy/optimized build pass. Browser capture/manage/export/restore and identical
+before/after project-operation checks pass.
+STOP — human approval ivac-7yii is required before starting FS4.

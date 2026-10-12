@@ -127,8 +127,16 @@ export function persistPerProjectState(p: ProjectState) {
 /// `?? []` fallback in restore().
 export function snapshotProject(p: ProjectState): ProjectFile {
   return {
-    kind: hasFeedsSpeedsData(p.data) ? 'ivac-project-cutting' : 'ivac-project',
-    version: hasFeedsSpeedsData(p.data) ? 3 : 1,
+    kind: p.data.operations.some((op) => op.appliedCutting?.knowledge)
+      ? 'ivac-project-knowledge'
+      : hasFeedsSpeedsData(p.data)
+        ? 'ivac-project-cutting'
+        : 'ivac-project',
+    version: p.data.operations.some((op) => op.appliedCutting?.knowledge)
+      ? 4
+      : hasFeedsSpeedsData(p.data)
+        ? 3
+        : 1,
     ...(p.data.material ? { material: p.data.material } : {}),
     ...(p.data.fsContext ? { fsContext: p.data.fsContext } : {}),
     imports: p.data.imports,

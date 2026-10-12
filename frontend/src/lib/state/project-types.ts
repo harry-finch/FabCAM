@@ -792,8 +792,8 @@ export function placementFileTransform(
 }
 
 export interface ProjectFile {
-  kind: 'ivac-project' | 'ivac-project-fs' | 'ivac-project-cutting';
-  version: 1 | 2 | 3;
+  kind: 'ivac-project' | 'ivac-project-fs' | 'ivac-project-cutting' | 'ivac-project-knowledge';
+  version: 1 | 2 | 3 | 4;
   material?: MaterialIdentity;
   fsContext?: import('../api/generated').components['schemas']['FsContext'];
   imports: ImportEntry[];

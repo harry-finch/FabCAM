@@ -23,7 +23,14 @@ import type {
   VersionResponse,
 } from './types';
 
+type SourcePack = import('./generated').components['schemas']['FsSourcePack'];
+type LabCapture = import('./generated').components['schemas']['FsLabCapture'];
 export type WasmModule = {
+  captureLabPreset?: (
+    project: import('./generated').components['schemas']['Project'],
+    opId: number,
+  ) => LabCapture;
+  validateSourcePack?: (json: string) => SourcePack;
   default?: () => Promise<unknown>;
   healthz: () => { ok: boolean };
   listPosts?: () => unknown;
@@ -165,6 +172,20 @@ export class WasmWiacClient implements WiacClient {
   async renderTextLayer(layer: WireTextLayer): Promise<RenderTextLayerResponse> {
     const m = await loadModule();
     return m.renderTextLayer(layer);
+  }
+
+  async captureLabPreset(
+    project: import('./generated').components['schemas']['Project'],
+    opId: number,
+  ): Promise<LabCapture> {
+    const m = await loadModule();
+    if (!m.captureLabPreset) throw new Error('Lab capture unavailable in this WASM build');
+    return m.captureLabPreset(project, opId);
+  }
+  async validateSourcePack(json: string): Promise<SourcePack> {
+    const m = await loadModule();
+    if (!m.validateSourcePack) throw new Error('Source packs unavailable in this WASM build');
+    return m.validateSourcePack(json);
   }
 
   async feedsSpeeds(request: FsCamRequest): Promise<FsCamResponse> {

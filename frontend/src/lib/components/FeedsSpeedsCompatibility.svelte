@@ -42,6 +42,16 @@
         >{/if}</select
     ></label
   >
+  <p>{t('fs38.identity_help')}</p>
+  <button
+    type="button"
+    onclick={() =>
+      onChange({
+        id: `lab-${kind === 'machines' ? 'machine' : 'tool'}-${crypto.randomUUID()}`,
+        revision: '1',
+      })}>{t('fs38.create_identity')}</button
+  >
+  {#if value}<small>{t('fs38.identity')}: {value.id} · {value.revision}</small>{/if}
 </details>
 
 <style>
@@ -54,6 +64,12 @@
   }
   p {
     max-width: 40rem;
+  }
+  small {
+    display: block;
+    margin-top: 0.4rem;
+    overflow-wrap: anywhere;
+    opacity: 0.7;
   }
   select {
     display: block;

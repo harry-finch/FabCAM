@@ -1,10 +1,14 @@
 <script lang="ts">
+  import LabPresetDialog from '../LabPresetDialog.svelte';
+  import { captureLabPreset } from '../../state/feeds-speeds-pack-store';
+  import { LAB_PACK_ID, labHasRevision, type LabCapture } from '../../state/lab-presets';
   import { scopeValue } from '../../state/feeds-speeds-explanation';
   import CuttingOriginStatus from './CuttingOriginStatus.svelte';
   import { project, type OpEntry } from '../../state/project.svelte';
   import { applyCuttingCommand } from '../../state/commands';
   import { buildProject } from '../../api/build-project';
-  import { defaultClient } from '../../api/http';
+  import { cuttingKnowledgeClient } from '../../state/feeds-speeds-pack-store';
+  import { packCollection, NORMALIZED_MATERIALS } from '../../state/feeds-speeds-sources';
   import type { FsCamResponse } from '../../api/types';
   import type { components } from '../../api/generated';
   import {
@@ -19,6 +23,26 @@
   import { t } from '../../i18n';
   type S = components['schemas'];
   let { op }: { op: OpEntry } = $props();
+  let labCapture = $state<LabCapture | null>(null);
+  let labFingerprint = $state('');
+  async function openLabCapture() {
+    if (!wire) return;
+    const fingerprint = currentLabFingerprint;
+    try {
+      await recommendationSources.refresh(true);
+      const c = await captureLabPreset(wire, op.id);
+      c.machine_name = project.data.machine.name ?? c.machine_name;
+      if (fingerprint !== currentLabFingerprint) throw new Error(t('fs38.stale'));
+      labFingerprint = fingerprint;
+      labCapture = c;
+      error = '';
+    } catch (e) {
+      error = String(e);
+    }
+  }
+  function knowledgeName(id: string) {
+    return id === LAB_PACK_ID ? t('fs38.sorbonne') : t('fs37.references');
+  }
   let review = $state(false);
   let mode = $state<S['FsAggressiveness']>('prudent');
   let responses = $state<
@@ -34,7 +58,7 @@
   let busy = $state(false);
   let attempted = $state(false);
   let error = $state('');
-  const api = defaultClient();
+  const api = cuttingKnowledgeClient();
   $effect(() => {
     void project.data.settings.feedsSpeedsSources;
     void recommendationSources.refresh();
@@ -66,11 +90,12 @@
       fsContext: context,
     }),
   );
+  const currentLabFingerprint = $derived(JSON.stringify([wire, op.id, project.data.machine.name]));
   const key = $derived(
     JSON.stringify([wire, mode, recommendationSources.rows.map((s) => s.contents), op.id]),
   );
   const stale = $derived(
-    !!op.appliedCutting?.proposal &&
+    !!(op.appliedCutting?.proposal || op.appliedCutting?.knowledge) &&
       op.appliedContextKey !==
         cuttingContextKey(
           op,
@@ -85,14 +110,26 @@
     responses.filter((s) => s.result.recommendation.status === 'available'),
   );
   const accepted = $derived(op.appliedCutting?.proposal);
+  const savedKnowledge = $derived(op.appliedCutting?.knowledge);
+  const hasRecommendation = $derived(!!accepted || !!savedKnowledge);
+  const provenanceMissing = $derived(
+    !!savedKnowledge &&
+      ![...recommendationSources.builtins, ...recommendationSources.local].some(
+        (p) =>
+          p.manifest.identity.id === savedKnowledge.selected_pack.id &&
+          (p.manifest.identity.revision === savedKnowledge.selected_pack.revision ||
+            labHasRevision(p, savedKnowledge.selected_pack.revision)),
+      ),
+  );
   const materialLabel = $derived(
-    recommendationSources.rows
-      .flatMap((s) => s.catalog.materials)
-      .find(
-        (m) =>
-          m.identity.id === project.data.material?.id &&
-          m.identity.revision === project.data.material?.revision,
-      )?.label ??
+    [
+      ...NORMALIZED_MATERIALS,
+      ...recommendationSources.rows.flatMap((s) => s.catalog.materials),
+    ].find(
+      (m) =>
+        m.identity.id === project.data.material?.id &&
+        m.identity.revision === project.data.material?.revision,
+    )?.label ??
       project.data.material?.label ??
       (project.data.material ? t('fs35.saved_material') : t('fs35.material_missing')),
   );
@@ -136,18 +173,28 @@
     error = '';
     attempted = true;
     try {
-      const next = await Promise.all(
-        recommendationSources.rows.map(async (source) => ({
-          ...source,
+      const contents = packCollection(recommendationSources.rows);
+      const catalog: DatasetCatalog = {
+        machines: recommendationSources.rows.flatMap((s) => s.catalog.machines),
+        materials: recommendationSources.rows.flatMap((s) => s.catalog.materials),
+        tools: recommendationSources.rows.flatMap((s) => s.catalog.tools),
+        description: t('fs37.references'),
+      };
+      const next = [
+        {
+          id: 'cutting-knowledge',
+          label: t('fs37.references'),
+          contents,
+          catalog,
           result: await api.feedsSpeeds!({
             project: wire,
             op_id: op.id,
-            dataset_json: source.contents,
+            dataset_json: contents,
             aggressiveness: mode,
             apply: false,
           }),
-        })),
-      );
+        },
+      ];
       if (captured === key) {
         responses = next;
         responseKey = captured;
@@ -344,10 +391,19 @@
         <span>{t('fs36.kept')}</span>
       </div>
     {/if}
-    {#if accepted && !review}<p class="source-meta">
+    {#if accepted && !savedKnowledge && !review}<p class="source-meta">
         {t('fs35.source')}: {accepted.provenance.profile.source.author} · {evidence(
           accepted.source_evidence,
         )}
+      </p>{/if}
+    {#if savedKnowledge && !review}<p class="source-meta">
+        {knowledgeName(savedKnowledge.selected_pack.id)} · {savedKnowledge.compatible_sources}
+        {savedKnowledge.compatible_sources === 1
+          ? t('fs37.compatible_source')
+          : t('fs37.compatible_sources')} · {evidence(savedKnowledge.evidence)}
+      </p>{/if}
+    {#if provenanceMissing}<p class="source-meta" role="status">
+        {t('fs37.provenance_missing')}
       </p>{/if}
     {#if !review}<button
         type="button"
@@ -355,16 +411,21 @@
         onclick={() => {
           review = true;
           error = '';
-        }}>{stale ? t('fs35.recalculate') : accepted ? t('fs35.review') : t('fs35.suggest')}</button
+        }}
+        >{stale
+          ? t('fs35.recalculate')
+          : hasRecommendation
+            ? t('fs35.review')
+            : t('fs35.suggest')}</button
       >{/if}
   </div>
   {#if review}
     <div
       class="recommendation"
       role="region"
-      aria-label={accepted ? t('fs36.recalculate_parameters') : t('fs35.recommendation')}
+      aria-label={hasRecommendation ? t('fs36.recalculate_parameters') : t('fs35.recommendation')}
     >
-      <h4>{accepted ? t('fs36.recalculate_parameters') : t('fs35.recommendation')}</h4>
+      <h4>{hasRecommendation ? t('fs36.recalculate_parameters') : t('fs35.recommendation')}</h4>
       <dl>
         <dt>{t('fs.material')}</dt>
         <dd>{materialLabel}</dd>
@@ -391,12 +452,21 @@
           {#if source.result.recommendation.status === 'available'}
             {@const proposal = source.result.recommendation.recommendation}
             <p class="source-meta">
-              {t('fs35.source')}: {proposal.provenance.profile.source.author} · {evidence(
-                proposal.source_evidence,
-              )}
+              {t('fs35.source')}: {knowledgeName(
+                source.result.knowledge?.summary.selected_pack.id ?? '',
+              )} · {source.result.knowledge?.summary.compatible_sources ?? 1}
+              {(source.result.knowledge?.summary.compatible_sources ?? 1) === 1
+                ? t('fs37.compatible_source')
+                : t('fs37.compatible_sources')} · {evidence(proposal.source_evidence)}
             </p>
           {/if}
         {/each}
+      {:else if savedKnowledge}
+        <p class="source-meta">
+          {t('fs36.previous_source')}: {savedKnowledge.selected_pack.id} · {evidence(
+            savedKnowledge.evidence,
+          )}
+        </p>
       {:else if accepted}
         <p class="source-meta">
           {t('fs36.previous_source')}: {accepted.provenance.profile.source.author} · {evidence(
@@ -405,7 +475,10 @@
         </p>
       {:else if recommendationSources.rows.length}
         <p class="source-meta">
-          {t('fs35.source')}: {recommendationSources.rows.map((source) => source.label).join(' · ')} ·
+          {t('fs35.source')}: {t('fs37.references')} · {recommendationSources.rows.length}
+          {recommendationSources.rows.length === 1
+            ? t('fs37.enabled_source')
+            : t('fs37.enabled_sources')} ·
           {t('fs36.evidence_pending')}
         </p>
       {/if}
@@ -421,7 +494,7 @@
         type="button"
         class="inspector-action"
         disabled={busy || !wire || !project.data.material || !recommendationSources.rows.length}
-        onclick={calculate}>{accepted ? t('fs35.recalculate') : t('fs.propose')}</button
+        onclick={calculate}>{hasRecommendation ? t('fs35.recalculate') : t('fs.propose')}</button
       >
       <details>
         <summary>{t('fs36.calculation_context')}</summary>
@@ -449,7 +522,7 @@
               {/if}
               {#if source.result.scope_rejections?.length}
                 <p class="scope-heading">{t('fs36.closest_scopes')}</p>
-                {#each source.result.scope_rejections as rejection (rejection.profile.id + rejection.profile.revision)}
+                {#each source.result.scope_rejections as rejection, rejectionIndex (rejectionIndex)}
                   <ul class="scope-reasons">
                     {#each rejection.mismatches as mismatch (mismatch.field)}
                       <li>
@@ -494,6 +567,9 @@
                 {proposal.parameters.effective_chipload_mm_tooth.toFixed(4)} mm/{t('fs.tooth')}
               </dd>
             </dl>
+            {#if source.result.knowledge?.disagreement}<p role="status">
+                {t('fs37.disagreement')}
+              </p>{/if}
             {#if proposal.applicability === 'adjusted_outside_evidence'}<p role="status">
                 {t('fs.adjusted')}
               </p>{/if}
@@ -506,6 +582,20 @@
             >
             <details>
               <summary>{t('fs.source')}</summary>
+              {#if source.result.knowledge}
+                <p>{source.result.knowledge.selection_reason}</p>
+                {#if source.result.knowledge.reference_chipload_range}<p>
+                    {t('fs37.reference_range')}: {source.result.knowledge.reference_chipload_range.min.toFixed(
+                      4,
+                    )}–{source.result.knowledge.reference_chipload_range.max.toFixed(4)} mm/{t(
+                      'fs.tooth',
+                    )}
+                  </p>{/if}
+                {#if source.result.knowledge.disagreement}<p role="status">
+                    {t('fs37.disagreement')}
+                  </p>{/if}
+                <pre>{JSON.stringify(source.result.knowledge.records, null, 2)}</pre>
+              {/if}
               <p>{proposal.provenance.profile.source.permission_or_license}</p>
               <a
                 href={sourceLink(proposal.provenance.profile.source.reference) ?? undefined}
@@ -541,8 +631,25 @@
       <p>{accepted.provenance.profile.source.notes}</p>
       <pre>{JSON.stringify(op.appliedCutting, null, 2)}</pre>
     </details>{/if}
+  {#if savedKnowledge && !accepted}<details>
+      <summary>{t('fs.source')}</summary>
+      <p>{savedKnowledge.selected_pack.id} · {savedKnowledge.selected_pack.revision}</p>
+      <p>{savedKnowledge.selected_record} · {evidence(savedKnowledge.evidence)}</p>
+      <p>{savedKnowledge.policy}</p>
+    </details>{/if}
   {#if error}<p role="alert">{error}</p>{/if}
+  <button type="button" class="inspector-action" disabled={!wire || busy} onclick={openLabCapture}
+    >{t('fs38.save_action')}</button
+  >
 </section>
+
+{#if labCapture}<LabPresetDialog
+    capture={labCapture}
+    materialName={materialLabel}
+    fingerprint={labFingerprint}
+    currentFingerprint={currentLabFingerprint}
+    onClose={() => (labCapture = null)}
+  />{/if}
 
 <style>
   .scope-reasons {

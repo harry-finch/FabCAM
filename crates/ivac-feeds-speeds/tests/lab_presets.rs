@@ -1,0 +1,237 @@
+//! Synthetic SOFTWARE ONLY attestations, never physical machining evidence.
+use ivac_feeds_speeds::*;
+fn lab_pack() -> SourcePack {
+    let mut p = load_source_pack_json(include_str!(
+        "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+    ))
+    .unwrap();
+    p.manifest.identity = Identity {
+        id: LAB_PACK_ID.into(),
+        revision: "0001791792000000".into(),
+    };
+    p.manifest.schema_version = 2;
+    p.manifest.visibility = Visibility::Private;
+    p.manifest.distribution = Distribution::LocalOnly;
+    p.dataset.profile_set.profiles.truncate(1);
+    p.records.truncate(1);
+    let profile = &mut p.dataset.profile_set.profiles[0];
+    profile.category = ProfileCategory::ExactPreset;
+    profile.evidence = Evidence::Tested;
+    profile.scope.entry = Some(EntryStrategy::Direct);
+    profile.source.evidence_record = Some(EvidenceRecord {
+        trial_reference: "SOFTWARE ONLY synthetic trial".into(),
+        validation_criteria_reference: None,
+    });
+    p.records[0].lab = Some(LabPreset {
+        name: "SOFTWARE ONLY local preset".into(),
+        state: LabState::Tested,
+        created_at: "2026-10-12T08:00:00Z".into(),
+        updated_at: "2026-10-12T08:00:00Z".into(),
+        tested_at: Some("2026-10-12".into()),
+        physically_tested: true,
+        no_critical_failure: true,
+        operator: "Synthetic operator".into(),
+        job_reference: "SOFTWARE TEST".into(),
+        observations: "No actual machining performed".into(),
+        detailed_notes: String::new(),
+        finishing_context: String::new(),
+        enabled: true,
+        deleted: false,
+        review: None,
+    });
+    p
+}
+fn request(p: &SourcePack) -> FeedsSpeedsRequest {
+    let s = &p.dataset.profile_set.profiles[0].scope;
+    FeedsSpeedsRequest {
+        schema_version: 1,
+        dataset: p.dataset.profile_set.identity.clone(),
+        machine: MachineSnapshot {
+            identity: Some(p.dataset.machines[0].identity.clone()),
+            rpm_min: None,
+            rpm_max: None,
+            max_feed_mm_min: None,
+            max_plunge_mm_min: None,
+        },
+        material: MaterialSnapshot {
+            identity: Some(p.dataset.materials[0].identity.clone()),
+            thickness_mm: None,
+        },
+        tool: ToolSnapshot {
+            identity: s.tool.clone(),
+            cutting_family: s.cutting_family,
+            diameter_mm: 6.35,
+            flute_count: 1,
+            max_rpm: None,
+        },
+        operation: OperationContext {
+            kind: OperationKind::FullSlot,
+            doc_mm: Some(2.8),
+            engagement: Engagement::KnownFullWidth,
+            entry: EntryStrategy::Direct,
+        },
+        aggressiveness: Aggressiveness::Prudent,
+    }
+}
+#[test]
+fn local_capture_round_trip_requires_successful_physical_attestation() {
+    let p = lab_pack();
+    validate_source_pack(&p).unwrap();
+    assert_eq!(
+        load_source_pack_json(&serde_json::to_string(&p).unwrap()).unwrap(),
+        p
+    );
+    let mut invalid = p.clone();
+    invalid.records[0].lab.as_mut().unwrap().physically_tested = false;
+    assert!(validate_source_pack(&invalid).is_err());
+    invalid = p.clone();
+    invalid.records[0].lab.as_mut().unwrap().no_critical_failure = false;
+    assert!(validate_source_pack(&invalid).is_err());
+    invalid = p;
+    invalid.records[0].lab.as_mut().unwrap().tested_at = None;
+    assert!(validate_source_pack(&invalid).is_err());
+}
+#[test]
+fn public_lab_metadata_and_incomplete_validation_are_refused() {
+    let mut p = lab_pack();
+    p.manifest.distribution = Distribution::Bundled;
+    p.manifest.visibility = Visibility::Public;
+    assert!(validate_source_pack(&p).is_err());
+    p = lab_pack();
+    p.records[0].lab.as_mut().unwrap().state = LabState::Validated;
+    p.dataset.profile_set.profiles[0].evidence = Evidence::Validated;
+    p.dataset.profile_set.profiles[0]
+        .source
+        .evidence_record
+        .as_mut()
+        .unwrap()
+        .validation_criteria_reference = Some(LAB_VALIDATION_POLICY.into());
+    assert!(validate_source_pack(&p).is_err());
+    p.records[0].lab.as_mut().unwrap().review = Some(LabReview {
+        policy: LAB_VALIDATION_POLICY.into(),
+        reviewed_at: "2026-10-12T09:00:00Z".into(),
+        notes: "SOFTWARE ONLY synthetic review".into(),
+        acceptable_finish_and_behavior: true,
+        no_overheating_chatter_or_overload: true,
+        suitable_for_lab_use: true,
+    });
+    validate_source_pack(&p).unwrap();
+    p.records[0]
+        .lab
+        .as_mut()
+        .unwrap()
+        .review
+        .as_mut()
+        .unwrap()
+        .suitable_for_lab_use = false;
+    assert!(validate_source_pack(&p).is_err());
+}
+#[test]
+fn local_tested_precedence_uses_existing_resolver_and_disabled_deleted_presets_are_ignored() {
+    let p = lab_pack();
+    let r = request(&p);
+    let public = load_source_pack_json(include_str!(
+        "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+    ))
+    .unwrap();
+    let result = recommend_packs(&[public.clone(), p.clone()], &r).unwrap();
+    assert_eq!(
+        result.explanation.unwrap().summary.selected_pack.id,
+        LAB_PACK_ID
+    );
+    for deleted in [false, true] {
+        let mut disabled = p.clone();
+        disabled.records[0].lab.as_mut().unwrap().enabled = false;
+        disabled.records[0].lab.as_mut().unwrap().deleted = deleted;
+        let result = recommend_packs(&[public.clone(), disabled], &r).unwrap();
+        assert_eq!(
+            result.explanation.unwrap().summary.selected_pack.id,
+            public.manifest.identity.id
+        );
+    }
+}
+#[test]
+fn draft_is_saved_but_never_supplies_recommendations() {
+    let mut p = lab_pack();
+    let r = request(&p);
+    p.dataset.profile_set.profiles[0].category = ProfileCategory::Theoretical;
+    p.dataset.profile_set.profiles[0].evidence = Evidence::Theoretical;
+    p.dataset.profile_set.profiles[0].scope.engagement = EngagementScope::UnknownSafe;
+    p.dataset.profile_set.profiles[0].scope.operation = OperationKind::Profile;
+    let l = p.records[0].lab.as_mut().unwrap();
+    l.state = LabState::Draft;
+    l.enabled = false;
+    l.physically_tested = false;
+    l.tested_at = None;
+    validate_source_pack(&p).unwrap();
+    assert!(matches!(
+        recommend_packs(&[p], &r).unwrap().recommendation,
+        FeedsSpeedsRecommendation::Unavailable { .. }
+    ));
+}
+#[test]
+fn history_preserves_prior_evidence_and_rejects_changed_identity() {
+    let mut p = lab_pack();
+    let previous = p.dataset.profile_set.profiles[0].clone();
+    let metadata = p.records[0].lab.clone().unwrap();
+    p.records[0].lab_history.push(LabRevision {
+        profile: previous,
+        metadata,
+    });
+    validate_source_pack(&p).unwrap();
+    p.records[0].lab_history[0].profile.identity.id = "other-preset".into();
+    assert!(validate_source_pack(&p).is_err());
+}
+
+#[test]
+fn malformed_dates_and_unsupported_authoring_schema_are_rejected_without_panics() {
+    let mut p = lab_pack();
+    p.manifest.schema_version = 1;
+    assert!(validate_source_pack(&p).is_err());
+    for date in ["2026-02-31", "2026-13-01", "界界界x", "not-a-date"] {
+        let mut p = lab_pack();
+        p.records[0].lab.as_mut().unwrap().tested_at = Some(date.into());
+        assert!(validate_source_pack(&p).is_err());
+    }
+}
+
+#[test]
+fn imported_physical_test_cannot_postdate_its_saved_revision() {
+    let mut p = lab_pack();
+    p.records[0].lab.as_mut().unwrap().tested_at = Some("2099-01-01".into());
+    assert!(validate_source_pack(&p).unwrap_err().contains("test date"));
+}
+
+#[test]
+fn sorbonne_validated_record_precedes_tested_record_without_ui_ranking() {
+    let mut p = lab_pack();
+    let r = request(&p);
+    let mut profile = p.dataset.profile_set.profiles[0].clone();
+    profile.identity.id = "sorbonne-validated-software".into();
+    profile.evidence = Evidence::Validated;
+    profile
+        .source
+        .evidence_record
+        .as_mut()
+        .unwrap()
+        .validation_criteria_reference = Some(LAB_VALIDATION_POLICY.into());
+    let mut origin = p.records[0].clone();
+    origin.profile = profile.identity.clone();
+    origin.source_record_id = profile.identity.id.clone();
+    let lab = origin.lab.as_mut().unwrap();
+    lab.state = LabState::Validated;
+    lab.review = Some(LabReview {
+        policy: LAB_VALIDATION_POLICY.into(),
+        reviewed_at: "2026-10-12T09:00:00Z".into(),
+        notes: "SOFTWARE ONLY synthetic review; no physical qualification".into(),
+        acceptable_finish_and_behavior: true,
+        no_overheating_chatter_or_overload: true,
+        suitable_for_lab_use: true,
+    });
+    p.records.push(origin);
+    p.dataset.profile_set.profiles.push(profile);
+    let result = recommend_packs(&[p], &r).unwrap();
+    let selected = result.explanation.unwrap().summary;
+    assert_eq!(selected.evidence, Evidence::Validated);
+    assert_eq!(selected.selected_record, "sorbonne-validated-software");
+}

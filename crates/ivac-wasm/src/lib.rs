@@ -319,3 +319,22 @@ pub fn feeds_speeds(request: JsValue) -> Result<JsValue, JsValue> {
         serde_wasm_bindgen::to_value(&response).map_err(into_js_error)
     })
 }
+
+#[wasm_bindgen(js_name = validateSourcePack)]
+pub fn validate_source_pack(json: &str) -> Result<JsValue, JsValue> {
+    guard(|| {
+        let pack =
+            ivac_core::feeds_speeds::validate_source_pack_json(json).map_err(into_js_error)?;
+        serde_wasm_bindgen::to_value(&pack).map_err(into_js_error)
+    })
+}
+
+#[wasm_bindgen(js_name = captureLabPreset)]
+pub fn capture_lab_preset(project: JsValue, op_id: u32) -> Result<JsValue, JsValue> {
+    guard(|| {
+        let project = serde_wasm_bindgen::from_value(project).map_err(into_js_error)?;
+        let capture =
+            ivac_core::feeds_speeds::capture_lab_preset(&project, op_id).map_err(into_js_error)?;
+        serde_wasm_bindgen::to_value(&capture).map_err(into_js_error)
+    })
+}

@@ -21,7 +21,8 @@ export function validateProjectFile(value: ProjectFile): void {
     !(
       (value.kind === 'ivac-project' && value.version === 1) ||
       (value.kind === 'ivac-project-fs' && value.version === 2) ||
-      (value.kind === 'ivac-project-cutting' && value.version === 3)
+      (value.kind === 'ivac-project-cutting' && value.version === 3) ||
+      (value.kind === 'ivac-project-knowledge' && value.version === 4)
     )
   )
     throw new Error('Unsupported project format/version');
@@ -40,6 +41,25 @@ export function validateProjectFile(value: ProjectFile): void {
           !applied.proposal.parameters))
     )
       throw new Error('Incomplete recommendation snapshot');
+    if (applied.knowledge) {
+      if (value.version !== 4)
+        throw new Error('Source-pack provenance requires guarded project version 4');
+      const k = applied.knowledge;
+      if (
+        !k.selected_pack?.id ||
+        !k.selected_pack.revision ||
+        !k.selected_record ||
+        !k.policy ||
+        !k.engine_version ||
+        !['theoretical', 'reference_data', 'tested', 'validated'].includes(k.evidence) ||
+        typeof k.local_only !== 'boolean' ||
+        !Number.isInteger(k.compatible_sources) ||
+        k.compatible_sources < 1
+      )
+        throw new Error('Invalid source-pack provenance');
+      if (k.local_only && applied.proposal)
+        throw new Error('Private source records cannot be embedded in projects');
+    }
     const keys = new Set<string>();
     for (const slot of applied.slots) {
       const key = `${slot.tool_id}/${slot.pass}`;

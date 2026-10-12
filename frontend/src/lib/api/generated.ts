@@ -251,6 +251,7 @@ export interface components {
             /** @description Saved native context after Apply; never used to overwrite parameters. */
             context_key: string;
             doc_origin: components["schemas"]["CuttingOrigin"];
+            knowledge?: components["schemas"]["FsKnowledgeSummary"] | null;
             /** @description Optional evidence snapshot; manually entered operation rates need no proposal. */
             proposal?: components["schemas"]["FsRecommendation"] | null;
             slots: components["schemas"]["AppliedRateSlot"][];
@@ -348,6 +349,11 @@ export interface components {
             /** Format: double */
             min_y: number;
         };
+        CatalogEntry: {
+            identity: components["schemas"]["FsIdentity"];
+            label: string;
+            notes: string;
+        };
         /** @description Parameters shared by every closed-contour op (Profile / Pocket / Engrave / `DragKnife`). Embedded in the matching [`super::op::OpKind`] variants. Holds tab shape + placement, lead-in / lead-out, cut direction, corner-feed reduction, and the optional user-picked approach point. */
         ContourParams: {
             /** @description Anfahrpunkt: user-picked XY where the cutter enters each closed-contour ring. `None` = auto. */
@@ -426,6 +432,17 @@ export interface components {
         CutDirection: "conventional" | "climb";
         /** @enum {string} */
         CuttingOrigin: "recommendation" | "manual" | "legacy_snapshot";
+        /** @description Self-contained authoring document; no implicit inheritance or remote references. */
+        DatasetDocument: {
+            description: string;
+            /** Format: uint32 */
+            format_version: number;
+            license: string;
+            machines: components["schemas"]["CatalogEntry"][];
+            materials: components["schemas"]["CatalogEntry"][];
+            profile_set: components["schemas"]["FsProfileSet"];
+            tools: components["schemas"]["ToolDefinition"][];
+        };
         /** @description Auto-placed dowel-pin registration for a two-sided job. The front program drills `count` holes of `diameter_mm`, inset `margin_mm` from the stock edge and placed symmetrically about the flip axis so the same holes line up once the stock is flipped. Exact positions are derived in a later phase; this struct is only the operator-facing knobs. */
         DowelPinConfig: {
             /**
@@ -601,6 +618,7 @@ export interface components {
         FsCamResponse: {
             /** @description Native op with authoritative geometry/rates only on explicit Apply. */
             applied_op?: components["schemas"]["Op"] | null;
+            knowledge?: components["schemas"]["FsKnowledgeExplanation"] | null;
             recommendation: components["schemas"]["FsFeedsSpeedsRecommendation"];
             /** @description Optional transient explanation; never persisted with cutting parameters. */
             scope_rejections?: components["schemas"]["FsProfileRejection"][];
@@ -659,6 +677,8 @@ export interface components {
             /** @enum {string} */
             kind: "unknown_doc";
         };
+        /** @enum {string} */
+        FsDistribution: "bundled" | "local_only" | "external_reference";
         /** @description Nominal stepover is not a bound on instantaneous physical engagement. */
         FsEngagement: {
             /** @enum {string} */
@@ -734,6 +754,83 @@ export interface components {
             /** @enum {string} */
             kind: "family";
         };
+        FsKnowledgeContributor: {
+            pack: components["schemas"]["FsIdentity"];
+            record_id: string;
+        };
+        FsKnowledgeExplanation: {
+            disagreement: boolean;
+            records: components["schemas"]["FsKnowledgeRecord"][];
+            reference_chipload_range?: components["schemas"]["FsRange"] | null;
+            selection_reason: string;
+            summary: components["schemas"]["FsKnowledgeSummary"];
+        };
+        FsKnowledgeRecord: {
+            evidence: components["schemas"]["FsEvidence"];
+            local_only: boolean;
+            normalized: components["schemas"]["FsNormalizedQuantities"];
+            origin: components["schemas"]["FsRecordOrigin"];
+            pack: components["schemas"]["FsIdentity"];
+            profile: components["schemas"]["FsIdentity"];
+            rank: number[];
+            record_id: string;
+        };
+        /** @description Safe to save/share: no original records, source notes, paths or derived source quantities. */
+        FsKnowledgeSummary: {
+            /** Format: uint32 */
+            compatible_sources: number;
+            contributors?: components["schemas"]["FsKnowledgeContributor"][];
+            engine_version: string;
+            evidence: components["schemas"]["FsEvidence"];
+            local_only: boolean;
+            policy: string;
+            selected_pack: components["schemas"]["FsIdentity"];
+            selected_record: string;
+        };
+        FsLabCapture: {
+            /** Format: uint32 */
+            feed_mm_min: number;
+            finishing_context: string;
+            machine_name: string;
+            operation_name: string;
+            /** Format: uint32 */
+            plunge_mm_min: number;
+            request: components["schemas"]["FsFeedsSpeedsRequest"];
+            /** Format: uint32 */
+            rpm: number;
+            tool_name: string;
+        };
+        FsLabPreset: {
+            created_at: string;
+            deleted: boolean;
+            detailed_notes: string;
+            enabled: boolean;
+            finishing_context: string;
+            job_reference: string;
+            name: string;
+            no_critical_failure: boolean;
+            observations: string;
+            operator: string;
+            physically_tested: boolean;
+            review?: components["schemas"]["FsLabReview"] | null;
+            state: components["schemas"]["FsLabState"];
+            tested_at?: string | null;
+            updated_at: string;
+        };
+        FsLabReview: {
+            acceptable_finish_and_behavior: boolean;
+            no_overheating_chatter_or_overload: boolean;
+            notes: string;
+            policy: string;
+            reviewed_at: string;
+            suitable_for_lab_use: boolean;
+        };
+        FsLabRevision: {
+            metadata: components["schemas"]["FsLabPreset"];
+            profile: components["schemas"]["FsProfile"];
+        };
+        /** @enum {string} */
+        FsLabState: "draft" | "tested" | "validated";
         FsMachineSnapshot: {
             identity?: components["schemas"]["FsIdentity"] | null;
             /** Format: uint32 */
@@ -751,6 +848,25 @@ export interface components {
             /** Format: double */
             thickness_mm?: number | null;
         };
+        FsMaterialTaxon: {
+            id: string;
+            label: string;
+            parent?: string | null;
+        };
+        FsNormalizedQuantities: {
+            chipload_derived: boolean;
+            /** Format: double */
+            chipload_mm_tooth?: number | null;
+            /** Format: double */
+            cutting_speed_m_min?: number | null;
+            /** @description The block is normalized; these flags distinguish copied source values. */
+            derived: boolean;
+            /** Format: double */
+            doc_ratio?: number | null;
+            radial_engagement_derived: boolean;
+            /** Format: double */
+            radial_engagement_ratio?: number | null;
+        };
         FsOperationContext: {
             /** Format: double */
             doc_mm?: number | null;
@@ -760,6 +876,24 @@ export interface components {
         };
         /** @enum {string} */
         FsOperationKind: "profile" | "pocket" | "full_slot" | "finish" | "surfacing" | "engraving";
+        FsPackManifest: {
+            attribution: string;
+            default_evidence: components["schemas"]["FsEvidence"];
+            distribution: components["schemas"]["FsDistribution"];
+            identity: components["schemas"]["FsIdentity"];
+            license: string;
+            license_url?: string | null;
+            name: string;
+            notes: string;
+            origin: string;
+            publisher: string;
+            redistributable: boolean;
+            /** Format: uint32 */
+            schema_version: number;
+            source_url?: string | null;
+            transformation_permitted: boolean;
+            visibility: components["schemas"]["FsVisibility"];
+        };
         /** @enum {string} */
         FsPass: "rough" | "finish";
         FsProfile: {
@@ -792,6 +926,15 @@ export interface components {
             operation: components["schemas"]["FsOperationKind"];
             thickness_mm?: components["schemas"]["FsRange"] | null;
             tool?: components["schemas"]["FsIdentity"] | null;
+        };
+        /** @description FS1 in-memory domain input, not the FS2 distribution/authoring file format. */
+        FsProfileSet: {
+            identity: components["schemas"]["FsIdentity"];
+            machine_families: components["schemas"]["FsFamilyMembership"][];
+            material_families: components["schemas"]["FsFamilyMembership"][];
+            profiles: components["schemas"]["FsProfile"][];
+            /** Format: uint32 */
+            schema_version: number;
         };
         FsProvenance: {
             adjustments: components["schemas"]["FsAdjustment"][];
@@ -837,6 +980,16 @@ export interface components {
             /** Format: double */
             stepover_ratio?: number | null;
         };
+        FsRecordOrigin: {
+            lab?: components["schemas"]["FsLabPreset"] | null;
+            lab_history?: components["schemas"]["FsLabRevision"][];
+            /** @description Explicit taxonomy applicability, including descendants. None preserves original identity. */
+            material_taxon?: string | null;
+            original_classification: string;
+            profile: components["schemas"]["FsIdentity"];
+            source_record_id: string;
+            tool?: components["schemas"]["FsToolClassification"] | null;
+        };
         /** @description Named empirical reductions apply only within the enclosing profile's scope. FS1 allows factors (0,1]; expansions require a separately qualified policy. */
         FsReductionRule: {
             /** Format: double */
@@ -862,12 +1015,24 @@ export interface components {
             permission_or_license: string;
             reference: string;
         };
+        FsSourcePack: {
+            dataset: components["schemas"]["DatasetDocument"];
+            manifest: components["schemas"]["FsPackManifest"];
+            records: components["schemas"]["FsRecordOrigin"][];
+        };
         FsToolBinding: {
             identity: components["schemas"]["FsIdentity"];
             /** Format: uint32 */
             max_rpm?: number | null;
             /** Format: uint32 */
             tool_id: number;
+        };
+        FsToolClassification: {
+            coating?: string | null;
+            family: components["schemas"]["FsCuttingFamily"];
+            helix?: string | null;
+            material?: string | null;
+            shape?: string | null;
         };
         FsToolSnapshot: {
             cutting_family: components["schemas"]["FsCuttingFamily"];
@@ -911,6 +1076,8 @@ export interface components {
             field: string;
             message: string;
         };
+        /** @enum {string} */
+        FsVisibility: "public" | "private";
         /** @description Lookup table the frontend uses to wire the gcode text panel to the 3D toolpath: line N in the gcode corresponds to `segments[lines_to_segment[N]]`, and `segments_to_line[i]` is the 1-based gcode line that produced segment `i`. Both vectors are dense — gcode lines that don't move the tool map to `usize::MAX` so callers can detect the gap. */
         GcodeIndex: {
             lines_to_segment: number[];
@@ -2794,6 +2961,18 @@ export interface components {
              * @default 0
              */
             whirl_stepover: number;
+        };
+        ToolDefinition: {
+            cutting_family: components["schemas"]["FsCuttingFamily"];
+            /** Format: double */
+            diameter_mm: number;
+            /** Format: uint8 */
+            flute_count: number;
+            identity: components["schemas"]["FsIdentity"];
+            label: string;
+            /** Format: uint32 */
+            max_rpm?: number | null;
+            notes: string;
         };
         ToolEntry: {
             /** @description Free-text comment / description. Surfaced as the tooltip on the tool dropdown in `OpPropertiesPanel` and as an expandable text area in `ToolLibraryDialog`. Empty / None = no comment; doesn't affect any pipeline output. */

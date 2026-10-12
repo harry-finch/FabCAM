@@ -405,3 +405,56 @@ inspector refinements, qualification records, fixtures and screenshots together.
 Existing frontend/native qualification remains the evidence baseline; publication
 does not imply physical validation or close the FS3.6 human gate. FS4 remains
 unstarted.
+
+
+## 2026-10-12 — FS3.7 multi-source source packs
+
+- Explicit user checkpoint request authorizes phases A–G. Audited special Sienci
+  paths, imported preference bodies and full applied snapshots before design.
+- ADR-0005 defines shared schema/loader, explicit material taxonomy, conservative
+  comparable-record policy, reviewed public registry and private-safe persistence.
+- Migrated the six Sienci references without changing cutting values. Reverified
+  pinned LICENSE/handbook/PDF and original SHA-256; kept CC BY-SA separate from GPL.
+  Candidate manufacturers remain licensing-review-only; no proprietary data copied.
+- Native imports use app_data_dir path APIs, immutable safe filenames, bounded
+  validated JSON and Unix 0600 files. Browser imports use local IndexedDB/WASM;
+  no private HTTP calculation, telemetry, sync or automatic export.
+- Generic Settings manage built-in/local pack enablement. Operations retain compact
+  material/engagement/mode and aggregated sources, with advanced provenance/rank
+  explanation and visible disagreement. Apply remains explicit.
+- New guarded v4 projects retain safe source identities and resolved rates; legacy
+  project versions and datasets remain supported. Actual browser save/reopen with
+  missing local pack retains rates and generates successfully.
+- Analytical/native/frontend/post checks and captures are recorded in qualification.
+  Native desktop rebuild and Windows/Linux runtime checks were not performed;
+  physical calibration remains unstarted. Engineering ivac-3957 handoff stops at
+  human review ivac-tm7u; no current checkpoint commit/push is authorized.
+
+## 2026-10-12 — FS3.8 local preset capture and validation
+
+- Audited FS3.7 contracts/storage/evidence/resolver before extending them. No
+  parallel preset DB or new cutting-evidence enum.
+- Core capture shares generation's saved_rates and native request context; manual
+  values remain authoritative, and Save never changes the current operation.
+- SourcePack schema 2 adds local authoring/history; public schema-1 data untouched.
+- Sorbonne immutable revisions, native import/save lock and optimistic head checks;
+  browser IndexedDB transactions. Current head loads without old-body bloat.
+- Compact Save dialog, explicit physical-use/success/date guards; later Settings
+  promotion, notes/history/search/disable/confirmed reversible delete/backup.
+- Explicit one-time UUID machine/tool identity setup supports initial lab use;
+  display renames keep physical identity. Browser QA caught empty legacy names;
+  stable-ID labels now prevent that capture failure.
+- Tests/docs in FS3_8_QUALIFICATION. No FS4, real physical evidence or publication.
+
+- Browser before/after project downloads confirm identical operations/tools/machine
+  and no private capture observations. Draft backup restores on a fresh origin;
+  duplicate import and stale capture refused. Rust JSON ordering/nullable fields
+  are normalized for duplicate/catalog comparison; reactive-proxy and normalization
+  regressions added. Engineering handoff gates FS4 at ivac-7yii.
+
+## 2026-10-12 — FS3.7/FS3.8 publication and debug cleanup
+
+Explicit user instruction authorizes commit/push of the qualified source changes
+on feature/shopbot-mvp. Human review gates remain separate; FS4 is unstarted.
+Oversized rebuildable debug artifacts are cleaned with cargo clean --profile dev;
+release builds, WASM release package and delivered applications are preserved.

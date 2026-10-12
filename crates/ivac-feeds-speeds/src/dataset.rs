@@ -5,6 +5,7 @@ use std::collections::BTreeSet;
 
 pub const DATASET_FORMAT_VERSION: u32 = 1;
 
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CatalogEntry {
@@ -13,6 +14,7 @@ pub struct CatalogEntry {
     pub notes: String,
 }
 
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ToolDefinition {
@@ -26,6 +28,7 @@ pub struct ToolDefinition {
 }
 
 /// Self-contained authoring document; no implicit inheritance or remote references.
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DatasetDocument {
@@ -48,7 +51,13 @@ impl std::fmt::Display for DatasetLoadError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Json(error) => write!(f, "invalid dataset JSON: {error}"),
-            Self::Invalid(issues) => write!(f, "invalid dataset: {} issue(s)", issues.len()),
+            Self::Invalid(issues) => {
+                write!(f, "invalid dataset: {} issue(s)", issues.len())?;
+                for issue in issues.iter().take(3) {
+                    write!(f, "; {}: {}", issue.field, issue.message)?;
+                }
+                Ok(())
+            }
         }
     }
 }

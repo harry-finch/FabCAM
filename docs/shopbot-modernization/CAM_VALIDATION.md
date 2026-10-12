@@ -98,3 +98,23 @@ FS35-04: existing selection/availability/non-milling and eight ShopBot golden
 regressions pass. Frontend 1,065 pass/one optional skip; core FS ten pass.
 [Qualification](feeds-speeds/FS3_5_QUALIFICATION.md) records commands, screenshots
 and limits. Human usability gate ivac-eh1g remains open; FS4 unstarted.
+
+
+## FS3.7 — software architecture qualification, 2026-10-12
+
+[Qualification](feeds-speeds/FS3_7_QUALIFICATION.md) covers source-pack validation,
+license-bound public enumeration, taxonomy/specificity/fallback, derived quantities,
+conservative reconciliation, deterministic ordering and local storage. Private
+Apply/save carries resolved values and identity metadata without the source body.
+Actual browser reopen on a separate origin with the pack absent preserves rates
+and generates 34 moves; native adapter and post regressions pass. Synthetic altered
+references are software fixtures only, never cutting advice. Human gate ivac-tm7u
+is open; no FS4 physical evidence or local calibration is established.
+
+## FS3.8 software qualification and future physical policy
+
+See [FS3.8 qualification](feeds-speeds/FS3_8_QUALIFICATION.md) for capture, overrides,
+loader/resolver, revision/promotion/storage and browser backup tests.
+[Sorbonne policy](feeds-speeds/LOCAL_VALIDATION_POLICY.md) defines dated Tested
+and later operator-reviewed Validated. All current test attestations are synthetic,
+SOFTWARE ONLY. Human approval precedes FS4 real-machine calibration.
