@@ -18,6 +18,7 @@ historical; Rust is now available.
 | M1-DETERMINISM | Repeated generation | Pass: square profile and island pocket exact G-code/toolpath equality |
 | M2-SBP | OpenSBP output and unsupported cases | Software pass: nine tests, five required goldens; actual output coordinate/sequence checks; see M2_QUALIFICATION |
 | M3-PROFILE | Native machine load/save, workspace profile, post selection and unverified clearance rejection | Software pass: frontend integration and Rust CAM/post guard; see M3_QUALIFICATION; no physical measurements |
+| M4-SOFTWARE | Native macOS launch/load/generate/export and offline demo | Pass: 0.5.0 arm64 app, real native export equals reference; user test pending |
 | M4-TEXT | Human review of exact program | Not performed |
 | M4-PREVIEW | Identified ShopBot controller/software Preview Mode | Not performed |
 | M4-AIR | Supervised air cut | Not performed |

@@ -78,3 +78,47 @@ fn positive_output_and_comment_injection() {
         .lines()
         .any(|l| l == "SO,1,1" || l == "M3,999,999,-999"));
 }
+
+fn lab_run(v: Value) -> Result<ivac_cps::PostOutput, ivac_cps::PostError> {
+    let p: Program = serde_json::from_value(v).unwrap();
+    run_post(
+        bundled("shopbot").unwrap().source,
+        "shopbot.cps",
+        &p,
+        &json!({"labSpindle1Control": true}),
+    )
+}
+
+#[test]
+fn lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause() {
+    let result = lab_run(fixture()).unwrap();
+    let text = result.text;
+    assert!(text.contains("SA\n' Tool 1 installed"));
+    assert!(text.contains("SO,1,0\nJZ,5.0000\nTR,18000\nSO,4,1\nSO,1,1\nPAUSE 2.000\n"));
+    assert!(text.ends_with("JZ,5.0000\nSO,1,0\nEND\n"));
+    assert!(text.find("SO,1,1").unwrap() < text.find("M3,").unwrap());
+    assert!(!text.lines().any(|l| l == "PAUSE"
+        || l.starts_with("C9")
+        || l.starts_with("CN")
+        || l.starts_with("SO,2")
+        || l.starts_with("VO,")));
+    assert_eq!(text, lab_run(fixture()).unwrap().text);
+}
+
+#[test]
+fn lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops() {
+    for i in 0..5 {
+        let mut v = fixture();
+        match i {
+            0 => v["sections"][0]["tool"]["number"] = json!(2),
+            1 => v["sections"][0]["spindleRpm"] = json!(18001),
+            2 => v["sections"][0]["spindleRpm"] = json!(17999.5),
+            3 => v["sections"][0]["tool"]["toolType"] = json!(11),
+            _ => v["sections"][0]["records"]
+                .as_array_mut()
+                .unwrap()
+                .push(json!({"kind":"command","command":0})),
+        }
+        assert!(lab_run(v).is_err());
+    }
+}

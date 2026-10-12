@@ -106,3 +106,106 @@ STOP at M2; publication and M3 require explicit human approval.
 - Tracking: ivac-c5lt. M3 remains uncommitted pending approval; M4 not started.
 
 STOP at M3; publication and M4 require explicit human approval.
+
+## 2026-10-10 — M3 publication and runnable M4 software handoff
+
+- User approved M3 publication and starting M4, requested explicit testing
+  instructions and a fully compiled application. Published M3 at b8a073a.
+- Installed Tauri CLI 2.12.1 locally under /private/tmp; built frontend and native
+  release CPS-enabled macOS arm64 app 0.5.0. Repaired local bundle signing with
+  an ad-hoc signature and verified it. Ready-to-launch copy in FabCAM/ivaCAM-M4.
+- Prepared a self-contained square project and independently generated reference
+  SBP, synthetic parameters clearly marked OFFLINE DEMO ONLY. Explicit svg layer
+  source avoids also machining the selectable stock outline.
+- Native launch/load/generate/settings/export check exposed toolbar .ngc label
+  despite correct ShopBot output, falsely dirty hidden machine settings draft,
+  and cosmetic 0.0.0 frontend release display. Fixed these bounded delivery bugs.
+- Native UI export equals the 164-line reference byte-for-byte. One expected
+  manual-spindle warning; no critical bounds warning on the final demo.
+- Full frontend suite 1,046 pass/one skip; final adapter regression and type/lint
+  checks pass. Release bundle ready, no source CAM or CPS changes.
+- Prepared M4 ordered human validation protocol and evidence record. Preparation
+  ivac-mwp7 closes at handoff; human software/physical evidence tracked in ivac-o4oy.
+  M4 remains in progress; no SB3.8 Preview, air cut, machining or measurement.
+
+Waiting for the user's explicit offline software test results. M4 preparation
+remains uncommitted; no authorization to publish this milestone yet.
+
+## 2026-10-10 — positive software acceptance
+
+User replied “je valide !” to the offline software test handoff. Recorded positive
+software acceptance without inventing individual observations or physical results.
+Requested actual Z travel/jog/spindle data and operator-selected tool, sacrificial
+material, feeds/plunge and clearance before preparing a dedicated machine file.
+No application changes or rebuild; delivered 0.5.0 bundle remains current.
+M4 controller/physical evidence remains pending in ivac-o4oy.
+
+## 2026-10-12 — M4 spindle workflow correction
+
+User confirmed successful r1 Preview and air cut, then reported SB3 PAUSE blocks
+manual controls and spindle never starts. Inspected supplied VCarve programme and
+lab macro archive as data only. Added opt-in reviewed spindle-1 relay/RPM mode
+for preloaded tool 1, with no C9/zero/offset routines. Default manual M2 output
+retained. See M4_SPINDLE_R2 for policy, scope, evidence and renewed human gates.
+
+Software verification r2: CPS guards 5/5, actual CAM/golden integration 8/8, bundled metadata 1/1; formatting/diff clean. Release macOS build and local signature passed, native project load/generate/export verified. Exported XY/cutting/feed lines equal r1. Delivery BUILD.json identifies new executable and SBP; human revised gates pending.
+
+## 2026-10-12 — r2 Preview and air-test acceptance
+
+User supplied completed r2 Preview (XY 7..113, Z -5..+15, no offset) and then
+confirmed “c’est un sans faute !” after the spindle-enabled air-test handoff.
+Recorded overall acceptance without inventing measured RPM or air-origin data.
+MDF cut, agreed tolerances/measurements and VCarve comparison remain pending.
+No code, delivered programme or application changed; no commit/push performed.
+
+## Human material-trial acceptance — 2026-10-12, r2
+
+After the handoff explicitly requesting the real MDF trial with the same r2 SBP,
+the user replied “c’est un deuxième sans faute, tout fonctionne parfaitement !”.
+Record successful operator-reported material machining with no anomaly reported.
+No measured dimensions, shoulder depth, instrument, pre-cut tolerance agreement
+or equivalent VCarve comparison were supplied. M4-PART accepted by operator;
+M4-MEASURE and M4-VCARVE remain pending. The application and SBP are unchanged;
+no new implementation, milestone completion, commit or push follows this report.
+
+## Operator target-conformity confirmation — 2026-10-12, r2
+
+User states “tout est parfait, dimensions, profondeur cible, dégagement à 15mm
+à la fin. l’usinage est propre. c’est nickel.” Record operator-confirmed conformity
+to the nominal retained square 100 × 100 mm and 5 mm depth targets, clean machining
+and final +15 mm clearance. No exact dimensional readings, measuring instrument
+or quantified tolerance agreement were supplied; do not invent them or claim
+a metrology certificate. M4-MEASURE has qualitative operator acceptance.
+Equivalent VCarve comparison remains unreported and is the outstanding M4 gate.
+No change to the tested application or SBP; no milestone commit/push or new track.
+
+## VCarve reference received — 2026-10-12
+
+Compared supplied M4-r2-carre-MDF_vcarve.sbp with tested r2. Nominal 100 mm square,
+6 mm exterior compensation, final depth 5 mm and 18000 RPM agree. Reference is
+translated (+1.246161,+0.409699 mm), uses -2.5/-5 passes, 4980/1794 mm/min feed/
+plunge and safe/home Z 6/20 mm. Traversal opposite; CG versus linearized corners.
+See M4_VCARVE_COMPARISON.md for hashes and evidence. Parameter alignment pending;
+no defect inferred, no new cut or application change requested. M4 remains open.
+
+## M4 qualification decision — 2026-10-12
+
+Second VCarve export aligns square location/exterior D6 compensation and -3/-5
+passes. Actual feed/plunge 5976/1992 differ by -0.4%; imposed safe/final Z 6/20,
+opposite traversal, arc representation and XY parking documented and accepted
+for semantic comparison. See M4_VCARVE_COMPARISON.md for source hashes/results.
+
+Operator confirmed r2 Preview, spindle-enabled air cut, real MDF cut, target
+dimensions/depth, clean finish and +15 final retract. M4 qualification completed
+at this reported evidence level; no exact metrology readings/instrument or measured
+RPM invented. ivac-o4oy closes. Explicit milestone commit/push approval still
+required; no code/app/SBP changes or post-M4 governance/FS implementation performed.
+
+## 2026-10-12 — M4 publication approval
+
+User explicitly authorized commit/push (“oui tu peux push”) after the completed
+physical qualification and VCarve comparison handoff. Publish the existing M4
+changes on feature/shopbot-mvp, with exact tested r2 project/SBP and build manifest
+retained as repository fixtures. No rebuild or modification of the delivered
+app/SBP; no PR, merge, upstream synchronization or new implementation. FS0 and
+the separate governance update remain subsequent work.

@@ -23,13 +23,21 @@ function gitVersion(): string {
 
 /// Package version baked into the bundle so the window title + About
 /// dialog show the real release identifier instead of a hardcoded
-/// '0.0.0' (audit qcvl). Reads `package.json` at vite-config time so a
-/// `pnpm version <next>` cuts a new build identity automatically.
+/// '0.0.0' (audit qcvl). Prefer an explicit frontend package version;
+/// this workspace's private frontend package is unversioned, so fall back
+/// to the desktop release version rather than displaying 0.0.0.
 function pkgVersion(): string {
   try {
     const pkgPath = fileURLToPath(new URL('./package.json', import.meta.url));
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as { version?: string };
-    return typeof pkg.version === 'string' && pkg.version.length > 0 ? pkg.version : '0.0.0';
+    if (typeof pkg.version === 'string' && pkg.version.length > 0) return pkg.version;
+    const desktop = JSON.parse(
+      readFileSync(
+        fileURLToPath(new URL('../crates/ivac-tauri/tauri.conf.json', import.meta.url)),
+        'utf8',
+      ),
+    ) as { version?: string };
+    return desktop.version || '0.0.0';
   } catch {
     return '0.0.0';
   }

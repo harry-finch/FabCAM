@@ -389,3 +389,39 @@ fn m3_unverified_clearance_refuses_sbp_export() {
         "{err}"
     );
 }
+
+#[test]
+fn m4_lab_spindle_runs_real_cam_and_preserves_manual_default() {
+    let p = project("square", "svg");
+    let manual = post(p.clone()).unwrap();
+    let mut properties = BTreeMap::new();
+    properties.insert(
+        "labSpindle1Control".into(),
+        ivac_core::pipeline::CpsParamValue::Bool(true),
+    );
+    let lab = run_pipeline(
+        PipelineRequest {
+            project: p,
+            post_processor: Some(PostProcessorKind::Cps),
+            cps_post: Some(CpsPostSelection {
+                source: CpsPostSource::Bundled {
+                    id: "shopbot".into(),
+                },
+                properties,
+            }),
+        },
+        |_, _, _| {},
+    )
+    .unwrap();
+    let movement_lines = |text: &str| {
+        text.lines()
+            .filter(|l| l.starts_with("M3,") || l.starts_with("J2,") || l.starts_with("MS,"))
+            .map(str::to_owned)
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(movement_lines(&manual.gcode), movement_lines(&lab.gcode));
+    assert!(lab.gcode.contains("TR,18000\nSO,4,1\nSO,1,1\nPAUSE 2.000"));
+    assert!(lab.gcode.ends_with("SO,1,0\nEND\n"));
+    assert!(!lab.gcode.lines().any(|l| l == "PAUSE"));
+    assert!(!manual.gcode.lines().any(|l| l.starts_with("SO,")));
+}

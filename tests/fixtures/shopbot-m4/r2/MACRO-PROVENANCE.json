@@ -1,0 +1,14 @@
+{
+  "source": "Operator-supplied Custom.zip and trophee.sbp, 2026-10-12",
+  "archive_sha256": "1f295afe047e285844d2be6c1b85331e84850123b2fa2ecf7ff7804e290ba75f",
+  "files": {
+    "Custom6.sbc": "8e0ab4b367d496a32ab466af250379a4f61702303e40de4f25f226eba2a5ccee",
+    "Custom7.sbc": "cb1d46b624f7aaeffb357c9723e723bed3507a024ccedb9ae27b6a8a22a8d71e",
+    "Custom9.sbc": "953a3c4b422ac53a9b163b863b52d94c09a4aa8dd978975aadaf52cc24c937d9",
+    "Custom90.sbc": "08b12c30c13e1d1cff4c9edb57ad53dad2c05386cac0c30ec001cd7cabe80774",
+    "MTC/MTCon.sbp": "270c7df780f96b79e768fd8d90c757864d5a766c0dc74d31675a6b0810fd602d",
+    "MTC/MTCoff.sbp": "0b26db260fe33ef2c3e7f8b239354eed8bea637e9a8a5a0391c1d8a0dabb584f",
+    "MTC/MTC.sbp": "d5e5d6dc2ef72593f29378ced21dd5ae2ddc7901d55b2f43fc3ed9c9fe30441a",
+    "my_variables.sbc": "d4ab11d8ccec89bc5b7e5bd1e8fd1f6040ea42893a5cca4fb061bb95df733b40"
+  }
+}

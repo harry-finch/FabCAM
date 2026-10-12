@@ -40,3 +40,12 @@ Numeric output: XYZ four decimal places (mm), speeds six (mm/s), dwell three
 (seconds), period decimal separator, fixed deterministic text, no timestamp.
 These formatting grids are separate from arc tolerance and machine accuracy.
 Pure browser WASM has no CPS; the post is listed by CPS-enabled transports.
+
+## M4 r2 opt-in lab spindle policy — 2026-10-12
+
+The statements above describe default M2 output. `labSpindle1Control=true` adds
+TR,RPM, SO,4,1 and SO,1,1 from operator-supplied MTCon, plus SO,1,0 at start
+and after final clearance from MTCoff. SO syntax: official ComRef page 26.
+TR syntax/RPM and 2s timed dwell are evidenced by supplied trophee.sbp.
+No CN90/C9 is emitted; those local routines can alter offsets and move axes.
+See ../M4_SPINDLE_R2.md. This opt-in has not been physically qualified.

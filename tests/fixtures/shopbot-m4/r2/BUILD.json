@@ -1,0 +1,14 @@
+{
+  "release": "0.5.0",
+  "revision": "M4-r2-2026-10-12",
+  "source_base": "b8a073a plus uncommitted M4 changes",
+  "tests": "5 CPS guards + 8 real CAM/golden tests + 1 bundled metadata test passed; Rust formatting/diff clean; native UI load/generate/export checked",
+  "physical_qualification": "r2 pending; r1 Preview and air cut confirmed, material blocked by spindle workflow",
+  "sha256": {
+    "ivaCAM.app/Contents/MacOS/ivac-desktop": "bbfc2f4477415b0d70fb84b1c16f855c9e99a893b2e1bcafa4605bf606f12fa9",
+    "M4-r2-carre-MDF.ivac-project.json": "897a535f370d554d3220ed0408e7640dceeba1209a7746f964c4aa76a471cf1a",
+    "M4-r2-carre-MDF.sbp": "10d0420055ef4e4d259357b62a7a21dc9deaf195fa291253d21307f2f4945c4a"
+  },
+  "signing": "Local ad-hoc; deep strict verified; not notarized",
+  "post_sha256": "dca28d7ce38a8cfee725879d6988b26421941df13b08ec192340b61198cceac1"
+}

@@ -248,9 +248,8 @@ export type MsgKey =
   | "genbar.chip.stale"
   | "genbar.chip.warnings"
   | "genbar.download.back"
+  | "genbar.download.file"
   | "genbar.download.front"
-  | "genbar.download.ngc"
-  | "genbar.download.plt"
   | "genbar.download.stl_title"
   | "genbar.download.title"
   | "genbar.error.block_critical"
@@ -1915,9 +1914,8 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "genbar.chip.stale",
   "genbar.chip.warnings",
   "genbar.download.back",
+  "genbar.download.file",
   "genbar.download.front",
-  "genbar.download.ngc",
-  "genbar.download.plt",
   "genbar.download.stl_title",
   "genbar.download.title",
   "genbar.error.block_critical",

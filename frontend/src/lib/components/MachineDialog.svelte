@@ -115,6 +115,15 @@
   function cloneSettings(m: MachineSettings): MachineSettings {
     return {
       ...m,
+      // Checkbox bindings coerce absent optional booleans to false. Seed the
+      // pristine draft with those same values so mounting the hidden panel
+      // cannot mark it dirty and prevent later project/profile refreshes.
+      optionalStop: m.optionalStop ?? false,
+      laserDynamicPower: m.laserDynamicPower ?? false,
+      plotModeZ: m.plotModeZ ?? false,
+      parkAtHome: m.parkAtHome ?? false,
+      rapidSpeed: m.rapidSpeed,
+      toolchangeS: m.toolchangeS,
       accel: m.accel ? { ...m.accel } : { x: 250, y: 250, z: 250 },
       jerk: m.jerk ? { ...m.jerk } : undefined,
       workArea: m.workArea ? { ...m.workArea } : { x: 200, y: 300, z: 50 },

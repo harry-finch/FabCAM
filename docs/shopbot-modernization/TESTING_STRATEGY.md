@@ -184,3 +184,7 @@ passed. Guard hardening is tracked as ivac-5g51; no fake package or config chang
 Logs: `/private/tmp/ivacam-m2-*.log`, temporary session evidence. Goldens and
 M2_QUALIFICATION are durable. Missing external refs remain unqualified; no
 Tauri desktop bundle, Windows/Linux run, controller/VCarve/hardware validation.
+
+## M4 software delivery — 2026-10-10
+
+Release frontend and CPS-enabled Tauri macOS arm64 app built (Tauri CLI 2.12.1, Rust 1.88.0, Node 24.21.0). Local ad-hoc signature verified. Native launch/load/generate/settings/export passes; actual SBP file equals the reference. Full frontend 1,046 pass/one optional skip, final demo adapter pass, type/lint/format checks clean. Details and reproducible commands in [M4_VALIDATION](M4_VALIDATION.md). User software test and controller/physical gates pending.

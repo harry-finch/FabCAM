@@ -16,6 +16,15 @@ allowHelicalMoves = false;
 var xyz = createFormat({decimals:4, forceDecimal:true, minDigitsRight:4});
 var speed = createFormat({decimals:6, forceDecimal:true, minDigitsRight:6});
 var secondsFormat = createFormat({decimals:3, forceDecimal:true, minDigitsRight:3});
+// Opt-in for the operator-supplied Sorbonne MTC wiring, not a generic ShopBot default.
+properties = {
+  labSpindle1Control: {
+    title: "Sorbonne MTC spindle 1 (preloaded tool)",
+    description: "Reviewed lab wiring: TR RPM, SO4 enable, SO1 spindle; 2s startup. Prepare tool 1 and XYZ zero before running. No C9, probing or tool changes.",
+    type: "boolean", value: false, scope: "post"
+  }
+};
+var labSpindle1;
 var safeZ;
 var position;
 var lastFeed;
@@ -69,6 +78,8 @@ function preflight() {
     fail("probing, controller offsets, stations, parking and custom scaffold unsupported");
   safeZ = getGlobalParameter("ivacam:clearance-z");
   if (!finite(safeZ) || safeZ <= 0) fail("positive authored clearance Z required");
+  labSpindle1 = getProperty("labSpindle1Control");
+  if (typeof labSpindle1 != "boolean") fail("labSpindle1Control must be boolean");
   var program = __ivacRun.program;
   if (program.version != 1 || program.machine) fail("unsupported IR or kinematics");
   if (!program.sections.length) fail("no milling sections");
@@ -80,6 +91,8 @@ function preflight() {
       fail("only flat end mills and drills supported");
     if (s.tool.coolant != COOLANT_DISABLED || !s.spindleClockwise ||
         !finite(s.spindleRpm) || s.spindleRpm <= 0) fail("requires CW spindle, positive RPM, no coolant");
+    if (labSpindle1 && (s.tool.number != 1 || s.tool.toolType != TOOL_MILLING_END_FLAT || s.spindleRpm > 18000 || s.spindleRpm != Math.floor(s.spindleRpm)))
+      fail("lab spindle mode requires preloaded flat end mill 1 and integer RPM <= 18000; tool changes unsupported");
     if (s.workOffset != 1) fail("only one operator-established work zero supported");
     var identity = [[1,0,0],[0,1,0],[0,0,1]];
     for (var row = 0; row < 3; row++) for (var col = 0; col < 3; col++)
@@ -119,6 +132,7 @@ function preflight() {
         if (r.mode != COOLANT_DISABLED) fail("coolant unsupported");
         break;
       case "command":
+        if (labSpindle1) fail("operator stop commands unsupported in preloaded lab spindle mode");
         if (r.command != COMMAND_STOP && r.command != COMMAND_OPTIONAL_STOP)
           fail("unsupported command " + getCommandStringId(r.command));
         break;
@@ -129,20 +143,35 @@ function preflight() {
 }
 function onOpen() {
   preflight(); // whole program checked before any output
-  warning("ShopBot MVP uses manual spindle start/stop and RPM; verify every operator pause. Arcs linearized at 0.01 mm. No controller/hardware qualification.");
-  comment("ivaCAM ShopBot MVP - metric XYZ - manual spindle");
+  warning(labSpindle1
+    ? "Sorbonne spindle 1 mode: prepare tool 1 and XYZ zero before running. TR/SO4/SO1 wiring from operator macros; 2s startup. Repeat controller/physical qualification for this revision."
+    : "ShopBot MVP uses manual spindle start/stop and RPM; verify every operator pause. Arcs linearized at 0.01 mm. No controller/hardware qualification.");
+  comment(labSpindle1 ? "ivaCAM ShopBot MVP - metric XYZ - Sorbonne spindle 1" : "ivaCAM ShopBot MVP - metric XYZ - manual spindle");
   comment(programComment);
   writeln("VD,,1");
   writeln("SA");
-  pause("Stop spindle. Verify work zero, stock, clearances and controller jog speeds before continuing.");
+  if (labSpindle1) {
+    comment("Tool 1 installed and XYZ work zero verified BEFORE RUN. Controller jog settings retained.");
+    writeln("SO,1,0");
+  } else {
+    pause("Stop spindle. Verify work zero, stock, clearances and controller jog speeds before continuing.");
+  }
 }
 function onSection() {
   // Establish Z before any XY, then require explicit tool/zero verification.
   writeln("JZ," + xyz.format(safeZ));
-  pause("Spindle OFF and stationary. Load tool " + tool.number +
-        " D=" + xyz.format(tool.diameter) + "; set work Z zero for this tool. Return to clearance before OK.");
-  writeln("JZ," + xyz.format(safeZ));
-  pause("Start spindle CW manually at " + spindleSpeed + " RPM. Wait until ready before OK.");
+  if (labSpindle1) {
+    // Exact spindle-1 branch of supplied MTC/MTCon.sbp; no motion/offset macros.
+    writeln("TR," + spindleSpeed);
+    writeln("SO,4,1");
+    writeln("SO,1,1");
+    writeln("PAUSE 2.000");
+  } else {
+    pause("Spindle OFF and stationary. Load tool " + tool.number +
+          " D=" + xyz.format(tool.diameter) + "; set work Z zero for this tool. Return to clearance before OK.");
+    writeln("JZ," + xyz.format(safeZ));
+    pause("Start spindle CW manually at " + spindleSpeed + " RPM. Wait until ready before OK.");
+  }
   comment(getParameter("operation-comment", "Operation"));
   position = {x:NaN, y:NaN, z:safeZ};
   lastFeed = undefined;
@@ -179,6 +208,11 @@ function onCommand(c) {
 function onPassThrough() { fail("raw commands unsupported"); }
 function onSectionEnd() {
   writeln("JZ," + xyz.format(safeZ));
-  pause("Stop spindle manually and wait until stationary before OK.");
+  if (labSpindle1) {
+    // The reviewed MTCoff turns SO1 off. No secondary-spindle/drill output writes.
+    writeln("SO,1,0");
+  } else {
+    pause("Stop spindle manually and wait until stationary before OK.");
+  }
 }
 function onClose() { writeln("END"); }

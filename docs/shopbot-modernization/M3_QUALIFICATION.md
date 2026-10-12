@@ -1,6 +1,6 @@
 # M3 — loadable Sorbonne ShopBot profile
 
-Software deliverable complete; human review and publication approval pending.
+Software deliverable approved; committed and pushed at `b8a073a`.
 Based on approved/pushed M2 `047a75872ca7ea7d28077555c9859f92fa9a7411`.
 
 ## Deliverables
@@ -49,7 +49,7 @@ was exercised. No SB3.8 parser, Preview Mode, VCarve comparison or hardware test
 
 ## Handoff
 
-M2 was approved and pushed; M3 remains uncommitted pending user authorization.
+M2 and M3 approved and pushed. M4 subsequently authorized; see M4_VALIDATION.
 Beads task `ivac-c5lt` closed after software qualification.
 Physical measurements and operational details belong to the unverified machine
-record. Stop here for M3 review; M4 requires separate explicit approval.
+record. The original M3 stop was satisfied by explicit user approval.

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolveExportExtension } from '../services/gcode-export';
   // Simplified bar: post-processor + Generate + Download. The full setup
   // tree lives in SetupPanel and feeds project.setup.
 
@@ -238,6 +239,20 @@
   // for the back toolpath yet (that's the dual-surface preview, tracked
   // separately), so unlike the front gate the back gate is pipeline-only.
   const twoSided = $derived(project.gen.generatedBack != null);
+  const frontExtension = $derived(
+    resolveExportExtension(
+      post,
+      project.gen.generated?.output_extension ?? undefined,
+      project.data.machine.postProfile?.file_extension,
+    ),
+  );
+  const backExtension = $derived(
+    resolveExportExtension(
+      post,
+      project.gen.generatedBack?.output_extension ?? undefined,
+      project.data.machine.postProfile?.file_extension,
+    ),
+  );
   const backWarnings = $derived(
     (project.gen.generatedBack as { warnings?: PipelineWarning[] } | null)?.warnings ?? [],
   );
@@ -489,14 +504,14 @@
         class="download"
         title={t('genbar.download.title')}
       >
-        {t('genbar.download.front', { ext: post === 'hpgl' ? 'plt' : 'ngc' })}
+        {t('genbar.download.front', { ext: frontExtension })}
       </button>
       <button
         onclick={() => void downloadGcode('back')}
         class="download"
         title={t('genbar.download.title')}
       >
-        {t('genbar.download.back', { ext: post === 'hpgl' ? 'plt' : 'ngc' })}
+        {t('genbar.download.back', { ext: backExtension })}
       </button>
     {:else}
       <button
@@ -504,7 +519,7 @@
         class="download"
         title={t('genbar.download.title')}
       >
-        {post === 'hpgl' ? t('genbar.download.plt') : t('genbar.download.ngc')}
+        {t('genbar.download.file', { ext: frontExtension })}
       </button>
     {/if}
     <button
