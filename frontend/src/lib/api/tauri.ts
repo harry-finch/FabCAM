@@ -13,6 +13,8 @@ import type {
   GenerateRequest,
   GenerateResponse,
   TwoSidedGenerateResponse,
+  FsCamRequest,
+  FsCamResponse,
   HelixRadiusRequest,
   HelixRadiusResponse,
   ImportResponse,
@@ -191,6 +193,10 @@ export class TauriWiacClient implements WiacClient {
 
   async renderTextLayer(layer: WireTextLayer): Promise<RenderTextLayerResponse> {
     return invoke<RenderTextLayerResponse>('render_text_layer', { layer });
+  }
+
+  async feedsSpeeds(request: FsCamRequest): Promise<FsCamResponse> {
+    return invoke<FsCamResponse>('feeds_speeds_cmd', { req: request });
   }
 
   async computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse> {

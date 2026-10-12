@@ -45,6 +45,8 @@ function clone<T>(v: T): T {
 /// commands.ts doesn't pull in the Svelte-runtime class itself; only
 /// the fields it touches.
 export interface CommandTarget {
+  material?: import('./project-types').MaterialIdentity;
+  fsContext?: import('../api/generated').components['schemas']['FsContext'];
   imports: ImportEntry[];
   operations: OpEntry[];
   tools: ToolEntry[];
@@ -971,4 +973,56 @@ export function autoFixToCommand(fix: WiacAutoFix): Command {
     case 'lower_sim_resolution':
       return lowerSimResolutionCommand(fix.suggested_cell_mm);
   }
+}
+
+export function applyCuttingCommand(
+  opId: number,
+  patch: Partial<OpEntry>,
+  material: CommandTarget['material'],
+  context: CommandTarget['fsContext'],
+): Command {
+  let oldMaterial: CommandTarget['material'];
+  let oldContext: CommandTarget['fsContext'];
+  let oldOp: OpEntry | undefined;
+  return {
+    label: 'Apply cutting parameters',
+    apply(s) {
+      const target = s as CommandTarget;
+      oldMaterial = target.material;
+      oldContext = target.fsContext;
+      oldOp = target.operations.find((o) => o.id === opId);
+      if (!oldOp) return;
+      target.material = material ? clone(material) : undefined;
+      target.fsContext = context ? clone(context) : undefined;
+      target.operations = target.operations.map((o) =>
+        o.id === opId ? ({ ...o, ...clone(patch) } as OpEntry) : o,
+      );
+      target.dirty = true;
+    },
+    revert(s) {
+      const target = s as CommandTarget;
+      target.material = oldMaterial;
+      target.fsContext = oldContext;
+      if (oldOp) target.operations = target.operations.map((o) => (o.id === opId ? oldOp! : o));
+      target.dirty = true;
+    },
+  };
+}
+
+export function setMaterialCommand(material: CommandTarget['material']): Command {
+  let previous: CommandTarget['material'];
+  return {
+    label: 'Set job material',
+    apply(s) {
+      const t = s as CommandTarget;
+      previous = t.material;
+      t.material = material;
+      t.dirty = true;
+    },
+    revert(s) {
+      const t = s as CommandTarget;
+      t.material = previous;
+      t.dirty = true;
+    },
+  };
 }

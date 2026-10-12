@@ -16,7 +16,8 @@ M3 approved and pushed. On 2026-10-12 the user authorized the M4 commit/push.
 - Upstream: `https://github.com/aalarchiv/ivacam.git`.
 - Branch: `feature/shopbot-mvp`.
 - M4 source base: `b8a073a` (approved M3); M2 is `047a758`.
-- M4 baseline/publication: `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1` on `feature/shopbot-mvp`; HEAD and local origin tracking ref match.
+- M4 baseline/publication: `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1` on `feature/shopbot-mvp`.
+- Latest published source: `f6d17dd89be9229c243709d7c2df06dc49df45fa` (governance and feeds-speeds skill); pushed on explicit user instruction 2026-10-12. HEAD and origin tracking ref match; FS0–FS3.6 work is uncommitted.
 - No PR, merge or upstream synchronization is included in M4 publication.
 - Current ready-to-launch macOS arm64 app: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/ivaCAM.app`.
 - Current machine file: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/M4-r2-carre-MDF.sbp`.
@@ -56,15 +57,53 @@ independent recommendation engine, CAM adapter and explicitly persisted applied
 parameters. Aggressiveness is separate from evidence; manual edits remain
 authoritative. Post-processors never invoke the recommendation engine.
 
-This update is documentation only; the user authorized its local commit; no FS0 audit,
-implementation, algorithm, CAM behavior, schema or application change.
-No feeds-speeds skill exists in the inspected repo-local skill catalog; none
-created. Governance tracking: ivac-x4bi.
+The user authorized FS3.5 on 2026-10-12 to clean up FS3 UX/domain ownership.
+[FS3.5 qualification](feeds-speeds/FS3_5_QUALIFICATION.md) and
+[ADR-0004](adr/ADR-0004-manual-operation-cutting-and-source-settings.md) record
+job material in Stock, explicit operation cutting values with optional proposal,
+focused Suggest/Review, global source Settings, physical tool/fallback disclosure
+and available-tools-first Machine tooling. New portable cutting saves use guarded
+kind/version 3; legacy v1 and FS3 v2 load unchanged. No math or ShopBot post changes.
 
-STOP for user approval. Exact next step after explicit authorization: start
-**FS0 architecture and data-model qualification** from the M4 baseline, using
-the architecture and documentation skills. Audit serialized parameter ownership
-and all consumers, then propose boundary/models, preset precedence/fallback,
-reproducibility/migration and a test strategy. Implement no recommendation
-algorithm during FS0. Local commit authorized by the user; push still requires explicit
-authorization under ROADMAP Git policy.
+Frontend **1,065 pass, one optional skip**; ten core adapter tests and eight
+ShopBot goldens pass. Svelte/TypeScript zero errors/warnings, native server/Tauri
+check, Clippy, schema/format/lint guards and release WASM/frontend build pass.
+Real browser Apply/manual/DOC-stale/save/reopen/source-disable-persistence passes;
+actual v3 saved fixture and screenshots are retained. No new desktop bundle or
+physical trial. FS3's broader serial Rust baseline remains 1,218 passes.
+
+The six Sienci references remain narrow LongMill full-slot references, with no
+ShopBot preset, Pocket transfer, material equivalence, invented limit or local
+Tested/Validated evidence. Manual values and generation are independent of sources.
+
+The user explicitly approved FS3.5 functional behavior and authorized **FS3.6**
+on 2026-10-12. [FS3.6 visual qualification](ux/FS3_6_QUALIFICATION.md) records
+shared compact field grids, quieter section/header hierarchy, compact stale state
+and Apply emphasis. [Persistent design direction](ux/DESIGN_DIRECTION.md) and
+the repo-local cam-ux-ui skill now guide future desktop UI work.
+
+FS3.6 frontend: **1,065 pass, one optional skip**; Svelte/TypeScript zero
+errors/warnings; targeted lint/format, whitespace and production build pass.
+Real browser Profile/Pocket, 240/360 px side panels, mixed manual/suggested states,
+proposal/provenance, long names, large values and expanded sections qualified.
+The initial visual handoff kept 437 protected files unchanged. The subsequent
+user-requested review revision adds transient native rejection explanations
+without changing matching rules/math, data, placement, persistence or posts.
+Stock now shows drawing/WCS corner readouts; disclosures and origin vignettes
+were refined. Revision: **1,068 frontend pass / one skip**, 50 engine/data tests
+plus doctest, 11 adapter tests, eight ShopBot goldens and five CPS guards pass;
+check/lint/format/Clippy/schema and rebuilt WASM/frontend pass. No new native
+bundle or physical trial.
+
+Focused recommendation-panel review (ivac-rncu) is ready: default material,
+engagement, mode and compact source; known inputs moved to closed Calculation
+context; clear Calculate recommendation/Recalculate naming. Explicit Apply is
+preserved; no engine/domain/persistence changes. Frontend 1,068 pass / one skip,
+check/lint/build and browser disclosure/240 px/kept-manual-feed verification pass.
+See the focused-review addendum and captures in FS3.6 qualification.
+
+STOP at human **FS3.6 approval** (ivac-vgu4). Engineering ivac-n23x is complete;
+FS3.5 human gate ivac-eh1g closed on explicit user approval. FS4 remains
+unstarted. User explicitly authorized committing and pushing the accumulated FS0–FS3.6
+work on 2026-10-12. This publication does not close the FS3.6 human qualification
+gate. Review the qualification screenshots; visual approval is the next action.

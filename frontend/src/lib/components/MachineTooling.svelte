@@ -25,6 +25,7 @@
   });
   /// Quick name/kind filter over the inventory column.
   let filter = $state('');
+  let adding = $state(false);
   const shownInventory = $derived.by(() => {
     const q = filter.trim().toLowerCase();
     if (q === '') return inventory;
@@ -34,6 +35,7 @@
   });
   const stocked = $derived(project.data.tools);
   const machineModes = $derived(effectiveModes(project.data.machine));
+
   const machineLabel = $derived(machineModesLabel(machineModes));
 
   function alreadyStocked(id: number): boolean {
@@ -63,57 +65,12 @@
 
 <div class="tooling">
   <section class="col">
-    <h3 title={t('machinetool.shop_inventory.title')}>
-      {t('machinetool.shop_inventory')}
-    </h3>
-    {#if inventory.length > 0}
-      <input
-        type="text"
-        class="inv-filter"
-        placeholder={t('machinetool.filter.placeholder')}
-        bind:value={filter}
-        title={t('machinetool.filter.title')}
-      />
-    {/if}
-    {#if inventory.length === 0}
-      <!-- eslint-disable-next-line svelte/no-at-html-tags -- static, translator-authored markup -->
-      <p class="hint">{@html t('machinetool.inventory_empty')}</p>
-    {/if}
-    <ul>
-      {#each shownInventory as tool (tool.id)}
-        {@const compatible = toolCompatibleWithAnyMode(tool.kind, machineModes)}
-        {@const stockedAlready = alreadyStocked(tool.id)}
-        <li class:incompatible={!compatible}>
-          <span class="name">#{tool.id} {tool.name}</span>
-          <span class="meta">{KIND_DISPLAY_LABELS[tool.kind]} · ⌀{tool.diameter}</span>
-          <span class="chips">
-            {#each TOOL_COMPATIBLE_MODES[tool.kind] as m (m)}
-              <span class="cap-chip">{MACHINE_MODE_NOUN[m]}</span>
-            {/each}
-          </span>
-          <button
-            type="button"
-            class="act"
-            disabled={!compatible || stockedAlready}
-            title={!compatible
-              ? t('machinetool.incompatible_tool.title', {
-                  kind: KIND_DISPLAY_LABELS[tool.kind].toLowerCase(),
-                  machine: machineLabel,
-                })
-              : stockedAlready
-                ? t('machinetool.already_stocked.title')
-                : t('machinetool.add.title')}
-            onclick={() => add(tool.id)}
-            >{stockedAlready ? t('machinetool.stocked') : t('machinetool.add')}</button
-          >
-        </li>
-      {/each}
-    </ul>
-  </section>
-  <section class="col">
     <h3 title={t('machinetool.stocked_col.title')}>
-      {t('machinetool.stocked_col', { machine: machineLabel })}
+      {t('fs35.available_tools')}
     </h3>
+    <button type="button" onclick={() => (adding = !adding)} aria-expanded={adding}
+      >{t('fs35.add_library')}</button
+    >
     <ul>
       {#each stocked as tool (tool.id)}
         {@const uses = usedByOps(tool.id)}
@@ -142,12 +99,61 @@
       {/each}
     </ul>
   </section>
+  {#if adding}
+    <section class="col">
+      <h3 title={t('machinetool.shop_inventory.title')}>
+        {t('machinetool.shop_inventory')}
+      </h3>
+      {#if inventory.length > 0}
+        <input
+          type="text"
+          class="inv-filter"
+          placeholder={t('machinetool.filter.placeholder')}
+          bind:value={filter}
+          title={t('machinetool.filter.title')}
+        />
+      {/if}
+      {#if inventory.length === 0}
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -- static, translator-authored markup -->
+        <p class="hint">{@html t('machinetool.inventory_empty')}</p>
+      {/if}
+      <ul>
+        {#each shownInventory as tool (tool.id)}
+          {@const compatible = toolCompatibleWithAnyMode(tool.kind, machineModes)}
+          {@const stockedAlready = alreadyStocked(tool.id)}
+          <li class:incompatible={!compatible}>
+            <span class="name">#{tool.id} {tool.name}</span>
+            <span class="meta">{KIND_DISPLAY_LABELS[tool.kind]} · ⌀{tool.diameter}</span>
+            <span class="chips">
+              {#each TOOL_COMPATIBLE_MODES[tool.kind] as m (m)}
+                <span class="cap-chip">{MACHINE_MODE_NOUN[m]}</span>
+              {/each}
+            </span>
+            <button
+              type="button"
+              class="act"
+              disabled={!compatible || stockedAlready}
+              title={!compatible
+                ? t('machinetool.incompatible_tool.title', {
+                    kind: KIND_DISPLAY_LABELS[tool.kind].toLowerCase(),
+                    machine: machineLabel,
+                  })
+                : stockedAlready
+                  ? t('machinetool.already_stocked.title')
+                  : t('machinetool.add.title')}
+              onclick={() => add(tool.id)}
+              >{stockedAlready ? t('machinetool.stocked') : t('machinetool.add')}</button
+            >
+          </li>
+        {/each}
+      </ul>
+    </section>{/if}
 </div>
 
 <style>
   .tooling {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0.7rem;
     flex: 1;

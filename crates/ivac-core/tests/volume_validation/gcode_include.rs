@@ -98,6 +98,8 @@ fn gcode_include_g1_slot_volume_matches_closed_form() {
         stock: Some(stock.clone()),
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
 
     let resp = run(project, PostProcessorKind::Grbl);

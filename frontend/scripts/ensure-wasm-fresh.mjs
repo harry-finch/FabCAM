@@ -34,6 +34,8 @@ const pkgWasm = join(repoRoot, 'crates/ivac-wasm/pkg/ivac_wasm_bg.wasm');
 const inputs = [
   join(repoRoot, 'crates/ivac-wasm/src'),
   join(repoRoot, 'crates/ivac-core/src'),
+  join(repoRoot, 'crates/ivac-feeds-speeds/src'),
+  join(repoRoot, 'crates/ivac-feeds-speeds/Cargo.toml'),
   join(repoRoot, 'crates/ivac-wasm/Cargo.toml'),
   join(repoRoot, 'crates/ivac-core/Cargo.toml'),
 ];

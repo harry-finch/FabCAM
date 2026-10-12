@@ -19,6 +19,7 @@ workspace = true
 cps = ["dep:ivac-cps"]
 
 [dependencies]
+ivac-feeds-speeds = { path = "../ivac-feeds-speeds", features = ["schema"] }
 ivac-cps = { workspace = true, optional = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

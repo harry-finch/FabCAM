@@ -101,3 +101,55 @@ constraints and CAM/post consumers until their ownership/compatibility audit.
 No recommendation capability is claimed by this planning update. No source,
 public model, schema or dependency changes; no upstream synchronization.
 See ADR-0002 and feeds-speeds/README.md for the requested milling-only boundary.
+
+
+## FS0 disposition — 2026-10-12
+
+KEEP upstream models/defaults for legacy projects, geometry/simulation/post seams
+and non-milling behavior. EXTEND through a future isolated FS crate and core
+adapter, optional material identity and operation applied-rate authority. REPLACE
+independent CPS section rate selection with shared resolved rates during FS3;
+DEFER advanced cutting/process semantics. The audited tool/operation/machine
+models and setup resolver match local upstream baseline 9168104; no claim about
+latest remote upstream. No fetch/sync or source/dependency/schema delta in FS0.
+See FS0 qualification for compatibility seams and ADR-0003 for design proposals.
+
+
+## FS1 fork delta — 2026-10-12
+
+EXTEND workspace with isolated `crates/ivac-feeds-speeds`, using only existing
+Serde/serde_json lockfile versions; Cargo.lock adds the local package only.
+KEEP all upstream core models, geometry, pipeline, native/CPS posts and frontend.
+No integration dependency points from those packages to FS. Existing workspace
+CI automatically includes the new member; schema drift guard still passes.
+Future upstream synchronization has a small manifest/lockfile conflict surface;
+retain the crate and rerun FS semantic tests. No upstream fetch/sync performed.
+
+
+## FS2 fork delta — 2026-10-12
+
+EXTEND isolated FS crate with pure JSON loader/catalog validation; serde_json
+moves from test-only to normal dependency at existing lockfile version. Add
+separate CC BY-SA 4.0 source-derived data/attribution/license. KEEP upstream CAM,
+public models, schema generation, posts and frontend. Loader owns no filesystem
+or network. No upstream source edits or integration dependencies introduced.
+
+## FS3 integration delta
+
+Fork-owned core adapter, optional material/identity context and applied rate
+slots; additive schema/HTTP/Tauri/WASM calls; guarded portable FS project format;
+milling panel explicit Calculate/Apply and manual values. Shared setup/CPS
+consumers now use saved resolved rates. Legacy inheritance remains covered by
+workspace golden tests. Source data stays independently licensed and separate.
+Existing ignored WASM imports were corrected for release browser execution.
+See FS3 qualification for scope and evidence; no upstream sync or PR.
+
+## FS3.5 fork delta
+
+EXTEND existing AppliedCutting with optional proposal for manual operation rates;
+KEEP tool defaults and native geometry fields. EXTEND guarded portable cutting
+format v3, frontend job material label and explicit reference compatibility.
+REORGANIZE operation/source/library/machine UI; KEEP inventory/profile IDs and
+non-milling paths. Source Settings reuse per-installation persistence. Generated
+schema/types must follow optional proposal. No engine coefficients or ShopBot
+post delta. See ADR-0004 and FS3.5 qualification before future upstream merging.

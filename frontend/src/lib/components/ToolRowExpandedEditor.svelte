@@ -10,6 +10,7 @@
   /// Stays a pure view: it never touches `project` or the draft directly —
   /// every edit routes back through a callback; the parent owns the draft,
   /// the expand toggle, and the calibration modal.
+  import FeedsSpeedsCompatibility from './FeedsSpeedsCompatibility.svelte';
   import { t } from '../i18n';
   import type { ToolEntry, HolderShape } from '../state/project.svelte';
   import { attrApplies, MACHINE_MODE_NOUN, TOOL_COMPATIBLE_MODES } from '../state/tool_family';
@@ -122,135 +123,144 @@
     </label>
   </div>
   <ToolHolderEditor holder={tool.holder} groupId={tool.id} onChange={(h) => onSetHolder(h)} />
-  <div class="holder-row pass-overrides">
-    <span class="holder-label" title={t('tools.pass_overrides.title')}
-      >{t('tools.pass_overrides')}</span
-    >
-  </div>
-  <div class="holder-row">
-    <label>
-      <span>{t('tools.finish.rpm')}</span>
-      <input
-        type="number"
-        step="500"
-        min="0"
-        placeholder={String(tool.speed)}
-        value={tool.speedFinish ?? ''}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          onUpdateField('speedFinish', v === '' ? undefined : parseInt(v, 10));
-        }}
-      />
-    </label>
-    <label>
-      <span>{t('tools.finish.feed')}</span>
-      <input
-        type="number"
-        step="50"
-        min="0"
-        placeholder={String(tool.feedRate)}
-        value={tool.feedRateFinish ?? ''}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          onUpdateField('feedRateFinish', v === '' ? undefined : parseInt(v, 10));
-        }}
-      />
-    </label>
-    <label>
-      <span>{t('tools.finish.plunge')}</span>
-      <input
-        type="number"
-        step="50"
-        min="0"
-        placeholder={String(tool.plungeRate)}
-        value={tool.plungeRateFinish ?? ''}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          onUpdateField('plungeRateFinish', v === '' ? undefined : parseInt(v, 10));
-        }}
-      />
-    </label>
-  </div>
-  <div class="holder-row">
-    <label>
-      <span>{t('tools.drill.rpm')}</span>
-      <input
-        type="number"
-        step="500"
-        min="0"
-        placeholder={String(tool.speed)}
-        value={tool.speedDrill ?? ''}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          onUpdateField('speedDrill', v === '' ? undefined : parseInt(v, 10));
-        }}
-      />
-    </label>
-    <label>
-      <span>{t('tools.drill.feed')}</span>
-      <input
-        type="number"
-        step="50"
-        min="0"
-        placeholder={String(tool.feedRate)}
-        value={tool.feedRateDrill ?? ''}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          onUpdateField('feedRateDrill', v === '' ? undefined : parseInt(v, 10));
-        }}
-      />
-    </label>
-    <label>
-      <span>{t('tools.drill.plunge')}</span>
-      <input
-        type="number"
-        step="50"
-        min="0"
-        placeholder={String(tool.plungeRate)}
-        value={tool.plungeRateDrill ?? ''}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          onUpdateField('plungeRateDrill', v === '' ? undefined : parseInt(v, 10));
-        }}
-      />
-    </label>
-    <label>
-      <span>{t('tools.drill.peck')}</span>
-      <input
-        type="number"
-        step="0.1"
-        min="0"
-        placeholder="—"
-        value={tool.defaultPeckStepMm ?? ''}
-        title={t('tools.drill.peck.title')}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          onUpdateField('defaultPeckStepMm', v === '' ? undefined : parseFloat(v));
-        }}
-      />
-    </label>
-    <label>
-      <span>{t('tools.drill.xy_overlap')}</span>
-      <input
-        type="number"
-        step="0.05"
-        min="0.05"
-        max="0.95"
-        placeholder="0.5"
-        value={tool.defaultXyOverlap ?? ''}
-        title={t('tools.drill.xy_overlap.title')}
-        onchange={(e) => {
-          const v = (e.currentTarget as HTMLInputElement).value;
-          if (v === '') {
-            onUpdateField('defaultXyOverlap', undefined);
-            return;
-          }
-          const n = parseFloat(v);
-          onUpdateField('defaultXyOverlap', isNaN(n) ? undefined : n);
-        }}
-      />
-    </label>
-  </div>
+  {#if tool.kind === 'endmill'}<FeedsSpeedsCompatibility
+      kind="tools"
+      value={tool.fsIdentity}
+      onChange={(identity) => onUpdateField('fsIdentity', identity)}
+    />{/if}
+  <details>
+    <summary>{t('fs35.fallback')}</summary>
+    <p>{t('fs35.fallback_help')}</p>
+    <div class="holder-row pass-overrides">
+      <span class="holder-label" title={t('tools.pass_overrides.title')}
+        >{t('tools.pass_overrides')}</span
+      >
+    </div>
+    <div class="holder-row">
+      <label>
+        <span>{t('tools.finish.rpm')}</span>
+        <input
+          type="number"
+          step="500"
+          min="0"
+          placeholder={String(tool.speed)}
+          value={tool.speedFinish ?? ''}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            onUpdateField('speedFinish', v === '' ? undefined : parseInt(v, 10));
+          }}
+        />
+      </label>
+      <label>
+        <span>{t('tools.finish.feed')}</span>
+        <input
+          type="number"
+          step="50"
+          min="0"
+          placeholder={String(tool.feedRate)}
+          value={tool.feedRateFinish ?? ''}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            onUpdateField('feedRateFinish', v === '' ? undefined : parseInt(v, 10));
+          }}
+        />
+      </label>
+      <label>
+        <span>{t('tools.finish.plunge')}</span>
+        <input
+          type="number"
+          step="50"
+          min="0"
+          placeholder={String(tool.plungeRate)}
+          value={tool.plungeRateFinish ?? ''}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            onUpdateField('plungeRateFinish', v === '' ? undefined : parseInt(v, 10));
+          }}
+        />
+      </label>
+    </div>
+    <div class="holder-row">
+      <label>
+        <span>{t('tools.drill.rpm')}</span>
+        <input
+          type="number"
+          step="500"
+          min="0"
+          placeholder={String(tool.speed)}
+          value={tool.speedDrill ?? ''}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            onUpdateField('speedDrill', v === '' ? undefined : parseInt(v, 10));
+          }}
+        />
+      </label>
+      <label>
+        <span>{t('tools.drill.feed')}</span>
+        <input
+          type="number"
+          step="50"
+          min="0"
+          placeholder={String(tool.feedRate)}
+          value={tool.feedRateDrill ?? ''}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            onUpdateField('feedRateDrill', v === '' ? undefined : parseInt(v, 10));
+          }}
+        />
+      </label>
+      <label>
+        <span>{t('tools.drill.plunge')}</span>
+        <input
+          type="number"
+          step="50"
+          min="0"
+          placeholder={String(tool.plungeRate)}
+          value={tool.plungeRateDrill ?? ''}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            onUpdateField('plungeRateDrill', v === '' ? undefined : parseInt(v, 10));
+          }}
+        />
+      </label>
+      <label>
+        <span>{t('tools.drill.peck')}</span>
+        <input
+          type="number"
+          step="0.1"
+          min="0"
+          placeholder="—"
+          value={tool.defaultPeckStepMm ?? ''}
+          title={t('tools.drill.peck.title')}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            onUpdateField('defaultPeckStepMm', v === '' ? undefined : parseFloat(v));
+          }}
+        />
+      </label>
+      <label>
+        <span>{t('tools.drill.xy_overlap')}</span>
+        <input
+          type="number"
+          step="0.05"
+          min="0.05"
+          max="0.95"
+          placeholder="0.5"
+          value={tool.defaultXyOverlap ?? ''}
+          title={t('tools.drill.xy_overlap.title')}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLInputElement).value;
+            if (v === '') {
+              onUpdateField('defaultXyOverlap', undefined);
+              return;
+            }
+            const n = parseFloat(v);
+            onUpdateField('defaultXyOverlap', isNaN(n) ? undefined : n);
+          }}
+        />
+      </label>
+    </div>
+  </details>
   <div class="holder-row">
     <label class="comment-row">
       <span>{t('tools.comment')}</span>

@@ -69,6 +69,7 @@ pub fn version() -> Result<JsValue, JsValue> {
     let mut capabilities = vec![
         "import-dxf",
         "generate-gcode",
+        "feeds-speeds",
         "post-linuxcnc",
         "post-grbl",
         "post-hpgl",
@@ -307,4 +308,14 @@ pub(crate) fn panic_message(p: &Box<dyn std::any::Any + Send>) -> String {
     } else {
         "unknown panic payload".to_string()
     }
+}
+
+#[wasm_bindgen(js_name = feedsSpeeds)]
+pub fn feeds_speeds(request: JsValue) -> Result<JsValue, JsValue> {
+    guard(|| {
+        let request = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+        let response = ivac_core::feeds_speeds::feeds_speeds(request)
+            .map_err(|e| structured_error_to_js(ivac_core::Error::bad_input(e)))?;
+        serde_wasm_bindgen::to_value(&response).map_err(into_js_error)
+    })
 }

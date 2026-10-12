@@ -85,6 +85,8 @@ fn pipeline_relief_mill_emits_varying_z_ballnose_surface() {
         stock: None,
         relief_sources: vec![source.clone()],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -135,6 +137,8 @@ fn pipeline_relief_mill_emits_varying_z_ballnose_surface() {
         stock: None,
         relief_sources: vec![source],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp2 = run_pipeline(
         PipelineRequest {
@@ -222,6 +226,8 @@ fn pipeline_relief_mill_heightgrid_cuts_real_z_without_depth_range() {
         stock: None,
         relief_sources: vec![source],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -321,6 +327,8 @@ fn pipeline_waterline_rough_emits_level_chains_over_stl_basin() {
         stock: None,
         relief_sources: vec![source],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -422,6 +430,8 @@ fn pipeline_waterline_rough_rejects_grayscale_source() {
         stock: None,
         relief_sources: vec![source],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -493,6 +503,8 @@ fn pipeline_renders_text_layers_and_routes_via_synthetic_layer() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -678,6 +690,8 @@ fn post_profile_overrides_program_start_and_end() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -750,6 +764,8 @@ fn post_profile_axes_config_drives_axis_emission() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -831,6 +847,8 @@ fn post_profile_disabled_axis_drops_the_word() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -881,6 +899,8 @@ fn post_profile_without_axes_keeps_legacy_output() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp_a = run_pipeline(
         PipelineRequest {
@@ -979,6 +999,8 @@ fn plot_mode_emits_only_two_z_values() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1077,6 +1099,8 @@ fn laser_op_emits_pierce_dwell_before_cut() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1116,6 +1140,8 @@ fn non_laser_tool_ignores_pierce_field() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1195,6 +1221,8 @@ fn raster_engrave_emits_power_modulated_scanlines() {
         stock: None,
         relief_sources: vec![source],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1272,6 +1300,8 @@ fn raster_scan_direction_sets_scanline_count() {
                 },
             }],
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         run_pipeline(
             PipelineRequest {
@@ -1377,6 +1407,8 @@ fn raster_streaming_alongx_reproduces_whole_grid_powers() {
             },
         }],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let g = run_pipeline(
         PipelineRequest {
@@ -1525,6 +1557,8 @@ fn raster_streaming_alongy_reproduces_whole_grid_powers() {
             },
         }],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let g = run_pipeline(
         PipelineRequest {
@@ -1611,6 +1645,8 @@ fn first_tool_z_shift_emits_g92_after_program_begin() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1642,6 +1678,8 @@ fn no_z_shift_emits_no_g92() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1678,6 +1716,8 @@ fn comma_decimal_separator_emits_commas_in_numbers() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1726,6 +1766,8 @@ fn line_numbering_prefixes_every_line() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1770,6 +1812,8 @@ fn no_line_numbering_by_default() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1824,6 +1868,8 @@ fn chamfer_op_emits_constant_z_pass_at_computed_depth() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1906,6 +1952,8 @@ fn chamfer_after_deep_profile_keeps_own_depth() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -1992,6 +2040,8 @@ fn chamfer_finish_pass_emits_second_pass_at_finish_feed() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -2036,6 +2086,8 @@ fn chamfer_with_non_vbit_warns() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -2085,6 +2137,8 @@ fn chamfer_deep_chamfer_uses_multi_pass_stepdown() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -2154,6 +2208,8 @@ fn chamfer_step_larger_than_depth_clamps_to_chamfer_z() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -2223,6 +2279,8 @@ fn chamfer_oversize_width_clamped_to_tool_reach() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -2346,6 +2404,8 @@ fn generate_streaming_emits_op_events_in_order() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let cancel = CancelToken::new();
     let mut events: Vec<PipelineEvent> = Vec::new();
@@ -2399,6 +2459,8 @@ fn generate_streaming_done_event_carries_aggregated_stats() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let cancel = CancelToken::new();
     let mut last: Option<PipelineEvent> = None;
@@ -2473,6 +2535,8 @@ fn generate_streaming_cancellation() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let cancel = CancelToken::new();
     let cancel_clone = cancel.clone();
@@ -2563,6 +2627,8 @@ fn regenerate_with_no_edits_hits_cache() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     clear_pipeline_cache();
     let first = collect_cached_flags(project.clone());
@@ -2609,6 +2675,8 @@ fn edit_one_op_misses_only_that() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     clear_pipeline_cache();
     let first = collect_cached_flags(project.clone());
@@ -2658,6 +2726,8 @@ fn cache_hit_produces_identical_response() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     clear_pipeline_cache();
     let req = || PipelineRequest {
@@ -2823,6 +2893,8 @@ fn pipeline_emits_m0_for_pause_op() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -2896,6 +2968,8 @@ fn pause_op_skips_tool_validation() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3015,6 +3089,8 @@ fn pipeline_emits_g28_for_homing_op() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3097,6 +3173,8 @@ fn pipeline_homing_without_retract_skips_safe_z_move() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let mut project = project;
     project.machine.tool_change = ToolChangeStrategy::Atc;
@@ -3192,6 +3270,8 @@ fn pipeline_emits_g38_2_for_probe_op() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3271,6 +3351,8 @@ fn pipeline_emits_comment_only_for_cycle_marker_op() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let mut project = project;
     project.machine.tool_change = ToolChangeStrategy::Atc;
@@ -3415,6 +3497,8 @@ fn pipeline_emits_gcode_include_with_variable_expansion() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3541,6 +3625,8 @@ fn gcode_include_unknown_variable_warns_and_passes_through() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3629,6 +3715,8 @@ fn gcode_include_empty_content_warns() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3714,6 +3802,8 @@ fn gcode_include_mixed_body_emits_counted_skipped_summary() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3825,6 +3915,8 @@ fn gcode_include_multi_axis_line_classified_unsimulated() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3910,6 +4002,8 @@ fn gcode_include_comment_only_body_emits_no_classification_warning() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -3994,6 +4088,8 @@ fn gcode_include_verbose_mode_fans_out_per_line_warnings() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -4106,6 +4202,8 @@ fn pipeline_emits_group_boundary_markers() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -4156,6 +4254,8 @@ fn pipeline_emits_no_group_markers_when_field_unset() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -4204,6 +4304,8 @@ fn pipeline_treats_empty_group_string_as_no_group() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -4329,6 +4431,8 @@ fn project_with_pause_between_cuts_decodes_and_runs() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
 
     // Round-trip through JSON, then surgically drop the three
@@ -4426,6 +4530,8 @@ fn multi_op_different_tools_emit_m6_at_each_boundary() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4477,6 +4583,8 @@ fn multi_op_same_tool_emits_at_most_one_m6() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4518,6 +4626,8 @@ fn no_toolchange_machine_omits_m6() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4589,6 +4699,8 @@ fn rectangle_tab_drop_uses_plunge_feedrate() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4685,6 +4797,8 @@ fn laser_pierce_dwells_at_cut_z() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4746,6 +4860,8 @@ fn multi_op_toolchange_envelope_has_m5_before_m6_and_m3_after() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4815,6 +4931,8 @@ fn dual_tool_internal_change_uses_full_envelope() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4903,6 +5021,8 @@ fn drill_stufenfase_change_uses_full_envelope() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -4960,6 +5080,8 @@ fn coolant_off_before_spindle_off_in_inter_op_toolchange() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5014,6 +5136,8 @@ fn first_tool_envelope_omits_leading_coolant_off() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5057,6 +5181,8 @@ fn same_tool_consecutive_ops_skip_envelope_entirely() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5103,6 +5229,8 @@ fn non_toolchange_machine_pauses_for_manual_swap() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5159,6 +5287,8 @@ fn manual_multitool_emits_g53_move_to_toolchange_position() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5211,6 +5341,8 @@ fn unset_toolchange_position_emits_no_mid_program_g53() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5258,6 +5390,8 @@ fn atc_multitool_emits_g53_move_before_m6() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5303,6 +5437,8 @@ fn multi_tool_manual_machine_warns_with_change_count() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5368,6 +5504,8 @@ fn single_tool_and_atc_machines_omit_manual_toolchange_warning() {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         run_pipeline(
             PipelineRequest {
@@ -5424,6 +5562,8 @@ fn grbl_atc_without_template_warns() {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         run_pipeline(
             PipelineRequest {
@@ -5501,6 +5641,8 @@ fn grbl_fixed_sensor_without_template_warns() {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         run_pipeline(
             PipelineRequest {
@@ -5567,6 +5709,8 @@ fn tool_length_offsets_emit_g43_and_skip_zshift() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let g = run_pipeline(
         PipelineRequest {
@@ -5614,6 +5758,8 @@ fn tool_length_offsets_off_emits_no_g43() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let g = run_pipeline(
         PipelineRequest {
@@ -5664,6 +5810,8 @@ fn two_tool_manual_gcode(
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     run_pipeline(
         PipelineRequest {
@@ -5868,6 +6016,8 @@ fn inch_units_emit_scaled_numbers() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -5951,6 +6101,8 @@ fn toolchange_envelope_routes_ccw_tool_through_m4() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -6008,6 +6160,8 @@ fn toolchange_envelope_keeps_m3_for_default_cw_tool() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -6086,6 +6240,8 @@ fn prev_tool_id_stays_unchanged_when_dual_tool_skips_finish() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -6218,6 +6374,8 @@ fn prev_tool_id_unchanged_after_drill_skips_chamfer_swap() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -6298,6 +6456,8 @@ fn pause_op_does_not_lock_spindle_direction() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -6391,6 +6551,8 @@ fn laser_mode_toolchange_envelope_emits_no_spindle_commands() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         crate::pipeline::PipelineRequest {
@@ -6501,6 +6663,8 @@ fn run_pipeline_flags_cuts_outside_work_area() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -6535,6 +6699,8 @@ fn run_pipeline_no_work_area_warning_when_in_bounds() {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
     let resp = run_pipeline(
         PipelineRequest {
@@ -6619,6 +6785,8 @@ fn tslot_project(tool: ToolEntry, depth: f64) -> Project {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     }
 }
 
@@ -6823,6 +6991,8 @@ fn dovetail_project(tool: ToolEntry, depth: f64) -> Project {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     }
 }
 
@@ -6980,6 +7150,8 @@ fn tessellated_circle_profile_project(arcs: bool) -> Project {
         stock: None,
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     }
 }
 
@@ -7144,6 +7316,8 @@ fn group_ops_by_tool_collapses_redundant_toolchange() {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: group,
+            material: None,
+            fs_context: None,
         };
         run_pipeline(
             PipelineRequest {
@@ -7206,6 +7380,8 @@ fn optional_stop_swaps_pause_m0_for_m1() {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         run_pipeline(
             PipelineRequest {
@@ -7260,6 +7436,8 @@ fn optional_stop_swaps_manual_toolchange_m0_for_m1() {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         run_pipeline(
             PipelineRequest {

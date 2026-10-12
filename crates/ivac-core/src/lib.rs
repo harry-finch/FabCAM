@@ -15,6 +15,7 @@
 pub mod cam;
 pub mod cancel;
 pub mod errors;
+pub mod feeds_speeds;
 pub mod gcode;
 pub mod geometry;
 pub mod input;

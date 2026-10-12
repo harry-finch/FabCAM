@@ -319,6 +319,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp_a = run_pipeline(
             PipelineRequest {
@@ -418,6 +420,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -500,6 +504,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -572,6 +578,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {

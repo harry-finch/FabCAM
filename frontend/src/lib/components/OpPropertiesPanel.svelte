@@ -22,6 +22,7 @@
   import { effectiveDiameterHint } from '../state/tool_wear';
   import { partitionToolsForModes } from '../state/tool_picker';
   import { t } from '../i18n';
+  import FeedsSpeedsSection from './op_properties/FeedsSpeedsSection.svelte';
   import VCarveSection from './op_properties/VCarveSection.svelte';
   import ChamferSection from './op_properties/ChamferSection.svelte';
   import ThreadSection from './op_properties/ThreadSection.svelte';
@@ -597,292 +598,277 @@
           <span class="unit">mm</span>
         </div>
       </label>
-      <label class="row">
-        <span>{t('opprops.cut.start_depth')}</span>
-        <div class="num-cell">
-          <input
-            type="number"
-            step="0.1"
-            value={op.startDepth}
-            onchange={(e) => {
-              const raw = (e.currentTarget as HTMLInputElement).value;
-              const v = parseFloat(raw);
-              if (Number.isFinite(v)) patch('startDepth', v);
-            }}
-          />
-          <span class="unit">mm</span>
-        </div>
-      </label>
-      <label class="row">
-        <span>{t('opprops.cut.step')}</span>
-        <div class="step-cell">
-          <input
-            type="number"
-            step="0.1"
-            value={op.step ?? ''}
-            placeholder={stepInheriting && toolDefaultStep !== null && toolDefaultStep < 0
-              ? t('opprops.cut.step.from_tool', { value: toolDefaultStep })
-              : '—'}
-            class:inherit={stepInheriting && toolDefaultStep !== null && toolDefaultStep < 0}
-            class:invalid={stepMissing}
-            onchange={(e) => {
-              const v = (e.currentTarget as HTMLInputElement).value;
-              if (v === '') {
-                patch('step', null);
-                return;
-              }
-              const n = parseFloat(v);
-              patch('step', isNaN(n) ? null : n);
-            }}
-          />
-          <span class="unit">mm</span>
-          {#if !stepInheriting}
-            <button
-              type="button"
-              class="reset-link"
-              title={t('opprops.cut.step.reset.title')}
-              onclick={() => patch('step', null)}>{t('opprops.cut.step.reset')}</button
-            >
+      {#snippet advancedCutSettings()}
+        <label class="row">
+          <span>{t('opprops.cut.start_depth')}</span>
+          <div class="num-cell">
+            <input
+              type="number"
+              step="0.1"
+              value={op.startDepth}
+              onchange={(e) => {
+                const raw = (e.currentTarget as HTMLInputElement).value;
+                const v = parseFloat(raw);
+                if (Number.isFinite(v)) patch('startDepth', v);
+              }}
+            />
+            <span class="unit">mm</span>
+          </div>
+        </label>
+        {#if !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}
+          <label class="row">
+            <span>{t('opprops.cut.step')}</span>
+            <div class="step-cell">
+              <input
+                type="number"
+                step="0.1"
+                value={op.step ?? ''}
+                placeholder={stepInheriting && toolDefaultStep !== null && toolDefaultStep < 0
+                  ? t('opprops.cut.step.from_tool', { value: toolDefaultStep })
+                  : '—'}
+                class:inherit={stepInheriting && toolDefaultStep !== null && toolDefaultStep < 0}
+                class:invalid={stepMissing}
+                onchange={(e) => {
+                  const v = (e.currentTarget as HTMLInputElement).value;
+                  if (v === '') {
+                    patch('step', null);
+                    return;
+                  }
+                  const n = parseFloat(v);
+                  patch('step', isNaN(n) ? null : n);
+                }}
+              />
+              <span class="unit">mm</span>
+              {#if !stepInheriting}
+                <button
+                  type="button"
+                  class="reset-link"
+                  title={t('opprops.cut.step.reset.title')}
+                  onclick={() => patch('step', null)}>{t('opprops.cut.step.reset')}</button
+                >
+              {/if}
+            </div>
+          </label>
+          {#if stepMissing}
+            <p class="step-error">{t('opprops.cut.step.required')}</p>
           {/if}
-        </div>
-      </label>
-      {#if stepMissing}
-        <p class="step-error">{t('opprops.cut.step.required')}</p>
-      {/if}
-      {#if isContourOp(op)}
-        <label class="row" title={t('opprops.cut.finish_step.title')}>
-          <span>{t('opprops.cut.finish_step')}</span>
-          <div class="num-cell">
-            <input
-              type="number"
-              step="0.05"
-              placeholder={t('opprops.cut.finish_step.placeholder')}
-              value={op.finishStep ?? ''}
-              onchange={(e) => {
-                const v = parseFloat((e.currentTarget as HTMLInputElement).value);
-                patch('finishStep', isNaN(v) ? undefined : v);
-              }}
-            />
-            <span class="unit">mm</span>
-          </div>
-        </label>
-      {/if}
-      {#if op.kind === 'pocket'}
-        <label class="row" title={t('opprops.cut.xy_finish_stock.title')}>
-          <span>{t('opprops.cut.xy_finish_stock')}</span>
-          <div class="num-cell">
-            <input
-              type="number"
-              step="0.05"
-              min="0"
-              placeholder="0"
-              value={op.finishXyAllowanceMm ?? ''}
-              onchange={(e) => {
-                const v = parseFloat((e.currentTarget as HTMLInputElement).value);
-                patch('finishXyAllowanceMm', isNaN(v) || v <= 0 ? undefined : v);
-              }}
-            />
-            <span class="unit">mm</span>
-          </div>
-        </label>
-      {/if}
-
-      {#if op.kind === 'pocket' || op.kind === 'profile'}
-        {@const pickActive =
-          project.sel.pickMode?.kind === 'approach-point' && project.sel.pickMode.opId === op.id}
-        <div class="row" title={t('opprops.cut.approach_point.title')}>
-          <span>{t('opprops.cut.approach_point')}</span>
-          <div class="num-cell num-cell-pair">
-            <input
-              type="number"
-              step="0.1"
-              placeholder="X"
-              aria-label={t('opprops.cut.approach_point.x_aria')}
-              value={op.approachPoint?.[0] ?? ''}
-              onchange={(e) => {
-                const xs = (e.currentTarget as HTMLInputElement).value;
-                if (xs === '') {
-                  patch('approachPoint', undefined);
-                  return;
-                }
-                const x = parseFloat(xs);
-                const y = op.approachPoint?.[1] ?? 0;
-                if (!isNaN(x)) patch('approachPoint', [x, y]);
-              }}
-            />
-            <input
-              type="number"
-              step="0.1"
-              placeholder="Y"
-              aria-label={t('opprops.cut.approach_point.y_aria')}
-              value={op.approachPoint?.[1] ?? ''}
-              onchange={(e) => {
-                const ys = (e.currentTarget as HTMLInputElement).value;
-                if (ys === '') {
-                  patch('approachPoint', undefined);
-                  return;
-                }
-                const y = parseFloat(ys);
-                const x = op.approachPoint?.[0] ?? 0;
-                if (!isNaN(y)) patch('approachPoint', [x, y]);
-              }}
-            />
-            <button
-              type="button"
-              class="reset-link"
-              class:pick-active={pickActive}
-              title={pickActive
-                ? t('opprops.cut.approach_point.picking.title')
-                : t('opprops.cut.approach_point.pick.title')}
-              onclick={() => {
-                project.sel.pickMode = pickActive ? null : { kind: 'approach-point', opId: op.id };
-              }}
-              >{pickActive
-                ? t('opprops.cut.approach_point.picking')
-                : t('opprops.cut.approach_point.pick')}</button
-            >
-            {#if op.approachPoint}
-              <button
-                type="button"
-                class="reset-link"
-                title={t('opprops.cut.approach_point.clear.title')}
-                onclick={() => patch('approachPoint', undefined)}
-                >{t('opprops.cut.approach_point.clear')}</button
-              >
-            {/if}
-          </div>
-        </div>
-      {/if}
-      <label class="row" title={t('opprops.cut.through_depth.title')}>
-        <span>{t('opprops.cut.through_depth')}</span>
-        <div class="num-cell">
-          <input
-            type="number"
-            step="0.1"
-            min="0"
-            value={op.throughDepth ?? 0}
-            onchange={(e) => {
-              const v = parseFloat((e.currentTarget as HTMLInputElement).value);
-              patch('throughDepth', isNaN(v) || v <= 0 ? undefined : v);
-            }}
-          />
-          <span class="unit">mm</span>
-        </div>
-      </label>
-      <label class="row" title={t('opprops.cut.depth_list.title')}>
-        <span>{t('opprops.cut.depth_list')}</span>
-        <div class="num-cell">
-          <input
-            type="text"
-            placeholder={t('opprops.cut.depth_list.placeholder')}
-            value={op.depthList ? op.depthList.join(', ') : ''}
-            onchange={(e) => {
-              const text = (e.currentTarget as HTMLInputElement).value.trim();
-              if (text === '') {
-                patch('depthList', undefined);
-                return;
-              }
-              const parts = text
-                .split(',')
-                .map((s) => parseFloat(s.trim()))
-                .filter((n) => !isNaN(n));
-              patch('depthList', parts.length > 0 ? parts : undefined);
-            }}
-          />
-          <span class="unit">mm</span>
-        </div>
-      </label>
-      {#if op.kind === 'profile' || op.kind === 'pocket'}
-        <label class="row" title={t(CUT_DIRECTION_HELP[op.cutDirection ?? 'conventional'])}>
-          <span>{t('opprops.cut.direction')}</span>
-          <select
-            value={op.cutDirection ?? 'conventional'}
-            onchange={(e) =>
-              patch('cutDirection', (e.currentTarget as HTMLSelectElement).value as CutDirection)}
-          >
-            <option value="conventional" title={t(CUT_DIRECTION_HELP.conventional)}
-              >{t('opprops.direction.conventional')}</option
-            >
-            <option value="climb" title={t(CUT_DIRECTION_HELP.climb)}
-              >{t('opprops.direction.climb')}</option
-            >
-          </select>
-        </label>
-        <label class="row" title={t(CUT_DIRECTION_HELP[op.finishCutDirection ?? 'conventional'])}>
-          <span>{t('opprops.cut.finish_direction')}</span>
-          <select
-            value={op.finishCutDirection ?? 'conventional'}
-            onchange={(e) =>
-              patch(
-                'finishCutDirection',
-                (e.currentTarget as HTMLSelectElement).value as CutDirection,
-              )}
-          >
-            <option value="conventional" title={t(CUT_DIRECTION_HELP.conventional)}
-              >{t('opprops.direction.conventional')}</option
-            >
-            <option value="climb" title={t(CUT_DIRECTION_HELP.climb)}
-              >{t('opprops.direction.climb')}</option
-            >
-          </select>
-        </label>
-        <label class="row" title={t(PLUNGE_HELP[op.plunge?.kind ?? 'direct'])}>
-          <span>{t('opprops.cut.plunge')}</span>
-          <select
-            value={op.plunge?.kind ?? 'direct'}
-            onchange={(e) => {
-              const v = (e.currentTarget as HTMLSelectElement).value;
-              if (v === 'ramp') {
-                patch('plunge', {
-                  kind: 'ramp',
-                  angleDeg: op.plunge && op.plunge.kind === 'ramp' ? op.plunge.angleDeg : 3,
-                });
-              } else if (v === 'helix') {
-                // Sane default helix radius: 1.5 × tool radius, fallback 3mm.
-                const tool = project.data.tools.find((t) => t.id === op?.toolId);
-                const defaultRadius = tool ? Math.max(0.1, tool.diameter * 0.75) : 3;
-                patch('plunge', {
-                  kind: 'helix',
-                  angleDeg: op.plunge && op.plunge.kind === 'helix' ? op.plunge.angleDeg : 3,
-                  radiusMm:
-                    op.plunge && op.plunge.kind === 'helix' ? op.plunge.radiusMm : defaultRadius,
-                });
-              } else {
-                patch('plunge', { kind: 'direct' });
-              }
-            }}
-          >
-            <option value="direct" title={t(PLUNGE_HELP.direct)}
-              >{t('opprops.plunge.direct')}</option
-            >
-            <option value="ramp" title={t(PLUNGE_HELP.ramp)}>{t('opprops.plunge.ramp')}</option>
-            <option value="helix" title={t(PLUNGE_HELP.helix)}>{t('opprops.plunge.helix')}</option>
-          </select>
-        </label>
-        {#if op.plunge && op.plunge.kind === 'ramp'}
-          <label class="row" title={t('opprops.ramp_angle.title')}>
-            <span>{t('opprops.ramp_angle')}</span>
+        {/if}
+        {#if isContourOp(op)}
+          <label class="row" title={t('opprops.cut.finish_step.title')}>
+            <span>{t('opprops.cut.finish_step')}</span>
             <div class="num-cell">
               <input
                 type="number"
-                step="0.5"
-                min="0.5"
-                max="45"
-                value={op.plunge.angleDeg}
+                step="0.05"
+                placeholder={t('opprops.cut.finish_step.placeholder')}
+                value={op.finishStep ?? ''}
                 onchange={(e) => {
                   const v = parseFloat((e.currentTarget as HTMLInputElement).value);
-                  if (!isNaN(v))
-                    patch('plunge', { kind: 'ramp', angleDeg: Math.max(0.5, Math.min(45, v)) });
+                  patch('finishStep', isNaN(v) ? undefined : v);
                 }}
               />
-              <span class="unit">°</span>
+              <span class="unit">mm</span>
             </div>
           </label>
-        {:else if op.plunge && op.plunge.kind === 'helix'}
-          <details class="subsection" open>
-            <summary>{t('opprops.helix')}</summary>
-            <label class="row" title={t('opprops.helix_angle.title')}>
-              <span>{t('opprops.helix_angle')}</span>
+        {/if}
+        {#if op.kind === 'pocket'}
+          <label class="row" title={t('opprops.cut.xy_finish_stock.title')}>
+            <span>{t('opprops.cut.xy_finish_stock')}</span>
+            <div class="num-cell">
+              <input
+                type="number"
+                step="0.05"
+                min="0"
+                placeholder="0"
+                value={op.finishXyAllowanceMm ?? ''}
+                onchange={(e) => {
+                  const v = parseFloat((e.currentTarget as HTMLInputElement).value);
+                  patch('finishXyAllowanceMm', isNaN(v) || v <= 0 ? undefined : v);
+                }}
+              />
+              <span class="unit">mm</span>
+            </div>
+          </label>
+        {/if}
+
+        {#if op.kind === 'pocket' || op.kind === 'profile'}
+          {@const pickActive =
+            project.sel.pickMode?.kind === 'approach-point' && project.sel.pickMode.opId === op.id}
+          <div class="row" title={t('opprops.cut.approach_point.title')}>
+            <span>{t('opprops.cut.approach_point')}</span>
+            <div class="num-cell num-cell-pair">
+              <input
+                type="number"
+                step="0.1"
+                placeholder="X"
+                aria-label={t('opprops.cut.approach_point.x_aria')}
+                value={op.approachPoint?.[0] ?? ''}
+                onchange={(e) => {
+                  const xs = (e.currentTarget as HTMLInputElement).value;
+                  if (xs === '') {
+                    patch('approachPoint', undefined);
+                    return;
+                  }
+                  const x = parseFloat(xs);
+                  const y = op.approachPoint?.[1] ?? 0;
+                  if (!isNaN(x)) patch('approachPoint', [x, y]);
+                }}
+              />
+              <input
+                type="number"
+                step="0.1"
+                placeholder="Y"
+                aria-label={t('opprops.cut.approach_point.y_aria')}
+                value={op.approachPoint?.[1] ?? ''}
+                onchange={(e) => {
+                  const ys = (e.currentTarget as HTMLInputElement).value;
+                  if (ys === '') {
+                    patch('approachPoint', undefined);
+                    return;
+                  }
+                  const y = parseFloat(ys);
+                  const x = op.approachPoint?.[0] ?? 0;
+                  if (!isNaN(y)) patch('approachPoint', [x, y]);
+                }}
+              />
+              <button
+                type="button"
+                class="reset-link"
+                class:pick-active={pickActive}
+                title={pickActive
+                  ? t('opprops.cut.approach_point.picking.title')
+                  : t('opprops.cut.approach_point.pick.title')}
+                onclick={() => {
+                  project.sel.pickMode = pickActive
+                    ? null
+                    : { kind: 'approach-point', opId: op.id };
+                }}
+                >{pickActive
+                  ? t('opprops.cut.approach_point.picking')
+                  : t('opprops.cut.approach_point.pick')}</button
+              >
+              {#if op.approachPoint}
+                <button
+                  type="button"
+                  class="reset-link"
+                  title={t('opprops.cut.approach_point.clear.title')}
+                  onclick={() => patch('approachPoint', undefined)}
+                  >{t('opprops.cut.approach_point.clear')}</button
+                >
+              {/if}
+            </div>
+          </div>
+        {/if}
+        <label class="row" title={t('opprops.cut.through_depth.title')}>
+          <span>{t('opprops.cut.through_depth')}</span>
+          <div class="num-cell">
+            <input
+              type="number"
+              step="0.1"
+              min="0"
+              value={op.throughDepth ?? 0}
+              onchange={(e) => {
+                const v = parseFloat((e.currentTarget as HTMLInputElement).value);
+                patch('throughDepth', isNaN(v) || v <= 0 ? undefined : v);
+              }}
+            />
+            <span class="unit">mm</span>
+          </div>
+        </label>
+        <label class="row" title={t('opprops.cut.depth_list.title')}>
+          <span>{t('opprops.cut.depth_list')}</span>
+          <div class="num-cell">
+            <input
+              type="text"
+              placeholder={t('opprops.cut.depth_list.placeholder')}
+              value={op.depthList ? op.depthList.join(', ') : ''}
+              onchange={(e) => {
+                const text = (e.currentTarget as HTMLInputElement).value.trim();
+                if (text === '') {
+                  patch('depthList', undefined);
+                  return;
+                }
+                const parts = text
+                  .split(',')
+                  .map((s) => parseFloat(s.trim()))
+                  .filter((n) => !isNaN(n));
+                patch('depthList', parts.length > 0 ? parts : undefined);
+              }}
+            />
+            <span class="unit">mm</span>
+          </div>
+        </label>
+        {#if op.kind === 'profile' || op.kind === 'pocket'}
+          <label class="row" title={t(CUT_DIRECTION_HELP[op.cutDirection ?? 'conventional'])}>
+            <span>{t('opprops.cut.direction')}</span>
+            <select
+              value={op.cutDirection ?? 'conventional'}
+              onchange={(e) =>
+                patch('cutDirection', (e.currentTarget as HTMLSelectElement).value as CutDirection)}
+            >
+              <option value="conventional" title={t(CUT_DIRECTION_HELP.conventional)}
+                >{t('opprops.direction.conventional')}</option
+              >
+              <option value="climb" title={t(CUT_DIRECTION_HELP.climb)}
+                >{t('opprops.direction.climb')}</option
+              >
+            </select>
+          </label>
+          <label class="row" title={t(CUT_DIRECTION_HELP[op.finishCutDirection ?? 'conventional'])}>
+            <span>{t('opprops.cut.finish_direction')}</span>
+            <select
+              value={op.finishCutDirection ?? 'conventional'}
+              onchange={(e) =>
+                patch(
+                  'finishCutDirection',
+                  (e.currentTarget as HTMLSelectElement).value as CutDirection,
+                )}
+            >
+              <option value="conventional" title={t(CUT_DIRECTION_HELP.conventional)}
+                >{t('opprops.direction.conventional')}</option
+              >
+              <option value="climb" title={t(CUT_DIRECTION_HELP.climb)}
+                >{t('opprops.direction.climb')}</option
+              >
+            </select>
+          </label>
+          <label class="row" title={t(PLUNGE_HELP[op.plunge?.kind ?? 'direct'])}>
+            <span>{t('opprops.cut.plunge')}</span>
+            <select
+              value={op.plunge?.kind ?? 'direct'}
+              onchange={(e) => {
+                const v = (e.currentTarget as HTMLSelectElement).value;
+                if (v === 'ramp') {
+                  patch('plunge', {
+                    kind: 'ramp',
+                    angleDeg: op.plunge && op.plunge.kind === 'ramp' ? op.plunge.angleDeg : 3,
+                  });
+                } else if (v === 'helix') {
+                  // Sane default helix radius: 1.5 × tool radius, fallback 3mm.
+                  const tool = project.data.tools.find((t) => t.id === op?.toolId);
+                  const defaultRadius = tool ? Math.max(0.1, tool.diameter * 0.75) : 3;
+                  patch('plunge', {
+                    kind: 'helix',
+                    angleDeg: op.plunge && op.plunge.kind === 'helix' ? op.plunge.angleDeg : 3,
+                    radiusMm:
+                      op.plunge && op.plunge.kind === 'helix' ? op.plunge.radiusMm : defaultRadius,
+                  });
+                } else {
+                  patch('plunge', { kind: 'direct' });
+                }
+              }}
+            >
+              <option value="direct" title={t(PLUNGE_HELP.direct)}
+                >{t('opprops.plunge.direct')}</option
+              >
+              <option value="ramp" title={t(PLUNGE_HELP.ramp)}>{t('opprops.plunge.ramp')}</option>
+              <option value="helix" title={t(PLUNGE_HELP.helix)}>{t('opprops.plunge.helix')}</option
+              >
+            </select>
+          </label>
+          {#if op.plunge && op.plunge.kind === 'ramp'}
+            <label class="row" title={t('opprops.ramp_angle.title')}>
+              <span>{t('opprops.ramp_angle')}</span>
               <div class="num-cell">
                 <input
                   type="number"
@@ -892,85 +878,118 @@
                   value={op.plunge.angleDeg}
                   onchange={(e) => {
                     const v = parseFloat((e.currentTarget as HTMLInputElement).value);
-                    if (!isNaN(v) && op.plunge && op.plunge.kind === 'helix')
-                      patch('plunge', {
-                        kind: 'helix',
-                        angleDeg: Math.max(0.5, Math.min(45, v)),
-                        radiusMm: op.plunge.radiusMm,
-                      });
+                    if (!isNaN(v))
+                      patch('plunge', { kind: 'ramp', angleDeg: Math.max(0.5, Math.min(45, v)) });
                   }}
                 />
                 <span class="unit">°</span>
               </div>
             </label>
-            <label class="row" title={t('opprops.helix_autofit.title')}>
-              <span>{t('opprops.helix_autofit')}</span>
-              <input
-                type="checkbox"
-                checked={op.plunge.radiusMm === null}
-                onchange={(e) => {
-                  const checked = (e.currentTarget as HTMLInputElement).checked;
-                  if (op.plunge && op.plunge.kind === 'helix') {
-                    patch('plunge', {
-                      kind: 'helix',
-                      angleDeg: op.plunge.angleDeg,
-                      radiusMm: checked ? null : lastManualHelixRadius,
-                    });
-                  }
-                }}
-              />
-            </label>
-            {#if op.plunge.radiusMm === null}
-              <div class="row" title={t('opprops.helix_radius.auto.title')}>
-                <span>{t('opprops.helix_radius')}</span>
-                {#if helixPreview?.radius_mm != null}
-                  <em class="placeholder"
-                    >{t('opprops.helix_radius.auto_detected', {
-                      value: helixPreview.radius_mm.toFixed(1),
-                    })}</em
-                  >
-                {:else if helixPreview && helixPreview.radius_mm == null}
-                  <em class="placeholder"
-                    >{helixPreview.fallback_reason
-                      ? t('opprops.helix_radius.auto_no_fit_reason', {
-                          reason: helixPreview.fallback_reason,
-                        })
-                      : t('opprops.helix_radius.auto_no_fit')}</em
-                  >
-                {:else if helixPreviewLoading}
-                  <em class="placeholder">{t('opprops.helix_radius.auto_pending')}</em>
-                {:else}
-                  <em class="placeholder">{t('opprops.helix_radius.auto_pending')}</em>
-                {/if}
-              </div>
-            {:else}
-              <label class="row" title={t('opprops.helix_radius.manual.title')}>
-                <span>{t('opprops.helix_radius')}</span>
+          {:else if op.plunge && op.plunge.kind === 'helix'}
+            <details class="subsection" open>
+              <summary>{t('opprops.helix')}</summary>
+              <label class="row" title={t('opprops.helix_angle.title')}>
+                <span>{t('opprops.helix_angle')}</span>
                 <div class="num-cell">
                   <input
                     type="number"
-                    step="0.1"
-                    min="0.1"
-                    max="50"
-                    value={op.plunge.radiusMm}
+                    step="0.5"
+                    min="0.5"
+                    max="45"
+                    value={op.plunge.angleDeg}
                     onchange={(e) => {
                       const v = parseFloat((e.currentTarget as HTMLInputElement).value);
                       if (!isNaN(v) && op.plunge && op.plunge.kind === 'helix')
                         patch('plunge', {
                           kind: 'helix',
-                          angleDeg: op.plunge.angleDeg,
-                          radiusMm: Math.max(0.1, Math.min(50, v)),
+                          angleDeg: Math.max(0.5, Math.min(45, v)),
+                          radiusMm: op.plunge.radiusMm,
                         });
                     }}
                   />
-                  <span class="unit">mm</span>
+                  <span class="unit">°</span>
                 </div>
               </label>
-            {/if}
-          </details>
+              <label class="row" title={t('opprops.helix_autofit.title')}>
+                <span>{t('opprops.helix_autofit')}</span>
+                <input
+                  type="checkbox"
+                  checked={op.plunge.radiusMm === null}
+                  onchange={(e) => {
+                    const checked = (e.currentTarget as HTMLInputElement).checked;
+                    if (op.plunge && op.plunge.kind === 'helix') {
+                      patch('plunge', {
+                        kind: 'helix',
+                        angleDeg: op.plunge.angleDeg,
+                        radiusMm: checked ? null : lastManualHelixRadius,
+                      });
+                    }
+                  }}
+                />
+              </label>
+              {#if op.plunge.radiusMm === null}
+                <div class="row" title={t('opprops.helix_radius.auto.title')}>
+                  <span>{t('opprops.helix_radius')}</span>
+                  {#if helixPreview?.radius_mm != null}
+                    <em class="placeholder"
+                      >{t('opprops.helix_radius.auto_detected', {
+                        value: helixPreview.radius_mm.toFixed(1),
+                      })}</em
+                    >
+                  {:else if helixPreview && helixPreview.radius_mm == null}
+                    <em class="placeholder"
+                      >{helixPreview.fallback_reason
+                        ? t('opprops.helix_radius.auto_no_fit_reason', {
+                            reason: helixPreview.fallback_reason,
+                          })
+                        : t('opprops.helix_radius.auto_no_fit')}</em
+                    >
+                  {:else if helixPreviewLoading}
+                    <em class="placeholder">{t('opprops.helix_radius.auto_pending')}</em>
+                  {:else}
+                    <em class="placeholder">{t('opprops.helix_radius.auto_pending')}</em>
+                  {/if}
+                </div>
+              {:else}
+                <label class="row" title={t('opprops.helix_radius.manual.title')}>
+                  <span>{t('opprops.helix_radius')}</span>
+                  <div class="num-cell">
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0.1"
+                      max="50"
+                      value={op.plunge.radiusMm}
+                      onchange={(e) => {
+                        const v = parseFloat((e.currentTarget as HTMLInputElement).value);
+                        if (!isNaN(v) && op.plunge && op.plunge.kind === 'helix')
+                          patch('plunge', {
+                            kind: 'helix',
+                            angleDeg: op.plunge.angleDeg,
+                            radiusMm: Math.max(0.1, Math.min(50, v)),
+                          });
+                      }}
+                    />
+                    <span class="unit">mm</span>
+                  </div>
+                </label>
+              {/if}
+            </details>
+          {/if}
         {/if}
+      {/snippet}
+      {#if project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket')}
+        <details class="inspector-disclosure">
+          <summary>{t('fs35.advanced_depth')}</summary>{@render advancedCutSettings()}
+        </details>
+      {:else}
+        {@render advancedCutSettings()}
       {/if}
     </fieldset>
+
+    {#if project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket')}
+      {#key op.id}<FeedsSpeedsSection {op} />{/key}
+    {/if}
 
     {#if op.kind === 'profile' || op.kind === 'pocket'}
       <details
@@ -1015,73 +1034,83 @@
           (op.cornerFeedReduction ?? 0) > 0}
       >
         <summary>
-          {t('opprops.feeds')}
-          <span class="opt-summary"
-            >{op.feedRateOverride !== undefined ||
-            op.plungeRateOverride !== undefined ||
-            (op.cornerFeedReduction ?? 0) > 0
-              ? t('opprops.feeds.custom')
-              : t('opprops.feeds.tool_defaults')}</span
-          >
+          {project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket')
+            ? t('fs35.advanced_feed')
+            : t('opprops.feeds')}
+          {#if !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}<span
+              class="opt-summary"
+              >{op.feedRateOverride !== undefined ||
+              op.plungeRateOverride !== undefined ||
+              (op.cornerFeedReduction ?? 0) > 0
+                ? t('opprops.feeds.custom')
+                : t('opprops.feeds.tool_defaults')}</span
+            >{/if}
         </summary>
         <fieldset class="optional-fieldset">
-          <legend>{t('opprops.feeds')}</legend>
-          <label class="row" title={t('opprops.feeds.feed_rate.title')}>
-            <span>{t('opprops.feeds.feed_rate')}</span>
-            <div class="num-cell">
-              <input
-                type="number"
-                step="50"
-                min="0"
-                placeholder={toolFeedRate != null
-                  ? String(toolFeedRate)
-                  : t('opprops.feeds.tool_default')}
-                value={op.feedRateOverride ?? ''}
-                onchange={(e) => {
-                  const v = parseInt((e.currentTarget as HTMLInputElement).value, 10);
-                  patch('feedRateOverride', isNaN(v) || v <= 0 ? undefined : v);
-                }}
-              />
-              <span class="unit">mm/min</span>
-              {#if op.feedRateOverride !== undefined}
-                <button
-                  type="button"
-                  class="reset-link"
-                  onclick={() => patch('feedRateOverride', undefined)}
-                  title={t('opprops.feeds.feed_rate.reset.title')}
-                  >{t('opprops.feeds.reset')}</button
-                >
-              {/if}
-            </div>
-          </label>
-          <label class="row" title={t('opprops.feeds.plunge_rate.title')}>
-            <span>{t('opprops.feeds.plunge_rate')}</span>
-            <div class="num-cell">
-              <input
-                type="number"
-                step="10"
-                min="0"
-                placeholder={toolPlungeRate != null
-                  ? String(toolPlungeRate)
-                  : t('opprops.feeds.tool_default')}
-                value={op.plungeRateOverride ?? ''}
-                onchange={(e) => {
-                  const v = parseInt((e.currentTarget as HTMLInputElement).value, 10);
-                  patch('plungeRateOverride', isNaN(v) || v <= 0 ? undefined : v);
-                }}
-              />
-              <span class="unit">mm/min</span>
-              {#if op.plungeRateOverride !== undefined}
-                <button
-                  type="button"
-                  class="reset-link"
-                  onclick={() => patch('plungeRateOverride', undefined)}
-                  title={t('opprops.feeds.plunge_rate.reset.title')}
-                  >{t('opprops.feeds.reset')}</button
-                >
-              {/if}
-            </div>
-          </label>
+          <legend
+            >{project.data.machine.mode === 'mill' &&
+            (op.kind === 'profile' || op.kind === 'pocket')
+              ? t('fs35.advanced_feed')
+              : t('opprops.feeds')}</legend
+          >
+          {#if !op.appliedCutting && !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}
+            <label class="row" title={t('opprops.feeds.feed_rate.title')}>
+              <span>{t('opprops.feeds.feed_rate')}</span>
+              <div class="num-cell">
+                <input
+                  type="number"
+                  step="50"
+                  min="0"
+                  placeholder={toolFeedRate != null
+                    ? String(toolFeedRate)
+                    : t('opprops.feeds.tool_default')}
+                  value={op.feedRateOverride ?? ''}
+                  onchange={(e) => {
+                    const v = parseInt((e.currentTarget as HTMLInputElement).value, 10);
+                    patch('feedRateOverride', isNaN(v) || v <= 0 ? undefined : v);
+                  }}
+                />
+                <span class="unit">mm/min</span>
+                {#if op.feedRateOverride !== undefined}
+                  <button
+                    type="button"
+                    class="reset-link"
+                    onclick={() => patch('feedRateOverride', undefined)}
+                    title={t('opprops.feeds.feed_rate.reset.title')}
+                    >{t('opprops.feeds.reset')}</button
+                  >
+                {/if}
+              </div>
+            </label>
+            <label class="row" title={t('opprops.feeds.plunge_rate.title')}>
+              <span>{t('opprops.feeds.plunge_rate')}</span>
+              <div class="num-cell">
+                <input
+                  type="number"
+                  step="10"
+                  min="0"
+                  placeholder={toolPlungeRate != null
+                    ? String(toolPlungeRate)
+                    : t('opprops.feeds.tool_default')}
+                  value={op.plungeRateOverride ?? ''}
+                  onchange={(e) => {
+                    const v = parseInt((e.currentTarget as HTMLInputElement).value, 10);
+                    patch('plungeRateOverride', isNaN(v) || v <= 0 ? undefined : v);
+                  }}
+                />
+                <span class="unit">mm/min</span>
+                {#if op.plungeRateOverride !== undefined}
+                  <button
+                    type="button"
+                    class="reset-link"
+                    onclick={() => patch('plungeRateOverride', undefined)}
+                    title={t('opprops.feeds.plunge_rate.reset.title')}
+                    >{t('opprops.feeds.reset')}</button
+                  >
+                {/if}
+              </div>
+            </label>
+          {/if}
           <label class="row" title={t('opprops.feeds.corner_slow.title')}>
             <span>{t('opprops.feeds.corner_slow')}</span>
             <div class="num-cell">
@@ -1195,6 +1224,6 @@
     height: auto;
     border-left: 0;
     background: transparent;
-    padding: 0.4rem 0.5rem 0.6rem 1.6rem;
+    padding: var(--ui-space-1) var(--ui-space-2) var(--ui-space-3);
   }
 </style>

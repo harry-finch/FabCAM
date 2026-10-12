@@ -11,6 +11,7 @@
   /// * Fixtures section dropped — sim still tracks them under the hood,
   ///   but the UI doesn't expose adding them any more.
 
+  import JobMaterial from './JobMaterial.svelte';
   import { project } from '../state/project.svelte';
   import { t } from '../i18n';
   import { computeFootprint } from '../sim/driver';
@@ -165,6 +166,8 @@
   const flip = $derived(project.data.stock.flip);
 </script>
 
+<JobMaterial />
+
 <div class="stock">
   <fieldset class="mode">
     <legend>{t('stock.mode')}</legend>
@@ -262,7 +265,18 @@
   </fieldset>
 
   <fieldset class="origin">
-    <legend>{t('stock.origin_offset')}</legend>
+    <p class="placement-help">
+      {t(
+        project.data.stock.mode === 'manual'
+          ? project.stockSizingImport
+            ? 'fs36.stock_manual_geometry'
+            : 'fs36.stock_manual_empty'
+          : project.stockSizingImport
+            ? 'fs36.stock_auto_geometry'
+            : 'fs36.stock_auto_empty',
+      )}
+    </p>
+    <legend>{t('fs36.stock_translation')}</legend>
     <label>
       <span>X</span>
       <span class="field">
@@ -310,6 +324,18 @@
       </span>
     </label>
   </fieldset>
+
+  <div class="placement-readout" aria-label={t('fs36.stock_corner')}>
+    <span>{t('fs36.stock_corner')}</span>
+    <span>X {footprint.minX.toFixed(2)} · Y {footprint.minY.toFixed(2)} mm</span>
+    <span>{t('fs36.stock_corner_wcs')}</span>
+    <span
+      >X {(footprint.minX - project.data.workOffset.x_mm).toFixed(2)} · Y {(
+        footprint.minY - project.data.workOffset.y_mm
+      ).toFixed(2)} mm</span
+    >
+    <p>{t('fs36.stock_wcs_help')}</p>
+  </div>
 
   <!-- Work-coordinate-system origin (per-project). Where on the
        drawing the operator zeroed the machine. Fresh imports auto-default
@@ -487,6 +513,29 @@
 </div>
 
 <style>
+  .placement-help,
+  .placement-readout {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .placement-help {
+    grid-column: 1 / -1;
+    margin: 0 0 var(--ui-space-2);
+  }
+  .placement-readout {
+    display: grid;
+    gap: var(--ui-space-1);
+    margin: var(--ui-space-2) 0;
+  }
+  .placement-readout p {
+    margin: var(--ui-space-1) 0;
+  }
+  .placement-readout span:nth-child(even) {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
   .stock {
     display: flex;
     flex-direction: column;

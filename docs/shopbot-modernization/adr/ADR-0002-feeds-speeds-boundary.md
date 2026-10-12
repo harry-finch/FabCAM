@@ -1,6 +1,6 @@
 # ADR-0002: Milling recommendation boundary and explicit applied parameters
 
-Status: Proposed — recorded for post-M4 governance review; implementation not authorized
+Status: Accepted — FS0 user approval on 2026-10-12; pure FS1 implementation authorized
 Date: 2026-10-12
 
 ## Context
@@ -25,9 +25,10 @@ Aggressiveness and evidence remain independent; configurable reference/local
 presets carry provenance and documented evidence criteria. WJ/VINYL have no
 FS dependency.
 
-Crate/module placement, exact models, units, schema, precedence, fallback,
-versioning and migration remain undecided until FS0 qualification. This ADR
-records boundaries, not a new universal process layer or a chosen API.
+The approved [FS0 qualification](../feeds-speeds/FS0_QUALIFICATION.md) and
+[ADR-0003](ADR-0003-feeds-speeds-data-ownership.md) now record crate placement,
+models, units, scoped data, matching, fallback and migration decisions. This ADR
+records the enduring boundaries; FS1 implements only the independent engine.
 
 ## Alternatives considered
 

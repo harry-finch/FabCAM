@@ -40,3 +40,31 @@ Reuse the existing Svelte/Tauri design system and components where sensible befo
 ## Review output
 
 Distinguish usability issues, safety/comprehension issues, information-architecture issues, and visual-polish issues. Prioritize workflow and correctness before aesthetics.
+
+## Visual design direction
+
+Primary reference:
+Adobe Creative Cloud desktop applications.
+
+Borrow:
+- compact professional density
+- contextual inspectors
+- restrained dark theme
+- subtle separators
+- strong typography hierarchy
+- compact numeric inputs
+- restrained accent colors
+- progressive disclosure
+- keyboard/mouse-first interaction
+
+Do not copy:
+- Adobe branding
+- proprietary icons
+- exact component layouts
+
+
+Avoid dashboard aesthetics, mobile-style controls, large card-based layouts,
+excessive rounding, decorative borders and oversized spacing. Preserve labels,
+units, visible keyboard focus and text/icon status while increasing density.
+Reuse the shared style/token layer before isolated component CSS.
+See [persistent desktop design guidance](../../../docs/shopbot-modernization/ux/DESIGN_DIRECTION.md).

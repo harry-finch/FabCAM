@@ -18,6 +18,7 @@ export type WorkerMethod =
   | 'generateTwoSided'
   | 'renderText'
   | 'renderTextLayer'
+  | 'feedsSpeeds'
   | 'computeHelixRadius'
   | 'rasterizeStl';
 

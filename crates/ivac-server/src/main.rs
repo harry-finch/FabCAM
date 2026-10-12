@@ -67,6 +67,7 @@ async fn main() -> Result<()> {
         .route("/text", post(render_text_handler))
         .route("/text/layer", post(render_text_layer_handler))
         .route("/helix-radius", post(helix_radius_handler))
+        .route("/feeds-speeds", post(feeds_speeds_handler))
         .route("/relief/stl", post(relief_stl_handler));
     // Post-library surfaces exist only in cps builds; the /version
     // capabilities probe ("post-cps") tells clients which world this is.
@@ -207,6 +208,7 @@ async fn version() -> Json<VersionResponse> {
             let mut caps = vec![
                 "import-dxf",
                 "generate-gcode",
+                "feeds-speeds",
                 "stream-gcode",
                 "post-linuxcnc",
                 "post-grbl",
@@ -1117,4 +1119,14 @@ mod tests {
         assert_eq!(parsed.kind, ErrorKind::Unsupported);
         assert!(parsed.recovery_hint.is_some());
     }
+}
+
+async fn feeds_speeds_handler(
+    Json(req): Json<ivac_core::feeds_speeds::FsCamRequest>,
+) -> Result<Json<ivac_core::feeds_speeds::FsCamResponse>, AppError> {
+    let response = tokio::task::spawn_blocking(move || ivac_core::feeds_speeds::feeds_speeds(req))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
+        .map_err(AppError::bad_request)?;
+    Ok(Json(response))
 }

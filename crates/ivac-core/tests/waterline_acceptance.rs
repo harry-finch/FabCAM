@@ -189,6 +189,8 @@ fn waterline_rough_then_relief_finish_no_gouge_bounded_envelope() {
         stock: Some(stock.clone()),
         relief_sources: vec![source.clone()],
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     };
 
     let resp = common::run(project, PostProcessorKind::Linuxcnc);

@@ -180,6 +180,8 @@ pub fn build_project(
         stock: Some(stock.clone()),
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
     }
 }
 

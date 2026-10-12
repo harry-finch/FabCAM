@@ -1,3 +1,4 @@
+import { validateProjectFile, hasFeedsSpeedsData } from './feeds-speeds-persistence';
 // Project-file / workspace lifecycle extracted from the ProjectState
 // god root. Save/load of .ivac-project files, the
 // project-boundary reset, and the per-project workspace view state all
@@ -28,6 +29,8 @@ import type { ProjectState } from './project.svelte';
 export function clearProject(p: ProjectState) {
   p.data.imports = [];
   p.data.operations = [];
+  p.data.material = undefined;
+  p.data.fsContext = undefined;
   p.data.fixtures = [];
   p.data.textLayers = [];
   p.data.reliefSources = [];
@@ -124,8 +127,10 @@ export function persistPerProjectState(p: ProjectState) {
 /// `?? []` fallback in restore().
 export function snapshotProject(p: ProjectState): ProjectFile {
   return {
-    kind: 'ivac-project',
-    version: 1,
+    kind: hasFeedsSpeedsData(p.data) ? 'ivac-project-cutting' : 'ivac-project',
+    version: hasFeedsSpeedsData(p.data) ? 3 : 1,
+    ...(p.data.material ? { material: p.data.material } : {}),
+    ...(p.data.fsContext ? { fsContext: p.data.fsContext } : {}),
     imports: p.data.imports,
     visibleLayers: [],
     selectedEntities: [],
@@ -149,9 +154,9 @@ export function snapshotProject(p: ProjectState): ProjectFile {
 }
 
 export function restoreProject(p: ProjectState, file: ProjectFile) {
-  if (file.kind !== 'ivac-project') {
-    throw new Error('not a ivaCAM project file');
-  }
+  validateProjectFile(file);
+  p.data.material = file.material;
+  p.data.fsContext = file.fsContext;
   // imports[] is the canonical shape. Pre-migration project
   // files (with bare `imported` / `fileTransform` / `lastImportPath`
   // fields) are no longer loadable — the user explicitly waived

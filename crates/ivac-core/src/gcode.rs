@@ -195,6 +195,8 @@ pub trait PostProcessor {
     fn unit(&mut self, _unit: UnitSystem);
     fn absolute(&mut self, _active: bool) {}
     fn feedrate(&mut self, rate: u32);
+    /// Resolved active-pass plunge rate for recorders; dialect posts ignore it.
+    fn set_plunge_rate_hint(&mut self, _rate: u32) {}
 
     fn program_start(&mut self) {}
     fn program_end(&mut self) {}

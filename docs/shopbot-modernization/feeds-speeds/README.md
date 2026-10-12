@@ -1,7 +1,10 @@
 # Feeds & Speeds Assistant — planning contract
 
-Status: post-M4 planned track; FS0 not started. This document captures the
-user's requirements, not a qualified data model or implemented engine.
+Status: FS0/FS1 approved; [FS2 data handoff](FS2_QUALIFICATION.md) ready for human review.
+An initial external reference dataset is separately supplied; CAM/UI integration remains unstarted.
+This document preserves the user's planning requirements. Qualified design
+proposals and source audit are in [FS0_QUALIFICATION](FS0_QUALIFICATION.md) and
+[ADR-0003](../adr/ADR-0003-feeds-speeds-data-ownership.md).
 See [ROADMAP](../ROADMAP.md) for FS0–FS5 scope and approval gates and
 [ADR-0002](../adr/ADR-0002-feeds-speeds-boundary.md) for boundary decisions.
 
@@ -53,12 +56,23 @@ be silently promoted into a generally validated recommendation preset.
 
 FS0 must qualify physical Tool vs cutting-preset identity, material ownership,
 request/recommendation/resolved models, schema/versioning, preset precedence,
-fallback behavior and project compatibility. None is selected here. FS0 must
-also plan deterministic engine tests, data validation, adapter coverage,
-save/reopen reproducibility and manual-override protection.
+fallback behavior and project compatibility. The approved contracts are documented in
+FS0. FS1 implements the independent engine and its synthetic tests; FS2 supplies an explicit
+JSON loader and licensed, narrowly scoped source references. FS3 implements the adapter, save/reopen reproducibility and manual-override
+protection; see [FS3 qualification](FS3_QUALIFICATION.md). FS3.5 cleans up operation ownership and UX; human software review is pending;
+physical calibration remains FS4.
 
 The engine remains milling-specific. Future ProtoMAX/waterjet and drag-knife
 processes may share infrastructure but must not depend on FS.
 
 Create further architecture/data/validation/preset-authoring documents only when
 qualified decisions or evidence make them useful; do not prefill speculative files.
+
+## FS3.5 workflow and domain distinction
+
+Tool != CuttingParameters != Recommendation. Physical cutter definitions retain
+legacy cutting fallbacks; operations own resolved rates and native DOC/overlap.
+Recommendations are optional proposals with provenance, applied only explicitly.
+Material is job context edited at Stock; source configuration is global Settings.
+Read [FS3.5 audit](FS3_5_AUDIT.md), [qualification](FS3_5_QUALIFICATION.md),
+[human review](FS3_5_TEST_LOGICIEL.md) and ADR-0004. Human FS3.5 approval precedes FS4.

@@ -295,6 +295,8 @@ pub struct PipelineStats {
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("operation #{0}: invalid applied cutting parameters: {1}")]
+    AppliedCutting(u32, String),
     #[error("unknown post_processor: {0}")]
     UnknownPostProcessor(String),
     #[error("operation #{0} references unknown tool id {1}")]
@@ -332,6 +334,7 @@ impl PipelineError {
         use crate::errors::{AutoFix, Error as Structured, ErrorCode};
         match self {
             PipelineError::Cancelled => None,
+            PipelineError::AppliedCutting(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Apply or edit complete cutting rates for the current tool roles.")),
             PipelineError::UnknownPostProcessor(name) => Some(
                 Structured::misconfigured(format!("unknown post_processor: {name}"))
                     .with_code(ErrorCode::UnknownPostProcessor)
@@ -572,6 +575,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // Fail an unusable CPS request before any real work happens.
     validate_cps_request(&req)?;
     let mut project = req.project;
+    crate::feeds_speeds::validate_applied_project(&project)?;
 
     // Pre-pipeline: render every TextLayer to segments and append them
     // to the project's geometry pool. Each layer's segments live under
@@ -1107,6 +1111,7 @@ fn prepare_stream(
         return Err(StreamGcodeError::Unsupported(post_kind));
     }
     let mut project = request.project;
+    crate::feeds_speeds::validate_applied_project(&project)?;
 
     if !project.text_layers.is_empty() {
         for layer in &project.text_layers {
@@ -2189,14 +2194,18 @@ where
         // per-op effects live in compute_op_cache_key / apply_cached_op /
         // store_op_cache; this loop keeps only the control flow (hit ⇒
         // bookkeep + continue; miss ⇒ emit + store + fall through).
-        let cache_key = compute_op_cache_key(
-            op,
-            project,
-            objects,
-            &tool_index,
-            post_tag,
-            key_blobs.as_ref(),
-        );
+        let cache_key = if op.params.applied_cutting.is_some() || project.fs_context.is_some() {
+            None
+        } else {
+            compute_op_cache_key(
+                op,
+                project,
+                objects,
+                &tool_index,
+                post_tag,
+                key_blobs.as_ref(),
+            )
+        };
 
         if let (Some(c), Some(key)) = (cache, cache_key) {
             if let Some(cached) = c.get(key) {
@@ -2508,10 +2517,15 @@ fn emit_boundary_toolchange<P: PostProcessor>(
             Some(tool),
             tool.id,
             is_first_tool,
-            // Inter-op boundary: the next op's resolved cut speed isn't
-            // synthesized at this site, so fall back to the tool's library
-            // speed.
-            None,
+            synthesize_op_setup(op, project, &mut Vec::new())
+                .ok()
+                .map(|s| {
+                    if matches!(op.kind, OpKind::Profile { .. }) {
+                        s.tool.speed_finish
+                    } else {
+                        s.tool.speed
+                    }
+                }),
         );
     }
     Some(op.tool_id)

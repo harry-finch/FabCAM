@@ -1,3 +1,4 @@
+import { preserveManualCutting } from './feeds-speeds';
 // Operation + tool-library CRUD extracted from the ProjectState god
 // root: the CAM entities the undo/redo command bus mutates. Every edit
 // here routes through the command bus; ProjectState keeps thin one-line
@@ -98,7 +99,8 @@ export function duplicateOperation(p: ProjectState, id: number): OpEntry | null 
 export function updateOperation(p: ProjectState, id: number, patch: Partial<OpEntry>) {
   if (Object.keys(patch).length === 0) return;
   if (!p.data.operations.some((o) => o.id === id)) return;
-  p.history.exec(updateOperationCommand(id, patch), p.target());
+  const current = p.data.operations.find((o) => o.id === id)!;
+  p.history.exec(updateOperationCommand(id, preserveManualCutting(current, patch)), p.target());
 }
 
 /// Reorder. Skipped when source and target index are the same so a stray

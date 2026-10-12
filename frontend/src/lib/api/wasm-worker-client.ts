@@ -16,6 +16,8 @@ import type {
   GenerateRequest,
   GenerateResponse,
   TwoSidedGenerateResponse,
+  FsCamRequest,
+  FsCamResponse,
   HelixRadiusRequest,
   HelixRadiusResponse,
   ImportResponse,
@@ -228,6 +230,10 @@ export class WasmWorkerClient implements WiacClient {
 
   renderTextLayer(layer: WireTextLayer): Promise<RenderTextLayerResponse> {
     return this.call('renderTextLayer', [layer]);
+  }
+
+  feedsSpeeds(request: FsCamRequest): Promise<FsCamResponse> {
+    return this.call('feedsSpeeds', [request]);
   }
 
   computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse> {

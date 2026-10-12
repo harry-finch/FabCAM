@@ -56,6 +56,7 @@
   }
   let { open, onClose, embedded = false, source = 'project' }: Props = $props();
   const active = $derived(open || embedded);
+  let showDefaults = $state(false);
   const isInventory = $derived(source === 'inventory');
   /// The list this editor seeds from / commits to.
   const backingTools = $derived.by(() => {
@@ -473,7 +474,12 @@
         : t('tools.count.filtered', { shown: paged.total, total: draft.length })}</span
     >
   </div>
-  <div class="body" bind:this={bodyEl}>
+  <details>
+    <summary>{t('fs35.fallback')}</summary>
+    <p>{t('fs35.fallback_help')}</p>
+    <label><input type="checkbox" bind:checked={showDefaults} />{t('fs35.fallback')}</label>
+  </details>
+  <div class="body" class:physical-only={!showDefaults} bind:this={bodyEl}>
     <div class="table">
       <div class="row head">
         <button
@@ -511,32 +517,36 @@
           onclick={() => setSort('flutes')}
           title={t('tools.col.flutes.title')}>{t('tools.col.flutes')}{sortArrow('flutes')}</button
         >
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('speed')}
-          title={t('tools.col.speed.title')}
-          >{t('tools.col.speed')} <span class="unit-hdr">RPM</span>{sortArrow('speed')}</button
-        >
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('feedRate')}
-          title={t('tools.col.feed.title')}
-          >{t('tools.col.feed')} <span class="unit-hdr">mm/min</span>{sortArrow('feedRate')}</button
-        >
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('plungeRate')}
-          title={t('tools.col.plunge.title')}
-          >{t('tools.col.plunge')} <span class="unit-hdr">mm/min</span>{sortArrow(
-            'plungeRate',
-          )}</button
-        >
-        <span title={t('tools.col.dflt_step.title')}
-          >{t('tools.col.dflt_step')} <span class="unit-hdr">mm</span></span
-        >
+        {#if showDefaults}
+          <button
+            class="sort-h"
+            type="button"
+            onclick={() => setSort('speed')}
+            title={t('tools.col.speed.title')}
+            >{t('tools.col.speed')} <span class="unit-hdr">RPM</span>{sortArrow('speed')}</button
+          >
+          <button
+            class="sort-h"
+            type="button"
+            onclick={() => setSort('feedRate')}
+            title={t('tools.col.feed.title')}
+            >{t('tools.col.feed')} <span class="unit-hdr">mm/min</span>{sortArrow(
+              'feedRate',
+            )}</button
+          >
+          <button
+            class="sort-h"
+            type="button"
+            onclick={() => setSort('plungeRate')}
+            title={t('tools.col.plunge.title')}
+            >{t('tools.col.plunge')} <span class="unit-hdr">mm/min</span>{sortArrow(
+              'plungeRate',
+            )}</button
+          >
+          <span title={t('tools.col.dflt_step.title')}
+            >{t('tools.col.dflt_step')} <span class="unit-hdr">mm</span></span
+          >
+        {/if}
         <span>{t('tools.col.coolant')}</span>
         <span></span>
       </div>
@@ -544,6 +554,7 @@
         <div class="row" class:highlight={highlightedId === tool.id} data-tool-id={tool.id}>
           <ToolRowSummary
             {tool}
+            {showDefaults}
             expanded={expanded.has(tool.id)}
             canDelete={draft.length > 1}
             onUpdateField={(key, value) => updateField(i, key, value)}
@@ -762,6 +773,11 @@
        windows, but never an unreadable squash on the common 900-1200 px
        laptop sizes. */
     min-width: min-content;
+  }
+  .physical-only .row {
+    grid-template-columns:
+      2.5rem minmax(8rem, 1.6fr) minmax(6rem, 1fr)
+      4.5rem 4.5rem 4rem 3.5rem minmax(6rem, 1fr) 2rem;
   }
   .row {
     display: grid;

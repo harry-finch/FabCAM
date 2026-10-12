@@ -229,6 +229,117 @@ export type MsgKey =
   | "error.hint.unimplemented_op_kind"
   | "error.hint.unknown_post_processor"
   | "error.span"
+  | "fs.adjusted"
+  | "fs.chipload"
+  | "fs.feed"
+  | "fs.full_width"
+  | "fs.invalid_data"
+  | "fs.material"
+  | "fs.mode"
+  | "fs.no_match"
+  | "fs.normal"
+  | "fs.plunge"
+  | "fs.positive"
+  | "fs.propose"
+  | "fs.prudent"
+  | "fs.rapid"
+  | "fs.reference_license"
+  | "fs.rpm"
+  | "fs.source"
+  | "fs.source_link"
+  | "fs.stepover"
+  | "fs.tooth"
+  | "fs.unavailable_build"
+  | "fs.unknowns"
+  | "fs35.add_library"
+  | "fs35.advanced_depth"
+  | "fs35.advanced_feed"
+  | "fs35.apply"
+  | "fs35.available_tools"
+  | "fs35.compatibility"
+  | "fs35.compatibility_help"
+  | "fs35.custom_material_help"
+  | "fs35.cutting"
+  | "fs35.define_material"
+  | "fs35.fallback"
+  | "fs35.fallback_help"
+  | "fs35.finishing"
+  | "fs35.import"
+  | "fs35.job_material"
+  | "fs35.kept"
+  | "fs35.loading"
+  | "fs35.machine"
+  | "fs35.material_missing"
+  | "fs35.material_name"
+  | "fs35.missing_rates"
+  | "fs35.modified"
+  | "fs35.nominal"
+  | "fs35.operation"
+  | "fs35.other_material"
+  | "fs35.outdated"
+  | "fs35.pocket"
+  | "fs35.preview_changed"
+  | "fs35.profile"
+  | "fs35.recalculate"
+  | "fs35.recommendation"
+  | "fs35.reference"
+  | "fs35.reference_match"
+  | "fs35.review"
+  | "fs35.saved_material"
+  | "fs35.schedule"
+  | "fs35.select_material"
+  | "fs35.settings"
+  | "fs35.sienci"
+  | "fs35.sienci_scope"
+  | "fs35.source"
+  | "fs35.source_details"
+  | "fs35.source_scope_help"
+  | "fs35.source_unavailable"
+  | "fs35.sources"
+  | "fs35.sources_disabled"
+  | "fs35.sources_help"
+  | "fs35.suggest"
+  | "fs35.suggested"
+  | "fs35.tested"
+  | "fs35.theoretical"
+  | "fs35.tool"
+  | "fs35.validated"
+  | "fs36.actual"
+  | "fs36.calculation_context"
+  | "fs36.closest_scopes"
+  | "fs36.engagement"
+  | "fs36.evidence_pending"
+  | "fs36.kept"
+  | "fs36.modified_hint"
+  | "fs36.no_transfer"
+  | "fs36.pass_depth"
+  | "fs36.previous_source"
+  | "fs36.reason.ambiguous_profiles"
+  | "fs36.reason.dataset_mismatch"
+  | "fs36.reason.invalid_request"
+  | "fs36.reason.missing_cutting_data"
+  | "fs36.reason.missing_material"
+  | "fs36.reason.unrepresentable_output"
+  | "fs36.reason.unsupported_operation"
+  | "fs36.reason.unsupported_tool"
+  | "fs36.recalculate_parameters"
+  | "fs36.required"
+  | "fs36.scope.cutting_family"
+  | "fs36.scope.diameter_mm"
+  | "fs36.scope.engagement"
+  | "fs36.scope.entry"
+  | "fs36.scope.flute_count"
+  | "fs36.stock_auto_empty"
+  | "fs36.stock_auto_geometry"
+  | "fs36.stock_corner"
+  | "fs36.stock_corner_wcs"
+  | "fs36.stock_manual_empty"
+  | "fs36.stock_manual_geometry"
+  | "fs36.stock_translation"
+  | "fs36.stock_wcs_help"
+  | "fs36.suggested"
+  | "fs36.suggested_hint"
+  | "fs36.unknown"
   | "gcode.label"
   | "gcode.line_sync_unavailable"
   | "gcode.line_sync_unavailable.title"
@@ -1323,7 +1434,6 @@ export type MsgKey =
   | "stock.mode.auto"
   | "stock.mode.manual"
   | "stock.offset_z.title"
-  | "stock.origin_offset"
   | "stock.snap_bbox"
   | "stock.snap_bbox.title"
   | "stock.thickness"
@@ -1588,6 +1698,7 @@ export type MsgKey =
   | "warn.drill_spot_tool_missing"
   | "warn.dual_tool_no_toolchange"
   | "warn.feed_clamped_above_max"
+  | "warn.feeds_speeds_stale"
   | "warn.fixed_sensor_reference_not_first"
   | "warn.frame_padding_below_tool_radius"
   | "warn.gcode_include_empty"
@@ -1895,6 +2006,117 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "error.hint.unimplemented_op_kind",
   "error.hint.unknown_post_processor",
   "error.span",
+  "fs.adjusted",
+  "fs.chipload",
+  "fs.feed",
+  "fs.full_width",
+  "fs.invalid_data",
+  "fs.material",
+  "fs.mode",
+  "fs.no_match",
+  "fs.normal",
+  "fs.plunge",
+  "fs.positive",
+  "fs.propose",
+  "fs.prudent",
+  "fs.rapid",
+  "fs.reference_license",
+  "fs.rpm",
+  "fs.source",
+  "fs.source_link",
+  "fs.stepover",
+  "fs.tooth",
+  "fs.unavailable_build",
+  "fs.unknowns",
+  "fs35.add_library",
+  "fs35.advanced_depth",
+  "fs35.advanced_feed",
+  "fs35.apply",
+  "fs35.available_tools",
+  "fs35.compatibility",
+  "fs35.compatibility_help",
+  "fs35.custom_material_help",
+  "fs35.cutting",
+  "fs35.define_material",
+  "fs35.fallback",
+  "fs35.fallback_help",
+  "fs35.finishing",
+  "fs35.import",
+  "fs35.job_material",
+  "fs35.kept",
+  "fs35.loading",
+  "fs35.machine",
+  "fs35.material_missing",
+  "fs35.material_name",
+  "fs35.missing_rates",
+  "fs35.modified",
+  "fs35.nominal",
+  "fs35.operation",
+  "fs35.other_material",
+  "fs35.outdated",
+  "fs35.pocket",
+  "fs35.preview_changed",
+  "fs35.profile",
+  "fs35.recalculate",
+  "fs35.recommendation",
+  "fs35.reference",
+  "fs35.reference_match",
+  "fs35.review",
+  "fs35.saved_material",
+  "fs35.schedule",
+  "fs35.select_material",
+  "fs35.settings",
+  "fs35.sienci",
+  "fs35.sienci_scope",
+  "fs35.source",
+  "fs35.source_details",
+  "fs35.source_scope_help",
+  "fs35.source_unavailable",
+  "fs35.sources",
+  "fs35.sources_disabled",
+  "fs35.sources_help",
+  "fs35.suggest",
+  "fs35.suggested",
+  "fs35.tested",
+  "fs35.theoretical",
+  "fs35.tool",
+  "fs35.validated",
+  "fs36.actual",
+  "fs36.calculation_context",
+  "fs36.closest_scopes",
+  "fs36.engagement",
+  "fs36.evidence_pending",
+  "fs36.kept",
+  "fs36.modified_hint",
+  "fs36.no_transfer",
+  "fs36.pass_depth",
+  "fs36.previous_source",
+  "fs36.reason.ambiguous_profiles",
+  "fs36.reason.dataset_mismatch",
+  "fs36.reason.invalid_request",
+  "fs36.reason.missing_cutting_data",
+  "fs36.reason.missing_material",
+  "fs36.reason.unrepresentable_output",
+  "fs36.reason.unsupported_operation",
+  "fs36.reason.unsupported_tool",
+  "fs36.recalculate_parameters",
+  "fs36.required",
+  "fs36.scope.cutting_family",
+  "fs36.scope.diameter_mm",
+  "fs36.scope.engagement",
+  "fs36.scope.entry",
+  "fs36.scope.flute_count",
+  "fs36.stock_auto_empty",
+  "fs36.stock_auto_geometry",
+  "fs36.stock_corner",
+  "fs36.stock_corner_wcs",
+  "fs36.stock_manual_empty",
+  "fs36.stock_manual_geometry",
+  "fs36.stock_translation",
+  "fs36.stock_wcs_help",
+  "fs36.suggested",
+  "fs36.suggested_hint",
+  "fs36.unknown",
   "gcode.label",
   "gcode.line_sync_unavailable",
   "gcode.line_sync_unavailable.title",
@@ -2989,7 +3211,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "stock.mode.auto",
   "stock.mode.manual",
   "stock.offset_z.title",
-  "stock.origin_offset",
   "stock.snap_bbox",
   "stock.snap_bbox.title",
   "stock.thickness",
@@ -3254,6 +3475,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "warn.drill_spot_tool_missing",
   "warn.dual_tool_no_toolchange",
   "warn.feed_clamped_above_max",
+  "warn.feeds_speeds_stale",
   "warn.fixed_sensor_reference_not_first",
   "warn.frame_padding_below_tool_radius",
   "warn.gcode_include_empty",

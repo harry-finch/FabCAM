@@ -238,3 +238,170 @@ the separate governance update remain subsequent work.
 User authorized committing the documentation/governance changes. Commit locally
 on feature/shopbot-mvp; no push or FS0 start authorized. Documentation whitespace
 and changed-file scope verified before commit.
+
+
+## 2026-10-12 — FS0 architecture and data-model qualification
+
+User explicitly requested push of the existing last commit, then FS0. Push
+published governance plus skill through f6d17dd on feature/shopbot-mvp. Read
+feeds-speeds first, persistent project context, architecture/validation/docs
+skills and their references. No upstream synchronization or new commit performed.
+
+Audited upstream-derived tool/machine/stock/operation models, both frontend-file
+and Rust wire persistence, editors, setup/header/dual-tool resolution, CPS IR
+metadata, native/ShopBot posts and simulation seams. Found no per-op RPM, signed
+DOC and complementary overlap conventions, absent cutting material identity,
+and CPS metadata that bypasses operation feed overrides/clamps.
+
+Created FS0_QUALIFICATION and proposed ADR-0003: independent crate/snapshots,
+material identity, scoped versioned JSON data, deterministic ambiguity/fallback,
+one applied pass-rate authority with native geometry ownership, guarded project
+version, manual/reopen invariants, 16 future validation cases and precise FS1
+scope. Updated current navigation/status/upstream disposition and validation
+index. No engine, final UX, algorithms, material tables or production schemas.
+
+19 existing resolver tests passed after sandboxed sccache failed before compile
+and approved wrapper-free rerun succeeded. Documentation links/whitespace/scope
+checked at handoff. Audit ivac-c943; gate ivac-9ma3 awaits human approval. FS1 unstarted;
+new FS0 commit/push authorization remains pending.
+
+
+## 2026-10-12 — FS0 approval and FS1 pure engine
+
+User approved FS0 and requested proceeding. Closed human gate ivac-9ma3 and
+accepted ADR-0002/0003; started FS1 as ivac-86b8. No new commit/push authorized.
+
+Added independent ivac-feeds-speeds workspace crate: versioned copied context,
+validated complete supplied profiles, explicit family matching and strict scope
+containment, deterministic tier/ambiguity policy, chipload-target or exact-value
+arithmetic, independent machine/tool constraints and transparent rounding,
+source evidence, applicability and adjustment provenance. No geometry/core/CPS/UI
+dependency, production material data, adapter or project-schema changes.
+
+38 qualification tests plus compiled API doctest pass; targeted Clippy with
+warnings denied, WASM compile, workspace formatting, schema drift and Serde-only
+normal-dependency checks pass. Serial all-features workspace tests excluding
+Tauri pass with initial 34 FS cases; final four cases/doctest passed separately.
+After the workspace run, provenance additionally snapshots selected family memberships;
+arithmetic/matching behavior is unchanged and final targeted checks passed. Updated qualification/status/
+architecture/roadmap/validation/upstream docs. FS1 awaits human approval; FS2
+and CAM integration remain unstarted; no physical evidence claim or app rebuild.
+Engineering ivac-86b8 closes; pending human FS1 gate is ivac-406n.
+
+
+## FS2 — 2026-10-12
+
+User approved FS1 and authorized FS2. Added format-1 pure JSON loader, immutable
+loaded document/engine, catalogs and atomic semantic validation, using existing
+serde_json version. Six licensed Sienci reference rows transcribed and visually
+checked against page 1 of the pinned metric PDF. Exact source context retained;
+no lab machine/material/tool equivalence, local evidence or missing cutting
+parameters invented. 38 engine + 11 data tests and 1 doctest pass; Clippy, WASM,
+formatting/schema guards pass. FS3 unstarted; FS2 human approval and new commit/
+push remain pending. See FS2 qualification for source, policy and limitations.
+
+## FS3 — 2026-10-12
+
+User approved FS2 and authorized FS3. Implemented core milling adapter, saved
+cutting roles/provenance and explicit HTTP/Tauri/WASM endpoints. Added optional
+schema feature to pure engine; native geometry remains DOC/overlap authority.
+UI now loads data explicitly, calculates a preview, applies atomically, edits
+manual rates and warns stale context. Portable v2 uses a distinct root kind
+because old readers ignored version. Corrected native/CPS initial RPM and
+active-pass feed/plunge metadata; no dynamic post-time recommendation.
+Serial broad Rust and frontend tests, focused adapter/CPS regression checks
+and real browser workflow qualify software behavior. Browser review fixed
+release WASM import resolution and disclosure edit state. FS3 human gate
+remains pending; FS4 and commits/push remain unauthorized.
+
+## 2026-10-12 — FS3.5 UX/domain cleanup
+
+- User explicitly requested FS3.5 only. Applied feeds-speeds, cam-ux-ui,
+  ivacam-architecture, cam-validation and project-documentation. Audited ownership
+  and compatibility before code; tracked ivac-x5pw and proposed ADR-0004.
+- Made existing recommendation snapshot optional for manual-only operation rates,
+  retaining tool fallback and native geometry semantics. Guarded portable cutting
+  v3 preserves old reader refusal; v1/v2 remain readable. Job material now lives
+  in Stock with optional readable display metadata stripped from native matching.
+- Replaced permanent expert form with current cutting values + focused explicit
+  Suggest/Calculate/Apply. Added plain Modified/stale states, progressive finishing
+  and provenance/depth disclosures. Sources moved to persistent global Settings.
+  Tool Library prioritizes physical fields; Machine prioritizes available tools.
+- Frontend 1,065 pass/one optional skip, core FS ten pass, ShopBot eight goldens
+  pass; native check, Clippy/schema/format/lint and WASM/frontend release pass.
+  Real browser workflow and actual v3 save/reopen/source-disable confirmed;
+  screenshots and a human protocol retained. Fixed conflicting global row CSS,
+  added an explicit missing-cutter-rates state and validation before saving
+  incomplete manual blocks. Deferred UX labels/source isolation tracked in
+  ivac-xz59/ivac-xf9w.
+- No math/post behavior change, no physical work, no new native bundle or push.
+  FS3 review superseded by FS3.5 human gate ivac-eh1g. STOP before FS4.
+
+## 2026-10-12 — FS3.6 compact desktop UI polish
+
+- User declares FS3.5 functionally satisfactory and authorizes FS3.6 only.
+  Closed FS3.5 human gate ivac-eh1g; applied cam-ux-ui/project-documentation.
+  Audited existing theme tokens, shared property CSS and adjacent workspaces.
+- Added a small shared spacing/density layer and label/value/unit/status grid.
+  Reduced decorative nesting/indentation, quieted headings and provenance,
+  separated operation name/cutter hierarchy and emphasized only Apply locally.
+  Compact stale state retains kept-values text and full explanation tooltip.
+- Browser review exposed narrow-width label/value competition; shared row grid
+  now preserves numeric values and units, moving metadata beneath values when
+  inspector content is below 260 px. Qualified 240/360 px desktop side panels,
+  Profile/Pocket, mixed origins, proposal, long names, six-digit values, advanced
+  depth, finishing and provenance. Keyboard Tab/focus remains visible.
+- Frontend 1,065 pass/one skip, check zero errors/warnings, targeted ESLint/
+  Prettier, production build and whitespace pass. 437 protected source/data files
+  unchanged against the pre-checkpoint hash snapshot. No new native/physical run.
+- Added ux/DESIGN_DIRECTION.md and ux/FS3_6_QUALIFICATION.md; extended cam-ux-ui
+  visual guidance, preserving the existing user-authored Adobe reference.
+  Tracked stock-offset explanation ivac-703e, no-match reason ivac-evl0 and
+  broader contextual inspector ivac-dqax separately. FS3.6 human gate ivac-vgu4
+  awaits review. No domain/math/source/post changes, no commit/push, no FS4.
+
+## 2026-10-12 — FS3.6 human review revisions
+
+User authorized clarification of stock frame/no-match and disclosure/status polish.
+Resolved ivac-703e/ivac-evl0 and style ivac-3d53. Reused computeFootprint for drawing/
+WCS corner readouts; stock placement unchanged. Shared smaller disclosure now has
+8 px separation. Blue-star Suggested and violet-pencil Modified vignettes retain
+text, keyboard focus and light/dark colors. No physical-validation implication.
+
+Added optional transient scope_rejections response metadata from the shared native
+scope predicate, with unchanged matching/calculation/precedence and saved formats.
+Actual DOC 1 versus required 2.8 shown; context changes hide outdated refusals.
+Existing engine qualification plus new explanatory/compatibility tests pass:
+1,068 frontend/one skip, 50 engine/data plus doctest, 11 core adapter, eight ShopBot
+goldens, five CPS guards. Check/lint/format/Clippy/schema and final release WASM/
+frontend pass; used cached offline tools after partial pkg freshness issue.
+Browser stock/WCS, exact no-match, disclosure keyboard and 240/360 px status layout
+verified; captures/addendum retained. FS3.6 gate ivac-vgu4 remains open; no FS4,
+native bundle, machining, commit or push.
+
+
+### 2026-10-12 — FS3.6 focused recommendation disclosure (ivac-rncu)
+
+Moved automatic machine/cutter/operation/pass-depth context into a native closed
+Calculation context disclosure. Material, relevant engagement, cutting mode,
+compact source/evidence and explicit calculation remain visible. New/existing
+states now say Calculate recommendation/Recalculate; duplicate opener and source
+paragraphs removed. Previous-source and pending-evidence wording avoids claiming
+an applicable profile before calculation. No math, domain or persistence changes.
+
+1,068 frontend tests pass / one skip; check/lint/build pass. Browser verifies
+keyboard disclosure, Pocket nominal engagement, 240/360 px density and manual
+feed 1,500 retained beside unapplied suggestion 1,620. Protected audit adds zero
+changes beyond prior seven diagnostic files. Qualification/captures updated;
+FS3.6 human gate stays open, FS4 unstarted. No commit or push.
+
+
+### 2026-10-12 — Accumulated FS0–FS3.6 publication authorized
+
+User explicitly requested commit and push of all work to date on
+feature/shopbot-mvp. Publish the pure engine, versioned licensed reference data,
+CAM integration, physical-tool/operation cutting ownership, source settings,
+inspector refinements, qualification records, fixtures and screenshots together.
+Existing frontend/native qualification remains the evidence baseline; publication
+does not imply physical validation or close the FS3.6 human gate. FS4 remains
+unstarted.

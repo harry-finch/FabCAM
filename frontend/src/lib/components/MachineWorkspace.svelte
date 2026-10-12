@@ -9,6 +9,7 @@
   ///     work area, post …) — the embedded MachineDialog form.
   /// Unlike the dialog's profile bar, these actions are draft-free:
   /// they operate on the COMMITTED project state.
+  import FeedsSpeedsCompatibility from './FeedsSpeedsCompatibility.svelte';
   import { project } from '../state/project.svelte';
   import { workspace } from '../state/workspace.svelte';
   import { duplicateProfile, profileFromCurrent } from '../state/machine_profiles';
@@ -146,6 +147,13 @@
     <MachineTooling />
   </div>
   <div class="sub-panel" class:tab-hidden={subTab !== 'settings'}>
+    <FeedsSpeedsCompatibility
+      kind="machines"
+      value={project.data.machine.fsIdentity !== undefined
+        ? project.data.machine.fsIdentity
+        : (project.data.fsContext?.machine_identity ?? undefined)}
+      onChange={(identity) => project.setMachine({ ...project.data.machine, fsIdentity: identity })}
+    />
     <MachineDialog embedded open={false} onClose={() => {}} />
   </div>
 </div>

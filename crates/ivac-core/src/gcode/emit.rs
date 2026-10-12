@@ -58,6 +58,7 @@ pub(super) fn emit_offset<P: PostProcessor>(
     } else {
         (setup.tool.speed, setup.tool.rate_v, setup.tool.rate_h)
     };
+    post.set_plunge_rate_hint(use_rate_v);
     // Dispatch by machine mode. Mill: spin the spindle. Laser:
     // fire M3 S<power>. Drag: no-op. The previous code gated
     // `spindle_on` behind `mode == Mill` only, so laser cuts never

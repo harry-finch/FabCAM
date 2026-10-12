@@ -211,6 +211,12 @@ pub struct VCarveParams {
 /// structs.)
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 pub struct OpParamsCommon {
+    /// Milling applied values; absent preserves legacy inheritance.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub applied_cutting: Option<crate::feeds_speeds::AppliedCutting>,
+    /// Operator-confirmed full-width profile cutting; never inferred from an offset.
+    #[serde(default, skip_serializing_if = "super::op::is_false")]
+    pub fs_full_width: bool,
     /// Final cut depth (negative number — a depth, not a height).
     ///
     /// `#[serde(default)]` so program-only ops (Pause, Homing,
@@ -318,6 +324,8 @@ impl OpParamsCommon {
     #[must_use]
     pub fn mill_default() -> Self {
         Self {
+            applied_cutting: None,
+            fs_full_width: false,
             depth: -2.0,
             start_depth: 0.0,
             step: Some(-1.0),

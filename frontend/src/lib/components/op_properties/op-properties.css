@@ -37,8 +37,7 @@
 .props .row {
   display: grid;
   /* Label column shrinks below its 6.5 rem natural width on narrow
-       sidebars so the input column keeps a usable size. Container
-       query would be cleaner but the props panel doesn't carry one. */
+       sidebars; the container query below preserves value/unit space. */
   grid-template-columns: minmax(4rem, 6.5rem) minmax(0, 1fr);
   gap: 0.5rem;
   align-items: center;
@@ -54,18 +53,21 @@
   overflow-wrap: break-word;
 }
 .props fieldset {
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  margin: 0.4rem 0;
-  padding: 0.3rem 0.5rem 0.4rem;
-  background: var(--bg-elevated);
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  margin: var(--ui-space-3) 0 0;
+  padding: var(--ui-space-2) 0 0;
+  min-width: 0;
+  background: transparent;
 }
 .props legend {
   font-size: 0.7rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 0 0.3rem;
+  padding: 0 var(--ui-space-1) 0 0;
+  font-weight: 600;
 }
 .props input,
 .props select {
@@ -293,10 +295,11 @@
   transform: rotate(90deg);
 }
 .props .optional-section {
-  margin: 0.4rem 0 0;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--bg-elevated) 30%, transparent);
+  margin: var(--ui-space-3) 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
 }
 .props .optional-section > summary {
   cursor: pointer;
@@ -304,7 +307,8 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.3rem 0.55rem;
+  padding: var(--ui-space-1) 0;
+  min-height: 24px;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-strong);
@@ -327,14 +331,13 @@
   font-size: 0.7rem;
   font-weight: 400;
   color: var(--text-muted);
-  background: var(--bg-input);
-  padding: 0.05rem 0.4rem;
-  border-radius: 999px;
+  padding: 0;
+  background: transparent;
 }
 .props .optional-fieldset {
   border: 0;
   margin: 0;
-  padding: 0 0.55rem 0.5rem;
+  padding: var(--ui-space-1) 0 var(--ui-space-2);
 }
 .props .optional-fieldset > legend {
   display: none;
@@ -347,4 +350,99 @@
   font-size: 0.74rem;
   font-style: italic;
   color: var(--text-muted);
+}
+
+/* Label / value / unit / status: share fixed numeric and suffix tracks.
+   Metadata stays in the row at ordinary desktop inspector widths. */
+.props {
+  container-type: inline-size;
+  container-name: cam-inspector;
+}
+.props .inspector-field {
+  display: grid;
+  grid-template-columns:
+    minmax(2rem, 1fr) var(--inspector-value-width) var(--inspector-unit-width)
+    var(--inspector-status-width);
+  gap: var(--ui-space-1);
+  align-items: center;
+  margin: var(--ui-space-1) 0;
+  font-size: var(--inspector-font-field);
+}
+.props .inspector-field > span:first-child {
+  overflow-wrap: break-word;
+}
+.props .inspector-field > .unit {
+  margin: 0;
+}
+.props .field-status {
+  font-size: var(--inspector-font-meta);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.props :is(input:not([type='checkbox']):not([type='radio']):not([type='range']), select) {
+  min-height: var(--inspector-control-height);
+  border-radius: var(--radius-sm);
+  font-size: var(--inspector-font-field);
+}
+.props .inspector-field input {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.props :is(.num-cell, .step-cell) > .unit {
+  min-width: var(--inspector-unit-width);
+  margin: 0;
+}
+.props .inspector-action {
+  min-height: var(--inspector-control-height);
+  padding: var(--ui-space-1) var(--ui-space-2);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--inspector-font-meta);
+  color: var(--text);
+  cursor: pointer;
+}
+.props .inspector-action:hover:not(:disabled) {
+  background: var(--bg-elevated);
+  border-color: var(--text-muted);
+}
+.props .inspector-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.props .inspector-action.primary {
+  background: color-mix(in srgb, var(--accent) 50%, var(--bg-input));
+  border-color: var(--accent);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+@container cam-inspector (max-width: 260px) {
+  .props .row {
+    grid-template-columns: minmax(3.25rem, 1fr) minmax(7.125rem, 1.2fr);
+    gap: var(--ui-space-1);
+  }
+  .props .inspector-field {
+    grid-template-columns: minmax(3.25rem, 1fr) 4.375rem var(--inspector-unit-width);
+  }
+  /* At narrow widths: metadata follows its value, never units. */
+  .props .field-status {
+    grid-column: 2 / -1;
+    margin-top: -2px;
+  }
+  .props .field-status:empty {
+    display: none;
+  }
+}
+
+.props .inspector-disclosure {
+  margin-top: var(--ui-space-2);
+}
+.props .inspector-disclosure > summary {
+  font-size: var(--inspector-font-meta);
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: var(--ui-space-1) 0;
+  min-height: 24px;
+  cursor: pointer;
+  box-sizing: border-box;
 }

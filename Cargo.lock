@@ -2608,6 +2608,7 @@ dependencies = [
  "criterion",
  "dxf",
  "ivac-cps",
+ "ivac-feeds-speeds",
  "lru",
  "schemars 0.8.22",
  "seahash",
@@ -2631,6 +2632,15 @@ dependencies = [
  "serde_json",
  "thiserror 2.0.18",
  "tracing",
+]
+
+[[package]]
+name = "ivac-feeds-speeds"
+version = "0.5.0"
+dependencies = [
+ "schemars 0.8.22",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

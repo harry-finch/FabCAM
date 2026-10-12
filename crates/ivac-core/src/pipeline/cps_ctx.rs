@@ -12,8 +12,8 @@ use std::collections::HashMap;
 use crate::cam::setup::Setup;
 use crate::pipeline::CpsParamValue;
 use crate::project::{
-    resolve_tool_rates, Coolant, MachineConfig, Op, OpKind, PassKind, Project, SpindleDirection,
-    ToolEntry, ToolKind, UnitSystem, Wcs,
+    Coolant, MachineConfig, Op, OpKind, PassKind, Project, SpindleDirection, ToolEntry, ToolKind,
+    UnitSystem, Wcs,
 };
 
 /// What a post implementation takes over from the pipeline. Returned by
@@ -117,8 +117,18 @@ pub(crate) fn build_section_ctx(
 ) -> SectionCtx {
     let tool_entry = tool_index.get(&op.tool_id).copied();
     let pass = op_pass_kind(op);
-    let (speed, rate_v, rate_h) = tool_entry.map_or((0, 0, 0), |t| resolve_tool_rates(t, pass));
-    let rpm = super::setup_resolver::clamp_rpm_silent(speed, &project.machine);
+    let resolved = super::setup_resolver::synthesize_op_setup(op, project, &mut Vec::new()).ok();
+    let (rpm, rate_v, rate_h) = resolved.map_or((0, 0, 0), |s| {
+        if pass == PassKind::Finish {
+            (
+                s.tool.speed_finish,
+                s.tool.rate_v_finish,
+                s.tool.rate_h_finish,
+            )
+        } else {
+            (s.tool.speed, s.tool.rate_v, s.tool.rate_h)
+        }
+    });
     let params = vec![
         (
             "ivacam:uses-static-tool-z-shift".to_string(),
@@ -229,6 +239,8 @@ fn cps_tool_info(entry: Option<&ToolEntry>, fallback_id: u32, rpm: u32) -> CpsTo
 fn op_pass_kind(op: &Op) -> PassKind {
     if matches!(op.kind, OpKind::Drill { .. }) {
         PassKind::Drill
+    } else if matches!(op.kind, OpKind::Profile { .. }) {
+        PassKind::Finish
     } else {
         PassKind::Rough
     }

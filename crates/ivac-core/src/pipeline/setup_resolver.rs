@@ -189,6 +189,38 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         .iter()
         .find(|t| t.id == op.tool_id)
         .ok_or(PipelineError::UnknownTool(op.id, op.tool_id))?;
+    if let Some(applied) = &op.params.applied_cutting {
+        if project.machine.mode != crate::project::MachineMode::Mill
+            || !matches!(op.kind, OpKind::Profile { .. } | OpKind::Pocket { .. })
+        {
+            return Err(PipelineError::AppliedCutting(
+                op.id,
+                "Saved milling rates cannot be used for this process/operation".into(),
+            ));
+        }
+        let canonical = project
+            .operations
+            .iter()
+            .find(|o| o.id == op.id)
+            .unwrap_or(op);
+        if applied.proposal.is_some()
+            && applied.context_key != crate::feeds_speeds::context_key(project, canonical)
+        {
+            warnings.push(PipelineWarning::for_op(op.id, "feeds_speeds_stale", "Cutting context changed since Apply. Saved/manual values are retained; review or recalculate explicitly."));
+        }
+    }
+    let machine = crate::feeds_speeds::effective_machine(project, tool.id);
+    if machine.spindle_rpm_max == Some(0)
+        || machine
+            .spindle_rpm_min
+            .zip(machine.spindle_rpm_max)
+            .is_some_and(|(min, max)| min > max)
+    {
+        return Err(PipelineError::AppliedCutting(
+            op.id,
+            "Machine/tool spindle constraints conflict".into(),
+        ));
+    }
     let step = match effective_step(op, tool) {
         Ok(v) => v,
         Err(w) => {
@@ -215,7 +247,8 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         crate::project::PassKind::Rough
     };
     let (rough_speed_raw, rough_plunge, rough_feed) =
-        crate::project::resolve_tool_rates(tool, main_pass);
+        crate::feeds_speeds::saved_rates(op, tool, main_pass)
+            .map_err(|e| PipelineError::AppliedCutting(op.id, e))?;
     let (finish_speed_raw, finish_plunge, finish_feed) = if matches!(op.kind, OpKind::Drill { .. })
     {
         // Drill never emits a finish pass — keep the finish triplet
@@ -223,23 +256,18 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         // sees consistent values.
         (rough_speed_raw, rough_plunge, rough_feed)
     } else {
-        crate::project::resolve_tool_rates(tool, crate::project::PassKind::Finish)
+        crate::feeds_speeds::saved_rates(op, tool, crate::project::PassKind::Finish)
+            .map_err(|e| PipelineError::AppliedCutting(op.id, e))?
     };
     // Clamp each pass's resolved RPM into the machine's
     // [spindle_rpm_min, spindle_rpm_max] window so an emitted S<x>
     // is always physically reachable. Clamp + warn rather than fail
     // hard — the user keeps the program but sees the substitution.
-    let rough_speed = clamp_spindle_rpm(rough_speed_raw, &project.machine, op, main_pass, warnings);
+    let rough_speed = clamp_spindle_rpm(rough_speed_raw, &machine, op, main_pass, warnings);
     let finish_speed = if matches!(op.kind, OpKind::Drill { .. }) {
         rough_speed
     } else {
-        clamp_spindle_rpm(
-            finish_speed_raw,
-            &project.machine,
-            op,
-            PassKind::Finish,
-            warnings,
-        )
+        clamp_spindle_rpm(finish_speed_raw, &machine, op, PassKind::Finish, warnings)
     };
     // Laser tools get their per-tool pierce-time threaded
     // into ToolConfig so emit_offset can emit a G4 P<sec> dwell
@@ -306,38 +334,24 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         // ceiling so even a fat-fingered override can't emit an
         // out-of-range F-word. Plunge + cut, rough + finish.
         rate_v: clamp_feed(
-            op.params.plunge_rate_override.unwrap_or(rough_plunge),
+            rough_plunge,
             "plunge",
             &project.machine,
             op,
             main_pass,
             warnings,
         ),
-        rate_h: clamp_feed(
-            op.params.feed_rate_override.unwrap_or(rough_feed),
-            "cut",
-            &project.machine,
-            op,
-            main_pass,
-            warnings,
-        ),
+        rate_h: clamp_feed(rough_feed, "cut", &project.machine, op, main_pass, warnings),
         speed_finish: finish_speed,
         rate_v_finish: clamp_feed(
-            op.params.plunge_rate_override.unwrap_or(finish_plunge),
+            finish_plunge,
             "plunge",
-            &project.machine,
+            &machine,
             op,
             PassKind::Finish,
             warnings,
         ),
-        rate_h_finish: clamp_feed(
-            op.params.feed_rate_override.unwrap_or(finish_feed),
-            "cut",
-            &project.machine,
-            op,
-            PassKind::Finish,
-            warnings,
-        ),
+        rate_h_finish: clamp_feed(finish_feed, "cut", &machine, op, PassKind::Finish, warnings),
         pierce_sec,
         whirl_radius,
         whirl_stepover,
@@ -732,25 +746,35 @@ pub(super) fn header_setup_for(project: &Project) -> Setup {
         if let Some(tool) = project.tools.iter().find(|t| t.id == op.tool_id) {
             let main_pass = if matches!(op.kind, OpKind::Drill { .. }) {
                 crate::project::PassKind::Drill
+            } else if matches!(op.kind, OpKind::Profile { .. }) {
+                crate::project::PassKind::Finish
             } else {
                 crate::project::PassKind::Rough
             };
-            let (rs_raw, rp, rf) = crate::project::resolve_tool_rates(tool, main_pass);
+            let (rs_raw, rp, rf) =
+                crate::feeds_speeds::saved_rates(op, tool, main_pass).unwrap_or((0, 0, 0));
             let (fs_raw, fp, ff) = if matches!(op.kind, OpKind::Drill { .. }) {
                 (rs_raw, rp, rf)
             } else {
-                crate::project::resolve_tool_rates(tool, crate::project::PassKind::Finish)
+                crate::feeds_speeds::saved_rates(op, tool, crate::project::PassKind::Finish)
+                    .unwrap_or((0, 0, 0))
             };
             // Keep the header S<x> consistent with the per-op
             // clamp. The synth path already pushed the warning when
             // this op ran through synthesize_op_setup; silently clamp
             // here so the header doesn't ship a different (unreachable)
             // RPM in its M3 command.
-            let rs = clamp_rpm_silent(rs_raw, &project.machine);
+            let rs = clamp_rpm_silent(
+                rs_raw,
+                &crate::feeds_speeds::effective_machine(project, tool.id),
+            );
             let fs = if matches!(op.kind, OpKind::Drill { .. }) {
                 rs
             } else {
-                clamp_rpm_silent(fs_raw, &project.machine)
+                clamp_rpm_silent(
+                    fs_raw,
+                    &crate::feeds_speeds::effective_machine(project, tool.id),
+                )
             };
             let pierce_sec = if matches!(tool.kind, crate::project::ToolKind::LaserBeam) {
                 tool.laser_pierce_sec.unwrap_or(0.0).max(0.0)
@@ -789,23 +813,11 @@ pub(super) fn header_setup_for(project: &Project) -> Setup {
                 // top despite the override. The override also
                 // applies to the finish slot so single-pass Profile ops
                 // (which now emit at finish rates) honour the override.
-                rate_v: clamp_feed_silent(
-                    op.params.plunge_rate_override.unwrap_or(rp),
-                    &project.machine,
-                ),
-                rate_h: clamp_feed_silent(
-                    op.params.feed_rate_override.unwrap_or(rf),
-                    &project.machine,
-                ),
+                rate_v: clamp_feed_silent(rp, &project.machine),
+                rate_h: clamp_feed_silent(rf, &project.machine),
                 speed_finish: fs,
-                rate_v_finish: clamp_feed_silent(
-                    op.params.plunge_rate_override.unwrap_or(fp),
-                    &project.machine,
-                ),
-                rate_h_finish: clamp_feed_silent(
-                    op.params.feed_rate_override.unwrap_or(ff),
-                    &project.machine,
-                ),
+                rate_v_finish: clamp_feed_silent(fp, &project.machine),
+                rate_h_finish: clamp_feed_silent(ff, &project.machine),
                 pierce_sec,
                 // Whirl is a cut-time overlay only — the
                 // header_setup_for path is for program header emission

@@ -8,6 +8,8 @@ import type {
   GenerateRequest,
   GenerateResponse,
   TwoSidedGenerateResponse,
+  FsCamRequest,
+  FsCamResponse,
   HelixRadiusRequest,
   HelixRadiusResponse,
   ImportResponse,
@@ -133,6 +135,16 @@ export class HttpWiacClient implements WiacClient {
     });
     if (!res.ok) await throwHttpError('/text/layer', res);
     return (await res.json()) as RenderTextLayerResponse;
+  }
+
+  async feedsSpeeds(request: FsCamRequest): Promise<FsCamResponse> {
+    const res = await fetch(`${this.base}/feeds-speeds`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!res.ok) await throwHttpError('/feeds-speeds', res);
+    return (await res.json()) as FsCamResponse;
   }
 
   async computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse> {
@@ -475,6 +487,11 @@ class WasmClientLazy {
         ),
       renderText: (req) => ensure().then((c) => c.renderText(req)),
       renderTextLayer: (layer) => ensure().then((c) => c.renderTextLayer(layer)),
+      feedsSpeeds: (req) =>
+        ensure().then((c) => {
+          if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
+          return c.feedsSpeeds(req);
+        }),
       computeHelixRadius: (req) => ensure().then((c) => c.computeHelixRadius(req)),
       rasterizeStl: (bytes, maxDim) => ensure().then((c) => c.rasterizeStl(bytes, maxDim)),
     };
@@ -529,6 +546,11 @@ class TauriClientLazy {
         ),
       renderText: (req) => ensure().then((c) => c.renderText(req)),
       renderTextLayer: (layer) => ensure().then((c) => c.renderTextLayer(layer)),
+      feedsSpeeds: (req) =>
+        ensure().then((c) => {
+          if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
+          return c.feedsSpeeds(req);
+        }),
       computeHelixRadius: (req) => ensure().then((c) => c.computeHelixRadius(req)),
       rasterizeStl: (bytes, maxDim) => ensure().then((c) => c.rasterizeStl(bytes, maxDim)),
     };

@@ -49,6 +49,11 @@ use crate::geometry::Segment;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 pub struct Project {
+    /// Cutting identity is distinct from stock geometry.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub material: Option<ivac_feeds_speeds::Identity>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub fs_context: Option<crate::feeds_speeds::FsContext>,
     /// Imported geometry — the same `segments` the existing pipeline
     /// consumes. We keep it inline rather than referencing it by id so the
     /// project file is self-contained.
@@ -388,6 +393,8 @@ impl Wcs {
 /// a same-file edit; `crate::schema::components_schemas` composes these.
 pub(crate) fn register_schemas(map: &mut crate::schema::SchemaMap) {
     crate::schema::insert::<Project>(map, "Project");
+    crate::schema::insert::<crate::feeds_speeds::FsCamRequest>(map, "FsCamRequest");
+    crate::schema::insert::<crate::feeds_speeds::FsCamResponse>(map, "FsCamResponse");
     crate::schema::insert::<Op>(map, "Op");
     crate::schema::insert::<OpKind>(map, "OpKind");
     crate::schema::insert::<DrillCycle>(map, "DrillCycle");

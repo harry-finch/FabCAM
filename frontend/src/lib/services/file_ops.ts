@@ -1,3 +1,4 @@
+import { validateProjectFile } from '../state/feeds-speeds-persistence';
 /// Open / Save / Sample I/O extracted from FileUpload so the toolbar
 /// (and any other UI surface) can invoke the same flows without
 /// reaching through DOM query selectors. Each function mutates
@@ -355,6 +356,7 @@ export async function openProject() {
     project.error = null;
     try {
       const text = await readTextFile(selected);
+      validateProjectFile(JSON.parse(text));
       project.clearProject();
       await clearPipelineCacheOnReplace();
       project.restore(JSON.parse(text));
@@ -437,6 +439,7 @@ export async function loadProjectPath(path: string) {
   try {
     const { readTextFile } = await import('@tauri-apps/plugin-fs');
     const text = await readTextFile(path);
+    validateProjectFile(JSON.parse(text));
     project.clearProject();
     await clearPipelineCacheOnReplace();
     project.restore(JSON.parse(text));
@@ -506,6 +509,7 @@ export async function loadProjectFile(file: File) {
   project.error = null;
   try {
     const text = await file.text();
+    validateProjectFile(JSON.parse(text));
     project.clearProject();
     await clearPipelineCacheOnReplace();
     project.restore(JSON.parse(text));
@@ -521,7 +525,15 @@ export async function loadProjectFile(file: File) {
 /// Save the current project state. Desktop = native save dialog;
 /// browser = anchor-tag download trick.
 export async function saveProject() {
-  const snapshot = JSON.stringify(project.snapshot(), null, 2);
+  let snapshot: string;
+  try {
+    const file = project.snapshot();
+    validateProjectFile(file);
+    snapshot = JSON.stringify(file, null, 2);
+  } catch (e) {
+    reportError(e);
+    return;
+  }
   const base = project.transformedImport?.filename?.replace(/\.[^.]+$/, '') ?? 'project';
   const filename = `${base}.ivac-project.json`;
   if (isTauri()) {

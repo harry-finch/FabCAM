@@ -24,6 +24,7 @@
 
   interface Props {
     tool: ToolEntry;
+    showDefaults?: boolean;
     /// Whether the row's expanded editor is open — drives the ▾/▸ glyph
     /// and the expand button's aria state.
     expanded: boolean;
@@ -37,6 +38,7 @@
   }
   let {
     tool,
+    showDefaults = false,
     expanded,
     canDelete,
     onUpdateField,
@@ -148,73 +150,75 @@
   onchange={(e) =>
     onUpdateField('flutes', parseInt((e.currentTarget as HTMLInputElement).value, 10) || 1)}
 />
-<input
-  type="number"
-  step="500"
-  min="1"
-  value={tool.speed}
-  disabled={!fieldApplies('speed', tool.kind)}
-  class:invalid={speedInvalid(tool)}
-  title={!fieldApplies('speed', tool.kind)
-    ? fieldDisabledReason('speed', tool.kind)
-    : speedInvalid(tool)
-      ? t('tools.row.speed.invalid.title')
-      : ''}
-  onchange={(e) =>
-    onUpdateField('speed', parseInt((e.currentTarget as HTMLInputElement).value, 10) || 0)}
-/>
-<input
-  type="number"
-  step="50"
-  min="1"
-  value={tool.feedRate}
-  class:invalid={feedInvalid(tool)}
-  title={feedInvalid(tool)
-    ? t('tools.row.feed.invalid.title')
-    : tool.kind === 'drill'
-      ? t('tools.row.feed.drill.title')
-      : ''}
-  onchange={(e) =>
-    onUpdateField('feedRate', parseInt((e.currentTarget as HTMLInputElement).value, 10) || 0)}
-/>
-<input
-  type="number"
-  step="50"
-  min="1"
-  value={tool.plungeRate}
-  disabled={!fieldApplies('plunge', tool.kind)}
-  class:invalid={plungeInvalid(tool)}
-  title={!fieldApplies('plunge', tool.kind)
-    ? fieldDisabledReason('plunge', tool.kind)
-    : plungeInvalid(tool)
-      ? t('tools.row.plunge.invalid.title')
-      : ''}
-  onchange={(e) =>
-    onUpdateField('plungeRate', parseInt((e.currentTarget as HTMLInputElement).value, 10) || 0)}
-/>
-<input
-  type="number"
-  step="0.05"
-  max="0"
-  value={tool.defaultStep ?? ''}
-  placeholder={fieldApplies('defaultStep', tool.kind) ? '—' : t('tools.field.na')}
-  disabled={!fieldApplies('defaultStep', tool.kind)}
-  title={fieldApplies('defaultStep', tool.kind)
-    ? tool.defaultStep !== undefined && tool.defaultStep >= 0
-      ? t('tools.row.dflt_step.invalid.title')
-      : t('tools.row.dflt_step.title')
-    : fieldDisabledReason('defaultStep', tool.kind)}
-  class:invalid={tool.defaultStep !== undefined && tool.defaultStep >= 0}
-  onchange={(e) => {
-    const v = (e.currentTarget as HTMLInputElement).value;
-    if (v === '') {
-      onUpdateField('defaultStep', undefined);
-      return;
-    }
-    const n = parseFloat(v);
-    onUpdateField('defaultStep', isNaN(n) || n >= 0 ? undefined : n);
-  }}
-/>
+{#if showDefaults}
+  <input
+    type="number"
+    step="500"
+    min="1"
+    value={tool.speed}
+    disabled={!fieldApplies('speed', tool.kind)}
+    class:invalid={speedInvalid(tool)}
+    title={!fieldApplies('speed', tool.kind)
+      ? fieldDisabledReason('speed', tool.kind)
+      : speedInvalid(tool)
+        ? t('tools.row.speed.invalid.title')
+        : ''}
+    onchange={(e) =>
+      onUpdateField('speed', parseInt((e.currentTarget as HTMLInputElement).value, 10) || 0)}
+  />
+  <input
+    type="number"
+    step="50"
+    min="1"
+    value={tool.feedRate}
+    class:invalid={feedInvalid(tool)}
+    title={feedInvalid(tool)
+      ? t('tools.row.feed.invalid.title')
+      : tool.kind === 'drill'
+        ? t('tools.row.feed.drill.title')
+        : ''}
+    onchange={(e) =>
+      onUpdateField('feedRate', parseInt((e.currentTarget as HTMLInputElement).value, 10) || 0)}
+  />
+  <input
+    type="number"
+    step="50"
+    min="1"
+    value={tool.plungeRate}
+    disabled={!fieldApplies('plunge', tool.kind)}
+    class:invalid={plungeInvalid(tool)}
+    title={!fieldApplies('plunge', tool.kind)
+      ? fieldDisabledReason('plunge', tool.kind)
+      : plungeInvalid(tool)
+        ? t('tools.row.plunge.invalid.title')
+        : ''}
+    onchange={(e) =>
+      onUpdateField('plungeRate', parseInt((e.currentTarget as HTMLInputElement).value, 10) || 0)}
+  />
+  <input
+    type="number"
+    step="0.05"
+    max="0"
+    value={tool.defaultStep ?? ''}
+    placeholder={fieldApplies('defaultStep', tool.kind) ? '—' : t('tools.field.na')}
+    disabled={!fieldApplies('defaultStep', tool.kind)}
+    title={fieldApplies('defaultStep', tool.kind)
+      ? tool.defaultStep !== undefined && tool.defaultStep >= 0
+        ? t('tools.row.dflt_step.invalid.title')
+        : t('tools.row.dflt_step.title')
+      : fieldDisabledReason('defaultStep', tool.kind)}
+    class:invalid={tool.defaultStep !== undefined && tool.defaultStep >= 0}
+    onchange={(e) => {
+      const v = (e.currentTarget as HTMLInputElement).value;
+      if (v === '') {
+        onUpdateField('defaultStep', undefined);
+        return;
+      }
+      const n = parseFloat(v);
+      onUpdateField('defaultStep', isNaN(n) || n >= 0 ? undefined : n);
+    }}
+  />
+{/if}
 <select
   value={tool.coolant}
   onchange={(e) =>

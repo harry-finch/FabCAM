@@ -893,3 +893,18 @@ describe('buildProject — two-sided (flip-stock) wire mapping', () => {
     expect(project!.stock).not.toHaveProperty('flip');
   });
 });
+
+describe('FS3.5 job material display metadata', () => {
+  it('keeps display labels out of native matching identities', () => {
+    const material = { id: 'workshop-mdf', revision: '1', label: 'MDF atelier' };
+    const project = buildProject({
+      transformedImport: fakeImport(),
+      machine: baseMachine(),
+      tools: [baseTool()],
+      operations: [profileOp()],
+      material,
+    });
+    expect(project!.material).toEqual({ id: 'workshop-mdf', revision: '1' });
+    expect(material.label).toBe('MDF atelier');
+  });
+});

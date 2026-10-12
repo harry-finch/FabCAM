@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/ivac-feeds-speeds",
     "crates/ivac-core",
     "crates/ivac-cps",
     "crates/ivac-cli",
@@ -16,6 +17,7 @@ members = [
 # desktop developer machine. CI builds it explicitly via `cargo build -p
 # ivac-tauri` when those deps are present.
 default-members = [
+    "crates/ivac-feeds-speeds",
     "crates/ivac-core",
     "crates/ivac-cps",
     "crates/ivac-cli",

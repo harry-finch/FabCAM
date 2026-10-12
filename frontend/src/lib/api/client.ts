@@ -6,6 +6,8 @@ import type {
   GenerateRequest,
   GenerateResponse,
   TwoSidedGenerateResponse,
+  FsCamRequest,
+  FsCamResponse,
   HelixRadiusRequest,
   HelixRadiusResponse,
   ImportResponse,
@@ -21,6 +23,7 @@ import type {
 } from './types';
 
 export interface WiacClient {
+  feedsSpeeds?(request: FsCamRequest): Promise<FsCamResponse>;
   health(): Promise<boolean>;
   version(): Promise<VersionResponse>;
   importFile(file: File, format?: string): Promise<ImportResponse>;

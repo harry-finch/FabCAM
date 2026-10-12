@@ -1,3 +1,8 @@
+import {
+  DEFAULT_SOURCE_SETTINGS,
+  normalizeSourceSettings,
+  type SourceSettings,
+} from './feeds-speeds-sources';
 /// Project-data slice of ProjectState. Owns
 /// every "what does this project contain" field that survives across
 /// sessions: the imported geometry, the ops list, the tool library,
@@ -31,6 +36,7 @@ const SETTINGS_KEY = 'ivac.settings';
 const LEGACY_THEME_KEY = 'ivac.theme';
 
 export interface AppSettings {
+  feedsSpeedsSources: SourceSettings;
   theme: 'auto' | 'light' | 'dark';
   /// UI language. `auto` follows the system / browser locale (see
   /// `detectLocale` in lib/i18n); `en` / `de` force a specific language.
@@ -116,6 +122,7 @@ export interface AppSettings {
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
+  feedsSpeedsSources: DEFAULT_SOURCE_SETTINGS,
   theme: 'auto',
   language: 'auto',
   previewMode: 'both',
@@ -170,7 +177,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
 /// adding new keys later doesn't break old payloads. Falls back to the
 /// legacy `ivac.theme` key when no `ivac.settings` blob exists yet
 /// (first run after the dialog ships).
-function loadSettings(): AppSettings {
+export function loadSettings(): AppSettings {
   if (typeof window === 'undefined') return { ...DEFAULT_SETTINGS };
   let merged: AppSettings = { ...DEFAULT_SETTINGS };
   try {
@@ -188,7 +195,11 @@ function loadSettings(): AppSettings {
         if (parsed.exactSimRewind === false) {
           delete (parsed as Record<string, unknown>).exactSimRewind;
         }
-        merged = { ...merged, ...parsed };
+        merged = {
+          ...merged,
+          ...parsed,
+          feedsSpeedsSources: normalizeSourceSettings(parsed.feedsSpeedsSources),
+        };
         // Deep-merge `osnap` so a future-added knob falls back to its
         // default instead of being undefined when the user's stored blob
         // predates the new key. Same care needed for any future nested
@@ -224,6 +235,8 @@ export function saveSettings(s: AppSettings): void {
 }
 
 export class ProjectDataState {
+  material = $state<import('./project-types').MaterialIdentity | undefined>();
+  fsContext = $state<import('../api/generated').components['schemas']['FsContext'] | undefined>();
   /// Imported drawings. Each entry owns its own ImportResponse, a
   /// non-destructive layout transform (fileTransform), and source file
   /// path. Multi-file workflows append entries; common-case projects have

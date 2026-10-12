@@ -107,7 +107,42 @@ parameters → existing CAM/post flow. The engine is independent of UI and geome
 generation; post-processors never invoke it. WJ/VINYL remain independent of it.
 Aggressiveness and evidence/provenance are separate; manual overrides are protected.
 
-This is a planned boundary, not an implemented subsystem. FS0 has not started;
-crate/module, material/preset and request/recommendation/resolved models,
-precedence/fallback and compatibility decisions await its audit. Current Tool,
-operation and machine types remain unchanged. See ROADMAP for acceptance gates.
+[FS0 qualification](feeds-speeds/FS0_QUALIFICATION.md) and accepted
+[ADR-0003](adr/ADR-0003-feeds-speeds-data-ownership.md) specify domain snapshots,
+material identity, scoped JSON data and explicit ambiguity/fallback behavior.
+FS1 now implements the independent `ivac-feeds-speeds` crate, with Serde and serde_json
+as normal dependencies. It owns no project state and is not called by CAM/posts.
+See [FS1 qualification](feeds-speeds/FS1_QUALIFICATION.md) for concrete policy/API.
+
+FS3 makes saved operation rates authoritative and retains native step/overlap
+as the sole geometry fields. The core adapter is the only project-to-engine
+boundary; HTTP/Tauri/WASM explicit endpoints call it. CAM generation reads saved
+rate slots and never calls the engine. CPS metadata uses resolved active-pass
+rates, including tool changes and plunge classification. Native schema additions
+are optional for legacy projects. Portable FS files use a separate kind/version;
+old applications reject them. Context changes warn without automatic mutation.
+FS-bearing projects bypass cache until the key captures all new context inputs.
+See [FS3 qualification](feeds-speeds/FS3_QUALIFICATION.md) for ownership,
+secondary-pass snapshots, persistence, limits and compatibility details.
+
+## FS3.5 ownership and UX boundary
+
+Physical ToolEntry geometry is distinct from operation AppliedCutting and from
+optional recommendation/provenance. Legacy tool defaults stay fallback values.
+Manual-only slots need no fabricated recommendation; native step/depth_list/overlap
+remain geometry authority. Portable cutting/context saves use guarded v3 while
+v1/v2 remain readable. Material identity belongs to the job and is edited in
+Stock; optional portable display labels do not enter native matching. Sources
+are per-installation Settings, loaded without automatic calculation. Explicit
+reference compatibility never implies machine equivalence. See
+[ADR-0004](adr/ADR-0004-manual-operation-cutting-and-source-settings.md) and
+[FS3.5 qualification](feeds-speeds/FS3_5_QUALIFICATION.md).
+
+### Transient refusal explanations (FS3.6 review revision)
+
+FsCamResponse may include scope_rejections for missing cutting data, derived from
+the same pure native scope checks used for matching. Requested/required values
+are display metadata; closest rejected scopes never become recommendations.
+The field defaults empty for old responses and is omitted when empty. It is not
+stored in AppliedCutting or project files. Math/precedence/data and post-time
+consumption remain unchanged. The frontend formats reasons without matching data.

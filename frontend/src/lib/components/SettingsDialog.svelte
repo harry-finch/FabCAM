@@ -10,6 +10,7 @@
   import { project, type AppSettings } from '../state/project.svelte';
   import { layout } from '../state/layout.svelte';
   import { t, type MsgKey } from '../i18n';
+  import FeedsSpeedsSourcesSettings from './FeedsSpeedsSourcesSettings.svelte';
   import Modal from './Modal.svelte';
 
   interface Props {
@@ -31,6 +32,7 @@
     { id: 'preview', labelKey: 'settings.group.preview' },
     { id: 'performance', labelKey: 'settings.group.performance' },
     { id: 'safety', labelKey: 'settings.group.safety' },
+    { id: 'feeds-speeds', labelKey: 'fs35.settings' },
     { id: 'sources', labelKey: 'settings.group.sources' },
     { id: 'snap', labelKey: 'settings.group.snap' },
   ] as const satisfies ReadonlyArray<{ id: string; labelKey: MsgKey }>;
@@ -107,6 +109,9 @@
   {/if}
 
   <div class="body">
+    <section class:group-hidden={groupHidden('feeds-speeds')}>
+      <FeedsSpeedsSourcesSettings />
+    </section>
     <section class:group-hidden={groupHidden('view')}>
       <h3>{t('settings.group.view')}</h3>
       <div class="grid">

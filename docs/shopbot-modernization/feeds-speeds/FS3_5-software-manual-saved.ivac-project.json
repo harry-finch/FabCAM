@@ -1,0 +1,386 @@
+{
+  "kind": "ivac-project-cutting",
+  "version": 3,
+  "material": {
+    "id": "sienci-softwood-soft-plywood-mdf",
+    "revision": "1"
+  },
+  "fsContext": {
+    "machine_identity": {
+      "id": "sienci-longmill-mk2-reference",
+      "revision": "1"
+    },
+    "tools": [
+      {
+        "tool_id": 1,
+        "identity": {
+          "id": "sienci-reference-single-flute-upcut-quarter-inch",
+          "revision": "1"
+        }
+      }
+    ]
+  },
+  "imports": [
+    {
+      "id": 1,
+      "source": {
+        "filename": "square_100.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 10
+            },
+            "end": {
+              "x": 110,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 110,
+              "y": 10
+            },
+            "end": {
+              "x": 110,
+              "y": 110
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 110,
+              "y": 110
+            },
+            "end": {
+              "x": 10,
+              "y": 110
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 110
+            },
+            "end": {
+              "x": 10,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 4
+          }
+        ],
+        "bbox": {
+          "min_x": 10,
+          "min_y": 10,
+          "max_x": 110,
+          "max_y": 110
+        },
+        "unit_scale": 1,
+        "warnings": [],
+        "objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 10,
+              "min_y": 10,
+              "max_x": 110,
+              "max_y": 110
+            }
+          }
+        ]
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    }
+  ],
+  "visibleLayers": [],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 0,
+    "thickness": 12,
+    "customX": 500,
+    "customY": 500,
+    "offsetX": 190,
+    "offsetY": 190,
+    "offsetZ": 0
+  },
+  "tools": [
+    {
+      "id": 1,
+      "name": "\u00d86.35 mm single flute upcut \u2014 software fixture",
+      "kind": "endmill",
+      "diameter": 6.35,
+      "flutes": 1,
+      "speed": 10000,
+      "plungeRate": 500,
+      "feedRate": 1000,
+      "coolant": "off",
+      "fsIdentity": {
+        "id": "sienci-reference-single-flute-upcut-quarter-inch",
+        "revision": "1"
+      }
+    }
+  ],
+  "machine": {
+    "unit": "mm",
+    "mode": "mill",
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 15,
+    "accel": {
+      "x": 250,
+      "y": 250,
+      "z": 250
+    },
+    "toolchangeS": 5,
+    "rapidSpeed": 9144,
+    "workArea": {
+      "x": 1200,
+      "y": 600,
+      "z": 203
+    },
+    "name": "FS3.5 SOFTWARE ONLY \u2014 LongMill reference context",
+    "capabilities": [
+      "mill"
+    ],
+    "gcodeDialect": "linuxcnc",
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false,
+    "spindleRpmMax": 24000,
+    "fsIdentity": {
+      "id": "sienci-longmill-mk2-reference",
+      "revision": "1"
+    }
+  },
+  "operations": [
+    {
+      "id": 1,
+      "name": "Profile \u2014 SOFTWARE ONLY",
+      "enabled": true,
+      "kind": "profile",
+      "toolId": 1,
+      "sourceLayers": [
+        "svg"
+      ],
+      "depth": -2.8,
+      "startDepth": 0,
+      "step": -2,
+      "offset": "outside",
+      "fsFullWidth": true,
+      "appliedCutting": {
+        "slots": [
+          {
+            "tool_id": 1,
+            "pass": "rough",
+            "rpm": 17000,
+            "feed_mm_min": 1620,
+            "plunge_mm_min": 810,
+            "origins": {
+              "rpm": "recommendation",
+              "feed": "recommendation",
+              "plunge": "recommendation"
+            }
+          },
+          {
+            "tool_id": 1,
+            "pass": "finish",
+            "rpm": 17000,
+            "feed_mm_min": 1500,
+            "plunge_mm_min": 810,
+            "origins": {
+              "rpm": "recommendation",
+              "feed": "manual",
+              "plunge": "recommendation"
+            }
+          }
+        ],
+        "proposal": {
+          "parameters": {
+            "rpm": 17000,
+            "feed_mm_min": 1620,
+            "plunge_mm_min": 810,
+            "doc_mm": 2.8,
+            "effective_chipload_mm_tooth": 0.09529411764705882
+          },
+          "aggressiveness": "prudent",
+          "source_evidence": "reference_data",
+          "applicability": "within_declared_profile",
+          "diagnostics": [
+            {
+              "kind": "unknown_limit",
+              "field": "machine.rpm_min"
+            },
+            {
+              "kind": "unknown_limit",
+              "field": "machine.max_feed_mm_min"
+            },
+            {
+              "kind": "unknown_limit",
+              "field": "machine.max_plunge_mm_min"
+            },
+            {
+              "kind": "unknown_limit",
+              "field": "tool.max_rpm"
+            }
+          ],
+          "provenance": {
+            "engine_version": "0.5.0/fs1-policy-1",
+            "schema_version": 1,
+            "dataset": {
+              "id": "sienci-router-reference",
+              "revision": "2026-10-12.1"
+            },
+            "profile": {
+              "identity": {
+                "id": "sienci-soft-single-flute-quarter-inch-slot-prudent",
+                "revision": "1"
+              },
+              "category": "reference",
+              "evidence": "reference_data",
+              "source": {
+                "reference": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf#page=1",
+                "author": "Sienci Labs",
+                "date": "2026-10-12",
+                "permission_or_license": "CC-BY-SA-4.0; see data/feeds-speeds/CC-BY-SA-4.0.txt and README.md",
+                "notes": "Adapted from page 1, Single Flute Flat End Mill UC, quarter-inch, Reduced Speed. Retrieved 2026-10-12 at git 060e2291a1cf17bf9be4f151d7aa539a42ed2b0c; PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8. Date is retrieval, publication date unspecified. Feed/plunge/RPM and slot DOC transcribed unchanged. Inch diameter converted exactly using 25.4 mm/in. Mode names mapped, no numerical reduction. Scope restricted to source machine/material category, full slot, exact diameter/flutes/DOC. Entry unspecified in source; no entry claim or pocket/finishing transfer. Preferred targets are not hard machine/tool limits; none imported. No local trials."
+              },
+              "aggressiveness": "prudent",
+              "scope": {
+                "machine": {
+                  "kind": "exact",
+                  "identity": {
+                    "id": "sienci-longmill-mk2-reference",
+                    "revision": "1"
+                  }
+                },
+                "material": {
+                  "kind": "exact",
+                  "identity": {
+                    "id": "sienci-softwood-soft-plywood-mdf",
+                    "revision": "1"
+                  }
+                },
+                "tool": {
+                  "id": "sienci-reference-single-flute-upcut-quarter-inch",
+                  "revision": "1"
+                },
+                "cutting_family": "flat_endmill",
+                "diameter_mm": {
+                  "min": 6.35,
+                  "max": 6.35
+                },
+                "flute_count": 1,
+                "operation": "full_slot",
+                "doc_mm": {
+                  "min": 2.8,
+                  "max": 2.8
+                },
+                "engagement": {
+                  "kind": "full_width"
+                }
+              },
+              "data": {
+                "kind": "exact_values",
+                "rpm": 17000,
+                "feed_mm_min": 1620,
+                "plunge_mm_min": 810,
+                "doc_mm": 2.8
+              },
+              "reductions": []
+            },
+            "request": {
+              "schema_version": 1,
+              "dataset": {
+                "id": "sienci-router-reference",
+                "revision": "2026-10-12.1"
+              },
+              "machine": {
+                "identity": {
+                  "id": "sienci-longmill-mk2-reference",
+                  "revision": "1"
+                },
+                "rpm_max": 24000
+              },
+              "material": {
+                "identity": {
+                  "id": "sienci-softwood-soft-plywood-mdf",
+                  "revision": "1"
+                },
+                "thickness_mm": 12
+              },
+              "tool": {
+                "identity": {
+                  "id": "sienci-reference-single-flute-upcut-quarter-inch",
+                  "revision": "1"
+                },
+                "cutting_family": "flat_endmill",
+                "diameter_mm": 6.35,
+                "flute_count": 1
+              },
+              "operation": {
+                "kind": "full_slot",
+                "doc_mm": 2.8,
+                "engagement": {
+                  "kind": "known_full_width"
+                },
+                "entry": "direct"
+              },
+              "aggressiveness": "prudent"
+            },
+            "selection_tier": 3,
+            "adjustments": []
+          }
+        },
+        "context_key": "[1,null,{\"kind\":\"layers\",\"layers\":[\"svg\"]},{\"type\":\"profile\",\"offset\":\"outside\",\"contour\":{\"tabs\":{\"active\":false,\"width\":10.0,\"height\":1.0,\"tab_type\":\"rectangle\"},\"leads\":{\"in\":\"off\",\"out\":\"off\",\"in_lenght\":5.0,\"out_lenght\":5.0}},\"profile\":{\"overcut\":false,\"reverse\":false,\"helix\":false}},{\"fs_full_width\":true,\"depth\":-2.8,\"start_depth\":0.0,\"step\":-2.8,\"fast_move_z\":15.0,\"objectorder\":\"nearest\"},{\"unit\":\"mm\",\"mode\":\"mill\",\"comments\":true,\"arcs\":false,\"tool_change\":\"manual_m0_pause\",\"accel\":{\"x\":250.0,\"y\":250.0,\"z\":250.0},\"rapid_speed\":9144.0,\"work_area\":{\"x\":1200.0,\"y\":600.0,\"z\":203.0},\"spindle_rpm_max\":24000},{\"id\":\"sienci-softwood-soft-plywood-mdf\",\"revision\":\"1\"},{\"machine_identity\":{\"id\":\"sienci-longmill-mk2-reference\",\"revision\":\"1\"},\"tools\":[{\"tool_id\":1,\"identity\":{\"id\":\"sienci-reference-single-flute-upcut-quarter-inch\",\"revision\":\"1\"},\"max_rpm\":null}]},{\"origin\":[0.0,0.0],\"width_mm\":500.0,\"height_mm\":500.0,\"thickness_mm\":12.0},[{\"id\":1,\"name\":\"\u00d86.35 mm single flute upcut \u2014 software fixture\",\"kind\":\"endmill\",\"diameter\":6.35,\"tip_angle_deg\":60.0,\"flutes\":1,\"speed\":10000,\"plunge_rate\":500,\"feed_rate\":1000,\"coolant\":\"off\"}]]",
+        "doc_origin": "manual"
+      },
+      "appliedContextKey": "[{\"id\":1,\"kind\":\"profile\",\"toolId\":1,\"sourceLayers\":[\"svg\"],\"depth\":-2.8,\"startDepth\":0,\"step\":-2.8,\"offset\":\"outside\",\"fsFullWidth\":true},{\"unit\":\"mm\",\"mode\":\"mill\",\"comments\":true,\"arcs\":false,\"toolchangeStrategy\":\"manual_m0_pause\",\"fastMoveZ\":15,\"accel\":{\"x\":250,\"y\":250,\"z\":250},\"toolchangeS\":5,\"rapidSpeed\":9144,\"workArea\":{\"x\":1200,\"y\":600,\"z\":203},\"name\":\"FS3.5 SOFTWARE ONLY \u2014 LongMill reference context\",\"capabilities\":[\"mill\"],\"gcodeDialect\":\"linuxcnc\",\"decimalSeparator\":\".\",\"parkAtHome\":false,\"optionalStop\":false,\"spindleRpmMax\":24000,\"fsIdentity\":{\"id\":\"sienci-longmill-mk2-reference\",\"revision\":\"1\"}},[{\"id\":1,\"name\":\"\u00d86.35 mm single flute upcut \u2014 software fixture\",\"kind\":\"endmill\",\"diameter\":6.35,\"flutes\":1,\"speed\":10000,\"plungeRate\":500,\"feedRate\":1000,\"coolant\":\"off\",\"fsIdentity\":{\"id\":\"sienci-reference-single-flute-upcut-quarter-inch\",\"revision\":\"1\"}}],{\"id\":\"sienci-softwood-soft-plywood-mdf\",\"revision\":\"1\"},{\"machine_identity\":{\"id\":\"sienci-longmill-mk2-reference\",\"revision\":\"1\"},\"tools\":[{\"tool_id\":1,\"identity\":{\"id\":\"sienci-reference-single-flute-upcut-quarter-inch\",\"revision\":\"1\"}}]}]"
+    }
+  ],
+  "fixtures": [],
+  "textLayers": []
+}

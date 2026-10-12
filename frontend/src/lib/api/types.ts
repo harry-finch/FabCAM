@@ -55,3 +55,6 @@ export type WiacErrorKind = components['schemas']['WiacErrorKind'];
 export type WiacErrorCode = components['schemas']['WiacErrorCode'];
 export type WiacAutoFix = components['schemas']['WiacAutoFix'];
 export type WiacSourceSpan = components['schemas']['WiacSourceSpan'];
+
+export type FsCamRequest = components['schemas']['FsCamRequest'];
+export type FsCamResponse = components['schemas']['FsCamResponse'];

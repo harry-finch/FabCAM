@@ -10,6 +10,21 @@
 :root {
   color-scheme: light dark;
 
+  /* Compact desktop inspectors: shared rhythm, not a second theme. */
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 24px;
+  --inspector-control-height: 28px;
+  --inspector-font-field: 0.78rem;
+  --inspector-font-meta: 0.7rem;
+  --inspector-value-width: 5rem;
+  --inspector-unit-width: 2.75rem;
+  --inspector-status-width: 5rem;
+  --status-suggested: #8eb8ff;
+  --status-modified: #c8afeb;
+
   /* Dark mode (default) — lifted from near-black to a more readable
      ~13% gray and panel borders bumped so dividers are actually visible. */
   --bg-app: #181818;
@@ -122,6 +137,8 @@
   --text: #1a1a1a;
   --text-strong: #050505;
   --text-muted: #5a5a5a;
+  --status-suggested: #285daa;
+  --status-modified: #70469b;
   --text-faint: #909090;
   --accent: #1d4ed8;
   --accent-strong: #2563eb;
@@ -163,6 +180,8 @@
     --text: #1a1a1a;
     --text-strong: #050505;
     --text-muted: #5a5a5a;
+    --status-suggested: #285daa;
+    --status-modified: #70469b;
     --text-faint: #909090;
     --accent: #1d4ed8;
     --accent-strong: #2563eb;

@@ -933,6 +933,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1017,6 +1019,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1081,6 +1085,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1163,6 +1169,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1240,6 +1248,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1310,6 +1320,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1437,6 +1449,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1496,6 +1510,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1535,6 +1551,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1570,6 +1588,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1613,6 +1633,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1689,6 +1711,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1738,6 +1762,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1788,6 +1814,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -1832,6 +1860,8 @@ mod tests {
                 stock: None,
                 relief_sources: Vec::new(),
                 group_ops_by_tool: false,
+                material: None,
+                fs_context: None,
             };
             let cut_max_x = |toolpath: &[crate::gcode::preview::ToolpathSegment]| -> f64 {
                 toolpath
@@ -1909,6 +1939,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2056,6 +2088,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         for offset in [ToolOffset::Outside, ToolOffset::Inside] {
             let resp = run_pipeline(
@@ -2102,6 +2136,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let cut_max_x = |toolpath: &[crate::gcode::preview::ToolpathSegment]| -> f64 {
             toolpath
@@ -2195,6 +2231,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let annulus_project = Project {
             segments,
@@ -2214,6 +2252,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let baseline = run_pipeline(
             PipelineRequest {
@@ -2300,6 +2340,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2379,6 +2421,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2473,6 +2517,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2585,6 +2631,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2675,6 +2723,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2788,6 +2838,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2893,6 +2945,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -2942,6 +2996,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3015,6 +3071,8 @@ mod tests {
                 stock: None,
                 relief_sources: Vec::new(),
                 group_ops_by_tool: false,
+                material: None,
+                fs_context: None,
             };
             run_pipeline(
                 PipelineRequest {
@@ -3074,6 +3132,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3153,6 +3213,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3218,6 +3280,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3281,6 +3345,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3325,6 +3391,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3375,6 +3443,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3565,6 +3635,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3619,6 +3691,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3693,6 +3767,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3775,6 +3851,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -3830,6 +3908,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let mut spiral_project = cascade_project.clone();
         spiral_project.operations[0].kind = OpKind::Pocket {
@@ -3921,6 +4001,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let gcode = run_pipeline(
             PipelineRequest {
@@ -4010,6 +4092,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let strategies = [
             PocketStrategy::Cascade,
@@ -4107,6 +4191,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let cut_total = |toolpath: &[preview::ToolpathSegment]| -> f64 {
             toolpath
@@ -4206,6 +4292,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -4263,6 +4351,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -4368,6 +4458,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let auto = run_pipeline(
             PipelineRequest {
@@ -4474,6 +4566,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -4567,6 +4661,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         let resp = run_pipeline(
             PipelineRequest {
@@ -4647,6 +4743,8 @@ mod tests {
             stock: None,
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
+            material: None,
+            fs_context: None,
         };
         // Baseline: nocontour + allowance=0.
         let baseline = run_pipeline(

@@ -467,6 +467,10 @@ impl PostProcessor for CpsRecorder {
         });
     }
 
+    fn set_plunge_rate_hint(&mut self, rate: u32) {
+        self.section_rate_v = rate;
+    }
+
     fn linear(&mut self, x: Option<f64>, y: Option<f64>, z: Option<f64>) {
         let before = self.position();
         let (x, y, z) = self.resolve(x, y, z);
@@ -1397,5 +1401,24 @@ mod tests {
         assert!((deep[2].to.z - 2.0).abs() < 1e-9, "full retract");
         assert!((deep[3].to.z - -1.5).abs() < 1e-9, "re-entry clearance");
         assert!((deep[5].to.z - -6.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn active_pass_plunge_hint_supersedes_initial_section_metadata() {
+        let mut rec = CpsRecorder::new();
+        begin(&mut rec);
+        rec.begin_section(&section_ctx(7, tool(3, ToolKind::Endmill, 18000)));
+        rec.set_plunge_rate_hint(250);
+        rec.feedrate(250);
+        rec.linear(None, None, Some(-1.0));
+        rec.end_section();
+        let program = rec.into_program();
+        assert!(matches!(
+            program.sections[0].records[0],
+            ir::Record::Linear {
+                movement: codes::MOVEMENT_PLUNGE,
+                ..
+            }
+        ));
     }
 }

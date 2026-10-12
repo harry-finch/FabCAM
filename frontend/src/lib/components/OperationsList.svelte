@@ -475,17 +475,21 @@
             style:color={op.kind === 'pause' ? null : opSourceCss(op.id, selected)}
             >{KIND_ICON[op.kind]}</span
           >
-          <span class="name">{op.name}</span>
-          <span class="tool"
-            >{#if isProgramOnlyOp(op.kind)}
-              <!-- Program-only ops carry no cutter. Render
+          <span class="op-identity"
+            ><span class="name" title={op.name}>{op.name}</span>
+            <span
+              class="tool"
+              title={isProgramOnlyOp(op.kind) ? kindLabel(op.kind) : toolName(op.toolId)}
+              >{#if isProgramOnlyOp(op.kind)}
+                <!-- Program-only ops carry no cutter. Render
                        a dash with the kind label so the row reads as
                        a deliberate program-flow building block instead
                        of an unconfigured cutting op. -->
-              — {kindLabel(op.kind).toLowerCase()} —
-            {:else}
-              {toolName(op.toolId)}
-            {/if}</span
+                — {kindLabel(op.kind).toLowerCase()} —
+              {:else}
+                {toolName(op.toolId)}
+              {/if}</span
+            ></span
           >
           {#if opHasPanelWarning(op)}
             <button
@@ -793,12 +797,9 @@
   }
   .row {
     display: grid;
-    /* Columns: grip · enable · caret · icon · name(1fr) · tool · status ·
-       [Re-pick] · duplicate · delete. The Re-pick button is conditional,
-       so the row has 9 or 10 children — the trailing `auto` reserves the
-       10th track so the delete `×` never wraps to a second line when
-       Re-pick shows (empty/collapsed otherwise). */
-    grid-template-columns: auto auto auto auto minmax(0, 1fr) minmax(0, auto) auto auto auto auto;
+    /* Grip / enabled / caret / type / identity / status / optional re-pick /
+       duplicate / delete. Identity carries a primary name and secondary cutter. */
+    grid-template-columns: auto auto auto auto minmax(0, 1fr) auto auto auto auto;
     align-items: center;
     gap: 0.35rem;
     padding: 0.25rem 0.4rem;
@@ -834,14 +835,21 @@
     width: 0.8rem;
     font-size: 0.7rem;
   }
+  .op-identity {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
   .name {
+    font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .tool {
     color: var(--text-muted);
-    font-size: 0.72rem;
+    font-size: var(--inspector-font-meta);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

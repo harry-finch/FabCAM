@@ -1,3 +1,4 @@
+import { referenceContext } from '../state/feeds-speeds';
 // Adapter from the frontend ProjectState shape to the wire Project the
 // ivac_core pipeline consumes. Camel-case → snake-case, and the
 // kind-specific Operation params get materialized from the per-op
@@ -204,6 +205,8 @@ interface ProjectStateView {
   /// text, not the work area. NO stock outline (that would loop). Optional;
   /// falls back to `transformedImport`.
   stockSizingImport?: ImportResponse | null;
+  material?: Schemas['FsIdentity'];
+  fsContext?: Schemas['FsContext'];
   machine: MachineSettings;
   tools: FrontToolEntry[];
   operations: OpEntry[];
@@ -726,6 +729,8 @@ function buildOp(opIn: OpEntry, machine: MachineSettings): WireOp {
     // single-sided projects serialize byte-identically, matching serde).
     ...(opIn.side === 'back' ? { side: 'back' as const } : {}),
     params: {
+      ...(op.appliedCutting ? { applied_cutting: op.appliedCutting } : {}),
+      ...(op.fsFullWidth ? { fs_full_width: true } : {}),
       // Program-only ops (Pause, Homing, Probe, CycleMarker,
       // GcodeInclude) construct without `depth` / `startDepth` —
       // they have no meaningful depth schedule. Emit explicit 0
@@ -868,6 +873,12 @@ export function buildProject(state: ProjectStateView): WireProject | null {
   const stock = buildStock(state);
   return {
     segments: imp?.segments ?? [],
+    ...(state.material
+      ? { material: { id: state.material.id, revision: state.material.revision } }
+      : {}),
+    ...(state.fsContext || state.machine.fsIdentity || state.tools.some((t) => t.fsIdentity)
+      ? { fs_context: referenceContext(state.machine, state.tools, state.fsContext) }
+      : {}),
     machine: buildMachine(state.machine),
     tools: state.tools.map(buildTool),
     operations: state.operations.map((op) => buildOp(op, state.machine)),

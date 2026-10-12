@@ -193,6 +193,7 @@ pub fn version() -> VersionResponse {
     let mut capabilities = vec![
         "import-dxf",
         "generate-gcode",
+        "feeds-speeds",
         "post-linuxcnc",
         "post-grbl",
         "post-hpgl",
@@ -538,4 +539,14 @@ pub async fn unwatch_all(state: tauri::State<'_, AppState>) -> Result<(), String
         .lock()
         .map_err(|e| format!("watcher mutex poisoned: {e}"))?
         .unwatch_all()
+}
+
+#[tauri::command]
+pub async fn feeds_speeds_cmd(
+    req: ivac_core::feeds_speeds::FsCamRequest,
+) -> Result<ivac_core::feeds_speeds::FsCamResponse, String> {
+    tokio::task::spawn_blocking(move || ivac_core::feeds_speeds::feeds_speeds(req))
+        .await
+        .map_err(|e| internal(e.to_string()))?
+        .map_err(|e| serialize_error(ivac_core::Error::bad_input(e)))
 }

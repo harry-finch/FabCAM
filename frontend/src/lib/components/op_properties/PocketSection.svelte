@@ -295,51 +295,54 @@
     {@const toolDefault = opTool?.defaultXyOverlap}
     {@const inheritedOverlap = toolDefault ?? 0.5}
     {@const opOverlap = op.xyOverlap}
-    <label
-      class="row"
-      title={opOverlap === undefined
-        ? t('ops.pocket.xy_overlap.help_empty', {
-            source:
-              toolDefault !== undefined
-                ? t('ops.pocket.xy_overlap.source_tool', {
-                    value: toolDefault,
-                    tool: opTool?.name ?? '',
-                  })
-                : t('ops.pocket.xy_overlap.source_global'),
-          })
-        : t('ops.pocket.xy_overlap.help_set', {
-            source:
-              toolDefault !== undefined
-                ? t('ops.pocket.xy_overlap.inherit_tool', {
-                    value: toolDefault,
-                    tool: opTool?.name ?? '',
-                  })
-                : t('ops.pocket.xy_overlap.inherit_global'),
-          })}
-    >
-      <span>{t('ops.pocket.xy_overlap.label')}</span>
-      <div class="num-cell">
-        <input
-          type="number"
-          step="0.05"
-          min="0.05"
-          max="0.95"
-          value={opOverlap ?? ''}
-          placeholder={String(inheritedOverlap)}
-          class:inherit-italic={opOverlap === undefined}
-          onchange={(e) => {
-            const raw = (e.currentTarget as HTMLInputElement).value;
-            if (raw === '') {
-              patch('xyOverlap', undefined);
-              return;
-            }
-            const v = parseFloat(raw);
-            if (!isNaN(v)) patch('xyOverlap', Math.max(0.05, Math.min(0.95, v)));
-          }}
-        />
-        <span class="unit" title={t('ops.pocket.xy_overlap.unit_help')}>fraction</span>
-      </div>
-    </label>
+    <details>
+      <summary>{t('fs35.advanced_depth')}</summary>
+      <label
+        class="row"
+        title={opOverlap === undefined
+          ? t('ops.pocket.xy_overlap.help_empty', {
+              source:
+                toolDefault !== undefined
+                  ? t('ops.pocket.xy_overlap.source_tool', {
+                      value: toolDefault,
+                      tool: opTool?.name ?? '',
+                    })
+                  : t('ops.pocket.xy_overlap.source_global'),
+            })
+          : t('ops.pocket.xy_overlap.help_set', {
+              source:
+                toolDefault !== undefined
+                  ? t('ops.pocket.xy_overlap.inherit_tool', {
+                      value: toolDefault,
+                      tool: opTool?.name ?? '',
+                    })
+                  : t('ops.pocket.xy_overlap.inherit_global'),
+            })}
+      >
+        <span>{t('ops.pocket.xy_overlap.label')}</span>
+        <div class="num-cell">
+          <input
+            type="number"
+            step="0.05"
+            min="0.05"
+            max="0.95"
+            value={opOverlap ?? ''}
+            placeholder={String(inheritedOverlap)}
+            class:inherit-italic={opOverlap === undefined}
+            onchange={(e) => {
+              const raw = (e.currentTarget as HTMLInputElement).value;
+              if (raw === '') {
+                patch('xyOverlap', undefined);
+                return;
+              }
+              const v = parseFloat(raw);
+              if (!isNaN(v)) patch('xyOverlap', Math.max(0.05, Math.min(0.95, v)));
+            }}
+          />
+          <span class="unit" title={t('ops.pocket.xy_overlap.unit_help')}>fraction</span>
+        </div>
+      </label>
+    </details>
   {/if}
 </fieldset>
 

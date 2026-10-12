@@ -17,6 +17,7 @@ import type { WasmModule } from './wasm';
 import type { WorkerRequest, WorkerResponse } from './wasm-worker-protocol';
 import type {
   GenerateRequest,
+  FsCamRequest,
   HelixRadiusRequest,
   RenderTextRequest,
   WireTextLayer,
@@ -36,7 +37,7 @@ let modPromise: Promise<WasmModule> | null = null;
 function loadModule(): Promise<WasmModule> {
   if (!modPromise) {
     modPromise = (async () => {
-      const wasm = (await import(/* @vite-ignore */ 'ivac-wasm')) as unknown as WasmModule;
+      const wasm = (await import('ivac-wasm')) as unknown as WasmModule;
       if (typeof wasm.default === 'function') {
         await wasm.default();
       }
@@ -110,6 +111,10 @@ ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
         break;
       case 'renderTextLayer':
         post({ id, type: 'result', value: m.renderTextLayer(args[0] as WireTextLayer) });
+        break;
+      case 'feedsSpeeds':
+        if (!m.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this WASM build');
+        post({ id, type: 'result', value: m.feedsSpeeds(args[0] as FsCamRequest) });
         break;
       case 'computeHelixRadius':
         post({ id, type: 'result', value: m.computeHelixRadius(args[0] as HelixRadiusRequest) });

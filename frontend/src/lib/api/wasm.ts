@@ -10,6 +10,8 @@ import type {
   GenerateRequest,
   GenerateResponse,
   TwoSidedGenerateResponse,
+  FsCamRequest,
+  FsCamResponse,
   HelixRadiusRequest,
   HelixRadiusResponse,
   ImportResponse,
@@ -38,6 +40,7 @@ export type WasmModule = {
   generateTwoSided?: (request: GenerateRequest) => TwoSidedGenerateResponse;
   renderText: (request: RenderTextRequest) => RenderTextResponse;
   renderTextLayer: (layer: WireTextLayer) => RenderTextLayerResponse;
+  feedsSpeeds?: (request: FsCamRequest) => FsCamResponse;
   computeHelixRadius: (request: HelixRadiusRequest) => HelixRadiusResponse;
   /// Rasterize an STL byte stream to a relief height grid — the serialized
   /// SurfaceField `{origin,cell,cols,rows,z}`, or null when the mesh has no
@@ -56,7 +59,7 @@ async function loadModule(): Promise<WasmModule> {
       // The pkg is produced by `wasm-pack build crates/ivac-wasm --target web`
       // and lives under crates/ivac-wasm/pkg/. Vite resolves it relative to
       // the frontend root once the symlink (or pnpm linked dep) is in place.
-      const wasm = (await import(/* @vite-ignore */ 'ivac-wasm')) as WasmModule;
+      const wasm = (await import('ivac-wasm')) as WasmModule;
       if (typeof wasm.default === 'function') {
         await wasm.default();
       }
@@ -162,6 +165,12 @@ export class WasmWiacClient implements WiacClient {
   async renderTextLayer(layer: WireTextLayer): Promise<RenderTextLayerResponse> {
     const m = await loadModule();
     return m.renderTextLayer(layer);
+  }
+
+  async feedsSpeeds(request: FsCamRequest): Promise<FsCamResponse> {
+    const m = await loadModule();
+    if (!m.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this WASM build');
+    return m.feedsSpeeds(request);
   }
 
   async computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse> {

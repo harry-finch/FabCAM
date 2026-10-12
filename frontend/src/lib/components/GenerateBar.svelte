@@ -275,6 +275,8 @@
     abortController = new AbortController();
     try {
       const opProject = buildProject({
+        material: project.data.material,
+        fsContext: project.data.fsContext,
         transformedImport: project.transformedImport,
         geometryView: project.geometryView,
         stockSizingImport: project.stockSizingImport,
