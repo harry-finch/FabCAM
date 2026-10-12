@@ -1,5 +1,33 @@
 # Agent Instructions
 
+## Fork governance after M4
+
+This section takes precedence over the upstream Git/session assumptions below.
+Read `docs/shopbot-modernization/STATUS.md` and `ROADMAP.md` before new work.
+M0–M4 are the completed ShopBot foundation; M4 baseline is
+`e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1`. Preserve their names and evidence limits.
+Use named future tracks: FS (Feeds & Speeds), UX (milling workflow), CAD
+(geometry preparation), WJ (ProtoMAX/waterjet), VINYL (drag knife, lower priority).
+Priority: FS foundation → priority milling UX/CAM improvements → WJ → VINYL.
+Every milestone ends at human approval; recording a roadmap does not authorize
+starting FS0 or implementing any later milestone.
+
+The future FS assistant is milling-specific, independent of UI and toolpath
+geometry generation, and independently testable. An adapter supplies CAM
+context; accepted or manually edited parameters are explicitly persisted.
+Post-processors must not call the engine dynamically. Manual overrides remain
+authoritative; aggressiveness and evidence are separate. Waterjet/drag knife
+must not depend on FS. See `docs/shopbot-modernization/feeds-speeds/README.md`
+and ADR-0002. Use the architecture/documentation skills; use feeds-speeds only
+if it exists, and do not create that skill without an explicit request.
+
+Work on `feature/shopbot-mvp`; origin is `harry-finch/ivacam`, upstream is
+`aalarchiv/ivacam`. Commits and pushes require explicit user authorization;
+M4 publication approval does not authorize publication of subsequent work.
+No automatic merge, PR, upstream sync or force-push. A reviewable documentation
+handoff may remain uncommitted pending approval.
+
+
 This project uses **bd** (beads) for issue tracking. Run `bd prime` for full workflow context.
 
 ## Quick Reference

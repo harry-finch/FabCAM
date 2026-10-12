@@ -209,3 +209,32 @@ changes on feature/shopbot-mvp, with exact tested r2 project/SBP and build manif
 retained as repository fixtures. No rebuild or modification of the delivered
 app/SBP; no PR, merge, upstream synchronization or new implementation. FS0 and
 the separate governance update remain subsequent work.
+
+## 2026-10-12 — Post-M4 governance and Feeds & Speeds planning
+
+- Verified clean initial feature/shopbot-mvp checkout, M4 HEAD and local origin
+  tracking ref both `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1`; no network
+  fetch or upstream sync performed. Read M4 qualification/spindle/reference
+  records; retain operator-reported evidence limits and unchanged artifacts.
+- Used local architecture/documentation skills; no feeds-speeds skill found or
+  created. Read existing model entry points only to ground future boundaries;
+  the FS0 ownership/consumer audit has not started.
+- Updated mirrored AGENTS/CLAUDE fork governance and roadmap: retain completed
+  M0–M4, use FS/UX/CAD/WJ/VINYL tracks, FS foundation before priority milling
+  improvements, then WJ and lower-priority VINYL; CAD scheduling remains open.
+- Recorded FS0–FS5 scope, exclusions, acceptance and approval gates; one useful
+  FS planning contract and proposed ADR-0002 capture independent milling engine,
+  adapter, explicit persisted application, manual authority, configurable
+  provenance-bearing data and separate aggressiveness/evidence.
+- Updated architecture/upstream/deferred-process navigation and current STATUS.
+  Documentation only: no code, CAM behavior, algorithms, schema, skill, fixture,
+  application or SBP changes. No FS0 implementation or audit, no FS5 work.
+- Tracking ivac-x4bi. Documentation verification: whitespace, relative Markdown
+  links and changed-file scope. No code tests/build needed for this change.
+  Stop for user review; no commit/push or subsequent milestone start authorized.
+
+## 2026-10-12 — Governance commit approval
+
+User authorized committing the documentation/governance changes. Commit locally
+on feature/shopbot-mvp; no push or FS0 start authorized. Documentation whitespace
+and changed-file scope verified before commit.

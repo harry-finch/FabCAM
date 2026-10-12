@@ -8,13 +8,14 @@ the existing engine, replacing the lab's VCarve 8 workflow progressively.
 ## Navigation
 
 - [STATUS](STATUS.md): current handoff and Git baseline.
+- [Feeds & Speeds planning](feeds-speeds/README.md): future milling assistant contract; FS0 unstarted.
 - [ROADMAP](ROADMAP.md): scope, milestone gates and approval policy.
 - [ARCHITECTURE](ARCHITECTURE.md): verified module map and boundaries.
 - [UPSTREAM_ANALYSIS](UPSTREAM_ANALYSIS.md): feature evidence and dispositions.
 - [TESTING_STRATEGY](TESTING_STRATEGY.md): build procedure and executed baseline.
 - [CAM_VALIDATION](CAM_VALIDATION.md): qualification and physical evidence status.
 - [M2 qualification](M2_QUALIFICATION.md): OpenSBP contract, output evidence and limits.
-- [M4 validation](M4_VALIDATION.md): software handoff and pending human machine gates.
+- [M4 validation](M4_VALIDATION.md): software handoff, operator qualification and evidence limits.
 - [M3 qualification](M3_QUALIFICATION.md): loadable machine profile and unverified parameters.
 - [Sorbonne machine record](shopbot/SORBONNE_MACHINE.md): reported facts and physical verification requirements.
 - [M1 qualification](M1_QUALIFICATION.md): corpus, defects, fixes and limits.

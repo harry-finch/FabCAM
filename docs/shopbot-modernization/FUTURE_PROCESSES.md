@@ -54,7 +54,12 @@ process-aware preview and a distinct exporter still require coordinated changes.
 Hence neither a trivial new post (A) nor demonstrated wholesale architectural
 failure (C) is supported by M0 evidence.
 
-Later M5 should determine the smallest additive boundary and record an ADR after
+Later WJ architecture qualification should determine the smallest additive boundary and record an ADR after
 reading serialization, frontend, caching, simulation and post consumers. OMAX
 MAKE handoff/directives must be verified later; direct machine control remains
 out of scope. This assessment makes no physical-machine or file-format claims.
+
+Post-M4 scheduling uses the WJ track rather than global M5–M10 numbering.
+See ROADMAP for the deferred sequence and priorities. The milling-specific FS
+engine must not become a waterjet or drag-knife dependency; share appropriate
+infrastructure only. No WJ/VINYL work is authorized by the FS planning update.

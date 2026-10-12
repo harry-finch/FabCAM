@@ -16,12 +16,12 @@ M3 approved and pushed. On 2026-10-12 the user authorized the M4 commit/push.
 - Upstream: `https://github.com/aalarchiv/ivacam.git`.
 - Branch: `feature/shopbot-mvp`.
 - M4 source base: `b8a073a` (approved M3); M2 is `047a758`.
-- M4 publication: authorized 2026-10-12 on `feature/shopbot-mvp`; this commit records the milestone.
+- M4 baseline/publication: `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1` on `feature/shopbot-mvp`; HEAD and local origin tracking ref match.
 - No PR, merge or upstream synchronization is included in M4 publication.
 - Current ready-to-launch macOS arm64 app: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/ivaCAM.app`.
 - Current machine file: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/M4-r2-carre-MDF.sbp`.
 - Older delivery is retained unchanged; r2 BUILD.json identifies the current baseline.
-- Version 0.5.0; M3 base plus uncommitted M4 changes. Delivery `BUILD.json`
+- Version 0.5.0; delivery was built from M3 plus the M4 changes now committed. Delivery `BUILD.json`
   records executable/project/SBP hashes. Local ad-hoc signature verifies; not notarized.
 
 ## Verified software result
@@ -46,10 +46,25 @@ M2 broad Rust baseline remains 1,158 serial passes, core without CPS 1,060;
 M3 clearance-refusal integration passes. Existing cache race ivac-htc8 and
 partial WASM freshness guard ivac-5g51 remain open. No Windows/Linux run.
 
-## Next action
+## Current planning and next action
 
-M4 commit/push authorized by the user. No code, tested
-application or programme changed during the reference comparison. Human evidence
-task ivac-o4oy closes with operator observations and recorded reference comparison.
-After M4, perform the separately requested governance update before FS0; do not
-start FS, edit AGENTS/roadmap for FS, or implement deferred 3D changes automatically.
+Post-M4 governance now records FS/UX/CAD/WJ/VINYL named tracks. Priority:
+FS foundation → priority milling UX/CAM improvements → WJ → VINYL.
+The [FS contract](feeds-speeds/README.md) and
+[ADR-0002](adr/ADR-0002-feeds-speeds-boundary.md) record a milling-only,
+independent recommendation engine, CAM adapter and explicitly persisted applied
+parameters. Aggressiveness is separate from evidence; manual edits remain
+authoritative. Post-processors never invoke the recommendation engine.
+
+This update is documentation only; the user authorized its local commit; no FS0 audit,
+implementation, algorithm, CAM behavior, schema or application change.
+No feeds-speeds skill exists in the inspected repo-local skill catalog; none
+created. Governance tracking: ivac-x4bi.
+
+STOP for user approval. Exact next step after explicit authorization: start
+**FS0 architecture and data-model qualification** from the M4 baseline, using
+the architecture and documentation skills. Audit serialized parameter ownership
+and all consumers, then propose boundary/models, preset precedence/fallback,
+reproducibility/migration and a test strategy. Implement no recommendation
+algorithm during FS0. Local commit authorized by the user; push still requires explicit
+authorization under ROADMAP Git policy.

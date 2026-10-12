@@ -92,3 +92,12 @@ ADR-0001 explains browser limits/private IR coupling/manual spindle policy.
 Two existing infrastructure weaknesses surfaced, tracked separately rather than
 rewriting caches or build scripts in this milestone: ivac-htc8 and ivac-5g51.
 M1 publication authorized and completed; M2 remains uncommitted pending approval.
+
+## Post-M4 FS planning disposition
+
+**DEFER implementation**, with an eventual additive engine/adapter extension to
+be qualified in FS0. Preserve current Tool defaults, operation overrides, machine
+constraints and CAM/post consumers until their ownership/compatibility audit.
+No recommendation capability is claimed by this planning update. No source,
+public model, schema or dependency changes; no upstream synchronization.
+See ADR-0002 and feeds-speeds/README.md for the requested milling-only boundary.

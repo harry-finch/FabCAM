@@ -28,10 +28,43 @@ M0–M4 exclude waterjet implementation, nesting, multiple sheets, full CAD, PDF
 import, inlays, advanced 3D/adaptive/rest machining, plugin architecture, major
 frontend rewrite and direct machine control unless explicitly authorized.
 
-After M4, milling product tracks can address setup/warnings/tabs/ramps and UX,
-then dogbones/presets/templates/CAD/job sheets, then advanced workflows.
-Future ProtoMAX milestones remain deferred: M5 architecture, M6 semantics,
-M7 OMX post, M8 corpus, M9 MAKE validation, M10 physical validation.
+## Post-M4 named tracks
+
+M0–M4 remain the completed ShopBot foundation; no global M5/M6 sequence follows.
+M4 baseline: `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1`, qualified at the
+operator-reported evidence level documented in M4_VALIDATION.
+
+| Track | Scope | Status / priority |
+| --- | --- | --- |
+| FS — Feeds & Speeds | Conservative, pedagogical milling assistant; independent engine and CAM adapter | Planned; foundation first; FS0 not started |
+| UX — Milling workflow | Priority setup, warnings, tabs/ramps and milling CAM/UX improvements | Deferred until FS foundation review; individual milestones need scoping/approval |
+| CAD — Geometry preparation | Dogbones and geometry preparation; no full CAD rewrite implied | Deferred; scope and scheduling require approval |
+| WJ — ProtoMAX / Waterjet | Architecture → process semantics → OMX post → corpus → MAKE validation → physical validation | Deferred after priority milling improvements; replaces former M5–M10 labels |
+| VINYL — Drag knife / vinyl | Improvements to existing drag-knife workflows | Deferred, lower priority after WJ |
+
+Intended order: **Feeds & Speeds foundation → priority milling UX/CAM
+improvements → ProtoMAX/waterjet → lower-priority vinyl work**. This order
+is not authorization to start or to finish all FS milestones before any UX work.
+CAD scheduling remains open. Each track milestone needs its own approval gate.
+
+## FS — Feeds & Speeds Assistant
+
+The [planning contract](feeds-speeds/README.md) defines subsystem constraints;
+[ADR-0002](adr/ADR-0002-feeds-speeds-boundary.md) records independence,
+persistence and process separation. All milestones below are unstarted.
+
+| Milestone | Goal and included scope | Excluded scope | Acceptance criteria | Status |
+| --- | --- | --- | --- | --- |
+| FS0 — Architecture and data-model qualification | Audit existing models and decide crate/module boundary; RPM/feed/plunge/stepdown/stepover ownership; material; physical Tool vs cutting presets; request/recommendation/resolved models; preset/data schema; precedence and fallback; aggressiveness, evidence, provenance; reproducibility and test strategy | Recommendation algorithms, engine implementation, UI integration | Source-backed ownership/consumer audit; documented decisions and unresolved questions; compatibility/migration and test plan; ADRs where needed; human approval | Planned; not started |
+| FS1 — Pure recommendation engine MVP | Independently testable Rust engine; deterministic chipload/feed relationship; simple machine constraints; operation context and profile/pocket/slotting distinctions; conservative policies; unit tests | Deep UI integration; diagnostic assistant | Deterministic tests cover units, constraints, missing/invalid context, operation distinctions and conservative policies; no UI/geometry dependency; human approval | Planned |
+| FS2 — Initial data profiles and provenance | Small configurable dataset relevant to fablab materials/tools; documented sources, provenance and evidence levels | Unauthorized proprietary copying; hidden cutting constants inside algorithms | Versioned data with traceable sources and evidence; data validation/loading tests; reference vs local tested/validated profiles distinguishable; human approval | Planned |
+| FS3 — CAM integration and UX | Adapter supplies known CAM context; simple Machine → Material → Tool → Operation → Recommendation flow; separate advanced view; explicit application and manual overrides | Dynamic post-time recommendation; silent recalculation | Applied values persist across save/reopen independent of engine/data changes; manual edits survive until deliberate recalculation; adapter and round-trip tests; human approval | Planned |
+| FS4 — Fablab validation and calibrated presets | Controlled physical tests recording machine/material/tool/operation and observations; local tested/validated presets | Unsupported claims of validation | Documented validation criteria, test conditions/results and preset applicability limits before a validated label; human approval | Planned |
+| FS5 — Diagnostic assistant | Possible symptoms: hot tool, melting plastic, chatter, overloaded sound, fine chips, poor finish; possible adjustments to feed/RPM/DOC/stepover/strategy | Any current implementation | Future scope, evidence and acceptance criteria must be qualified and approved before work | Deferred future work |
+
+FS0 is the next proposed milestone, **not started by this governance update**.
+No recommendation engine, algorithm, data schema or CAM behavior changes are
+included here. WJ and VINYL must not depend on the milling FS engine.
 
 ## Git policy
 

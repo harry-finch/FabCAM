@@ -97,3 +97,17 @@ changing serialized types or IR version. The owned post checks IR v1 before
 using existing dispatch. Generic CAM, simulation and public API are retained.
 Pure WASM has no CPS; CPS-enabled transport is required. ProtoMAX process-event
 gaps remain deferred; the ShopBot post introduces no universal process layer.
+
+## Planned post-M4 milling assistant
+
+The future [Feeds & Speeds subsystem](feeds-speeds/README.md) follows
+[ADR-0002](adr/ADR-0002-feeds-speeds-boundary.md): CAM context → adapter → pure
+milling recommendation engine → user acceptance/edit → explicit persisted
+parameters → existing CAM/post flow. The engine is independent of UI and geometry
+generation; post-processors never invoke it. WJ/VINYL remain independent of it.
+Aggressiveness and evidence/provenance are separate; manual overrides are protected.
+
+This is a planned boundary, not an implemented subsystem. FS0 has not started;
+crate/module, material/preset and request/recommendation/resolved models,
+precedence/fallback and compatibility decisions await its audit. Current Tool,
+operation and machine types remain unchanged. See ROADMAP for acceptance gates.
