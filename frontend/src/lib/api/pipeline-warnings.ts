@@ -70,6 +70,7 @@ export type PipelineSeverity = 'critical' | 'warning' | 'info';
 ///   chamfer: the internal swap to the finish tool can't happen, so
 ///   the chamfer cuts with the drill still loaded.
 const CRITICAL_KINDS: ReadonlySet<string> = new Set([
+  'fixture_path_collision',
   'tool_too_large',
   'frame_padding_below_tool_radius',
   'op_order_suspect',
@@ -120,6 +121,7 @@ const CRITICAL_KINDS: ReadonlySet<string> = new Set([
 
 export function pipelineWarningSeverity(w: PipelineWarning): PipelineSeverity {
   if (CRITICAL_KINDS.has(w.kind)) return 'critical';
+  if (w.kind === 'entry_representation') return 'info';
   return 'warning';
 }
 

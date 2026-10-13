@@ -83,5 +83,6 @@ describe('fixtureAt', () => {
     const b = box(2, 0, 0, 10, 10);
     expect(fixtureAt([a, b], 0, 0)).toBe(1);
     expect(fixtureAt([b, a], 0, 0)).toBe(2);
+    expect(fixtureAt([a, b], 0, 0, 2)).toBe(2);
   });
 });

@@ -31,3 +31,11 @@ source notes/hash and attribution. Existing license text accompanies the bundle.
 These statuses are scoped engineering distribution decisions, not blanket legal
 permission for all material on a vendor site. New files, rights exclusions or new
 sources require their own review. No proprietary extended pack was populated.
+
+## FS3.9 distribution delta — 2026-10-13
+
+Reviewed bundled revision 2026-10-13.1 adds FabCAM adaptation declarations, not
+cutting rows. The same six pinned Sienci profiles/source notes/numbers remain
+unchanged. Original and derived data remain separate under the existing CC BY-SA
+metadata; prior version is retained for regression. No manufacturer permission
+status changed, no private records populated and no public Sorbonne license chosen.

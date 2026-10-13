@@ -489,7 +489,7 @@ fn paths_for(indices: &[usize], objects: &[VcObject], cache: &mut TessCache) -> 
 /// DXF produced a single annulus that machined straight through the boss.
 /// We now recurse so each outer at any depth becomes its own region with
 /// its direct children as holes.
-fn polytree_to_regions(
+pub(crate) fn polytree_to_regions(
     tree: &PolyTreeD,
     source_idx: usize,
     layer: &str,

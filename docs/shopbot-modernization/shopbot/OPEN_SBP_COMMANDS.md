@@ -49,3 +49,18 @@ and after final clearance from MTCoff. SO syntax: official ComRef page 26.
 TR syntax/RPM and 2s timed dwell are evidenced by supplied trophee.sbp.
 No CN90/C9 is emitted; those local routines can alter offsets and move axes.
 See ../M4_SPINDLE_R2.md. This opt-in has not been physically qualified.
+
+## UX1 software extension — 2026-10-13
+
+No command inventory change. Scoped curved Ramp uses existing M3 XYZ through CPS
+0.01 mm XYZ linearization. Direct output remains compatible with M2 goldens.
+Helix, Ramp+tabs/leads, actual vertical fallback, nonzero numeric G54 and G55–G59
+are deliberately rejected; physical qualification is not claimed. See
+[UX1 qualification](../ux/UX1_QUALIFICATION.md).
+
+UX1 continued parity qualification uses the same movement/scaffold inventory to
+decode final preview; no added controller syntax. Rounded XYZ chords, separated
+JZ/J2 axes, MS feed and PAUSE dwell are authoritative for final simulation. Startup
+operator trajectory/manual actions are not predicted. Genuine Helix remains
+unqualified for CAM-region/contour-transition reasons; geometry-invalid fallbacks
+refuse explicitly, independently of representability by M3. See ADR-0007.

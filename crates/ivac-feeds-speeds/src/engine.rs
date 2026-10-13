@@ -360,6 +360,7 @@ fn calculate(
             request: r.clone(),
             selection_tier: tier,
             adjustments,
+            derivation: None,
         },
     })
 }

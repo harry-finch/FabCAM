@@ -416,9 +416,7 @@
     margin: 0.2rem 0 0 0.5rem;
     padding-left: 0.3rem;
     border-left: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
-    /* The sidebar accordion gives this host the active 1fr row and
-       clips overflow on the host wrapper, so we don't need a second
-       max-height cap here — see LayerList for the same fix. */
+    /* Active host limits long content; short lists retain natural height. */
     overflow-y: auto;
   }
   ul {

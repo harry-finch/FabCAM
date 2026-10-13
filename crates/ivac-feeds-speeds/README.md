@@ -64,3 +64,10 @@ Run `RUSTC_WRAPPER='' cargo test -p ivac-feeds-speeds --locked --offline`.
 See [FS1 qualification](../../docs/shopbot-modernization/feeds-speeds/FS1_QUALIFICATION.md).
 
 See [FS2 qualification](../../docs/shopbot-modernization/feeds-speeds/FS2_QUALIFICATION.md).
+
+FS3.9 extends source-pack resolution with bounded normalized reference adaptations,
+immutable source snapshots, explicit transfer scopes, graph taxonomy and sorted
+matching traces. Legacy Engine exact mathematics remain unchanged. See
+`docs/shopbot-modernization/feeds-speeds/FS3_9_MATCHING.md` and the reproducible
+`coverage` example. Schema3 is additive; physically supported exact presets never
+inherit diameter/class transfers. No production cutting dataset is embedded here.

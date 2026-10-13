@@ -23,6 +23,7 @@ import {
   loadFile,
   loadProjectFile,
   saveProject,
+  openAny,
   confirmDiscardIfDirty,
 } from './file_ops';
 import { dragHasFiles } from '../state/app-menu';
@@ -109,7 +110,7 @@ export function dismissReopen(): void {
 export function dismissReopenOnceLoaded(): void {
   const hasImport = project.transformedImport;
   const hasPath = project.activeProjectPath;
-  if (!hasImport && !hasPath) return;
+  if (!project.documentActive && !hasImport && !hasPath) return;
   // Deferred so the prompt clear runs outside the effect scheduler.
   // Inline mutation would self-trigger the calling effect (it reads
   // `reopenPrompt` itself), which works but is fragile to refactor.
@@ -162,6 +163,10 @@ export function mirrorMachineProfileOnChange(): void {
 /// ConfirmPrompt (same dialog as Open / Quit) rather than a native
 /// window.confirm.
 export async function openRecentProject(path: string): Promise<void> {
+  if (!isDesktop()) {
+    await openAny();
+    return;
+  }
   if (!(await confirmDiscardIfDirty(t('dialog.action.load_recent_project')))) return;
   if (isProjectFilePath(path)) await loadProjectPath(path);
   else await loadFromPath(path);

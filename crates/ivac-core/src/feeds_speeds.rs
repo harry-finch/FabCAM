@@ -644,6 +644,92 @@ mod tests {
         p.operations[0] = action(p, true).applied_op.unwrap();
     }
     #[test]
+    fn approximate_proposal_apply_and_reopen_keep_resolved_values_authoritative() {
+        let mut p = fixture();
+        p.tools[0].diameter = 6.0;
+        p.material = Some(fs::taxon_identity("wood.softwood"));
+        p.fs_context.as_mut().unwrap().machine_identity = Some(fs::Identity {
+            id: "machine/fablab-router".into(),
+            revision: "1".into(),
+        });
+        p.operations[0].kind = OpKind::Pocket {
+            strategy: crate::project::PocketStrategy::Cascade,
+            contour: Default::default(),
+            pocket: Default::default(),
+        };
+        p.operations[0].params.step = Some(-1.0);
+        let pack = fs::load_source_pack_json(include_str!(
+            "../../../data/feeds-speeds/packs/sienci-longmill.v3.json"
+        ))
+        .unwrap();
+        let data = serde_json::to_string(&fs::PackCollection {
+            source_packs: vec![pack],
+        })
+        .unwrap();
+        let before = serde_json::to_string(&p).unwrap();
+        let preview = feeds_speeds(FsCamRequest {
+            project: p.clone(),
+            op_id: 1,
+            dataset_json: data.clone(),
+            aggressiveness: fs::Aggressiveness::Prudent,
+            apply: false,
+        })
+        .unwrap();
+        assert!(preview.applied_op.is_none());
+        assert_eq!(serde_json::to_string(&p).unwrap(), before);
+        let applied = feeds_speeds(FsCamRequest {
+            project: p.clone(),
+            op_id: 1,
+            dataset_json: data,
+            aggressiveness: fs::Aggressiveness::Prudent,
+            apply: true,
+        })
+        .unwrap();
+        p.operations[0] = applied.applied_op.unwrap();
+        p.operations[0]
+            .params
+            .applied_cutting
+            .as_mut()
+            .unwrap()
+            .slots[0]
+            .feed_mm_min = 1200;
+        p.operations[0]
+            .params
+            .applied_cutting
+            .as_mut()
+            .unwrap()
+            .slots[0]
+            .origins
+            .feed = CuttingOrigin::Manual;
+        let restored: Project = serde_json::from_str(&serde_json::to_string(&p).unwrap()).unwrap();
+        let rates =
+            saved_rates(&restored.operations[0], &restored.tools[0], PassKind::Rough).unwrap();
+        assert_eq!(rates, (17000, 765, 1200));
+        let mut private = fs::load_source_pack_json(include_str!(
+            "../../../data/feeds-speeds/packs/sienci-longmill.v3.json"
+        ))
+        .unwrap();
+        private.manifest.distribution = fs::Distribution::LocalOnly;
+        for profile in &mut private.dataset.profile_set.profiles {
+            profile.source.notes = "PRIVATE-DERIVED-SENTINEL".into();
+        }
+        let result = feeds_speeds(FsCamRequest {
+            project: p,
+            op_id: 1,
+            dataset_json: serde_json::to_string(&fs::PackCollection {
+                source_packs: vec![private],
+            })
+            .unwrap(),
+            aggressiveness: fs::Aggressiveness::Prudent,
+            apply: true,
+        })
+        .unwrap();
+        let applied = result.applied_op.unwrap();
+        let json = serde_json::to_string(&applied).unwrap();
+        assert!(!json.contains("PRIVATE-DERIVED-SENTINEL"));
+        assert!(applied.params.applied_cutting.unwrap().proposal.is_none());
+    }
+    #[test]
     fn private_pack_apply_saves_values_and_ids_without_record_body() {
         let p = fixture();
         let mut pack = fs::load_source_pack_json(include_str!(

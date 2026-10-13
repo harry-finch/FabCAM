@@ -5,7 +5,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 /// A user-declared physical obstacle on the stock the cutter must miss.
-/// Lives in stock-relative XY (same frame as the imported geometry) and
+/// Lives in drawing XY (same frame as the imported geometry) and
 /// occupies a Z range; the sim collision test gates on that range first
 /// then falls back to a per-shape XY swept-region check.
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
@@ -13,9 +13,9 @@ pub struct Fixture {
     pub id: u32,
     pub name: String,
     pub kind: FixtureKind,
-    /// Center of the fixture in stock XY (mm).
+    /// Center in authored drawing XY (mm); the pipeline resolves it to work XY.
     pub origin: (f64, f64),
-    /// Z range the fixture occupies (relative to stock-top = 0). Typically
+    /// Absolute Z range in the operation depth frame (work-origin Z must be zero). Typically
     /// `z_top` is positive (a clamp standing above stock); both can be
     /// negative for cleats below.
     pub z_bottom: f64,

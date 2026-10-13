@@ -28,6 +28,7 @@
   import ThreadSection from './op_properties/ThreadSection.svelte';
   import PatternSection from './op_properties/PatternSection.svelte';
   import DrillSection from './op_properties/DrillSection.svelte';
+  import EntrySupport from './op_properties/EntrySupport.svelte';
   import TabsSection from './op_properties/TabsSection.svelte';
   import ProfileSection from './op_properties/ProfileSection.svelte';
   import PocketSection from './op_properties/PocketSection.svelte';
@@ -866,6 +867,7 @@
               >
             </select>
           </label>
+          <EntrySupport {op} hideBlocked={project.data.machine.mode === 'mill'} />
           {#if op.plunge && op.plunge.kind === 'ramp'}
             <label class="row" title={t('opprops.ramp_angle.title')}>
               <span>{t('opprops.ramp_angle')}</span>
@@ -979,9 +981,10 @@
         {/if}
       {/snippet}
       {#if project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket')}
-        <details class="inspector-disclosure">
+        <details class="inspector-disclosure depth-entry">
           <summary>{t('fs35.advanced_depth')}</summary>{@render advancedCutSettings()}
         </details>
+        <EntrySupport {op} onlyBlocked />
       {:else}
         {@render advancedCutSettings()}
       {/if}

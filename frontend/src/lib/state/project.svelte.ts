@@ -1,3 +1,4 @@
+import { notificationError } from '../api/error-notification';
 // Global project state, Svelte 5 runes.
 // Holds the most recently imported geometry plus UI flags.
 
@@ -10,7 +11,6 @@ import type {
   WiacError,
 } from '../api/types';
 import { History } from './history';
-import { computeUnsavedWork } from './unsaved';
 import { previewSegmentsFor, previewVersion } from './text_preview.svelte';
 import { GeneratedState, type PipelineNoteEvent } from './generated.svelte';
 import { SelectionState, type PickMode, type SelectionMode } from './selection.svelte';
@@ -309,16 +309,7 @@ export class ProjectState {
   /// [`computeUnsavedWork`] for the rule and why it's broader than
   /// `dirty`.
   get hasUnsavedWork(): boolean {
-    const empty =
-      !this.transformedImport &&
-      this.data.operations.length === 0 &&
-      this.data.textLayers.length === 0 &&
-      this.data.reliefSources.length === 0;
-    return computeUnsavedWork({
-      empty,
-      dirty: this.data.dirty,
-      savedToProject: this.savedToProject,
-    });
+    return fileOps.projectHasUnsavedWork(this);
   }
 
   /// Undo / redo. Per-session only; not serialized to .vc-project.json.
@@ -352,6 +343,16 @@ export class ProjectState {
   /// a project" from "imported but never saved". Drives `hasUnsavedWork`.
   /// Runtime-only — not part of `snapshot()`.
   savedToProject = $state(false);
+
+  // Session lifecycle only; never part of the portable project format.
+  documentActive = $state(false);
+  documentName = $state<string | null>(null);
+  documentEpoch = $state(0);
+  documentBaseline = $state<string | null>(null);
+
+  markDocumentSaved(name: string, snapshot = JSON.stringify(this.snapshot())) {
+    fileOps.markDocumentSaved(this, name, snapshot);
+  }
 
   /// Source-file change indicator. Populated when the watcher fires and
   /// the user has `autoReloadSources` disabled. SourceStaleToast renders
@@ -541,7 +542,7 @@ export class ProjectState {
   }
 
   setError(err: string | WiacError) {
-    this.error = err;
+    this.error = notificationError(err);
   }
 
   clearError() {
@@ -621,6 +622,7 @@ export class ProjectState {
   addTextLayer(
     seed: Omit<TextLayer, 'id' | 'name'> & Partial<Pick<TextLayer, 'id' | 'name'>>,
   ): TextLayer {
+    this.documentActive = true;
     return entityOps.addTextLayer(this, seed);
   }
 
@@ -629,6 +631,7 @@ export class ProjectState {
   addReliefSource(
     seed: Omit<ReliefSource, 'id'> & Partial<Pick<ReliefSource, 'id'>>,
   ): ReliefSource {
+    this.documentActive = true;
     return entityOps.addReliefSource(this, seed);
   }
 

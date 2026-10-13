@@ -458,3 +458,399 @@ Explicit user instruction authorizes commit/push of the qualified source changes
 on feature/shopbot-mvp. Human review gates remain separate; FS4 is unstarted.
 Oversized rebuildable debug artifacts are cleaned with cargo clean --profile dev;
 release builds, WASM release package and delivered applications are preserved.
+
+## 2026-10-13 — defer FS4 and resume milling CAM audit
+
+User explicitly redirects the track. FS4 is DEFERRED for unavailable physical lab/
+ShopBot/tool/material access, not a failure or software blocker. Keep FS4 on the
+roadmap; existing FS3.8 architecture supports later resume without redesign. Freeze
+FS datasets/preset tuning/math/UX; ReferenceData remains distinct from real trials.
+WJ and VINYL remain deferred.
+
+Inspected milling implementation and test assertions: Profile/Pocket/Drill/V-carve,
+ramp/helix, winding, tabs/leads, stock/WCS, warnings, dogbones/T-bones, surfacing,
+operation reuse, preview/simulation and fixtures. Found generic helical circular
+records vs ShopBot planar-arc preflight mismatch, bbox-centered manual stock offsets,
+unsupported ShopBot multi-WCS choices and missing ordinary fixture-creation UI.
+No dogbone/T-bone generator or named reusable CAM operation-template library found;
+ballnose relief/spiral overlay do not constitute planar spoilboard surfacing.
+
+Published an evidence-scoped feature matrix, priority/dependency order and proposed
+UX1 entry/post qualification with UX1-01..08 acceptance. No application code changed;
+124 fresh frontend checks across 9 files pass. Rust coverage inspected, not rerun;
+no physical evidence or newly reproduced numerical bug claimed. STATUS condensed
+to current direction, source/delivery and limits; historical qualification remains
+in dedicated records. FS4 issue ivac-mwry deferred; milling approval ivac-s7zo open.
+Stop before implementation. This checkpoint has no new commit/push authorization.
+
+## 2026-10-13 — UX1 software entries and handoff
+
+Explicit user approval starts UX1 after the milling audit. Reproduced circular Ramp
+rejection at ShopBot varying-Z arc preflight; enabled scoped Ramp through existing
+0.01 mm CPS XYZ linearization. Generic planning unchanged. Transient section inputs
+allow explicit refusal of Helix/Trochoidal/path helix, Ramp+tabs/leads and emitted
+vertical fallback, preserving authored rates/parameters. Corrected curved-ramp
+boundary warning and added compact inspector support/refusal explanation.
+
+Discovered numeric work-origin XYZ does not translate generic output coordinates;
+ShopBot now rejects those offsets rather than implying support. Explicit geometry/
+stock translation with numeric zero G54 tested. Recorded separately scoped UX2
+follow-up ivac-vj11. Browser testing also exposed downloadable stale programs and
+Save clearing dirty; runtime wire-input identity now guards shared export, including
+recheck after native save picker. No persisted schema or FS changes.
+
+Native core/M1/M2/snapshot checks 1,054/11/14/4 pass, strengthened final UX1 variants
+6 pass; frontend 1,092 pass/1 optional skip in 115 files; check/lint/fmt/Clippy and
+optimized WASM/frontend build pass. Real local browser verifies generation/export,
+manual 1500 Save/reopen, stale edit/save refusal and explicit Helix failure/recovery.
+See ux/UX1_QUALIFICATION.md for durable acceptance evidence. Scratch builds avoided
+root target/debug; stopped test servers/tab and cleaned 1.5 GiB of temporary Cargo
+artifacts after qualification. No new desktop bundle, physical test, commit or push. Stop at
+human gate ivac-cb64; FS4 remains deferred/nonblocking and UX2 unstarted.
+
+## 2026-10-13 — Continue UX1: capability resolution and output parity
+
+User refines UX1 scope; retain existing work, reopen engineering ivac-uigy. Name
+remains UX1, covering CAM/post compatibility as well as UX. Real clamp/keep-out
+creation, stock reference and numeric WCS repair remain CAM2/UX2; concave/island
+drawing tests remain generic CAM geometry. No next milestone started.
+
+Found CPS preview used ideal generic arcs and combined rapid axes while ShopBot
+emits linearized XYZ/split jogs. Formalized existing preflight/kernel linearize as
+capability resolution and added isolated owned-output preview adapter (ADR-0007).
+Final preview, sim, timing and envelope checks consume rounded emitted movements,
+with source-line mapping; unknown output fails instead of falling back to IR.
+Initial operator trajectory/manual pauses remain explicitly unmodeled. No schema
+change. Per-op existing diagnostic params report requested/resolved representation;
+compact inspector uses informational status and collapsed Machine compatibility.
+
+Generic Helix geometry fallback now emits an explicit resolution comment, with no
+machine-specific planner branch or intent rewrite. ShopBot distinguishes geometric
+fallback from true Helix, rejects both before output; full-region/island safety and
+subsequent contour re-plunge are not qualified. Corrected misleading Helix tooltip.
+A small pocket at 3° reproduced vertical fallback; guard retained. Independent SBP
+decoder proves exact known-state preview endpoint/motion/source-line parity for
+Direct/Ramp Profile/Pocket; analytic circle/offset/direction tolerances retained.
+
+Final native 1,056 core/11M1/17ShopBot/4snapshots pass serial; frontend 1,092/1skip
+in 115 files, check/lint/fmt/Clippy/WASM/frontend/server builds pass. Browser reopens
+saved Helix unchanged, keeps 1500 manual feed, refuses it, explicitly restores Ramp
+and exports SBP (160 displayed lines); final preview has 136 actual emitted moves instead of 101
+generic moves. Documentation/ADR/qualification/screenshots updated. No physical
+trial, desktop bundle, FS change, commit/push or CAM2/UX2 implementation. Stop at
+human review ivac-cb64; FS4 deferred/nonblocking.
+
+UX1 continuation cleanup: stopped local test servers/tab and removed 1.5 GiB of
+Cargo scratch artifacts; root target/debug stayed absent, release/WASM retained.
+
+## 2026-10-13 — Future remaining-material roadmap (documentation only)
+
+User requests a future diagnostic Remaining Material Analysis / Rest Material
+Visualization feature. Preserve UX1 software completion/output parity/Helix refusal,
+requested intent and deferred nonblocking FS4; CAM2/UX2 remains next. Record CAM3
+broader entry/tabs/leads qualification ahead of CAM4 analysis/overlay and coordinated
+CAD1 dogbones/T-bones. Keep existing UX3/UX4 labels for later surfacing/templates;
+V-carve qualification and Rest Machining remain later advanced work.
+
+Future plan separates generated cutter-sweep vs intended removal at qualified
+stock/reference/depth context, intentional tabs/allowance vs accidental residuals,
+generic vs resolved path questions and provisional analytical acceptance. Phase A
+analysis is useful without dogbone generation; B preview and C corner relief follow.
+V1 is diagnostic/visual, not generalized simulation or smaller-tool cleanup.
+
+Confirmed professional-workshop-ui is already installed in repository .agents/skills;
+read it and relevant icon/color/interaction guidance, did not create/edit a competing
+skill. Record shared visual language + cam-ux-ui pairing, compact amber/token-based
+overlay and consistent SVG icons in durable design guidance. Updated ROADMAP,
+STATUS, milling planning/audit, design guidance, future plan and documentation index.
+No application/post/UX1 evidence change, implementation, rebuild or physical test;
+document links/content and unchanged-code/evidence checks only. No commit/push.
+
+## 2026-10-13 — CAM2 / UX2 software handoff
+
+User approval of UX1 and instruction to continue authorized bounded setup work.
+Implemented effective stock minimum corner controls without moving legacy jobs,
+once-before-CAM numeric XY normalization and drawing-frame resolved preview.
+Fixture box/cylinder/polygon editing reuses history/persistence; resolved-path
+candidate warnings integrate with the existing critical export setting. Unknown
+body/holder clearance remains explicit and conservative for known cutter footprint.
+Nonzero Z rejects; discovered legacy two-sided CPS scaffold/shifted-registration
+limitations now reject before output (future ivac-u1ko / ivac-jtkj).
+
+Native/core and frontend checks, complete WASM build and actual browser
+collision/refusal/recovery + Save/reopen pass. Manual feed and Ramp intent retained.
+No FS math/data changes, physical test or native bundle. See
+[UX2 evidence](ux/UX2_QUALIFICATION.md) and [ADR-0008](adr/ADR-0008-work-origin-frames.md).
+Engineering ivac-69ak complete; human gate ivac-97fb pending. Stop before CAM3.
+Publication remains unauthorized. Root debug stays absent; scratch build is cleaned.
+
+## 2026-10-13 — UX2.1 direct manipulation and collision feedback
+
+Requested follow-up preserves CAM2 architecture. Fixed actual Generate/reportError
+object-coercion paths using whitelisted user-facing errors and preserved backend
+localization metadata. Added compact critical collision row and official Lucide
+icons; Show selects/reveals/frames a fixture using live 2D container bounds rather
+than hidden canvas dimensions. Selected colliding fixtures use red dashed outlines.
+
+Mouse/pen fixture dragging uses the existing model, a captured drawing transform
+and one release command; no visual-only placement/history-per-move. Existing
+snapshot and generation identity preserve saved XY and stale export refusal.
+Actual box/cylinder/polygon drag, Undo/Redo, Save/reopen, moved-polygon collision
+and numeric correction/recovery verified. Tests/check/lint/build pass; no collision
+math, FS, persistence migration, native bundle or physical trial. Snapping and
+stock/WCS/CAD interactions deferred. Engineering ivac-yfg8 closed; human gate
+ivac-svnf before CAM3. See [evidence](ux/UX2_1_QUALIFICATION.md).
+
+## 2026-10-13 — CPS availability message during fixture testing
+
+User reported cps_unavailable while expecting collision feedback. This is an
+engine capability refusal, not a fixture verdict: standalone production browser
+mode defaults to WASM without CPS, while UX2.1 was qualified against a CPS-enabled
+native HTTP server. Desktop/server default CPS features remain enabled. Clarified
+localized error and recovery hint: generation stopped, ShopBot .sbp requires CPS,
+and resolved collision checks require successful path generation. No transport,
+post, fixture mathematics or file format change. Test environment (browser URL or
+native app) requested; no unverified runtime cause or new bundle is claimed.
+
+## 2026-10-13 — CPS browser review environment restored
+
+User confirmed port 18767 with ?api=wasm. Built current native CPS server offline
+in /private/tmp/fabcam-cps-runtime and started it on 127.0.0.1:18772 with matching
+18767 CORS. Prepared the same frontend with explicit HTTP API query. Kept the
+server available for human review; no automatic fallback, post-format change,
+user-file overwrite or service installation. Standalone WASM remains available
+for its qualified supported posts. Root target/debug stays absent. Local URL and
+session boundary are recorded in STATUS (ivac-t79u).
+
+The configured 18767 page generated the ShopBot software collision fixture:
+136 resolved movements, 160 output lines, 7 warnings including one critical
+fixture_path_collision naming Clamp 1. No cps_unavailable refusal. Browser proof
+is ux/UX2_1-cps-browser.png; page retained as a human-review deliverable. Runtime
+server session is intentionally retained until review completes.
+
+## 2026-10-13 — Inspector accordion collapse and natural content height
+
+Removed active/previous-panel bounce after user's report. Inspector permits all
+sections closed, keeps explicit contextual reveals, and uses natural-height flex
+hosts with scrolling only when content exceeds available height. Updated obsolete
+collapse tooltips. Verified Layers/Operations closure, compact empty Text and short
+Layers/Operations, long Stock/operation scrolling, keyboard Enter and fixture
+selection revealing Stock in the actual desktop browser. Frontend 1107 pass /
+1 optional skip, zero check warnings, lint/build pass. No CAM/FS/storage change,
+CAM3 still unstarted. See ux/INSPECTOR_ACCORDION_FIX.md (ivac-16yy).
+
+## 2026-10-13 — Future FabCAM / FabSBP setup ownership (documentation only)
+
+Recorded user-directed product boundary in ADR-0009 and FABCAM_FABSBP_WORKFLOW:
+FabCAM declares intent; future FabSBP establishes physical state and executes.
+Separated future XY origin/Z reference, reusable profile capability/setup/workflow
+areas, standalone behavior and explicit unfrozen requirements metadata. Added
+unnumbered future roadmap groups, profile assistant/validation, guided default-ON
+setup, structured pre/post actions and shared Professional Workshop UI placement.
+Zero-setting cannot follow merely from origin declaration. Existing machine/tools
+snapshots and qualified XY behavior stay intact; Z/two-sided guards unchanged.
+UX2.1 human gate remains pending, CAM3 next and unstarted; FS4 deferred/nonblocking.
+No source, post, schema, UI or FabSBP implementation changes. Documentation links
+and whitespace checked; no new software/physical qualification claimed (ivac-22df).
+
+## 2026-10-13 — CAM3 bounded tabs/leads qualification
+
+User validated documentation and requested progression; closed UX2.1 gate ivac-svnf
+and started CAM3 ivac-sa8q. Independent output tests reproduced configured tab
+width being replaced by tool diameter, ignored taller intermediate-pass overrides,
+chord projection of curved tabs, discontinuous/coarse curved tab ramps, a lead-out
+recutting a tab and direct entry plunging through a manual tab. Corrected generic
+attachment/emission; no ShopBot syntax, FS, schema or new UI feature. Added four
+CAM3 tests including 48 simple-shape combinations and reviewed intentional width
+snapshot changes. Complete build and regression results in CAM3_QUALIFICATION.
+Conservative rectangular arc lifts and remaining topology/physical limits stay
+explicit; Ramp-entry+tabs/leads refusal retained. Human gate ivac-wh2m; CAM4 not
+started. CPS review server rebuilt in retained scratch target; no app bundle.
+
+## 2026-10-13 — CAM4 A/B remaining-material analysis and 2D overlay
+
+User approved CAM3 and requested progression, later asked to resume ongoing work.
+Closed ivac-wh2m; continued ivac-qk8y without restarting. Added bounded per-pocket
+final-depth capsule/disk difference using existing Clipper, intended regions and
+final returned linear movements. Reused hole conversion; kept arbitrary CPS IR,
+analytic arcs/curved targets, tabs/allowance and unqualified depth/tool contexts
+explicit. Added optional buffered response/schema/types, work/drawing frame mapping,
+compact translated overlay/metrics/detail and generation-identity stale suppression.
+Extracted canvas region-layer logic to preserve the component line budget instead
+of raising its guard. No toolpath/post/FS/persistence change or rest machining.
+Analytical and emitted-path tests, complete regression/check/lint/build and browser
+stale-after-Save/unsupported/overlay evidence in CAM4_QUALIFICATION. Retained updated
+native CPS review server on18772; no desktop bundle. A/B gate ivac-tvox; CAD1/C
+corner relief remains separate scope/approval.
+
+## 2026-10-13 — CAM4 review: WASM checkpoints and 3D path visibility
+
+Fixed simulator i64/bigint→number checkpoint boundary after user scrub errors;
+invalid/sentinel indices use full replay. Added two regression tests through
+backward replay planning. Aligned warning-chip SVG/text and added transient 3D
+Toolpaths checkbox using visibility-only scene updates. Audited existing Spiral
+and added compact choice guidance, without changing Cascade defaults or geometry.
+Actual browser Cascade/Spiral rewind and final visibility checked; emitted listing
+J2=13→2/JZ=16→5 on the software test, Spiral residual analysis still unsupported.
+Explained restrictive Sienci reference coverage for metric softwood pockets; FS
+math/data remain frozen. Frontend1112 pass/1skip, check/lint/build pass; four existing
+Spiral tests pass. See ux/CAM4_REVIEW_FOLLOWUP.md (ivac-ubcr).
+
+## 2026-10-13 — FS3.9 targeted approximate-matching reopening
+
+User explicitly reopened FS for bounded matching/coverage, preserving deferred
+nonblocking FS4. Audited six narrow LongMill single-flute full-slot references.
+Kept legacy/exact math; added pure normalized nearest/extrapolation and unique
+within-series interpolation with explicit router/material/tool/slot-to-pocket
+transfers, graph taxonomy, provenance, deterministic trace and accurate refusal
+reasons. Same-mode reconciliation/disagreement and exact six-row outputs retained.
+No new cutting rows or private data imports; reviewed public schema3 metadata only,
+original CC BY-SA profiles untouched. Router class cannot masquerade as an
+individual physical trial scope. Compact inspector explains quality/transfers under
+Why these values?; saved values remain authoritative and private snapshots drop.
+
+94 FS tests +1 doctest,17 core adapter tests,1112 frontend passes/1 optional skip;
+check/lint/fmt/Clippy/schema-check/build qualified. Actual browser Ø6/Ø6.35 Pocket,
+extrapolated Ø2.2, explicit Apply and manual1200 save/reopen verified. CPS review
+server rebuilt/restarted for additive provenance; no native desktop or physical
+qualification. [Handoff](feeds-speeds/FS3_9_QUALIFICATION.md),
+[policy](feeds-speeds/FS3_9_MATCHING.md), [coverage](feeds-speeds/FS3_9_COVERAGE.md).
+Human gate ivac-t0fk; CAM4 gate ivac-tvox remains pending independently. No commit
+or push authorized for this checkpoint. Stop before further FS work.
+
+### FS3.9 resumed handoff and analysis
+
+Final frontend check/lint/build passed; 1112 tests passed/1 optional skip. Native
+browser Ø6 reproduced17000/1530/765/DOC1; Ø5 interpolation and Ø2 refusal also
+recorded. ShopBot rough17000/finish10000 exposes existing unsupported spindleSpeed
+record (ivac-2zll). Explicitly concordant RPM software export produced77moves/133lines
+and preserved manualfeed1200; no general post or physical qualification implied.
+User requested analysis/proposal after completion: recommend a deterministic diameter
+sensitivity sweep around policy and anchor-selection boundaries, before considering
+any smoothing. Proposal only, no new resolver mathematics implemented. See
+[review](feeds-speeds/FS3_9_REVIEW.md). Human gate ivac-t0fk remains open.
+
+## 2026-10-13 — Approved FS3.9 sensitivity audit
+
+Added developer CSV sweep and stdlib report generator:11997 samples (1333 diameters,
+three modes, DOC1/DOC10/synthetic caps). Measured Prudent feed jumps≈10% at the
+small-tool near boundary and≈57% at interpolation entry; close-match selection also
+reduces DOC≈27%. Added four regressions for boundary refusal, both numeric transitions,
+all-mode order invariance, evidence and hard constraints. FS98 tests +1 doctest pass;
+Clippy/fmt pass. No production math, UI, source or persistence edits. Results and
+revised continuity proposal in FS3_9_REVIEW/FS3_9_SENSITIVITY; FS4 remains deferred.
+
+## 2026-10-13 — UX2.2 shell and welcome roadmap (documentation only)
+
+Added PLANNED UX2.2 specification, roadmap row/placement note, status pointer,
+UX design direction and navigation link (ivac-3267). Applied repository-local
+Professional Workshop UI, CAM UX, architecture and documentation skills. Read-only
+source inventory confirms existing RecentMenu/workspace local storage, shared
+file-operation unsaved-work guards and generation-context export freshness; these
+must be reused, not replaced by header-only truth or a second recent store.
+
+Requested UX2.1 → UX2.2 → CAM3 order conflicts with approved UX2.1/CAM3 continuation
+and software-qualified CAM4 A/B. Kept history intact; propose the shell audit/design
+checkpoint after current handoff reviews, subject to human planning gate ivac-dwdd.
+Recorded distinct no-project/new-empty/no-operations/no-current-path states,
+command grouping, safe cancellation/switching, planned acceptance, targeted tests,
+desktop screenshots and human review. FS3.9 and deferred/nonblocking FS4 unchanged.
+No source/UI/algorithm/engine/project-format/post behavior changed; no implementation,
+new software qualification, commit or push. Local added links and whitespace
+checked; frontend/core/schema/data hashes unchanged from the session baseline.
+No software tests/build needed for documentation only. Stop pending human approval.
+
+## 2026-10-13 — FS3.9.1 recommendation UX simplification
+
+User authorized UI-only checkpoint. Audited inline assistant and FS3.8 capture; reused
+Modal for compact values/context, auto mode preview and coherent footer. Added transient
+request ownership with cancellation/disposal/key guards, local full-width confirmation
+committed only by Apply, trigger focus restoration and raw-diameter presentation facts.
+Kept source/diagnostics accessible, blocking issues visible, no-match Apply disabled.
+Moved local capture to effective values and defaulted existing form to Draft; Tested
+still requires physical evidence. No math/source/storage/domain/post edits.
+Frontend1117 pass/1skip, engine98 +1doctest, check/lint/build; actual mode/Cancel/Apply,
+manual1200 save/reopen, keyboard, matching/refusal/invalid-limits and1024×600 checked.
+Handoff/screenshots: ux/FS3_9_1_QUALIFICATION.md. FS4 deferred/nonblocking; stop for
+human visual review. No commit/push authorized.
+
+## 2026-10-13 — FS3.9.1 inspector / advanced-entry continuation
+
+Removed duplicate default recommendation/provenance block; retained saved details in
+Modal for unavailable recalculation. Shared secondary preset/review row and origin
+baseline/manual exceptions. Reused inspector disclosure/numeric tokens; Pocket overlap
+renamed precisely, original values/handlers unchanged. Existing blocking EntrySupport
+message now visible outside closed depth-entry disclosure; no policy/post changes.
+Frontend1121 pass/1skip/check/lint/build;27 CPS ShopBot regressions pass. Actual before/
+after/apply/manual/Ramp/Helix/closed-warning/small-desktop screenshots in existing
+FS3_9_1_QUALIFICATION. Same human gate ivac-anp0; FS4 deferred/nonblocking; no new CAM
+milestone, commit or push. Engineering task ivac-m0qf complete.
+
+## 2026-10-13 — UX2.2 selected; first design checkpoint
+
+User selected UX2.2 as the next development milestone. Completed source-backed
+command inventory, lifecycle ownership audit, Atelier/Document interactive design
+alternatives and targeted qualification plan (ivac-7737). Recommended Atelier.
+Identified existing empty-project discard, save identity and load-helper reset
+limits; proposed bounded New/Close scope in ux/UX2_2_AUDIT.md. Actual source remains
+unchanged. Mockup actions are simulated, not software qualification. Human design/
+lifecycle gate ivac-dwdd remains before implementation; earlier CAM4/FS gates stay
+independent. No CAM, FS, post, persistence change, commit or push.
+
+### UX2.2 bounded machine/tool navigation continuation
+
+User requested active machine (and operation tool) visibility in Atelier menu bar.
+Added reactive machine snapshot name to existing tab and separate primary operation
+tool shortcut, with full accessible names and bounded ellipsis. Tool shortcut reveals
+the selected operation, avoiding false identity matches with the shop inventory;
+library remains independently accessible. Unnamed/missing fallbacks translated EN/DE.
+Check/lint/build pass; 19 i18n/sidebar tests pass, 1 optional skip. Actual browser
+fixture selection/long-name/small-window review recorded in UX2_2_AUDIT.md.
+No lifecycle/CAM/FS/post changes, commit or push; broader UX2.2 remains in progress.
+
+## 2026-10-13 — UX2.2 Atelier implementation
+
+- Explicit user approval closes ivac-dwdd; implemented ivac-j6ba on the existing
+  feature branch without commit/push. Welcome and compact file menu reuse existing
+  Open/Import/Save/example/recent paths. New/Close retain machine/tool context and
+  clear job geometry, operations, selections and both generated sides.
+- Added runtime document identity and saved snapshot baseline: an empty edited
+  project is protected, and generation cannot incorrectly mark a job saved.
+  Failed replacement/conversion restores the prior document/history. Async
+  generation results are tied to a document epoch.
+- Active machine is always visible in desktop navigation; selected-operation tool
+  links to its inspector. Shared UI tokens/Lucide and EN/DE messages reused.
+- Frontend lifecycle coverage and browser evidence recorded in
+  [UX2.2 qualification](ux/UX2_2_QUALIFICATION.md). Human/native gate ivac-ein1;
+  existing CAM4/FS gates unchanged. No CAM/FS/post or physical qualification claim.
+
+## 2026-10-13 — UX2.2 final shell polish (ivac-8u1p)
+
+- Preserved Atelier. Compact machine presentation uses the persisted name; explicit
+  SOFTWARE ONLY/unvalidated name qualifiers remain visible with a small Lucide
+  caution icon. Full identity remains in title/accessible name. No new validation
+  field, inferred positive certification or profile-selection behavior.
+- Kept Layers as primary import; removed the competing empty-canvas button.
+  File import and Layers Add still support additive geometry.
+- Idle generation summary appears only when operations exist. Generated diagnostics
+  remain visible after editing/removing operations; shared stale calculation now
+  includes output awaiting simulation. Critical count/export handlers unchanged.
+- Frontend 1145 passes/1skip, check 0 errors/warnings, lint/build and diff checks pass.
+  Browser tested primary/secondary imports, native-server CPS collision generation,
+  blocked export and edit/save/reopen consistency. Seven screenshots and limitations
+  in [polish review](ux/UX2_2_POLISH.md). Stop for human review ivac-ein1; no new milestone.
+
+## 2026-10-13 — Publication checkpoint authorized
+
+User explicitly requested committing and pushing all current repository changes
+to origin/feature/shopbot-mvp. Includes CAM/ShopBot improvements, remaining-material
+analysis, FS3.9/FS3.9.1, Atelier UX2.2 and their qualification records, fixtures,
+screenshots and regression tests. Frontend publication checks: 1145 tests pass,
+1 skipped; type checks, lint and production build pass. Existing human/native/
+physical review gates remain independent and pending as recorded above.
+Rust publication checks: 1063 core unit tests and 98 feeds/speeds tests plus
+1 doctest pass. The broad CPS integration run stops at the legacy
+`cps_posts::two_sided_runs_both_sides` success expectation: current code deliberately
+rejects that unqualified capability (ivac-jtkj). Regression alignment follow-up
+is recorded as ivac-13go; the publication checkpoint does not claim a fully green
+broad Rust suite.

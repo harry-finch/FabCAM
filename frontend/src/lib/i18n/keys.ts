@@ -20,6 +20,10 @@ export type MsgKey =
   | "about.title"
   | "app.bar.open"
   | "app.bar.save"
+  | "app.context.missing_tool"
+  | "app.context.operation_tool"
+  | "app.context.operation_tool_tip"
+  | "app.context.unnamed_machine"
   | "app.drop.sub"
   | "app.drop.title"
   | "app.gcode.label"
@@ -99,6 +103,30 @@ export type MsgKey =
   | "calib.step.enter"
   | "calib.step.measure"
   | "calib.title"
+  | "cam4.details"
+  | "cam4.hide"
+  | "cam4.largest"
+  | "cam4.metrics"
+  | "cam4.not_analyzed"
+  | "cam4.operation"
+  | "cam4.reason.analysis_budget"
+  | "cam4.reason.analytic_arc_path"
+  | "cam4.reason.cascade_pocket_only"
+  | "cam4.reason.depth_schedule"
+  | "cam4.reason.execution_path_unavailable"
+  | "cam4.reason.intentional_allowance"
+  | "cam4.reason.intentional_tabs"
+  | "cam4.reason.metric_milling_only"
+  | "cam4.reason.missing_target"
+  | "cam4.reason.single_flat_cutter_only"
+  | "cam4.reason.stock_depth_context"
+  | "cam4.reason.target_outside_stock"
+  | "cam4.reason.target_representation"
+  | "cam4.scope"
+  | "cam4.show"
+  | "cam4.stale"
+  | "cam4.title"
+  | "cam4.unavailable"
   | "canvas.add_to_selection.aria"
   | "canvas.add_to_selection.title"
   | "canvas.ctx.dismiss"
@@ -229,7 +257,6 @@ export type MsgKey =
   | "error.hint.unimplemented_op_kind"
   | "error.hint.unknown_post_processor"
   | "error.span"
-  | "fs.adjusted"
   | "fs.chipload"
   | "fs.feed"
   | "fs.full_width"
@@ -240,7 +267,6 @@ export type MsgKey =
   | "fs.normal"
   | "fs.plunge"
   | "fs.positive"
-  | "fs.propose"
   | "fs.prudent"
   | "fs.rapid"
   | "fs.reference_license"
@@ -277,13 +303,11 @@ export type MsgKey =
   | "fs35.other_material"
   | "fs35.outdated"
   | "fs35.pocket"
-  | "fs35.preview_changed"
   | "fs35.profile"
   | "fs35.recalculate"
   | "fs35.recommendation"
   | "fs35.reference"
   | "fs35.reference_match"
-  | "fs35.review"
   | "fs35.saved_material"
   | "fs35.schedule"
   | "fs35.select_material"
@@ -304,12 +328,9 @@ export type MsgKey =
   | "fs36.calculation_context"
   | "fs36.closest_scopes"
   | "fs36.engagement"
-  | "fs36.evidence_pending"
   | "fs36.kept"
   | "fs36.modified_hint"
-  | "fs36.no_transfer"
   | "fs36.pass_depth"
-  | "fs36.previous_source"
   | "fs36.reason.ambiguous_profiles"
   | "fs36.reason.dataset_mismatch"
   | "fs36.reason.invalid_request"
@@ -318,7 +339,6 @@ export type MsgKey =
   | "fs36.reason.unrepresentable_output"
   | "fs36.reason.unsupported_operation"
   | "fs36.reason.unsupported_tool"
-  | "fs36.recalculate_parameters"
   | "fs36.required"
   | "fs36.scope.cutting_family"
   | "fs36.scope.diameter_mm"
@@ -327,21 +347,15 @@ export type MsgKey =
   | "fs36.scope.flute_count"
   | "fs36.stock_auto_empty"
   | "fs36.stock_auto_geometry"
-  | "fs36.stock_corner"
   | "fs36.stock_corner_wcs"
   | "fs36.stock_manual_empty"
   | "fs36.stock_manual_geometry"
-  | "fs36.stock_translation"
   | "fs36.stock_wcs_help"
   | "fs36.suggested"
   | "fs36.suggested_hint"
   | "fs36.unknown"
   | "fs37.built_in"
-  | "fs37.compatible_source"
-  | "fs37.compatible_sources"
   | "fs37.disagreement"
-  | "fs37.enabled_source"
-  | "fs37.enabled_sources"
   | "fs37.import"
   | "fs37.local"
   | "fs37.local_only"
@@ -349,7 +363,6 @@ export type MsgKey =
   | "fs37.privacy"
   | "fs37.provenance_missing"
   | "fs37.public"
-  | "fs37.reference_range"
   | "fs37.references"
   | "fs37.sources_help"
   | "fs37.too_large"
@@ -386,7 +399,6 @@ export type MsgKey =
   | "fs38.review_notes"
   | "fs38.revision_help"
   | "fs38.save"
-  | "fs38.save_action"
   | "fs38.save_new"
   | "fs38.save_notes"
   | "fs38.save_title"
@@ -402,6 +414,53 @@ export type MsgKey =
   | "fs38.use_preset"
   | "fs38.validation_confirm"
   | "fs38.validation_policy"
+  | "fs39.adapted_from"
+  | "fs39.approximate"
+  | "fs39.close"
+  | "fs39.exact"
+  | "fs39.extrapolated"
+  | "fs39.generic"
+  | "fs39.interpolated"
+  | "fs39.interpolation_method"
+  | "fs39.machine_setup"
+  | "fs39.material_transfer"
+  | "fs39.method"
+  | "fs39.normalized_method"
+  | "fs39.reference_only"
+  | "fs39.relative_gap"
+  | "fs39.router_transfer"
+  | "fs39.same_machine"
+  | "fs39.same_material"
+  | "fs39.same_operation"
+  | "fs39.slot_basis"
+  | "fs39.theoretical"
+  | "fs39.tool_setup"
+  | "fs39.weight"
+  | "fs39.why"
+  | "fs391.adapted_reference"
+  | "fs391.applied_values"
+  | "fs391.calculating"
+  | "fs391.cutting_speed"
+  | "fs391.engagement_distinct"
+  | "fs391.known_limits"
+  | "fs391.mixed_values"
+  | "fs391.modified_values"
+  | "fs391.no_reference"
+  | "fs391.nominal_engagement_not_maximum"
+  | "fs391.pocket_overlap"
+  | "fs391.preset_help"
+  | "fs391.rejection_details"
+  | "fs391.requested"
+  | "fs391.review_limits"
+  | "fs391.review_recommendation"
+  | "fs391.save_current"
+  | "fs391.save_preset"
+  | "fs391.saved_recommendation"
+  | "fs391.slot_basis"
+  | "fs391.unknown_doc"
+  | "fs391.unknown_engagement_full_width_assumption"
+  | "fs391.unknown_entry_strategy"
+  | "fs391.unknown_limit"
   | "gcode.label"
   | "gcode.line_sync_unavailable"
   | "gcode.line_sync_unavailable.title"
@@ -1041,6 +1100,7 @@ export type MsgKey =
   | "ops.pocket.radius.help"
   | "ops.pocket.radius.label"
   | "ops.pocket.strategy.cascade"
+  | "ops.pocket.strategy.continuous_hint"
   | "ops.pocket.strategy.halfpipe"
   | "ops.pocket.strategy.label"
   | "ops.pocket.strategy.spiral"
@@ -1329,6 +1389,8 @@ export type MsgKey =
   | "post.tokens.tools"
   | "post.tokens.version"
   | "post.tool_change"
+  | "preview.toolpaths.label"
+  | "preview.toolpaths.tip"
   | "recent.button"
   | "recent.clear"
   | "recent.open_hint"
@@ -1448,6 +1510,30 @@ export type MsgKey =
   | "settings.view.preview_style.solid"
   | "settings.view.preview_style.wireframe"
   | "settings.view.show_stock_box"
+  | "shell.brand"
+  | "shell.browser_files"
+  | "shell.close"
+  | "shell.close_action"
+  | "shell.dismiss"
+  | "shell.example"
+  | "shell.file_menu"
+  | "shell.getting_started"
+  | "shell.import"
+  | "shell.loading"
+  | "shell.modified"
+  | "shell.new"
+  | "shell.new_action"
+  | "shell.no_recents"
+  | "shell.not_saved"
+  | "shell.open"
+  | "shell.operations_hint"
+  | "shell.recents"
+  | "shell.reopen"
+  | "shell.resume"
+  | "shell.saved"
+  | "shell.untitled"
+  | "shell.welcome"
+  | "shell.welcome_hint"
   | "shortcuts.canvas2d.add_selection"
   | "shortcuts.canvas2d.context"
   | "shortcuts.canvas2d.pan"
@@ -1750,6 +1836,40 @@ export type MsgKey =
   | "tools.whirl.z_wobble.title"
   | "tools.z_shift"
   | "tools.z_shift.title"
+  | "ux1.entry.compatibility"
+  | "ux1.entry.helix"
+  | "ux1.entry.leads"
+  | "ux1.entry.linearized_ramp"
+  | "ux1.entry.origin"
+  | "ux1.entry.ramp"
+  | "ux1.entry.resolved"
+  | "ux1.entry.tabs"
+  | "ux1.export.stale"
+  | "ux2.fixture.bottom"
+  | "ux2.fixture.box"
+  | "ux2.fixture.cylinder"
+  | "ux2.fixture.depth"
+  | "ux2.fixture.help"
+  | "ux2.fixture.invalid"
+  | "ux2.fixture.name"
+  | "ux2.fixture.polygon"
+  | "ux2.fixture.radius"
+  | "ux2.fixture.remove"
+  | "ux2.fixture.top"
+  | "ux2.fixture.vertices"
+  | "ux2.fixture.width"
+  | "ux2.fixtures"
+  | "ux2.stock_corner"
+  | "ux2.two_sided"
+  | "ux2.wcs.unsupported"
+  | "ux2.zero_marker"
+  | "ux2.zero_stock"
+  | "ux2.zero_z"
+  | "ux21.blocked"
+  | "ux21.collision"
+  | "ux21.override"
+  | "ux21.reason"
+  | "ux21.show"
   | "warn.chamfer_non_vbit"
   | "warn.chamfer_width_clamped_to_reach"
   | "warn.compression_transition_above_cut"
@@ -1762,6 +1882,8 @@ export type MsgKey =
   | "warn.feed_clamped_above_max"
   | "warn.feeds_speeds_stale"
   | "warn.fixed_sensor_reference_not_first"
+  | "warn.fixture_clearance_unknown"
+  | "warn.fixture_path_collision"
   | "warn.frame_padding_below_tool_radius"
   | "warn.gcode_include_empty"
   | "warn.gcode_include_lines_skipped"
@@ -1859,6 +1981,10 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "about.title",
   "app.bar.open",
   "app.bar.save",
+  "app.context.missing_tool",
+  "app.context.operation_tool",
+  "app.context.operation_tool_tip",
+  "app.context.unnamed_machine",
   "app.drop.sub",
   "app.drop.title",
   "app.gcode.label",
@@ -1938,6 +2064,30 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "calib.step.enter",
   "calib.step.measure",
   "calib.title",
+  "cam4.details",
+  "cam4.hide",
+  "cam4.largest",
+  "cam4.metrics",
+  "cam4.not_analyzed",
+  "cam4.operation",
+  "cam4.reason.analysis_budget",
+  "cam4.reason.analytic_arc_path",
+  "cam4.reason.cascade_pocket_only",
+  "cam4.reason.depth_schedule",
+  "cam4.reason.execution_path_unavailable",
+  "cam4.reason.intentional_allowance",
+  "cam4.reason.intentional_tabs",
+  "cam4.reason.metric_milling_only",
+  "cam4.reason.missing_target",
+  "cam4.reason.single_flat_cutter_only",
+  "cam4.reason.stock_depth_context",
+  "cam4.reason.target_outside_stock",
+  "cam4.reason.target_representation",
+  "cam4.scope",
+  "cam4.show",
+  "cam4.stale",
+  "cam4.title",
+  "cam4.unavailable",
   "canvas.add_to_selection.aria",
   "canvas.add_to_selection.title",
   "canvas.ctx.dismiss",
@@ -2068,7 +2218,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "error.hint.unimplemented_op_kind",
   "error.hint.unknown_post_processor",
   "error.span",
-  "fs.adjusted",
   "fs.chipload",
   "fs.feed",
   "fs.full_width",
@@ -2079,7 +2228,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs.normal",
   "fs.plunge",
   "fs.positive",
-  "fs.propose",
   "fs.prudent",
   "fs.rapid",
   "fs.reference_license",
@@ -2116,13 +2264,11 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.other_material",
   "fs35.outdated",
   "fs35.pocket",
-  "fs35.preview_changed",
   "fs35.profile",
   "fs35.recalculate",
   "fs35.recommendation",
   "fs35.reference",
   "fs35.reference_match",
-  "fs35.review",
   "fs35.saved_material",
   "fs35.schedule",
   "fs35.select_material",
@@ -2143,12 +2289,9 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs36.calculation_context",
   "fs36.closest_scopes",
   "fs36.engagement",
-  "fs36.evidence_pending",
   "fs36.kept",
   "fs36.modified_hint",
-  "fs36.no_transfer",
   "fs36.pass_depth",
-  "fs36.previous_source",
   "fs36.reason.ambiguous_profiles",
   "fs36.reason.dataset_mismatch",
   "fs36.reason.invalid_request",
@@ -2157,7 +2300,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs36.reason.unrepresentable_output",
   "fs36.reason.unsupported_operation",
   "fs36.reason.unsupported_tool",
-  "fs36.recalculate_parameters",
   "fs36.required",
   "fs36.scope.cutting_family",
   "fs36.scope.diameter_mm",
@@ -2166,21 +2308,15 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs36.scope.flute_count",
   "fs36.stock_auto_empty",
   "fs36.stock_auto_geometry",
-  "fs36.stock_corner",
   "fs36.stock_corner_wcs",
   "fs36.stock_manual_empty",
   "fs36.stock_manual_geometry",
-  "fs36.stock_translation",
   "fs36.stock_wcs_help",
   "fs36.suggested",
   "fs36.suggested_hint",
   "fs36.unknown",
   "fs37.built_in",
-  "fs37.compatible_source",
-  "fs37.compatible_sources",
   "fs37.disagreement",
-  "fs37.enabled_source",
-  "fs37.enabled_sources",
   "fs37.import",
   "fs37.local",
   "fs37.local_only",
@@ -2188,7 +2324,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs37.privacy",
   "fs37.provenance_missing",
   "fs37.public",
-  "fs37.reference_range",
   "fs37.references",
   "fs37.sources_help",
   "fs37.too_large",
@@ -2225,7 +2360,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs38.review_notes",
   "fs38.revision_help",
   "fs38.save",
-  "fs38.save_action",
   "fs38.save_new",
   "fs38.save_notes",
   "fs38.save_title",
@@ -2241,6 +2375,53 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs38.use_preset",
   "fs38.validation_confirm",
   "fs38.validation_policy",
+  "fs39.adapted_from",
+  "fs39.approximate",
+  "fs39.close",
+  "fs39.exact",
+  "fs39.extrapolated",
+  "fs39.generic",
+  "fs39.interpolated",
+  "fs39.interpolation_method",
+  "fs39.machine_setup",
+  "fs39.material_transfer",
+  "fs39.method",
+  "fs39.normalized_method",
+  "fs39.reference_only",
+  "fs39.relative_gap",
+  "fs39.router_transfer",
+  "fs39.same_machine",
+  "fs39.same_material",
+  "fs39.same_operation",
+  "fs39.slot_basis",
+  "fs39.theoretical",
+  "fs39.tool_setup",
+  "fs39.weight",
+  "fs39.why",
+  "fs391.adapted_reference",
+  "fs391.applied_values",
+  "fs391.calculating",
+  "fs391.cutting_speed",
+  "fs391.engagement_distinct",
+  "fs391.known_limits",
+  "fs391.mixed_values",
+  "fs391.modified_values",
+  "fs391.no_reference",
+  "fs391.nominal_engagement_not_maximum",
+  "fs391.pocket_overlap",
+  "fs391.preset_help",
+  "fs391.rejection_details",
+  "fs391.requested",
+  "fs391.review_limits",
+  "fs391.review_recommendation",
+  "fs391.save_current",
+  "fs391.save_preset",
+  "fs391.saved_recommendation",
+  "fs391.slot_basis",
+  "fs391.unknown_doc",
+  "fs391.unknown_engagement_full_width_assumption",
+  "fs391.unknown_entry_strategy",
+  "fs391.unknown_limit",
   "gcode.label",
   "gcode.line_sync_unavailable",
   "gcode.line_sync_unavailable.title",
@@ -2880,6 +3061,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ops.pocket.radius.help",
   "ops.pocket.radius.label",
   "ops.pocket.strategy.cascade",
+  "ops.pocket.strategy.continuous_hint",
   "ops.pocket.strategy.halfpipe",
   "ops.pocket.strategy.label",
   "ops.pocket.strategy.spiral",
@@ -3168,6 +3350,8 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "post.tokens.tools",
   "post.tokens.version",
   "post.tool_change",
+  "preview.toolpaths.label",
+  "preview.toolpaths.tip",
   "recent.button",
   "recent.clear",
   "recent.open_hint",
@@ -3287,6 +3471,30 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "settings.view.preview_style.solid",
   "settings.view.preview_style.wireframe",
   "settings.view.show_stock_box",
+  "shell.brand",
+  "shell.browser_files",
+  "shell.close",
+  "shell.close_action",
+  "shell.dismiss",
+  "shell.example",
+  "shell.file_menu",
+  "shell.getting_started",
+  "shell.import",
+  "shell.loading",
+  "shell.modified",
+  "shell.new",
+  "shell.new_action",
+  "shell.no_recents",
+  "shell.not_saved",
+  "shell.open",
+  "shell.operations_hint",
+  "shell.recents",
+  "shell.reopen",
+  "shell.resume",
+  "shell.saved",
+  "shell.untitled",
+  "shell.welcome",
+  "shell.welcome_hint",
   "shortcuts.canvas2d.add_selection",
   "shortcuts.canvas2d.context",
   "shortcuts.canvas2d.pan",
@@ -3589,6 +3797,40 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "tools.whirl.z_wobble.title",
   "tools.z_shift",
   "tools.z_shift.title",
+  "ux1.entry.compatibility",
+  "ux1.entry.helix",
+  "ux1.entry.leads",
+  "ux1.entry.linearized_ramp",
+  "ux1.entry.origin",
+  "ux1.entry.ramp",
+  "ux1.entry.resolved",
+  "ux1.entry.tabs",
+  "ux1.export.stale",
+  "ux2.fixture.bottom",
+  "ux2.fixture.box",
+  "ux2.fixture.cylinder",
+  "ux2.fixture.depth",
+  "ux2.fixture.help",
+  "ux2.fixture.invalid",
+  "ux2.fixture.name",
+  "ux2.fixture.polygon",
+  "ux2.fixture.radius",
+  "ux2.fixture.remove",
+  "ux2.fixture.top",
+  "ux2.fixture.vertices",
+  "ux2.fixture.width",
+  "ux2.fixtures",
+  "ux2.stock_corner",
+  "ux2.two_sided",
+  "ux2.wcs.unsupported",
+  "ux2.zero_marker",
+  "ux2.zero_stock",
+  "ux2.zero_z",
+  "ux21.blocked",
+  "ux21.collision",
+  "ux21.override",
+  "ux21.reason",
+  "ux21.show",
   "warn.chamfer_non_vbit",
   "warn.chamfer_width_clamped_to_reach",
   "warn.compression_transition_above_cut",
@@ -3601,6 +3843,8 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "warn.feed_clamped_above_max",
   "warn.feeds_speeds_stale",
   "warn.fixed_sensor_reference_not_first",
+  "warn.fixture_clearance_unknown",
+  "warn.fixture_path_collision",
   "warn.frame_padding_below_tool_radius",
   "warn.gcode_include_empty",
   "warn.gcode_include_lines_skipped",

@@ -81,6 +81,21 @@ export class History {
     return this.redoStack.length;
   }
 
+  // File replacement may fail after parsing (e.g. text conversion). Preserve
+  // the actual commands, not only their counts, until the load has committed.
+  checkpoint() {
+    return { undo: [...this.undoStack], redo: [...this.redoStack], time: this.lastCommandTime };
+  }
+
+  restoreCheckpoint(checkpoint: ReturnType<History['checkpoint']>) {
+    this.undoStack = checkpoint.undo;
+    this.redoStack = checkpoint.redo;
+    this.lastCommandTime = checkpoint.time;
+    this.transaction = null;
+    this._version += 1;
+    this.listener?.();
+  }
+
   exec(cmd: Command, state: unknown): void {
     if (this.transaction) {
       const wrapped = wrapWithDirty(cmd, state);

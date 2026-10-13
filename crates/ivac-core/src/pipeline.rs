@@ -48,11 +48,16 @@ mod offset_builder;
 mod op_drivers;
 mod patterns;
 mod regions;
+mod remaining;
+pub use remaining::RemainingMaterial;
 mod selection;
 mod setup_resolver;
+#[cfg(feature = "cps")]
+mod shopbot_resolution;
 mod tabs;
 mod two_sided_emit;
 mod warnings;
+mod work_origin;
 
 pub use two_sided_emit::{run_pipeline_two_sided, TwoSidedResponse};
 
@@ -191,6 +196,9 @@ pub struct PipelineResponse {
     /// reading the toolpath. Empty for non-Pocket ops.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub regions: Vec<RegionPreview>,
+    /// Per-operation planar diagnostics, never a job-wide safety verdict.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub remaining_material: Vec<RemainingMaterial>,
     /// Non-fatal warnings raised during planning — mostly tool-fit
     /// problems (cutter doesn't fit the geometry, kind mismatch, …).
     /// The frontend surfaces these in the operations list status badge
@@ -295,6 +303,10 @@ pub struct PipelineStats {
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("work origin: {0}")]
+    WorkOrigin(String),
+    #[error("fixture: {0}")]
+    Fixture(String),
     #[error("operation #{0}: invalid applied cutting parameters: {1}")]
     AppliedCutting(u32, String),
     #[error("unknown post_processor: {0}")]
@@ -335,6 +347,8 @@ impl PipelineError {
         match self {
             PipelineError::Cancelled => None,
             PipelineError::AppliedCutting(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Apply or edit complete cutting rates for the current tool roles.")),
+            PipelineError::Fixture(message) => Some(Structured::misconfigured(message.clone())),
+            PipelineError::WorkOrigin(message) => Some(Structured::misconfigured(message.clone())),
             PipelineError::UnknownPostProcessor(name) => Some(
                 Structured::misconfigured(format!("unknown post_processor: {name}"))
                     .with_code(ErrorCode::UnknownPostProcessor)
@@ -576,6 +590,8 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     validate_cps_request(&req)?;
     let mut project = req.project;
     crate::feeds_speeds::validate_applied_project(&project)?;
+    work_origin::validate_fixtures(&project)?;
+    work_origin::resolve(&mut project)?;
 
     // Pre-pipeline: render every TextLayer to segments and append them
     // to the project's geometry pool. Each layer's segments live under
@@ -733,14 +749,23 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // instead of re-parsing every line and re-tessellating every arc
     // (bd ivac-ryan.14). With caching off (`cache == None`) we interpret
     // directly, same as before.
-    // CPS preview comes from the recorded IR (geometry exact no matter
+    // Bundled ShopBot uses its emitted movement subset (resolved representation).
+    // Other CPS preview comes from the recorded IR (geometry exact no matter
     // what dialect text the post rendered); the built-in dialects keep
     // the text-interpreting path. `cps_feeds_dwell` carries the
-    // IR-derived per-segment feeds + dwell for the time estimate.
+    // per-segment feeds + dwell from the selected representation for timing.
     #[cfg(feature = "cps")]
     let (toolpath, gcode_index, cps_feeds_dwell) = if let Some(program) = &cps_program {
-        let (ir_preview, index) =
-            crate::gcode::cps_recorder::preview_with_line_sync(program, &gcode);
+        let shopbot = req.cps_post.as_ref().is_some_and(|selection| {
+            matches!(&selection.source, CpsPostSource::Bundled { id } if id == "shopbot")
+        });
+        let (ir_preview, index) = if shopbot {
+            warnings.extend(shopbot_resolution::entry_diagnostics(program));
+            shopbot_resolution::resolved_preview(&gcode)
+                .map_err(|message| PipelineError::CpsPostFailed { message })?
+        } else {
+            crate::gcode::cps_recorder::preview_with_line_sync(program, &gcode)
+        };
         (
             ir_preview.segments,
             index,
@@ -765,12 +790,22 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // frontend — surfaces soft-limit / gantry-crash risk as a critical
     // `out_of_work_area` warning.
     warnings::push_work_area_warning(&toolpath, &project.machine, &mut warnings);
+    work_origin::fixture_warnings(&project, &toolpath, &mut warnings);
     // Stock envelope scan. Runs on the same assembled toolpath; emits a
     // critical `out_of_stock` warning so CLI / server / wasm consumers
     // get the guard centrally rather than synthesizing it per-frontend.
     // No-op when `project.stock` is unset.
     warnings::push_stock_warning(&toolpath, project.stock.as_ref(), &mut warnings);
     let regions = build_region_previews(&project, &objects);
+    // Recorded IR from arbitrary CPS scripts is not evidence of their actual
+    // output. Keep that representation distinction at the post adapter boundary.
+    let execution_path = post_kind != PostProcessorKind::Cps
+        || req
+            .cps_post
+            .as_ref()
+            .is_some_and(|p| matches!(&p.source, CpsPostSource::Bundled { id } if id == "shopbot"));
+    let remaining_material =
+        remaining::analyze(&project, &objects, &regions, &toolpath, execution_path);
     let tool_changes = count_tool_changes(&project);
     let spindle_warmup_s = spindle_warmup_seconds(&project);
     // Build per-op tool-rate lookup so the estimator clamps
@@ -824,6 +859,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         toolpath,
         gcode_index,
         regions,
+        remaining_material,
         warnings,
         time_estimate,
         output_extension,
@@ -1112,6 +1148,8 @@ fn prepare_stream(
     }
     let mut project = request.project;
     crate::feeds_speeds::validate_applied_project(&project)?;
+    work_origin::validate_fixtures(&project)?;
+    work_origin::resolve(&mut project)?;
 
     if !project.text_layers.is_empty() {
         for layer in &project.text_layers {
@@ -3058,6 +3096,7 @@ pub(crate) fn register_schemas(map: &mut crate::schema::SchemaMap) {
     crate::schema::insert::<TwoSidedResponse>(map, "TwoSidedGenerateResponse");
     crate::schema::insert::<PipelineStats>(map, "GenerateStats");
     crate::schema::insert::<RegionPreview>(map, "RegionPreview");
+    crate::schema::insert::<remaining::RemainingMaterial>(map, "RemainingMaterial");
     crate::schema::insert::<PipelineWarning>(map, "PipelineWarning");
     crate::schema::insert::<CpsPostSelection>(map, "CpsPostSelection");
     crate::schema::insert::<CpsPostSource>(map, "CpsPostSource");

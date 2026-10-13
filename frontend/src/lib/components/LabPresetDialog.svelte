@@ -29,7 +29,7 @@
   function initialForm(): CaptureForm {
     return {
       name: `${materialName} · Ø${capture.request.tool.diameter_mm} · ${capture.request.operation.kind === 'pocket' ? t('fs35.pocket') : t('fs35.profile')}`,
-      state: capture.request.operation.engagement.kind === 'unknown' ? 'draft' : 'tested',
+      state: 'draft',
       tested_at: new Date().toISOString().slice(0, 10),
       operator: '',
       job_reference: '',

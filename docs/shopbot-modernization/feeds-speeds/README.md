@@ -93,3 +93,17 @@ See [preset workflow](PRESET_AUTHORING.md), [validation policy](LOCAL_VALIDATION
 [audit](FS3_8_AUDIT.md), [qualification](FS3_8_QUALIFICATION.md) and ADR-0006.
 Current operation values become private exact Sorbonne records through explicit
 capture; no automatic application or physical-evidence promotion. FS4 awaits approval.
+
+## FS3.9 targeted reopening
+
+[Bounded matching policy](FS3_9_MATCHING.md) and [generated coverage](FS3_9_COVERAGE.md)
+record the separately authorized approximate-matching checkpoint. FS4 stays
+DEFERRED / NONBLOCKING; no physical validation or new proprietary datasets.
+
+### FS3.9.1 UI interaction
+
+The compact recommendation Modal automatically previews opening/mode changes; Apply
+remains explicit. Full-width confirmation is transient until acceptance. Details and
+source provenance remain accessible. Local capture stays separate, defaults Draft,
+and retains existing evidence eligibility. No resolver or saved-value semantics change.
+[Qualification](../ux/FS3_9_1_QUALIFICATION.md); FS4 remains deferred/nonblocking.

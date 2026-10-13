@@ -2,10 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { computeUnsavedWork } from './unsaved';
 
 describe('computeUnsavedWork', () => {
-  it('empty project is never unsaved (fresh app start, nothing to lose)', () => {
+  it('untouched empty project is clean but configured empty work is protected', () => {
     expect(computeUnsavedWork({ empty: true, dirty: false, savedToProject: false })).toBe(false);
-    // Even if flags say otherwise, emptiness wins.
-    expect(computeUnsavedWork({ empty: true, dirty: true, savedToProject: false })).toBe(false);
+    expect(computeUnsavedWork({ empty: true, dirty: true, savedToProject: false })).toBe(true);
+    expect(computeUnsavedWork({ empty: true, dirty: true, savedToProject: true })).toBe(true);
   });
 
   it('edited project is unsaved regardless of saved-to-project', () => {

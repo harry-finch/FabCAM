@@ -845,7 +845,7 @@ components:
       - internal
       type: string
     Fixture:
-      description: A user-declared physical obstacle on the stock the cutter must miss. Lives in stock-relative XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check.
+      description: A user-declared physical obstacle on the stock the cutter must miss. Lives in drawing XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check.
       properties:
         color:
           default: 4288696512
@@ -862,7 +862,7 @@ components:
         name:
           type: string
         origin:
-          description: Center of the fixture in stock XY (mm).
+          description: Center in authored drawing XY (mm); the pipeline resolves it to work XY.
           items:
           - format: double
             type: number
@@ -872,7 +872,7 @@ components:
           minItems: 2
           type: array
         z_bottom:
-          description: Z range the fixture occupies (relative to stock-top = 0). Typically `z_top` is positive (a clamp standing above stock); both can be negative for cleats below.
+          description: Absolute Z range in the operation depth frame (work-origin Z must be zero). Typically `z_top` is positive (a clamp standing above stock); both can be negative for cleats below.
           format: double
           type: number
         z_top:
@@ -988,6 +988,33 @@ components:
       - rectangle
       - rounded_rectangle
       type: string
+    FsAdaptationScope:
+      additionalProperties: false
+      properties:
+        machines:
+          items:
+            $ref: '#/components/schemas/FsIdentity'
+          type: array
+        material_taxa:
+          items:
+            type: string
+          type: array
+        policy:
+          type: string
+        slot_to_pocket:
+          type: boolean
+        tools:
+          description: Explicit interchangeable physical classifications, never inferred from labels.
+          items:
+            $ref: '#/components/schemas/FsIdentity'
+          type: array
+      required:
+      - machines
+      - material_taxa
+      - policy
+      - slot_to_pocket
+      - tools
+      type: object
     FsAdjustment:
       additionalProperties: false
       properties:
@@ -1151,6 +1178,60 @@ components:
       - v_bit
       - other
       type: string
+    FsDerivation:
+      properties:
+        chipload_factor:
+          format: double
+          type: number
+        doc_factor:
+          format: double
+          type: number
+        interpolation_weight:
+          format: double
+          type:
+          - number
+          - 'null'
+        machine_transfer:
+          type: boolean
+        material_transfer:
+          type: boolean
+        method:
+          type: string
+        policy:
+          type: string
+        quality:
+          $ref: '#/components/schemas/FsMatchQuality'
+        relative_delta:
+          format: double
+          type: number
+        requested_diameter_mm:
+          format: double
+          type: number
+        slot_basis_for_pocket:
+          type: boolean
+        source_diameters_mm:
+          items:
+            format: double
+            type: number
+          type: array
+        source_profiles:
+          items:
+            $ref: '#/components/schemas/FsProfile'
+          type: array
+      required:
+      - chipload_factor
+      - doc_factor
+      - machine_transfer
+      - material_transfer
+      - method
+      - policy
+      - quality
+      - relative_delta
+      - requested_diameter_mm
+      - slot_basis_for_pocket
+      - source_diameters_mm
+      - source_profiles
+      type: object
     FsDiagnostic:
       oneOf:
       - additionalProperties: false
@@ -1451,6 +1532,10 @@ components:
       type: object
     FsKnowledgeRecord:
       properties:
+        derivation:
+          anyOf:
+          - $ref: '#/components/schemas/FsDerivation'
+          - type: 'null'
         evidence:
           $ref: '#/components/schemas/FsEvidence'
         local_only:
@@ -1498,6 +1583,10 @@ components:
           $ref: '#/components/schemas/FsEvidence'
         local_only:
           type: boolean
+        match_quality:
+          anyOf:
+          - $ref: '#/components/schemas/FsMatchQuality'
+          - type: 'null'
         policy:
           type: string
         selected_pack:
@@ -1671,6 +1760,16 @@ components:
           - integer
           - 'null'
       type: object
+    FsMatchQuality:
+      enum:
+      - close
+      - approximate
+      - extrapolated
+      - interpolated
+      - exact
+      - generic
+      - theoretical
+      type: string
     FsMaterialSnapshot:
       additionalProperties: false
       properties:
@@ -1954,6 +2053,10 @@ components:
           type: array
         dataset:
           $ref: '#/components/schemas/FsIdentity'
+        derivation:
+          anyOf:
+          - $ref: '#/components/schemas/FsDerivation'
+          - type: 'null'
         engine_version:
           type: string
         machine_family:
@@ -2063,6 +2166,10 @@ components:
     FsRecordOrigin:
       additionalProperties: false
       properties:
+        adaptation:
+          anyOf:
+          - $ref: '#/components/schemas/FsAdaptationScope'
+          - type: 'null'
         lab:
           anyOf:
           - $ref: '#/components/schemas/FsLabPreset'
@@ -2394,6 +2501,11 @@ components:
           description: 'Filled-area preview for Pocket ops: the actual region the cutter will machine, computed via the per-op `SourceCombine` mode (Auto by default — outer + inner = annulus). The frontend paints these as translucent fills so the user sees what they''re cutting before reading the toolpath. Empty for non-Pocket ops.'
           items:
             $ref: '#/components/schemas/RegionPreview'
+          type: array
+        remaining_material:
+          description: Per-operation planar diagnostics, never a job-wide safety verdict.
+          items:
+            $ref: '#/components/schemas/RemainingMaterial'
           type: array
         stats:
           $ref: '#/components/schemas/PipelineStats'
@@ -3833,6 +3945,11 @@ components:
           items:
             $ref: '#/components/schemas/RegionPreview'
           type: array
+        remaining_material:
+          description: Per-operation planar diagnostics, never a job-wide safety verdict.
+          items:
+            $ref: '#/components/schemas/RemainingMaterial'
+          type: array
         stats:
           $ref: '#/components/schemas/PipelineStats'
         time_estimate:
@@ -4715,6 +4832,39 @@ components:
       - id
       - origin
       - rows
+      type: object
+    RemainingMaterial:
+      properties:
+        area_mm2:
+          format: double
+          type: number
+        depth_mm:
+          format: double
+          type: number
+        largest_area_mm2:
+          format: double
+          type: number
+        op_id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        reason:
+          type: string
+        regions:
+          items:
+            $ref: '#/components/schemas/RegionPreview'
+          type: array
+        status:
+          description: ready or unsupported; zero area is meaningful only when ready.
+          type: string
+      required:
+      - area_mm2
+      - depth_mm
+      - largest_area_mm2
+      - op_id
+      - reason
+      - regions
+      - status
       type: object
     RenderTextLayerResponse:
       description: Live-preview response — the rendered `TextLayer` segments plus the cached single-line classification. The pipeline produces the same segments at Generate time; this endpoint lets the frontend show the text on the 2D canvas without round-tripping a full pipeline run.
@@ -6196,12 +6346,12 @@ components:
       - line
       type: object
     WorkOffset:
-      description: Program-level work-coordinate offset. Defaults to all zeros — geometry origin == WCS origin. When the user zeros the machine somewhere different from the geometry origin, set this so the sim can align the heightmap to the WCS frame. The full per-fixture / G54..G59 selector is a follow-up feature.
+      description: Program-level work-coordinate offset. Defaults to all zeros — geometry origin == WCS origin. When the user zeros the machine somewhere different from the geometry origin, set drawing XY here. Single-sided milling resolves XY to work coordinates before CAM; the desktop preview re-expresses that same generated path in the drawing frame. Numeric Z translation remains explicitly unsupported; stock-top/depth conventions are independent. No automatic controller offset write is implied.
       properties:
         wcs:
           allOf:
           - $ref: '#/components/schemas/Wcs'
-          description: Which work coordinate system this offset applies to. The gcode emitter doesn't (yet) flip between G54..G59 — this is a labelling field for the UI + future expansion.
+          description: Which work coordinate system this offset applies to. The selected post must support this slot. LinuxCNC selects it; bundled ShopBot qualifies only operator-established G54. No offset programming.
         x_mm:
           description: X offset (mm) from geometry origin to WCS origin.
           format: double

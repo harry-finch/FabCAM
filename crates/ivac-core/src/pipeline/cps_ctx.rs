@@ -129,7 +129,65 @@ pub(crate) fn build_section_ctx(
             (s.tool.speed, s.tool.rate_v, s.tool.rate_h)
         }
     });
+    // Authored milling intent travels to posts as transient section metadata, not
+    // machine-specific geometry or new persisted operation fields.
+    let entry = if matches!(
+        op.kind,
+        OpKind::Pocket {
+            strategy: crate::project::PocketStrategy::Trochoidal { .. },
+            ..
+        }
+    ) {
+        "helix"
+    } else {
+        match op.params.plunge {
+            crate::project::PlungeStrategy::Direct => "direct",
+            crate::project::PlungeStrategy::Ramp { .. } => "ramp",
+            crate::project::PlungeStrategy::Helix { .. } => "helix",
+        }
+    };
+    let contour = op.contour_params();
+    let has_tabs = contour.is_some_and(|c| {
+        c.tabs.active || !matches!(c.tab_mode, crate::project::TabPlacementMode::Off)
+    });
+    let has_leads = contour.is_some_and(|c| {
+        c.leads.r#in != crate::project::LeadKind::Off
+            || c.leads.out != crate::project::LeadKind::Off
+    });
+    let path_helix = match &op.kind {
+        OpKind::Profile { profile, .. } => profile.helix,
+        _ => false,
+    };
     let params = vec![
+        (
+            "ivacam:entry-start-z".into(),
+            CpsParamValue::Number(op.params.start_depth),
+        ),
+        (
+            "ivacam:wcs-x".into(),
+            CpsParamValue::Number(project.work_offset.x_mm),
+        ),
+        (
+            "ivacam:wcs-y".into(),
+            CpsParamValue::Number(project.work_offset.y_mm),
+        ),
+        (
+            "ivacam:wcs-z".into(),
+            CpsParamValue::Number(project.work_offset.z_mm),
+        ),
+        (
+            "ivacam:entry-strategy".into(),
+            CpsParamValue::Text(entry.into()),
+        ),
+        (
+            "ivacam:entry-has-tabs".into(),
+            CpsParamValue::Bool(has_tabs),
+        ),
+        (
+            "ivacam:entry-has-leads".into(),
+            CpsParamValue::Bool(has_leads),
+        ),
+        ("ivacam:path-helix".into(), CpsParamValue::Bool(path_helix)),
         (
             "ivacam:uses-static-tool-z-shift".to_string(),
             CpsParamValue::Bool(

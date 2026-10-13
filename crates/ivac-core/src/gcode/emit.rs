@@ -262,7 +262,10 @@ pub(super) fn emit_offset<P: PostProcessor>(
     let lead_out = lead_out_geometry(setup, &offset.segments);
     match lead_out {
         LeadGeometry::Straight { from: to } => {
-            post.linear(Some(to.x), Some(to.y), None);
+            let segment = Segment::line(end_pos(offset), to, "lead", 0);
+            if !emit_tabbed_lead_out(setup, offset, &segment, use_rate_v, use_rate_h, post) {
+                post.linear(Some(to.x), Some(to.y), None);
+            }
         }
         LeadGeometry::Arc {
             entry_or_exit: to,
@@ -274,7 +277,13 @@ pub(super) fn emit_offset<P: PostProcessor>(
             let end_pt = end_pos(offset);
             let i = center.x - end_pt.x;
             let j = center.y - end_pt.y;
-            if ccw {
+            let mut segment = Segment::line(end_pt, to, "lead", 0);
+            segment.kind = SegmentKind::Arc;
+            segment.center = Some(center);
+            segment.bulge = (std::f64::consts::FRAC_PI_8).tan() * if ccw { 1.0 } else { -1.0 };
+            if emit_tabbed_lead_out(setup, offset, &segment, use_rate_v, use_rate_h, post) {
+                // Tab-aware output preserves holding material on the exit too.
+            } else if ccw {
                 post.arc_ccw(Some(to.x), Some(to.y), None, Some(i), Some(j));
             } else {
                 post.arc_cw(Some(to.x), Some(to.y), None, Some(i), Some(j));
@@ -297,6 +306,38 @@ pub(super) fn emit_offset<P: PostProcessor>(
     post.move_to(None, None, Some(setup.mill.fast_move_z));
 
     *last_pos = offset.segments.last().map_or(start, |s| s.end);
+}
+
+// Leads are cutting moves: they must preserve the same holding tabs as the
+// contour, including when an inside-profile exit crosses a nearby auto tab.
+fn emit_tabbed_lead_out<P: PostProcessor>(
+    setup: &Setup,
+    offset: &PolylineOffset,
+    segment: &Segment,
+    rate_v: u32,
+    rate_h: u32,
+    post: &mut P,
+) -> bool {
+    if setup.machine.mode != MachineMode::Mill || !setup.tabs.active || offset.tabs.is_empty() {
+        return false;
+    }
+    let floor = setup.mill.depth - setup.mill.through_depth.max(0.0);
+    let ramp = match setup.tabs.tab_type {
+        crate::project::TabType::Ramp => Some(setup.tabs.ramp_angle_deg.clamp(0.5, 89.0)),
+        crate::project::TabType::Rectangle => None,
+    };
+    emit_path_with_tabs(
+        std::slice::from_ref(segment),
+        &offset.tabs,
+        floor + setup.tabs.height.abs(),
+        floor,
+        setup.tabs.width.max(0.0) * 0.5,
+        ramp,
+        rate_v,
+        rate_h,
+        post,
+    );
+    true
 }
 
 /// Single-pass emit for the plot-mode / drag-knife / plasma modes that
@@ -437,7 +478,7 @@ fn multi_pass<P: PostProcessor>(
         &setup.mill.depth_list,
     );
     let tabs_z = total_depth + setup.tabs.height.abs();
-    let tab_radius = (setup.tool.diameter * 0.5).max(0.5);
+    let tab_radius = setup.tabs.width.max(0.0) * 0.5;
     // Ramp profile only applies when tab_type=Ramp. ramp_length is the
     // horizontal distance over which Z transitions between cut_z and
     // tabs_z at the configured angle. Computed once per pass below.
@@ -472,6 +513,12 @@ fn multi_pass<P: PostProcessor>(
         }
         _ => None,
     };
+    if matches!(setup.mill.plunge, PlungeStrategy::Helix { .. }) && helix_entry.is_none() && !helix
+    {
+        // Generic intent/geometry resolution, independent of the target post.
+        // Keep the operation authored as Helix; consumers may refuse fallback.
+        post.comment("ENTRY: requested Helix; resolved Ramp/Direct; reason: radius/space or open path cannot realize helix geometry");
+    }
     let ramp_angle_deg = match setup.mill.plunge {
         PlungeStrategy::Ramp { angle_deg } => Some(angle_deg.clamp(0.5, 45.0)),
         PlungeStrategy::Helix { angle_deg, .. } if helix_entry.is_none() => {
@@ -530,7 +577,21 @@ fn multi_pass<P: PostProcessor>(
         }
     };
     for (pass_idx, &z) in z_schedule.iter().enumerate() {
-        let pass_uses_tabs = setup.tabs.active && !tabs.is_empty() && z < tabs_z;
+        // Per-tab heights describe residual material above the FINAL floor,
+        // not an extra lift above each intermediate pass. Resolve only tabs
+        // whose top is above this pass, including taller individual overrides.
+        let pass_tabs: Vec<_> = tabs
+            .iter()
+            .filter_map(|tab| {
+                let top = total_depth + tab.lift(setup.tabs.height.abs());
+                (top > z).then(|| {
+                    let mut resolved = *tab;
+                    resolved.height_override_mm = Some(top - z);
+                    resolved
+                })
+            })
+            .collect();
+        let pass_uses_tabs = setup.tabs.active && !pass_tabs.is_empty();
         // For an OPEN polyline, the cascade alternates walk
         // direction so consecutive passes pick up where the
         // previous one ended — pass 0 forward (start→end), pass 1
@@ -654,8 +715,21 @@ fn multi_pass<P: PostProcessor>(
                 );
             }
         } else {
+            // A manual tab may coincide with the contour entry. Do not plunge
+            // through it before the tab-aware walk has a chance to lift.
+            let entry_floor = if pass_uses_tabs {
+                let start = pass_segments[0].start;
+                pass_tabs
+                    .iter()
+                    .filter(|tab| {
+                        (tab.x - start.x).hypot(tab.y - start.y) <= tab.radius(tab_radius * 2.0)
+                    })
+                    .fold(z, |floor, tab| floor.max(z + tab.lift((tabs_z - z).abs())))
+            } else {
+                z
+            };
             post.feedrate(rate_v);
-            post.linear(None, None, Some(z));
+            post.linear(None, None, Some(entry_floor));
             post.feedrate(rate_h);
             // Straight lead-in cut (pass 0 only): the head sits at
             // the off-contour hop point where the lead plunged — cut
@@ -674,7 +748,7 @@ fn multi_pass<P: PostProcessor>(
                 // keep the tabs walker's positioning math intact.
                 emit_path_with_tabs(
                     segments,
-                    tabs,
+                    &pass_tabs,
                     tabs_z,
                     z,
                     tab_radius,

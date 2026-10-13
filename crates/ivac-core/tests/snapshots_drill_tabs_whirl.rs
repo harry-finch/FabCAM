@@ -456,8 +456,9 @@ fn snapshot_whirl_walks_closed_contour() {
 // correct, strengthen those asserts rather than trusting the digest.
 
 const EXPECTED_DRILL_STUFENFASE_TOOLCHANGE_DIGEST: &str = "b296d632f465ec0e";
-const EXPECTED_PROFILE_RECTANGLE_TABS_HELIX_DIGEST: &str = "e373699104c83dff";
-const EXPECTED_PROFILE_RAMP_TABS_DIGEST: &str = "eb4036633918f333";
+// CAM3: configured width now controls the footprint instead of tool diameter.
+const EXPECTED_PROFILE_RECTANGLE_TABS_HELIX_DIGEST: &str = "bd8da588978d347f";
+const EXPECTED_PROFILE_RAMP_TABS_DIGEST: &str = "6c86059cda6991b5";
 const EXPECTED_WIRBELN_CLOSED_CONTOUR_DIGEST: &str = "4558fbc3397c27eb";
 
 /// Hex digest of `seahash` over the gcode bytes. Stable across

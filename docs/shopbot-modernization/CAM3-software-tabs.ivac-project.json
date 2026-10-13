@@ -1,0 +1,225 @@
+{
+  "kind": "ivac-project-cutting",
+  "version": 3,
+  "material": null,
+  "fsContext": null,
+  "imports": [
+    {
+      "id": 1,
+      "source": {
+        "filename": "square_100.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 10
+            },
+            "end": {
+              "x": 110,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 110,
+              "y": 10
+            },
+            "end": {
+              "x": 110,
+              "y": 110
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 110,
+              "y": 110
+            },
+            "end": {
+              "x": 10,
+              "y": 110
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 110
+            },
+            "end": {
+              "x": 10,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 4
+          }
+        ],
+        "bbox": {
+          "min_x": 10,
+          "min_y": 10,
+          "max_x": 110,
+          "max_y": 110
+        },
+        "unit_scale": 1,
+        "warnings": [],
+        "objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 10,
+              "min_y": 10,
+              "max_x": 110,
+              "max_y": 110
+            }
+          }
+        ]
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    }
+  ],
+  "visibleLayers": [],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 0,
+    "thickness": 10,
+    "customX": 140,
+    "customY": 140,
+    "offsetX": 0,
+    "offsetY": 0,
+    "offsetZ": 0
+  },
+  "tools": [
+    {
+      "id": 1,
+      "name": "\u00d86 mm \u2014 CAM3 SOFTWARE ONLY",
+      "kind": "endmill",
+      "diameter": 6,
+      "flutes": 1,
+      "speed": 10000,
+      "plungeRate": 500,
+      "feedRate": 1000,
+      "coolant": "off"
+    }
+  ],
+  "machine": {
+    "unit": "mm",
+    "mode": "mill",
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 15,
+    "accel": {
+      "x": 250,
+      "y": 250,
+      "z": 250
+    },
+    "toolchangeS": 5,
+    "rapidSpeed": 9144,
+    "workArea": {
+      "x": 1200,
+      "y": 600,
+      "z": 203
+    },
+    "name": "CAM3 SOFTWARE ONLY \u2014 ShopBot post",
+    "capabilities": [
+      "mill"
+    ],
+    "gcodeDialect": "cps",
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false,
+    "spindleRpmMax": 24000,
+    "cpsPost": {
+      "source": "bundled",
+      "bundledId": "shopbot",
+      "properties": {}
+    }
+  },
+  "operations": [
+    {
+      "id": 1,
+      "name": "CAM3 \u2014 SOFTWARE ONLY \u2014 wide tab",
+      "enabled": true,
+      "kind": "profile",
+      "toolId": 1,
+      "sourceLayers": [
+        "svg"
+      ],
+      "depth": -5,
+      "startDepth": 0,
+      "step": -2,
+      "offset": "outside",
+      "plunge": {
+        "kind": "direct"
+      },
+      "tabsActive": true,
+      "tabMode": {
+        "kind": "manual"
+      },
+      "tabWidth": 20,
+      "tabHeight": 1,
+      "tabType": "rectangle",
+      "tabPlacements": [
+        {
+          "objectId": 1,
+          "t": 0.125,
+          "heightOverrideMm": 3
+        }
+      ],
+      "cutDirection": "conventional",
+      "leadInKind": "straight",
+      "leadOutKind": "straight",
+      "leadIn": 5,
+      "leadOut": 5
+    }
+  ],
+  "fixtures": [],
+  "textLayers": [],
+  "workOffset": {
+    "x_mm": 20,
+    "y_mm": 30,
+    "z_mm": 0,
+    "wcs": "G54"
+  }
+}

@@ -2,7 +2,8 @@
  * ivaCAM ShopBot MVP. Authored here, GPL-3.0-or-later.
  * Command sources: docs/shopbot-modernization/shopbot/OPEN_SBP_COMMANDS.md.
  * Metric XYZ milling; manual spindle and tool changes; XY arcs linearized
- * at 0.01 mm. No relay/VFD/probe/ATC assumptions before machine qualification.
+ * at 0.01 mm, including qualified Ramp Z interpolation. Helix and combined
+ * Ramp/tabs/leads remain explicitly rejected. No relay/VFD/probe/ATC assumptions before machine qualification.
  */
 description = "ShopBot OpenSBP MVP (manual spindle, metric)";
 vendor = "ivaCAM";
@@ -97,10 +98,38 @@ function preflight() {
     var identity = [[1,0,0],[0,1,0],[0,0,1]];
     for (var row = 0; row < 3; row++) for (var col = 0; col < 3; col++)
       if (s.workPlane[row][col] != identity[row][col]) fail("rotated work plane unsupported");
+    var entry = "direct", entryTabs = false, entryLeads = false, pathHelix = false, entryStartZ;
     for (var k = 0; k < (s.parameters || []).length; k++) {
+      var param = s.parameters[k];
+      if (param.name == "ivacam:entry-strategy") entry = param.value;
+      if (param.name == "ivacam:entry-start-z") entryStartZ = param.value;
+      if (["ivacam:wcs-x", "ivacam:wcs-y", "ivacam:wcs-z"].indexOf(param.name) >= 0 && param.value !== 0)
+        fail("operation " + s.id + ": translated work origins are not qualified by the current coordinate pipeline; use a zero numeric G54 offset and explicitly position geometry. Operation parameters were kept");
+      if (param.name == "ivacam:entry-has-tabs") entryTabs = param.value;
+      if (param.name == "ivacam:entry-has-leads") entryLeads = param.value;
+      if (param.name == "ivacam:path-helix") pathHelix = param.value;
       if (s.parameters[k].name == "ivacam:uses-static-tool-z-shift" && s.parameters[k].value)
         fail("static tool Z shifts incompatible with manual work Z zero");
     }
+    if (entry == "helix" || pathHelix) {
+      var helixZ = s.initialPosition.z, hasHelicalMotion = false;
+      for (var h = 0; h < s.records.length; h++) {
+        var motion = s.records[h];
+        if (motion.kind == "comment" && String(motion.text).indexOf("ENTRY: requested Helix; resolved") == 0)
+          fail("operation " + s.id + ": requested Helix was not geometrically realized (entry radius/space or open path); generic motion substituted Ramp/Direct. ShopBot refuses this fallback. Choose another entry explicitly. Operation parameters were kept");
+        if (motion.kind == "circular") {
+          if (motion.end.z != helixZ) hasHelicalMotion = true;
+          helixZ = motion.end.z;
+        } else if (motion.kind == "linear" || motion.kind == "rapid") helixZ = motion.z;
+      }
+      if (!hasHelicalMotion)
+        fail("operation " + s.id + ": requested Helix was not geometrically realized (entry radius/space, open path or composition); generic motion substituted Ramp/Direct. ShopBot refuses this fallback. Choose another entry explicitly. Operation parameters were kept");
+      fail("operation " + s.id + ": helical entry/descent is not qualified for this post (contour re-plunge and complete region clearance remain unqualified); choose Ramp (without tabs/leads) or Direct. Operation parameters were kept");
+    }
+    if (entry == "ramp" && (entryTabs || entryLeads))
+      fail("operation " + s.id + ": Ramp with tabs or leads is not qualified; the generic emitter can substitute direct entry. Choose Direct explicitly, or remove tabs/leads. Operation parameters were kept");
+    if (entry == "ramp" && (!finite(entryStartZ) || entryStartZ >= safeZ))
+      fail("operation " + s.id + ": Ramp requires a finite start depth below authored clearance");
     point(s.initialPosition); point(s.finalPosition);
     var p = s.initialPosition;
     for (var j = 0; j < s.records.length; j++) {
@@ -109,13 +138,16 @@ function preflight() {
       case "rapid": case "linear":
         point(r);
         if (r.kind == "linear") feed(r.feed);
+        if (entry == "ramp" && r.kind == "linear" && r.z < entryStartZ && r.z < p.z &&
+            xyz.format(r.x) == xyz.format(p.x) && xyz.format(r.y) == xyz.format(p.y))
+          fail("operation " + s.id + ": requested Ramp became a direct plunge (path too short or entry combination unsupported). Choose Direct explicitly or revise the entry. Operation parameters were kept");
         if (r.kind == "rapid" && (r.x != p.x || r.y != p.y) && r.z <= 0 && p.z <= 0)
           fail("lateral rapid below stock");
         p = r;
         break;
       case "circular":
         point(r.center); point(r.end); feed(r.feed);
-        if (r.end.z != p.z || r.normal[0] != 0 || r.normal[1] != 0 || r.normal[2] != 1)
+        if ((r.end.z != p.z && entry != "ramp") || r.normal[0] != 0 || r.normal[1] != 0 || r.normal[2] != 1)
           fail("only planar XY arcs supported");
         p = r.end;
         break;

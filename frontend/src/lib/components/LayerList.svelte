@@ -584,11 +584,7 @@
     margin: 0.2rem 0 0 0.5rem;
     padding-left: 0.3rem;
     border-left: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
-    /* Sidebar accordion (App.svelte) already gives the active layers
-       host `minmax(0, 1fr)` and clips overflow on its host wrapper.
-       The prior `max-height: 28vh` capped this region INSIDE that
-       1fr row and created a nested second scrollbar that wasted
-       vertical space on tall windows. Let the host own scrolling. */
+    /* Active host limits long content; short lists retain natural height. */
     overflow-y: auto;
   }
   /* Per-import card. When the project has multiple drawings the head

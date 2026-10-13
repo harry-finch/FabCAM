@@ -1,17 +1,23 @@
 <script lang="ts">
+  import { notificationError } from '../api/error-notification';
+  import CollisionFeedback from './CollisionFeedback.svelte';
+  import RemainingMaterial from './RemainingMaterial.svelte';
+  import { CircleX, TriangleAlert, Info, Check, RotateCw } from '@lucide/svelte';
+  import { inDrawingFrame } from '../state/work-frame';
+  import { generationContextKey, buildGenerationProject } from '../state/generation-context';
   import { resolveExportExtension } from '../services/gcode-export';
   // Simplified bar: post-processor + Generate + Download. The full setup
   // tree lives in SetupPanel and feeds project.setup.
 
   import { defaultClient } from '../api/http';
-  import { CancelledError, tryParseStructuredError } from '../api/client';
+  import { CancelledError } from '../api/client';
   import {
     project,
     simWarningSeverity,
     simWarningSegmentIdx,
     simWarningSummary,
   } from '../state/project.svelte';
-  import { buildProject, type GenerateRequestWithProject } from '../api/build-project';
+  import { type GenerateRequestWithProject } from '../api/build-project';
   import { generateBus } from '../state/generate-bus.svelte';
   import { exportGeneratedGcode, exportSimulatedStockStl } from '../services/file_ops';
   import type { SimWarning, TimeEstimate } from '../api/types';
@@ -20,7 +26,7 @@
     countCriticalPipelineWarnings,
     type PipelineWarning,
   } from '../api/pipeline-warnings';
-  import { summarizeWarnings } from '../state/warnings-summary';
+  import { summarizeWarnings, showGenerationSummary } from '../state/warnings-summary';
   import GenerateProgress from './GenerateProgress.svelte';
   import FloatingPanel from './FloatingPanel.svelte';
   import { workspace } from '../state/workspace.svelte';
@@ -30,30 +36,7 @@
   import { cpsSelectionKey, toCpsPostRequest } from './cps-post-form';
   import { warningMessage } from './warning-display';
 
-  // Format a duration in seconds as HH:MM:SS (always two digits per
-  // unit). Negative / NaN inputs render as 00:00:00.
-  function formatHms(s: number | undefined): string {
-    if (!s || !isFinite(s) || s < 0) return '00:00:00';
-    const total = Math.round(s);
-    const h = Math.floor(total / 3600);
-    const m = Math.floor((total % 3600) / 60);
-    const sec = total % 60;
-    return [h, m, sec].map((n) => String(n).padStart(2, '0')).join(':');
-  }
-
-  // Short form for breakdown items: M:SS for sub-hour, just seconds for
-  // tiny values. Returns "—" for zero / undefined.
-  function formatShort(s: number | undefined): string {
-    if (s === undefined || !isFinite(s)) return '—';
-    if (s <= 0.05) return '0s';
-    if (s < 60) return `${s.toFixed(1)}s`;
-    if (s < 3600) {
-      const m = Math.floor(s / 60);
-      const sec = Math.round(s % 60);
-      return `${m}:${String(sec).padStart(2, '0')}`;
-    }
-    return formatHms(s);
-  }
+  import { formatHms, formatShort } from './generate-time';
 
   function timeEstimate(): TimeEstimate | null {
     const r = project.gen.generated as { time_estimate?: TimeEstimate } | null;
@@ -143,6 +126,12 @@
     abortController?.abort();
   }
 
+  $effect(() => {
+    void project.documentEpoch;
+    abortController?.abort();
+    abortController = null;
+  });
+
   // Auto-regenerate on edit. Watch project.data.dirty + the setting;
   // when both are true and we're not already running, debounce ~1.5s
   // and fire run(). Cancel prior pending debounce on each new edit.
@@ -209,6 +198,11 @@
   // warnings.rs::push_stock_warning), since the core `Project` carries a
   // resolved stock box. Both ride in on `project.gen.generated.warnings`,
   // so the frontend does not synthesize either — doing so would double-count.
+  const generatedStale = $derived(
+    project.gen.generated != null &&
+      project.gen.inputContextKey !== generationContextKey(project, post),
+  );
+
   const warningSummary = $derived(
     summarizeWarnings({
       simWarnings: project.gen.simDiagnostics?.warnings ?? [],
@@ -216,7 +210,7 @@
         (project.gen.generated as { warnings?: PipelineWarning[] } | null)?.warnings ?? [],
       hasGenerated: project.gen.generated != null,
       hasSimDiagnostics: project.gen.simDiagnostics != null,
-      dirty: project.data.dirty,
+      dirty: generatedStale,
     }),
   );
   let warnings = $derived(warningSummary.sim);
@@ -262,34 +256,23 @@
   );
 
   async function run() {
-    if (!project.geometryView) return;
-    // NOTE: Generate is deliberately NOT gated on `criticalCount`. The
-    // critical-warning safety check blocks DOWNLOAD (see downloadGcode +
-    // the SettingsDialog hint: "required before downloading G-code"), not
-    // generation. Gating Generate here deadlocked the fix loop: a critical
-    // warning (e.g. pocket_fill_incomplete) can only be cleared by
-    // re-generating after a parameter change, but the gate refused that
-    // very re-generate because the count still reflected the stale prior
-    // run — so the warning never went away.
+    if (
+      !project.documentActive ||
+      project.loading ||
+      !project.geometryView ||
+      project.data.operations.length === 0
+    )
+      return;
+    const epoch = project.documentEpoch;
+    const ownsDocument = () => project.documentEpoch === epoch;
+    // Critical warnings block export, never regeneration: generating again
+    // must remain available to clear warnings after correcting the job.
+    const inputContextKey = generationContextKey(project, post);
+    const origin = { ...project.data.workOffset };
     project.beginGenerate();
     abortController = new AbortController();
     try {
-      const opProject = buildProject({
-        material: project.data.material,
-        fsContext: project.data.fsContext,
-        transformedImport: project.transformedImport,
-        geometryView: project.geometryView,
-        stockSizingImport: project.stockSizingImport,
-        machine: project.data.machine,
-        tools: project.data.tools,
-        operations: project.data.operations,
-        fixtures: project.data.fixtures,
-        textLayers: project.data.textLayers,
-        workOffset: project.data.workOffset,
-        stock: project.data.stock,
-        reliefSources: project.data.reliefSources,
-        groupOpsByTool: project.data.groupOpsByTool,
-      });
+      const opProject = buildGenerationProject(project);
       if (!opProject) {
         // Early bail: `beginGenerate()` flipped pipelineState to 'running'
         // above, so just `setError + return` would leave the UI stuck on
@@ -324,7 +307,11 @@
       const twoSided = project.data.stock?.flip != null && client.generateTwoSided != null;
       if (twoSided) {
         const both = await client.generateTwoSided!(req);
-        project.setGeneratedTwoSided(both);
+        if (!ownsDocument()) return;
+        project.setGeneratedTwoSided({
+          front: inDrawingFrame(both.front, origin),
+          back: both.back ? inDrawingFrame(both.back, origin) : undefined,
+        });
       } else {
         let r;
         if (client.generateStreaming) {
@@ -333,7 +320,7 @@
             (ev) => {
               // Live progress is read from project.gen.pipelineProgress, which
               // notePipelineEvent maintains; the bar binds to that.
-              project.notePipelineEvent(ev);
+              if (ownsDocument()) project.notePipelineEvent(ev);
             },
             abortController.signal,
           );
@@ -345,22 +332,25 @@
         } else {
           r = await client.generate(req);
         }
-        project.setGenerated(r);
+        if (!ownsDocument()) return;
+        project.setGenerated(inDrawingFrame(r, origin));
       }
+      project.gen.inputContextKey = inputContextKey;
       generatedPost = postTag;
       project.finishGenerate();
     } catch (e) {
+      if (!ownsDocument()) return;
       if (e instanceof CancelledError) {
         // Cancelled by the user — just snap back to idle.
         project.gen.pipelineState = 'idle';
       } else {
-        const raw = e instanceof Error ? e.message : String(e);
-        const structured = tryParseStructuredError(raw);
-        project.failGenerate(structured ?? raw);
+        project.failGenerate(notificationError(e));
       }
     } finally {
-      project.endGenerate();
-      abortController = null;
+      if (ownsDocument()) {
+        project.endGenerate();
+        abortController = null;
+      }
     }
   }
 
@@ -459,21 +449,6 @@
     }
   }
 
-  function chipGlyph(): string {
-    switch (warningSummary.severity) {
-      case 'idle':
-        return '🛡';
-      case 'stale':
-        return '↻';
-      case 'clean':
-        return '✓';
-      case 'critical':
-        return '⛔';
-      default:
-        return '⚠';
-    }
-  }
-
   const SIM_IDLE_HINT = $derived(t('genbar.sim_idle_hint'));
 </script>
 
@@ -483,16 +458,21 @@
   {:else}
     <button
       onclick={run}
-      disabled={(!project.geometryView && project.data.textLayers.length === 0) ||
+      disabled={!project.documentActive ||
+        project.data.operations.length === 0 ||
+        project.loading ||
+        (!project.geometryView && project.data.textLayers.length === 0) ||
         project.gen.generating}
-      class:stale={project.data.dirty && project.gen.generated != null}
-      title={project.data.dirty && project.gen.generated != null
-        ? t('genbar.generate.title_stale')
-        : t('genbar.generate.title')}
+      class:stale={generatedStale}
+      title={project.data.operations.length === 0
+        ? t('shell.operations_hint')
+        : generatedStale
+          ? t('genbar.generate.title_stale')
+          : t('genbar.generate.title')}
     >
       {#if project.gen.generating}
         {t('genbar.generate.generating')}
-      {:else if project.data.dirty && project.gen.generated != null}
+      {:else if generatedStale}
         {t('genbar.generate.regenerate')}
       {:else}
         {t('genbar.generate.generate')}
@@ -504,14 +484,16 @@
       <button
         onclick={() => void downloadGcode('front')}
         class="download"
-        title={t('genbar.download.title')}
+        disabled={generatedStale || project.gen.pipelineState !== 'idle'}
+        title={generatedStale ? t('ux1.export.stale') : t('genbar.download.title')}
       >
         {t('genbar.download.front', { ext: frontExtension })}
       </button>
       <button
         onclick={() => void downloadGcode('back')}
         class="download"
-        title={t('genbar.download.title')}
+        disabled={generatedStale || project.gen.pipelineState !== 'idle'}
+        title={generatedStale ? t('ux1.export.stale') : t('genbar.download.title')}
       >
         {t('genbar.download.back', { ext: backExtension })}
       </button>
@@ -519,7 +501,8 @@
       <button
         onclick={() => void downloadGcode()}
         class="download"
-        title={t('genbar.download.title')}
+        disabled={generatedStale || project.gen.pipelineState !== 'idle'}
+        title={generatedStale ? t('ux1.export.stale') : t('genbar.download.title')}
       >
         {t('genbar.download.file', { ext: frontExtension })}
       </button>
@@ -607,21 +590,30 @@
       </button>
     </span>
   {/if}
-  {#if warningSummary.severity === 'idle'}
-    <span class="sim-chip idle" title={SIM_IDLE_HINT}>
-      🛡 {chipLabel()}
-    </span>
-  {:else}
-    <button
-      class={chipClass()}
-      onclick={() => (warningPanelOpen = !warningPanelOpen)}
-      type="button"
-      title={t('genbar.chip.details_title')}
-      aria-expanded={warningPanelOpen}
-    >
-      <span class="glyph" aria-hidden="true">{chipGlyph()}</span>
-      {chipLabel()}
-    </button>
+  {#if showGenerationSummary(project.documentActive, project.data.operations.length, warningSummary)}
+    {#if warningSummary.severity === 'idle'}
+      <span class="sim-chip idle" title={SIM_IDLE_HINT}>
+        <Info size={16} aria-hidden="true" />
+        {chipLabel()}
+      </span>
+    {:else}
+      <button
+        class={chipClass()}
+        onclick={() => (warningPanelOpen = !warningPanelOpen)}
+        type="button"
+        title={t('genbar.chip.details_title')}
+        aria-expanded={warningPanelOpen}
+      >
+        <span class="glyph" aria-hidden="true">
+          {#if warningSummary.severity === 'critical'}<CircleX size={16} />
+          {:else if warningSummary.severity === 'warning'}<TriangleAlert size={16} />
+          {:else if warningSummary.severity === 'stale'}<RotateCw size={16} />
+          {:else if warningSummary.severity === 'clean'}<Check size={16} />
+          {:else}<Info size={16} />{/if}
+        </span>
+        {chipLabel()}
+      </button>
+    {/if}
   {/if}
   <!-- The separate 'bounds' chip was removed — its out-of-stock /
        out-of-work-area findings are already folded into
@@ -629,6 +621,9 @@
        they're counted in `totalWarningCount`, listed in the panel, and
        drive the single warnings chip's critical color. One button now. -->
 </div>
+
+<CollisionFeedback stale={generatedStale || !project.gen.generated} />
+<RemainingMaterial stale={generatedStale || project.gen.generating} />
 
 <!-- Floating, drag-movable + resizable panel (mechanics live in
      FloatingPanel; it stays mounted so the in-session position/size
@@ -853,6 +848,10 @@
     text-shadow: 0 0 4px var(--bg-app);
   }
   .sim-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ui-space-1);
+    line-height: 1.2;
     border-radius: 999px;
     padding: 0.18rem 0.65rem;
     font-size: 0.74rem;
@@ -951,8 +950,10 @@
     border-color: color-mix(in srgb, var(--error) 40%, transparent);
   }
   .sim-chip .glyph {
-    margin-right: 0.25rem;
-    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    line-height: 1;
   }
   /* Warnings content inside the FloatingPanel body — `flex: 1` fills
      the panel's column layout; user-select: text on the body so users

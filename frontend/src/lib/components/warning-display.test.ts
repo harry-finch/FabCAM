@@ -9,6 +9,9 @@ import { hasWarningTemplate, warningMessage, type Translate } from './warning-di
 /// because the Rust side never supplies it. Extend this set (and the matching
 /// `.with_param` call) when a new warning param is introduced.
 const KNOWN_WARN_PARAMS = new Set([
+  // work_origin.rs fixture collision diagnostics.
+  'op_id',
+  'fixture_name',
   'allowance',
   'allowed',
   'approach_x',

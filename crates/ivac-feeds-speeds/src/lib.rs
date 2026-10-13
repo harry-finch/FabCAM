@@ -15,6 +15,8 @@
 //! }
 //! ```
 
+mod adaptation;
+pub use adaptation::*;
 mod dataset;
 mod engine;
 mod matching;

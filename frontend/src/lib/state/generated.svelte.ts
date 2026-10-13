@@ -44,6 +44,13 @@ export class GeneratedState {
   /// two-sided (flip-stock) run this holds the FRONT program, so every
   /// existing consumer keeps working unchanged.
   generated = $state<GenerateResponse | null>(null);
+  // Transient analysis view only: never saved, no CAM commands/history.
+  remainingVisible = $state(false);
+  toolpath3dVisible = $state(true);
+  remainingOpId = $state<number | null>(null);
+
+  /// CAM input identity captured before the successful request; never persisted.
+  inputContextKey = $state<string | null>(null);
 
   /// The BACK program of a two-sided (flip-stock) run — mirrored geometry
   /// with a flip/re-zero header. `null` for a single-sided run (the common
@@ -88,9 +95,28 @@ export class GeneratedState {
   /// the preview is wireframe-only).
   simDiagnostics = $state<SimDiagnostics | null>(null);
 
+  reset(): void {
+    this.generated = null;
+    this.generatedBack = null;
+    this.generatedVersion += 1;
+    this.inputContextKey = null;
+    this.remainingVisible = false;
+    this.remainingOpId = null;
+    this.toolpath3dVisible = true;
+    this.toolpathCumLen = null;
+    this.toolpathTotalLen = 0;
+    this.simDiagnostics = null;
+    this.generating = false;
+    this.pipelineState = 'idle';
+    this.pipelineProgress = null;
+    this.lastGenerateCachedCount = 0;
+    this.lastGenerateOpCount = 0;
+  }
+
   /// Start a new pipeline run. Resets all transient state so the UI
   /// can't leak progress / cache counters from the prior run.
   beginGenerate(): void {
+    this.remainingVisible = false;
     this.generating = true;
     this.pipelineState = 'running';
     this.pipelineProgress = null;

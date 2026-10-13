@@ -1,0 +1,688 @@
+{
+  "manifest": {
+    "identity": {
+      "id": "sienci-router-reference",
+      "revision": "2026-10-13.1"
+    },
+    "schema_version": 3,
+    "name": "Sienci Labs \u2014 LongMill references",
+    "publisher": "Sienci Labs",
+    "source_url": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf",
+    "origin": "Adapted from six page-1 single-flute UC metric rows; pinned PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8; retrieved 2026-10-12.",
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": "Sienci Labs. Adaptation by FabCAM: identities, units, mode labels and restrictive scopes; original numerical cutting values unchanged. No endorsement.",
+    "visibility": "public",
+    "distribution": "bundled",
+    "redistributable": true,
+    "transformation_permitted": true,
+    "default_evidence": "reference_data",
+    "notes": "Source category is composite softwood / soft plywood / MDF; no universal material equivalence, no ShopBot transfer, no local validation. FS3.9: original six rows unchanged. FabCAM derived adaptation policy permits softwood/MDF, explicit fablab-router context, same confirmed upcut tool identities and conservative full-slot basis for nominal pockets. This is not Sienci pocket or ShopBot validation."
+  },
+  "dataset": {
+    "format_version": 1,
+    "description": "Sienci LongMill MK2 external reference subset; no ShopBot or locally tested/validated presets.",
+    "license": "CC-BY-SA-4.0",
+    "machines": [
+      {
+        "identity": {
+          "id": "sienci-longmill-mk2-reference",
+          "revision": "1"
+        },
+        "label": "LongMill MK2 source reference context",
+        "notes": "Source machine class only; no lab machine, hardware limits or equivalence inferred."
+      },
+      {
+        "identity": {
+          "id": "machine/fablab-router",
+          "revision": "1"
+        },
+        "label": "Fablab router class \u2014 derived reference transfer",
+        "notes": "Explicit operator applicability selection, not a physical validation or machine limit."
+      }
+    ],
+    "materials": [
+      {
+        "identity": {
+          "id": "sienci-softwood-soft-plywood-mdf",
+          "revision": "1"
+        },
+        "label": "Source softwood / soft plywood / MDF category",
+        "notes": "Source category includes low-hardness wood-based materials dentable with a fingernail. Not a universal MDF or plywood identity; operator must qualify actual stock before mapping. No material grade, thickness or local calibration claimed."
+      }
+    ],
+    "tools": [
+      {
+        "identity": {
+          "id": "sienci-reference-single-flute-upcut-quarter-inch",
+          "revision": "1"
+        },
+        "label": "Source reference: quarter-inch single-flute flat upcut",
+        "cutting_family": "flat_endmill",
+        "diameter_mm": 6.35,
+        "flute_count": 1,
+        "max_rpm": null,
+        "notes": "Reference geometry, not a lab tool inventory or manufacturer maximum RPM."
+      },
+      {
+        "identity": {
+          "id": "sienci-reference-single-flute-upcut-eighth-inch",
+          "revision": "1"
+        },
+        "label": "Source reference: eighth-inch single-flute flat upcut",
+        "cutting_family": "flat_endmill",
+        "diameter_mm": 3.175,
+        "flute_count": 1,
+        "max_rpm": null,
+        "notes": "Reference geometry, not a lab tool inventory or manufacturer maximum RPM."
+      }
+    ],
+    "profile_set": {
+      "schema_version": 1,
+      "identity": {
+        "id": "sienci-router-reference",
+        "revision": "2026-10-12.1"
+      },
+      "machine_families": [],
+      "material_families": [],
+      "profiles": [
+        {
+          "identity": {
+            "id": "sienci-soft-single-flute-quarter-inch-slot-prudent",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf#page=1",
+            "author": "Sienci Labs",
+            "date": "2026-10-12",
+            "permission_or_license": "CC-BY-SA-4.0; see data/feeds-speeds/CC-BY-SA-4.0.txt and README.md",
+            "notes": "Adapted from page 1, Single Flute Flat End Mill UC, quarter-inch, Reduced Speed. Retrieved 2026-10-12 at git 060e2291a1cf17bf9be4f151d7aa539a42ed2b0c; PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8. Date is retrieval, publication date unspecified. Feed/plunge/RPM and slot DOC transcribed unchanged. Inch diameter converted exactly using 25.4 mm/in. Mode names mapped, no numerical reduction. Scope restricted to source machine/material category, full slot, exact diameter/flutes/DOC. Entry unspecified in source; no entry claim or pocket/finishing transfer. Preferred targets are not hard machine/tool limits; none imported. No local trials.",
+            "evidence_record": null
+          },
+          "aggressiveness": "prudent",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-longmill-mk2-reference",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-softwood-soft-plywood-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "sienci-reference-single-flute-upcut-quarter-inch",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6.35,
+              "max": 6.35
+            },
+            "flute_count": 1,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 2.8,
+              "max": 2.8
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": null,
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 17000,
+            "feed_mm_min": 1620,
+            "plunge_mm_min": 810,
+            "doc_mm": 2.8,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "sienci-soft-single-flute-quarter-inch-slot-normal",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf#page=1",
+            "author": "Sienci Labs",
+            "date": "2026-10-12",
+            "permission_or_license": "CC-BY-SA-4.0; see data/feeds-speeds/CC-BY-SA-4.0.txt and README.md",
+            "notes": "Adapted from page 1, Single Flute Flat End Mill UC, quarter-inch, Regular Speed. Retrieved 2026-10-12 at git 060e2291a1cf17bf9be4f151d7aa539a42ed2b0c; PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8. Date is retrieval, publication date unspecified. Feed/plunge/RPM and slot DOC transcribed unchanged. Inch diameter converted exactly using 25.4 mm/in. Mode names mapped, no numerical reduction. Scope restricted to source machine/material category, full slot, exact diameter/flutes/DOC. Entry unspecified in source; no entry claim or pocket/finishing transfer. Preferred targets are not hard machine/tool limits; none imported. No local trials.",
+            "evidence_record": null
+          },
+          "aggressiveness": "normal",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-longmill-mk2-reference",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-softwood-soft-plywood-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "sienci-reference-single-flute-upcut-quarter-inch",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6.35,
+              "max": 6.35
+            },
+            "flute_count": 1,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 4.1,
+              "max": 4.1
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": null,
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 17000,
+            "feed_mm_min": 2160,
+            "plunge_mm_min": 1080,
+            "doc_mm": 4.1,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "sienci-soft-single-flute-quarter-inch-slot-rapid",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf#page=1",
+            "author": "Sienci Labs",
+            "date": "2026-10-12",
+            "permission_or_license": "CC-BY-SA-4.0; see data/feeds-speeds/CC-BY-SA-4.0.txt and README.md",
+            "notes": "Adapted from page 1, Single Flute Flat End Mill UC, quarter-inch, Full Speed. Retrieved 2026-10-12 at git 060e2291a1cf17bf9be4f151d7aa539a42ed2b0c; PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8. Date is retrieval, publication date unspecified. Feed/plunge/RPM and slot DOC transcribed unchanged. Inch diameter converted exactly using 25.4 mm/in. Mode names mapped, no numerical reduction. Scope restricted to source machine/material category, full slot, exact diameter/flutes/DOC. Entry unspecified in source; no entry claim or pocket/finishing transfer. Preferred targets are not hard machine/tool limits; none imported. No local trials.",
+            "evidence_record": null
+          },
+          "aggressiveness": "rapid",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-longmill-mk2-reference",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-softwood-soft-plywood-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "sienci-reference-single-flute-upcut-quarter-inch",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6.35,
+              "max": 6.35
+            },
+            "flute_count": 1,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 5.5,
+              "max": 5.5
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": null,
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 17000,
+            "feed_mm_min": 2700,
+            "plunge_mm_min": 1350,
+            "doc_mm": 5.5,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "sienci-soft-single-flute-eighth-inch-slot-prudent",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf#page=1",
+            "author": "Sienci Labs",
+            "date": "2026-10-12",
+            "permission_or_license": "CC-BY-SA-4.0; see data/feeds-speeds/CC-BY-SA-4.0.txt and README.md",
+            "notes": "Adapted from page 1, Single Flute Flat End Mill UC, eighth-inch, Reduced Speed. Retrieved 2026-10-12 at git 060e2291a1cf17bf9be4f151d7aa539a42ed2b0c; PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8. Date is retrieval, publication date unspecified. Feed/plunge/RPM and slot DOC transcribed unchanged. Inch diameter converted exactly using 25.4 mm/in. Mode names mapped, no numerical reduction. Scope restricted to source machine/material category, full slot, exact diameter/flutes/DOC. Entry unspecified in source; no entry claim or pocket/finishing transfer. Preferred targets are not hard machine/tool limits; none imported. No local trials.",
+            "evidence_record": null
+          },
+          "aggressiveness": "prudent",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-longmill-mk2-reference",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-softwood-soft-plywood-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "sienci-reference-single-flute-upcut-eighth-inch",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 3.175,
+              "max": 3.175
+            },
+            "flute_count": 1,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 4.3,
+              "max": 4.3
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": null,
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 22000,
+            "feed_mm_min": 1050,
+            "plunge_mm_min": 530,
+            "doc_mm": 4.3,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "sienci-soft-single-flute-eighth-inch-slot-normal",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf#page=1",
+            "author": "Sienci Labs",
+            "date": "2026-10-12",
+            "permission_or_license": "CC-BY-SA-4.0; see data/feeds-speeds/CC-BY-SA-4.0.txt and README.md",
+            "notes": "Adapted from page 1, Single Flute Flat End Mill UC, eighth-inch, Regular Speed. Retrieved 2026-10-12 at git 060e2291a1cf17bf9be4f151d7aa539a42ed2b0c; PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8. Date is retrieval, publication date unspecified. Feed/plunge/RPM and slot DOC transcribed unchanged. Inch diameter converted exactly using 25.4 mm/in. Mode names mapped, no numerical reduction. Scope restricted to source machine/material category, full slot, exact diameter/flutes/DOC. Entry unspecified in source; no entry claim or pocket/finishing transfer. Preferred targets are not hard machine/tool limits; none imported. No local trials.",
+            "evidence_record": null
+          },
+          "aggressiveness": "normal",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-longmill-mk2-reference",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-softwood-soft-plywood-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "sienci-reference-single-flute-upcut-eighth-inch",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 3.175,
+              "max": 3.175
+            },
+            "flute_count": 1,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 6.4,
+              "max": 6.4
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": null,
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 22000,
+            "feed_mm_min": 1400,
+            "plunge_mm_min": 700,
+            "doc_mm": 6.4,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "sienci-soft-single-flute-eighth-inch-slot-rapid",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "https://github.com/Sienci-Labs/Resources/blob/060e2291a1cf17bf9be4f151d7aa539a42ed2b0c/_downloads/FeedsSpeedsMetric.pdf#page=1",
+            "author": "Sienci Labs",
+            "date": "2026-10-12",
+            "permission_or_license": "CC-BY-SA-4.0; see data/feeds-speeds/CC-BY-SA-4.0.txt and README.md",
+            "notes": "Adapted from page 1, Single Flute Flat End Mill UC, eighth-inch, Full Speed. Retrieved 2026-10-12 at git 060e2291a1cf17bf9be4f151d7aa539a42ed2b0c; PDF SHA-256 e7c4519025ce1a285733138d1295423995617a80e2b4f2b5c135d4607a6167d8. Date is retrieval, publication date unspecified. Feed/plunge/RPM and slot DOC transcribed unchanged. Inch diameter converted exactly using 25.4 mm/in. Mode names mapped, no numerical reduction. Scope restricted to source machine/material category, full slot, exact diameter/flutes/DOC. Entry unspecified in source; no entry claim or pocket/finishing transfer. Preferred targets are not hard machine/tool limits; none imported. No local trials.",
+            "evidence_record": null
+          },
+          "aggressiveness": "rapid",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-longmill-mk2-reference",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "sienci-softwood-soft-plywood-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "sienci-reference-single-flute-upcut-eighth-inch",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 3.175,
+              "max": 3.175
+            },
+            "flute_count": 1,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 8.5,
+              "max": 8.5
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": null,
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 22000,
+            "feed_mm_min": 1750,
+            "plunge_mm_min": 880,
+            "doc_mm": 8.5,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        }
+      ]
+    }
+  },
+  "records": [
+    {
+      "profile": {
+        "id": "sienci-soft-single-flute-quarter-inch-slot-prudent",
+        "revision": "1"
+      },
+      "source_record_id": "sienci-soft-single-flute-quarter-inch-slot-prudent",
+      "original_classification": "Softwood / soft plywood / MDF \u00b7 Single Flute Flat End Mill UC \u00b7 prudent",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": "upcut",
+        "material": null,
+        "coating": null,
+        "shape": "flat"
+      },
+      "adaptation": {
+        "policy": "fs39-normalized-matching-1",
+        "material_taxa": ["wood.softwood", "wood.mdf"],
+        "machines": [
+          {
+            "id": "machine/fablab-router",
+            "revision": "1"
+          }
+        ],
+        "tools": [
+          {
+            "id": "sienci-reference-single-flute-upcut-quarter-inch",
+            "revision": "1"
+          },
+          {
+            "id": "sienci-reference-single-flute-upcut-eighth-inch",
+            "revision": "1"
+          }
+        ],
+        "slot_to_pocket": true
+      }
+    },
+    {
+      "profile": {
+        "id": "sienci-soft-single-flute-quarter-inch-slot-normal",
+        "revision": "1"
+      },
+      "source_record_id": "sienci-soft-single-flute-quarter-inch-slot-normal",
+      "original_classification": "Softwood / soft plywood / MDF \u00b7 Single Flute Flat End Mill UC \u00b7 normal",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": "upcut",
+        "material": null,
+        "coating": null,
+        "shape": "flat"
+      },
+      "adaptation": {
+        "policy": "fs39-normalized-matching-1",
+        "material_taxa": ["wood.softwood", "wood.mdf"],
+        "machines": [
+          {
+            "id": "machine/fablab-router",
+            "revision": "1"
+          }
+        ],
+        "tools": [
+          {
+            "id": "sienci-reference-single-flute-upcut-quarter-inch",
+            "revision": "1"
+          },
+          {
+            "id": "sienci-reference-single-flute-upcut-eighth-inch",
+            "revision": "1"
+          }
+        ],
+        "slot_to_pocket": true
+      }
+    },
+    {
+      "profile": {
+        "id": "sienci-soft-single-flute-quarter-inch-slot-rapid",
+        "revision": "1"
+      },
+      "source_record_id": "sienci-soft-single-flute-quarter-inch-slot-rapid",
+      "original_classification": "Softwood / soft plywood / MDF \u00b7 Single Flute Flat End Mill UC \u00b7 rapid",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": "upcut",
+        "material": null,
+        "coating": null,
+        "shape": "flat"
+      },
+      "adaptation": {
+        "policy": "fs39-normalized-matching-1",
+        "material_taxa": ["wood.softwood", "wood.mdf"],
+        "machines": [
+          {
+            "id": "machine/fablab-router",
+            "revision": "1"
+          }
+        ],
+        "tools": [
+          {
+            "id": "sienci-reference-single-flute-upcut-quarter-inch",
+            "revision": "1"
+          },
+          {
+            "id": "sienci-reference-single-flute-upcut-eighth-inch",
+            "revision": "1"
+          }
+        ],
+        "slot_to_pocket": true
+      }
+    },
+    {
+      "profile": {
+        "id": "sienci-soft-single-flute-eighth-inch-slot-prudent",
+        "revision": "1"
+      },
+      "source_record_id": "sienci-soft-single-flute-eighth-inch-slot-prudent",
+      "original_classification": "Softwood / soft plywood / MDF \u00b7 Single Flute Flat End Mill UC \u00b7 prudent",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": "upcut",
+        "material": null,
+        "coating": null,
+        "shape": "flat"
+      },
+      "adaptation": {
+        "policy": "fs39-normalized-matching-1",
+        "material_taxa": ["wood.softwood", "wood.mdf"],
+        "machines": [
+          {
+            "id": "machine/fablab-router",
+            "revision": "1"
+          }
+        ],
+        "tools": [
+          {
+            "id": "sienci-reference-single-flute-upcut-quarter-inch",
+            "revision": "1"
+          },
+          {
+            "id": "sienci-reference-single-flute-upcut-eighth-inch",
+            "revision": "1"
+          }
+        ],
+        "slot_to_pocket": true
+      }
+    },
+    {
+      "profile": {
+        "id": "sienci-soft-single-flute-eighth-inch-slot-normal",
+        "revision": "1"
+      },
+      "source_record_id": "sienci-soft-single-flute-eighth-inch-slot-normal",
+      "original_classification": "Softwood / soft plywood / MDF \u00b7 Single Flute Flat End Mill UC \u00b7 normal",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": "upcut",
+        "material": null,
+        "coating": null,
+        "shape": "flat"
+      },
+      "adaptation": {
+        "policy": "fs39-normalized-matching-1",
+        "material_taxa": ["wood.softwood", "wood.mdf"],
+        "machines": [
+          {
+            "id": "machine/fablab-router",
+            "revision": "1"
+          }
+        ],
+        "tools": [
+          {
+            "id": "sienci-reference-single-flute-upcut-quarter-inch",
+            "revision": "1"
+          },
+          {
+            "id": "sienci-reference-single-flute-upcut-eighth-inch",
+            "revision": "1"
+          }
+        ],
+        "slot_to_pocket": true
+      }
+    },
+    {
+      "profile": {
+        "id": "sienci-soft-single-flute-eighth-inch-slot-rapid",
+        "revision": "1"
+      },
+      "source_record_id": "sienci-soft-single-flute-eighth-inch-slot-rapid",
+      "original_classification": "Softwood / soft plywood / MDF \u00b7 Single Flute Flat End Mill UC \u00b7 rapid",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": "upcut",
+        "material": null,
+        "coating": null,
+        "shape": "flat"
+      },
+      "adaptation": {
+        "policy": "fs39-normalized-matching-1",
+        "material_taxa": ["wood.softwood", "wood.mdf"],
+        "machines": [
+          {
+            "id": "machine/fablab-router",
+            "revision": "1"
+          }
+        ],
+        "tools": [
+          {
+            "id": "sienci-reference-single-flute-upcut-quarter-inch",
+            "revision": "1"
+          },
+          {
+            "id": "sienci-reference-single-flute-upcut-eighth-inch",
+            "revision": "1"
+          }
+        ],
+        "slot_to_pocket": true
+      }
+    }
+  ]
+}

@@ -34,6 +34,7 @@ describe('pipelineWarningSeverity', () => {
   });
 
   it('keeps informational kinds non-critical', () => {
+    expect(pipelineWarningSeverity(w('entry_representation', 1))).toBe('info');
     // These are the "the program will run; here's a heads-up" kinds —
     // they MUST NOT be promoted to critical or the safety gate
     // becomes unusable in practice.

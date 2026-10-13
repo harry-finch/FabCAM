@@ -22,7 +22,7 @@ import type { SimWarning } from '../api/types';
 /// them differently — but the lane that drives it is computed once here.
 ///
 /// * `idle`     — nothing generated and no sim run yet (Generate first).
-/// * `stale`    — a sim verdict exists but the project changed since
+/// * `stale`    — generated output or a sim verdict exists but the project changed since
 ///                (re-Generate to refresh).
 /// * `critical` — at least one critical sim or pipeline warning.
 /// * `warning`  — non-critical warnings present.
@@ -54,7 +54,7 @@ export interface WarningsSummary {
   total: number;
   /// Anything generated or simulated yet?
   hasRun: boolean;
-  /// A sim verdict exists but the project has been edited since.
+  /// Output or a sim verdict exists but the project has been edited since.
   stale: boolean;
   severity: WarningSeverity;
 }
@@ -69,7 +69,7 @@ export function summarizeWarnings(input: WarningsSummaryInput): WarningsSummary 
   // Canonical "has anything run" test (the phone copy's, which also
   // covers a clean Generate that emitted no warnings and ran no sim).
   const hasRun = input.hasGenerated || input.hasSimDiagnostics;
-  const stale = input.hasSimDiagnostics && input.dirty;
+  const stale = hasRun && input.dirty;
 
   let severity: WarningSeverity;
   if (!hasRun) severity = 'idle';
@@ -79,4 +79,13 @@ export function summarizeWarnings(input: WarningsSummaryInput): WarningsSummary 
   else severity = 'clean';
 
   return { sim, pipeline, critical, total, hasRun, stale, severity };
+}
+
+/** Hide only irrelevant pre-generation messaging; never suppress diagnostics. */
+export function showGenerationSummary(
+  active: boolean,
+  operationCount: number,
+  summary: WarningsSummary,
+): boolean {
+  return active && (operationCount > 0 || summary.hasRun || summary.total > 0);
 }

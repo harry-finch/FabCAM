@@ -17,7 +17,7 @@ import { HeightfieldMeshPyramid, pickMinLodLevelForBudget } from './heightfield_
 import { UndercutMeshBuilder } from './undercut_mesh';
 import { backReflectionOffsetZ } from './dual_surface';
 import { detectTwoSidedConflicts, type ConflictMarker } from './two_sided_conflict';
-import { planAdvance, playheadToSegment } from './playhead';
+import { checkpointIndex, planAdvance, playheadToSegment } from './playhead';
 import { computeFootprint } from './footprint';
 import { isWasmTransport } from '../api/transport-mode';
 import { simWarningKey } from './warnings';
@@ -76,7 +76,7 @@ interface SimulatorWasm {
   /// (marks the whole grid dirty). Returns true on a hit.
   restore_checkpoint(seg_idx: number): boolean;
   /// Largest checkpoint `seg_idx` ≤ `target`, or -1 if none.
-  nearest_checkpoint(target: number): number;
+  nearest_checkpoint(target: number): number | bigint;
   /// Drop all heightmap checkpoints (call when the toolpath changes).
   clear_checkpoints(): void;
   checkpoint_count(): number;
@@ -933,7 +933,7 @@ export class HeightfieldDriver {
       segIdx < this.appliedSeg || (segIdx === this.appliedSeg && segT < this.partialT);
     let replayFrom = 0;
     if (backward && exactRewind && this.checkpointInterval > 0) {
-      const nearest = this.sim.nearest_checkpoint(segIdx);
+      const nearest = checkpointIndex(this.sim.nearest_checkpoint(segIdx));
       if (nearest > 0) replayFrom = nearest;
     }
 

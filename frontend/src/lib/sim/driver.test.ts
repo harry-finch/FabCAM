@@ -11,7 +11,7 @@ import {
   effectiveSimCellCap,
   WASM_TRIAL_SIM_CELL_CAP,
 } from './driver';
-import { planAdvance } from './playhead';
+import { checkpointIndex, planAdvance } from './playhead';
 import type { ImportResponse } from '../api/types';
 import type { ToolEntry } from '../state/project-types';
 
@@ -246,5 +246,23 @@ describe('effectiveSimCellCap (5v1b trial-mode fidelity)', () => {
   it('never returns less than 1 cell', () => {
     expect(effectiveSimCellCap(0, false)).toBe(1);
     expect(effectiveSimCellCap(-10, true)).toBe(1);
+  });
+});
+
+describe('WASM checkpoint replay boundary', () => {
+  it('normalizes i64 bigint results before backward replay math', () => {
+    const plan = planAdvance(80, 0.5, 60, 0.4, 100, checkpointIndex(40n));
+    expect(plan?.reset).toBe(true);
+    expect(plan?.bulkAdvance).toEqual({ from: 40, to: 60 });
+    expect(checkpointIndex(40)).toBe(40);
+  });
+  it('preserves the no-checkpoint sentinel and rejects invalid/out-of-range indices', () => {
+    for (const value of [-1n, -1, NaN, Infinity, 0.5, 4294967296n])
+      expect(checkpointIndex(value)).toBe(-1);
+    expect(checkpointIndex(4294967295n)).toBe(4294967295);
+    expect(planAdvance(80, 0.5, 60, 0.4, 100, checkpointIndex(-1n))?.bulkAdvance).toEqual({
+      from: 0,
+      to: 60,
+    });
   });
 });

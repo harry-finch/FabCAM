@@ -171,3 +171,10 @@ export function planAdvance(
   plan.newPartialT = curT;
   return plan;
 }
+
+// wasm-bindgen maps Rust i64 checkpoint results to bigint; other simulators
+// may expose number. Normalize at this boundary before planner math/map lookup.
+export function checkpointIndex(value: number | bigint): number {
+  const index = Number(value);
+  return Number.isInteger(index) && index >= 0 && index <= 0xffff_ffff ? index : -1;
+}

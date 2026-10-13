@@ -1,3 +1,4 @@
+import { computeUnsavedWork } from './unsaved';
 import { validateProjectFile, hasFeedsSpeedsData } from './feeds-speeds-persistence';
 // Project-file / workspace lifecycle extracted from the ProjectState
 // god root. Save/load of .ivac-project files, the
@@ -27,6 +28,10 @@ import type { ProjectState } from './project.svelte';
 /// new drawing so leftover ops from the previous project don't
 /// silently re-target unrelated objects in the new geometry.
 export function clearProject(p: ProjectState) {
+  p.documentEpoch += 1;
+  p.documentActive = false;
+  p.documentName = null;
+  p.documentBaseline = null;
   p.data.imports = [];
   p.data.operations = [];
   p.data.material = undefined;
@@ -39,9 +44,11 @@ export function clearProject(p: ProjectState) {
   // workOffset is per-project (the user pre-zeros their machine
   // at a different point per drawing), so reset to default like ops.
   p.data.workOffset = defaultWorkOffset();
-  p.gen.generated = null;
-  p.gen.toolpathCumLen = null;
-  p.gen.toolpathTotalLen = 0;
+  p.gen.reset();
+  p.playhead = 1;
+  p.sel.pickMode = null;
+  p.sel.toolsDialogFocusId = null;
+  p.sel.selectionAnchorObjectId = null;
   p.sel.selectedEntities = new Set();
   p.sel.selectedObjects = new Set();
   p.sel.selectedOpId = null;
@@ -56,6 +63,7 @@ export function clearProject(p: ProjectState) {
   p.savedToProject = false;
   resetPreviewCache();
   p.history.clear();
+  void refreshSourceWatch(p);
 }
 
 /// Switch the active project path and apply the persisted per-project
@@ -218,6 +226,35 @@ export function restoreProject(p: ProjectState, file: ProjectFile) {
   // so re-opening it (unedited) doesn't trigger the unsaved-work guard.
   // Must run AFTER the internal setImported above, which clears it.
   p.savedToProject = true;
+  p.documentActive = true;
+  p.documentBaseline = JSON.stringify(snapshotProject(p));
   // Loading a project resets to a clean undo baseline.
   p.history.clear();
+}
+
+export function projectHasUnsavedWork(p: ProjectState): boolean {
+  if (!p.documentActive) return false;
+  const empty =
+    !p.transformedImport &&
+    p.data.operations.length === 0 &&
+    p.data.textLayers.length === 0 &&
+    p.data.reliefSources.length === 0;
+  return computeUnsavedWork({
+    empty,
+    // Generate clears the legacy CAM dirty flag. Compare persisted content
+    // independently so generating never marks unsaved edits as saved.
+    dirty:
+      p.documentBaseline == null
+        ? p.data.dirty
+        : JSON.stringify(p.snapshot()) !== p.documentBaseline,
+    savedToProject: p.savedToProject,
+  });
+}
+
+export function markDocumentSaved(p: ProjectState, name: string, snapshot: string) {
+  p.documentActive = true;
+  p.documentName = name.split(/[\\/]/).pop() ?? name;
+  p.documentBaseline = snapshot;
+  p.savedToProject = true;
+  p.data.dirty = JSON.stringify(p.snapshot()) !== snapshot;
 }

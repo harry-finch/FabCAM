@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ToolpathVisibility from './lib/components/ToolpathVisibility.svelte';
+  import { fixtureFocus } from './lib/state/fixture-focus.svelte';
   import FileUpload from './lib/components/FileUpload.svelte';
   import ModeSwitchNotice from './lib/components/ModeSwitchNotice.svelte';
   import EntityCanvas2D from './lib/components/EntityCanvas2D.svelte';
@@ -45,7 +47,9 @@
   type ReportDialogComp = typeof import('./lib/components/ReportDialog.svelte').default;
   let ReportDialog = $state<ReportDialogComp | null>(null);
   let reportDialogLoading = false;
-  import RecentMenu from './lib/components/RecentMenu.svelte';
+  import AppNavigation from './lib/components/AppNavigation.svelte';
+  import ProjectMenu from './lib/components/ProjectMenu.svelte';
+  import WelcomeScreen from './lib/components/WelcomeScreen.svelte';
   import AppBarOverflowMenu from './lib/components/AppBarOverflowMenu.svelte';
   import LoadingOverlay from './lib/components/LoadingOverlay.svelte';
   import Splitter from './lib/components/Splitter.svelte';
@@ -137,6 +141,7 @@
   import ConfirmPrompt from './lib/components/ConfirmPrompt.svelte';
   import {
     addDrawing,
+    resetDocument,
     openAny,
     saveProject,
     exportGeneratedGcode,
@@ -200,35 +205,12 @@
   /// without expanding the panel. Uses `computeFootprint` so the
   /// numbers match what Scene3D / sim use (auto mode follows imported
   /// bbox; manual = customX/Y; no-import fallback = machine work area).
-  /// Accordion-style sidebar (replaces the per-panel `collapsed`
-  /// state): exactly one of Stock / Layers / Text / Operations is
-  /// active at a time. Clicking another panel's header makes it the
-  /// active one and the previous active collapses to its header
-  /// strip. Default = 'layers' so the file-open + reopen affordances
-  /// are visible on cold start (the typical first-action is "open
-  /// drawing"). Each panel still shows its summary chip when
-  /// collapsed (Stock dims, layer count + filename, text count), so
-  /// the user can read working numbers at a glance without
-  /// switching panes.
-  ///
-  /// Click the ACTIVE panel's caret to bounce back to the previously
-  /// active pane — the typical "I jumped to Stock to tweak dims, now
-  /// take me back to Operations" flow. `activateSidebarPane(p)` swaps
-  /// `prev` ↔ `active` when the same pane is clicked twice, so the
-  /// pair toggles cleanly.
-  // Pane-transition logic lives in lib/state/sidebar-pane.ts (pure +
-  // unit-tested). `activateSidebarPane` is the caret-click TOGGLE;
-  // `revealSidebarPane` is the non-toggling "show me this pane now"
-  // used by programmatic flows.
-  let activeSidebarPane = $state<SidebarPane>('layers');
-  /// Last non-current pane. Initial value matches "user hasn't
-  /// switched yet but wants Operations" — the most likely return
-  /// destination for a Layers-default startup.
-  let prevSidebarPane = $state<SidebarPane>('operations');
+  // A section may close without activating another. Contextual reveals
+  // still open the relevant section (fixture selection, adding an operation).
+  let activeSidebarPane = $state<SidebarPane | null>('layers');
   function activateSidebarPane(target: SidebarPane) {
-    const next = togglePane({ active: activeSidebarPane, prev: prevSidebarPane }, target);
+    const next = togglePane({ active: activeSidebarPane }, target);
     activeSidebarPane = next.active;
-    prevSidebarPane = next.prev;
   }
   function revealSidebarPane(target: SidebarPane) {
     // On phone/tablet the Operations pane is the bottom sheet, not the
@@ -239,9 +221,8 @@
       opsSheetOpenSignal++;
       return;
     }
-    const next = revealPane({ active: activeSidebarPane, prev: prevSidebarPane }, target);
+    const next = revealPane({ active: activeSidebarPane }, target);
     activeSidebarPane = next.active;
-    prevSidebarPane = next.prev;
     // On narrow layouts the sidebar is a full-screen overlay over the
     // canvas, so a programmatic "show me this pane" (e.g. a canvas tap
     // that jumps to its operation) must also raise the overlay.
@@ -408,6 +389,17 @@
   });
 
   let activePane = $state<'2d' | '3d'>('2d');
+  $effect(() => {
+    if (project.gen.remainingVisible) activePane = '2d';
+  });
+  let lastFixtureFocus = 0;
+  $effect(() => {
+    if (fixtureFocus.seq === lastFixtureFocus) return;
+    lastFixtureFocus = fixtureFocus.seq;
+    if (fixtureFocus.id == null) return;
+    activePane = '2d';
+    revealSidebarPane('stock');
+  });
 
   // Phone navigation: the desktop main-tabs + 2D/3D pane toggle collapse
   // into one swipeable activity list (activities.ts). `currentActivity`
@@ -426,6 +418,7 @@
   // replaces routing through that overlay; Stock/Layers/Text still use it.
   const showBottomPanels = $derived(
     layout.isNarrow &&
+      project.documentActive &&
       !mobilePanelOpen &&
       (currentActivity === 'project-2d' || currentActivity === 'project-3d'),
   );
@@ -705,6 +698,33 @@
       ? null
       : (project.data.operations.find((o) => o.id === project.sel.selectedOpId) ?? null),
   );
+  const documentLabel = $derived(
+    project.documentName ?? project.transformedImport?.filename ?? t('shell.untitled'),
+  );
+  const saveStatus = $derived(
+    !project.savedToProject
+      ? t('shell.not_saved')
+      : project.hasUnsavedWork
+        ? t('shell.modified')
+        : t('shell.saved'),
+  );
+  let lastDocumentEpoch = -1;
+  let hadDocument = false;
+  $effect(() => {
+    const active = project.documentActive;
+    const epoch = project.documentEpoch;
+    if (active && (!hadDocument || epoch !== lastDocumentEpoch)) mainTab = 'project';
+    hadDocument = active;
+    lastDocumentEpoch = epoch;
+  });
+  async function switchDocument(open: boolean) {
+    if (!(await resetDocument(open))) return;
+    dismissReopen();
+    mainTab = 'project';
+    activePane = '2d';
+    activeSidebarPane = 'layers';
+    gcodeOpen = false;
+  }
   const modalStatusHint = $derived(
     modalStatusHintFn(
       project.sel.pickMode,
@@ -831,6 +851,11 @@
       <!-- Right: primary actions. ☰ panels button retired — Stock/Layers/
            Text are on-canvas chips and Operations is the bottom sheet. -->
       <div class="appbar-actions">
+        <ProjectMenu
+          onNew={() => void switchDocument(true)}
+          onClose={() => void switchDocument(false)}
+          onReport={() => (reportOpen = true)}
+        />
         <!-- Inline primary actions — hidden on really narrow phones, where
              they collapse into the ☰ overflow menu (see .wide-actions CSS
              + AppBarOverflowMenu compact items). -->
@@ -845,7 +870,7 @@
               aria-haspopup="menu"
               aria-expanded={saveMenuOpen}
               onclick={() => (saveMenuOpen = !saveMenuOpen)}
-              disabled={!project.transformedImport}
+              disabled={!project.documentActive || project.loading}
             >
               {t('app.bar.save')} ▾
             </button>
@@ -949,7 +974,7 @@
           onSaveGcode={(side) => void exportGeneratedGcode(gcodeDialect, side)}
           onSaveStl={() => void exportSimulatedStockStl()}
           onReport={() => (reportOpen = true)}
-          canSave={!!project.transformedImport}
+          canSave={project.documentActive && !project.loading}
           hasProgram={!!project.gen.generated}
           twoSided={!!project.gen.generatedBack}
           loading={project.loading}
@@ -1059,94 +1084,46 @@
   {/if}
 
   <!-- ============== MAIN TABS ================================= -->
-  <nav class="main-tabs" aria-label={t('app.tab.areas')}>
-    <button
-      type="button"
-      class="main-tab"
-      class:active={mainTab === 'project'}
-      onclick={() => (mainTab = 'project')}>{t('app.tab.project')}</button
-    >
-    <button
-      type="button"
-      class="main-tab"
-      class:active={mainTab === 'machine'}
-      onclick={() => (mainTab = 'machine')}
-      title={t('app.tab.machine_tip')}>{t('app.tab.machine')}</button
-    >
-    <button
-      type="button"
-      class="main-tab"
-      class:active={mainTab === 'tools'}
-      onclick={() => (mainTab = 'tools')}
-      title={t('app.tab.tools_tip')}>{t('app.tab.tools')}</button
-    >
-    <span class="main-tabs-flex"></span>
-    <button
-      type="button"
-      class="main-tab"
-      class:active={mainTab === 'settings'}
-      onclick={() => (mainTab = 'settings')}
-      title={t('app.tab.settings_tip')}>{t('app.tab.settings')}</button
-    >
-    <button
-      type="button"
-      class="main-tab"
-      class:active={mainTab === 'help'}
-      onclick={() => (mainTab = 'help')}
-      title={t('app.tab.help_tip')}>{t('app.tab.help')}</button
-    >
-    <button
-      type="button"
-      class="main-tab"
-      class:active={mainTab === 'about'}
-      onclick={() => (mainTab = 'about')}
-      title={t('app.tab.about_tip')}>{t('app.tab.about')}</button
-    >
-  </nav>
+  <AppNavigation
+    {mainTab}
+    narrow={layout.isNarrow}
+    onNavigate={(tab) => (mainTab = tab)}
+    onShowOperation={() => {
+      mainTab = 'project';
+      revealSidebarPane('operations');
+    }}
+  />
 
   <!-- ============== TOOLBAR (single row) ====================== -->
-  <div class="toolbar" class:tab-hidden={mainTab !== 'project'}>
+  <div class="toolbar" class:tab-hidden={mainTab !== 'project' || !project.documentActive}>
+    <ProjectMenu
+      onNew={() => void switchDocument(true)}
+      onClose={() => void switchDocument(false)}
+      onReport={() => (reportOpen = true)}
+    />
     <button
-      class="tb-btn primary"
+      class="tb-btn"
       onclick={() => openAny()}
       disabled={project.loading}
       title={t('app.toolbar.open_tip')}
     >
       {t('app.bar.open')}
     </button>
-    <RecentMenu onOpen={(path) => void openRecentProject(path)} />
+
     <button
       class="tb-btn"
       onclick={() => saveProject()}
-      disabled={!project.transformedImport}
+      disabled={!project.documentActive || project.loading}
       title={t('app.toolbar.save_tip')}
     >
       {t('app.bar.save')}
     </button>
     <span class="tb-sep"></span>
-    <button
-      class="tb-btn icon"
-      onclick={() => (reportOpen = true)}
-      title={t('app.report.tip')}
-      aria-label={t('app.report.aria')}
-    >
-      <svg
-        viewBox="0 0 24 24"
-        width="14"
-        height="14"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
+    <div class="document-identity" title={`${documentLabel} — ${saveStatus}`}>
+      <span class="document-name">{documentLabel}</span><span class="document-status"
+        >{saveStatus}</span
       >
-        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-      </svg>
-      <span>{t('menu.report')}</span>
-    </button>
-    <span class="tb-sep"></span>
+    </div>
     <button
       class="tb-btn icon"
       onclick={() => project.undo()}
@@ -1209,6 +1186,7 @@
         <span>{t('app.regions.label')}</span>
       </label>
     {/if}
+    {#if activePane === '3d'}<ToolpathVisibility />{/if}
     <div
       class="pane-toggle"
       role="tablist"
@@ -1241,10 +1219,14 @@
   <FileUpload />
   <ModeSwitchNotice />
 
+  {#if mainTab === 'project' && !project.documentActive}
+    <WelcomeScreen onNew={() => void switchDocument(true)} onHelp={() => (mainTab = 'help')} />
+  {/if}
+
   <!-- ============== SPLIT VIEW ================================ -->
   <main
     class="split"
-    class:tab-hidden={mainTab !== 'project'}
+    class:tab-hidden={mainTab !== 'project' || !project.documentActive}
     class:narrow={layout.isNarrow}
     class:with-ops-sheet={showBottomPanels}
     style:--sidebar-width="{sidebarWidth}px"
@@ -1269,6 +1251,9 @@
           </div>
         {:else if activePane === '3d'}
           <p class="loading-3d">{t('app.loading.threed')}</p>
+        {/if}
+        {#if project.documentActive && project.data.operations.length === 0 && (project.data.imports.length > 0 || project.data.textLayers.length > 0 || project.data.reliefSources.length > 0)}
+          <div class="workspace-guidance"><span>{t('shell.operations_hint')}</span></div>
         {/if}
         <LoadingOverlay visible={project.loading} message={project.loadingMessage} />
         <!-- Phone: pull down from the top of the canvas to (re-)generate —
@@ -1474,6 +1459,43 @@
 </div>
 
 <style>
+  .document-identity {
+    min-width: 5rem;
+    max-width: 12rem;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .document-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.78rem;
+  }
+  .document-status {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .workspace-guidance {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    z-index: 2;
+    width: fit-content;
+    max-width: calc(100% - 2rem);
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    background: var(--bg-panel);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-radius: 3px;
+  }
+
   .app {
     /* Flex column instead of grid so optional rows (reopen banner,
        dialogs rendered as direct children) can't shift the 1fr slot
@@ -1501,7 +1523,6 @@
   /* ---------- mobile top app bar (narrow only) ----------------- */
   /* The activity-swipe app bar replaces the desktop tabs + toolbar on
      narrow screens, so hide those there. */
-  .app.narrow > .main-tabs,
   .app.narrow > .toolbar {
     display: none;
   }
@@ -1689,37 +1710,6 @@
 
   /* ---------- toolbar ------------------------------------------ */
   /* Top-level main-window tabs (Project | Machine | Tool library). */
-  .main-tabs {
-    display: flex;
-    gap: 0.15rem;
-    padding: 0.2rem 0.7rem 0;
-    background: var(--bg-elevated);
-    border-bottom: 1px solid var(--border);
-  }
-  .main-tabs-flex {
-    flex: 1;
-  }
-  .main-tab {
-    background: none;
-    border: 1px solid transparent;
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
-    padding: 0.3rem 0.85rem;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    cursor: pointer;
-  }
-  .main-tab:hover {
-    color: var(--text);
-  }
-  .main-tab.active {
-    background: var(--bg-panel);
-    border-color: var(--border);
-    color: var(--text-strong);
-    /* Visually merge with the content below by sitting on the strip's
-       bottom border. */
-    margin-bottom: -1px;
-  }
   /* Machine / Tool-library tab panels — fill the main area like
      .split does; the embedded dialog shells scroll internally. */
   .tab-panel {
@@ -1774,16 +1764,6 @@
   .tb-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
-  }
-  .tb-btn.primary {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-  }
-  .tb-btn.primary:hover:not(:disabled) {
-    background: var(--accent-strong);
-    border-color: var(--accent-strong);
-    color: white;
   }
   .tb-btn.icon {
     display: inline-flex;
@@ -1927,12 +1907,8 @@
     min-height: 0;
   }
   .sidebar {
-    display: grid;
-    /* Accordion: exactly one of the four hosts is `.active` — that
-       row gets the 1fr space, the others collapse to their header
-       strip (`auto`). `data-active` drives which row goes wide via
-       the four matched `grid-template-rows` declarations below. */
-    grid-template-rows: auto auto auto auto;
+    display: flex;
+    flex-direction: column;
     min-height: 0;
     min-width: 0;
     overflow: hidden;
@@ -1973,37 +1949,23 @@
   .mobile-panel-close:hover {
     border-color: var(--accent);
   }
-  .sidebar[data-active='stock'] {
-    grid-template-rows: minmax(0, 1fr) auto auto auto;
-  }
-  .sidebar[data-active='layers'] {
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
-  }
-  .sidebar[data-active='text'] {
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
-  }
-  .sidebar[data-active='operations'] {
-    grid-template-rows: auto auto auto minmax(0, 1fr);
-  }
   .stock-host,
   .layers-host,
   .text-list-host,
   .ops-host {
+    flex: 0 0 auto;
     min-height: 0;
     min-width: 0;
-    /* overflow: visible so per-panel dropdowns (Add+ etc.) escape the
-       row boundary. The sidebar itself + inner scrollable lists handle
-       their own clipping where it matters. */
     overflow: visible;
   }
-  /* When a host is `.active` (1fr row) we need to clip overflow on the
-     host wrapper so the inner list scrolls instead of pushing the
-     sibling hosts off-screen. */
+  /* Short sections use only their content height. Long sections shrink
+     to the available space and scroll, keeping sibling headers reachable. */
   .stock-host.active,
   .layers-host.active,
   .text-list-host.active,
   .ops-host.active {
-    overflow: hidden;
+    flex: 0 1 auto;
+    overflow: auto;
   }
   .stock-host {
     background: var(--bg-panel);

@@ -17,8 +17,8 @@ use crate::math;
 /// `cut_z`, continue cutting (Rectangle); or ramp up / flat / ramp down
 /// when `ramp_angle_deg` is `Some` (Ramp).
 ///
-/// Arcs through tabs are tab-skipped with a straight Z lift even when
-/// Ramp is requested — ramping along a curved path is a v2 follow-up.
+/// Rectangle tabs conservatively lift an entire intersecting arc. Ramp tabs
+/// use bounded chords and a continuous tab-height field across chord seams.
 #[allow(clippy::too_many_arguments)]
 pub(super) fn emit_path_with_tabs<P: PostProcessor>(
     segments: &[Segment],
@@ -363,49 +363,45 @@ fn emit_arc_chord_with_tabs<P: PostProcessor>(
         return;
     }
     let theta_start = (seg.start.y - center.y).atan2(seg.start.x - center.x);
-    let theta_end = (seg.end.y - center.y).atan2(seg.end.x - center.x);
     // Bulge sign: positive ⇒ CCW (signed sweep > 0). Total swept angle
     // satisfies sweep = 4·atan(bulge), preserving sign.
     let sweep = 4.0 * seg.bulge.atan();
-    // Chord count: 32 chords for a full circle is plenty (chord error
-    // ~ r·(1 - cos(π/32)) ≈ r·0.005; on a 10 mm arc that's 0.05 mm —
-    // visually identical and well under typical tab tolerances). Scale
-    // chords linearly with sweep magnitude, with a 4-chord minimum.
-    let n_chords = (32.0 * sweep.abs() / std::f64::consts::TAU).ceil().max(4.0) as usize;
+    // Geometric chord error in mm, distinct from topology epsilon and
+    // machine/output rounding. Keep tab ramps inside the qualified 0.01mm
+    // resolved-path tolerance even on large-radius contours.
+    let max_angle = 2.0 * (1.0 - (0.005 / r).min(1.0)).acos();
+    let n_chords = (sweep.abs() / max_angle)
+        .ceil()
+        .max((r * sweep.abs() / 0.25).ceil())
+        .max(4.0) as usize;
     let dtheta = sweep / (n_chords as f64);
-    let mut prev_theta = theta_start;
-    for k in 0..n_chords {
-        let next_theta = if k + 1 == n_chords {
-            // Snap last endpoint to the original arc end so
-            // floating-point error doesn't leave a gap.
-            theta_end
-        } else {
-            theta_start + dtheta * ((k + 1) as f64)
-        };
-        let a = Point2::new(
-            center.x + r * prev_theta.cos(),
-            center.y + r * prev_theta.sin(),
-        );
-        let b = if k + 1 == n_chords {
+    // Evaluate one continuous ramp envelope across the arc. Restarting the
+    // line ramp on every chord plunged back to the floor inside the tab.
+    let tab_z = |point: Point2| {
+        tabs.iter().fold(cut_z, |z, tab| {
+            let radius = tab.radius(tab_radius * 2.0);
+            if radius <= 0.0 {
+                return z;
+            }
+            let lift = tab.lift((tabs_z - cut_z).abs());
+            let ramp_len = (lift / ramp_angle_deg.to_radians().tan()).min(radius);
+            let edge_distance = radius - (point.x - tab.x).hypot(point.y - tab.y);
+            let fraction = if ramp_len > 1e-9 {
+                (edge_distance / ramp_len).clamp(0.0, 1.0)
+            } else {
+                f64::from(edge_distance >= 0.0)
+            };
+            z.max(cut_z + lift * fraction)
+        })
+    };
+    post.linear(None, None, Some(tab_z(seg.start)));
+    for k in 1..=n_chords {
+        let point = if k == n_chords {
             seg.end
         } else {
-            Point2::new(
-                center.x + r * next_theta.cos(),
-                center.y + r * next_theta.sin(),
-            )
+            let angle = theta_start + dtheta * k as f64;
+            Point2::new(center.x + r * angle.cos(), center.y + r * angle.sin())
         };
-        let chord = Segment::line(a, b, seg.layer.clone(), seg.color);
-        emit_line_with_tabs(
-            &chord,
-            tabs,
-            tabs_z,
-            cut_z,
-            tab_radius,
-            Some(ramp_angle_deg),
-            rate_v,
-            rate_h,
-            post,
-        );
-        prev_theta = next_theta;
+        post.linear(Some(point.x), Some(point.y), Some(tab_z(point)));
     }
 }

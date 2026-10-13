@@ -129,3 +129,14 @@ provenance can resolve prior revisions through retained current history. Explici
 backup exports current pack/history, with private observations; restore refuses
 older/equal installed heads. See [authoring](PRESET_AUTHORING.md),
 [policy](LOCAL_VALIDATION_POLICY.md) and [ADR-0006](../adr/ADR-0006-local-preset-authoring-and-validation.md).
+
+## FS3.9 — schema3 bounded adaptation extension
+
+Schemas1/2 remain readable. Schema3 adds optional RecordOrigin.adaptation with
+versioned policy and explicit machine/tool/material/slot-to-pocket transfers.
+Only transformation-permitted reference-category ReferenceData may opt in.
+The new reviewed public version retains all six original profiles unchanged;
+prior strict composite/diameter statements above describe FS3.7 and legacy dataset
+behavior, now extended only by the bounded derived layer. Original/derived
+provenance is separate; private summaries never store source quantities or bodies.
+See [matching](FS3_9_MATCHING.md), [coverage](FS3_9_COVERAGE.md) and ADR-0011.

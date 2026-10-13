@@ -15,8 +15,11 @@ export function fixtureAt(
   fixtures: ReadonlyArray<Fixture>,
   dataX: number,
   dataY: number,
+  selectedId: number | null = null,
 ): number | null {
-  for (const f of fixtures) {
+  const selected = fixtures.find((f) => f.id === selectedId);
+  const ordered = selected ? [selected, ...fixtures.filter((f) => f.id !== selectedId)] : fixtures;
+  for (const f of ordered) {
     const [ox, oy] = f.origin;
     if (f.kind.shape === 'box') {
       const hw = f.kind.width / 2;

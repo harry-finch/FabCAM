@@ -554,7 +554,7 @@
       lineWidth: project.data.settings.previewLineWidth,
       width: host?.clientWidth || 1,
       height: host?.clientHeight || 1,
-      wireVisible,
+      wireVisible: wireVisible && untrack(() => project.gen.toolpath3dVisible),
       playhead: fade.playhead,
       cumLen: fade.cumLen,
       totalLen: fade.totalLen,
@@ -743,6 +743,13 @@
     return (i) => byOp.get(segs[i]?.op_id ?? -1) ?? fallback;
   }
 
+  // Visibility changes do not rebuild path buffers or reconfigure simulation.
+  $effect(() => {
+    if (!scene) return;
+    toolpathBuilder?.setWireVisible(wireVisible && project.gen.toolpath3dVisible);
+    requestRender();
+  });
+
   $effect(() => {
     if (!scene) return;
     const settings = project.data.settings;
@@ -751,7 +758,6 @@
     // the heightfield carved-stock mesh. wireVisible is a $derived at
     // module scope so the rebuild functions see the same value.
     importedBuilder?.setWireVisible(wireVisible);
-    toolpathBuilder?.setWireVisible(wireVisible);
     if (settings.previewMode === 'wireframe') {
       driver?.setVisible(false);
       requestRender();

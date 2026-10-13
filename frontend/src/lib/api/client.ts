@@ -158,6 +158,14 @@ export function tryParseStructuredError(input: unknown): WiacError | null {
     kind: obj.kind as WiacError['kind'],
     message: obj.message,
   };
+  if (typeof obj.code === 'string') out.code = obj.code as WiacError['code'];
+  if (obj.params && typeof obj.params === 'object') {
+    out.params = Object.fromEntries(
+      Object.entries(obj.params).filter(
+        ([, value]) => typeof value === 'string' || typeof value === 'number',
+      ),
+    ) as WiacError['params'];
+  }
   if (typeof obj.recovery_hint === 'string') {
     out.recovery_hint = obj.recovery_hint;
   }

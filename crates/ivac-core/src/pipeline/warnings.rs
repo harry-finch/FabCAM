@@ -822,7 +822,7 @@ pub(super) fn push_ramp_with_arcs_warning(
             op.id,
             "ramp_arcs_at_boundary",
             format!(
-                "op '{}': ramp plunge with arc / circle source segments. The cutter ramps along line segments correctly but dives straight down at the start of any arc that crosses the ramp boundary — surface finish near arc entries may show a small step. Use Helix plunge or a finer ramp angle for a smoother entry.",
+                "op '{}': ramp with arc / circle source segments. An arc crossing the requested ramp length finishes its descent at the arc endpoint rather than splitting the arc. The ramp can be shallower than the selected angle; inspect the generated entry.",
                 op.name
             ),
         )

@@ -139,3 +139,18 @@ describe('autoFixToCommand wiring', () => {
     expect(target.operations[0].toolId).toBe(99);
   });
 });
+
+describe('missing CPS engine is not a collision verdict', () => {
+  it('explains stopped generation and preserves the ShopBot output workflow', () => {
+    const error: WiacError = {
+      kind: 'unsupported',
+      code: 'cps_unavailable',
+      message: 'this build does not support .cps post-processors',
+      recovery_hint: 'legacy hint',
+    };
+    expect(errorMessage(error, t)).toContain('Generation stopped');
+    expect(errorHint(error, t)).toContain('ShopBot (.sbp)');
+    expect(errorHint(error, t)).toContain('Collision checks require a generated toolpath');
+    expect(errorHint(error, t)).not.toContain('pick linuxcnc');
+  });
+});

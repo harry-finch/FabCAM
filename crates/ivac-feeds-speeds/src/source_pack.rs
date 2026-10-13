@@ -3,9 +3,9 @@ use crate::*;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
-pub const PACK_SCHEMA_VERSION: u32 = 2;
+pub const PACK_SCHEMA_VERSION: u32 = 3;
 pub const MAX_PACK_BYTES: usize = 2 * 1024 * 1024;
-pub const KNOWLEDGE_POLICY: &str = "fs37-compatible-records-1";
+pub const KNOWLEDGE_POLICY: &str = "fs39-normalized-matching-1";
 
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[cfg_attr(feature = "schema", schemars(rename = "FsVisibility"))]
@@ -71,6 +71,8 @@ pub struct RecordOrigin {
     pub lab: Option<LabPreset>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub lab_history: Vec<LabRevision>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub adaptation: Option<AdaptationScope>,
 }
 pub const LAB_PACK_ID: &str = "sorbonne-fablab";
 pub const LAB_VALIDATION_POLICY: &str = "sorbonne-local-validation-1";
@@ -303,11 +305,32 @@ pub fn taxon_identity(id: &str) -> Identity {
         revision: "1".into(),
     }
 }
-fn taxon_matches(parent: &str, identity: &Identity) -> bool {
-    identity.revision == "1"
-        && (identity.id == format!("material/{parent}")
-            || identity.id.starts_with(&format!("material/{parent}.")))
+pub(crate) fn taxon_matches(parent: &str, identity: &Identity) -> bool {
+    if identity.revision != "1" {
+        return false;
+    }
+    let taxa = material_taxonomy();
+    let Some(mut taxon) = taxa
+        .iter()
+        .find(|t| identity.id == format!("material/{}", t.id))
+    else {
+        return false;
+    };
+    loop {
+        if taxon.id == parent {
+            return true;
+        }
+        let Some(next) = taxon
+            .parent
+            .as_ref()
+            .and_then(|id| taxa.iter().find(|t| &t.id == id))
+        else {
+            return false;
+        };
+        taxon = next;
+    }
 }
+
 pub fn safe_pack_id(value: &str) -> bool {
     !value.is_empty()
         && value.len() <= 100
@@ -400,6 +423,7 @@ pub fn validate_source_pack(pack: &SourcePack) -> Result<(), String> {
             .iter()
             .find(|p| p.identity == r.profile)
             .ok_or("Record profile absent from dataset")?;
+        validate_adaptation(pack, p, r)?;
         if let Some(lab) = &r.lab {
             validate_lab(pack, p, lab)?;
             for previous in &r.lab_history {
@@ -457,6 +481,11 @@ pub fn validate_source_pack(pack: &SourcePack) -> Result<(), String> {
             {
                 return Err("Invalid normalized tool classification".into());
             }
+        }
+        if matches!(p.evidence, Evidence::Tested | Evidence::Validated)
+            && matches!(&p.scope.machine, IdentitySelector::Exact {identity} if identity.id=="machine/fablab-router")
+        {
+            return Err("Physical evidence requires an individual machine identity, not the fablab-router transfer class".into());
         }
         if matches!(p.evidence, Evidence::Tested | Evidence::Validated)
             && (p.category != ProfileCategory::ExactPreset
@@ -545,6 +574,8 @@ pub struct KnowledgeRecord {
     pub rank: Vec<u32>,
     pub normalized: NormalizedQuantities,
     pub origin: RecordOrigin,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub derivation: Option<Derivation>,
 }
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[cfg_attr(feature = "schema", schemars(rename = "FsKnowledgeContributor"))]
@@ -568,6 +599,8 @@ pub struct KnowledgeSummary {
     pub compatible_sources: u32,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub contributors: Vec<KnowledgeContributor>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub match_quality: Option<MatchQuality>,
 }
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[cfg_attr(feature = "schema", schemars(rename = "FsKnowledgeExplanation"))]
@@ -650,9 +683,31 @@ pub fn recommend_packs(
                     p.scope.material = IdentitySelector::Exact {
                         identity: r.material.identity.clone().expect("matched identity"),
                     };
-                } else {
-                    continue;
                 }
+            }
+            let mut derivation = None;
+            if !crate::matching::matches(&p, &r, &set) {
+                if let Some((adapted, detail)) = adapt_profile(pack, origin, original, &p, &r, &set)
+                {
+                    p = adapted;
+                    derivation = Some(detail);
+                }
+            }
+            if origin.material_taxon.as_ref().is_some_and(|t| {
+                !r.material
+                    .identity
+                    .as_ref()
+                    .is_some_and(|m| taxon_matches(t, m))
+            }) {
+                refusals.push(ProfileRejection {
+                    profile: p.identity.clone(),
+                    mismatches: vec![ScopeMismatch {
+                        field: "material".into(),
+                        actual: serde_json::to_string(&r.material.identity).unwrap(),
+                        required: serde_json::to_string(&origin.material_taxon).unwrap(),
+                    }],
+                });
+                continue;
             }
             set.profiles = vec![p.clone()];
             let engine =
@@ -671,7 +726,7 @@ pub fn recommend_packs(
                         IdentitySelector::Family { .. } => 1,
                         IdentitySelector::Any => 2,
                     };
-                    let material_cost = origin.material_taxon.as_ref().map_or(
+                    let mut material_cost = origin.material_taxon.as_ref().map_or(
                         selector_cost(&original.scope.material),
                         |taxon| {
                             r.material.identity.as_ref().map_or(100, |m| {
@@ -680,9 +735,16 @@ pub fn recommend_packs(
                             })
                         },
                     );
+                    if origin.material_taxon.is_none()
+                        && derivation.as_ref().is_some_and(|d| d.material_transfer)
+                    {
+                        material_cost = material_cost.max(1);
+                    }
                     let rank = vec![
                         preset,
                         material_cost,
+                        derivation.as_ref().map_or(0, |d| d.quality as u32 + 1),
+                        derivation.as_ref().map_or(0, |d| d.machine_transfer as u32),
                         selector_cost(&original.scope.machine),
                         u32::from(p.scope.tool.is_none()),
                         u32::from(p.scope.diameter_mm.min != p.scope.diameter_mm.max),
@@ -690,6 +752,9 @@ pub fn recommend_packs(
                         u32::from(p.scope.doc_mm.is_none()),
                         u32::from(p.scope.entry.is_none()),
                         crate::matching::tier(&p).into(),
+                        derivation
+                            .as_ref()
+                            .map_or(0, |d| (d.relative_delta * 1_000_000.0).round() as u32),
                     ];
                     let record = KnowledgeRecord {
                         pack: pack.manifest.identity.clone(),
@@ -700,15 +765,24 @@ pub fn recommend_packs(
                         rank,
                         normalized: normalized_quantities(original),
                         origin: origin.clone(),
+                        derivation: derivation.clone(),
                     };
                     candidates.push((record, *recommendation));
                 }
                 FeedsSpeedsRecommendation::Unavailable { .. } => {
-                    refusals.extend(engine.scope_rejections(&r))
+                    let rejected =
+                        derived_rejections(pack, origin, &p, &r, &pack.dataset.profile_set);
+                    if !rejected.is_empty() {
+                        refusals.push(ProfileRejection {
+                            profile: p.identity.clone(),
+                            mismatches: rejected,
+                        });
+                    }
                 }
             }
         }
     }
+    add_interpolations(&mut candidates, request);
     if candidates.is_empty() {
         refusals.sort_by(|a, b| {
             a.mismatches
@@ -796,6 +870,7 @@ pub fn recommend_packs(
         .find(|p| p.identity == selected.profile)
         .expect("candidate profile")
         .clone();
+    recommendation.provenance.derivation = selected.derivation.clone();
     let range = Range {
         min: candidates[0].1.parameters.effective_chipload_mm_tooth,
         max: candidates
@@ -810,6 +885,35 @@ pub fn recommend_packs(
         .map(|v| &v.0.pack.id)
         .collect::<BTreeSet<_>>()
         .len() as u32;
+    let mut contributors: Vec<KnowledgeContributor> = candidates
+        .iter()
+        .map(|(record, _)| KnowledgeContributor {
+            pack: record.pack.clone(),
+            record_id: record.record_id.clone(),
+        })
+        .collect();
+    for (candidate, _) in &candidates {
+        if let Some(derivation) = &candidate.derivation {
+            let source_pack = packs
+                .iter()
+                .find(|p| p.manifest.identity == candidate.pack)
+                .expect("candidate source pack");
+            for source in &derivation.source_profiles {
+                if let Some(origin) = source_pack
+                    .records
+                    .iter()
+                    .find(|origin| origin.profile == source.identity)
+                {
+                    contributors.push(KnowledgeContributor {
+                        pack: source_pack.manifest.identity.clone(),
+                        record_id: origin.source_record_id.clone(),
+                    });
+                }
+            }
+        }
+    }
+    contributors.sort_by(|a, b| a.pack.cmp(&b.pack).then(a.record_id.cmp(&b.record_id)));
+    contributors.dedup_by(|a, b| a.pack == b.pack && a.record_id == b.record_id);
     let summary = KnowledgeSummary {
         policy: KNOWLEDGE_POLICY.into(),
         engine_version: ENGINE_VERSION.into(),
@@ -818,15 +922,21 @@ pub fn recommend_packs(
         evidence: recommendation.source_evidence,
         local_only: selected.local_only,
         compatible_sources: sources,
-        contributors: candidates
-            .iter()
-            .map(|(record, _)| KnowledgeContributor {
-                pack: record.pack.clone(),
-                record_id: record.record_id.clone(),
-            })
-            .collect(),
+        match_quality: Some(selected.derivation.as_ref().map_or_else(
+            || {
+                if selected.evidence == Evidence::Theoretical {
+                    MatchQuality::Theoretical
+                } else if selected.rank[1] > 0 {
+                    MatchQuality::Generic
+                } else {
+                    MatchQuality::Exact
+                }
+            },
+            |d| d.quality,
+        )),
+        contributors,
     };
-    let explanation=KnowledgeExplanation {summary,records:candidates.into_iter().map(|v|v.0).collect(),reference_chipload_range:Some(range),disagreement:range.max>range.min*1.25,selection_reason:format!("{:?}: select an authored same-mode record by chipload order; rank dimensions: local exact trial, material specificity, machine, tool identity, diameter, flutes, DOC, entry, category",request.aggressiveness)};
+    let explanation=KnowledgeExplanation {summary,records:candidates.into_iter().map(|v|v.0).collect(),reference_chipload_range:Some(range),disagreement:range.max>range.min*1.25,selection_reason:format!("{:?}: select same-mode reference or explicit normalized derivation; rank dimensions: local exact trial, material specificity, adaptation quality, machine transfer, machine specificity, tool, diameter, flutes, DOC, entry, category, relative distance",request.aggressiveness)};
     Ok(KnowledgeResult {
         recommendation: FeedsSpeedsRecommendation::Available {
             recommendation: Box::new(recommendation),

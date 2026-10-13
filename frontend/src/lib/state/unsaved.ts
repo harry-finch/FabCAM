@@ -23,7 +23,7 @@ export interface UnsavedWorkState {
 }
 
 export function computeUnsavedWork(s: UnsavedWorkState): boolean {
-  if (s.empty) return false; // nothing loaded → nothing to lose
+  if (s.empty) return s.dirty; // stock/origin/fixtures can be edited before geometry
   // Non-empty: unsaved if edited, or if it was never saved as a project.
   return s.dirty || !s.savedToProject;
 }

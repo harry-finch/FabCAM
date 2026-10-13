@@ -1,179 +1,142 @@
-# Status — 2026-10-12
+# Status — 2026-10-13
 
-M4 qualification completed at the operator-reported evidence level. r2 Preview,
-spindle-enabled air cut and real MDF machining passed; operator confirms target
-dimensions/depth, clean finish and final +15 mm clearance. The second
-[VCarve reference comparison](M4_VCARVE_COMPARISON.md) passes geometry, exterior
-compensation and -3/-5 pass schedule. Residual differences: -0.4% feeds, VCarve
-safe/final Z 6/20, opposite traversal, arcs and XY parking. Exact measurement
-readings/instrument/tolerances and measured RPM remain unreported.
-M3 approved and pushed. On 2026-10-12 the user authorized the M4 commit/push.
+## Publication authorization — 2026-10-13
 
-## Git and delivery
+User explicitly authorized committing and pushing all current repository changes
+on `feature/shopbot-mvp`. This publication checkpoint includes the CAM/UX/FS
+software and qualification records below. Pending human/native/physical review
+gates retain their recorded status; publication does not qualify those gates.
 
-- Checkout: `/Users/mugen/Documents/01_Projets/FabCAM/ivacam`.
-- Fork/origin: `https://github.com/harry-finch/ivacam.git`.
-- Upstream: `https://github.com/aalarchiv/ivacam.git`.
-- Branch: `feature/shopbot-mvp`.
-- M4 source base: `b8a073a` (approved M3); M2 is `047a758`.
-- M4 baseline/publication: `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1` on `feature/shopbot-mvp`.
-- Published foundation: `8271dd3bc892559fecbcaf3d80a64abff59aa299` (FS0–FS3.6). Latest publication: FS3.7/FS3.8 on `feature/shopbot-mvp`, explicitly authorized for commit/push on 2026-10-12; the publication commit is identified in branch history. Publication does not close human qualification gates or authorize FS4.
-- No PR, merge or upstream synchronization is included in M4 publication.
-- Current ready-to-launch macOS arm64 app: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/ivaCAM.app`.
-- Current machine file: `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2/M4-r2-carre-MDF.sbp`.
-- Older delivery is retained unchanged; r2 BUILD.json identifies the current baseline.
-- Version 0.5.0; delivery was built from M3 plus the M4 changes now committed. Delivery `BUILD.json`
-  records executable/project/SBP hashes. Local ad-hoc signature verifies; not notarized.
+## Current direction and next action
 
-## Verified software result
+**UX2.2 — Application Shell & Welcome Experience**: Atelier implemented locally
+(ivac-j6ba), following explicit user approval (ivac-dwdd closed). Welcome,
+New/Close, shared Open/Import, project name/save state, active machine and
+selected-operation tool are integrated. Lifecycle tests and browser review passed;
+[qualification and screenshots](ux/UX2_2_QUALIFICATION.md). Next: human review and
+native desktop qualification **ivac-ein1**. No native bundle rebuilt.
+Final polish continuation **ivac-8u1p** complete: literal machine limitations
+stay visible, Layers owns the primary import, generation messaging is contextual.
+Frontend 1145 pass/1skip; [seven review captures](ux/UX2_2_POLISH.md), including
+critical export rejection and edit → Save → stale → reopen. Await human approval
+under ivac-ein1. Existing CAM4/FS gates remain independent; CAD1 remains separate.
 
-Release Tauri bundle includes native CAM and owned ShopBot CPS. Node 24.21.0,
-Rust 1.88.0, Tauri CLI 2.12.1. Native app launched, project loaded/regenerated,
-settings displayed correctly and export picker offered `.sbp`. The actual UI
-export matches the 164-line reference byte-for-byte. Only expected manual-spindle
-CPS warning, no work-area/stock warning for the final square-only demo.
-
-Three small delivery fixes: toolbar label uses post-declared extension;
-optional checkbox defaults no longer dirty the hidden Machine draft and block
-refresh after loading; build version falls back to the Tauri release version
-when the private frontend package has no version. No CAM algorithm changes. r2 subsequently adds the opt-in lab spindle policy
-recorded in M4_SPINDLE_R2.md; 14 targeted Rust checks and rebuilt native export pass.
-
-Frontend 108 files: **1,046 pass, one optional skip**. Final demo-adapter check
-also passes with selectable stock outline present and explicit svg-layer source.
-Svelte/TypeScript zero errors/warnings; targeted ESLint, formatting and Git
-whitespace checks pass. Release frontend and native desktop builds pass.
-M2 broad Rust baseline remains 1,158 serial passes, core without CPS 1,060;
-M3 clearance-refusal integration passes. Existing cache race ivac-htc8 and
-partial WASM freshness guard ivac-5g51 remain open. No Windows/Linux run.
-
-## Current planning and next action
-
-Post-M4 governance now records FS/UX/CAD/WJ/VINYL named tracks. Priority:
-FS foundation → priority milling UX/CAM improvements → WJ → VINYL.
-The [FS contract](feeds-speeds/README.md) and
-[ADR-0002](adr/ADR-0002-feeds-speeds-boundary.md) record a milling-only,
-independent recommendation engine, CAM adapter and explicitly persisted applied
-parameters. Aggressiveness is separate from evidence; manual edits remain
-authoritative. Post-processors never invoke the recommendation engine.
-
-The user authorized FS3.5 on 2026-10-12 to clean up FS3 UX/domain ownership.
-[FS3.5 qualification](feeds-speeds/FS3_5_QUALIFICATION.md) and
-[ADR-0004](adr/ADR-0004-manual-operation-cutting-and-source-settings.md) record
-job material in Stock, explicit operation cutting values with optional proposal,
-focused Suggest/Review, global source Settings, physical tool/fallback disclosure
-and available-tools-first Machine tooling. New portable cutting saves use guarded
-kind/version 3; legacy v1 and FS3 v2 load unchanged. No math or ShopBot post changes.
-
-Frontend **1,065 pass, one optional skip**; ten core adapter tests and eight
-ShopBot goldens pass. Svelte/TypeScript zero errors/warnings, native server/Tauri
-check, Clippy, schema/format/lint guards and release WASM/frontend build pass.
-Real browser Apply/manual/DOC-stale/save/reopen/source-disable-persistence passes;
-actual v3 saved fixture and screenshots are retained. No new desktop bundle or
-physical trial. FS3's broader serial Rust baseline remains 1,218 passes.
-
-The six Sienci references remain narrow LongMill full-slot references, with no
-ShopBot preset, Pocket transfer, material equivalence, invented limit or local
-Tested/Validated evidence. Manual values and generation are independent of sources.
-
-The user explicitly approved FS3.5 functional behavior and authorized **FS3.6**
-on 2026-10-12. [FS3.6 visual qualification](ux/FS3_6_QUALIFICATION.md) records
-shared compact field grids, quieter section/header hierarchy, compact stale state
-and Apply emphasis. [Persistent design direction](ux/DESIGN_DIRECTION.md) and
-the repo-local cam-ux-ui skill now guide future desktop UI work.
-
-FS3.6 frontend: **1,065 pass, one optional skip**; Svelte/TypeScript zero
-errors/warnings; targeted lint/format, whitespace and production build pass.
-Real browser Profile/Pocket, 240/360 px side panels, mixed manual/suggested states,
-proposal/provenance, long names, large values and expanded sections qualified.
-The initial visual handoff kept 437 protected files unchanged. The subsequent
-user-requested review revision adds transient native rejection explanations
-without changing matching rules/math, data, placement, persistence or posts.
-Stock now shows drawing/WCS corner readouts; disclosures and origin vignettes
-were refined. Revision: **1,068 frontend pass / one skip**, 50 engine/data tests
-plus doctest, 11 adapter tests, eight ShopBot goldens and five CPS guards pass;
-check/lint/format/Clippy/schema and rebuilt WASM/frontend pass. No new native
-bundle or physical trial.
-
-Focused recommendation-panel review (ivac-rncu) is ready: default material,
-engagement, mode and compact source; known inputs moved to closed Calculation
-context; clear Calculate recommendation/Recalculate naming. Explicit Apply is
-preserved; no engine/domain/persistence changes. Frontend 1,068 pass / one skip,
-check/lint/build and browser disclosure/240 px/kept-manual-feed verification pass.
-See the focused-review addendum and captures in FS3.6 qualification.
-
-FS3.6 human review (ivac-vgu4) remains recorded separately. Engineering ivac-n23x is complete;
-FS3.5 human gate ivac-eh1g closed on explicit user approval. FS4 remains
-unstarted. User explicitly authorized committing and pushing the accumulated FS0–FS3.6
-work on 2026-10-12. This publication does not close the FS3.6 human qualification
-gate. The subsequent user request explicitly authorizes FS3.7 phases A–G.
+**FS3.9.1 — Recommendation UX Simplification** engineering qualified (ivac-hcea);
+human visual review **ivac-anp0** is next. [Handoff and screenshots](ux/FS3_9_1_QUALIFICATION.md).
+Inspector/advanced-entry continuation also qualified (ivac-m0qf): no default provenance,
+shared actions/origin indicator and consistent disclosure rows; blocking entry warnings
+remain visible while closed. Frontend1121 passes/1skip and27 ShopBot regressions pass.
+Compact existing Modal, automatic unapplied mode preview, guarded asynchronous results,
+explicit Apply, local capture separated and Draft by default. Frontend1117 pass/1skip,
+engine98 +1doctest; check/lint/build pass. No FS mathematics, source priority, storage
+or ShopBot post changes. FS4 remains deferred/nonblocking; CAM ordering unchanged.
 
 
-## FS3.7 — source packs handoff (2026-10-12)
+**FS3.9 — Approximate Matching & Coverage Expansion** is explicitly authorized
+as a targeted exception to the FS freeze (ivac-02in). Software qualification
+is complete; human gate **ivac-t0fk** is next. See [handoff](feeds-speeds/FS3_9_QUALIFICATION.md), [policy](feeds-speeds/FS3_9_MATCHING.md) and
+[coverage](feeds-speeds/FS3_9_COVERAGE.md). FS4 remains deferred/nonblocking.
+Independent known limitation: ShopBot CPS rejects a rough/finish RPM transition
+(ivac-2zll); see the FS3.9 handoff for the conditional export check.
+[Approved sensitivity audit](feeds-speeds/FS3_9_REVIEW.md) complete (ivac-v6pf):11997 samples,98 FS tests +1 doctest. Selection/interpolation jumps quantified; production smoothing requires a separate policy decision.
 
-The explicitly requested [FS3.7 audit](feeds-speeds/FS3_7_AUDIT.md) and
-[ADR-0005](adr/ADR-0005-source-packs-and-cutting-knowledge.md) guide one shared
-JSON pack loader and pure multi-source resolver. Existing numerical engine rules
-remain intact. Reviewed public packs use an explicit registry; imported packs
-use Tauri app-data files or origin-local IndexedDB, never the HTTP transport.
-Preferences retain IDs/versions and enablement. Legacy imports migrate only after
-successful validated storage. Generic Settings and compact operation summaries
-retain collapsed calculation context and detailed record provenance.
+Milling software remains active. CAM3 continuation approved (ivac-wh2m closed).
+**CAM4 A/B — Remaining Material Analysis & 2D Preview** (ivac-qk8y) is software
+qualified within the explicit per-pocket/depth scope in
+[the handoff](CAM4_QUALIFICATION.md). Human gate **ivac-tvox** is next.
+Amber residual rings, area/depth metrics, toggle and detail use final linear output;
+stale/unsupported contexts are explicit. CAD1/Phase C corner relief remains
+separate scope/approval; no Rest Machining or physical validation.
+User review follow-up fixes WASM checkpoint BigInt scrubbing, warning-chip alignment
+and adds transient 3D Toolpaths visibility. Existing Spiral choice is clarified;
+FS reference coverage unchanged in that earlier follow-up; targeted FS3.9 now adds derived coverage. [Evidence](ux/CAM4_REVIEW_FOLLOWUP.md).
 
-The application-owned material taxonomy supports explicit parent fallback and
-exact preference; composite Sienci categories are deliberately unmapped. Original
-values/classifications remain traceable beside normalized quantities. The resolver
-prioritizes scoped local trial presets, ranks specificity and reconciles only
-comparable authored same-mode records without averaging. Noncomparable contexts
-remain ambiguous; disagreement is visible and never promotes evidence.
+Stock/WCS/imported-geometry dragging and snapping remain deferred (ivac-t68s).
+UX2 numeric Z and two-sided CPS limits remain (ivac-u1ko / ivac-jtkj).
 
-[License matrix](feeds-speeds/DATA_SOURCES.md): APPROVED_PUBLIC is only the pinned
-six-row Sienci CC BY-SA subset. LOCAL_ONLY is the framework for user-entitled
-original measurements; no production private pack is populated. FabCAM/Sorbonne
-public records, Onsrud, Amana, DATRON and Sorotec require licensing review. No new
-lab-data license is chosen. Source licenses remain separate from application GPL.
+FS4 — Physical Feeds & Speeds Validation
+- **Status: DEFERRED** (ivac-mwry).
+- **Reason: requires physical lab / ShopBot access**, tools and materials currently
+  unavailable.
+- **Blocking further software development: NO**. Neither failure nor blocker.
+- Resume later with existing FS3.8 capture/storage/resolver/history/validation
+  workflow; no Feeds & Speeds architecture redesign required.
 
-[Qualification](feeds-speeds/FS3_7_QUALIFICATION.md): 69 engine/data/pack tests plus
-one doctest, 13 adapter tests, two native storage tests, eight ShopBot goldens and
-four CPS integration tests pass. Frontend 1,074 pass / one optional skip;
-Svelte/TypeScript zero errors/warnings, lint/format/Clippy/schema and production
-WASM/frontend build pass. Real browser import/refusal/duplicate, two-source
-proposal/explicit Apply, actual v4 save and missing-local-pack reopen/generation
-pass. Local data bodies are absent from the saved project. No new desktop bundle,
-Windows/Linux execution, physical trial or lab-qualified preset is claimed.
+FS architecture through FS3.8 is sufficient for continued CAM work. Freeze FS
+expansion: no new manufacturer imports, Sorbonne tuning, mathematics, physical
+trials or FS UX redesign unless a separately approved feature needs integration.
+External values remain ReferenceData; Sorbonne Tested/Validated require real cuts.
+WJ/ProtoMAX and VINYL remain deferred. Historical FS human reviews remain recorded,
+not automatically closed by track redirection or dependencies of milling software.
 
-New knowledge saves use guarded version 4; v1/v2/v3 files and legacy dataset
-requests remain supported. Missing local data never changes saved rates or blocks
-generation. See [source-pack contract](feeds-speeds/SOURCE_PACKS.md).
+Future FabCAM/FabSBP ownership and unnumbered planning groups are recorded in
+[the workflow plan](FABCAM_FABSBP_WORKFLOW.md) and ADR-0009. Documentation only:
+FabCAM declares requirements; future FabSBP establishes physical state. No implementation in that documentation checkpoint; no FabSBP development authorization.
 
-FS3.7 human review ivac-tm7u remains recorded. The subsequent explicit user
-request authorizes FS3.8 engineering; it does not authorize FS4.
+UX2.2 is now the selected next milestone; its first source/design checkpoint is
+complete. [Specification](ux/UX2_2_PLAN.md), [audit](ux/UX2_2_AUDIT.md), human
+design/scope gate **ivac-dwdd**. This selection does not rerun CAM3 or silently
+close the pending CAM4/FS reviews. Production implementation awaits the concrete
+design/lifecycle decision; no persistence/post/FS behavior changed.
+
+## Current browser review session
+
+User test URL `http://127.0.0.1:18767/?api=wasm` explicitly forces the standalone
+WASM engine, which has no CPS support in the current package. For ShopBot review,
+use `http://127.0.0.1:18767/?api=http%3A%2F%2F127.0.0.1%3A18772` with the current
+CPS-enabled native server running on 127.0.0.1:18772. CORS allows the 18767 origin.
+The server is deliberately left running for human testing (ivac-t79u); binary is
+in /private/tmp/fabcam-cps-runtime, outside root target/debug. This is a local review
+session, not a service installation or new native desktop bundle. Save/reopen your
+own project when switching page URLs; no user project file was rewritten.
+
+## Verified source and delivery
+
+- Checkout: /Users/mugen/Documents/01_Projets/FabCAM/ivacam.
+- Branch: feature/shopbot-mvp; origin harry-finch/ivacam, upstream aalarchiv/ivacam.
+- Previous committed/pushed software: **96e41ec4e8a3b593579079cbb6c051e070cd03ea**
+  (FS3.7/FS3.8), explicitly published by user authorization on 2026-10-12.
+- M4 baseline: e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1; M0–M4 names retained.
+- Current historical native delivery: ../ivaCAM-M4-r2/ivaCAM.app. No FS3.8 native
+  bundle or physical trial is claimed. target/debug cleaned by prior user request;
+  release/WASM packages retained.
+- M4 operator-reported Preview/air-cut/MDF exterior-square and VCarve comparison
+  evidence remains in [M4 validation](M4_VALIDATION.md) and
+  [comparison](M4_VCARVE_COMPARISON.md). Exact instrument/readings/tolerance and
+  measured RPM remain unreported; this is not blanket milling qualification.
+
+## Current evidence and limits
+
+FS3.9: 94 FS tests +1 doctest,17 core FS adapter tests,1112 frontend passes/1 optional
+skip; check/lint/fmt/Clippy/schema-check and optimized WASM/frontend build pass.
+Original six public cutting rows numerically unchanged; no physical evidence
+promotion, additional manufacturer data or private Sorbonne population.
+[Qualification](feeds-speeds/FS3_9_QUALIFICATION.md).
 
 
-## FS3.8 — local capture and validation handoff
+CAM4 A/B: core1,062; M1 11; ShopBot27; snapshots4 pass. Frontend1,112 passes /
+1 optional skip in120 files; check/lint/fmt/Clippy/schema-check and complete optimized
+WASM/frontend build pass. Buffered response/type addition is compatible; project
+serialization and machining output unchanged. Actual browser four-corner overlay,
+strategy stale suppression even after Save, unsupported reason and Save/reopen
+checked. New generation resets visibility. No native desktop bundle/physical trial.
 
-Explicit user checkpoint request authorizes FS3.8. The pure core capture adapter
-reads actual generation rates including manual edits, exact stable identities and
-native depth/entry/engagement. Secondary Save as lab preset writes only private
-Sorbonne knowledge using FS3.7 storage/resolution. Existing Tool/CuttingParameters,
-recommendation mathematics and ShopBot posts remain unchanged.
+Earlier CAM3 holding-tab and UX2.1 fixture/history evidence remains in their records.
+A/B covers metric Cascade Pocket, one Endmill, straight closed targets, linear
+returned execution moves and qualified Z0 stock depth. Tabs/allowance, curved or
+analytic-arc targets/paths and broader contexts are Not analyzed, with reasons.
+No cumulative job/physical stock-removal verdict.
 
-Schema 2 adds optional authoring metadata and retained revision snapshots; schema 1
-public references remain readable and unchanged. Draft is inactive, Tested requires
-dated physical-use/success attestation, Validated requires later deliberate review
-under sorbonne-local-validation-1. Unknown engagement cannot be qualified. Revisions
-are immutable with stale-head refusal; deletion is confirmed and reversible.
-Settings supports search/context/trial/history/notes/disable/restore/promotion and
-explicit private backup/restore. Missing local packs still preserve saved values.
+Helix, Ramp+tabs/leads, short-path vertical fallback and ShopBot G55–G59 retain
+explicit rejection. Numeric XY origin is fixed (ivac-vj11); Z refuses rather than
+being ignored. Genuine two-sided CPS/translated registration refuses. Fixtures
+warn when holder geometry is missing; no physical clearance/automatic avoidance
+claim. FS4 does not block this software work.
 
-Read [qualification](feeds-speeds/FS3_8_QUALIFICATION.md),
-[authoring guide](feeds-speeds/PRESET_AUTHORING.md),
-[validation policy](feeds-speeds/LOCAL_VALIDATION_POLICY.md) and
-[ADR-0006](adr/ADR-0006-local-preset-authoring-and-validation.md).
-Software tests and browser captures do not constitute a physical trial. No new
-macOS desktop bundle or Windows/Linux runtime qualification is claimed.
-Software checks: 77 engine tests + doctest, 16 core adapter, 3 native storage,
-1,087 frontend passes/1 optional skip and 8 ShopBot post regressions; check/lint/
-Clippy/optimized build pass. Browser capture/manage/export/restore and identical
-before/after project-operation checks pass.
-STOP — human approval ivac-7yii is required before starting FS4.
+[Milling audit](MILLING_CAPABILITY_AUDIT.md) remains the dated feature inventory.
+Dogbones/T-bones, dedicated spoilboard surfacing and named operation templates are
+future gaps; fixture creation is now available under Stock.
+Known ivac-htc8 global pocket-cache parallel-test race retains serial testing;
+ivac-5g51 partial WASM freshness guard limits retain complete package verification.
+
+Redirection, UX1, CAM2/UX2, UX2.1, future workflow documentation, CAM3, CAM4 A/B and FS3.9 changes are uncommitted; publication requires authorization.

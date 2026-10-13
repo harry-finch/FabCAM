@@ -7,10 +7,13 @@
   /// * Length / Width / Thickness labels (instead of bare X / Y / Z).
   /// * Auto mode: Length + Width are computed (greyed-out readouts);
   ///   Margin adds to both. Thickness is always user-editable.
-  /// * Origin offsets X / Y / Z (Z reserved for future). All default 0.
-  /// * Fixtures section dropped — sim still tracks them under the hood,
-  ///   but the UI doesn't expose adding them any more.
+  /// * Effective stock minimum corner, distinct from work zero.
+  /// * Fixtures reuse project persistence and history; checks do not reroute.
 
+  import FixturesPanel from './FixturesPanel.svelte';
+  import { stockCornerPatch } from '../state/stock-placement';
+  import { supportedWcs } from '../state/work-frame';
+  import { workspace } from '../state/workspace.svelte';
   import JobMaterial from './JobMaterial.svelte';
   import { project } from '../state/project.svelte';
   import { t } from '../i18n';
@@ -104,6 +107,18 @@
   }
 
   const WCS_OPTIONS: Wcs[] = ['G54', 'G55', 'G56', 'G57', 'G58', 'G59'];
+  const availableWcs = $derived(
+    supportedWcs(project.data.machine.gcodeDialect ?? workspace.get().last_post_processor),
+  );
+  function corner(axis: 'x' | 'y', raw: string) {
+    const parsed = parseFiniteNumber(raw);
+    if (parsed.value == null) {
+      invalidKey = axis === 'x' ? 'offsetX' : 'offsetY';
+      return;
+    }
+    invalidKey = null;
+    patch(stockCornerPatch(axis, parsed.value, footprint, project.data.stock));
+  }
 
   /// Wrap a stock-field onchange handler with shared invalid-feedback
   /// behavior: on a parse failure / out-of-range value the input keeps
@@ -276,16 +291,16 @@
             : 'fs36.stock_auto_empty',
       )}
     </p>
-    <legend>{t('fs36.stock_translation')}</legend>
+    <legend>{t('ux2.stock_corner')}</legend>
     <label>
       <span>X</span>
       <span class="field">
         <input
           type="number"
           step="0.5"
-          value={project.data.stock.offsetX ?? 0}
+          value={footprint.minX}
           class:invalid={invalidKey === 'offsetX'}
-          onchange={(e) => onStockNumberChange('offsetX', e, { allowNegative: true })}
+          onchange={(e) => corner('x', e.currentTarget.value)}
         />
         <span class="unit">mm</span>
       </span>
@@ -296,9 +311,9 @@
         <input
           type="number"
           step="0.5"
-          value={project.data.stock.offsetY ?? 0}
+          value={footprint.minY}
           class:invalid={invalidKey === 'offsetY'}
-          onchange={(e) => onStockNumberChange('offsetY', e, { allowNegative: true })}
+          onchange={(e) => corner('y', e.currentTarget.value)}
         />
         <span class="unit">mm</span>
       </span>
@@ -325,16 +340,13 @@
     </label>
   </fieldset>
 
-  <div class="placement-readout" aria-label={t('fs36.stock_corner')}>
-    <span>{t('fs36.stock_corner')}</span>
-    <span>X {footprint.minX.toFixed(2)} · Y {footprint.minY.toFixed(2)} mm</span>
+  <div class="placement-readout" aria-label={t('fs36.stock_corner_wcs')}>
     <span>{t('fs36.stock_corner_wcs')}</span>
     <span
       >X {(footprint.minX - project.data.workOffset.x_mm).toFixed(2)} · Y {(
         footprint.minY - project.data.workOffset.y_mm
       ).toFixed(2)} mm</span
     >
-    <p>{t('fs36.stock_wcs_help')}</p>
   </div>
 
   <!-- Work-coordinate-system origin (per-project). Where on the
@@ -354,7 +366,7 @@
             })}
         >
           {#each WCS_OPTIONS as w (w)}
-            <option value={w}>{w}</option>
+            <option value={w} disabled={!availableWcs.includes(w)}>{w}</option>
           {/each}
         </select>
       </span>
@@ -399,7 +411,25 @@
     >
       {t('stock.snap_bbox')}
     </button>
+    <button
+      type="button"
+      class="snap-btn"
+      onclick={() => patchWorkOffset({ x_mm: footprint.minX, y_mm: footprint.minY })}
+    >
+      {t('ux2.zero_stock')}
+    </button>
+    <p class="placement-help">{t('fs36.stock_wcs_help')}</p>
+    {#if !availableWcs.includes(project.data.workOffset.wcs) || project.data.workOffset.z_mm !== 0}
+      <p class="placement-help" role="alert">{t('ux2.wcs.unsupported')}</p>
+      {#if project.data.workOffset.z_mm !== 0}
+        <button type="button" class="snap-btn" onclick={() => patchWorkOffset({ z_mm: 0 })}
+          >{t('ux2.zero_z')}</button
+        >
+      {/if}
+    {/if}
   </fieldset>
+
+  <FixturesPanel />
 
   <!-- Two-sided (flip-stock) registration. When enabled, ops tagged
        side:'back' are mirrored about the flip axis and emitted as a
@@ -415,6 +445,9 @@
       <span>{t('stock.flip.enable')}</span>
     </label>
     {#if flip}
+      {#if (project.data.machine.gcodeDialect ?? workspace.get().last_post_processor) === 'cps' || project.data.workOffset.x_mm !== 0 || project.data.workOffset.y_mm !== 0}
+        <p class="placement-help" role="alert">{t('ux2.two_sided')}</p>
+      {/if}
       <label>
         <span>{t('stock.flip.axis')}</span>
         <span class="field">
@@ -527,9 +560,6 @@
     display: grid;
     gap: var(--ui-space-1);
     margin: var(--ui-space-2) 0;
-  }
-  .placement-readout p {
-    margin: var(--ui-space-1) 0;
   }
   .placement-readout span:nth-child(even) {
     color: var(--text);

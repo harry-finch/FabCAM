@@ -173,3 +173,85 @@ schema 2 and existing app-data/IndexedDB storage, with read-only core capture,
 immutable revisions/head comparison and retained authoring history. Draft is inactive;
 Tested/Validated use existing resolver categories. Existing project identity fields
 support explicit local UUID setup. No parallel database, math or post change.
+
+## UX1 entry/post and generated-output boundary
+
+Generic CAM remains authoritative. Section context carries transient entry strategy,
+start Z, tab/lead/path-helix flags and numeric WCS metadata for consumer qualification;
+no persisted Tool/CuttingParameters/Project schema change. Bundled ShopBot accepts
+scoped varying-Z XY Ramp arcs and uses existing CPS XYZ linearization; unsupported
+composition and numeric origin offsets reject before output. Generic geometry does
+not learn ShopBot semantics. Runtime generation input identity prevents exporting
+a program after setup edits, even after saving; the shared wire builder supplies
+both generation and identity. See [UX1 qualification](ux/UX1_QUALIFICATION.md).
+
+UX1 continues with [ADR-0007](adr/ADR-0007-shopbot-resolved-preview.md): the final
+bundled ShopBot preview decodes emitted supported movements, so simulation uses
+straight, rounded SBP XYZ chords and ordered jogs rather than analytic generic arcs.
+Existing per-op diagnostics carry requested/resolved representation; no new schema.
+Generic Helix fallback comments make geometric failure inspectable; ShopBot refuses
+fallback before output, separately from unqualified true Helix. Other posts retain
+existing preview paths. Stock/fixture workflows remain CAM2/UX2.
+
+## CAM2 coordinate and obstacle boundary
+
+[ADR-0008](adr/ADR-0008-work-origin-frames.md) defines single-sided milling XY
+normalization on an owned request before generic CAM. Program/returned geometry
+use work coordinates; desktop display maps resolved moves/regions back to drawing
+coordinates using captured origin. No persistence migration, post text rewriting
+or ShopBot-specific geometry semantics. Fixture candidates use resolved paths and
+existing warning/export controls; missing holder geometry is explicit. Z and
+unqualified two-sided output reject before generation.
+
+## Future job-intent / machine-setup boundary
+
+**DESIGN DIRECTION; implementation deferred.** FabCAM describes job requirements;
+future FabSBP establishes physical machine state and executes. Declared work zero
+is not physical zero establishment. Future XY origin and Z reference are distinct;
+current qualified XY normalization and Z/two-sided guards remain unchanged.
+Origin declaration alone must not cause zero-setting commands such as Z2/ZZ.
+
+Reusable future profiles separate capabilities, workshop setup and execution
+workflow. FabCAM shares the CAM-relevant subset; connection, home/probe/I/O and
+execution procedures remain FabSBP responsibilities. Both applications remain
+standalone; explicit lightweight requirements metadata may connect them after a
+separate contract-design checkpoint. No format/schema or persistence change now.
+See [ADR-0009](adr/ADR-0009-job-intent-machine-setup.md) and the
+[future workflow plan](FABCAM_FABSBP_WORKFLOW.md) for ownership, current seam
+dispositions, guided policy, structured pre/post actions, UX and dependencies.
+
+## CAM3 holding-material emission
+
+Generic tab attachment projects onto swept arcs rather than their chords. Generic
+emission honors configured width and resolves individual tab tops against the
+final floor before each pass. Direct contour entry and lead-out preserve holding
+tabs too. Curved ramps use a continuous height field across bounded chords, not
+independent repeated chord ramps. No post-specific syntax, new schema or FS calls.
+ShopBot final preview still follows emitted XYZ. Conservative whole-arc lifts for
+rectangular curved tabs remain explicit partial behavior. See
+[CAM3 qualification and limits](CAM3_QUALIFICATION.md).
+
+## CAM4 A/B depth-scoped diagnostics
+
+[ADR-0010](adr/ADR-0010-depth-scoped-remaining-material.md) extends only buffered
+pipeline output with optional per-operation remaining_material diagnostics. Reuse
+Pocket intended regions, hole-preserving Clipper conversion and final returned
+linear moves; depth clipping precedes flat-cutter sweep/difference. Native text
+interpretation/bundled ShopBot resolved output is distinguished from arbitrary
+CPS IR at the adapter boundary. No machine syntax in removal geometry.
+
+The additive response/schema has no project/Tool/preset migration. Drawing-frame
+adaptation translates residual rings while leaving area/depth/program intact.
+Transient UI state and generation identity control fresh overlays; Save cannot
+validate old results. Unsupported scope is explicit, not empty-area success.
+[Qualification](CAM4_QUALIFICATION.md) records bounded metric Cascade scope,
+intentional-material exclusions, numerical cutoffs and per-operation limits.
+
+## FS3.9 derived reference layer
+
+The pure pack resolver adds bounded normalized adaptation before the existing
+Engine calculator, restoring original source profiles afterward. Optional public
+derivation provenance and private-safe match quality extend FS metadata; no
+Tool/CuttingParameters, geometry, post, application or save-value ownership changes.
+See [ADR-0011](adr/ADR-0011-bounded-cutting-reference-adaptation.md) and
+[policy](feeds-speeds/FS3_9_MATCHING.md). FS4 remains deferred/nonblocking.

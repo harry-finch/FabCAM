@@ -1,4 +1,14 @@
 <script lang="ts">
+  import { untrack, tick, onDestroy } from 'svelte';
+  import Modal from '../Modal.svelte';
+  import {
+    PreviewRequests,
+    displayNumber,
+    distinctEngagement,
+    adaptationKind,
+  } from '../../state/recommendation-preview';
+  import { cuttingOriginPresentation } from '../../state/cutting-origin-presentation';
+  import RecommendationBasis from './RecommendationBasis.svelte';
   import LabPresetDialog from '../LabPresetDialog.svelte';
   import { captureLabPreset } from '../../state/feeds-speeds-pack-store';
   import { LAB_PACK_ID, labHasRevision, type LabCapture } from '../../state/lab-presets';
@@ -41,9 +51,26 @@
     }
   }
   function knowledgeName(id: string) {
-    return id === LAB_PACK_ID ? t('fs38.sorbonne') : t('fs37.references');
+    if (id === LAB_PACK_ID) return t('fs38.sorbonne');
+    return (
+      recommendationSources.rows.find((row) => row.pack?.manifest.identity.id === id)?.pack
+        ?.manifest.publisher ?? t('fs37.references')
+    );
   }
+  let reviewTrigger = $state<HTMLButtonElement>();
+  const requests = new PreviewRequests();
+  onDestroy(() => requests.cancel());
   let review = $state(false);
+  let fullWidth = $state(false);
+  function cancelReview() {
+    requests.cancel();
+    review = false;
+    responses = [];
+    attempted = false;
+    busy = false;
+    error = '';
+    void tick().then(() => reviewTrigger?.focus());
+  }
   let mode = $state<S['FsAggressiveness']>('prudent');
   let responses = $state<
     {
@@ -82,7 +109,11 @@
       stockSizingImport: project.stockSizingImport,
       machine: project.data.machine,
       tools: project.data.tools,
-      operations: project.data.operations,
+      operations: project.data.operations.map((entry) =>
+        entry.id === op.id && entry.kind === 'profile' && review
+          ? { ...entry, fsFullWidth: fullWidth }
+          : entry,
+      ),
       stock: project.data.stock,
       textLayers: project.data.textLayers,
       workOffset: project.data.workOffset,
@@ -111,7 +142,18 @@
   );
   const accepted = $derived(op.appliedCutting?.proposal);
   const savedKnowledge = $derived(op.appliedCutting?.knowledge);
-  const hasRecommendation = $derived(!!accepted || !!savedKnowledge);
+  const originView = $derived(
+    cuttingOriginPresentation([
+      main?.origins.rpm,
+      main?.origins.feed,
+      main?.origins.plunge,
+      op.appliedCutting?.doc_origin,
+      ...(op.kind === 'pocket' ? [op.appliedCutting?.stepover_origin] : []),
+    ]),
+  );
+  const finishOriginView = $derived(
+    cuttingOriginPresentation(secondary ? Object.values(secondary.origins) : []),
+  );
   const provenanceMissing = $derived(
     !!savedKnowledge &&
       ![...recommendationSources.builtins, ...recommendationSources.local].some(
@@ -163,12 +205,26 @@
       error = t('fs.positive');
     }
   }
-  async function calculate() {
+  $effect(() => {
+    const captured = key;
+    if (
+      review &&
+      wire &&
+      project.data.material &&
+      !recommendationSources.loading &&
+      recommendationSources.rows.length
+    ) {
+      untrack(() => {
+        void calculate(captured);
+      });
+    }
+  });
+  async function calculate(captured = key) {
     if (!wire || !api.feedsSpeeds) {
       error = t('fs.unavailable_build');
       return;
     }
-    const captured = key;
+    const revision = requests.start();
     busy = true;
     error = '';
     attempted = true;
@@ -195,19 +251,20 @@
           }),
         },
       ];
-      if (captured === key) {
+      if (review && requests.owns(revision) && captured === key) {
         responses = next;
         responseKey = captured;
       }
     } catch (e) {
-      error = String(e);
+      if (review && requests.owns(revision) && captured === key) error = String(e);
     } finally {
-      busy = false;
+      if (requests.owns(revision)) busy = false;
     }
   }
   async function apply(source: (typeof suggestions)[number]) {
     if (!wire || !api.feedsSpeeds || previewStale) return;
     const captured = key;
+    const revision = requests.start();
     busy = true;
     error = '';
     try {
@@ -218,10 +275,17 @@
         aggressiveness: mode,
         apply: true,
       });
-      if (captured !== key || !result.applied_op?.params.applied_cutting) return;
+      if (
+        !review ||
+        !requests.owns(revision) ||
+        captured !== key ||
+        !result.applied_op?.params.applied_cutting
+      )
+        return;
       const native = result.applied_op;
       const patch: Partial<OpEntry> = {
         appliedCutting: native.params.applied_cutting!,
+        ...(op.kind === 'profile' ? { fsFullWidth: fullWidth } : {}),
         step: native.params.step ?? op.step,
         feedRateOverride: undefined,
         plungeRateOverride: undefined,
@@ -239,13 +303,11 @@
         applyCuttingCommand(op.id, patch, project.data.material, context),
         project.target(),
       );
-      review = false;
-      responses = [];
-      attempted = false;
+      cancelReview();
     } catch (e) {
-      error = String(e);
+      if (review && requests.owns(revision) && captured === key) error = String(e);
     } finally {
-      busy = false;
+      if (requests.owns(revision)) busy = false;
     }
   }
   const fields = ['rpm', 'feed_mm_min', 'plunge_mm_min'] as const;
@@ -291,6 +353,8 @@
         return t('fs36.pass_depth');
       case 'thickness_mm':
         return t('stock.thickness');
+      case 'diameter_proximity':
+        return t('fs39.relative_gap');
       case 'cutting_family':
         return t('fs36.scope.cutting_family');
       case 'diameter_mm':
@@ -323,6 +387,15 @@
   {#if op.appliedCutting && (!main || (op.kind === 'pocket' && !secondary))}<p role="alert">
       {t('fs35.missing_rates')}
     </p>{/if}
+  {#if originView.shared}<p class="source-meta" role="status">
+      {t(
+        originView.shared === 'recommendation'
+          ? 'fs391.applied_values'
+          : originView.shared === 'manual'
+            ? 'fs391.modified_values'
+            : 'fs391.mixed_values',
+      )}
+    </p>{/if}
   {#each fields as field (field)}
     <label class="inspector-field"
       ><span>{fieldName(field)}</span><input
@@ -333,7 +406,9 @@
         value={main?.[field] ?? ''}
         oninput={(e) => editRate(op.toolId, mainPass, field, Number(e.currentTarget.value))}
       /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span>
-      <CuttingOriginStatus origin={main?.origins[origin(field)]} /></label
+      {#if originView.show(main?.origins[origin(field)])}<CuttingOriginStatus
+          origin={main?.origins[origin(field)]}
+        />{/if}</label
     >
   {/each}
   <label class="inspector-field"
@@ -347,9 +422,10 @@
         const n = Number(e.currentTarget.value);
         if (n > 0) project.updateOperation(op.id, { step: -n });
       }}
-    /><span class="unit">mm</span><CuttingOriginStatus
-      origin={op.appliedCutting?.doc_origin}
-    /></label
+    /><span class="unit">mm</span
+    >{#if originView.show(op.appliedCutting?.doc_origin)}<CuttingOriginStatus
+        origin={op.appliedCutting?.doc_origin}
+      />{/if}</label
   >
   {#if op.depthList?.length}<p>{t('fs35.schedule')}</p>{/if}
   {#if op.kind === 'pocket'}<label class="inspector-field"
@@ -363,14 +439,24 @@
           const n = Number(e.currentTarget.value);
           if (n > 0 && n < 100) project.updateOperation(op.id, { xyOverlap: 1 - n / 100 });
         }}
-      /><span class="unit">%</span><CuttingOriginStatus
-        origin={op.appliedCutting?.stepover_origin}
-      /></label
+      /><span class="unit">%</span
+      >{#if originView.show(op.appliedCutting?.stepover_origin)}<CuttingOriginStatus
+          origin={op.appliedCutting?.stepover_origin}
+        />{/if}</label
     >{/if}
   {#if separateFinish && secondary}
     <details>
       <summary>{t('fs35.finishing')}</summary>
       <p>{finishTool?.name}</p>
+      {#if finishOriginView.shared}<p class="source-meta">
+          {t(
+            finishOriginView.shared === 'recommendation'
+              ? 'fs391.applied_values'
+              : finishOriginView.shared === 'manual'
+                ? 'fs391.modified_values'
+                : 'fs391.mixed_values',
+          )}
+        </p>{/if}
       {#each fields as field (field)}<label class="inspector-field"
           ><span>{fieldName(field)}</span><input
             type="number"
@@ -378,269 +464,289 @@
             step="1"
             value={secondary[field]}
             oninput={(e) => editRate(finishToolId, 'finish', field, Number(e.currentTarget.value))}
-          /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span><CuttingOriginStatus
-            origin={secondary.origins[origin(field)]}
-          /></label
+          /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span
+          >{#if finishOriginView.show(secondary.origins[origin(field)])}<CuttingOriginStatus
+              origin={secondary.origins[origin(field)]}
+            />{/if}</label
         >{/each}
     </details>
   {/if}
-  <div class="assistant-state">
-    {#if stale}
-      <div class="stale" role="status" title={t('fs35.kept')}>
-        <strong>⚠ {t('fs35.outdated')}</strong>
-        <span>{t('fs36.kept')}</span>
-      </div>
-    {/if}
-    {#if accepted && !savedKnowledge && !review}<p class="source-meta">
-        {t('fs35.source')}: {accepted.provenance.profile.source.author} · {evidence(
-          accepted.source_evidence,
-        )}
-      </p>{/if}
-    {#if savedKnowledge && !review}<p class="source-meta">
-        {knowledgeName(savedKnowledge.selected_pack.id)} · {savedKnowledge.compatible_sources}
-        {savedKnowledge.compatible_sources === 1
-          ? t('fs37.compatible_source')
-          : t('fs37.compatible_sources')} · {evidence(savedKnowledge.evidence)}
-      </p>{/if}
-    {#if provenanceMissing}<p class="source-meta" role="status">
-        {t('fs37.provenance_missing')}
-      </p>{/if}
+  <div class="inspector-action-row">
+    <button
+      type="button"
+      class="inspector-action"
+      disabled={!wire || busy}
+      onclick={openLabCapture}
+      title={t('fs391.preset_help')}>{t('fs391.save_preset')}</button
+    >
     {#if !review}<button
         type="button"
-        class="inspector-action review-action"
+        class="inspector-action"
+        bind:this={reviewTrigger}
         onclick={() => {
+          fullWidth = op.fsFullWidth ?? false;
           review = true;
           error = '';
-        }}
-        >{stale
-          ? t('fs35.recalculate')
-          : hasRecommendation
-            ? t('fs35.review')
-            : t('fs35.suggest')}</button
+        }}>{t('fs391.review_recommendation')}</button
       >{/if}
   </div>
+  {#if stale}<div class="stale" role="status" title={t('fs35.kept')}>
+      <strong>{t('fs35.outdated')}</strong><span>{t('fs36.kept')}</span>
+    </div>{/if}
+  {#if provenanceMissing}<p class="source-meta" role="status">
+      {t('fs37.provenance_missing')}
+    </p>{/if}
   {#if review}
-    <div
-      class="recommendation"
-      role="region"
-      aria-label={hasRecommendation ? t('fs36.recalculate_parameters') : t('fs35.recommendation')}
+    <Modal
+      onClose={cancelReview}
+      width="min(440px, 95vw)"
+      maxHeight="85vh"
+      ariaLabelledBy="cutting-recommendation-title"
     >
-      <h4>{hasRecommendation ? t('fs36.recalculate_parameters') : t('fs35.recommendation')}</h4>
-      <dl>
-        <dt>{t('fs.material')}</dt>
-        <dd>{materialLabel}</dd>
-        {#if op.kind === 'pocket'}<dt>{t('fs36.engagement')}</dt>
-          <dd>{((1 - overlap) * 100).toFixed(1)} % · {t('fs35.nominal')}</dd>{/if}
-      </dl>
-      {#if op.kind === 'profile'}<label class="check-row"
-          ><input
-            type="checkbox"
-            checked={op.fsFullWidth ?? false}
-            onchange={(e) =>
-              project.updateOperation(op.id, { fsFullWidth: e.currentTarget.checked })}
-          />{t('fs.full_width')}</label
-        >{/if}
-      <label class="inspector-field mode-field"
-        ><span>{t('fs.mode')}</span><select bind:value={mode}
-          ><option value="prudent">{t('fs.prudent')}</option><option value="normal"
-            >{t('fs.normal')}</option
-          ><option value="rapid">{t('fs.rapid')}</option></select
-        ></label
-      >
-      {#if suggestions.length && !previewStale}
-        {#each suggestions as source (source.id)}
-          {#if source.result.recommendation.status === 'available'}
-            {@const proposal = source.result.recommendation.recommendation}
-            <p class="source-meta">
-              {t('fs35.source')}: {knowledgeName(
-                source.result.knowledge?.summary.selected_pack.id ?? '',
-              )} · {source.result.knowledge?.summary.compatible_sources ?? 1}
-              {(source.result.knowledge?.summary.compatible_sources ?? 1) === 1
-                ? t('fs37.compatible_source')
-                : t('fs37.compatible_sources')} · {evidence(proposal.source_evidence)}
-            </p>
-          {/if}
-        {/each}
-      {:else if savedKnowledge}
-        <p class="source-meta">
-          {t('fs36.previous_source')}: {savedKnowledge.selected_pack.id} · {evidence(
-            savedKnowledge.evidence,
-          )}
+      <div class="recommendation" aria-busy={busy}>
+        <h4 id="cutting-recommendation-title">{t('fs35.recommendation')}</h4>
+        <p class="context-line">
+          {materialLabel} · {op.kind === 'profile' ? t('fs35.profile') : t('fs35.pocket')} · Ø{tool
+            ? displayNumber(tool.diameter, 3)
+            : '—'} mm · {tool?.flutes ?? '—'}F
         </p>
-      {:else if accepted}
-        <p class="source-meta">
-          {t('fs36.previous_source')}: {accepted.provenance.profile.source.author} · {evidence(
-            accepted.source_evidence,
-          )}
-        </p>
-      {:else if recommendationSources.rows.length}
-        <p class="source-meta">
-          {t('fs35.source')}: {t('fs37.references')} · {recommendationSources.rows.length}
-          {recommendationSources.rows.length === 1
-            ? t('fs37.enabled_source')
-            : t('fs37.enabled_sources')} ·
-          {t('fs36.evidence_pending')}
-        </p>
-      {/if}
-      {#if recommendationSources.loading}<p role="status">
-          {t('fs35.loading')}
-        </p>{:else if recommendationSources.error}<p role="status">
-          {t('fs35.source_unavailable')}
-        </p>{:else if !recommendationSources.rows.length}<p role="status">
-          {t('fs35.sources_disabled')}
-        </p>{/if}
-      {#if !project.data.material}<p role="status">{t('fs35.define_material')}</p>{/if}
-      <button
-        type="button"
-        class="inspector-action"
-        disabled={busy || !wire || !project.data.material || !recommendationSources.rows.length}
-        onclick={calculate}>{hasRecommendation ? t('fs35.recalculate') : t('fs.propose')}</button
-      >
-      <details>
-        <summary>{t('fs36.calculation_context')}</summary>
-        <dl>
-          <dt>{t('fs35.machine')}</dt>
-          <dd>{project.data.machine.name}</dd>
-          <dt>{t('fs35.tool')}</dt>
-          <dd>{tool?.name} · Ø{tool?.diameter} mm · {tool?.flutes}F</dd>
-          <dt>{t('fs35.operation')}</dt>
-          <dd>{op.kind === 'profile' ? t('fs35.profile') : t('fs35.pocket')}</dd>
-          <dt>{t('fs36.pass_depth')}</dt>
-          <dd>{doc} mm</dd>
-        </dl>
-      </details>
-      {#if previewStale}<p role="status">{t('fs35.preview_changed')}</p>{/if}
-      {#if attempted && !busy && !suggestions.length && !error && !previewStale}
-        <div class="no-match" role="status">
-          {#each responses as source (source.id)}
-            {#if source.result.recommendation.status === 'unavailable'}
-              <p>{source.label}: {rejectionReason(source.result.recommendation.reason)}</p>
-              {#if source.result.recommendation.reason.kind === 'invalid_request'}
-                {#each source.result.recommendation.reason.issues as issue, index (index)}<p>
-                    {issue.field}: {issue.message}
-                  </p>{/each}
-              {/if}
-              {#if source.result.scope_rejections?.length}
-                <p class="scope-heading">{t('fs36.closest_scopes')}</p>
-                {#each source.result.scope_rejections as rejection, rejectionIndex (rejectionIndex)}
-                  <ul class="scope-reasons">
-                    {#each rejection.mismatches as mismatch (mismatch.field)}
-                      <li>
-                        <strong>{scopeField(mismatch.field)}</strong><br />{t('fs36.actual')}: {scopeValue(
-                          mismatch.actual,
-                          source.catalog,
-                          t('fs36.unknown'),
-                        )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}<br />{t('fs36.required')}: {scopeValue(
-                          mismatch.required,
-                          source.catalog,
-                          t('fs36.unknown'),
-                        )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}
-                      </li>
+        {#if op.kind === 'profile'}<label class="check-row"
+            ><input type="checkbox" bind:checked={fullWidth} />{t('fs.full_width')}</label
+          >{/if}
+        <label class="inspector-field mode-field"
+          ><span>{t('fs.mode')}</span><select bind:value={mode}>
+            <option value="prudent">{t('fs.prudent')}</option><option value="normal"
+              >{t('fs.normal')}</option
+            ><option value="rapid">{t('fs.rapid')}</option>
+          </select></label
+        >
+        {#if busy}<p class="source-meta" role="status">{t('fs391.calculating')}</p>{/if}
+        {#if recommendationSources.loading}<p role="status">{t('fs35.loading')}</p>
+        {:else if recommendationSources.error}<p role="alert">{t('fs35.source_unavailable')}</p>
+        {:else if !recommendationSources.rows.length}<p role="status">
+            {t('fs35.sources_disabled')}
+          </p>{/if}
+        {#if !project.data.material}<p role="status">{t('fs35.define_material')}</p>{/if}
+        {#if attempted && !busy && !suggestions.length && !error && !previewStale}
+          <div
+            class="no-match"
+            class:blocking={responses.some(
+              (s) =>
+                s.result.recommendation.status === 'unavailable' &&
+                ['invalid_request', 'unrepresentable_output'].includes(
+                  s.result.recommendation.reason.kind,
+                ),
+            )}
+            role="alert"
+          >
+            {#each responses as source (source.id)}
+              {#if source.result.recommendation.status === 'unavailable'}
+                <p>
+                  {source.result.recommendation.reason.kind === 'missing_cutting_data'
+                    ? t('fs391.no_reference')
+                    : rejectionReason(source.result.recommendation.reason)}
+                </p>
+                {#if source.result.recommendation.reason.kind === 'invalid_request'}
+                  {#each source.result.recommendation.reason.issues as issue, index (index)}<p>
+                      {issue.field}: {issue.message}
+                    </p>{/each}
+                {/if}
+                <details>
+                  <summary>{t('fs391.rejection_details')}</summary>
+                  <p>{rejectionReason(source.result.recommendation.reason)}</p>
+                  {#if source.result.scope_rejections?.length}
+                    <p class="scope-heading">{t('fs36.closest_scopes')}</p>
+                    {#each source.result.scope_rejections as rejection, rejectionIndex (rejectionIndex)}
+                      <ul class="scope-reasons">
+                        {#each rejection.mismatches as mismatch (mismatch.field)}
+                          <li>
+                            <strong>{scopeField(mismatch.field)}</strong><br />{t('fs36.actual')}: {scopeValue(
+                              mismatch.actual,
+                              source.catalog,
+                              t('fs36.unknown'),
+                            )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}<br />{t(
+                              'fs36.required',
+                            )}: {scopeValue(
+                              mismatch.required,
+                              source.catalog,
+                              t('fs36.unknown'),
+                            )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}
+                          </li>
+                        {/each}
+                      </ul>
                     {/each}
-                  </ul>
-                {/each}
+                  {/if}
+                </details>
               {/if}
-            {/if}
-          {/each}
-          <p>{t('fs36.no_transfer')}</p>
-        </div>
-      {/if}
-      {#each suggestions as source (source.id)}
-        {#if source.result.recommendation.status === 'available'}
-          {@const proposal = source.result.recommendation.recommendation}
-          <article>
-            <h4>{t('fs35.suggested')}</h4>
-            {#if suggestions.length > 1}<p class="source-meta">{source.label}</p>{/if}
-            <dl>
+            {/each}
+          </div>
+        {/if}
+
+        {#each suggestions as source (source.id)}
+          {#if source.result.recommendation.status === 'available' && !previewStale}
+            {@const proposal = source.result.recommendation.recommendation}
+            {@const derived = proposal.provenance.derivation}
+            <dl class="suggested-values" aria-label={t('fs35.suggested')}>
               <dt>{t('fs.rpm')}</dt>
-              <dd>{proposal.parameters.rpm} rpm</dd>
+              <dd>{displayNumber(proposal.parameters.rpm)} <span>rpm</span></dd>
               <dt>{t('fs.feed')}</dt>
-              <dd>{proposal.parameters.feed_mm_min} mm/min</dd>
+              <dd>{displayNumber(proposal.parameters.feed_mm_min)} <span>mm/min</span></dd>
               <dt>{t('fs.plunge')}</dt>
-              <dd>{proposal.parameters.plunge_mm_min} mm/min</dd>
+              <dd>{displayNumber(proposal.parameters.plunge_mm_min)} <span>mm/min</span></dd>
               <dt>{t('fs36.pass_depth')}</dt>
-              <dd>{proposal.parameters.doc_mm} mm</dd>
+              <dd>{displayNumber(proposal.parameters.doc_mm, 2)} <span>mm</span></dd>
               {#if proposal.parameters.stepover_ratio != null}<dt>{t('fs.stepover')}</dt>
-                <dd>{(proposal.parameters.stepover_ratio * 100).toFixed(1)} %</dd>{/if}
-              <dt>{t('fs.chipload')}</dt>
-              <dd>
-                {proposal.parameters.effective_chipload_mm_tooth.toFixed(4)} mm/{t('fs.tooth')}
-              </dd>
+                <dd>
+                  {displayNumber(proposal.parameters.stepover_ratio * 100, 1)} <span>%</span>
+                </dd>{/if}
             </dl>
-            {#if source.result.knowledge?.disagreement}<p role="status">
+            {#if op.kind === 'pocket' && distinctEngagement(1 - overlap, proposal.parameters.stepover_ratio)}<p
+                class="source-meta"
+              >
+                {t('fs36.engagement')}: {displayNumber((1 - overlap) * 100, 1)} % · {t(
+                  'fs35.nominal',
+                )}
+              </p>{/if}
+            <p class="source-meta" class:extrapolated={derived?.quality === 'extrapolated'}>
+              {derived?.quality === 'extrapolated'
+                ? t('fs39.extrapolated')
+                : derived
+                  ? t('fs391.adapted_reference')
+                  : evidence(proposal.source_evidence)} · {proposal.provenance.profile.source
+                .author}
+            </p>
+            {#if derived}<p class="source-meta">{evidence(proposal.source_evidence)}</p>{/if}
+            {#if proposal.diagnostics.length || proposal.applicability === 'adjusted_outside_evidence'}<p
+                class="caution-copy"
+                role="status"
+              >
+                {t('fs391.review_limits')}
+              </p>{/if}
+            {#if source.result.knowledge?.disagreement}<p class="extrapolated" role="status">
                 {t('fs37.disagreement')}
               </p>{/if}
-            {#if proposal.applicability === 'adjusted_outside_evidence'}<p role="status">
-                {t('fs.adjusted')}
-              </p>{/if}
-            {#if proposal.diagnostics.length}<p>{t('fs.unknowns')}</p>{/if}
-            <button
-              type="button"
-              class="inspector-action primary"
-              disabled={busy || previewStale}
-              onclick={() => apply(source)}>{t('fs35.apply')}</button
-            >
+            <details class="explanation">
+              <summary>{t('fs39.why')}</summary>
+              <dl>
+                <dt>{t('fs35.machine')}</dt>
+                <dd>{project.data.machine.name}</dd>
+                <dt>{t('fs35.tool')}</dt>
+                <dd>{tool?.name}</dd>
+                <dt>{t('fs.material')}</dt>
+                <dd>{materialLabel}</dd>
+                <dt>{t('fs36.pass_depth')}</dt>
+                <dd>{displayNumber(doc, 2)} mm · {t('fs391.requested')}</dd>
+                <dt>{t('fs36.engagement')}</dt>
+                <dd>
+                  {op.kind === 'pocket'
+                    ? `${displayNumber((1 - overlap) * 100, 1)} % · ${t('fs35.nominal')}`
+                    : fullWidth
+                      ? t('fs.full_width')
+                      : t('fs36.unknown')}
+                </dd>
+                <dt>{t('fs.chipload')}</dt>
+                <dd>
+                  {displayNumber(proposal.parameters.effective_chipload_mm_tooth, 3)} mm/{t(
+                    'fs.tooth',
+                  )}
+                </dd>
+                <dt>{t('fs391.cutting_speed')}</dt>
+                <dd>
+                  {displayNumber(
+                    (Math.PI * (tool?.diameter ?? 0) * proposal.parameters.rpm) / 1000,
+                    1,
+                  )} m/min
+                </dd>
+              </dl>
+              {#if op.kind === 'pocket' && distinctEngagement(1 - overlap, proposal.parameters.stepover_ratio)}<p
+                >
+                  {t('fs391.engagement_distinct')}
+                </p>{/if}
+              {#if derived && adaptationKind(derived) === 'diameter'}<p>
+                  {t('fs39.adapted_from')} Ø{derived.source_diameters_mm
+                    .map((v) => displayNumber(v, 3))
+                    .join(' / Ø')} → Ø{displayNumber(derived.requested_diameter_mm, 3)} mm
+                </p>{/if}
+              <RecommendationBasis knowledge={source.result.knowledge} detail={derived} embedded />
+              {#if proposal.diagnostics.length}<p>{t('fs.unknowns')}</p>
+                <ul>
+                  {#each proposal.diagnostics as diagnostic, index (index)}<li>
+                      {diagnostic.kind === 'unknown_limit'
+                        ? `${t('fs391.unknown_limit')}: ${diagnostic.field}`
+                        : t(`fs391.${diagnostic.kind}`)}
+                    </li>{/each}
+                </ul>{/if}
+              <dl>
+                <dt>{t('fs391.known_limits')}</dt>
+                <dd>
+                  {proposal.provenance.request.machine.rpm_min ?? '—'}–{proposal.provenance.request
+                    .machine.rpm_max ?? '—'} rpm ·
+                  {proposal.provenance.request.machine.max_feed_mm_min ?? '—'} mm/min ({t(
+                    'fs.feed',
+                  )}) ·
+                  {proposal.provenance.request.machine.max_plunge_mm_min ?? '—'} mm/min ({t(
+                    'fs.plunge',
+                  )})
+                </dd>
+              </dl>
+            </details>
             <details>
               <summary>{t('fs.source')}</summary>
-              {#if source.result.knowledge}
-                <p>{source.result.knowledge.selection_reason}</p>
-                {#if source.result.knowledge.reference_chipload_range}<p>
-                    {t('fs37.reference_range')}: {source.result.knowledge.reference_chipload_range.min.toFixed(
-                      4,
-                    )}–{source.result.knowledge.reference_chipload_range.max.toFixed(4)} mm/{t(
-                      'fs.tooth',
-                    )}
-                  </p>{/if}
-                {#if source.result.knowledge.disagreement}<p role="status">
-                    {t('fs37.disagreement')}
-                  </p>{/if}
-                <pre>{JSON.stringify(source.result.knowledge.records, null, 2)}</pre>
-              {/if}
-              <p>{proposal.provenance.profile.source.permission_or_license}</p>
+              <p>{proposal.provenance.dataset.id} · {proposal.provenance.dataset.revision}</p>
+              <p>{proposal.provenance.profile.identity.id}</p>
+              <p>
+                {evidence(proposal.source_evidence)} · {proposal.provenance.profile.source
+                  .permission_or_license}
+              </p>
               <a
                 href={sourceLink(proposal.provenance.profile.source.reference) ?? undefined}
                 target="_blank"
                 rel="noreferrer">{t('fs.source_link')}</a
               >
               <p>{proposal.provenance.profile.source.notes}</p>
-              <pre>{JSON.stringify(proposal.provenance, null, 2)}</pre>
+              <pre>{JSON.stringify(
+                  { provenance: proposal.provenance, knowledge: source.result.knowledge },
+                  null,
+                  2,
+                )}</pre>
             </details>
-          </article>
-        {/if}
-      {/each}
-      <button
-        type="button"
-        class="inspector-action"
-        onclick={() => {
-          review = false;
-          responses = [];
-          attempted = false;
-          error = '';
-        }}>{t('common.cancel')}</button
-      >
-    </div>
+          {/if}
+        {/each}
+        {#if (accepted || savedKnowledge) && (!suggestions.length || previewStale)}<details>
+            <summary>{t('fs391.saved_recommendation')}</summary>
+            {#if savedKnowledge}<p>
+                {knowledgeName(savedKnowledge.selected_pack.id)} · {savedKnowledge.selected_pack
+                  .revision} · {evidence(savedKnowledge.evidence)}
+              </p>{/if}
+            {#if accepted}<p>{accepted.provenance.profile.source.permission_or_license}</p>
+              <a
+                href={sourceLink(accepted.provenance.profile.source.reference) ?? undefined}
+                target="_blank"
+                rel="noreferrer">{t('fs.source_link')}</a
+              >{/if}
+            <pre>{JSON.stringify(op.appliedCutting, null, 2)}</pre>
+          </details>{/if}
+        {#if error}<p role="alert">{error}</p>
+          <button type="button" class="inspector-action" disabled={busy} onclick={() => calculate()}
+            >{t('fs35.recalculate')}</button
+          >{/if}
+        <footer class="recommendation-footer">
+          <button type="button" class="inspector-action" onclick={cancelReview}
+            >{t('common.cancel')}</button
+          >
+          <button
+            type="button"
+            class="inspector-action primary"
+            disabled={busy || previewStale || !suggestions.length || !!error}
+            onclick={() => {
+              if (suggestions[0]) void apply(suggestions[0]);
+            }}>{t('fs35.apply')}</button
+          >
+        </footer>
+      </div>
+    </Modal>
   {/if}
-  {#if accepted && (!review || !suggestions.length || previewStale)}<details>
-      <summary>{t('fs.source')}</summary>
-      <p>{accepted.provenance.profile.source.permission_or_license}</p>
-      <a
-        href={sourceLink(accepted.provenance.profile.source.reference) ?? undefined}
-        target="_blank"
-        rel="noreferrer">{t('fs.source_link')}</a
-      >
-      <p>{accepted.provenance.profile.source.notes}</p>
-      <pre>{JSON.stringify(op.appliedCutting, null, 2)}</pre>
-    </details>{/if}
-  {#if savedKnowledge && !accepted}<details>
-      <summary>{t('fs.source')}</summary>
-      <p>{savedKnowledge.selected_pack.id} · {savedKnowledge.selected_pack.revision}</p>
-      <p>{savedKnowledge.selected_record} · {evidence(savedKnowledge.evidence)}</p>
-      <p>{savedKnowledge.policy}</p>
-    </details>{/if}
   {#if error}<p role="alert">{error}</p>{/if}
-  <button type="button" class="inspector-action" disabled={!wire || busy} onclick={openLabCapture}
-    >{t('fs38.save_action')}</button
-  >
 </section>
 
 {#if labCapture}<LabPresetDialog
@@ -660,6 +766,9 @@
   }
   .scope-reasons li {
     margin: var(--ui-space-2) 0;
+  }
+  .no-match.blocking {
+    border-left-color: var(--error);
   }
   .scope-heading {
     color: var(--text-muted);
@@ -717,16 +826,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(5rem, 1fr);
   }
   .recommendation {
-    border-top: 1px solid var(--border);
-    padding-top: var(--ui-space-3);
-    margin-top: var(--ui-space-3);
-  }
-  .assistant-state {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--ui-space-1) var(--ui-space-2);
-    align-items: start;
-    margin-top: var(--ui-space-2);
+    padding: var(--ui-space-3);
   }
   .stale {
     grid-column: 1;
@@ -747,10 +847,6 @@
     color: var(--text-muted);
     font-size: var(--inspector-font-meta);
   }
-  .review-action {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-  }
   pre {
     font-size: var(--inspector-font-meta);
     overflow: auto;
@@ -768,16 +864,39 @@
     min-height: 24px;
     display: list-item;
   }
-  article {
-    border-top: 1px solid var(--border);
-    margin: var(--ui-space-3) 0;
-    padding-top: var(--ui-space-2);
+  .context-line {
+    color: var(--text-muted);
+    margin-bottom: var(--ui-space-3);
   }
-  @container cam-inspector (max-width: 260px) {
-    .review-action {
-      grid-column: 1 / -1;
-      grid-row: auto;
-      justify-self: start;
-    }
+  .suggested-values {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: var(--ui-space-3) 0;
+    gap: var(--ui-space-2);
+  }
+  .suggested-values dd {
+    text-align: right;
+  }
+  .suggested-values dd span {
+    color: var(--text-muted);
+  }
+  .extrapolated {
+    color: var(--warn);
+  }
+  .caution-copy {
+    color: var(--text-muted);
+    font-size: var(--inspector-font-meta);
+  }
+  .recommendation-footer {
+    position: sticky;
+    bottom: -12px;
+    background: var(--bg-panel, var(--bg));
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--ui-space-2);
+    padding: var(--ui-space-3) 0;
+    border-top: 1px solid var(--border);
+    margin-top: var(--ui-space-3);
   }
 </style>

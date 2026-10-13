@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { summarizeWarnings, type WarningsSummaryInput } from './warnings-summary';
+import {
+  showGenerationSummary,
+  summarizeWarnings,
+  type WarningsSummaryInput,
+} from './warnings-summary';
 import type { SimWarning } from '../api/types';
 import type { PipelineWarning } from '../api/pipeline-warnings';
 
@@ -77,9 +81,32 @@ describe('summarizeWarnings', () => {
     expect(s.severity).toBe('stale');
   });
 
-  it('does not go stale on dirty alone without a sim verdict', () => {
+  it('marks changed generated output stale even before simulation', () => {
     const s = summarizeWarnings(base({ hasGenerated: true, dirty: true }));
-    expect(s.stale).toBe(false);
-    expect(s.severity).toBe('clean');
+    expect(s.stale).toBe(true);
+    expect(s.severity).toBe('stale');
+  });
+});
+
+describe('contextual generation summary', () => {
+  it('is absent at welcome and before operations, regardless of geometry', () => {
+    expect(showGenerationSummary(false, 0, summarizeWarnings(base()))).toBe(false);
+    expect(showGenerationSummary(true, 0, summarizeWarnings(base()))).toBe(false);
+    expect(showGenerationSummary(true, 1, summarizeWarnings(base()))).toBe(true);
+  });
+  it('retains clean, stale and diagnostic output even after operations are removed', () => {
+    for (const input of [
+      base({ hasGenerated: true }),
+      base({ hasGenerated: true, dirty: true }),
+      base({ hasGenerated: true, pipelineWarnings: [pipeInfo()] }),
+      base({ hasGenerated: true, pipelineWarnings: [pipeCritical()] }),
+    ]) {
+      expect(showGenerationSummary(true, 0, summarizeWarnings(input))).toBe(true);
+    }
+    const blocked = summarizeWarnings(
+      base({ hasGenerated: true, dirty: true, pipelineWarnings: [pipeCritical()] }),
+    );
+    expect(blocked.stale).toBe(true);
+    expect(blocked.critical).toBe(1);
   });
 });

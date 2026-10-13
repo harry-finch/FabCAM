@@ -306,9 +306,11 @@ fn default_dowel_count() -> u32 {
 
 /// Program-level work-coordinate offset. Defaults to all
 /// zeros — geometry origin == WCS origin. When the user zeros the
-/// machine somewhere different from the geometry origin, set this
-/// so the sim can align the heightmap to the WCS frame. The full
-/// per-fixture / G54..G59 selector is a follow-up feature.
+/// machine somewhere different from the geometry origin, set drawing XY here.
+/// Single-sided milling resolves XY to work coordinates before CAM; the desktop
+/// preview re-expresses that same generated path in the drawing frame. Numeric Z
+/// translation remains explicitly unsupported; stock-top/depth conventions are
+/// independent. No automatic controller offset write is implied.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, JsonSchema)]
 pub struct WorkOffset {
     /// X offset (mm) from geometry origin to WCS origin.
@@ -322,8 +324,8 @@ pub struct WorkOffset {
     #[serde(default, skip_serializing_if = "is_zero_f64")]
     pub z_mm: f64,
     /// Which work coordinate system this offset applies to. The
-    /// gcode emitter doesn't (yet) flip between G54..G59 — this is
-    /// a labelling field for the UI + future expansion.
+    /// selected post must support this slot. LinuxCNC selects it; bundled
+    /// ShopBot qualifies only operator-established G54. No offset programming.
     #[serde(default, skip_serializing_if = "Wcs::is_default")]
     pub wcs: Wcs,
 }

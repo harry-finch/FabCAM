@@ -122,6 +122,9 @@
       <option value="halfpipe">{t('ops.pocket.strategy.halfpipe')}</option>
     </select>
   </label>
+  {#if !op.pocketStrategy || op.pocketStrategy === 'cascade' || op.pocketStrategy === 'spiral'}
+    <p class="hint">{t('ops.pocket.strategy.continuous_hint')}</p>
+  {/if}
   {#if op.pocketStrategy === 'halfpipe'}
     <details class="subsection" open>
       <summary>{t('ops.pocket.halfpipe.summary')}</summary>
@@ -295,8 +298,8 @@
     {@const toolDefault = opTool?.defaultXyOverlap}
     {@const inheritedOverlap = toolDefault ?? 0.5}
     {@const opOverlap = op.xyOverlap}
-    <details>
-      <summary>{t('fs35.advanced_depth')}</summary>
+    <details class="inspector-disclosure">
+      <summary>{t('fs391.pocket_overlap')}</summary>
       <label
         class="row"
         title={opOverlap === undefined

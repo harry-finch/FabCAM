@@ -30,6 +30,7 @@
 <details>
   <summary>{t('fs35.compatibility')}</summary>
   <p>{t('fs35.compatibility_help')}</p>
+  <p>{kind === 'machines' ? t('fs39.machine_setup') : t('fs39.tool_setup')}</p>
   <label
     >{t('fs35.reference_match')}<select
       value={selected}

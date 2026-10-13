@@ -3,7 +3,7 @@
   "packs": [
     {
       "id": "sienci-router-reference",
-      "path": "packs/sienci-longmill.v1.json"
+      "path": "packs/sienci-longmill.v3.json"
     }
   ]
 }

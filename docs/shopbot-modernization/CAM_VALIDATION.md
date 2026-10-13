@@ -118,3 +118,66 @@ loader/resolver, revision/promotion/storage and browser backup tests.
 [Sorbonne policy](feeds-speeds/LOCAL_VALIDATION_POLICY.md) defines dated Tested
 and later operator-reviewed Validated. All current test attestations are synthetic,
 SOFTWARE ONLY. Human approval precedes FS4 real-machine calibration.
+
+## Milling redirection audit — 2026-10-13
+
+[Milling audit](MILLING_CAPABILITY_AUDIT.md) classifies implementation/evidence and
+defines proposed UX1-01..08 analytical/semantic acceptance. Fresh frontend audit
+checks: 124 passes / 9 files; Rust assertions inspected, not freshly rerun.
+No new machine validation. FS4 physical FS calibration is DEFERRED for lab access
+and does not block milling software; M4 evidence remains limited to its record.
+
+## UX1 — scoped milling entry software qualification, 2026-10-13
+
+[UX1 qualification](ux/UX1_QUALIFICATION.md) maps UX1-01..08 to analytical/native
+output and real inspector evidence. Curved Profile/cascade Pocket Ramp without
+tabs/leads exports XYZ; unsupported combinations and numeric WCS refuse explicitly.
+Depth, direction, island clearance, tab retention, shifted geometry and saved stale
+export tested. Native 1,054 + 11 + 14 + 4 pass; final strengthened variants 6 pass;
+frontend 1,092 / 1 optional skip. Human gate ivac-cb64 pending; physical entry
+qualification unperformed. FS4 remains DEFERRED/nonblocking.
+
+UX1 continuation: final bundled ShopBot preview/simulation now uses emitted SBP
+XYZ, ordered rapid axes, feed/dwell and source lines (ADR-0007); independent decoder
+compares Direct/Ramp Profile/Pocket output exactly. Generic local Helix depth/winding
+and preserved requested intent tested separately from geometry fallback and post
+refusal; island/open requests reject. Final suite 1,056/11/17/4; frontend 1,092/1skip.
+No clamp/fixture authoring acceptance in UX1; it belongs to CAM2/UX2.
+
+## CAM2 / UX2 setup qualification
+
+[UX2 qualification](ux/UX2_QUALIFICATION.md) maps stock/XY work-zero, coupled
+approach/polar inputs, resolved path/region frame mapping, fixture persistence and
+actual collision/export recovery. Native 1,056 core, 11 M1, 22 ShopBot cases
+across full/targeted runs and 4 snapshots; frontend 1,096 pass / 1 optional skip.
+Check/lint/fmt/Clippy and complete optimized WASM/frontend build pass. UX1 gate
+ivac-cb64 approved; CAM2 human gate ivac-97fb pending. No physical clearance or
+new native bundle; Z/two-sided limitations remain explicit. Historical UX1 numeric
+origin restrictions above are superseded only by the bounded XY scope of ADR-0008.
+
+## UX2.1 interaction follow-up
+
+[UX2.1 qualification](ux/UX2_1_QUALIFICATION.md) adds UX21-01..10 for real structured
+notifications, red fixture feedback, first 3D→2D focus, model-backed shape dragging,
+one history entry, actual Save/reopen and stale/collision/export recovery. Existing
+UX2 collision mathematics and native evidence are retained. Frontend 1,106 pass /
+1 optional skip in 119 files; zero check warnings and lint/build pass. Human gate
+ivac-svnf pending before CAM3; no physical clearance or new native bundle claim.
+
+## CAM3 — holding tabs and cutting transitions
+
+[CAM3 qualification](CAM3_QUALIFICATION.md) defines CAM3-T01..T04: width and
+absolute override-height preservation, 48-case output/preview/direction matrix,
+curved placement/ramp compensation and entry-tab preservation. Reproduced defects
+corrected with independent emitted-SBP geometry assertions. Conservative arc
+rectangle residuals and unqualified topology combinations remain explicit.
+Software handoff only; human gate ivac-wh2m before CAM4, no physical qualification.
+
+## CAM4 A/B — planar remaining material
+
+[Qualification](CAM4_QUALIFICATION.md) records CAM4-A01..A07 analytical sweep,
+sharp corners, concavity, depth, islands, cutoff and emitted/origin proof plus
+CAM4-B01..B05 drawing-frame, stale, unsupported, toggle and browser persistence
+checks. Optional diagnostics do not change machining output. Explicit unsupported
+contexts are not classified as fully machined. Human gate ivac-tvox before broader
+scope; no CAM4/CAD1 Phase C or physical qualification claim.

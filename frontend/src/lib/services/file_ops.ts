@@ -1,3 +1,6 @@
+import { commitDocumentLoad } from '../state/document-load';
+import { notificationError, notificationText } from '../api/error-notification';
+import { generationContextKey } from '../state/generation-context';
 import { validateProjectFile } from '../state/feeds-speeds-persistence';
 /// Open / Save / Sample I/O extracted from FileUpload so the toolbar
 /// (and any other UI surface) can invoke the same flows without
@@ -14,7 +17,6 @@ import { isTauri, isAndroid } from '../api/env';
 import { isProjectPath } from './file-kind';
 export { isProjectPath } from './file-kind';
 import { defaultClient } from '../api/http';
-import { tryParseStructuredError } from '../api/client';
 import { migrateLegacyToolTerms } from '../state/tool-migration';
 // `pushRecent` (from ../recent) was a parallel store the UI never read
 // — the File menu draws Recent Projects from workspace.recent_projects.
@@ -46,10 +48,35 @@ async function clearPipelineCacheOnReplace(): Promise<void> {
   }
 }
 
+// Serialize explicit document transitions while a discard prompt is open.
+let switchingDocument = false;
+
+export async function resetDocument(open: boolean): Promise<boolean> {
+  if (switchingDocument || project.loading) return false;
+  switchingDocument = true;
+  try {
+    if (!(await confirmDiscardIfDirty(t(open ? 'shell.new_action' : 'shell.close_action'))))
+      return false;
+    if (project.loading) return false;
+    project.clearProject();
+    project.data.stock = {
+      ...project.data.stock,
+      offsetX: 0,
+      offsetY: 0,
+      offsetZ: 0,
+      flip: undefined,
+    };
+    project.documentActive = open;
+    project.documentBaseline = JSON.stringify(project.snapshot());
+    void clearPipelineCacheOnReplace();
+    return true;
+  } finally {
+    switchingDocument = false;
+  }
+}
+
 export function reportError(input: unknown) {
-  const raw = input instanceof Error ? input.message : String(input);
-  const structured = tryParseStructuredError(raw);
-  project.setError(structured ?? raw);
+  project.setError(notificationError(input));
 }
 
 /// Collapse multi-dot "extensions" (e.g. `ivac-machine.json`) to their
@@ -221,6 +248,7 @@ export async function handleOpenPick(file: File): Promise<void> {
 }
 
 export async function openAny() {
+  if (project.loading || switchingDocument) return;
   if (isTauri()) {
     try {
       const { open } = await import('@tauri-apps/plugin-dialog');
@@ -271,6 +299,7 @@ export async function openAny() {
 /// setImported. (The File menu's Open is the intent-ambiguous entry that
 /// asks New-or-Add; this one's intent is explicit.)
 export async function addDrawing() {
+  if (project.loading || switchingDocument) return;
   if (isTauri()) {
     try {
       const { open } = await import('@tauri-apps/plugin-dialog');
@@ -337,6 +366,7 @@ export async function confirmDiscardIfDirty(action: string): Promise<boolean> {
 /// Desktop: native open dialog for `.ivac-project.json`. Browser: same
 /// hidden-input trick as openFile, but for project files.
 export async function openProject() {
+  if (project.loading || switchingDocument) return;
   if (!(await confirmDiscardIfDirty(t('dialog.action.open_another_project')))) return;
   if (isTauri()) {
     const { open } = await import('@tauri-apps/plugin-dialog');
@@ -357,15 +387,18 @@ export async function openProject() {
     try {
       const text = await readTextFile(selected);
       validateProjectFile(JSON.parse(text));
-      project.clearProject();
       await clearPipelineCacheOnReplace();
-      project.restore(JSON.parse(text));
-      const filename = selected.split(/[\\/]/).pop() ?? selected;
-      workspace.addRecentProject(selected, filename);
-      project.setActiveProjectPath(selected);
-      project.data.dirty = false;
+      await commitDocumentLoad(project, async () => {
+        project.clearProject();
+        project.restore(JSON.parse(text));
+        project.markDocumentSaved(selected);
+        const filename = selected.split(/[\\/]/).pop() ?? selected;
+        workspace.addRecentProject(selected, filename);
+        project.setActiveProjectPath(selected);
+        project.data.dirty = false;
+      });
     } catch (e) {
-      project.setError(`load project: ${e instanceof Error ? e.message : String(e)}`);
+      project.setError(`load project: ${notificationText(e)}`);
     } finally {
       project.loading = false;
       project.loadingMessage = null;
@@ -383,22 +416,25 @@ export async function openProject() {
 /// Callers that want ADD semantics (overlay a second drawing on the
 /// current project) should use `addDrawingPath` instead.
 export async function loadFromPath(path: string) {
+  if (project.loading || switchingDocument) return;
   project.loading = true;
   project.loadingMessage = pathToLoadingMessage(path);
   project.error = null;
   try {
     const { invoke } = await import('@tauri-apps/api/core');
     const result = await invoke<ImportResponse>('import_path', { path });
-    project.clearProject();
     await clearPipelineCacheOnReplace();
-    project.setImported(result, path);
-    await project.convertImportedTextEntities();
-    const filename = path.split(/[\\/]/).pop() ?? path;
-    workspace.addRecentProject(path, filename);
-    project.setActiveProjectPath(path);
-    // setImported flips dirty=true; reset because the freshly-loaded
-    // file matches what's on disk and the user hasn't edited yet.
-    project.data.dirty = false;
+    await commitDocumentLoad(project, async () => {
+      project.clearProject();
+      project.setImported(result, path);
+      await project.convertImportedTextEntities();
+      const filename = path.split(/[\\/]/).pop() ?? path;
+      workspace.addRecentProject(path, filename);
+      project.setActiveProjectPath(path);
+      // setImported flips dirty=true; reset because the freshly-loaded
+      // file matches what's on disk and the user hasn't edited yet.
+      project.data.dirty = false;
+    });
   } catch (e) {
     reportError(e);
   } finally {
@@ -412,14 +448,17 @@ export async function loadFromPath(path: string) {
 /// "+ Add drawing" affordance for genuine multi-drawing workflows.
 /// Not exposed in a menu today; reserved for future UI.
 export async function addDrawingPath(path: string) {
+  if (project.loading || switchingDocument) return;
   project.loading = true;
   project.loadingMessage = pathToLoadingMessage(path);
   project.error = null;
   try {
     const { invoke } = await import('@tauri-apps/api/core');
     const result = await invoke<ImportResponse>('import_path', { path });
-    project.addImported(result, path);
-    await project.convertImportedTextEntities();
+    await commitDocumentLoad(project, async () => {
+      project.addImported(result, path);
+      await project.convertImportedTextEntities();
+    });
   } catch (e) {
     reportError(e);
   } finally {
@@ -433,6 +472,7 @@ export async function addDrawingPath(path: string) {
 /// menu, OS file-association launch) should have already vetted
 /// the dirty state via `confirmDiscardIfDirty`.
 export async function loadProjectPath(path: string) {
+  if (project.loading || switchingDocument) return;
   project.loading = true;
   project.loadingMessage = t('dialog.loading.project');
   project.error = null;
@@ -440,15 +480,18 @@ export async function loadProjectPath(path: string) {
     const { readTextFile } = await import('@tauri-apps/plugin-fs');
     const text = await readTextFile(path);
     validateProjectFile(JSON.parse(text));
-    project.clearProject();
     await clearPipelineCacheOnReplace();
-    project.restore(JSON.parse(text));
-    const filename = path.split(/[\\/]/).pop() ?? path;
-    workspace.addRecentProject(path, filename);
-    project.setActiveProjectPath(path);
-    project.data.dirty = false;
+    await commitDocumentLoad(project, async () => {
+      project.clearProject();
+      project.restore(JSON.parse(text));
+      project.markDocumentSaved(path);
+      const filename = path.split(/[\\/]/).pop() ?? path;
+      workspace.addRecentProject(path, filename);
+      project.setActiveProjectPath(path);
+      project.data.dirty = false;
+    });
   } catch (e) {
-    project.setError(`load project: ${e instanceof Error ? e.message : String(e)}`);
+    project.setError(`load project: ${notificationText(e)}`);
   } finally {
     project.loading = false;
     project.loadingMessage = null;
@@ -460,17 +503,20 @@ export async function loadProjectPath(path: string) {
 /// `<input type=file>` change handler. REPLACE semantics — see
 /// `loadFromPath` for the desktop counterpart.
 export async function loadFile(file: File) {
+  if (project.loading || switchingDocument) return;
   const client = defaultClient();
   project.loading = true;
   project.loadingMessage = pathToLoadingMessage(file.name);
   project.error = null;
   try {
     const result = await client.importFile(file);
-    project.clearProject();
     await clearPipelineCacheOnReplace();
-    project.setImported(result);
-    await project.convertImportedTextEntities();
-    project.data.dirty = false;
+    await commitDocumentLoad(project, async () => {
+      project.clearProject();
+      project.setImported(result);
+      await project.convertImportedTextEntities();
+      project.data.dirty = false;
+    });
   } catch (e) {
     reportError(e);
   } finally {
@@ -485,14 +531,17 @@ export async function loadFile(file: File) {
 /// The first import into an empty project still auto-places (addImported
 /// delegates to setImported there).
 export async function addDrawingFile(file: File) {
+  if (project.loading || switchingDocument) return;
   const client = defaultClient();
   project.loading = true;
   project.loadingMessage = pathToLoadingMessage(file.name);
   project.error = null;
   try {
     const result = await client.importFile(file);
-    project.addImported(result);
-    await project.convertImportedTextEntities();
+    await commitDocumentLoad(project, async () => {
+      project.addImported(result);
+      await project.convertImportedTextEntities();
+    });
   } catch (e) {
     reportError(e);
   } finally {
@@ -504,18 +553,22 @@ export async function addDrawingFile(file: File) {
 /// Browser project load — paired with the hidden project input.
 /// REPLACE semantics, mirroring the desktop `loadProjectPath`.
 export async function loadProjectFile(file: File) {
+  if (project.loading || switchingDocument) return;
   project.loading = true;
   project.loadingMessage = t('dialog.loading.project');
   project.error = null;
   try {
     const text = await file.text();
     validateProjectFile(JSON.parse(text));
-    project.clearProject();
     await clearPipelineCacheOnReplace();
-    project.restore(JSON.parse(text));
-    project.data.dirty = false;
+    await commitDocumentLoad(project, async () => {
+      project.clearProject();
+      project.restore(JSON.parse(text));
+      project.markDocumentSaved(file.name);
+      project.data.dirty = false;
+    });
   } catch (e) {
-    project.setError(`load project: ${e instanceof Error ? e.message : String(e)}`);
+    project.setError(`load project: ${notificationText(e)}`);
   } finally {
     project.loading = false;
     project.loadingMessage = null;
@@ -525,18 +578,26 @@ export async function loadProjectFile(file: File) {
 /// Save the current project state. Desktop = native save dialog;
 /// browser = anchor-tag download trick.
 export async function saveProject() {
+  if (project.loading || !project.documentActive) return;
+  const epoch = project.documentEpoch;
+  let content: string;
   let snapshot: string;
   try {
     const file = project.snapshot();
     validateProjectFile(file);
+    content = JSON.stringify(file);
     snapshot = JSON.stringify(file, null, 2);
   } catch (e) {
     reportError(e);
     return;
   }
-  const base = project.transformedImport?.filename?.replace(/\.[^.]+$/, '') ?? 'project';
+  const base =
+    project.documentName?.replace(/\.(?:ivac|vc)-project\.json$|\.json$/i, '') ??
+    project.transformedImport?.filename?.replace(/\.[^.]+$/, '') ??
+    'project';
   const filename = `${base}.ivac-project.json`;
   if (isTauri()) {
+    project.loading = true;
     try {
       const { save } = await import('@tauri-apps/plugin-dialog');
       const { writeTextFile } = await import('@tauri-apps/plugin-fs');
@@ -546,17 +607,15 @@ export async function saveProject() {
       });
       if (typeof path === 'string') {
         await writeTextFile(path, snapshot);
-        // The file now matches disk — clear dirty to match the
-        // contract every load path upholds. Otherwise the quit-confirm
-        // dialog, the confirmDiscardIfDirty prompt on a later Open, and
-        // the stale-gcode indicators all fire right after a save.
-        project.data.dirty = false;
-        // The project now lives in a saved file — clears hasUnsavedWork
-        // so a later Open doesn't prompt on a just-saved project.
-        project.savedToProject = true;
+        if (project.documentEpoch === epoch) {
+          project.markDocumentSaved(path, content);
+          workspace.addRecentProject(path, path.split(/[\\/]/).pop() ?? path);
+        }
       }
     } catch (e) {
-      project.setError(`save: ${e instanceof Error ? e.message : String(e)}`);
+      project.setError(`save: ${notificationText(e)}`);
+    } finally {
+      project.loading = false;
     }
     return;
   }
@@ -567,10 +626,8 @@ export async function saveProject() {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
-  // The browser download IS the save; mirror the desktop branch and
-  // clear dirty so the snapshot just written to disk isn't reported unsaved.
-  project.data.dirty = false;
-  project.savedToProject = true;
+  // Browser downloads have no reusable native path.
+  if (project.documentEpoch === epoch) project.markDocumentSaved(filename, content);
 }
 
 /// Save a project report as a Markdown file. Desktop = native
@@ -589,7 +646,7 @@ export async function saveReportMarkdown(markdown: string, baseName: string) {
       try {
         await writeTextFile(path, markdown);
       } catch (e) {
-        project.setError(`save report: ${e instanceof Error ? e.message : String(e)}`);
+        project.setError(`save report: ${notificationText(e)}`);
       }
     }
     return;
@@ -607,6 +664,7 @@ export async function saveReportMarkdown(markdown: string, baseName: string) {
 /// REPLACE semantics: loading a sample drops the current project to
 /// start fresh.
 export async function loadSample(url: string) {
+  if (project.loading || switchingDocument) return;
   if (!(await confirmDiscardIfDirty(t('dialog.action.load_sample')))) return;
   project.loading = true;
   project.loadingMessage = t('dialog.loading.sample');
@@ -615,12 +673,14 @@ export async function loadSample(url: string) {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`fetch ${url}: ${res.status}`);
     const data = (await res.json()) as ImportResponse;
-    project.clearProject();
     await clearPipelineCacheOnReplace();
-    project.setImported(data);
-    project.data.dirty = false;
+    await commitDocumentLoad(project, async () => {
+      project.clearProject();
+      project.setImported(data);
+      project.data.dirty = false;
+    });
   } catch (e) {
-    project.setError(e instanceof Error ? e.message : String(e));
+    project.setError(notificationText(e));
   } finally {
     project.loading = false;
     project.loadingMessage = null;
@@ -666,6 +726,20 @@ export async function exportGeneratedGcode(
 ): Promise<void> {
   const gen = side === 'back' ? project.gen.generatedBack : project.gen.generated;
   if (!gen) return;
+  const isCurrent = () =>
+    project.gen.inputContextKey === generationContextKey(project, postProcessor) &&
+    project.gen.pipelineState === 'idle' &&
+    (side === 'back' ? project.gen.generatedBack : project.gen.generated) === gen;
+  if (!isCurrent()) {
+    project.setError(t('ux1.export.stale'));
+    return;
+  }
+  const fixtureCollisions =
+    gen.warnings?.filter((w) => w.kind === 'fixture_path_collision').length ?? 0;
+  if (project.data.settings.blockOnCriticalSimWarnings && fixtureCollisions > 0) {
+    project.setError(t('genbar.error.block_critical', { count: fixtureCollisions }));
+    return;
+  }
   const twoSided = project.gen.generatedBack != null;
   const base = project.transformedImport?.filename?.replace(/\.[^.]+$/, '') ?? 'output';
   const ext = exportExtension(postProcessor, gen);
@@ -679,10 +753,14 @@ export async function exportGeneratedGcode(
       filters: [{ name: ext.toUpperCase(), extensions: [ext] }],
     });
     if (typeof path === 'string') {
+      if (!isCurrent()) {
+        project.setError(t('ux1.export.stale'));
+        return;
+      }
       try {
         await writeTextFile(path, text);
       } catch (e) {
-        project.setError(`save: ${e instanceof Error ? e.message : String(e)}`);
+        project.setError(`save: ${notificationText(e)}`);
       }
     }
     return;
@@ -744,7 +822,7 @@ export async function exportSimulatedStockStl(
       try {
         await writeFile(path, bytes);
       } catch (e) {
-        project.setError(`stl export: ${e instanceof Error ? e.message : String(e)}`);
+        project.setError(`stl export: ${notificationText(e)}`);
       }
     }
     return;
@@ -772,7 +850,7 @@ export async function loadSampleWithGenerate(sampleUrl: string, generatedUrl: st
     project.setImported(imp);
     project.setGenerated(gen);
   } catch (e) {
-    project.setError(e instanceof Error ? e.message : String(e));
+    project.setError(notificationText(e));
   } finally {
     project.loading = false;
     project.loadingMessage = null;
@@ -908,7 +986,7 @@ export async function importToolset(
       { name: 'ivaCAM toolset', extensions: ['ivac-toolset.json', 'json'] },
     ]);
   } catch (e) {
-    project.setError(`toolset load: ${e instanceof Error ? e.message : String(e)}`);
+    project.setError(`toolset load: ${notificationText(e)}`);
     return null;
   }
   if (!text) return null;
@@ -916,7 +994,7 @@ export async function importToolset(
   try {
     parsed = JSON.parse(text);
   } catch (e) {
-    project.setError(`toolset parse: ${e instanceof Error ? e.message : String(e)}`);
+    project.setError(`toolset parse: ${notificationText(e)}`);
     return null;
   }
   const env = parsed as SnapshotEnvelope<'toolset', ToolEntry[]>;
@@ -986,7 +1064,7 @@ export async function loadMachine() {
       { name: 'ivaCAM machine', extensions: ['ivac-machine.json', 'json'] },
     ]);
   } catch (e) {
-    project.setError(`machine load: ${e instanceof Error ? e.message : String(e)}`);
+    project.setError(`machine load: ${notificationText(e)}`);
     return;
   }
   if (!text) return;
@@ -994,7 +1072,7 @@ export async function loadMachine() {
   try {
     parsed = JSON.parse(text);
   } catch (e) {
-    project.setError(`machine parse: ${e instanceof Error ? e.message : String(e)}`);
+    project.setError(`machine parse: ${notificationText(e)}`);
     return;
   }
   const env = parsed as SnapshotEnvelope<'machine', MachineSettings>;

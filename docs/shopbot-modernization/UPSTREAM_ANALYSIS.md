@@ -170,3 +170,24 @@ FS3.8 adds fork-local SourcePack authoring metadata (schema 2, schema 1 compatib
 read-only core/WASM capture and private native/browser revision writes plus compact
 Settings UI. No upstream sync, mathematical change or ShopBot post modification.
 See ADR-0006 for identity, validation and compatibility decisions.
+
+## UX1 fork delta
+
+KEEP generic Profile/cascade Pocket planners, cutting values and existing CPS arc
+linearization. EXTEND generic transient section metadata and bundled ShopBot
+preflight for scoped Ramp and explicit unqualified-entry/WCS refusal. EXTEND existing
+inspector with a small contextual paragraph and export with runtime input identity;
+no schema, FS mathematics or upstream synchronization change. Generic numeric WCS
+translation remains follow-up ivac-vj11, guarded for ShopBot in UX1.
+
+UX1 continuation: EXTEND bundled ShopBot's post/preview adapter, using the owned
+emitted movement subset for final simulation rather than generic IR. KEEP other
+CPS previews and generic geometry. EXTEND generic emission only with an explicit
+Helix geometry-fallback comment, not a ShopBot branch or path rewrite. Existing
+warning params expose derived requested/resolved representation; no API/model
+migration. See ADR-0007 for upstream impact and alternatives.
+
+CAM2/UX2 fork delta: generic once-before-CAM XY work-frame normalization, invalid
+origin/fixture guards and resolved-path fixture warnings; compact stock-corner/WCS
+and fixture authoring UI with existing persistence/history. No schema migration,
+FS engine change or machine-specific geometry semantics. See ADR-0008.

@@ -5,7 +5,7 @@
 //! unchanged.
 
 use super::PolylineOffset;
-use crate::geometry::Segment;
+use crate::geometry::{Segment, SegmentKind};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -87,6 +87,33 @@ fn snap_to_offset(offset: &PolylineOffset, tab: TabPoint, max_distance: f64) -> 
 }
 
 fn closest_point_on_segment(seg: &Segment, tab: TabPoint) -> TabPoint {
+    // Curved offset tabs must attach to the arc, not its chord. Chord
+    // projection can discard a valid placement or move it off the cutter path.
+    if matches!(seg.kind, SegmentKind::Arc | SegmentKind::Circle) {
+        let center = seg
+            .center
+            .unwrap_or_else(|| crate::math::bulge_to_arc(seg.start, seg.end, seg.bulge).0);
+        let radius = seg.start.distance(center);
+        let angle = (tab.y - center.y).atan2(tab.x - center.x);
+        let start_angle = (seg.start.y - center.y).atan2(seg.start.x - center.x);
+        let point = if crate::math::arc_contains_angle(start_angle, 4.0 * seg.bulge.atan(), angle) {
+            crate::geometry::Point2::new(
+                center.x + radius * angle.cos(),
+                center.y + radius * angle.sin(),
+            )
+        } else if (tab.x - seg.start.x).hypot(tab.y - seg.start.y)
+            <= (tab.x - seg.end.x).hypot(tab.y - seg.end.y)
+        {
+            seg.start
+        } else {
+            seg.end
+        };
+        return TabPoint {
+            x: point.x,
+            y: point.y,
+            ..tab
+        };
+    }
     let dx = seg.end.x - seg.start.x;
     let dy = seg.end.y - seg.start.y;
     let len_sq = dx * dx + dy * dy;

@@ -514,7 +514,7 @@ export interface components {
         ErrorCode: "unknown_post_processor" | "missing_tool" | "unimplemented_op_kind" | "text_render_failed" | "internal_panic" | "two_sided_through" | "cps_selection_missing" | "cps_unavailable" | "cps_post_failed";
         /** @enum {string} */
         ErrorKind: "bad_input" | "misconfigured" | "limit" | "unsupported" | "io" | "internal";
-        /** @description A user-declared physical obstacle on the stock the cutter must miss. Lives in stock-relative XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check. */
+        /** @description A user-declared physical obstacle on the stock the cutter must miss. Lives in drawing XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check. */
         Fixture: {
             /**
              * Format: uint32
@@ -526,14 +526,14 @@ export interface components {
             id: number;
             kind: components["schemas"]["FixtureKind"];
             name: string;
-            /** @description Center of the fixture in stock XY (mm). */
+            /** @description Center in authored drawing XY (mm); the pipeline resolves it to work XY. */
             origin: [
                 number,
                 number
             ];
             /**
              * Format: double
-             * @description Z range the fixture occupies (relative to stock-top = 0). Typically `z_top` is positive (a clamp standing above stock); both can be negative for cleats below.
+             * @description Absolute Z range in the operation depth frame (work-origin Z must be zero). Typically `z_top` is positive (a clamp standing above stock); both can be negative for cleats below.
              */
             z_bottom: number;
             /** Format: double */
@@ -593,6 +593,14 @@ export interface components {
          * @enum {string}
          */
         FrameShape: "rectangle" | "rounded_rectangle";
+        FsAdaptationScope: {
+            machines: components["schemas"]["FsIdentity"][];
+            material_taxa: string[];
+            policy: string;
+            slot_to_pocket: boolean;
+            /** @description Explicit interchangeable physical classifications, never inferred from labels. */
+            tools: components["schemas"]["FsIdentity"][];
+        };
         FsAdjustment: {
             /** Format: double */
             after: number;
@@ -660,6 +668,26 @@ export interface components {
          * @enum {string}
          */
         FsCuttingFamily: "flat_endmill" | "compression" | "v_bit" | "other";
+        FsDerivation: {
+            /** Format: double */
+            chipload_factor: number;
+            /** Format: double */
+            doc_factor: number;
+            /** Format: double */
+            interpolation_weight?: number | null;
+            machine_transfer: boolean;
+            material_transfer: boolean;
+            method: string;
+            policy: string;
+            quality: components["schemas"]["FsMatchQuality"];
+            /** Format: double */
+            relative_delta: number;
+            /** Format: double */
+            requested_diameter_mm: number;
+            slot_basis_for_pocket: boolean;
+            source_diameters_mm: number[];
+            source_profiles: components["schemas"]["FsProfile"][];
+        };
         FsDiagnostic: {
             field: string;
             /** @enum {string} */
@@ -766,6 +794,7 @@ export interface components {
             summary: components["schemas"]["FsKnowledgeSummary"];
         };
         FsKnowledgeRecord: {
+            derivation?: components["schemas"]["FsDerivation"] | null;
             evidence: components["schemas"]["FsEvidence"];
             local_only: boolean;
             normalized: components["schemas"]["FsNormalizedQuantities"];
@@ -783,6 +812,7 @@ export interface components {
             engine_version: string;
             evidence: components["schemas"]["FsEvidence"];
             local_only: boolean;
+            match_quality?: components["schemas"]["FsMatchQuality"] | null;
             policy: string;
             selected_pack: components["schemas"]["FsIdentity"];
             selected_record: string;
@@ -842,6 +872,8 @@ export interface components {
             /** Format: uint32 */
             rpm_min?: number | null;
         };
+        /** @enum {string} */
+        FsMatchQuality: "close" | "approximate" | "extrapolated" | "interpolated" | "exact" | "generic" | "theoretical";
         FsMaterialSnapshot: {
             /** @description Grade/condition are part of immutable material identity. */
             identity?: components["schemas"]["FsIdentity"] | null;
@@ -939,6 +971,7 @@ export interface components {
         FsProvenance: {
             adjustments: components["schemas"]["FsAdjustment"][];
             dataset: components["schemas"]["FsIdentity"];
+            derivation?: components["schemas"]["FsDerivation"] | null;
             engine_version: string;
             /** @description Selected family membership snapshots keep matching explainable offline. */
             machine_family?: components["schemas"]["FsFamilyMembership"] | null;
@@ -981,6 +1014,7 @@ export interface components {
             stepover_ratio?: number | null;
         };
         FsRecordOrigin: {
+            adaptation?: components["schemas"]["FsAdaptationScope"] | null;
             lab?: components["schemas"]["FsLabPreset"] | null;
             lab_history?: components["schemas"]["FsLabRevision"][];
             /** @description Explicit taxonomy applicability, including descendants. None preserves original identity. */
@@ -1097,6 +1131,8 @@ export interface components {
             output_extension?: string | null;
             /** @description Filled-area preview for Pocket ops: the actual region the cutter will machine, computed via the per-op `SourceCombine` mode (Auto by default — outer + inner = annulus). The frontend paints these as translucent fills so the user sees what they're cutting before reading the toolpath. Empty for non-Pocket ops. */
             regions?: components["schemas"]["RegionPreview"][];
+            /** @description Per-operation planar diagnostics, never a job-wide safety verdict. */
+            remaining_material?: components["schemas"]["RemainingMaterial"][];
             stats: components["schemas"]["PipelineStats"];
             /** @description Acceleration- and jerk-aware program-time estimate. See [`crate::sim::timing`] for the integrator. The total accounts for motion under the trapezoidal profile, tool-change time (`MachineConfig.toolchange_s` × number of M6s), and per-tool spindle pauses summed across used tools. */
             time_estimate: components["schemas"]["TimeEstimate"];
@@ -2026,6 +2062,8 @@ export interface components {
             output_extension?: string | null;
             /** @description Filled-area preview for Pocket ops: the actual region the cutter will machine, computed via the per-op `SourceCombine` mode (Auto by default — outer + inner = annulus). The frontend paints these as translucent fills so the user sees what they're cutting before reading the toolpath. Empty for non-Pocket ops. */
             regions?: components["schemas"]["RegionPreview"][];
+            /** @description Per-operation planar diagnostics, never a job-wide safety verdict. */
+            remaining_material?: components["schemas"]["RemainingMaterial"][];
             stats: components["schemas"]["PipelineStats"];
             /** @description Acceleration- and jerk-aware program-time estimate. See [`crate::sim::timing`] for the integrator. The total accounts for motion under the trapezoidal profile, tool-change time (`MachineConfig.toolchange_s` × number of M6s), and per-tool spindle pauses summed across used tools. */
             time_estimate: components["schemas"]["TimeEstimate"];
@@ -2471,6 +2509,20 @@ export interface components {
             origin: components["schemas"]["Point2"];
             /** Format: uint32 */
             rows: number;
+        };
+        RemainingMaterial: {
+            /** Format: double */
+            area_mm2: number;
+            /** Format: double */
+            depth_mm: number;
+            /** Format: double */
+            largest_area_mm2: number;
+            /** Format: uint32 */
+            op_id: number;
+            reason: string;
+            regions: components["schemas"]["RegionPreview"][];
+            /** @description ready or unsupported; zero area is meaningful only when ready. */
+            status: string;
         };
         /** @description Live-preview response — the rendered `TextLayer` segments plus the cached single-line classification. The pipeline produces the same segments at Generate time; this endpoint lets the frontend show the text on the 2D canvas without round-tripping a full pipeline run. */
         RenderTextLayerResponse: {
@@ -3310,9 +3362,9 @@ export interface components {
             /** Format: uint32 */
             line: number;
         };
-        /** @description Program-level work-coordinate offset. Defaults to all zeros — geometry origin == WCS origin. When the user zeros the machine somewhere different from the geometry origin, set this so the sim can align the heightmap to the WCS frame. The full per-fixture / G54..G59 selector is a follow-up feature. */
+        /** @description Program-level work-coordinate offset. Defaults to all zeros — geometry origin == WCS origin. When the user zeros the machine somewhere different from the geometry origin, set drawing XY here. Single-sided milling resolves XY to work coordinates before CAM; the desktop preview re-expresses that same generated path in the drawing frame. Numeric Z translation remains explicitly unsupported; stock-top/depth conventions are independent. No automatic controller offset write is implied. */
         WorkOffset: {
-            /** @description Which work coordinate system this offset applies to. The gcode emitter doesn't (yet) flip between G54..G59 — this is a labelling field for the UI + future expansion. */
+            /** @description Which work coordinate system this offset applies to. The selected post must support this slot. LinuxCNC selects it; bundled ShopBot qualifies only operator-established G54. No offset programming. */
             wcs?: components["schemas"]["Wcs"];
             /**
              * Format: double

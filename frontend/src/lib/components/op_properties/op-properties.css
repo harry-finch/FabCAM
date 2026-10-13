@@ -446,3 +446,44 @@
   cursor: pointer;
   box-sizing: border-box;
 }
+
+/* Shared operation action/disclosure rows, including advanced depth and entry. */
+.props .inspector-action-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--ui-space-2);
+  align-items: stretch;
+  margin: var(--ui-space-2) 0;
+}
+.props .inspector-action-row .inspector-action {
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  padding-inline: var(--ui-space-1);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+@container cam-inspector (max-width: 180px) {
+  .props .inspector-action-row {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+}
+.props .depth-entry .row {
+  grid-template-columns: minmax(0, 1fr) minmax(7.125rem, 1fr);
+  gap: var(--ui-space-2);
+  font-size: var(--inspector-font-field);
+}
+.props .depth-entry .num-cell {
+  display: grid;
+  grid-template-columns: 4.375rem var(--inspector-unit-width);
+  gap: var(--ui-space-2);
+  justify-content: end;
+}
+.props .depth-entry input[type='number'] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.props .depth-entry .hint {
+  font-size: var(--inspector-font-meta);
+}

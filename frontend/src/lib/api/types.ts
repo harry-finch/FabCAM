@@ -19,6 +19,7 @@ export type PipelineResponse = components['schemas']['PipelineResponse'];
 /// Result of a two-sided (flip-stock) generate: `{ front, back? }`. `back` is
 /// present only for a genuine two-sided job (mirrored geometry + flip header).
 export type TwoSidedGenerateResponse = components['schemas']['TwoSidedGenerateResponse'];
+export type RemainingMaterial = components['schemas']['RemainingMaterial'];
 export type RegionPreview = components['schemas']['RegionPreview'];
 export type PipelineWarning = components['schemas']['PipelineWarning'];
 export type PostMeta = components['schemas']['PostMeta'];

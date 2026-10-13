@@ -1,3 +1,4 @@
+import { notificationError } from './error-notification';
 // Web Worker host for the wasm CAM client. Runs the blocking
 // pipeline OFF the main thread so the UI stays responsive, and streams
 // per-op events back via postMessage as they are produced — postMessage
@@ -52,12 +53,8 @@ function post(msg: WorkerResponse) {
 }
 
 function errText(err: unknown): string {
-  if (err instanceof Error) return err.message;
-  try {
-    return String(err);
-  } catch {
-    return 'wasm worker error';
-  }
+  const normalized = notificationError(err);
+  return typeof normalized === 'string' ? normalized : JSON.stringify(normalized);
 }
 
 ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {

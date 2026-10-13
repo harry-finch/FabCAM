@@ -11,15 +11,22 @@ export function drawFixtures(
   fixtures: readonly Fixture[],
   selectedFixtureId: number | null,
   accent: string,
+  collisions: ReadonlySet<number> = new Set(),
+  danger = accent,
 ) {
   if (!fixtures || fixtures.length === 0) return;
-  for (const f of fixtures) {
+  const ordered = [
+    ...fixtures.filter((f) => f.id !== selectedFixtureId),
+    ...fixtures.filter((f) => f.id === selectedFixtureId),
+  ];
+  for (const f of ordered) {
     const { r, g, b, a } = unpackFixtureColor(f.color);
     const fill = `rgba(${r}, ${g}, ${b}, ${Math.max(0.15, (a / 255) * 0.5)})`;
     const stroke = `rgb(${r}, ${g}, ${b})`;
     const isSel = selectedFixtureId === f.id;
     ctx.fillStyle = fill;
-    ctx.strokeStyle = isSel ? accent : stroke;
+    ctx.strokeStyle = collisions.has(f.id) ? danger : isSel ? accent : stroke;
+    ctx.setLineDash(collisions.has(f.id) && isSel ? [5, 2] : []);
     ctx.lineWidth = isSel ? 2.4 : 1.4;
     const [ox, oy] = f.origin;
     if (f.kind.shape === 'box') {
@@ -55,4 +62,5 @@ export function drawFixtures(
       ctx.stroke();
     }
   }
+  ctx.setLineDash([]);
 }

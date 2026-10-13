@@ -125,6 +125,15 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
         });
     }
 
+    // Existing two-sided headers use native G-code comments and unshifted
+    // registration references. Do not present those as qualified CPS/translated
+    // machine output. Keep authored flip/origin intent; fail before any output.
+    if post_kind == PostProcessorKind::Cps
+        || req.project.work_offset.x_mm != 0.
+        || req.project.work_offset.y_mm != 0.
+    {
+        return Err(PipelineError::WorkOrigin("two-sided CPS output or translated XY registration is not qualified; use a single-sided job or an unshifted native setup".into()));
+    }
     let stock = stock.clone();
     let dowels = stock.flip.as_ref().and_then(|f| f.dowels.clone());
     let dowel_centres = dowels

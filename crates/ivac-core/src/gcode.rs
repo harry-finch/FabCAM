@@ -1724,8 +1724,9 @@ mod tests {
         setup.machine.comments = false;
         setup.mill.offset = ToolOffset::Outside;
 
+        setup.tabs.width = 3.0;
         // Single 20mm long line cut along +X with one tab in the middle.
-        // tab_radius = max(3.0/2, 0.5) = 1.5 → tab_world_len = 3mm.
+        // Configured tab width = 3mm, independent of tool diameter.
         // ramp_length = 0.5 / tan(30°) ≈ 0.866mm. 2*ramp_length ≈ 1.73mm
         // < 3mm tab width → trapezoid (ramp_up / flat / ramp_down).
         let line_offset = PolylineOffset {
@@ -1839,7 +1840,8 @@ mod tests {
         setup.machine.comments = false;
         setup.mill.offset = ToolOffset::Outside;
 
-        // tab_radius = 1.5 → tab_world_len = 3mm.
+        setup.tabs.width = 3.0;
+        // Configured tab width = 3mm, independent of tool diameter.
         // ramp_length = 1.5 / tan(30°) ≈ 2.598mm. 2*ramp_length ≈ 5.2mm
         // > 3mm tab width → triangle (ramp up directly to tabs_z at tab
         // center, then ramp down — no flat top).

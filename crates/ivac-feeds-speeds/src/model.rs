@@ -381,6 +381,8 @@ pub struct Provenance {
     pub request: FeedsSpeedsRequest,
     pub selection_tier: u8,
     pub adjustments: Vec<Adjustment>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub derivation: Option<crate::Derivation>,
 }
 
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]

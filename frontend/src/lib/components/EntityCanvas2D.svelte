@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { createFixtureTools } from '../canvas/fixture-feedback.svelte';
+
   import { onMount } from 'svelte';
   import { project, isContourOp, type OpEntry } from '../state/project.svelte';
   import { opSourceCss } from '../state/op-color';
@@ -12,7 +14,6 @@
     queryHitObjects,
     type HitIndex,
   } from '../canvas/spatial-index';
-  import { fixtureAt } from '../canvas/fixture-hit';
   import { projectGhostTab, type GhostTab } from '../canvas/ghost-tab';
   import { reduceCanvasClick } from '../canvas/entity-selection';
   import { reducePointerDown } from '../canvas/pointer-down';
@@ -53,11 +54,12 @@
     type StockResizeKind,
     type WorldBox,
   } from '../canvas/stock-gizmo';
-  import { RegionPathCache, drawRegions } from '../canvas/render/regions';
+  import { createRegionLayers } from '../canvas/region-layers.svelte';
   import { drawTextPreview } from '../canvas/render/text';
   import { drawImportedWireframe, drawEntityHalos } from '../canvas/render/entities';
   import { drawTabs } from '../canvas/render/tabs';
   import { drawApproachPoint } from '../canvas/render/approach';
+  import { drawWorkZero } from '../canvas/render/work-zero';
   import { drawFixtures } from '../canvas/render/fixtures';
   import { RasterImageCache, drawRasterPlacements } from '../canvas/render/raster';
   import { drawBoxSelect } from '../canvas/render/box-select';
@@ -108,7 +110,7 @@
   /// Theme-observed CSS-var cache. `resetThemeCache()` clears it when
   /// the MutationObserver in onMount sees a `data-theme` change.
   let themeCache = new Map<string, string>();
-  function themeVar(name: string, fallback: string): string {
+  function themeVar(name: string, fallback = ''): string {
     if (!container) return fallback;
     const cached = themeCache.get(name);
     if (cached !== undefined) return cached;
@@ -205,6 +207,7 @@
       attributeFilter: ['data-theme'],
     });
     return () => {
+      fixtureTools.interaction.cancel();
       ro.disconnect();
       mql.removeEventListener('change', onChange);
       themeMo.disconnect();
@@ -228,6 +231,8 @@
     void project.geometryView;
     void project.data.visibleLayers;
     void project.data.regionsVisible;
+    void project.gen.remainingVisible;
+    void regionLayers.remaining;
     void project.gen.generated;
     // Repaints on origin too (drag): cheap now that an origin change no
     // longer triggers a backend render — drawTextPreview just re-strokes
@@ -257,7 +262,9 @@
     void project.data.operations;
     void project.sel.selectedOpId;
     void project.data.fixtures;
+    void fixtureTools.ids;
     void project.sel.selectedFixtureId;
+    void project.data.workOffset;
     void project.sel.selectedTextLayerId;
     // Raster-engrave placement images live on the overlay
     // (faint, under the interaction chrome) so the heavy bg layer stays
@@ -335,14 +342,15 @@
     snap: OSnapCandidate['kind'] | null;
   } | null>(null);
 
-  /// Active live-commit pointer drags (approach marker / raster placement /
-  /// text origin / stock gizmo) + the parked stock-handle pre-commit. Owned
-  /// by lib/canvas/pointer-drag.svelte.ts, mirroring the ViewController /
-  /// TouchTracker split. At most one is active at a time; each commits live
-  /// (coalesced into one undo entry) on every move. Text patches coalesce
-  /// via coalesceKeyForTextPatch.
   const drag = new PointerDragController();
-
+  const fixtureTools = createFixtureTools(
+    project,
+    () => view,
+    () => canvas,
+    viewportFitBBox,
+    pxToData,
+    () => onActivateSidebarPane?.('stock'),
+  );
   /// Cache of the decoded brightness image per relief source — see
   /// RasterImageCache (lib/canvas/render/raster.ts).
   const rasterImageCache = new RasterImageCache();
@@ -597,6 +605,7 @@
     const rect = canvas.getBoundingClientRect();
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
+    if (fixtureTools.interaction.move(e)) return;
     // Cursor coordinate HUD. Track the world (data) position on
     // every move regardless of modal mode — users want to read X/Y
     // while pan/zoom/select/picking. pxToData returns null if the
@@ -836,13 +845,20 @@
         } else if (ghostTab) {
           ghostTab = null;
         }
-        canvas.style.cursor = hoverCursor(textHover != null, idx != null, tabPlacementActive);
+        const fixture = !tabPlacementActive ? fixtureHit(cx, cy) : null;
+        canvas.style.cursor =
+          fixture != null
+            ? project.sel.selectedFixtureId === fixture
+              ? 'grab'
+              : 'pointer'
+            : hoverCursor(textHover != null, idx != null, tabPlacementActive);
         return;
       }
     }
   }
 
   function onPointerUp(e: PointerEvent) {
+    if (fixtureTools.interaction.end(e)) return;
     // Release touch tracking + end any active gesture. A quick
     // down→up cancels the long-press (it was a tap, not a hold).
     if (e.pointerType === 'touch') {
@@ -1153,6 +1169,7 @@
       canvas.style.cursor = 'default';
       e.preventDefault();
     }
+    if (e.key === 'Escape') fixtureTools.interaction.cancel();
     // Escape mid-drag cancels the box-select without changing the
     // current selection — FreeCAD-style.
     if (e.key === 'Escape' && boxSelect) {
@@ -1391,8 +1408,7 @@
         project.toggleTabPlacement(selectedOp!.id, intent.at, 0.01);
         return;
       case 'fixture-select':
-        project.selectFixture(intent.id);
-        project.sel.selectedTextLayerId = null; // keep selection single-domain
+        fixtureTools.interaction.select(intent.id, e, cx, cy);
         return;
       case 'entity-click':
         break;
@@ -1495,22 +1511,10 @@
       }
     }
   }
-
-  /// Returns the id of the fixture under the cursor, or null. Hit-test
-  /// runs in data coordinates: a click is "inside" a Box / Cylinder if
-  /// the point is inside their AABB / disc, and inside a Polygon by
-  /// Hit-test fixtures in canvas pixel space. Pure shape-inclusion
-  /// logic delegated to `lib/canvas/fixture-hit.ts`;
-  /// the component just converts canvas-pixel to data-space and
-  /// passes the current fixture list.
-  function fixtureHit(canvasX: number, canvasY: number): number | null {
-    if (!lastTransform) return null;
-    const { scale, offX, offY } = lastTransform;
-    const dataX = (canvasX - offX) / scale;
-    const dataY = (offY - canvasY) / scale;
-    return fixtureAt(project.data.fixtures, dataX, dataY);
+  function fixtureHit(x: number, y: number): number | null {
+    const point = pxToData(x, y);
+    return point ? fixtureTools.hit(point.x, point.y) : null;
   }
-
   function colorFor(c: number): string {
     const r = resolveAci(c);
     return r.kind === 'fixed' ? hexToCss(r.hex) : themeVar(r.token, hexToCss(r.fallback));
@@ -1639,22 +1643,15 @@
     // DXF is loaded. A placement-only project skips straight to the text
     // previews below (raster images live on the overlay).
     if (hasGeom && data) {
-      // Filled-region preview painted under the wireframe so contours
-      // stay legible. Regions come from the backend (pipeline.rs
-      // build_region_previews).
-      const regions = project.gen.generated?.regions ?? [];
-      if (regions.length > 0 && project.data.regionsVisible) {
-        drawRegions(
-          ctx,
-          regionPathCache,
-          regions,
-          scale,
-          offX,
-          offY,
-          project.sel.selectedOpId,
-          themeVar('--accent', '#2d6cdf'),
-        );
-      }
+      // Intended region and fresh residual diagnostics share the drawing frame.
+      regionLayers.draw(
+        ctx,
+        scale,
+        offX,
+        offY,
+        themeVar('--accent', '#2d6cdf'),
+        themeVar('--warn'),
+      );
 
       // Imported segments — paint in BASE layer color only. State-bearing
       // overlays (selection / hover / op-assignment halos) go on the
@@ -1766,7 +1763,16 @@
       });
     }
 
-    drawFixtures(ctx, project2, project.data.fixtures, project.sel.selectedFixtureId, accent);
+    drawFixtures(
+      ctx,
+      project2,
+      project.data.fixtures,
+      project.sel.selectedFixtureId,
+      accent,
+      fixtureTools.ids,
+      themeVar('--error', '#e54848'),
+    );
+    drawWorkZero(ctx, project2, project.data.workOffset, accent, t('ux2.zero_marker'));
     drawTabs(
       ctx,
       project2,
@@ -1907,7 +1913,7 @@
 
   /// Path2D cache for region previews — see RegionPathCache
   /// (lib/canvas/render/regions.ts).
-  const regionPathCache = new RegionPathCache();
+  const regionLayers = createRegionLayers(project);
 </script>
 
 <svelte:window
@@ -1935,6 +1941,7 @@
     onpointerdown={onPointerDown}
     onpointerup={onPointerUp}
     onpointercancel={onPointerUp}
+    onlostpointercapture={(e) => fixtureTools.interaction.end(e)}
     oncontextmenu={onContextMenu}
     onwheel={onWheel}
     ondblclick={onDblClick}
