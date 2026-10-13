@@ -1,4 +1,13 @@
-# Status — 2026-10-13
+# Status — 2026-10-14
+
+## Repository transition — 2026-10-14
+
+User authorized integrating `feature/shopbot-mvp` into the default branch `main`
+and renaming the GitHub fork to `harry-finch/FabCAM`. The integration is a
+fast-forward to c9d3f3b; the feature branch and upstream relationship are preserved.
+Origin now uses `https://github.com/harry-finch/FabCAM.git`. Application/package
+names and the local checkout directory remain unchanged. Existing qualification
+gates and the CPS regression follow-up ivac-13go retain their recorded status.
 
 ## Publication authorization — 2026-10-13
 
@@ -93,7 +102,7 @@ own project when switching page URLs; no user project file was rewritten.
 ## Verified source and delivery
 
 - Checkout: /Users/mugen/Documents/01_Projets/FabCAM/ivacam.
-- Branch: feature/shopbot-mvp; origin harry-finch/ivacam, upstream aalarchiv/ivacam.
+- Branch: main; origin harry-finch/FabCAM, upstream aalarchiv/ivacam.
 - Previous committed/pushed software: **96e41ec4e8a3b593579079cbb6c051e070cd03ea**
   (FS3.7/FS3.8), explicitly published by user authorization on 2026-10-12.
 - M4 baseline: e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1; M0–M4 names retained.

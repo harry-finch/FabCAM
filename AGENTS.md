@@ -21,7 +21,8 @@ must not depend on FS. See `docs/shopbot-modernization/feeds-speeds/README.md`
 and ADR-0002. Use the architecture/documentation skills; use feeds-speeds only
 if it exists, and do not create that skill without an explicit request.
 
-Work on `feature/shopbot-mvp`; origin is `harry-finch/ivacam`, upstream is
+The published baseline is now `main`; `feature/shopbot-mvp` is retained historically.
+Origin is `harry-finch/FabCAM`, upstream is
 `aalarchiv/ivacam`. Commits and pushes require explicit user authorization;
 M4 publication approval does not authorize publication of subsequent work.
 No automatic merge, PR, upstream sync or force-push. A reviewable documentation

@@ -854,3 +854,15 @@ Rust publication checks: 1063 core unit tests and 98 feeds/speeds tests plus
 rejects that unqualified capability (ivac-jtkj). Regression alignment follow-up
 is recorded as ivac-13go; the publication checkpoint does not claim a fully green
 broad Rust suite.
+
+## 2026-10-14 — GitHub fork renamed FabCAM; ShopBot integrated into main
+
+User explicitly authorized merging feature/shopbot-mvp into main and renaming
+the GitHub repository. Main had no unique commits and advanced by fast-forward
+from 9168104 to c9d3f3b, preserving all 11 feature commits and their source tree.
+The fork is now harry-finch/FabCAM; origin was updated locally and upstream remains
+aalarchiv/ivacam. Feature branch retained. Governance references updated in both
+AGENTS.md and CLAUDE.md. Application branding and package identifiers unchanged.
+No new code behavior or physical/native qualification; prior publication test
+results apply to the identical merged source, including known CPS follow-up
+ivac-13go. Tracking: ivac-wesn.
