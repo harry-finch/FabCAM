@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 authors.workspace = true
 publish.workspace = true
-description = "ivaCAM Tauri desktop shell"
+description = "FabCAM Tauri desktop shell"
 
 # Shared app shell. The mobile (Android / iOS) build loads the app as a
 # `cdylib` via Tauri's generated host glue (there is no `main()` on

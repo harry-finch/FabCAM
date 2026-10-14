@@ -1,4 +1,9 @@
-# Building ivaCAM from source
+# Building FabCAM from source
+
+FabCAM is the public product name. The legacy packaging value `productName=ivaCAM`
+and executable/installer filenames remain for installation compatibility. Display
+titles and macOS display metadata use FabCAM; `org.opcenter.ivacam` and app data
+paths are unchanged. See [ADR-0012](shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md).
 
 Targeted at users who'd rather not run a prebuilt binary they didn't
 compile themselves. The project is a Cargo workspace plus a Vite frontend;
@@ -9,7 +14,7 @@ the desktop bundle is produced by Tauri 2.
 | Tool        | Version          | Notes                                          |
 |-------------|------------------|------------------------------------------------|
 | Rust        | pinned in [`rust-toolchain.toml`](../rust-toolchain.toml) | rustup picks up the pin automatically the first time you run cargo in this repo. |
-| Node.js     | ≥ 20             | Any LTS works; we use it only to drive Vite + svelte-check. |
+| Node.js     | 20.19+ or 22.12+ | Matches the installed Vite 8 engine requirement; Node 24 was used for local checks. |
 | pnpm        | ≥ 10             | Required. The frontend pulls in the local `ivac-wasm` package via pnpm's `link:` protocol, which npm can't resolve; lockfile is `frontend/pnpm-lock.yaml`. |
 | Tauri CLI   | 2.x              | Install via `cargo install tauri-cli --version "^2" --locked` once you're set up for desktop builds. |
 | wasm-pack   | ≥ 0.14           | Install via `cargo install wasm-pack --locked` for the WASM crate. |
@@ -68,8 +73,8 @@ The repo expects a few sibling reference checkouts under `refs/`. Pull
 them yourself; CI does the same.
 
 ```sh
-git clone https://github.com/<your-org>/ivacam.git
-cd ivacam
+git clone https://github.com/harry-finch/FabCAM.git
+cd FabCAM
 
 git clone https://github.com/multigcs/viaconstructor refs/viaconstructor
 git clone https://github.com/IxMilia/dxf-rs           refs/dxf-rs
@@ -84,8 +89,8 @@ needs. The viaConstructor checkout supplies DXF fixtures under
 ### Headless workspace (no UI)
 
 ```sh
-cargo build --workspace
-cargo test --workspace --tests   # full Rust unit + integration suite
+cargo build --locked
+cargo test --locked --tests   # full Rust unit + integration suite
 ```
 
 ### Feature matrix: `cps` (Autodesk-`.cps` post runtime)
@@ -158,7 +163,7 @@ CAM pipeline client-side — no Rust server, no Python, no anything.
 
 #### Install-free trial channel (OS-agnostic)
 
-This is the lowest-friction way to let someone *try* ivaCAM:
+This is the lowest-friction way to let someone *try* FabCAM:
 ship a static bundle to any CDN / static host and hand out a URL — it
 runs in the browser on any OS, nothing to install, and the user's
 geometry never leaves their machine.
@@ -215,6 +220,15 @@ headline trial path):
 
 ### Desktop bundle (Tauri)
 
+FabCAM A1 desktop/browser icons use the existing resource paths and stable Tauri
+identity. Refresh generated copies from the repository root with
+`python3 assets/branding/fabcam/tools/build_assets.py --integrate` (Pillow and
+Inkscape; no font required). Masters and native-format limitations are documented
+in [the brand specification](../assets/branding/fabcam/README.md). This desktop
+command does not regenerate Android launcher assets or change application IDs.
+An icon file passing validation does not establish package/runtime compatibility;
+build and inspect on each target OS separately.
+
 ```sh
 cd crates/ivac-tauri
 cargo tauri build            # produces a release bundle for your platform
@@ -267,7 +281,7 @@ never uses.
 
 ### Android (Tauri mobile)
 
-ivaCAM runs on Android as a native Tauri 2 app: the Svelte UI loads from
+The inherited Android implementation runs as a native Tauri 2 app: the Svelte UI loads from
 the embedded `dist/` in the System WebView and calls the **native**
 `ivac-core` commands over Tauri IPC (not the wasm path — `ivac-core` is
 pure Rust with zero `*-sys`/C deps, so it cross-compiles to the Android
@@ -421,7 +435,7 @@ cd frontend && pnpm check
 ```
 
 For Tauri builds, launching the bundled app should open a window titled
-*ivaCAM* with the same UI you saw under `pnpm dev`.
+*FabCAM* with the same UI you saw under `pnpm dev`.
 
 ## 5. Troubleshooting
 

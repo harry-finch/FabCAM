@@ -1,0 +1,132 @@
+{
+  "production": {
+    "favicon.svg": {
+      "status": 200,
+      "mime": "image/svg+xml",
+      "bytes": 574,
+      "sha256": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748",
+      "matches_public_asset": true
+    },
+    "favicon-16.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 465,
+      "sha256": "a858d765240d12bcdf721cd262cd877eaca14a76060249517533f88009f74dc0",
+      "matches_public_asset": true
+    },
+    "favicon-32.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 953,
+      "sha256": "c743ac56e8c9b3d1905fa3d2b18c78ebc3956a7a3d550aa6d046ebe513995db9",
+      "matches_public_asset": true
+    },
+    "favicon-64.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 1609,
+      "sha256": "79e3fc07f81be78bc1eddaa8ef746eca9d689b372c758e3b2a36bb4df4179b96",
+      "matches_public_asset": true
+    },
+    "favicon-128.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 2975,
+      "sha256": "5f5c636980e3710ad61f7470b9473fec05c82342f46e22f622e72d2f58cb9398",
+      "matches_public_asset": true
+    },
+    "favicon-256.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 5847,
+      "sha256": "13b230d05d5d900da50905fb0de83397f242bf2e19b3f6de666705cb12cc9a3c",
+      "matches_public_asset": true
+    },
+    "apple-touch-icon.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 6289,
+      "sha256": "ec914ff42976fe7d18e5fdc2212dae9a1388ed9850b91e6a199d0c4806c5e018",
+      "matches_public_asset": true
+    },
+    "branding/fabcam-symbol.svg": {
+      "status": 200,
+      "mime": "image/svg+xml",
+      "bytes": 574,
+      "sha256": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748",
+      "matches_public_asset": true
+    },
+    "branding/fabcam-lockup.svg": {
+      "status": 200,
+      "mime": "image/svg+xml",
+      "bytes": 3293,
+      "sha256": "3de085c0994b3ecb54ce06d178618fb6dba4c8a8b96f85d482cb88fe6fa2ba5f",
+      "matches_public_asset": true
+    }
+  },
+  "development": {
+    "favicon.svg": {
+      "status": 200,
+      "mime": "image/svg+xml",
+      "bytes": 574,
+      "sha256": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748",
+      "matches_public_asset": true
+    },
+    "favicon-16.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 465,
+      "sha256": "a858d765240d12bcdf721cd262cd877eaca14a76060249517533f88009f74dc0",
+      "matches_public_asset": true
+    },
+    "favicon-32.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 953,
+      "sha256": "c743ac56e8c9b3d1905fa3d2b18c78ebc3956a7a3d550aa6d046ebe513995db9",
+      "matches_public_asset": true
+    },
+    "favicon-64.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 1609,
+      "sha256": "79e3fc07f81be78bc1eddaa8ef746eca9d689b372c758e3b2a36bb4df4179b96",
+      "matches_public_asset": true
+    },
+    "favicon-128.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 2975,
+      "sha256": "5f5c636980e3710ad61f7470b9473fec05c82342f46e22f622e72d2f58cb9398",
+      "matches_public_asset": true
+    },
+    "favicon-256.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 5847,
+      "sha256": "13b230d05d5d900da50905fb0de83397f242bf2e19b3f6de666705cb12cc9a3c",
+      "matches_public_asset": true
+    },
+    "apple-touch-icon.png": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 6289,
+      "sha256": "ec914ff42976fe7d18e5fdc2212dae9a1388ed9850b91e6a199d0c4806c5e018",
+      "matches_public_asset": true
+    },
+    "branding/fabcam-symbol.svg": {
+      "status": 200,
+      "mime": "image/svg+xml",
+      "bytes": 574,
+      "sha256": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748",
+      "matches_public_asset": true
+    },
+    "branding/fabcam-lockup.svg": {
+      "status": 200,
+      "mime": "image/svg+xml",
+      "bytes": 3293,
+      "sha256": "3de085c0994b3ecb54ce06d178618fb6dba4c8a8b96f85d482cb88fe6fa2ba5f",
+      "matches_public_asset": true
+    }
+  }
+}

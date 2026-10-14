@@ -36,7 +36,10 @@
 </script>
 
 <nav class="main-tabs" class:hidden={narrow} aria-label={t('app.tab.areas')}>
-  <span class="app-brand">{t('shell.brand')}</span>
+  <span class="app-brand">
+    <img src="/branding/fabcam-symbol.svg" alt="" aria-hidden="true" width="24" height="24" />
+    {t('shell.brand')}
+  </span>
   <button
     type="button"
     class="main-tab"
@@ -114,11 +117,21 @@
 
 <style>
   .app-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
     align-self: center;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 0 0.6rem 0 0;
     color: var(--text-strong);
+  }
+  .app-brand img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
   }
   .main-tabs {
     display: flex;

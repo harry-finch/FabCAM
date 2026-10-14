@@ -1,6 +1,8 @@
 # ShopBot modernization
 
-University-fablab fork of ivaCAM. First target: ShopBot PRS Gantry, approximately
+FabCAM is a university-fablab fork of [ivaCAM](https://github.com/aalarchiv/ivacam).
+Public product identity and compatibility policy: [ADR-0012](adr/ADR-0012-fabcam-product-identity.md).
+First target: ShopBot PRS Gantry, approximately
 2011; future target: OMAX ProtoMAX. Windows, macOS and Linux remain required.
 The first objective is a correct, reviewable program from simple SVG/DXF using
 the existing engine, replacing the lab's VCarve 8 workflow progressively.

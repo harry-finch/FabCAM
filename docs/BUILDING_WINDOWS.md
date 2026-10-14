@@ -1,4 +1,9 @@
-# Building ivaCAM for Windows
+# Building FabCAM for Windows
+
+The public product is FabCAM. The inherited Windows build evidence below was not
+re-run in this product-identity checkpoint. `productName=ivaCAM`, installer names
+and `ivac-desktop.exe` are deliberately retained to preserve upgrade/install
+identity; UI/window titles use FabCAM. See [ADR-0012](shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md).
 
 A focused companion to [`BUILDING.md`](./BUILDING.md) for producing a
 Windows desktop bundle (`.msi` + `.exe` installer). Read `BUILDING.md`
@@ -91,8 +96,8 @@ Identical to `BUILDING.md` §2 — clone the repo plus the read-only
 reference checkouts under `refs/`:
 
 ```powershell
-git clone <repo-url> ivacam
-cd ivacam
+git clone https://github.com/harry-finch/FabCAM.git
+cd FabCAM
 git clone https://github.com/multigcs/viaconstructor refs/viaconstructor
 git clone https://github.com/IxMilia/dxf-rs           refs/dxf-rs
 ```
@@ -141,12 +146,12 @@ cargo test --workspace
 cd frontend; pnpm check; cd ..
 
 # Install one of the bundles, then launch — you should get a window
-# titled "ivaCAM" with the same UI as `pnpm dev`.
+# titled "FabCAM" with the same UI as `pnpm dev`.
 ```
 
 The `.dxf` / `.svg` / `.ngc` / `.ivac-project.json` file associations
 declared in `tauri.conf.json` register on install; double-clicking such a
-file should open it in ivaCAM.
+file should open it in FabCAM.
 
 ## 6. Building from a Windows VM
 

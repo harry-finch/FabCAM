@@ -1,5 +1,7 @@
 # Architectural decisions
 
+- [ADR-0012: FabCAM product identity](ADR-0012-fabcam-product-identity.md) — public name and preserved upstream/compatibility contracts; implementation human review pending.
+
 Use `.agents/skills/project-documentation/assets/ADR-TEMPLATE.md`; include
 context, alternatives, evidence, decision, compatibility and validation impact.
 

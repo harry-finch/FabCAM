@@ -375,7 +375,7 @@ export async function openProject() {
       multiple: false,
       filters: openFilters([
         {
-          name: 'ivaCAM project',
+          name: 'FabCAM project',
           extensions: ['ivac-project.json', 'vc-project.json', 'json'],
         },
       ]),
@@ -603,7 +603,7 @@ export async function saveProject() {
       const { writeTextFile } = await import('@tauri-apps/plugin-fs');
       const path = await save({
         defaultPath: filename,
-        filters: [{ name: 'ivaCAM project', extensions: ['json'] }],
+        filters: [{ name: 'FabCAM project', extensions: ['json'] }],
       });
       if (typeof path === 'string') {
         await writeTextFile(path, snapshot);
@@ -958,7 +958,7 @@ export async function exportToolset(tools: readonly ToolEntry[]) {
     payload: tools.map((t) => ({ ...t })),
   };
   await writeJson('toolset.ivac-toolset.json', JSON.stringify(envelope, null, 2), [
-    { name: 'ivaCAM toolset', extensions: ['ivac-toolset.json', 'json'] },
+    { name: 'FabCAM toolset', extensions: ['ivac-toolset.json', 'json'] },
   ]);
 }
 
@@ -983,7 +983,7 @@ export async function importToolset(
   let text: string | null;
   try {
     text = await pickAndReadJson([
-      { name: 'ivaCAM toolset', extensions: ['ivac-toolset.json', 'json'] },
+      { name: 'FabCAM toolset', extensions: ['ivac-toolset.json', 'json'] },
     ]);
   } catch (e) {
     project.setError(`toolset load: ${notificationText(e)}`);
@@ -1051,7 +1051,7 @@ export async function saveMachine() {
   };
   const fileBase = (project.data.machine.name && project.data.machine.name.trim()) || 'machine';
   await writeJson(`${fileBase}.ivac-machine.json`, JSON.stringify(envelope, null, 2), [
-    { name: 'ivaCAM machine', extensions: ['ivac-machine.json', 'json'] },
+    { name: 'FabCAM machine', extensions: ['ivac-machine.json', 'json'] },
   ]);
 }
 
@@ -1061,7 +1061,7 @@ export async function loadMachine() {
   let text: string | null;
   try {
     text = await pickAndReadJson([
-      { name: 'ivaCAM machine', extensions: ['ivac-machine.json', 'json'] },
+      { name: 'FabCAM machine', extensions: ['ivac-machine.json', 'json'] },
     ]);
   } catch (e) {
     project.setError(`machine load: ${notificationText(e)}`);

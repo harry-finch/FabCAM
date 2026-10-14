@@ -24,7 +24,10 @@
   /// docs/ABOUT.md and substituted + inlined at build time by the
   /// `ivac-about-md` Vite plugin (`virtual:about`). Trusted, compiled-in
   /// content — safe for `{@html}`; markdown-lite escapes raw HTML first.
-  const aboutHtml = renderMarkdown(aboutMd);
+  const [overviewMd, acknowledgementsMd = ''] = aboutMd.split('\n### Acknowledgements\n');
+  const aboutHtml = renderMarkdown(overviewMd);
+  const acknowledgementsHtml = renderMarkdown(acknowledgementsMd);
+  const pkgVersion = typeof __IVAC_PKG_VERSION__ === 'string' ? __IVAC_PKG_VERSION__ : '';
 
   const buildVersion =
     typeof __IVAC_BUILD_VERSION__ === 'string' ? __IVAC_BUILD_VERSION__ : 'unknown';
@@ -150,14 +153,17 @@
 
 {#snippet shell()}
   <header>
-    <h2 id="about-title">{t('about.title')}</h2>
+    <div class="about-identity">
+      <h2 id="about-title">{t('shell.brand')}</h2>
+      {#if pkgVersion}<p class="version">v{pkgVersion}</p>{/if}
+    </div>
     <div class="header-right">
       <img
         class="about-logo"
-        src="/ivacam-logo.png"
+        src="/branding/fabcam-symbol.svg"
         alt={t('about.logo_alt')}
-        width="80"
-        height="80"
+        width="64"
+        height="64"
       />
       {#if !embedded}
         <button type="button" class="dlg-close" onclick={onClose} aria-label={t('common.close')}
@@ -174,61 +180,73 @@
     {@html aboutHtml}
   </section>
 
-  <section>
-    <dl class="build">
-      <dt>{t('about.build')}</dt>
-      <dd>
-        <code class="build-id">{buildVersion}</code>
-        <button
-          type="button"
-          class="copy-btn"
-          onclick={copyBuildId}
-          title={t('about.copy_build_id.title')}
-        >
-          {copyState === 'copied' ? t('about.copied') : t('about.copy')}
-        </button>
-      </dd>
-      {#if buildDateDisplay}
-        <dt>{t('about.date')}</dt>
+  <details class="about-disclosure">
+    <summary>{t('about.acknowledgements')}</summary>
+    <section class="about-md" role="presentation" onclick={onExternalLinkClick}>
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted compiled-in markdown, escaped by markdown-lite -->
+      {@html acknowledgementsHtml}
+    </section>
+  </details>
+  <details class="about-disclosure">
+    <summary>{t('about.build_details')}</summary>
+    <section>
+      <dl class="build">
+        <dt>{t('about.build')}</dt>
         <dd>
-          <span class="build-date" title={t('about.date.title')}>
-            {buildDateDisplay}
-          </span>
+          <code class="build-id">{buildVersion}</code>
+          <button
+            type="button"
+            class="copy-btn"
+            onclick={copyBuildId}
+            title={t('about.copy_build_id.title')}
+          >
+            {copyState === 'copied' ? t('about.copied') : t('about.copy')}
+          </button>
         </dd>
-      {/if}
-    </dl>
-    <p class="hint">{t('about.build_hint')}</p>
-  </section>
+        {#if buildDateDisplay}
+          <dt>{t('about.date')}</dt>
+          <dd>
+            <span class="build-date" title={t('about.date.title')}>
+              {buildDateDisplay}
+            </span>
+          </dd>
+        {/if}
+      </dl>
+      <p class="hint">{t('about.build_hint')}</p>
+    </section>
+  </details>
 
-  <section>
-    <h3>{t('about.third_party')}</h3>
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -- static, translator-authored markup (only <code> filenames) -->
-    <p class="hint">{@html t('about.third_party.intro')}</p>
-    <table class="libs">
-      <thead>
-        <tr>
-          <th>{t('about.col.library')}</th>
-          <th>{t('about.col.license')}</th>
-          <th>{t('about.col.role')}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each [...thirdParty].sort( (a, b) => a.name.localeCompare( b.name, undefined, { sensitivity: 'base' }, ), ) as lib (lib.name)}
+  <details class="about-disclosure">
+    <summary>{t('about.third_party')}</summary>
+    <section role="presentation" onclick={onExternalLinkClick}>
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -- static, translator-authored markup (only <code> filenames) -->
+      <p class="hint">{@html t('about.third_party.intro')}</p>
+      <table class="libs">
+        <thead>
           <tr>
-            <td>
-              <a href={lib.home} target="_blank" rel="noreferrer">{lib.name}</a>
-            </td>
-            <td>{lib.license}</td>
-            <td>{lib.role}</td>
+            <th>{t('about.col.library')}</th>
+            <th>{t('about.col.license')}</th>
+            <th>{t('about.col.role')}</th>
           </tr>
-        {/each}
-      </tbody>
-    </table>
-  </section>
+        </thead>
+        <tbody>
+          {#each [...thirdParty].sort( (a, b) => a.name.localeCompare( b.name, undefined, { sensitivity: 'base' }, ), ) as lib (lib.name)}
+            <tr>
+              <td>
+                <a href={lib.home} target="_blank" rel="noreferrer">{lib.name}</a>
+              </td>
+              <td>{lib.license}</td>
+              <td>{lib.role}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </section>
+  </details>
 {/snippet}
 
 {#if embedded}
-  <section class="embedded-col">{@render shell()}</section>
+  <section class="embedded-col" aria-label={t('about.title')}>{@render shell()}</section>
 {:else}
   <Modal
     {onClose}
@@ -259,15 +277,32 @@
     margin: 0;
     font-size: 1.05rem;
   }
+  .version {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+  .about-disclosure {
+    border-bottom: 1px solid var(--border);
+  }
+  .about-disclosure summary {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .about-disclosure summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
   .header-right {
     display: flex;
     align-items: center;
     gap: 0.75rem;
   }
-  /* Prominent ivaCAM logo, top-right of the About screen. */
+  /* Canonical A1 symbol; About identity, version and legal text stay intact. */
   .about-logo {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
     flex: 0 0 auto;
   }
@@ -277,11 +312,6 @@
   }
   section:last-of-type {
     border-bottom: 0;
-  }
-  section h3 {
-    margin: 0 0 0.4rem 0;
-    font-size: 0.9rem;
-    color: var(--text-strong);
   }
   /* The About prose is injected via {@html} from ABOUT.md, so its
      elements aren't Svelte-scoped — target them with :global under the
@@ -309,7 +339,13 @@
   }
   .about-md :global(a) {
     color: var(--accent);
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .about-md :global(a:focus-visible),
+  table.libs td a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
   .about-md :global(a:hover) {
     text-decoration: underline;

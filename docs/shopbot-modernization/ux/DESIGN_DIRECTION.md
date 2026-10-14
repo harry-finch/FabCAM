@@ -1,5 +1,11 @@
 # Desktop CAM design direction
 
+UX2.2 A1 branding policy: canonical 24 px symbol plus existing name in the compact
+header, outlined lockup in Welcome, canonical symbol in About, app tile for desktop
+icons. Preserve the exact blue/graphite palette and existing layout. The micro
+candidate is excluded until explicitly approved. See [integration evidence and
+platform limitations](A1_BRANDING_INTEGRATION.md); this is not a CAM milestone.
+
 The primary visual reference for the CAM is professional Adobe Creative Cloud
 desktop software: compact density, contextual inspectors, restrained dark UI,
 strong typography hierarchy, subtle separators and progressive disclosure.

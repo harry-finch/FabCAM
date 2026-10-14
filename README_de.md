@@ -1,52 +1,57 @@
-# ivaCAM
+# FabCAM
 
-[English](./README.md) | **Deutsch**
+[English](README.md) | **Deutsch**
 
-**DXF- und SVG-Zeichnungen in G-Code für CNC-Fräsen, Laser, Plasmaschneider und Schleppmesser verwandeln.**
+**Quelloffene CAM-Software für praktische digitale Fertigung.**
 
-Freie, quelloffene CAM-Software für die Hobbywerkstatt. Eine eigenständige App für Desktop und Android — kein Python, keine Installationshölle — plus ein optionaler selbst gehosteter Web-Dienst und ein vollständig im Browser laufender (WebAssembly-)Modus, in dem Ihre Zeichnungen Ihren Rechner nie verlassen.
+![FabCAM A1 Optical Balance](assets/branding/fabcam/source/fabcam-a1-app-icon.svg)
 
-![preview](./assets/ivaCAM_GH_social.png)
+## Überblick und Funktionen
 
-## Verwendung
+FabCAM bereitet 2D-Zeichnungen für CNC-Bearbeitung vor: Geometrie, Rohmaterial, Werkzeuge, Operationen, Schnittwerte, Vorschau und Maschinenausgabe. Der aktuelle Schwerpunkt liegt auf Fräsabläufen in Werkstätten und Fablabs einschließlich eines begrenzten ShopBot-OpenSBP-Umfangs. FabCAM ist eine Weiterentwicklung von [ivaCAM](https://github.com/aalarchiv/ivacam), keine pauschale Produktionsfreigabe.
 
-**Wollen Sie einfach etwas schneiden?** → [Schnellstart](./docs/QUICKSTART.md)
+- SVG/DXF, Ebenen, Transformationen und Projektdateien.
+- Profil, Tasche und Bohren; Anbindungen und Ein-/Ausfahrten mit maschinenabhängigen Prüfungen. Weitere geerbte Operationen sind vorhanden, aber nicht für jede Maschine/Kombination qualifiziert.
+- Rohmaterial, Arbeitsnullpunkt, Maschinenprofile, Werkzeugbibliotheken, Spannmittel und Kollisionswarnungen.
+- Frässpezifische Schnittwertempfehlungen mit Quellenangaben, expliziter Übernahme, manuellen Werten und privaten lokalen Voreinstellungen.
+- 2D/3D-Vorschau und Materialabtrag-Simulation; begrenzte Restmaterialanalyse je Tasche/Tiefe, keine implementierte Restbearbeitung.
+- Native CPS-Posts, begrenzte ShopBot-Ausgabe und kompakte Atelier-Oberfläche mit Startbildschirm, Dateien, letzten Projekten und Maschinen-/Werkzeugkontext.
 
-- **Desktop** (Linux / macOS / Windows): AppImage / `.msi` / `.app` bauen — siehe [Aus dem Quellcode bauen](#aus-dem-quellcode-bauen).
-- **Android**: eine native APK (Tauri Mobile) bauen und auf dem Gerät installieren — siehe [Aus dem Quellcode bauen](#aus-dem-quellcode-bauen).
-- **Browser**: den statischen Build ausliefern und die URL öffnen. Nichts zu installieren; alles läuft clientseitig.
+![FabCAM-Arbeitsbereich](docs/shopbot-modernization/ux/A1-branding-project.jpg)
 
-## Funktionsumfang
+## Plattformen und Einstieg
 
-- **Import**: DXF, SVG.
-- **Operationen**: Profilieren, Tasche, Bohrung (Bohrzyklen), V-Carve, Gravur/Text, Anfasen, Gewinde, Schwalbenschwanz, T-Nut — mit Anbindungen, Lead-in/-out und Werkzeugversätzen.
-- **Maschinen**: Fräse, Laser, Plasma (Einstechen + Verweilen), Schleppmesser — jede mit eigenem Postprozessor.
-- **Vorschau**: 2D-Zeichenfläche plus ein Live-3D-Werkzeugweg und eine Materialabtrag-Simulation.
-- **Werkstatt-Einrichtung**: Werkzeugbibliothek (Parameter pro Werkzeug), wiederverwendbare Maschinenprofile, Projekt speichern/laden.
+Ein lokaler macOS-Tauri-Build wurde gestartet und visuell geprüft. Windows/Linux sind Build-Ziele mit geprüften Icon-Ressourcen; native Pakete/Laufzeit wurden in diesem Checkpoint nicht getestet. Browser-Entwicklung und Produktionsbuild sind geprüft. Das aktuelle WASM-Paket unterstützt keine CPS-Posts; ShopBot benötigt Desktop oder einen nativen Server. Geerbte Android-Werkzeuge liegen außerhalb der aktuellen Desktop-Qualifikation.
 
-## Aus dem Quellcode bauen
+Voraussetzungen: [gepinntes Rust](rust-toolchain.toml), Node 20.19+ oder 22.12+, pnpm 10+, wasm-pack und für Desktop Tauri-CLI 2 samt Systembibliotheken. [Build-Anleitung](docs/BUILDING.md), [Windows](docs/BUILDING_WINDOWS.md).
 
 ```sh
-cargo build --workspace                        # Core + CLI + Server
-cd frontend && pnpm install && pnpm dev        # Web-UI auf :5173
-cargo tauri build --bundles appimage           # Desktop-Bundle
-cargo tauri android build --apk                # Android-APK
+git clone https://github.com/harry-finch/FabCAM.git
+cd FabCAM
+cargo build --locked
+wasm-pack build crates/ivac-wasm --target web --release
+pnpm --dir frontend install --frozen-lockfile
+pnpm --dir frontend dev
 ```
 
-Plattformspezifische Voraussetzungen und der vollständige Ablauf: [docs/BUILDING.md](./docs/BUILDING.md) (Windows: [docs/BUILDING_WINDOWS.md](./docs/BUILDING_WINDOWS.md), Android: [docs/BUILDING.md § Android](./docs/BUILDING.md)).
+Für Desktop anschließend `cd crates/ivac-tauri` und `cargo tauri build`. Technische Binär-/Installernamen können aus Kompatibilitätsgründen weiterhin `ivac`/`ivaCAM` enthalten. Es wird kein Release veröffentlicht.
 
-## Dokumentation
+## Arbeitsablauf
 
-- [Schnellstart](./docs/QUICKSTART.md) — von der Zeichnung zum G-Code in 5 Minuten
-- [Bauen](./docs/BUILDING.md) — jeden Transport bauen & paketieren
-- [Architektur](./docs/ARCHITECTURE.md) · [Mitwirken](./docs/CONTRIBUTING.md) — zum Weiterentwickeln
+Projekt erstellen/öffnen → Geometrie importieren → Rohmaterial, Nullpunkt, Maschine und Spannmittel einrichten → Werkzeuge/Operationen wählen → Schnittwerte prüfen → Werkzeugwege erzeugen → Vorschau/Warnungen prüfen → unterstützten Code exportieren. Maschinenbezogene Einrichtung und physische Prüfungen erfolgen anschließend durch den Bediener. [Schnellstart](docs/QUICKSTART.md).
 
-## Lizenz
+## Status, Grenzen und Planung
 
-GPL-3.0-or-later — siehe [`LICENSE`](./LICENSE). ivaCAM erbt diese Lizenz aus seiner teilweisen Ableitung von viaConstructor (GPLv3); siehe Danksagungen.
+Softwareprüfung ersetzt keine physische Schnittprüfung. Die dokumentierte M4-ShopBot-Quadratprüfung qualifiziert nicht alle Fräsoperationen. Helix-Einstieg, bestimmte zweiseitige CPS-/Registrierungskombinationen und ein Arbeitsnullpunkt-Z ungleich null bleiben eingeschränkt/abgelehnt. Der Wechsel der ShopBot-Drehzahl zwischen Schruppen/Schlichten ist eine bekannte Exportgrenze. Referenzdaten sind keine physisch validierten Laborwerte. **FS4 bleibt zurückgestellt.** Menschliche CAM/FS/UX-Freigaben sind weiterhin offen.
 
-## Danksagungen
+Eckfreistellungen (Dogbone/T-Bone), Planfräsen, Vorlagen und fortgeschrittene Strategien sind spätere Arbeit; FabSBP ist Planung, Wasserstrahl/Vinyl sind zurückgestellt. Maßgeblich sind [STATUS](docs/shopbot-modernization/STATUS.md), [ROADMAP](docs/shopbot-modernization/ROADMAP.md) und Qualifikationsnachweise.
 
-Baut auf hervorragenden Open-Source-Bibliotheken auf — [`dxf-rs`](https://github.com/IxMilia/dxf-rs), [`cavalier_contours`](https://github.com/jbuckmccready/cavalier_contours), `clipper2-rust`, [`usvg`](https://github.com/linebender/resvg), [Svelte](https://svelte.dev/), [Three.js](https://threejs.org/) und [Tauri](https://tauri.app/).
+## Herkunft und Lizenz
 
-Der CAM-Kern von ivaCAM ist teilweise eine Rust-Portierung der Geometrie- und Werkzeugweg-Routinen von [viaConstructor](https://github.com/multigcs/viaconstructor) (`calc.py`, `machine_cmd.py`, `setupdefaults.py`) und wird entsprechend unter der GPL vertrieben. [Estlcam](https://www.estlcam.de/) hat Teile des Funktionsumfangs und der Terminologie inspiriert, ist aber Closed-Source und steuert keinen Code bei.
+FabCAM basiert auf **ivaCAM von Soenke J. Peters**: [aalarchiv/ivacam](https://github.com/aalarchiv/ivacam). Ursprüngliche Autorenschaft und Beiträge bleiben gewürdigt. ivaCAMs Kern enthält teilweise Rust-Portierungen von [viaConstructor](https://github.com/multigcs/viaconstructor); [Estlcam](https://www.estlcam.de/) inspirierte Terminologie, steuert aber keinen Code bei. Danksagungen und Copyright-Hinweise bleiben, einschließlich dxf-rs, cavalier_contours, clipper2-rust, usvg, Svelte, Three.js und Tauri.
+
+**GPL-3.0-or-later**, siehe unveränderte [LICENSE](LICENSE). Abhängigkeiten und Referenzdaten behalten ihre Lizenzbedingungen. Private Herstellerpakete werden nicht automatisch weiterverteilbar oder Teil der öffentlichen Distribution. [Datenquellen/Lizenzen](docs/shopbot-modernization/feeds-speeds/DATA_SOURCES.md).
+
+## Mitwirken
+
+[Beitragsrichtlinien](docs/CONTRIBUTING.md), [Architektur](docs/ARCHITECTURE.md) und aktuellen Status lesen. Projekt: [harry-finch/FabCAM](https://github.com/harry-finch/FabCAM). [Identitätsentscheidung](docs/shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md).

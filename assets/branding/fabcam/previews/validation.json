@@ -1,0 +1,580 @@
+{
+  "svg": {
+    "source/fabcam-a1-lockup-outlined.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        9,
+        13,
+        239,
+        67
+      ],
+      "colors": [
+        "#58B5F5",
+        "#75C8FA",
+        "#EEF3F8"
+      ],
+      "sha256": "3de085c0994b3ecb54ce06d178618fb6dba4c8a8b96f85d482cb88fe6fa2ba5f"
+    },
+    "source/fabcam-a1-app-icon.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        3,
+        3,
+        125,
+        125
+      ],
+      "colors": [
+        "#171E28",
+        "#354250",
+        "#58B5F5"
+      ],
+      "sha256": "17e65135b2ee5d4a086e42a59621c3d8bc6b7448419628dc526273d9f6b5b890"
+    },
+    "source/fabcam-a1-symbol.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        5,
+        5,
+        59,
+        59
+      ],
+      "colors": [
+        "#58B5F5"
+      ],
+      "sha256": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748"
+    },
+    "source/fabcam-a1-lockup.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        9,
+        13,
+        239,
+        67
+      ],
+      "colors": [
+        "#58B5F5",
+        "#75C8FA",
+        "#EEF3F8"
+      ],
+      "sha256": "2748e642bc985faf6ccb55d339c32507117185dc5cb18425fa29b07d2da099dd"
+    },
+    "variants/fabcam-lockup-light.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        9,
+        13,
+        239,
+        67
+      ],
+      "colors": [
+        "#EEF3F8"
+      ],
+      "sha256": "82a3675fa5e743227566fefea8fc8a10a4a81fd8921bc2bebdb989a4a4e4e350"
+    },
+    "variants/fabcam-symbol-micro.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        5,
+        5,
+        59,
+        59
+      ],
+      "colors": [
+        "#58B5F5"
+      ],
+      "sha256": "758151abe776233ad23252dac5eb8d839c479bd8c747c51aca40ae9b10801b50"
+    },
+    "variants/fabcam-symbol-light.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        5,
+        5,
+        59,
+        59
+      ],
+      "colors": [
+        "#EEF3F8"
+      ],
+      "sha256": "930af75d50fbb7a79c3bbb37aa56693ed548b3c1e0fbce3004971903e1107ac9"
+    },
+    "variants/fabcam-lockup-dark.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        9,
+        13,
+        239,
+        67
+      ],
+      "colors": [
+        "#171E28"
+      ],
+      "sha256": "e5548f9a48b65fd34930b7944a127ee28ab072370fc977e5977e814f2c981119"
+    },
+    "variants/fabcam-symbol-dark.svg": {
+      "parse": true,
+      "render": true,
+      "transparent_corner": true,
+      "bounds": [
+        5,
+        5,
+        59,
+        59
+      ],
+      "colors": [
+        "#171E28"
+      ],
+      "sha256": "b66e6110b6829e4bddc99e11bc2a9818a2e6bb93b7f97cdace17081a5c656094"
+    }
+  },
+  "png": {
+    "fabcam-app-icon-24.png": [
+      24,
+      24
+    ],
+    "fabcam-symbol-256.png": [
+      256,
+      256
+    ],
+    "fabcam-symbol-micro-24.png": [
+      24,
+      24
+    ],
+    "fabcam-app-icon-32.png": [
+      32,
+      32
+    ],
+    "fabcam-symbol-micro-20.png": [
+      20,
+      20
+    ],
+    "fabcam-app-icon-1024.png": [
+      1024,
+      1024
+    ],
+    "fabcam-app-icon-20.png": [
+      20,
+      20
+    ],
+    "fabcam-symbol-32.png": [
+      32,
+      32
+    ],
+    "fabcam-app-icon-128.png": [
+      128,
+      128
+    ],
+    "fabcam-app-icon-512.png": [
+      512,
+      512
+    ],
+    "fabcam-symbol-24.png": [
+      24,
+      24
+    ],
+    "fabcam-symbol-20.png": [
+      20,
+      20
+    ],
+    "fabcam-app-icon-256.png": [
+      256,
+      256
+    ],
+    "fabcam-app-icon-64.png": [
+      64,
+      64
+    ],
+    "fabcam-app-icon-48.png": [
+      48,
+      48
+    ],
+    "fabcam-lockup.png": [
+      322,
+      80
+    ],
+    "fabcam-symbol-16.png": [
+      16,
+      16
+    ],
+    "fabcam-symbol-64.png": [
+      64,
+      64
+    ],
+    "fabcam-symbol-128.png": [
+      128,
+      128
+    ],
+    "fabcam-app-icon-16.png": [
+      16,
+      16
+    ],
+    "fabcam-symbol-micro-16.png": [
+      16,
+      16
+    ],
+    "fabcam-symbol-48.png": [
+      48,
+      48
+    ]
+  },
+  "ico": {
+    "sizes": [
+      [
+        16,
+        16
+      ],
+      [
+        24,
+        24
+      ],
+      [
+        32,
+        32
+      ],
+      [
+        48,
+        48
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        128,
+        128
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "decoded_pixels_match_source_pngs": true
+  },
+  "icns": {
+    "header": true,
+    "encoded_png_pixels_match_source_pngs": true,
+    "iconutil_roundtrip": {
+      "icon_32x32@2x.png": [
+        64,
+        64
+      ],
+      "icon_128x128.png": [
+        128,
+        128
+      ],
+      "icon_256x256@2x.png": [
+        512,
+        512
+      ],
+      "icon_32x32.png": [
+        32,
+        32
+      ],
+      "icon_512x512.png": [
+        512,
+        512
+      ],
+      "icon_16x16.png": [
+        16,
+        16
+      ],
+      "icon_16x16@2x.png": [
+        32,
+        32
+      ],
+      "icon_128x128@2x.png": [
+        256,
+        256
+      ],
+      "icon_512x512@2x.png": [
+        1024,
+        1024
+      ],
+      "icon_256x256.png": [
+        256,
+        256
+      ]
+    },
+    "native_extraction_differences": {
+      "icon_32x32@2x.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_128x128.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_256x256@2x.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_32x32.png": {
+        "identical_rgba": false,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            42
+          ],
+          [
+            0,
+            50
+          ],
+          [
+            0,
+            47
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_512x512.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_16x16.png": {
+        "identical_rgba": false,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            22
+          ],
+          [
+            0,
+            28
+          ],
+          [
+            0,
+            34
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_16x16@2x.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_128x128@2x.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_512x512@2x.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      },
+      "icon_256x256.png": {
+        "identical_rgba": true,
+        "visible_channel_extrema_on_white": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "alpha_identical": true
+      }
+    }
+  },
+  "font": {
+    "family": "Inter",
+    "release": "4.1",
+    "weights": [
+      500,
+      700
+    ],
+    "bundled": false
+  },
+  "canonical_geometry": {
+    "symbol_app_lockup_consistent": true,
+    "outlined_symbol_unchanged": true,
+    "micro_change": "inner path start y 28.6 \u2192 26.6; end y 39 \u2192 41; all other geometry identical"
+  },
+  "wordmark_conversion": {
+    "raster_dimensions": [
+      1288,
+      320
+    ],
+    "difference_bounds": [
+      422,
+      112,
+      931,
+      210
+    ],
+    "identical_pixels": false,
+    "changed_pixels": 300,
+    "total_pixels": 412160,
+    "max_channel_difference": 85,
+    "mean_absolute_channel_difference": 0.0007278726708074534,
+    "live_alpha_bounds": [
+      38,
+      54,
+      954,
+      266
+    ],
+    "outline_alpha_bounds": [
+      38,
+      54,
+      954,
+      266
+    ],
+    "outlined_render_identical_without_custom_fontconfig": true
+  }
+}

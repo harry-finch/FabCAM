@@ -13,7 +13,7 @@
   "app": {
     "windows": [
       {
-        "title": "ivaCAM",
+        "title": "FabCAM",
         "width": 1280,
         "height": 800,
         "minWidth": 800,
@@ -37,8 +37,12 @@
       "icons/icon.ico"
     ],
     "category": "DeveloperTool",
-    "shortDescription": "DXF/SVG to G-code CAM tool",
-    "longDescription": "ivaCAM converts DXF and SVG drawings into G-code for CNC mills, lasers, and drag-knife plotters. Rust core, Svelte UI, GPL-3.0-or-later.",
+    "shortDescription": "FabCAM — open-source CAM for digital fabrication",
+    "longDescription": "FabCAM is an open-source, workshop-oriented CAM application derived from ivaCAM. Rust core, Svelte UI, GPL-3.0-or-later.",
+    "macOS": {
+      "bundleName": "FabCAM",
+      "infoPlist": "Info.branding.plist"
+    },
     "fileAssociations": [
       {
         "ext": [
@@ -80,8 +84,8 @@
           "ivac-project.json",
           "vc-project.json"
         ],
-        "name": "ivaCAM project",
-        "description": "ivaCAM saved project (geometry + setup + tabs)",
+        "name": "FabCAM project",
+        "description": "FabCAM saved project (geometry + setup + tabs)",
         "role": "Editor"
       }
     ]

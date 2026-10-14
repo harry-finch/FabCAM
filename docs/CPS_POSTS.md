@@ -1,6 +1,6 @@
-# Writing and testing a `.cps` post for ivaCAM
+# Writing and testing a `.cps` post for FabCAM
 
-ivaCAM runs Autodesk-`.cps`-compatible post-processors: ES5 JavaScript
+FabCAM runs Autodesk-`.cps`-compatible post-processors: ES5 JavaScript
 files that declare config globals, user properties, and entry-point
 callbacks (`onOpen`, `onSection`, `onLinear`, `onCircular`,
 `onCyclePoint`, `onClose`, …). If you have written or tuned a Fusion 360
@@ -113,12 +113,12 @@ prelude, not a test to relax.
 
 ## Licensing
 
-Posts bundled with ivaCAM are ivaCAM-authored and GPL-3.0-or-later. The
+Posts bundled with FabCAM include upstream ivaCAM-authored posts and the fork's ShopBot post; their GPL-3.0-or-later notices and source authorship are retained. The
 runtime reimplements a published API surface from Autodesk's public
 `globals.d.ts` declarations; no Autodesk kernel code is included, and the
 Autodesk-copyrighted material under `refs/` is a test oracle only —
 tests using it skip when it is absent and it is never embedded in a
 build artifact. A vendor post you supply stays yours; it is embedded in
-your project file, not redistributed by ivaCAM.
+your project file, not redistributed by FabCAM.
 
 [boa]: https://github.com/boa-dev/boa

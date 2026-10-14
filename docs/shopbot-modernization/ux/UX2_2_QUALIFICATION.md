@@ -1,5 +1,10 @@
 # UX2.2 — Atelier shell qualification, 2026-10-13
 
+2026-10-14 continuation: [A1 branding integration](A1_BRANDING_INTEGRATION.md)
+is implemented locally with a new macOS test bundle, runtime/Finder captures and
+unchanged shell behavior/identity. This qualifies the branding slice only;
+ivac-ein1's broader native lifecycle/human review remains open.
+
 Status: implemented locally (ivac-j6ba) following explicit Atelier approval
 (ivac-dwdd closed). Human/native desktop review: **ivac-ein1**. No commit, push,
 new desktop bundle, CAM algorithm, FS calculation or post-processor change in this

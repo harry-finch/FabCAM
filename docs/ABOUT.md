@@ -1,4 +1,4 @@
-ivaCAM by Soenke J. Peters is an open-source CAM for hobbyist CNC, laser cutters, drag-knife plotters, and plasma CNC machines.
+Open-source CAM software for digital fabrication.
 
 <!--
   This file is the source for the About dialog's prose. It is read at
@@ -8,15 +8,19 @@ ivaCAM by Soenke J. Peters is an open-source CAM for hobbyist CNC, laser cutters
   bold, italic, inline code, links, bullet lists, paragraphs) — see
   `frontend/src/lib/components/markdown-lite.ts`. Tokens:
     %%VERSION%%      git describe --always --dirty (e.g. v0.1.0-3-gabc1234)
-    %%PKG_VERSION%%  package.json version (semver)
+    %%PKG_VERSION%%  configured frontend version, or Tauri version for this unversioned frontend
     %%DATE%%         ISO-8601 UTC build timestamp
 -->
 
-### License
+### Project origins
 
-ivaCAM is distributed under the [GNU General Public License v3.0 or later](https://www.gnu.org/licenses/gpl-3.0.html). The source for this build (`%%VERSION%%`) is at [github.com/aalarchiv/ivacam](https://github.com/aalarchiv/ivacam).
+FabCAM is derived from the open-source [ivaCAM project](https://github.com/aalarchiv/ivacam) by Soenke J. Peters. The fork develops workshop-oriented milling workflows, machine-aware preparation and transparent cutting recommendations. Original authorship and upstream contributions remain credited.
 
-The bundled license text ships in the repository as `LICENSE`; you also have a copy in the install directory of your desktop build.
+### Open source
+
+FabCAM retains [GNU General Public License v3.0 or later](https://www.gnu.org/licenses/gpl-3.0.html). Source and development records are at [harry-finch/FabCAM](https://github.com/harry-finch/FabCAM). See the repository's [LICENSE](https://github.com/harry-finch/FabCAM/blob/main/LICENSE) and [technical status](https://github.com/harry-finch/FabCAM/blob/main/docs/shopbot-modernization/STATUS.md) for qualification limits.
+
+Third-party dependencies and reference-data packs retain their own notices and licenses. Local/private manufacturer packs are not part of the public distribution. The original GPL text remains in the repository as `LICENSE`.
 
 ### Acknowledgements
 

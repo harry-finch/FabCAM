@@ -1,4 +1,7 @@
-# Deploying the web build
+# Deploying the FabCAM web build
+
+This guide covers standalone WASM. The current package has no CPS runtime;
+ShopBot review needs native desktop or a local CPS-enabled server.
 
 The production web build is a **fully static, serverless bundle** — it runs
 the CAM engine in the browser via WebAssembly, so there is no API server,

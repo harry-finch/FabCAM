@@ -1,9 +1,9 @@
-# Contributing to ivaCAM
+# Contributing to FabCAM
 
 ## License
 
 By contributing you agree your work is licensed under GPL-3.0-or-later. This
-matches the upstream viaConstructor license. Do not include code under
+retains the upstream ivaCAM source license. Do not include code under
 incompatible licenses without prior discussion.
 
 If you port code from the original Python viaConstructor or another

@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-14",
+  "protected_files_identical": 361,
+  "allowed_baseline_difference": "Cargo.toml repository URL only",
+  "protected_config_fields_unchanged": [
+    "productName",
+    "identifier",
+    "version",
+    "build",
+    "plugins",
+    "security",
+    "file association extensions/roles/MIME"
+  ],
+  "bundle_metadata": {
+    "CFBundleName": "FabCAM",
+    "CFBundleDisplayName": "FabCAM",
+    "CFBundleIdentifier": "org.opcenter.ivacam",
+    "CFBundleExecutable": "ivac-desktop",
+    "CFBundleShortVersionString": "0.5.0"
+  },
+  "license_sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+  "license_identical_to_upstream": true,
+  "A1_SVG_hashes_unchanged": true,
+  "frontend": {
+    "pass": 1145,
+    "skip": 1,
+    "check_errors": 0,
+    "check_warnings": 0,
+    "lint": "pass"
+  },
+  "rust_project_tests": 29,
+  "platform_limit": "Windows/Linux packages/runtime and installed upgrade not tested"
+}

@@ -1,57 +1,103 @@
-# ivaCAM
+# FabCAM
 
-**English** | [Deutsch](./README_de.md)
+**English** | [Deutsch](README_de.md)
 
-**Turn DXF and SVG drawings into G-code for CNC mills, lasers, plasma cutters and drag knives.**
+**Open-source CAM software for practical digital fabrication.**
 
-Free, open-source CAM for the hobby shop. One self-contained app for desktop and Android — no Python, no install hell — plus an optional self-hosted web service and a fully in-browser (WebAssembly) mode where your drawings never leave your machine.
+![FabCAM A1 Optical Balance](assets/branding/fabcam/source/fabcam-a1-app-icon.svg)
 
-![preview](./assets/ivaCAM_GH_social.png)
+## Overview
 
-## Use it
+FabCAM prepares drawings for CNC machining through a compact desktop workflow: geometry, stock, tools, operations, cutting parameters, preview and machine output. The current focus is milling in workshops and fablabs, including bounded ShopBot OpenSBP support. It is an actively developed fork of [ivaCAM](https://github.com/aalarchiv/ivacam), not a claim of universal production readiness.
 
-**Just want to cut something?** → [Quickstart](./docs/QUICKSTART.md)
+## Main features
 
-- **Desktop** (Linux / macOS / Windows): build the AppImage / `.msi` / `.app` — see [Build from source](#build-from-source).
-- **Android**: build a native APK (Tauri mobile) and install it on the device — see [Build from source](#build-from-source).
-- **Browser**: serve the static build and open the URL. Nothing to install; everything runs client-side.
+- SVG/DXF import, layers, drawing transforms and project save/reopen.
+- Profile, pocket and drilling; tabs, leads and entry controls with machine/post-specific checks. Inherited operations also include engraving/text, V-carve, chamfer, thread, dovetail and T-slot; their presence does not qualify every machine or combination.
+- Stock and work-origin configuration, machine profiles, tool libraries, fixture authoring and generated-path collision warnings.
+- Milling Feeds & Speeds recommendations with provenance, bounded reference matching, explicit Apply, authoritative manual values and private local presets.
+- 2D/3D preview and material-removal simulation. Bounded per-pocket/depth remaining-material analysis is implemented; Rest Machining is not.
+- Built-in G-code/HPGL dialects and native CPS posts, including a restricted ShopBot OpenSBP subset. Unsupported output combinations reject.
+- Atelier shell with Welcome, New/Open/Import/Save/Close, recent projects and machine/operation-tool context.
 
-## What it does
+The Rust CAM core, independent cutting-recommendation engine and Svelte UI remain separate. See [architecture](docs/ARCHITECTURE.md) and [fork architecture](docs/shopbot-modernization/ARCHITECTURE.md).
 
-- **Import**: DXF, SVG.
-- **Operations**: profile, pocket, drill (canned cycles), V-carve, engrave/text, chamfer, thread, dovetail, T-slot — with tabs, lead-in/out, and tool offsets.
-- **Machines**: mill, laser, plasma (pierce + dwell), drag knife — each with its own post-processor.
-- **Post-processors**: built-in LinuxCNC / GRBL / HPGL dialects, plus an
-  Autodesk-`.cps`-compatible runtime — run Fusion-style post scripts
-  (bundled or your own file) with their properties exposed in the UI.
-  Available on the CLI, server and desktop app.
-- **Preview**: 2D drawing canvas plus a live 3D toolpath and material-removal simulation.
-- **Shop setup**: per-tool library, reusable machine profiles, project save/load.
+## Screenshots
 
-## Build from source
+Actual UX2.2 interface with the approved A1 branding:
+
+![FabCAM machining workspace](docs/shopbot-modernization/ux/A1-branding-project.jpg)
+
+[Welcome/icon review](docs/shopbot-modernization/ux/A1_BRANDING_INTEGRATION.md) and [product identity/About review](docs/shopbot-modernization/ux/PRODUCT_IDENTITY.md).
+
+## Supported platforms
+
+| Target | Current verification |
+| --- | --- |
+| macOS | Local optimized Tauri app built and launched; branding/display identity inspected. Signing and installer upgrades require separate qualification. |
+| Windows | Build target and icon resources exist; this checkpoint has no Windows package/runtime trial. |
+| Linux | Build target and icon resources exist; this checkpoint has no Linux package/runtime trial. |
+| Browser | Development and production UI checked. Current standalone WASM has no CPS support; ShopBot needs a native server or desktop app. |
+
+Inherited Android tooling remains outside current desktop qualification. No release or binary publication is created by this identity update.
+
+## Getting started
+
+Prerequisites: [pinned Rust](rust-toolchain.toml), Node 20.19+ or 22.12+, pnpm 10+, wasm-pack and Tauri CLI 2 for desktop packaging. System libraries, sccache and matching WASM tools are in [BUILDING.md](docs/BUILDING.md); [Windows instructions](docs/BUILDING_WINDOWS.md).
 
 ```sh
-cargo build --workspace                        # core + CLI + server
-cd frontend && pnpm install && pnpm dev        # web UI on :5173
-cargo tauri build --bundles appimage           # desktop bundle
-cargo tauri android build --apk                # Android APK
+git clone https://github.com/harry-finch/FabCAM.git
+cd FabCAM
+cargo build --locked
+wasm-pack build crates/ivac-wasm --target web --release
+pnpm --dir frontend install --frozen-lockfile
+pnpm --dir frontend dev
 ```
 
-Per-platform prerequisites and the full workflow: [docs/BUILDING.md](./docs/BUILDING.md) (Windows: [docs/BUILDING_WINDOWS.md](./docs/BUILDING_WINDOWS.md), Android: [docs/BUILDING.md § Android](./docs/BUILDING.md)).
+For a desktop bundle, after satisfying platform prerequisites:
 
-## Docs
+```sh
+cd crates/ivac-tauri
+cargo tauri build
+```
 
-- [Quickstart](./docs/QUICKSTART.md) — drawing → G-code in 5 minutes
-- [Building](./docs/BUILDING.md) — build & package every transport
-- [Writing a .cps post](./docs/CPS_POSTS.md) — use or author an Autodesk-compatible post
-- [Architecture](./docs/ARCHITECTURE.md) · [Contributing](./docs/CONTRIBUTING.md) — for hacking on it
+For CPS-backed browser development, run `cargo run --locked -p ivac-server` from the root alongside Vite; see the build guide for transport selection. Executable/installer filenames may retain `ivac`/`ivaCAM` for compatibility; the [identity decision](docs/shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md) explains why.
+
+## Basic workflow
+
+1. Create/open a project and import SVG/DXF geometry.
+2. Configure stock, work origin, machine and fixtures.
+3. Select tools and configure operations.
+4. Review cutting parameters; deliberately apply a recommendation or use manual values.
+5. Generate paths and inspect preview and warnings.
+6. Export a supported program, then perform machine-specific setup and controller/physical checks.
+
+[Quickstart](docs/QUICKSTART.md). FabCAM does not establish physical machine zero or control the machine directly.
+
+## Current status and limitations
+
+- Software qualification is separate from physical evidence. M4 records a bounded operator-reported ShopBot square trial/comparison, not blanket milling validation.
+- ShopBot CPS is restricted: helical entry, unqualified two-sided/translated registration and nonzero work-origin Z remain limited/rejected. Rough/finish spindle-RPM transitions have a known export limitation.
+- Fixture diagnostics and remaining-material overlays have bounded geometric scopes; they do not prove all physical clearances.
+- Manufacturer ReferenceData and derived recommendations are not physical lab validation. **FS4 physical Feeds & Speeds validation remains deferred.**
+- Human CAM/FS/UX handoff reviews remain open. A legacy CPS two-sided success-expectation test needs alignment with the explicit rejection.
+
+[STATUS](docs/shopbot-modernization/STATUS.md) and [CAM qualification](docs/shopbot-modernization/CAM_VALIDATION.md) are authoritative for supported combinations and evidence limits.
+
+## Roadmap
+
+Priority milling workflow/coverage improvements continue within human approval gates. Dogbone/T-bone relief, planar surfacing, templates and advanced strategies are later work. FabSBP is planning only; ProtoMAX/waterjet and vinyl are deferred. See the canonical [ROADMAP](docs/shopbot-modernization/ROADMAP.md); planned work is not implemented functionality.
+
+## Project origins
+
+FabCAM is derived from **ivaCAM by Soenke J. Peters**: [aalarchiv/ivacam](https://github.com/aalarchiv/ivacam). The fork develops ShopBot preparation, cutting recommendations, stock/origin/fixture workflows and a dedicated workshop UI. Original authorship and contributions remain credited; FabCAM is a separate derivative project.
+
+ivaCAM's CAM core is in part a Rust port of [viaConstructor](https://github.com/multigcs/viaconstructor)'s geometry/toolpath routines (`calc.py`, `machine_cmd.py`, `setupdefaults.py`). [Estlcam](https://www.estlcam.de/) inspired feature terminology and contributes no code. Existing source copyright notices and dependency acknowledgements are retained, including dxf-rs, cavalier_contours, clipper2-rust, usvg, Svelte, Three.js and Tauri.
 
 ## License
 
-GPL-3.0-or-later — see [`LICENSE`](./LICENSE). ivaCAM inherits this licence from its partial derivation of viaConstructor (GPLv3); see Acknowledgements.
+**GPL-3.0-or-later**; see the unchanged [LICENSE](LICENSE). Dependencies, imported reference data and separately licensed resources keep their own notices. [Source-pack licensing records](docs/shopbot-modernization/feeds-speeds/DATA_SOURCES.md). Local/private manufacturer packs are not automatically redistributable and are not added to public distribution by this update.
 
-## Acknowledgements
+## Contributing
 
-Stands on excellent open-source libraries — [`dxf-rs`](https://github.com/IxMilia/dxf-rs), [`cavalier_contours`](https://github.com/jbuckmccready/cavalier_contours), `clipper2-rust`, [`usvg`](https://github.com/linebender/resvg), [Svelte](https://svelte.dev/), [Three.js](https://threejs.org/) and [Tauri](https://tauri.app/).
-
-ivaCAM's CAM core is in part a Rust port of [viaConstructor](https://github.com/multigcs/viaconstructor)'s geometry and toolpath routines (`calc.py`, `machine_cmd.py`, `setupdefaults.py`), and is distributed under the GPL accordingly. [Estlcam](https://www.estlcam.de/) inspired parts of the feature set and terminology, but is closed-source and contributes no code.
+Read [CONTRIBUTING](docs/CONTRIBUTING.md), architecture and current STATUS/ROADMAP before proposing changes. Repository-local tracking uses Beads. Preserve compatibility/attribution and include evidence appropriate to CAM changes. Source: [harry-finch/FabCAM](https://github.com/harry-finch/FabCAM).

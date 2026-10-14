@@ -1,4 +1,8 @@
-# ivaCAM Architecture
+# FabCAM Architecture
+
+FabCAM derives from [ivaCAM](https://github.com/aalarchiv/ivacam). The inherited
+`ivac-*` crates and transport/storage contracts remain intact. Fork-specific
+CAM/FS/setup architecture is documented in [the modernization architecture](shopbot-modernization/ARCHITECTURE.md).
 
 This is the map. CONTRIBUTING.md tells you how to set up the toolchain
 and walks two extension recipes (new op kind, new post-processor); this
@@ -7,7 +11,7 @@ and what to leave alone.
 
 ## Big picture
 
-ivaCAM turns a 2-D drawing (DXF or SVG) into G-code for a
+FabCAM turns a 2-D drawing (DXF or SVG) into G-code for a
 CNC mill, router, plasma, or laser. The same CAM engine runs in three
 deployments: a desktop app (Tauri), a self-hosted server (axum HTTP),
 and a browser tab (WASM). All three share one Rust core and one Svelte

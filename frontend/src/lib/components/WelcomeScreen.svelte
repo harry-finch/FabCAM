@@ -21,7 +21,9 @@
 
 <main class="welcome" aria-label={t('shell.welcome')} aria-busy={project.loading}>
   <div class="entry">
-    <h1>{t('shell.brand')}</h1>
+    <h1>
+      <img src="/branding/fabcam-lockup.svg" alt={t('shell.brand')} width="322" height="80" />
+    </h1>
     <p class="intro">{t('shell.welcome_hint')}</p>
     <div class="actions">
       <button class="btn-primary" onclick={onNew} disabled={project.loading}
@@ -94,6 +96,11 @@
     font-weight: 600;
     margin: 0 0 0.4rem;
     color: var(--text-strong);
+  }
+  h1 img {
+    display: block;
+    width: min(100%, 258px);
+    height: auto;
   }
   h2 {
     font-size: 0.85rem;

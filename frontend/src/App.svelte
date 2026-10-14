@@ -95,7 +95,7 @@
   /// Quit the app (phone has no window chrome to close it). Prompts to
   /// save when there are unsaved changes, then exits the process.
   async function exitApp() {
-    if (!(await confirmDiscardIfDirty('exit ivaCAM'))) return;
+    if (!(await confirmDiscardIfDirty('exit FabCAM'))) return;
     try {
       const { exit } = await import('@tauri-apps/plugin-process');
       await exit(0);
@@ -105,7 +105,7 @@
   }
 
   /// Window title carries the build version so a screenshot pins the
-  /// report to the exact binary. Format: "ivaCAM v<pkg>
+  /// report to the exact binary. Format: "FabCAM v<pkg>
   /// (<git-describe>)" — package version comes from
   /// frontend/package.json via the `__IVAC_PKG_VERSION__` define
   /// baked by vite.config.ts, git-describe via
@@ -114,9 +114,9 @@
   const pkgVersion = typeof __IVAC_PKG_VERSION__ === 'string' ? __IVAC_PKG_VERSION__ : '0.0.0';
   $effect(() => {
     if (buildVersion && buildVersion !== 'unknown') {
-      document.title = `ivaCAM v${pkgVersion} (${buildVersion})`;
+      document.title = `FabCAM v${pkgVersion} (${buildVersion})`;
     } else {
-      document.title = `ivaCAM v${pkgVersion}`;
+      document.title = `FabCAM v${pkgVersion}`;
     }
   });
   // Open the Tool library dialog when OpPropertiesPanel's "edit this

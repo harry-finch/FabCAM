@@ -866,3 +866,99 @@ AGENTS.md and CLAUDE.md. Application branding and package identifiers unchanged.
 No new code behavior or physical/native qualification; prior publication test
 results apply to the identical merged source, including known CPS follow-up
 ivac-13go. Tracking: ivac-wesn.
+
+## 2026-10-14 — FabCAM A1 Optical Balance asset finalization
+
+User supplied authoritative symbol/app-icon/lockup SVGs and requested an
+asset-only finalization with professional-workshop-ui and project-documentation.
+Copied all three originals byte-identically into assets/branding/fabcam/source;
+canonical geometry/palette unchanged. Added four monochromes and a separately
+named micro candidate enlarging only the inner opening for 16–20 px review.
+Rendered eight symbol sizes; practical canonical minimum 24 px, app tile 32 px.
+
+The original font stack has no author-rendered font proof; local resolution was
+Verdana. Temporarily used official Inter 4.1 Medium/Bold, the first declared
+family, for accurate Inkscape text-to-path. Editable original retained, no font
+files bundled. Text/outline bounds match at 4×; 300/412160 edge pixels differ.
+Outlined rendering is identical with/without the temporary font configuration.
+
+Validated nine SVGs, palette/geometry/alpha/bounds, 22 PNG dimensions, seven
+ICO entries matching source pixels, and native-decodable ICNS. Lossless PNG
+entries replace legacy 16/32 px ICNS data; Pillow decodes every entry exactly.
+Native iconutil extraction still alters 16/32 px antialiased RGB edges while
+preserving alpha; the other eight slots match. Reported this limitation rather
+than claiming installed-platform visual qualification. README, comparison sheets
+and validation.json are the handoff. No unrelated application source, Tauri
+configuration, existing branding assets, release, commit or push changed.
+Engineering ivac-79bq complete; human typography/micro/integration gate ivac-8k3o.
+
+## 2026-10-14 — A1 branding integration into the UX2.2 shell
+
+User explicitly authorized integration of the production A1 masters. Closed
+ivac-8k3o for canonical artwork/outlined Inter lockup; retained micro as a separate
+unapproved candidate. Header adds a 24 px symbol beside the existing FabCAM name;
+measured navigation height unchanged at 30.2890625 px. Welcome h1 uses the outlined
+lockup at 258 px width; existing actions/recents/lifecycle unchanged. About changes
+only the 80 px logo reference and EN/DE alt text, preserving identity/legal/version
+information and links. SVG plus 16/32/64/128/256 PNG favicons; Apple touch 180 px.
+
+Extended the existing master-export script with a font-free --integrate command:
+canonical runtime copies at frontend/public/branding and existing Tauri icon paths,
+reviewed ICO/ICNS, direct SVG rasterization of Store sizes, exact dimensions/alpha
+checks and integration manifest. No Tauri config/identity/security or runtime
+graphics dependency change. Removed only the confirmed-unused public ivacam-logo
+PNG; preserved historical artwork/fixtures and Android's independent pipeline.
+
+Frontend 1145 pass/1skip, check 0 errors/warnings, lint and production build pass.
+Local optimized macOS app bundle built; actual Welcome/About and Finder icon-view
+captured. Info.plist identity stable and bundled icon bytes match reviewed ICNS.
+Nine branding/favicon resources served with source-identical bytes and HTTP 200
+in dev/production. Windows/Linux native build/runtime and Dock/small OS scale
+behavior remain untested; native ICNS extraction caveat remains documented.
+
+Engineering ivac-7cdj complete; existing UX2.2 human/native gate ivac-ein1 stays open
+for broader checks. [Handoff](ux/A1_BRANDING_INTEGRATION.md), seven genuine captures,
+app icon size sheet, brand README and BUILDING/UI docs updated. No new CAM milestone,
+CAM/FS/post/schema/project changes, commit, merge, push, release or publication.
+
+## 2026-10-14 — FabCAM public product identity and attribution
+
+User authorized public product rename, About/origins and current documentation.
+Audited references by public identity, upstream attribution, internal namespaces,
+persisted/install contracts and historical records. UI/browser/window titles,
+EN/DE text, report/picker labels and startup diagnostic now use FabCAM. Cargo's
+public repository metadata points to the existing fork; names/authors/version
+are retained. Root READMEs and active guides describe verified current features
+and limits, not hypothetical roadmap capability.
+
+About now shows A1 symbol, FabCAM and authoritative 0.5.0, upstream ivaCAM by
+Soenke J. Peters, GPL/fork source/status and preserved acknowledgements/dependency
+table in accessible disclosures. Official upstream Cargo/LICENSE/ABOUT verified;
+LICENSE unchanged. Private data/provenance are untouched. No logo changes.
+
+Tauri window/macOS display metadata use FabCAM. productName=ivaCAM remains because
+default MSI upgrade identity and installation names depend on it; bundle filename,
+ivac-desktop, org.opcenter.ivacam, permissions/security/signing/keys/extensions
+are preserved. ADR-0012 records policy; ivac-snqn is a proposed future installed-
+upgrade qualification, not an implemented migration.
+
+Frontend1145 pass/1skip/check 0 errors/warnings/lint; Rust29 project tests pass.
+Optimized local macOS bundle built with correct display metadata; actual runtime
+reopened existing M4 project via recents and read settings. Browser identity/meta,
+keyboard links/disclosures and seven genuine captures recorded in
+ux/PRODUCT_IDENTITY.md. Protected baseline:361 source/data/license files identical;
+only Cargo repository metadata differs by one verified line. No CAM/FS/post/schema
+or serialization change. Windows/Linux native packages/upgrade untested; physical
+gates/FS4 remain unchanged. Engineering ivac-9td7; human review ivac-7pul pending. No commit,
+push, merge, GitHub rename, release or publication.
+
+## 2026-10-14 — Branding and product identity publication approval
+
+User accepted the A1 branding, FabCAM public identity, About attribution and
+documentation, then explicitly requested commit/push to `main`. Human identity
+review ivac-7pul is closed as accepted. Frontend 1145 pass/1skip, check/lint,
+production build, Rust 29 project tests and the local macOS bundle checks passed
+at the engineering checkpoint; publication introduces no further code changes.
+The separate micro candidate stays excluded. Broader UX2.2/CAM/FS qualification,
+Windows/Linux native qualification and proposed installer migration ivac-snqn
+retain their recorded status. No release or binary publication is included.

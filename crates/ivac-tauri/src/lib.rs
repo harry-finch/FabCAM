@@ -111,7 +111,7 @@ fn kill_webkit_children() {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     if let Err(err) = run_app() {
-        eprintln!("ivacam: fatal: {err:?}");
+        eprintln!("FabCAM: fatal: {err:?}");
         std::process::exit(1);
     }
 }

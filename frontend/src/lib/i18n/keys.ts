@@ -4,7 +4,9 @@
 
 /** Every translatable message key, derived from the English base catalog. */
 export type MsgKey =
+  | "about.acknowledgements"
   | "about.build"
+  | "about.build_details"
   | "about.build_hint"
   | "about.col.library"
   | "about.col.license"
@@ -1965,7 +1967,9 @@ export type MsgKey =
 
 /** All keys as an array (handy for coverage tests / iteration). */
 export const MSG_KEYS: readonly MsgKey[] = [
+  "about.acknowledgements",
   "about.build",
+  "about.build_details",
   "about.build_hint",
   "about.col.library",
   "about.col.license",

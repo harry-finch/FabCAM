@@ -1,5 +1,48 @@
 # Status — 2026-10-14
 
+## FabCAM branding and identity — publication approved
+
+User approved the A1 branding, public identity and documentation on 2026-10-14
+and explicitly requested commit/push to `main`. Product/About/documentation review
+**ivac-7pul** is accepted. The micro logo candidate, installer migration and
+independent CAM/FS/UX qualification gates remain outside this approval.
+
+## FabCAM product identity — accepted
+
+Public UI/browser/window/About/report identity is FabCAM (ivac-9td7), with
+verified ivaCAM origins/author and unchanged GPL license. English/German README
+and active guides updated; [audit, compatibility policy and captures](ux/PRODUCT_IDENTITY.md).
+Version remains 0.5.0. Mac display names use FabCAM; packaging productName,
+`org.opcenter.ivacam`, executable/storage/schema identifiers remain legacy.
+[ADR-0012](adr/ADR-0012-fabcam-product-identity.md); proposed installer qualification
+ivac-snqn. Frontend1145 pass/1skip, check/lint, Rust29 project tests pass; local
+macOS bundle/runtime verified, old M4 project/settings/recents accessible.
+Human product/About/documentation gate: **ivac-7pul**, accepted.
+Windows/Linux native packaging/upgrade untested. No migration/relicense/functional
+milestone or release; existing milling/FS qualification gates are unchanged.
+
+## UX2.2 A1 branding integration — human review next
+
+User-authorized production branding is integrated locally (ivac-7cdj): canonical
+header/About symbol, outlined Welcome lockup, SVG/PNG favicons and existing Tauri
+desktop icon resources. Micro candidate excluded. Frontend 1145 pass/1skip,
+check/lint/production build pass; macOS .app built, launched and checked in Finder.
+Name/identifier/config/security unchanged. Windows/Linux assets structurally
+verified, native packages/runtime untested. [Handoff and genuine captures](ux/A1_BRANDING_INTEGRATION.md).
+Broader UX2.2 qualification remains **ivac-ein1**; branding publication is approved.
+This is a UX2.2 branding continuation, not a new CAM milestone.
+
+## FabCAM A1 branding asset handoff — preparation checkpoint
+
+Approved A1 source SVGs preserved exactly in `assets/branding/fabcam/source`.
+Asset-only finalization (ivac-79bq) includes an Inter outlined lockup, four
+monochromes, a separate 16–20 px micro candidate, 22 PNGs, ICO/ICNS and review
+sheets. [Specification and limitations](../../assets/branding/fabcam/README.md).
+Canonical integration approval closes **ivac-8k3o**; micro remains excluded.
+Native macOS extraction alters 16/32 px edge RGB; encoded PNG entries
+are lossless and the report records both. The subsequent integration is recorded
+above. Milling qualification gates below remain unchanged.
+
 ## Repository transition — 2026-10-14
 
 User authorized integrating `feature/shopbot-mvp` into the default branch `main`

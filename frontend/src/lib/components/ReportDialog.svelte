@@ -24,7 +24,7 @@
     typeof __IVAC_BUILD_VERSION__ === 'string' ? __IVAC_BUILD_VERSION__ : 'unknown';
   const buildDate = typeof __IVAC_BUILD_DATE__ === 'string' ? __IVAC_BUILD_DATE__ : '';
   const generatedBy =
-    `ivaCAM v${pkgVersion}` +
+    `FabCAM v${pkgVersion}` +
     (buildVersion && buildVersion !== 'unknown' ? ` (${buildVersion})` : '') +
     (buildDate ? `, built ${buildDate}` : '');
 

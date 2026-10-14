@@ -1,0 +1,108 @@
+{
+  "policy": "canonical only; micro candidate excluded",
+  "raster_dimensions": {
+    "frontend/public/favicon-16.png": [
+      16,
+      16
+    ],
+    "frontend/public/favicon-32.png": [
+      32,
+      32
+    ],
+    "frontend/public/favicon-64.png": [
+      64,
+      64
+    ],
+    "frontend/public/favicon-128.png": [
+      128,
+      128
+    ],
+    "frontend/public/favicon-256.png": [
+      256,
+      256
+    ],
+    "frontend/public/apple-touch-icon.png": [
+      180,
+      180
+    ],
+    "crates/ivac-tauri/icons/Square30x30Logo.png": [
+      30,
+      30
+    ],
+    "crates/ivac-tauri/icons/Square44x44Logo.png": [
+      44,
+      44
+    ],
+    "crates/ivac-tauri/icons/Square71x71Logo.png": [
+      71,
+      71
+    ],
+    "crates/ivac-tauri/icons/Square89x89Logo.png": [
+      89,
+      89
+    ],
+    "crates/ivac-tauri/icons/Square107x107Logo.png": [
+      107,
+      107
+    ],
+    "crates/ivac-tauri/icons/Square142x142Logo.png": [
+      142,
+      142
+    ],
+    "crates/ivac-tauri/icons/Square150x150Logo.png": [
+      150,
+      150
+    ],
+    "crates/ivac-tauri/icons/Square284x284Logo.png": [
+      284,
+      284
+    ],
+    "crates/ivac-tauri/icons/Square310x310Logo.png": [
+      310,
+      310
+    ],
+    "crates/ivac-tauri/icons/32x32.png": [
+      32,
+      32
+    ],
+    "crates/ivac-tauri/icons/64x64.png": [
+      64,
+      64
+    ],
+    "crates/ivac-tauri/icons/128x128.png": [
+      128,
+      128
+    ],
+    "crates/ivac-tauri/icons/128x128@2x.png": [
+      256,
+      256
+    ],
+    "crates/ivac-tauri/icons/icon.png": [
+      512,
+      512
+    ],
+    "crates/ivac-tauri/icons/StoreLogo.png": [
+      50,
+      50
+    ]
+  },
+  "tauri_icon_paths": [
+    "icons/32x32.png",
+    "icons/128x128.png",
+    "icons/128x128@2x.png",
+    "icons/icon.icns",
+    "icons/icon.ico"
+  ],
+  "tauri_identity": {
+    "productName": "ivaCAM",
+    "identifier": "org.opcenter.ivacam",
+    "version": "0.5.0"
+  },
+  "svg_sources": {
+    "frontend/public/branding/fabcam-symbol.svg": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748",
+    "frontend/public/favicon.svg": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748",
+    "frontend/public/branding/fabcam-lockup.svg": "3de085c0994b3ecb54ce06d178618fb6dba4c8a8b96f85d482cb88fe6fa2ba5f",
+    "crates/ivac-tauri/icons/icon.svg": "17e65135b2ee5d4a086e42a59621c3d8bc6b7448419628dc526273d9f6b5b890"
+  },
+  "native_exports_byte_identical": true
+}
