@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ProjectState } from '../state/project.svelte';
 import { History } from '../state/history';
-import { defaultWorkOffset } from '../state/project-types';
+import { setImported } from '../state/import-ops';
+import { defaultWorkOffset, identityFileTransform } from '../state/project-types';
 
 const io = vi.hoisted(() => ({
   project: {} as ProjectState,
@@ -266,9 +267,103 @@ describe('Atelier project lifecycle through shared file services', () => {
     expect(io.project.hasUnsavedWork).toBe(false);
     expect(io.project.documentName).toBe('empty.ivac-project.json');
   });
+  it('restores every saved import transform after import initialization', () => {
+    const p = io.project;
+    const file = p.snapshot();
+    const source = {
+      segments: [],
+      objects: [],
+      layers: [],
+      object_meta: [],
+      bbox: { min_x: 0, min_y: 0, max_x: 1, max_y: 1 },
+    } as unknown as import('../api/types').ImportResponse;
+    file.imports = [
+      { id: 1, source, fileTransform: { ...identityFileTransform(), scale: 2 } },
+      { id: 2, source, fileTransform: { ...identityFileTransform(), translate: { x: 17, y: 0 } } },
+    ];
+    vi.mocked(setImported).mockImplementationOnce((state) => {
+      state.data.imports = [{ id: 1, source, fileTransform: identityFileTransform() }];
+    });
+    restoreProject(p, file);
+    expect(p.data.imports).toEqual(file.imports);
+    expect(p.data.imports).toHaveLength(2);
+  });
   it('refuses a transition while a file load is in progress', async () => {
     io.project.loading = true;
     expect(await resetDocument(false)).toBe(false);
     expect(io.project.documentEpoch).toBe(1);
   });
+});
+
+// UX3 uses the same guarded save/open lifecycle as contour jobs.
+it('saves and reopens a standalone surfacing zone in guarded format 6', () => {
+  const p = io.project;
+  p.data.operations = [
+    {
+      id: 1,
+      name: 'Surface',
+      kind: 'planar_surface',
+      enabled: true,
+      toolId: 1,
+      sourceLayers: null,
+      depth: -0.5,
+      startDepth: 0,
+      step: -0.5,
+      surface: {
+        origin: [20, 30],
+        width_mm: 40,
+        height_mm: 20,
+        margin_mm: 1,
+        overtravel_mm: 2,
+        stepover_mm: 2.4,
+        direction: 'along_y',
+      },
+    },
+  ];
+  const saved = p.snapshot();
+  expect(saved.kind).toBe('ivac-project-surfacing');
+  expect(saved.version).toBe(6);
+  const reopened = JSON.parse(JSON.stringify(saved));
+  clearProject(p);
+  restoreProject(p, reopened);
+  expect(p.data.operations[0]).toEqual(saved.operations![0]);
+  expect(p.data.imports).toEqual([]);
+});
+
+it('saves and restores both V-Carve modes, radius caps and physical bit properties', () => {
+  const p = io.project;
+  p.data.operations = [false, true].map((fullMedialAxis, i) => ({
+    id: i + 1,
+    name: 'Software V-Carve',
+    kind: 'vcarve' as const,
+    enabled: true,
+    toolId: 1,
+    sourceLayers: null,
+    depth: -1,
+    startDepth: 0,
+    step: -0.2,
+    fullMedialAxis,
+    carveMaxWidthMm: 2,
+    multiPassRefine: false,
+  }));
+  p.data.tools = [
+    {
+      id: 1,
+      name: 'Software V-bit',
+      kind: 'v_bit',
+      diameter: 6,
+      tipDiameter: 0.5,
+      tipAngleDeg: 60,
+      flutes: 1,
+      speed: 10000,
+      plungeRate: 200,
+      feedRate: 600,
+      coolant: 'off',
+    },
+  ];
+  const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
+  clearProject(p);
+  restoreProject(p, saved);
+  expect(p.data.operations).toEqual(saved.operations);
+  expect(p.data.tools).toEqual(saved.tools);
 });

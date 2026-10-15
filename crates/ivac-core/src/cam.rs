@@ -24,6 +24,7 @@ pub mod geometry_cache;
 pub mod halfpipe;
 pub mod inscribed;
 pub mod offsets;
+pub mod planar_surface;
 pub mod raster;
 pub mod setup;
 pub mod source_combine;
@@ -36,6 +37,8 @@ pub mod trochoidal;
 pub mod two_sided;
 pub mod vcarve;
 pub mod vcarve_emit;
+pub mod vcarve_plan;
+pub mod vcarve_validate;
 pub mod waterline;
 
 /// `VcObject` analogue: a chain of segments grouped after `segments2objects`.

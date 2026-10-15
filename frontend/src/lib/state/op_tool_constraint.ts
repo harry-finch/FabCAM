@@ -64,6 +64,8 @@ export function expectedToolKinds(op: OpKind): readonly ToolKind[] {
     case 'pause':
       // No tool reference — accept anything (Op.tool_id may be 0).
       return [];
+    case 'planar_surface':
+      return ['endmill', 'compression'];
     case 'relief_mill':
       // The drop-cutter follows the cutter's round tip — a ball-nose
       // (full hemisphere) or a bull-nose (flat centre + corner fillet).

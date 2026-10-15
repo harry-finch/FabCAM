@@ -1,0 +1,211 @@
+{
+  "kind": "ivac-project-cutting",
+  "version": 3,
+  "imports": [
+    {
+      "id": 1,
+      "source": {
+        "filename": "CAM4-square40-software.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10.0,
+              "y": 10.0
+            },
+            "end": {
+              "x": 50.0,
+              "y": 10.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50.0,
+              "y": 10.0
+            },
+            "end": {
+              "x": 50.0,
+              "y": 50.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50.0,
+              "y": 50.0
+            },
+            "end": {
+              "x": 10.0,
+              "y": 50.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10.0,
+              "y": 50.0
+            },
+            "end": {
+              "x": 10.0,
+              "y": 10.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 4
+          }
+        ],
+        "bbox": {
+          "min_x": 10.0,
+          "min_y": 10.0,
+          "max_x": 50.0,
+          "max_y": 50.0
+        },
+        "unit_scale": 1,
+        "warnings": [],
+        "objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 10.0,
+              "min_y": 10.0,
+              "max_x": 50.0,
+              "max_y": 50.0
+            }
+          }
+        ]
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    }
+  ],
+  "visibleLayers": [],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 0,
+    "thickness": 10,
+    "customX": 50,
+    "customY": 50,
+    "offsetX": 0,
+    "offsetY": 0,
+    "offsetZ": 0
+  },
+  "tools": [
+    {
+      "id": 1,
+      "name": "SOFTWARE ONLY \u2014 90\u00b0 V-bit D6",
+      "kind": "v_bit",
+      "diameter": 6,
+      "tipDiameter": 0,
+      "tipAngleDeg": 90,
+      "flutes": 1,
+      "speed": 10000,
+      "plungeRate": 200,
+      "feedRate": 600,
+      "coolant": "off",
+      "fluteLengthMm": 6
+    }
+  ],
+  "machine": {
+    "unit": "mm",
+    "mode": "mill",
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 15,
+    "accel": {
+      "x": 250,
+      "y": 250,
+      "z": 250
+    },
+    "toolchangeS": 5,
+    "rapidSpeed": 9144,
+    "workArea": {
+      "x": 1200,
+      "y": 600,
+      "z": 203
+    },
+    "name": "VCARVE SOFTWARE ONLY \u2014 ShopBot post",
+    "capabilities": [
+      "mill"
+    ],
+    "gcodeDialect": "cps",
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false,
+    "spindleRpmMax": 24000,
+    "cpsPost": {
+      "source": "bundled",
+      "bundledId": "shopbot",
+      "properties": {}
+    }
+  },
+  "operations": [
+    {
+      "id": 1,
+      "name": "VCARVE SOFTWARE ONLY \u2014 incompatible saved values",
+      "enabled": true,
+      "kind": "vcarve",
+      "toolId": 1,
+      "sourceLayers": [
+        "svg"
+      ],
+      "depth": -1,
+      "startDepth": -0.5,
+      "step": -0.2,
+      "fullMedialAxis": false,
+      "multiPassRefine": true,
+      "throughDepth": 0.2,
+      "depthList": [
+        -0.2,
+        -1
+      ],
+      "finishStep": -0.1
+    }
+  ],
+  "fixtures": [],
+  "textLayers": [],
+  "workOffset": {
+    "x_mm": 5,
+    "y_mm": 5,
+    "z_mm": 0,
+    "wcs": "G54"
+  }
+}

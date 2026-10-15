@@ -1,43 +1,24 @@
-//! V-Carve op driver. Builds the medial axis of the source region(s)
-//! and emits a per-axis ratchet sweep with depth varying from
-//! `start_depth` to the geometric V-bit depth at each point.
-
-// CAM/sim pedantic-lint exemption: STEPS-style sample counts cast to
-// f64 for trig are tiny constants.
-#![allow(clippy::cast_precision_loss)]
-
+//! Qualified V-Carve driver: source regions -> target depth envelopes ->
+//! V-Carve-only passes/entries -> normal generic XYZ emission.
 use crate::cam::setup::Setup;
 use crate::cam::source_combine::combine_source_regions;
-use crate::cam::VcObject;
+use crate::cam::{vcarve_plan, vcarve_validate, VcObject};
 use crate::gcode::{emit_vcarve_block, PostProcessor};
 use crate::geometry::Point2;
-use crate::pipeline::warnings::push_tool_fit_kind_warnings;
 use crate::pipeline::{
     cancelled, effective_step, ordered_selection, source_combine_mode, CancelToken, PipelineError,
     PipelineWarning,
 };
-use crate::project::{Op, Project};
+use crate::project::{MachineMode, Op, Project, ToolKind};
 
-/// Cheap pre-check used by `run_per_op` to decide whether the
-/// toolchange envelope (M5+dwell → M6 → z-shift → M3+dwell) needs to
-/// fire BEFORE this op. The medial-axis combine is the cheapest reliable
-/// gate — V-Carve emits exactly when `combine_source_regions` is
-/// non-empty (matches the actual driver's first emission gate at
-/// `regions.is_empty()`). Open polylines / single-line sources fail
-/// closure and produce an empty regions vec, so without this gate the
-/// M6 dwells fire pointlessly for a no-output op. Returning `false` here skips
-/// the envelope; the driver still runs (so it can still emit its
-/// `vcarve_no_closed_region` warning).
-#[must_use]
 pub(in crate::pipeline) fn vcarve_would_emit(op: &Op, objects: &[VcObject]) -> bool {
-    let selected = ordered_selection(op, objects);
-    let combine = source_combine_mode(op);
-    !combine_source_regions(objects, &selected, combine).is_empty()
+    !combine_source_regions(
+        objects,
+        &ordered_selection(op, objects),
+        source_combine_mode(op),
+    )
+    .is_empty()
 }
-
-// V-Carve driver couples medial-axis sampling, multi-pass cascade, and
-// optional finish-pass into a single state machine. Length budget waived
-// — the function is the per-stage split's main entry point.
 #[allow(clippy::too_many_arguments, clippy::too_many_lines)]
 pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     op: &Op,
@@ -49,321 +30,207 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     warnings: &mut Vec<PipelineWarning>,
     cancel: Option<&CancelToken>,
 ) -> Result<(), PipelineError> {
-    push_tool_fit_kind_warnings(op, project, setup, warnings);
+    let invalid = |s: &str| PipelineError::VCarve(op.id, s.into());
     let tool = project
         .tools
         .iter()
         .find(|t| t.id == op.tool_id)
         .ok_or(PipelineError::UnknownTool(op.id, op.tool_id))?;
-    if !matches!(tool.kind, crate::project::ToolKind::VBit) {
-        warnings.push(PipelineWarning::for_op(
-            op.id,
-            "tool_kind_mismatch",
-            format!(
-                "V-Carve op '{}' uses tool '{}' which is not a V-bit. The carve depth is computed from the V-bit cone angle; engraver / endmill geometry won't produce a true V-groove.",
-                op.name, tool.name
-            ),
-        )
-        .with_param("op_name", op.name.as_str())
-        .with_param("tool_name", tool.name.as_str())
-        .with_param("variant", "vcarve_non_vbit"));
+    let diameter = tool.effective_diameter();
+    let tip = tool.tip_diameter.unwrap_or(0.);
+    if tool.kind != ToolKind::VBit || !matches!(project.machine.mode, MachineMode::Mill) {
+        return Err(invalid("Select a V-bit in milling mode."));
     }
-    // A tool whose configured tip_angle lies outside the cone-math
-    // valid range [1°, 179°] gets silently clamped by `chamfer_depth` and
-    // by `polyline_to_z`'s tan-half lookup. Surface the clamp so the user
-    // realizes their bit configuration is producing different geometry
-    // than they typed.
-    if !(1.0..=179.0).contains(&tool.tip_angle_deg) {
-        let clamped = tool.tip_angle_deg.clamp(1.0, 179.0);
-        warnings.push(PipelineWarning::for_op(
-            op.id,
-            "tool_tip_angle_clamped",
-            format!(
-                "V-Carve op '{}' tool '{}': configured tip angle {:.2}° is outside the supported [1°, 179°] range and was clamped to {:.2}° for cone-math. Update the tool's tip_angle_deg to silence this warning.",
-                op.name, tool.name, tool.tip_angle_deg, clamped,
-            ),
-        )
-        .with_param("op_name", op.name.as_str())
-        .with_param("tool_name", tool.name.as_str())
-        .with_param("tip_angle", format!("{:.2}", tool.tip_angle_deg))
-        .with_param("clamped", format!("{clamped:.2}")));
+    if !diameter.is_finite()
+        || diameter <= 0.
+        || !tip.is_finite()
+        || tip < 0.
+        || tip >= diameter
+        || !tool.tip_angle_deg.is_finite()
+        || !(1. ..=179.).contains(&tool.tip_angle_deg)
+    {
+        return Err(invalid("Invalid V-bit geometry: finite positive diameter, tip diameter from zero to less than the cutting diameter, and included angle 1–179° required."));
     }
-    let tip_angle_deg = tool.tip_angle_deg.clamp(1.0, 179.0);
-    let tip_angle_rad = tip_angle_deg.to_radians();
-    let tip_radius_mm = tool.tip_diameter.unwrap_or(0.0).max(0.0) * 0.5;
-    // Physical reach of the V-bit. Past `diameter / 2` the cutter has
-    // run out of cone — engaging deeper would scrape the shank into
-    // the stock. Folded into the r_cap below.
-    let tool_reach_r = tool.effective_diameter() * 0.5;
-
-    let selected = ordered_selection(op, objects);
-    let combine = source_combine_mode(op);
-    let regions = combine_source_regions(objects, &selected, combine);
-    // Guard: combine_source_regions returns empty
-    // when the selection has no closable contours — e.g. the user pointed
-    // a V-Carve op at a single-line text layer or at open polylines from
-    // an SVG <line>. Silently no-op'ing left the user wondering why
-    // Generate produced no toolpath. Surface it instead.
-    if regions.is_empty() {
-        warnings.push(PipelineWarning::for_op(
-            op.id,
-            "vcarve_no_closed_region",
-            format!(
-                "V-Carve op '{}' has no closed source regions. V-Carve operates on the medial axis of a closed shape — pick objects whose contours close (DXF LWPOLYLINE/POLYLINE/CIRCLE/etc.). Single-line text or open polylines need an Engrave op.",
-                op.name,
-            ),
-        )
-        .with_param("op_name", op.name.as_str()));
-        return Ok(());
+    if !op.params.depth.is_finite()
+        || op.params.depth > 0.
+        || !op.params.start_depth.is_finite()
+        || op.params.start_depth != 0.
+        || !setup.mill.fast_move_z.is_finite()
+        || setup.mill.fast_move_z <= 0.
+    {
+        return Err(invalid("V-Carve requires stock-top start depth 0, a nonpositive maximum depth and positive clearance. Staged starts are not qualified."));
     }
-
-    // V-Carve cap lives on VCarveParams.
-    // Effective r cap = min(user carve_max_width_mm, tool reach radius).
-    // The tool-reach clamp prevents the medial-axis-driven depth from
-    // running deeper than the cone can physically reach, which would
-    // produce gcode that scrapes the shank into the workpiece.
-    let user_cap = op.vcarve_params().and_then(|v| v.carve_max_width_mm);
-    let effective_r_cap = match user_cap {
-        Some(c) => Some(c.min(tool_reach_r)),
-        None => Some(tool_reach_r),
-    };
-    let z_cap = if op.params.depth.abs() > 1e-9 {
-        Some(op.params.depth)
+    if setup.tool.rate_h == 0 || setup.tool.rate_v == 0 || setup.tool.speed == 0 {
+        return Err(invalid("Set positive feed, plunge and spindle rates."));
+    }
+    if op.params.through_depth != 0.
+        || !op.params.depth_list.is_empty()
+        || op.params.finish_step.is_some()
+    {
+        return Err(invalid("V-Carve uses maximum depth and step per pass. Clear Through depth, Depth list and Finish step; these alternate schedules are not qualified."));
+    }
+    let dpp = effective_step(op, tool).map(f64::abs).unwrap_or(1.);
+    if !dpp.is_finite() || dpp <= 0. {
+        return Err(invalid("Set a finite positive depth per pass."));
+    }
+    let angle = tool.vcarve_lead_in_angle_deg.unwrap_or(10.);
+    if !angle.is_finite() || angle <= 0. || angle >= 90. {
+        return Err(invalid(
+            "V-Carve entry angle must be between 0 and 90 degrees.",
+        ));
+    }
+    let params = op.vcarve_params().expect("VCarve driver");
+    if params.multi_pass_refine {
+        return Err(invalid("The legacy refine-pass option is not implemented. Disable it; normal depth passes already reach the qualified target."));
+    }
+    if params
+        .carve_max_width_mm
+        .is_some_and(|c| !c.is_finite() || c <= 0.)
+        || params
+            .source_inset_mm
+            .is_some_and(|c| !c.is_finite() || c < 0.)
+    {
+        return Err(invalid("Radius cap and source inset must be finite and nonnegative (radius cap strictly positive)."));
+    }
+    let tan = (tool.tip_angle_deg.to_radians() * 0.5).tan();
+    let tip_r = tip * 0.5;
+    let reach = diameter * 0.5;
+    let r_cap = params.carve_max_width_mm.unwrap_or(reach).min(reach);
+    let max_depth = if op.params.depth < 0. {
+        -op.params.depth
     } else {
-        None
+        f64::INFINITY
     };
-    let dpp = effective_step(op, tool)
-        .map(f64::abs)
-        .unwrap_or(1.0)
-        .max(0.05);
-
-    let mut polylines: Vec<Vec<(f64, f64, f64)>> = Vec::new();
-    let mut any_depth_limited = false;
-
-    // full_medial_axis defaults to false → Estlcam-style perimeter
-    // pass. The medial-axis path is opt-in for the rare "carve a depth
-    // gradient across the entire interior" workflow (think Aspire-style
-    // relief). The two paths share tip-angle / tip-radius / reach-cap
-    // / depth-cap math; only the traversal shape differs.
-    let full_medial = op.vcarve_params().is_some_and(|v| v.full_medial_axis);
-    // Optional pre-offset for the source region. Inlay plug side
-    // sets this to the desired gap so the plug ends up `gap` mm smaller
-    // per side than the pocket. None / 0 = identity (the common case).
-    let source_inset = op
-        .vcarve_params()
-        .and_then(|v| v.source_inset_mm)
-        .unwrap_or(0.0)
-        .max(0.0);
-
+    let z_limit = ((r_cap - tip_r) / tan).min(max_depth);
+    if z_limit <= 0. {
+        return Err(invalid(
+            "V-Carve radius cap is at or below the flat tip: no material can be removed.",
+        ));
+    }
+    if tool
+        .flute_length_mm
+        .is_some_and(|f| !f.is_finite() || f <= 0. || z_limit > f)
+    {
+        return Err(invalid("Requested carving depth exceeds the authored cutting length; reduce maximum depth or select another bit."));
+    }
+    let selected = ordered_selection(op, objects);
+    let prepared = vcarve_validate::prepared(objects, &selected).map_err(|e| invalid(&e))?;
+    let regions = combine_source_regions(&prepared, &selected, source_combine_mode(op));
+    if regions.is_empty() {
+        return Err(invalid(
+            "No closed carving region remains after geometry combination.",
+        ));
+    }
+    let mut polylines = Vec::new();
+    let mut capped = false;
+    let mut total = 0;
     for region in &regions {
         if cancelled(cancel) {
             return Err(PipelineError::Cancelled);
         }
-        if region.boundary.len() < 3 {
-            continue;
-        }
-        // When the user requested a pre-inset (inlay plug side),
-        // shrink the boundary and any holes BEFORE the V-carve pass.
-        // If the inset collapses the region we silently skip it — the
-        // plug is geometrically too small to exist (e.g. a 0.1 mm-wide
-        // sliver with 0.1 mm gap).
-        let (inset_outer, inset_holes_storage);
-        let (boundary, holes): (&[Point2], &[Vec<Point2>]) = if source_inset > 1e-9 {
-            let rings = crate::cam::offsets::boundary_offset_inward(
-                &region.boundary,
-                &region.holes,
-                source_inset,
-            );
-            if rings.is_empty() {
-                continue;
+        let inset = params.source_inset_mm.unwrap_or(0.);
+        let storage;
+        let boundary = if inset > 0. {
+            let rings =
+                crate::cam::offsets::boundary_offset_inward(&region.boundary, &region.holes, inset);
+            if rings.len() != 1 || !region.holes.is_empty() {
+                return Err(invalid("Source inset collapses or splits the region, or contains islands; this inlay topology is not qualified."));
             }
-            // clipper2 with EndType::Polygon returns the inset boundary
-            // first, then any inset hole rings. Inscribed area > 0
-            // means at least one outer ring; treat rings[0] as the new
-            // outer and rings[1..] as the new holes.
-            inset_outer = rings[0].clone();
-            inset_holes_storage = rings.into_iter().skip(1).collect::<Vec<_>>();
-            (inset_outer.as_slice(), inset_holes_storage.as_slice())
+            storage = rings[0].clone();
+            storage.as_slice()
         } else {
-            (region.boundary.as_slice(), region.holes.as_slice())
+            region.boundary.as_slice()
         };
-        if boundary.len() < 3 {
-            continue;
-        }
-        if full_medial {
-            // Medial-axis traversal. Plunges along
-            // every interior medial-axis chain; depth follows local
-            // inscribed radius up to effective_r_cap.
-            let vc_region = crate::cam::vcarve::VcRegion {
+        let holes = &region.holes;
+        let mut targets = Vec::new();
+        if params.full_medial_axis {
+            let vc = crate::cam::vcarve::VcRegion {
                 outer: boundary.to_vec(),
-                holes: holes.to_vec(),
+                holes: holes.clone(),
             };
-            let axes_raw = crate::cam::geometry_cache::medial_axis_cached(&vc_region, cancel);
+            // Keep the existing axis builder, but do not silently prune reachable
+            // small features. Every retained chain must complete or fail the op.
+            let axes = crate::cam::geometry_cache::medial_axis_cached(&vc, cancel);
             if cancelled(cancel) {
                 return Err(PipelineError::Cancelled);
             }
-            // A degenerate medial axis (e.g. a single straight slot
-            // whose Voronoi vertices all sit on the boundary) returns
-            // empty. Surface a `vcarve_no_medial_axis` warning so the
-            // user understands why full-medial-axis mode produced no
-            // toolpath — the geometry has no interior locus to walk.
-            if axes_raw.is_empty() {
-                warnings.push(PipelineWarning::for_op(
-                    op.id,
-                    "vcarve_no_medial_axis",
-                    format!(
-                        "V-Carve op '{}' (full medial axis): the source region's medial axis is empty — typical for very thin / straight slots whose Voronoi vertices all collapse onto the boundary. Either disable full_medial_axis (Estlcam-style perimeter pass), or thicken the source region.",
-                        op.name,
-                    ),
-                )
-                .with_param("op_name", op.name.as_str()));
-                continue;
+            if axes.is_empty() {
+                return Err(invalid("No medial axis could be resolved at the 0.1 mm sampling spacing. Geometry is unsupported; no output generated."));
             }
-            // Prune spurious branches (boundary-sampling spurs +
-            // chains that can never engage past the tip plateau). Without
-            // this the cutter spends most of its time ratcheting into
-            // micro-features that the bit physically can't carve.
-            let axes = crate::cam::vcarve::prune_medial_axis(axes_raw, tool_reach_r, tip_radius_mm);
-            // Track whether at least one chain produced a useful
-            // (non-all-zero) toolpath. When every chain bottoms out at
-            // z=0 the user is silently getting a no-op carve — surface
-            // a warning instead.
-            let mut any_non_zero_emitted = false;
-            let mut any_skipped_below_tip = false;
-            for axis in &axes {
-                let (z_axis, depth_limited, all_zero) = crate::cam::vcarve::polyline_to_z(
+            for axis in axes.iter() {
+                let (path, limited, zero) = crate::cam::vcarve::polyline_to_z(
                     axis,
-                    tip_angle_rad,
-                    tip_radius_mm,
-                    effective_r_cap,
-                    z_cap,
+                    tool.tip_angle_deg.to_radians(),
+                    tip_r,
+                    Some(r_cap),
+                    Some(-z_limit),
                 );
-                if depth_limited {
-                    any_depth_limited = true;
+                capped |= limited;
+                if zero {
+                    return Err(invalid("Undercut: a medial-axis chain is narrower than the flat tip and cannot be carved with this bit."));
                 }
-                if all_zero {
-                    // Skipping avoids a silent z=0 walk along this chain —
-                    // the cutter would scrub the surface, remove nothing,
-                    // and the user would think they cut.
-                    // Skip the chain; report below.
-                    any_skipped_below_tip = true;
-                    continue;
-                }
-                // ratchet_emit returns a list of sub-polylines
-                // so the caller can rapid (G0) between them rather
-                // than dragging the bit across uncut stock at feed.
-                // Route the per-tool lead-in angle through.
-                let paths = crate::cam::vcarve_emit::ratchet_emit_with_lead_in(
-                    &z_axis,
-                    dpp,
-                    setup.tool.vcarve_lead_in_angle_deg,
-                );
-                let mut added_any = false;
-                for p in paths {
-                    if p.len() >= 2 {
-                        polylines.push(p);
-                        added_any = true;
+                let mut target = Vec::new();
+                for (x, y, z, _) in path {
+                    if target
+                        .last()
+                        .is_some_and(|&(px, py, _): &(f64, f64, f64)| (x - px).hypot(y - py) < 1e-7)
+                    {
+                        continue;
                     }
+                    target.push((x, y, z));
                 }
-                if added_any {
-                    any_non_zero_emitted = true;
+                if target.len() < 2 {
+                    return Err(invalid(
+                        "Undercut: a degenerate medial chain cannot be completed.",
+                    ));
                 }
-            }
-            if any_skipped_below_tip && !any_non_zero_emitted {
-                warnings.push(PipelineWarning::for_op(
-                    op.id,
-                    "vcarve_below_tip_radius",
-                    format!(
-                        "V-Carve op '{}' (full medial axis): every medial-axis chain's largest inscribed circle is at or below the V-bit's flat tip ({:.3} mm). The bit's nose would ride the surface without engaging — no toolpath emitted. Pick a sharper bit or raise carve_max_width_mm.",
-                        op.name, tip_radius_mm,
-                    ),
-                )
-                .with_param("op_name", op.name.as_str())
-                .with_param("tip_radius", format!("{tip_radius_mm:.3}"))
-                .with_param("variant", "full_none"));
-            } else if any_skipped_below_tip {
-                warnings.push(PipelineWarning::for_op(
-                    op.id,
-                    "vcarve_below_tip_radius",
-                    format!(
-                        "V-Carve op '{}' (full medial axis): some medial-axis chains never exceed the V-bit's flat tip ({:.3} mm) and were skipped to avoid emitting a no-cut Z=0 traversal.",
-                        op.name, tip_radius_mm,
-                    ),
-                )
-                .with_param("op_name", op.name.as_str())
-                .with_param("tip_radius", format!("{tip_radius_mm:.3}"))
-                .with_param("variant", "full_some"));
+                targets.push(target);
             }
         } else {
-            // Default Estlcam-style perimeter pass: inset the boundary
-            // (and holes) by R = effective_r_cap; emit each resulting
-            // ring at constant z = -(R - tip_r) / tan(angle / 2).
-            // Centre plateau and any deep interior are left untouched.
-            let r_offset = effective_r_cap.unwrap_or(tool_reach_r);
-            if r_offset <= tip_radius_mm + 1e-9 {
-                // The cap is below the bit's flat tip — perimeter offset
-                // would lie at z=0, indistinguishable from an engrave.
-                // Bail with a warning so the user knows nothing got cut.
-                warnings.push(PipelineWarning::for_op(
-                    op.id,
-                    "vcarve_below_tip_radius",
-                    format!(
-                        "V-Carve op '{}' effective carve width ({:.3} mm) is at or below the V-bit's flat tip ({:.3} mm); the bit's nose rides the surface and no material would be removed. Pick a sharper bit or raise carve_max_width_mm.",
-                        op.name, r_offset, tip_radius_mm,
-                    ),
-                )
-                .with_param("op_name", op.name.as_str())
-                .with_param("carve_width", format!("{r_offset:.3}"))
-                .with_param("tip_radius", format!("{tip_radius_mm:.3}"))
-                .with_param("variant", "perimeter"));
-                continue;
+            // The XY offset must correspond to the actual depth after caps.
+            let radius = tip_r + z_limit * tan;
+            capped = z_limit < (r_cap - tip_r) / tan;
+            let rings = crate::cam::offsets::boundary_offset_inward(boundary, holes, radius);
+            if rings.is_empty() {
+                return Err(invalid("No perimeter fits the selected radius/depth. Reduce the radius cap or choose Full medial axis."));
             }
-            // Compute target z. polyline_to_z's r-cap logic isn't needed
-            // here — we already know we're cutting at the cap.
-            let tan_half = (tip_angle_rad * 0.5).tan().max(1e-9);
-            let mut z_target = -(r_offset - tip_radius_mm) / tan_half;
-            if let Some(c) = z_cap {
-                let limit = c.abs();
-                if z_target < -limit {
-                    z_target = -limit;
-                    any_depth_limited = true;
-                }
-            }
-            let rings = crate::cam::offsets::boundary_offset_inward(boundary, holes, r_offset);
             for ring in rings {
-                if ring.len() < 2 {
-                    continue;
+                let mut target: Vec<_> = ring.iter().map(|p| (p.x, p.y, -z_limit)).collect();
+                target.dedup_by(|a, b| (a.0 - b.0).hypot(a.1 - b.1) < 1e-7);
+                if target.len() < 3 {
+                    return Err(invalid("Degenerate perimeter after V-bit offset."));
                 }
-                // Close the ring so the cutter returns to its start —
-                // perimeter passes are closed loops, not open polylines.
-                let mut path: Vec<(f64, f64, f64)> =
-                    ring.iter().map(|p| (p.x, p.y, z_target)).collect();
-                let first = path[0];
-                let last = *path.last().expect("len >= 2");
-                if (first.0 - last.0).hypot(first.1 - last.1) > 1e-9 {
-                    path.push(first);
+                if (target[0].0 - target.last().unwrap().0)
+                    .hypot(target[0].1 - target.last().unwrap().1)
+                    > 1e-7
+                {
+                    target.push(target[0]);
                 }
-                polylines.push(path);
+                targets.push(target);
             }
         }
+        let mut rings = vec![boundary];
+        rings.extend(holes.iter().map(Vec::as_slice));
+        for target in targets {
+            vcarve_validate::check_envelope(&target, &rings, tip_r, tan)
+                .map_err(|e| invalid(&e))?;
+            let path = vcarve_plan::plan(&target, dpp, angle).map_err(|e| invalid(&e))?;
+            total += path.len();
+            if total > 1_000_000 {
+                return Err(invalid("Undercut: operation exceeds the one-million-waypoint budget before completion."));
+            }
+            polylines.push(path);
+        }
     }
-
-    if any_depth_limited {
-        warnings.push(PipelineWarning::for_op(
-            op.id,
-            "vcarve_depth_limited",
-            format!(
-                "V-Carve op '{}' was depth-limited: the V-bit can't reach the geometric corner because depth and/or carve_max_width caps clipped the inscribed-circle radius.",
-                op.name
-            ),
-        )
-        .with_param("op_name", op.name.as_str()));
-    }
-
     if polylines.is_empty() {
-        return Ok(());
+        return Err(invalid("Undercut: no qualified cutting path."));
     }
-
+    if capped {
+        warnings.push(PipelineWarning::for_op(op.id,"vcarve_target_capped","V-Carve reaches the explicitly capped target; capped regions are not fully cleared. Reduce radius limits only if that is your intended geometry."));
+    }
+    warnings.push(PipelineWarning::for_op(op.id,"vcarve_scope",if params.full_medial_axis {"Full medial axis: completed sampled spine paths (0.1 mm boundary spacing), not a complete-area pocket or exact swept-volume simulation."} else {"Perimeter: V-bit contour groove at constant final depth; the interior is not cleared."}));
+    // Shared emitter is unchanged: the plan begins at Z=0 and contains its own
+    // qualified continuous entry. Between separate chains it retracts to safe Z.
     emit_vcarve_block(setup, &polylines, post, last_pos);
     Ok(())
 }
@@ -452,7 +319,7 @@ mod tests {
     /// single-line text layer) silently produced no toolpath because
     /// `combine_source_regions` returns empty. Now warns instead.
     #[test]
-    fn vcarve_op_warns_when_no_closed_region() {
+    fn vcarve_op_rejects_no_closed_region() {
         let op = Op {
             id: 7,
             name: "Carve".into(),
@@ -503,14 +370,8 @@ mod tests {
             },
             |_, _, _| {},
         )
-        .expect("pipeline ran");
-        assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "vcarve_no_closed_region"),
-            "expected vcarve_no_closed_region warning; got {:?}",
-            resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
-        );
+        .expect_err("unsupported carve must fail, not return successful empty output");
+        assert!(resp.to_string().contains("closed"), "{resp}");
     }
 
     /// Tool-reach clamp: a 6mm V-bit physically can't
@@ -586,7 +447,7 @@ mod tests {
         assert!(
             resp.warnings
                 .iter()
-                .any(|w| w.kind == "vcarve_depth_limited"),
+                .any(|w| w.kind == "vcarve_target_capped"),
             "tool-reach cap should mark depth_limited",
         );
     }
@@ -775,7 +636,7 @@ mod tests {
     /// `vcarve_below_tip_radius` warning fires and NO cutting moves
     /// are emitted.
     #[test]
-    fn vcarve_full_medial_axis_warns_when_below_tip_radius() {
+    fn vcarve_full_medial_axis_rejects_below_tip_radius() {
         // Custom V-bit with a deliberately fat flat tip — tip_diameter
         // 1.0 mm ⇒ tip_radius 0.5 mm.
         let mut fat_tip = crate::pipeline::test_helpers::vbit();
@@ -834,24 +695,8 @@ mod tests {
             },
             |_, _, _| {},
         )
-        .expect("pipeline ran");
-        assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "vcarve_below_tip_radius"),
-            "expected vcarve_below_tip_radius warning; got {:?}",
-            resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
-        );
-        // No deep cuts should have been emitted — only rapids and
-        // surface (z=0) moves at most.
-        let has_deep_cut = resp
-            .toolpath
-            .iter()
-            .any(|s| s.to.z < -0.01 && !matches!(s.kind, crate::gcode::preview::MoveKind::Rapid));
-        assert!(
-            !has_deep_cut,
-            "idne: full-medial-axis silently emitted Z<0 cuts despite r-cap below tip",
-        );
+        .expect_err("unsupported carve must fail, not return successful empty output");
+        assert!(resp.to_string().contains("flat tip"), "{resp}");
     }
 
     #[test]

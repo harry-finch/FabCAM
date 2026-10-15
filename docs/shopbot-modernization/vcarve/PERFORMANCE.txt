@@ -1,0 +1,32 @@
+
+running 1 test
+matrix acute triangle reverse=false: 2555 moves
+matrix acute triangle reverse=true: 2555 moves
+matrix nonconvex L reverse=false: 3965 moves
+matrix nonconvex L reverse=true: 3965 moves
+matrix thin slot reverse=false: 208 moves
+matrix thin slot reverse=true: 208 moves
+matrix near collinear reverse=false: 4174 moves
+matrix near collinear reverse=true: 4174 moves
+test topology_matrix_and_winding ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.17s
+
+        0.18 real         0.14 user         0.01 sys
+            17285120  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 928  page reclaims
+                 368  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   6  voluntary context switches
+                 656  involuntary context switches
+          2293203253  instructions retired
+           633171759  cycles elapsed
+             8061360  peak memory footprint

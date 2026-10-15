@@ -123,7 +123,7 @@
 </script>
 
 <aside class="text-panel">
-  <div class="group-head">
+  <div class="group-head sidebar-section-head">
     <button
       class="caret-btn"
       onclick={onActivate}
@@ -131,8 +131,10 @@
       aria-label={active ? t('textlist.collapse.aria') : t('textlist.activate.aria')}
       >{active ? '▾' : '▸'}</button
     >
-    <span class="group-name">{t('textlist.title')}</span>
-    <span class="group-count">{project.data.textLayers.length}</span>
+    <span class="sidebar-section-identity"
+      ><span class="group-name">{t('textlist.title')}</span>
+      <span class="sidebar-section-count">{project.data.textLayers.length}</span></span
+    >
     {#if onAddText}
       <button
         type="button"
@@ -381,19 +383,11 @@
   }
   /* Base `.group-head` / `.caret-btn` shapes live in app.css. */
   .group-head {
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
   }
   .group-name {
     color: var(--text-strong);
     font-weight: 600;
-  }
-  .group-count {
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    padding: 0 0.3rem;
-    background: var(--bg);
-    border-radius: 10px;
-    line-height: 1.4;
   }
   .add-btn {
     background: var(--bg-elevated);

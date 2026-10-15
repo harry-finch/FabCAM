@@ -1,0 +1,156 @@
+{
+  "kind": "ivac-project-surfacing",
+  "version": 6,
+  "imports": [],
+  "visibleLayers": [],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 0,
+    "thickness": 15,
+    "customX": 41.123,
+    "customY": 23.789,
+    "offsetX": 0,
+    "offsetY": 0,
+    "offsetZ": 0
+  },
+  "tools": [
+    {
+      "id": 1,
+      "name": "Flat \u00d86 \u2014 software only",
+      "kind": "endmill",
+      "diameter": 6,
+      "flutes": 1,
+      "speed": 10000,
+      "plungeRate": 500,
+      "feedRate": 1000,
+      "coolant": "off",
+      "wearOffsetMm": 0,
+      "fluteLengthMm": 10
+    }
+  ],
+  "machine": {
+    "unit": "mm",
+    "mode": "mill",
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 15,
+    "accel": {
+      "x": 250,
+      "y": 250,
+      "z": 250
+    },
+    "toolchangeS": 5,
+    "rapidSpeed": 9144,
+    "workArea": {
+      "x": 1200,
+      "y": 600,
+      "z": 203
+    },
+    "name": "UX3 SOFTWARE ONLY \u2014 ShopBot post",
+    "capabilities": [
+      "mill"
+    ],
+    "gcodeDialect": "cps",
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false,
+    "spindleRpmMax": 24000,
+    "cpsPost": {
+      "source": "bundled",
+      "bundledId": "shopbot",
+      "properties": {}
+    }
+  },
+  "operations": [
+    {
+      "id": 1,
+      "kind": "planar_surface",
+      "name": "Spoilboard surface \u2014 software fixture",
+      "enabled": true,
+      "toolId": 1,
+      "sourceCombine": "auto",
+      "sourceLayers": null,
+      "depth": -1.3,
+      "startDepth": 0,
+      "step": -0.5,
+      "surface": {
+        "origin": [
+          20.123,
+          30.456
+        ],
+        "width_mm": 41.123,
+        "height_mm": 23.789,
+        "margin_mm": 1.234,
+        "overtravel_mm": 1.111,
+        "stepover_mm": 2.4,
+        "direction": "along_x"
+      }
+    },
+    {
+      "kind": "planar_surface",
+      "depth": -1.3,
+      "startDepth": 0,
+      "step": -0.5,
+      "sourceCombine": "auto",
+      "surface": {
+        "margin_mm": 1.234,
+        "overtravel_mm": 1.111,
+        "stepover_mm": 2.4,
+        "direction": "along_x",
+        "origin": [
+          20.123,
+          30.456000000000003
+        ],
+        "width_mm": 41.12299999999999,
+        "height_mm": 23.789
+      },
+      "id": 2,
+      "name": "UX4 software surface",
+      "enabled": true,
+      "toolId": 1,
+      "sourceLayers": null,
+      "side": "front",
+      "appliedCutting": {
+        "context_key": "",
+        "doc_origin": "manual",
+        "slots": [
+          {
+            "tool_id": 1,
+            "pass": "rough",
+            "rpm": 10000,
+            "feed_mm_min": 1000,
+            "plunge_mm_min": 500,
+            "origins": {
+              "rpm": "manual",
+              "feed": "manual",
+              "plunge": "manual"
+            }
+          },
+          {
+            "tool_id": 1,
+            "pass": "finish",
+            "rpm": 10000,
+            "feed_mm_min": 1000,
+            "plunge_mm_min": 500,
+            "origins": {
+              "rpm": "manual",
+              "feed": "manual",
+              "plunge": "manual"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "fixtures": [],
+  "textLayers": [],
+  "workOffset": {
+    "x_mm": 5,
+    "y_mm": 7,
+    "z_mm": 0,
+    "wcs": "G54"
+  }
+}

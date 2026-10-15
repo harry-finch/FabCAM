@@ -1,0 +1,32 @@
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized] target(s) in 2.04s
+     Running tests/vcarve_qualification.rs (/private/tmp/fabcam-cps-runtime/debug/deps/vcarve_qualification-55e732f658bf9a7d)
+
+running 10 tests
+test a3_short_chain_reaches_target_at_both_ends ... ok
+test a2_interpolated_ramp_never_exceeds_local_target ... ok
+test continuous_clearance_catches_between_sample_collision ... ok
+test a1_perimeter_honors_pass_step_and_depth_limited_radius ... ok
+test invalid_inputs_and_physical_limits_fail_closed ... ok
+matrix case=0 medial=false: 1213 moves
+matrix case=1 medial=false: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.
+matrix case=2 medial=false: 264 moves
+test reference_cones_caps_and_flat_tips ... ok
+matrix acute triangle reverse=false: 2555 moves
+matrix acute triangle reverse=true: 2555 moves
+Full medial axis surface coverage: 256/800 cell centres (0.5 mm grid); not an area bound
+test medial_axis_is_variable_finite_deterministic_and_does_not_clear_plateau ... ok
+matrix nonconvex L reverse=false: 3965 moves
+matrix case=0 medial=true: 8693 moves
+matrix nonconvex L reverse=true: 3965 moves
+matrix case=1 medial=true: 6729 moves
+matrix thin slot reverse=false: 208 moves
+matrix thin slot reverse=true: 208 moves
+matrix case=2 medial=true: 4237 moves
+test circle_islands_and_disconnected_regions_are_explicit ... ok
+matrix near collinear reverse=false: 4174 moves
+matrix near collinear reverse=true: 4174 moves
+test topology_matrix_and_winding ... ok
+test a4_decoded_output_preview_generic_parity_and_persistence ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.49s

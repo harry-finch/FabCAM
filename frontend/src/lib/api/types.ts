@@ -59,3 +59,9 @@ export type WiacSourceSpan = components['schemas']['WiacSourceSpan'];
 
 export type FsCamRequest = components['schemas']['FsCamRequest'];
 export type FsCamResponse = components['schemas']['FsCamResponse'];
+
+export type CornerReliefRequest = components['schemas']['CornerReliefRequest'];
+export type CornerReliefResponse = components['schemas']['CornerReliefResponse'];
+export type CornerRef = components['schemas']['CornerRef'];
+export type ReliefMode = components['schemas']['ReliefMode'];
+export type RemovalSide = components['schemas']['RemovalSide'];

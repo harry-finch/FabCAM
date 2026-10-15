@@ -1,0 +1,11 @@
+{
+  "crates/ivac-core/src/cam/vcarve_plan.rs": "fcffd41fd6abd7e6337f64e3c8b49b5e5b7d72a46a026ae8f59c95935f177d4a",
+  "crates/ivac-core/src/cam/vcarve_validate.rs": "05e8d5a6f758c32efa1db5adb76e656037110808d9d44c213225d7d0fb9a8fb9",
+  "crates/ivac-core/src/cam/vcarve.rs": "2d46f69b8052f78cd443630e370224129b82df27a698e9a92d2b3c32a2a6b4cb",
+  "crates/ivac-core/src/cam/vcarve_emit.rs": "fae1fb6c1854751a34d453b24e3963ea5cfea76534f0eb54ee39d4583c2cea00",
+  "crates/ivac-core/src/cam/halfpipe.rs": "2d24781a737567f532f56ff433cea485c3d9f9e9333fd63927092b75f673313f",
+  "crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs": "e2a6099f5fcfa4fda595493acb09e8360b9ee8b89d38c7eb47e44f82c3952d7e",
+  "crates/ivac-core/src/pipeline/op_drivers/vcarve.rs": "cfdb38bacac42793f08d613321db8c204852eef7beefc127a235a90eeec077ea",
+  "crates/ivac-core/src/pipeline/cps_ctx.rs": "4f58d80a853c755a17cc8fb7c784e2e239347bf97fe26155b71c1762503960a0",
+  "crates/ivac-cps/posts/shopbot.cps": "fea4f62c3a0ef9d070fc1eec9b0f04922648efd710dd86b12a4fd6bb58340b21"
+}

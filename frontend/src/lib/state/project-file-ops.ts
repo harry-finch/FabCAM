@@ -33,6 +33,7 @@ export function clearProject(p: ProjectState) {
   p.documentName = null;
   p.documentBaseline = null;
   p.data.imports = [];
+  p.data.cornerRelief = undefined;
   p.data.operations = [];
   p.data.material = undefined;
   p.data.fsContext = undefined;
@@ -135,16 +136,25 @@ export function persistPerProjectState(p: ProjectState) {
 /// `?? []` fallback in restore().
 export function snapshotProject(p: ProjectState): ProjectFile {
   return {
-    kind: p.data.operations.some((op) => op.appliedCutting?.knowledge)
-      ? 'ivac-project-knowledge'
-      : hasFeedsSpeedsData(p.data)
-        ? 'ivac-project-cutting'
-        : 'ivac-project',
-    version: p.data.operations.some((op) => op.appliedCutting?.knowledge)
-      ? 4
-      : hasFeedsSpeedsData(p.data)
-        ? 3
-        : 1,
+    ...(p.data.cornerRelief ? { cornerRelief: p.data.cornerRelief } : {}),
+    kind: p.data.operations.some((op) => op.kind === 'planar_surface')
+      ? 'ivac-project-surfacing'
+      : p.data.cornerRelief
+        ? 'ivac-project-cad'
+        : p.data.operations.some((op) => op.appliedCutting?.knowledge)
+          ? 'ivac-project-knowledge'
+          : hasFeedsSpeedsData(p.data)
+            ? 'ivac-project-cutting'
+            : 'ivac-project',
+    version: p.data.operations.some((op) => op.kind === 'planar_surface')
+      ? 6
+      : p.data.cornerRelief
+        ? 5
+        : p.data.operations.some((op) => op.appliedCutting?.knowledge)
+          ? 4
+          : hasFeedsSpeedsData(p.data)
+            ? 3
+            : 1,
     ...(p.data.material ? { material: p.data.material } : {}),
     ...(p.data.fsContext ? { fsContext: p.data.fsContext } : {}),
     imports: p.data.imports,
@@ -181,6 +191,9 @@ export function restoreProject(p: ProjectState, file: ProjectFile) {
   if (p.data.imports[0]) {
     setImported(p, p.data.imports[0].source, p.data.imports[0].lastImportPath ?? null);
   }
+  // Restore all saved imports/transforms after the import initializer.
+  p.data.imports = Array.isArray(file.imports) ? file.imports : [];
+  p.data.cornerRelief = file.cornerRelief;
   // Layer visibility precedence (best wins):
   //   1. workspace.per_project[path].visible_layers (applied in
   //      setActiveProjectPath after restore returns).

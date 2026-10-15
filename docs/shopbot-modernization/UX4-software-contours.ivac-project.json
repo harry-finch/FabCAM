@@ -1,0 +1,233 @@
+{
+  "kind": "ivac-project-cutting",
+  "version": 3,
+  "imports": [
+    {
+      "id": 1,
+      "source": {
+        "filename": "CAM4-square40-software.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10.0,
+              "y": 10.0
+            },
+            "end": {
+              "x": 50.0,
+              "y": 10.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50.0,
+              "y": 10.0
+            },
+            "end": {
+              "x": 50.0,
+              "y": 50.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50.0,
+              "y": 50.0
+            },
+            "end": {
+              "x": 10.0,
+              "y": 50.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10.0,
+              "y": 50.0
+            },
+            "end": {
+              "x": 10.0,
+              "y": 10.0
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 4
+          }
+        ],
+        "bbox": {
+          "min_x": 10.0,
+          "min_y": 10.0,
+          "max_x": 50.0,
+          "max_y": 50.0
+        },
+        "unit_scale": 1,
+        "warnings": [],
+        "objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 10.0,
+              "min_y": 10.0,
+              "max_x": 50.0,
+              "max_y": 50.0
+            }
+          }
+        ]
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    }
+  ],
+  "visibleLayers": [],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 0,
+    "thickness": 10,
+    "customX": 50,
+    "customY": 50,
+    "offsetX": 0,
+    "offsetY": 0,
+    "offsetZ": 0
+  },
+  "tools": [
+    {
+      "id": 1,
+      "name": "UX4 source \u00d812 \u2014 software only",
+      "kind": "endmill",
+      "diameter": 12,
+      "flutes": 1,
+      "speed": 10000,
+      "plungeRate": 500,
+      "feedRate": 1000,
+      "coolant": "off"
+    },
+    {
+      "id": 7,
+      "name": "UX4 target \u00d88 \u2014 different defaults",
+      "kind": "endmill",
+      "diameter": 8,
+      "flutes": 1,
+      "speed": 9000,
+      "plungeRate": 100,
+      "feedRate": 500,
+      "coolant": "off"
+    }
+  ],
+  "machine": {
+    "unit": "mm",
+    "mode": "mill",
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 15,
+    "accel": {
+      "x": 250,
+      "y": 250,
+      "z": 250
+    },
+    "toolchangeS": 5,
+    "rapidSpeed": 9144,
+    "workArea": {
+      "x": 1200,
+      "y": 600,
+      "z": 203
+    },
+    "name": "UX4 SOFTWARE ONLY \u2014 ShopBot post",
+    "capabilities": [
+      "mill"
+    ],
+    "gcodeDialect": "cps",
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false,
+    "spindleRpmMax": 24000,
+    "cpsPost": {
+      "source": "bundled",
+      "bundledId": "shopbot",
+      "properties": {}
+    }
+  },
+  "operations": [
+    {
+      "id": 1,
+      "name": "UX4 source pocket \u2014 software only",
+      "enabled": true,
+      "kind": "pocket",
+      "toolId": 1,
+      "sourceLayers": [
+        "svg"
+      ],
+      "depth": -2,
+      "startDepth": 0,
+      "step": -1,
+      "pocketStrategy": "cascade",
+      "xyOverlap": 0.5,
+      "plunge": {
+        "kind": "direct"
+      }
+    },
+    {
+      "id": 2,
+      "name": "UX4 source profile \u2014 software only",
+      "enabled": false,
+      "kind": "profile",
+      "toolId": 1,
+      "sourceLayers": [
+        "svg"
+      ],
+      "depth": -2,
+      "startDepth": 0,
+      "step": -1,
+      "plunge": {
+        "kind": "direct"
+      },
+      "offset": "outside"
+    }
+  ],
+  "fixtures": [],
+  "textLayers": [],
+  "workOffset": {
+    "x_mm": 5,
+    "y_mm": 5,
+    "z_mm": 0,
+    "wcs": "G54"
+  }
+}

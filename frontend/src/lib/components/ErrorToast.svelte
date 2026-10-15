@@ -16,6 +16,7 @@
   import { autoFixToCommand } from '../state/commands';
   import { confirmStore } from '../state/confirm.svelte';
   import { t } from '../i18n';
+  import { isVCarveRefusal } from '../state/vcarve-controls';
   import { errorMessage, errorHint, fixLabel } from './error-display';
   import type { WiacError } from '../api/types';
 
@@ -57,7 +58,10 @@
   function enqueue(err: ToastError) {
     const id = ++nextId;
     const isInternal = typeof err === 'object' && err?.kind === 'internal';
-    const timer = isInternal ? null : setTimeout(() => dismissById(id), AUTO_DISMISS_MS);
+    const timer =
+      isInternal || isVCarveRefusal(err, project.data.operations)
+        ? null
+        : setTimeout(() => dismissById(id), AUTO_DISMISS_MS);
     queue.push({ id, error: err, timer });
   }
 

@@ -485,3 +485,27 @@ body,
   white-space: pre-line;
   pointer-events: none;
 }
+
+/* UX4.1: section context stays inside the current section, using the host's
+   existing scrollport. No cloned headers or stack of unrelated sections. */
+:where(.sidebar-section-head) {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-anchor);
+}
+.sidebar-section-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+.sidebar-section-count {
+  flex: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}

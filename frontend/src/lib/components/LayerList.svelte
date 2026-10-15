@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CornerReliefPanel from './CornerReliefPanel.svelte';
   /// Imported-drawing layer list. Restyled (audit follow-up) to match
   /// the OperationsList group-header pattern: caret-to-collapse, a
   /// "show / hide all" master checkbox, a count chip, and a body that
@@ -173,7 +174,7 @@
 <svelte:window onclick={onWindowClick} onkeydown={onWindowKey} />
 
 <aside class="layers">
-  <div class="group-head">
+  <div class="group-head sidebar-section-head">
     <button
       class="caret-btn"
       onclick={onActivate}
@@ -191,23 +192,28 @@
         onchange={(e) => setAllVisible((e.currentTarget as HTMLInputElement).checked)}
       />
     {/if}
-    {#if project.data.imports.length === 1 && usableLayers.length > 0}
-      <span class="filename" title={project.data.imports[0].source.filename}>
-        {project.data.imports[0].source.filename}
-      </span>
-      <span class="file-stats" title={t('layers.file_stats.title')}>
-        {t('layers.file_stats', {
-          segments: project.data.imports[0].source.segments.length,
-          layers: usableLayers.length,
-        })}
-      </span>
-    {:else if project.data.imports.length > 1}
-      <span class="group-name">{t('layers.drawings')}</span>
-      <span class="group-count">{project.data.imports.length}</span>
-    {:else}
-      <span class="group-name">{t('layers.title')}</span>
-      <span class="group-count">{usableLayers.length}</span>
-    {/if}
+    <span class="sidebar-section-identity">
+      {#if project.data.imports.length === 1 && usableLayers.length > 0}
+        <span class="filename" title={project.data.imports[0].source.filename}
+          >{project.data.imports[0].source.filename}</span
+        >
+        <span
+          class="sidebar-section-count"
+          title={t('layers.file_stats', {
+            segments: project.data.imports[0].source.segments.length,
+            layers: usableLayers.length,
+          })}>{usableLayers.length}</span
+        >
+      {:else if project.data.imports.length > 1}
+        <span class="group-name">{t('layers.drawings')}</span><span class="sidebar-section-count"
+          >{project.data.imports.length}</span
+        >
+      {:else}
+        <span class="group-name">{t('layers.title')}</span><span class="sidebar-section-count"
+          >{usableLayers.length}</span
+        >
+      {/if}
+    </span>
     {#if onAddDrawingClick || onAddTextClick}
       <div class="add-menu" class:open={addMenuOpen}>
         <button
@@ -461,6 +467,8 @@
   {/if}
 </aside>
 
+{#if active}<CornerReliefPanel />{/if}
+
 <style>
   .layers {
     width: 100%;
@@ -480,7 +488,7 @@
   /* Base shape lives in app.css `.group-head`; only the per-panel
      grid (5 columns) is local. */
   .group-head {
-    grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+    display: flex;
   }
   .add-menu {
     position: relative;
@@ -559,25 +567,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .group-count {
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    padding: 0 0.3rem;
-    background: var(--bg);
-    border-radius: 10px;
-    line-height: 1.4;
-  }
   .filename {
     color: var(--text-strong);
     font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .file-stats {
-    color: var(--text-muted);
-    font-size: 0.7rem;
-    font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
   .group-body {

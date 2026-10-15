@@ -8,6 +8,7 @@ import type { ProjectState } from './project.svelte';
 import type { OpEntry, OpKind } from './op_types';
 import type { ToolEntry } from './project-types';
 import { buildOpEntry } from './op_defaults';
+import { computeFootprint } from '../sim/footprint';
 import { effectiveModes } from './tool_family';
 import {
   addOperationCommand,
@@ -59,6 +60,11 @@ export function addOperation(p: ProjectState, kind: OpKind): OpEntry {
   // users select first, then click "+ Pocket"); empty selection keeps the
   // All default.
   const op = buildOpEntry(kind, {
+    ...(p.stockSizingImport || p.data.stock.mode === 'manual'
+      ? {
+          surfaceZone: computeFootprint(p.stockSizingImport, p.data.stock, p.data.machine.workArea),
+        }
+      : {}),
     nextId: p.data.operations.reduce((m, o) => Math.max(m, o.id), 0) + 1,
     tools: p.data.tools,
     reliefSources: p.data.reliefSources,

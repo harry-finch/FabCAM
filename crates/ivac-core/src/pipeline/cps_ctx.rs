@@ -314,9 +314,11 @@ fn op_strategy_slug(kind: &OpKind) -> &'static str {
         OpKind::Drill { .. } => "drill",
         OpKind::Thread { .. } => "thread",
         OpKind::Chamfer { .. } => "chamfer2d",
-        OpKind::Engrave { .. } | OpKind::VCarve { .. } | OpKind::RasterEngrave { .. } => "engrave",
+        OpKind::VCarve { .. } => "vcarve",
+        OpKind::Engrave { .. } | OpKind::RasterEngrave { .. } => "engrave",
         OpKind::DragKnife { .. } => "trace",
         OpKind::TSlot { .. } | OpKind::Dovetail { .. } => "slot",
+        OpKind::PlanarSurface { .. } => "planar_surface",
         OpKind::ReliefMill { .. } => "parallel",
         OpKind::WaterlineRough { .. } => "contour",
         // Program-only kinds never build a section; anything new lands

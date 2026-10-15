@@ -50,6 +50,8 @@ export function prettyOpKind(kind: OpKind): string {
       return 'Marker';
     case 'gcode_include':
       return 'G-code include';
+    case 'planar_surface':
+      return 'Planar surfacing';
     case 'relief_mill':
       return 'Relief (3D)';
     case 'waterline_rough':
@@ -792,8 +794,15 @@ export function placementFileTransform(
 }
 
 export interface ProjectFile {
-  kind: 'ivac-project' | 'ivac-project-fs' | 'ivac-project-cutting' | 'ivac-project-knowledge';
-  version: 1 | 2 | 3 | 4;
+  kind:
+    | 'ivac-project'
+    | 'ivac-project-fs'
+    | 'ivac-project-cutting'
+    | 'ivac-project-knowledge'
+    | 'ivac-project-cad'
+    | 'ivac-project-surfacing';
+  version: 1 | 2 | 3 | 4 | 5 | 6;
+  cornerRelief?: import('./corner-relief').CornerReliefModifier;
   material?: MaterialIdentity;
   fsContext?: import('../api/generated').components['schemas']['FsContext'];
   imports: ImportEntry[];

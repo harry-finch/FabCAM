@@ -191,7 +191,10 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         .ok_or(PipelineError::UnknownTool(op.id, op.tool_id))?;
     if let Some(applied) = &op.params.applied_cutting {
         if project.machine.mode != crate::project::MachineMode::Mill
-            || !matches!(op.kind, OpKind::Profile { .. } | OpKind::Pocket { .. })
+            || !matches!(
+                op.kind,
+                OpKind::Profile { .. } | OpKind::Pocket { .. } | OpKind::PlanarSurface { .. }
+            )
         {
             return Err(PipelineError::AppliedCutting(
                 op.id,
@@ -409,7 +412,7 @@ pub(in crate::pipeline) fn synthesize_op_setup(
     }
     let offset = match &op.kind {
         OpKind::Profile { offset, .. } => *offset,
-        OpKind::Pocket { .. } => ToolOffset::None,
+        OpKind::Pocket { .. } | OpKind::PlanarSurface { .. } => ToolOffset::None,
         // T-slot and dovetail both ride ON the centerline
         // like Engrave — the cutter's own cross-section (not a radius
         // offset) defines the undercut groove width.
@@ -631,6 +634,9 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         setup.mill.step = if span.abs() > 1e-9 { span } else { -1e-6 };
         setup.mill.through_depth = 0.0;
         setup.mill.depth_list = Vec::new();
+    }
+    if matches!(op.kind, OpKind::PlanarSurface { .. }) {
+        super::op_drivers::validate_planar_surface(op, project, &setup)?;
     }
     Ok(setup)
 }

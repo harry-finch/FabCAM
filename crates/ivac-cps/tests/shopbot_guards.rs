@@ -122,3 +122,48 @@ fn lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops() {
         assert!(lab_run(v).is_err());
     }
 }
+
+#[test]
+fn planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel() {
+    let mut surface = fixture();
+    surface["sections"][0]["strategy"] = json!("planar_surface");
+    assert!(run(surface.clone()).is_ok());
+    surface["sections"][0]["tool"]["toolType"] = json!(11); // drill
+    assert!(run(surface)
+        .unwrap_err()
+        .to_string()
+        .contains("flat end mill"));
+    let mut relief = fixture();
+    relief["sections"][0]["strategy"] = json!("parallel");
+    assert!(run(relief)
+        .unwrap_err()
+        .to_string()
+        .contains("unsupported strategy parallel"));
+}
+
+#[test]
+fn vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair() {
+    let mut v = fixture();
+    v["sections"][0]["strategy"] = json!("vcarve");
+    v["sections"][0]["tool"]["toolType"] = json!(8);
+    assert!(run(v.clone()).is_ok());
+    for strategy in ["engrave", "contour2d", "pocket2d", "milling"] {
+        let mut bad = v.clone();
+        bad["sections"][0]["strategy"] = json!(strategy);
+        assert!(
+            run(bad).is_err(),
+            "V-bit unexpectedly accepted for {strategy}"
+        );
+    }
+    let mut bad = v.clone();
+    bad["sections"][0]["tool"]["toolType"] = json!(5);
+    assert!(run(bad).is_err());
+    for z in [-1., -2.] {
+        let mut bad = v.clone();
+        bad["sections"][0]["records"].as_array_mut().unwrap().push(json!({"kind":"circular","clockwise":true,"center":{"x":5,"y":10,"z":-1},"end":{"x":0,"y":10,"z":z},"normal":[0,0,1],"feed":600}));
+        assert!(run(bad)
+            .unwrap_err()
+            .to_string()
+            .contains("arcs are unsupported"));
+    }
+}

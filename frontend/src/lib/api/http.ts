@@ -1,3 +1,4 @@
+import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // HTTP implementation of WiacClient. Talks to ivac-server (axum) over the
 // JSON contract in schema/openapi.yaml.
 
@@ -147,6 +148,15 @@ export class HttpWiacClient implements WiacClient {
     return (await res.json()) as FsCamResponse;
   }
 
+  async cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {
+    const res = await fetch(`${this.base}/corner-relief`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!res.ok) await throwHttpError('/corner-relief', res);
+    return (await res.json()) as CornerReliefResponse;
+  }
   async computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse> {
     const res = await fetch(`${this.base}/helix-radius`, {
       method: 'POST',
@@ -492,6 +502,7 @@ class WasmClientLazy {
           if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
           return c.feedsSpeeds(req);
         }),
+      cornerRelief: (req) => ensure().then((c) => c.cornerRelief(req)),
       computeHelixRadius: (req) => ensure().then((c) => c.computeHelixRadius(req)),
       rasterizeStl: (bytes, maxDim) => ensure().then((c) => c.rasterizeStl(bytes, maxDim)),
     };
@@ -551,6 +562,7 @@ class TauriClientLazy {
           if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
           return c.feedsSpeeds(req);
         }),
+      cornerRelief: (req) => ensure().then((c) => c.cornerRelief(req)),
       computeHelixRadius: (req) => ensure().then((c) => c.computeHelixRadius(req)),
       rasterizeStl: (bytes, maxDim) => ensure().then((c) => c.rasterizeStl(bytes, maxDim)),
     };

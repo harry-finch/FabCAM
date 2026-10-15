@@ -71,3 +71,48 @@ describe('generated program identity is independent of file saving', () => {
     expect(generationContextKey(p, 'grbl')).not.toBe(generationContextKey(p, 'cps'));
   });
 });
+
+it('V-Carve tool geometry invalidates output across save, undo and redo without changing cutting rates', async () => {
+  const { History } = await import('./history');
+  const { replaceToolsCommand } = await import('./commands');
+  const p = fixture();
+  p.data.operations = [
+    buildOpEntry('vcarve', {
+      nextId: 1,
+      tools: [],
+      reliefSources: [],
+      selectionIds: [],
+      objectMeta: [],
+    }),
+  ];
+  p.data.operations[0].toolId = 1;
+  p.data.tools = [
+    {
+      id: 1,
+      name: 'Software V-bit',
+      kind: 'v_bit',
+      diameter: 6,
+      tipDiameter: 0.5,
+      tipAngleDeg: 60,
+      flutes: 1,
+      speed: 10000,
+      plungeRate: 200,
+      feedRate: 600,
+      coolant: 'off',
+    },
+  ];
+  const key = generationContextKey(p, 'cps');
+  const history = new History();
+  history.exec(replaceToolsCommand([{ ...p.data.tools[0], tipAngleDeg: 90 }]), p.data);
+  const changed = generationContextKey(p, 'cps');
+  expect(changed).not.toBe(key);
+  p.data.dirty = false;
+  expect(generationContextKey(p, 'cps')).toBe(changed);
+  history.undo(p.data);
+  expect(generationContextKey(p, 'cps')).toBe(key);
+  history.redo(p.data);
+  expect(generationContextKey(p, 'cps')).toBe(changed);
+  expect(p.data.tools[0]).toMatchObject({ feedRate: 600, plungeRate: 200, speed: 10000 });
+  p.data.tools[0].tipDiameter = 1;
+  expect(generationContextKey(p, 'cps')).not.toBe(changed);
+});

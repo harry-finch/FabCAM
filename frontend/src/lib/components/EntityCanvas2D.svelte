@@ -1,4 +1,15 @@
 <script lang="ts">
+  import { drawPlanarSurface } from '../canvas/planar-surface';
+  import { cornerReliefUi } from '../state/corner-relief-ui.svelte';
+  import {
+    drawCornerRelief,
+    clickCorner,
+    reliefFitBounds,
+    reliefDisplay,
+    type ReliefHit,
+  } from '../canvas/corner-relief';
+  let reliefHits: ReliefHit[] = [];
+
   import { createFixtureTools } from '../canvas/fixture-feedback.svelte';
 
   import { onMount } from 'svelte';
@@ -95,11 +106,7 @@
   let { onShowHelp, onActivateSidebarPane }: Props = $props();
 
   let canvas: HTMLCanvasElement;
-  /// Stacked overlay canvas for state-bearing repaints (selection halos,
-  /// hover halo, ghost tab, approach point, box-select rect, fixtures,
-  /// tabs, OSnap glyph). pointer-events: none in CSS so the bg canvas
-  /// keeps receiving input. Splits the per-frame work so hover and
-  /// selection don't repaint the (often huge) imported geometry layer.
+  /// Transparent interaction layer; pointer events stay on the geometry canvas.
   let canvasOverlay: HTMLCanvasElement;
   let container: HTMLDivElement;
 
@@ -215,18 +222,6 @@
     };
   });
 
-  // Two-effect canvas paint (split bd: 'EntityCanvas2D draw effect').
-  //
-  // The bg canvas paints the heavy static layer: imported geometry in
-  // base layer color, text-layer previews in base color, regions, grid,
-  // axes, work-area. Repaints only on data / layout / zoom / pan / theme
-  // changes — NEVER on hover or selection.
-  //
-  // The overlay canvas paints state-bearing items on top: selection /
-  // hover / op-assignment halos, ghost tab, approach point, fixtures,
-  // tab markers, box-select rect, selected-text-layer highlight, OSnap
-  // glyphs. Hover and selection only retouch this layer.
-
   $effect(() => {
     void project.geometryView;
     void project.data.visibleLayers;
@@ -252,6 +247,8 @@
     void view.zoom;
     void view.panX;
     void view.panY;
+    void cornerReliefUi.editing;
+    void cornerReliefUi.response;
     scheduleBackground();
   });
 
@@ -259,6 +256,9 @@
     void project.geometryView;
     void project.data.visibleLayers;
     void project.sel.selectedObjects;
+    void cornerReliefUi.response;
+    void cornerReliefUi.corners;
+    void cornerReliefUi.editing;
     void project.data.operations;
     void project.sel.selectedOpId;
     void project.data.fixtures;
@@ -858,6 +858,7 @@
   }
 
   function onPointerUp(e: PointerEvent) {
+    if (cornerReliefUi.editing && e.button === 0) return;
     if (fixtureTools.interaction.end(e)) return;
     // Release touch tracking + end any active gesture. A quick
     // down→up cancels the long-press (it was a tap, not a hold).
@@ -1199,6 +1200,10 @@
     const rect = canvas.getBoundingClientRect();
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
+    if (clickCorner(reliefHits, cx, cy, e.button)) {
+      e.preventDefault();
+      return;
+    }
 
     // Stock gizmo (phone, 7jug.15): a handle press pre-empts
     // pan / select / long-press. Only on the FIRST pointer — a second
@@ -1567,20 +1572,15 @@
     return { scale: t.scale, offX: t.offX, offY: t.offY, project2: t.project2 };
   }
 
-  /// The bbox the viewport auto-fits to. STABLE on purpose: a text-only
-  /// project's `geometryView` is the synthetic stock outline, which is sized
-  /// to the text and MOVES with it — fitting the view to that would make the
-  /// canvas chase the text during a drag (a tiny finger move reads as a huge
-  /// jump). Prefer real imported geometry; else the work-area / placement
-  /// bed (stable); only fall back to the live geometryView bbox if neither
-  /// exists.
+  /// Fit imported geometry first, then the stable placement/work-area box.
+  /// Authored-only surfacing uses geometryView's bbox without source contours.
   function viewportFitBBox(): BBox | null {
-    const imp = project.transformedImport;
-    if (imp && imp.segments.length > 0) return imp.bbox;
+    const imp = reliefDisplay(project.transformedImport);
+    if (imp && imp.segments.length > 0) return reliefFitBounds(imp.bbox);
     const fb = placementFallbackBBox();
     if (fb) return fb;
     const gv = project.geometryView;
-    return gv && gv.segments.length > 0 ? gv.bbox : null;
+    return gv ? gv.bbox : null;
   }
 
   /// Heavy static layer — repaints only on geometry / layout / theme /
@@ -1594,7 +1594,7 @@
     ctx.fillStyle = themeVar('--bg-app', '#0d0d0d');
     ctx.fillRect(0, 0, w, h);
 
-    const data = project.geometryView;
+    const data = reliefDisplay(project.geometryView);
     const hasGeom = !!data && data.segments.length > 0;
     const fitBBox = viewportFitBBox();
     if (!fitBBox) {
@@ -1703,7 +1703,7 @@
     // Transparent clear — bg shows through.
     ctx.clearRect(0, 0, w, h);
 
-    const data = project.geometryView;
+    const data = reliefDisplay(project.geometryView);
     const hasGeom = !!data && data.segments.length > 0;
     // Mirror drawBackground — same stable fit bbox so the overlay projection
     // matches the bg layer (and doesn't chase a dragged text layer).
@@ -1712,6 +1712,7 @@
     const { scale, project2 } = computeTransform(fitBBox, w, h);
 
     const accent = themeVar('--accent', '#2d6cdf');
+    drawPlanarSurface(ctx, project2, accent, themeVar('--warn'));
 
     // Faint raster-engrave placement images, painted
     // first so selection halos / chrome layer over them.
@@ -1741,7 +1742,7 @@
       }
     }
 
-    if (hasGeom && data) {
+    if (hasGeom && data && !cornerReliefUi.editing) {
       const visibleLayersSnap = new Set(project.data.visibleLayers);
       visibleLayersSnap.add(STOCK_OUTLINE_LAYER); // synthetic layer always drawn
       drawEntityHalos(ctx, project2, {
@@ -1773,6 +1774,8 @@
       themeVar('--error', '#e54848'),
     );
     drawWorkZero(ctx, project2, project.data.workOffset, accent, t('ux2.zero_marker'));
+    reliefHits = drawCornerRelief(ctx, project2, scale, themeVar, accent);
+
     drawTabs(
       ctx,
       project2,

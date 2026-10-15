@@ -152,3 +152,93 @@ context/provenance belongs to the existing Modal. Advanced depth-entry uses the 
 disclosure/numeric row tokens; incompatible entry warnings stay visible when closed.
 Pocket overlap retains its lower-level inheritance control under an accurately named
 secondary disclosure. No domain or compatibility changes.
+
+## UX5 command palette and quick actions (PLANNED — NOT IMPLEMENTED)
+
+[UX5 plan](UX5_PLAN.md) defines an additional keyboard/menu access method over
+existing actions, using the canonical Professional Workshop UI and CAM UX skills.
+Review a compact upper-center floating search surface, short scrollable results,
+Lucide icons, context/shortcut hints, visible keyboard selection and accessible
+one-line disabled reasons. Normal menus, toolbar and inspectors remain usable.
+
+Focus restoration/transfer, typing/IME handling and Cmd+K/Ctrl+K conflicts require
+qualification before adoption. Search is deterministic and local; navigation/search
+never changes project data. Tool Inspect and Assign are explicit distinct intentions.
+Context ranking cannot enable incompatible or stale commands. No fullscreen
+navigation replacement, remote search or extra permanent command clutter.
+This entry records future design only; shared skill rules remain canonical.
+
+### UX4.1 templates and section context
+
+Reuse-first template list with simple local search; secondary contextual library
+management and dedicated source capture; stored preview and concise known diameter
+review. Top-level sidebar title/count stays together; active section scrolls with
+its own sticky header. No sticky operation rows or duplicated header layer.
+[Qualification and visual evidence](../UX4_1_QUALIFICATION.md).
+
+## Future two-sided setup and V-Carve inlays (planning only)
+
+Both use the canonical Professional Workshop UI + CAM UX skills; no restyling now.
+[Two-sided setup](../TWO_SIDED_PLAN.md) should progressively disclose side, physical
+X/Y flip/reference, pin registration and per-side XY/Z, with a compact orientation
+and registration diagram. View switching is not operation mutation or proof of
+physically established zero. [Inlays](../VCARVE_INLAYS_PLAN.md) need clear female/male
+identity, depth/engagement/fit meaning and a useful pair cross-section, distinguishing
+software clearance from measured physical fit. Both remain PLANNED/unqualified;
+normal workspace, authoritative warnings and current V-Carve scope stay intact.
+
+## GEOM drawing cleanup and editing (PLANNED — NOT IMPLEMENTED)
+
+Use canonical Professional Workshop UI as primary visual language plus CAM UX.
+[Shared plan](../GEOMETRY_PREPARATION_PLAN.md) places tools in Drawing/Geometry,
+compact 2D selection/numeric controls, post-import review and existing UX5 access;
+not inside individual machining inspectors or a full CAD workspace.
+
+Analyze and preview do not mutate. Show affected geometry, repair action/tolerance,
+ambiguity and operation impact; original/removed/added/moved/simplified/unresolved
+states need restrained semantic cues and text. Geometry repair preview must remain
+distinct from generated paths. Optional post-import diagnosis never implies automatic
+repair or blocking harmless open geometry. Creation stays separate from CAM intent;
+exact dimensions, keyboard focus/history and cancellation remain accessible.
+No new palette actions now; eventual commands use existing registry/owner dispatch.
+
+## Future transform and sheet-layout UX
+
+GEOM2-A uses compact position/size/proportions/angle/pivot controls plus qualified
+2D handles, grouped selection and explicit completion/cancel/history. GEOM2-B reuses
+those interactions for primitives. NEST1 places source-referenced instances with
+quantity, numeric XY/angle, margins/restrictions and actionable layout warnings;
+NEST2 proposes an arrangement for explicit review/accept/reject, then manual adjustment.
+Drawing edits, instance placement and CAM parameters remain distinct contexts.
+Canonical Professional Workshop UI + CAM UX apply; no large permanent CAD toolbar,
+second editor or dashboard. Future palette actions reuse current UX5 owners.
+See [architecture/dependencies](../NESTING_PLAN.md); all PLANNED/unimplemented.
+
+## Planned PERF1 perceived performance and cancellation
+
+[PERF1 plan](../PERF1_PLAN.md) preserves canonical Professional Workshop UI + CAM UX:
+compact contextual busy/elapsed/stage feedback, truthful progress, indeterminate
+indicator where completion fraction is unknown. Audit existing nonblocking/cancel
+paths before adding controls. No fake percentages, permanent performance dashboard,
+noisy overlays or unnecessary blocking modals. Measurements belong in developer
+reports. Cancel/failure/timeout remain distinct, with no partial-current output or
+stale-export loophole; late completion and resource release require qualification.
+This is PLANNED only; no current preview/generation interaction change.
+
+
+## Geometry source terminology and interpretation — 2026-10-14
+
+The shared operation inspector uses Geometry, Use geometry from and Contour
+interpretation. Source selection and region interpretation stay distinct. Show
+original layer identity with reliable drawing provenance: SVG is one synthetic
+layer; equal names span imports. Preserve saved multi-layer bindings and invalid
+references instead of rendering blank or replacing them on unrelated edits.
+Unbound mode choices remain drafts with the still-active source named explicitly.
+
+Region controls are contextual to actual Pocket/V-Carve consumers; path operations
+retain their saved fields while showing individual-path intent. Selected descriptions
+must reflect normal Pocket Auto versus the shared parity kernel and Difference's
+actual source ordering. Avoid universal nesting diagrams or invented resolved counts.
+Use existing shared rows, native selects, tooltips and one concise help line.
+
+[Detailed source semantics, qualification, deferred highlight and manual review](../GEOMETRY_SOURCE_UX.md).

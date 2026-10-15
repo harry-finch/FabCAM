@@ -590,6 +590,10 @@ pub enum OpKind {
         #[serde(default)]
         verbose_unsim_warnings: bool,
     },
+    /// Explicit flat-cutter rectangular planar surfacing, independent of imports.
+    PlanarSurface {
+        surface: crate::cam::planar_surface::PlanarSurfaceParams,
+    },
     /// 3-axis ball-nose relief surfacing. Finishes a curved Z(x,y)
     /// surface (a [`crate::project::ReliefSource`] referenced by
     /// `source_id`, e.g. a grayscale-image relief) with a ball-nose cutter:

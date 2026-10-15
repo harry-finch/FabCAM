@@ -662,7 +662,7 @@ pub(super) fn build_op_offsets(
                 // call here doesn't crash the program — the dedicated
                 // dispatcher already produced the toolpath.
             }
-            OpKind::ReliefMill { .. } => {
+            OpKind::PlanarSurface { .. } | OpKind::ReliefMill { .. } => {
                 // Relief surfacing runs through `run_relief_op` (its
                 // own drop-cutter driver), never the offset cascade. Skip.
             }

@@ -303,9 +303,11 @@
     const axes = new THREE.AxesHelper(50);
     scene.add(axes);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
-    dir.position.set(100, -100, 200);
+    // A lower key light and less ambient fill reveal shallow cut walls.
+    // Lighting only: simulation heights, cutter geometry and paths stay exact.
+    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+    const dir = new THREE.DirectionalLight(0xffffff, 1.5);
+    dir.position.set(100, -100, 120);
     scene.add(dir);
 
     // Builders own their own groups inside the scene. The host's
@@ -1233,7 +1235,7 @@
   >
     ⌖
   </button>
-  {#if !project.transformedImport && project.data.textLayers.length === 0}
+  {#if !project.transformedImport && project.data.textLayers.length === 0 && !project.data.operations.some((op) => op.enabled && op.kind === 'planar_surface')}
     <!-- Empty-state mirror of EntityCanvas2D's "Open a file" overlay.
          Before this, switching to 3D before loading anything showed a
          blank grid + axes with no affordance. The pointer-events:none

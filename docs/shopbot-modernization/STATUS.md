@@ -1,5 +1,186 @@
 # Status — 2026-10-14
 
+## Geometry source UX refinement — human review pending
+
+Requested shared-inspector refinement ivac-uebs: Geometry / Use geometry from /
+Contour interpretation, actual SVG/DXF/file provenance, preserved saved multi-layer
+bindings, explicit pending-source state, one-command source edits and consumer-specific
+help. [Architecture, semantics, qualification and actual captures](GEOMETRY_SOURCE_UX.md).
+No geometry/import/boolean/toolpath/post changes: 120 protected production files
+unchanged; actual SBP output identical for both V-Carve strategies.
+
+1260 frontend passes/1skip; check0 diagnostics; lint/build pass. 7 new core audit
+fixtures and existing combine9/selection9/offset54/import41 suites pass (2 optional
+DXF corpus tests return early; new self-contained DXF coverage runs). V-Carve10,
+Halfpipe15, ShopBot7 pass. Actual source Undo/Redo/Save-reopen/duplication, missing
+layer diagnostics/export refusal and desktop/narrow layouts verified.
+
+**Next action: human visual review ivac-xy3w**, including native popup/tooltip and
+arrow-key checks. Separate follow-ups: source highlight ivac-9oty, deep Pocket Auto
+preview/emission nesting audit ivac-dli7, XOR early-empty audit ivac-j2po.
+**V-Carve final acceptance ivac-1b75 remains independent and pending.** No new
+milestone or publication; roadmap scheduling remains subject to human approval.
+
+
+## V-Carve strategy UX clarification — human review pending
+
+The user-requested presentation follow-up (ivac-klww) replaces algorithm labels
+with **Outline groove / Variable-depth engraving**, a full-width native selector
+and contextual explanations. Final depth becomes Maximum carving depth only for
+the variable strategy; the same field, sign,0-auto semantics and pass values remain.
+Existing boolean/default/history/persistence/templates/diagnostics/export guards
+are preserved. [Strategy UX evidence](VCARVE_STRATEGY_UX.md).
+
+1249 frontend passes/1skip; check0 diagnostics; lint/build pass.10 V-Carve,
+15 Halfpipe and7 ShopBot guard tests pass. Nine protected sources remain byte-
+identical; actual OpenSBP programs match exactly for both strategies. Browser
+verifies Undo/Redo/Save-reopen, selected descriptions, advanced controls, warnings
+and approximately280/360/550px sidebars. Native popup keyboard navigation remains
+an explicit manual acceptance check; no new physical/native qualification.
+**Next action: existing final human gate ivac-1b75. STOP before another milestone
+or publication.** Future Two-Sided plan remains planned, with separate launch approval.
+This section supersedes earlier V-Carve next-action presentation wording below.
+
+
+Final UX/diagnostics refinement is implemented; see [final UX audit and screenshots](VCARVE_FINAL_UX.md). Unsupported saved settings remain visible/rejected and explicitly correctable; inlay action unavailable; warning severities/export guards preserved. **Final human acceptance ivac-1b75 remains pending.**
+
+## V-Carve qualification — software implementation ready for review
+
+User approved the targeted V-Carve-only planner. A1/A2/A3 red references now pass;
+A4 independently verifies generic paths → OpenSBP → resolved preview. Halfpipe
+sources unchanged; 15 named tests pass. Perimeter stays a contour groove; Full
+medial stays sampled spines, **partial area coverage**, not a complete pocket.
+Strict clearance refuses the square-island Perimeter counterexample.
+[Qualification, limits, fixtures and screenshots](VCARVE_QUALIFICATION.md),
+[ADR-0017](adr/ADR-0017-vcarve-continuous-planner.md). 10 dedicated, 1,074 core,
+7 post guard, 51 existing CAM/post regression tests pass; frontend 1,234/1skip,
+check/lint/build and Clippy pass. No schema migration or FS changes in this work.
+**HARD STOP: human software review ivac-1b75.** No physical qualification,
+commit/push or next milestone authorized. ivac-2eh7 implementation completed;
+independent pre-existing review gates remain unchanged.
+
+Future **Two-Sided Machining & Registration** and **V-Carve Inlays** are recorded
+as **PLANNED — NOT IMPLEMENTED / NOT QUALIFIED** in their promised complete scope.
+[Two-sided plan](TWO_SIDED_PLAN.md), [inlay plan](VCARVE_INLAYS_PLAN.md).
+Active V-Carve priority/decision/HARD STOP and independent gates stay intact;
+no implementation starts here. Open ivac-jtkj still tracks rejected CPS/translated
+registration; closed inherited inlay work is not qualified fit evidence.
+
+GEOM1, GEOM2-A/B, GEOM3 and NEST1/2 are **PLANNED — NOT IMPLEMENTED**:
+[geometry plan](GEOMETRY_PREPARATION_PLAN.md), [transform/nesting architecture](NESTING_PLAN.md).
+GEOM2 is refined into transformations A and drawing B. NEST1 depends on qualified
+A/reliable sources, not all B; NEST2 follows manual layout. Current V-Carve review
+ivac-1b75 and independent priorities/gates remain unchanged; no new code now.
+
+PERF1-A profiling and PERF1-B targeted optimization are **PLANNED**, not started;
+[measurement/architecture plan](PERF1_PLAN.md). Reported 5–10 s text generation
+is informal and awaits reproduction. A is proposed near-term after current V-Carve
+acceptance; its report/HARD STOP precedes B. Current ivac-1b75 and other priorities
+remain unchanged; no instrumentation or optimization in this checkpoint.
+
+## UX5 — discoverability refinement ready, human review pending
+
+UX5 implementation is satisfactory in the human review; its requested small
+polish is implemented locally (ivac-snsy). Welcome returns to the approved three
+primary actions and branding with no palette hint/replacement. Existing File
+menu retains **Command Palette…** with platform shortcut; Help concisely documents
+keyboard navigation/execution/dismissal. The authoritative shortcut/opening
+handler, palette registry/search/ranking/availability/history/export guards are
+unchanged. [Current qualification and five captures](UX5_QUALIFICATION.md).
+
+1232 frontend passes/1skip;0 check diagnostics; lint/build/diff check pass. Actual
+macOS browser verifies welcome/empty/loaded/geometry/operation contexts, menu,
+focus/Esc/Tab and modal/input guards; before/after Save files are byte-identical.
+Windows/Linux mapping/display are unit-tested, without new native-runtime claims.
+Earlier UX5/native/IME/picker/physical limits remain. No new major milestone.
+**Next action: UX5 human software gate ivac-txve. STOP before later milling work
+or publication.** Roadmap and next V-carve qualification scope remain unchanged.
+No commit/push requested. This section supersedes earlier UX5/UX4.1 next actions.
+
+## UX4.1 — templates and sidebar refinement, human review pending
+
+User-requested UX refinement is implemented locally (ivac-01ux): reuse-first
+searchable templates; separate save/contextual rename/confirmed delete; stored
+parameter preview and diameter review. Existing v1 templates/manual values and
+v3/v6 projects retain their semantics. Shared section-bounded sticky headers and
+adjacent total counters preserve orientation during long inspector edits.
+[Qualification, before/after captures and fixtures](UX4_1_QUALIFICATION.md).
+
+1178 frontend passes/1skip; zero check diagnostics, lint and production build pass.
+Actual browser confirms history/counts/save-reopen/ShopBot/stale guards, all four
+sections, 32-operation fixture, sidebar resize and 1100×660 desktop. No new core,
+FS/post semantics or physical/native qualification. Initial review ivac-51gg is
+superseded by **ivac-si5w**, not retrospectively approved.
+**Next action: UX4.1 human review. HARD STOP before UX5.** No publication requested.
+This section supersedes earlier UX4 review-next-action wording below.
+
+## UX4 — operation templates software handoff, human review pending
+
+User explicitly authorized UX4 on 2026-10-14; UX3 continuation gate ivac-k4z3
+accepted without new physical/native claims. UX4 is implemented locally
+(ivac-epg2): named local Profile/Pocket/planar-surface templates, explicit current
+geometry and rough/finish tool binding, frozen manual values, independent job
+operations and atomic Undo/Redo. Source-specific/private evidence is excluded.
+Library supports rename/remove/restore and persists in the existing workspace.
+[Qualification and review fixtures](UX4_QUALIFICATION.md),
+[ADR-0015](adr/ADR-0015-reusable-operation-templates.md).
+
+1172 frontend tests pass (1 optional skip), check/lint and production build pass.
+Browser verifies library reload, explicit choices, Undo/Redo, v3/v6 save/reopen,
+different-tool retained rates, ShopBot generation/export and stale blocking.
+No UX4 Rust/CAM/post changes or new native bundle/physical qualification.
+**Next action: UX4 human gate ivac-51gg. HARD STOP before UX5.**
+No commit/push requested. This section supersedes older UX3 pending and
+UX4-unstarted wording below; independent FS/UX/native/physical gates remain.
+
+## UX3 — planar surfacing software handoff, human review pending
+
+User authorized the next milestone on 2026-10-14, accepting CAD1 continuation
+(ivac-7r7r closed; no wider geometry or physical evidence claimed).
+**UX3 — Planar spoilboard surfacing** is implemented locally (ivac-gepq):
+explicit persisted rectangle/stock snapshot, flat cutter, X/Y raster, margins and
+edge overtravel, depth passes, manual rates, Undo/Redo and guarded v6 save/reopen.
+Shared XYZ emission, resolved work frame, final ShopBot preview and fixture/export
+checks are retained. Invalid depth/tool/travel/context refuses generation.
+[Qualification, fixture and review](UX3_QUALIFICATION.md),
+[ADR-0014](adr/ADR-0014-explicit-planar-surfacing.md).
+
+1074 core tests, 1161 frontend tests (1 optional skip), 8 UX3 integration tests,
+27 existing ShopBot regressions and the CAD1 integration matrix pass.
+Svelte/TypeScript, lint, core/server Clippy, schemas, production WASM/frontend
+build and CLI/WASM/Tauri compilation pass; 14 server tests pass.
+Browser verification: standalone load/generate/.sbp export; X→Y/manual feed edit
+marks output stale and disables export; actual v6 Save/reopen preserves Y and
+1500 mm/min; excessive stepover refuses generation. Review captures are linked
+in the qualification. No new desktop bundle or physical flatness qualification.
+
+**Next action: UX3 human gate ivac-k4z3. HARD STOP before UX4.**
+Local CPS review runs on 18767/18772; independent FS/UX/native/physical gates remain.
+No commit/push requested. This section supersedes older CAD1-next-action and
+unstarted-UX3 wording below.
+
+## CAD1 — software qualified, human review pending
+
+The user approved the architecture checkpoint and bounded CAM4 A/B prerequisite
+on 2026-10-14 (ivac-alch / ivac-tvox closed). CAD1 now implements exact-radius
+Dogbone and both T-bone orientations, explicit corner/batch selection and preview,
+a persistent source-preserving modifier, atomic Undo/Redo and stale-generation guards.
+[Qualification and review steps](CAD1_QUALIFICATION.md),
+[accepted architecture](adr/ADR-0013-persistent-corner-relief.md).
+1070 core tests and 1151 frontend tests pass (1 frontend skip); 18 CAD1 integration
+cases verify decoded ShopBot coverage and preview parity. Acute corners requiring
+isolated plunges/access enlargement and other unsupported contexts are refused.
+Curved residual diagnostics remain outside CAM4 A/B qualification.
+Human CAD1 gate **ivac-7r7r** remains open. No physical machining qualification.
+**HARD STOP: UX3/UX4 are unstarted.** Independent FS/UX gates remain unchanged.
+This section supersedes older next-action wording below.
+
+UX5 — Command Palette & Quick Actions is **PLANNED — NOT IMPLEMENTED**;
+[architecture/UX plan](ux/UX5_PLAN.md), human planning gate **ivac-2zh9**.
+Future order CAD1 → UX3 → UX4 → UX5 retains current labels and completion status.
+CAD1's human qualification remains the next action; no UX5 development or
+publication is authorized. Existing FS/CAM/UX reviews remain independent.
+
 ## FabCAM branding and identity — publication approved
 
 User approved the A1 branding, public identity and documentation on 2026-10-14

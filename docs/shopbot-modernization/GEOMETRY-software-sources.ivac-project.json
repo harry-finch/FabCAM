@@ -1,0 +1,574 @@
+{
+  "kind": "ivac-project-cutting",
+  "version": 3,
+  "imports": [
+    {
+      "id": 1,
+      "source": {
+        "filename": "nested.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 10
+            },
+            "end": {
+              "x": 50,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50,
+              "y": 10
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50,
+              "y": 50
+            },
+            "end": {
+              "x": 10,
+              "y": 50
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 50
+            },
+            "end": {
+              "x": 10,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 23,
+              "y": 23
+            },
+            "end": {
+              "x": 37,
+              "y": 23
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 37,
+              "y": 23
+            },
+            "end": {
+              "x": 37,
+              "y": 37
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 37,
+              "y": 37
+            },
+            "end": {
+              "x": 23,
+              "y": 37
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 23,
+              "y": 37
+            },
+            "end": {
+              "x": 23,
+              "y": 23
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "objects": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 10,
+              "min_y": 10,
+              "max_x": 50,
+              "max_y": 50
+            }
+          },
+          {
+            "id": 2,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 23,
+              "min_y": 23,
+              "max_x": 37,
+              "max_y": 37
+            }
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 8
+          }
+        ],
+        "bbox": {
+          "min_x": 10,
+          "min_y": 10,
+          "max_x": 50,
+          "max_y": 50
+        },
+        "unit_scale": 1,
+        "warnings": []
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    },
+    {
+      "id": 2,
+      "source": {
+        "filename": "detail.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 60,
+              "y": 10
+            },
+            "end": {
+              "x": 72,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 72,
+              "y": 10
+            },
+            "end": {
+              "x": 72,
+              "y": 22
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 72,
+              "y": 22
+            },
+            "end": {
+              "x": 60,
+              "y": 22
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 60,
+              "y": 22
+            },
+            "end": {
+              "x": 60,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 60,
+              "min_y": 10,
+              "max_x": 72,
+              "max_y": 22
+            }
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 4
+          }
+        ],
+        "bbox": {
+          "min_x": 60,
+          "min_y": 10,
+          "max_x": 72,
+          "max_y": 22
+        },
+        "unit_scale": 1,
+        "warnings": []
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    },
+    {
+      "id": 3,
+      "source": {
+        "filename": "plate.dxf",
+        "format": "dxf",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 60,
+              "y": 32
+            },
+            "end": {
+              "x": 72,
+              "y": 32
+            },
+            "bulge": 0,
+            "layer": "Cuts",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 72,
+              "y": 32
+            },
+            "end": {
+              "x": 72,
+              "y": 44
+            },
+            "bulge": 0,
+            "layer": "Cuts",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 72,
+              "y": 44
+            },
+            "end": {
+              "x": 60,
+              "y": 44
+            },
+            "bulge": 0,
+            "layer": "Cuts",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 60,
+              "y": 44
+            },
+            "end": {
+              "x": 60,
+              "y": 32
+            },
+            "bulge": 0,
+            "layer": "Cuts",
+            "color": 7
+          }
+        ],
+        "objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "Cuts",
+            "color": 7,
+            "bbox": {
+              "min_x": 60,
+              "min_y": 32,
+              "max_x": 72,
+              "max_y": 44
+            }
+          }
+        ],
+        "layers": [
+          {
+            "name": "Cuts",
+            "color": 7,
+            "segment_count": 4
+          }
+        ],
+        "bbox": {
+          "min_x": 60,
+          "min_y": 32,
+          "max_x": 72,
+          "max_y": 44
+        },
+        "unit_scale": 1,
+        "warnings": []
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    }
+  ],
+  "visibleLayers": [],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 0,
+    "thickness": 10,
+    "customX": 90,
+    "customY": 60,
+    "offsetX": 0,
+    "offsetY": 0,
+    "offsetZ": 0
+  },
+  "tools": [
+    {
+      "id": 1,
+      "name": "SOFTWARE ONLY \u2014 90\u00b0 V-bit D6",
+      "kind": "v_bit",
+      "diameter": 6,
+      "tipDiameter": 0,
+      "tipAngleDeg": 90,
+      "flutes": 1,
+      "speed": 10000,
+      "plungeRate": 200,
+      "feedRate": 600,
+      "coolant": "off",
+      "fluteLengthMm": 6
+    },
+    {
+      "id": 2,
+      "name": "GEOMETRY SOFTWARE ONLY \u2014 endmill D4",
+      "kind": "endmill",
+      "diameter": 4,
+      "flutes": 1,
+      "speed": 10000,
+      "plungeRate": 500,
+      "feedRate": 1000,
+      "coolant": "off"
+    }
+  ],
+  "machine": {
+    "unit": "mm",
+    "mode": "mill",
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 15,
+    "accel": {
+      "x": 250,
+      "y": 250,
+      "z": 250
+    },
+    "toolchangeS": 5,
+    "rapidSpeed": 9144,
+    "workArea": {
+      "x": 1200,
+      "y": 600,
+      "z": 203
+    },
+    "name": "VCARVE SOFTWARE ONLY \u2014 ShopBot post",
+    "capabilities": [
+      "mill"
+    ],
+    "gcodeDialect": "cps",
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false,
+    "spindleRpmMax": 24000,
+    "cpsPost": {
+      "source": "bundled",
+      "bundledId": "shopbot",
+      "properties": {}
+    }
+  },
+  "operations": [
+    {
+      "id": 1,
+      "name": "Pocket \u2014 nested SVG contours",
+      "enabled": true,
+      "kind": "pocket",
+      "toolId": 2,
+      "sourceLayers": [
+        "svg"
+      ],
+      "sourceCombine": "auto",
+      "depth": -1,
+      "startDepth": 0,
+      "step": -0.5,
+      "pocketStrategy": "cascade"
+    },
+    {
+      "id": 2,
+      "name": "Profile \u2014 saved two-layer source",
+      "enabled": false,
+      "kind": "profile",
+      "toolId": 2,
+      "sourceLayers": [
+        "svg",
+        "Cuts"
+      ],
+      "sourceCombine": "difference",
+      "depth": -1,
+      "startDepth": 0,
+      "step": -0.5,
+      "pocketStrategy": "cascade",
+      "offset": "outside"
+    },
+    {
+      "id": 3,
+      "name": "Pocket \u2014 ordered Difference",
+      "enabled": false,
+      "kind": "pocket",
+      "toolId": 2,
+      "sourceLayers": null,
+      "sourceCombine": "difference",
+      "depth": -1,
+      "startDepth": 0,
+      "step": -0.5,
+      "pocketStrategy": "cascade",
+      "sourceObjects": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Pocket \u2014 unavailable layer",
+      "enabled": false,
+      "kind": "pocket",
+      "toolId": 2,
+      "sourceLayers": [
+        "Missing layer"
+      ],
+      "sourceCombine": "auto",
+      "depth": -1,
+      "startDepth": 0,
+      "step": -0.5,
+      "pocketStrategy": "cascade"
+    },
+    {
+      "id": 5,
+      "name": "Pocket \u2014 legacy empty binding",
+      "enabled": false,
+      "kind": "pocket",
+      "toolId": 2,
+      "sourceLayers": [],
+      "sourceCombine": "auto",
+      "depth": -1,
+      "startDepth": 0,
+      "step": -0.5,
+      "pocketStrategy": "cascade"
+    }
+  ],
+  "fixtures": [],
+  "textLayers": [],
+  "workOffset": {
+    "x_mm": 5,
+    "y_mm": 5,
+    "z_mm": 0,
+    "wcs": "G54"
+  },
+  "nextOpId": 6,
+  "nextToolId": 3
+}

@@ -18,6 +18,7 @@ type ObjectMeta = Parameters<typeof pickBestToolForOp>[2];
 export interface OpDefaultsCtx {
   /// Id for the new op (max existing id + 1).
   nextId: number;
+  surfaceZone?: { minX: number; minY: number; maxX: number; maxY: number };
   tools: readonly ToolEntry[];
   reliefSources: readonly ReliefSource[];
   /// Canvas-selected object ids — geometry kinds pin the op to this set.
@@ -48,7 +49,7 @@ export function buildOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
     name: prettyOpKind(kind),
     enabled: true,
     toolId: 0,
-    sourceCombine: 'auto',
+    sourceCombine: 'auto' as const,
     sourceLayers: null,
   };
 
@@ -77,6 +78,27 @@ export function buildOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
       } as OpEntry;
     // Relief surfacing follows a target Z-surface, not source geometry.
     // Prefer a ball-/bull-nose tool; bind to the first loaded relief source.
+    case 'planar_surface': {
+      const tool = tools.find((t) => t.kind === 'endmill' || t.kind === 'compression');
+      const zone = ctx.surfaceZone;
+      return {
+        ...base,
+        kind,
+        toolId: tool?.id ?? 0,
+        depth: -0.5,
+        startDepth: 0,
+        step: -0.5,
+        surface: {
+          origin: zone ? [zone.minX, zone.minY] : [20, 20],
+          width_mm: zone ? zone.maxX - zone.minX : 100,
+          height_mm: zone ? zone.maxY - zone.minY : 100,
+          margin_mm: 0,
+          overtravel_mm: 1,
+          stepover_mm: Math.max(0.01, (tool?.diameter ?? 6) * 0.4),
+          direction: 'along_x',
+        },
+      };
+    }
     case 'relief_mill': {
       const ball = tools.find((t) => t.kind === 'ball_nose' || t.kind === 'bull_nose') ?? tools[0];
       return {

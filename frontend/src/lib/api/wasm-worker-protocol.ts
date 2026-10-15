@@ -20,6 +20,7 @@ export type WorkerMethod =
   | 'renderTextLayer'
   | 'feedsSpeeds'
   | 'computeHelixRadius'
+  | 'cornerRelief'
   | 'rasterizeStl';
 
 /// Main thread → worker. `id` correlates the eventual response(s);

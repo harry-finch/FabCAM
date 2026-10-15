@@ -4,6 +4,7 @@
 // compiler. Reactivity is bolted on by the `.svelte.ts` wrapper via a
 // subscriber callback.
 
+import { validTemplate, type OperationTemplate } from './operation-templates';
 import { isTauri } from '../api/env';
 import type { MachineSettings, ToolEntry } from './project-types';
 
@@ -77,6 +78,7 @@ export interface WorkspaceState {
   /// (copied id-preserving into the project's working tool set); the
   /// Tool library tab edits THIS list.
   tool_inventory: ToolEntry[];
+  operation_templates: OperationTemplate[];
 }
 
 export const DEFAULT_WORKSPACE: WorkspaceState = {
@@ -95,6 +97,7 @@ export const DEFAULT_WORKSPACE: WorkspaceState = {
   last_post_processor: 'linuxcnc',
   machine_profiles: [],
   tool_inventory: [],
+  operation_templates: [],
 };
 
 function defaultsClone(): WorkspaceState {
@@ -105,6 +108,7 @@ function defaultsClone(): WorkspaceState {
     per_project: {},
     machine_profiles: [],
     tool_inventory: [],
+    operation_templates: [],
   };
 }
 
@@ -238,6 +242,14 @@ export function parseWorkspace(raw: string | null | undefined): WorkspaceState {
     }
     out.tool_inventory = tools;
   }
+  if (Array.isArray(obj.operation_templates)) {
+    const seen = new Set<string>();
+    out.operation_templates = obj.operation_templates.filter((t) => {
+      if (!validTemplate(t) || seen.has(t.id)) return false;
+      seen.add(t.id);
+      return true;
+    });
+  }
   return out;
 }
 
@@ -259,11 +271,8 @@ class LocalStorageTransport implements WorkspaceTransport {
   }
   async write(json: string): Promise<void> {
     if (typeof window === 'undefined') return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, json);
-    } catch {
-      // ignore — quota / disabled storage are non-fatal here.
-    }
+    // Explicit library saves expose quota/disabled-storage failures to callers.
+    window.localStorage.setItem(STORAGE_KEY, json);
   }
 }
 
@@ -278,12 +287,8 @@ class TauriTransport implements WorkspaceTransport {
     }
   }
   async write(json: string): Promise<void> {
-    try {
-      const { invoke } = await import('@tauri-apps/api/core');
-      await invoke('write_workspace_file', { json });
-    } catch {
-      // ignore — best-effort.
-    }
+    const { invoke } = await import('@tauri-apps/api/core');
+    await invoke('write_workspace_file', { json });
   }
 }
 
@@ -296,6 +301,7 @@ export class WorkspaceStore {
   private transport: WorkspaceTransport;
   private saveTimer: ReturnType<typeof setTimeout> | null = null;
   private loaded = false;
+  private saveQueue: Promise<void> = Promise.resolve();
   private subscribers: Array<() => void> = [];
 
   constructor(transport?: WorkspaceTransport) {
@@ -386,6 +392,17 @@ export class WorkspaceStore {
     this.state = { ...this.state, recent_projects: [], last_project: null };
     this.notify();
     this.scheduleSave();
+  }
+
+  upsertOperationTemplate(template: OperationTemplate) {
+    if (!validTemplate(template)) throw new Error('templates.invalid');
+    const entries = this.state.operation_templates.filter((t) => t.id !== template.id);
+    entries.push(JSON.parse(JSON.stringify(template)) as OperationTemplate);
+    this.update({ operation_templates: entries });
+  }
+
+  removeOperationTemplate(id: string) {
+    this.update({ operation_templates: this.state.operation_templates.filter((t) => t.id !== id) });
   }
 
   // ── machine profiles ─────────────────────────────────────────────
@@ -505,7 +522,8 @@ export class WorkspaceStore {
       this.saveTimer = null;
     }
     const json = JSON.stringify(this.state);
-    await this.transport.write(json);
+    this.saveQueue = this.saveQueue.catch(() => {}).then(() => this.transport.write(json));
+    await this.saveQueue;
   }
 
   private scheduleSave() {
@@ -517,7 +535,7 @@ export class WorkspaceStore {
     if (this.saveTimer) clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => {
       this.saveTimer = null;
-      void this.save();
+      void this.save().catch(() => console.warn('Workspace persistence failed'));
     }, SAVE_DEBOUNCE_MS);
   }
 

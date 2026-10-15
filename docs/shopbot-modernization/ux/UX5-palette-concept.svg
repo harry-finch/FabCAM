@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="420" viewBox="0 0 840 420" role="img" aria-labelledby="title desc">
+<title id="title">UX5 palette concept — not implemented</title><desc id="desc">Proposal for compact command and template results; query pocket, explicit selection and existing workflow handoff.</desc>
+<rect width="840" height="420" fill="#171717"/><g fill="#999" font-family="sans-serif"><text x="20" y="27" font-size="13">FabCAM • UX5 design checkpoint</text><text x="550" y="27" font-size="12">PROPOSAL — NOT IMPLEMENTED</text></g>
+<rect x="145" y="58" width="550" height="307" rx="5" fill="#252525" stroke="#505050"/>
+<g font-family="sans-serif" font-size="13"><text x="163" y="84" fill="#eee" font-weight="600">Command palette</text><text x="646" y="84" fill="#aaa">Esc</text>
+<rect x="163" y="101" width="514" height="32" rx="3" fill="#1e1e1e" stroke="#729bdd"/><text x="173" y="122" fill="#eee">pocket</text>
+<text x="163" y="157" fill="#aaa" font-size="11">2 MATCHES • PROPOSED CONTEXT: SELECTED CLOSED CONTOUR / MILL</text>
+<rect x="163" y="173" width="514" height="56" rx="2" fill="#303844"/><rect x="163" y="173" width="2" height="56" fill="#729bdd"/>
+<text x="176" y="195" fill="#eee" font-weight="600">Create Pocket</text><text x="176" y="214" fill="#aaa" font-size="12">Operation • existing creation and history</text>
+<text x="176" y="252" fill="#eee" font-weight="600">UX4.1 pocket — retained values</text><text x="176" y="272" fill="#aaa" font-size="12">Template • source Ø12 mm • opens explicit geometry/tool binding</text>
+<path d="M163 289H677" stroke="#484848"/><text x="163" y="316" fill="#aaa" font-size="12">↑ ↓ Navigate   •   Enter: selected action   •   Escape: close</text>
+<text x="163" y="342" fill="#bcbcbc" font-size="11">Availability rechecked at dispatch; no search-time mutation</text></g>
+<text x="145" y="393" fill="#999" font-family="sans-serif" font-size="12">Concept only. Runtime focus, compatibility, search and performance remain to be qualified.</text></svg>

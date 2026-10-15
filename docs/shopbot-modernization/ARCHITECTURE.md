@@ -255,3 +255,170 @@ derivation provenance and private-safe match quality extend FS metadata; no
 Tool/CuttingParameters, geometry, post, application or save-value ownership changes.
 See [ADR-0011](adr/ADR-0011-bounded-cutting-reference-adaptation.md) and
 [policy](feeds-speeds/FS3_9_MATCHING.md). FS4 remains deferred/nonblocking.
+
+## UX5 future application-command access layer
+
+**PLANNED — NOT IMPLEMENTED.** [UX5 plan and preliminary inventory](ux/UX5_PLAN.md)
+proposes a thin CommandRegistry for local command/tool search and eventual shared
+menu/shortcut dispatch. Current `app-menu.ts` resolves shortcuts while App owns
+shell effects; `commands.ts`/history owns undoable mutations. These are distinct
+responsibilities, not an existing unified application registry. Audit component-local
+actions before freezing descriptor/context/execution contracts or moving handlers.
+
+Registry availability reads authoritative document/selection/tool/machine/generated
+state; execution rechecks existing handlers/guards. No independent palette-ready
+state, CAM/FS logic or command execution state machine. Search reads workspace shop
+inventory plus relevant stocked/project tools and preserves existing identity,
+compatibility and explicit assignment. Derived search indexes remain read-only and
+transient. UX4 template handlers are a future dependency for template commands only.
+No project serialization, tool storage, post or process boundary changes now;
+no ADR selecting a concrete registry schema is warranted at this planning checkpoint.
+
+## UX3 — planar surfacing boundary
+
+`PlanarSurface` owns its drawing-frame rectangle and explicit raster parameters;
+copying stock snapshots dimensions rather than binding to future stock edits.
+`cam/planar_surface.rs` plans XY only. Its specialty driver validates resolved
+milling/tool/zone/depth/travel before output/cache replay and uses common XYZ
+emission with saved manual rates. Work-origin normalization translates the zone;
+final-program movement supplies preview/simulation/fixture checking. ShopBot
+receives a distinct strategy, without broadening 3D or controller semantics.
+
+Frontend authored sizing does not introduce source chains. V6 guards persistence
+of the new operation and can retain CAD1 modifiers/cutting provenance. Scoped
+stock XY and surfacing-only bbox diagnostics distinguish intended overtravel while
+retaining Z/collision/mixed-contour guards. [ADR-0014](adr/ADR-0014-explicit-planar-surfacing.md)
+and [qualification](UX3_QUALIFICATION.md) define the bounded V1 and evidence limits.
+
+## UX4 local operation templates
+
+`state/operation-templates.ts` defines strict version-1 portable operation recipes.
+The existing workspace owns the local library; explicit destination binding creates
+an ordinary independent OpEntry via command history. Manual role snapshots preserve
+captured values without evidence promotion or dynamic FS evaluation. Source IDs,
+zone bounds and source-bound placements are excluded. Per-store writes serialize
+and transport errors propagate. Job files contain only instantiated operations,
+using existing guarded formats. [ADR-0015](adr/ADR-0015-reusable-operation-templates.md).
+
+## UX4.1 presentation and sidebar context
+
+Template search/parameter rows and validation feedback are pure presentation
+helpers over the unchanged UX4 model. Secondary save/rename/confirmed-delete
+views retain workspace persistence; create uses the existing command and reveals
+the inspector. The dialog is outside the clickable header. Main sidebar active
+hosts own scrollports; intermediate wrappers remain visible in this layout.
+Shared section-bounded sticky headers and inline title/count identity preserve
+context, using existing design tokens. Counts derive directly from project data.
+[Audit and evidence](UX4_1_QUALIFICATION.md); no new core/model/post boundary.
+
+## UX5 proposal — owner-bound palette dispatch
+
+The live action audit found component-owned export policies not fully represented
+by the raw file service, and tool identities/rate slots that require origin/role
+context. Proposed localized search descriptors bind to existing authoritative
+owners with execution-time target revalidation; mutation history and stores remain
+unchanged. No palette source code exists at this checkpoint.
+[Audit](ux/UX5_AUDIT.md), [Proposed ADR-0016](adr/ADR-0016-command-palette-owner-dispatch.md).
+
+## UX5 palette ownership (accepted ADR-0016)
+
+The frontend palette is a transient search and dispatch surface. Pure descriptors,
+prepared whitelisted metadata, numeric/ranking, keyboard and export-policy helpers
+are separate from disposable shell/GenerateBar/OperationTemplates owner bindings.
+History and existing file services remain authoritative. Execution rechecks captured
+owner/context/result identity; tool Inspect is read-only and Assign reuses existing
+operation updates after origin, stocked-definition, kind/mode and saved-role checks.
+Template results only preselect UX4.1's binder. GenerateBar retains generation,
+cancellation and complete export guards; file_ops retains late native-picker and
+fixture/freshness checks. No CAM/FS/post/schema/store migration. See
+[ADR-0016](adr/ADR-0016-command-palette-owner-dispatch.md) and
+[software evidence/limits](UX5_QUALIFICATION.md).
+
+## Future two-sided registration and V-Carve inlay boundaries
+
+**PLANNED — NOT IMPLEMENTED / NOT QUALIFIED** for the new complete capabilities.
+[Two-sided inventory and plan](TWO_SIDED_PLAN.md) distinguishes inherited stock flip,
+Front/Back fields, reflection helpers, native wrapper and approximate conflict checks
+from qualified ShopBot output. Open ivac-jtkj covers CPS/translated registration;
+existing rejection remains. Future drawing/stock/A/B/machine/registration frames need
+explicit transform composition, side Z/clearance ownership and independently qualified
+pin preparation. Keep generic geometry separate from machine syntax/physical setup.
+
+[Inlay inventory and plan](VCARVE_INLAYS_PLAN.md) reuses V-Carve only within its
+qualified scope. Inherited source inset and duplicate-as-plug do not establish
+female/male mating geometry, assembly clearance or physical fit. Pair depth/angle/tip,
+start depth, engagement/glue/fit and topology require separate proof and output identity.
+No second V-Carve engine or concrete paired-project schema selected in this plan.
+
+Both retain capability resolution, history/save compatibility, fixture and stale-output
+protections and final output/preview parity. FabCAM declares setup intent; operator
+or future FabSBP establishes physical references. Standalone instructions do not depend
+on FabSBP metadata. Any future model/contract change needs architecture approval;
+no new ADR selecting those unfrozen decisions or serialization change now. Active
+V-Carve qualification proceeds within its own scope and human gate.
+
+## V-Carve planning boundary
+
+[ADR-0017](adr/ADR-0017-vcarve-continuous-planner.md): source-region/medial geometry → continuous V-Carve target validation → V-Carve-only pass scheduler → shared XYZ emitter → CPS strategy `vcarve` → existing resolved preview. Halfpipe retains its legacy emitter. ShopBot changes authorize only the qualified strategy/tool pair, never repair geometry. No serialized project migration.
+
+## Planned geometry preparation and editing (GEOM1/2/3)
+
+**PLANNED — NOT IMPLEMENTED.** [Shared source-backed plan](GEOMETRY_PREPARATION_PLAN.md)
+separates external sources, editable drawing entities/layers, CAM selections/regions,
+generated paths and process-specific output. Current SVG normalized/transformed paths
+and DXF layers/entities/units differ; do not promise lossless source editing. Import
+normalization may already discard tiny geometry; later diagnostics cannot recover it.
+
+Reuse Segment/import metadata, per-import transforms, common transformedImport,
+CAD1's preserved-source/accepted-result precedent and history/generation identity.
+CAM source_combine booleans are not persistent shape merging. Multi-import object-ID
+namespacing and source/relief/tab/approach bindings require explicit stable identity
+or remapping on topology changes; no silent operation rebinding. GEOM1/2 must share
+one authoritative effective geometry for ordinary consumers, with transient proposals
+and explicit atomic Apply/history. No concrete new schema, editable model or ADR frozen
+now. Purpose-specific mm tolerances stay separate from CAM/physical tolerances.
+
+Geometry diagnostics and operation-specific incompatibility differ: points/open
+paths may be valid. Generic infrastructure serves future WJ without kerf/pierce or
+milling-engine coupling. [GEOM1](GEOM1_PLAN.md), [GEOM2](GEOM2_PLAN.md) and
+[GEOM3](GEOM3_PLAN.md) define audit-first scope, exclusions, tests and acceptance.
+Active V-Carve work and current project/post semantics stay intact.
+
+## Future grouped transforms and sheet instances (GEOM2-A/B, NEST1/2)
+
+**PLANNED — NOT IMPLEMENTED.** [Shared architecture inventory](NESTING_PLAN.md)
+refines GEOM2 into selected-geometry transformations and basic authoring. Current
+per-import TS transforms and Rust helpers are partial reuse; audit their parity
+instead of extending two independent implementations. Nonuniform circular-curve
+scale needs qualified exact representation, bounded conversion or explicit refusal.
+
+Logical source parts and placed instances must have distinct ownership and stable
+identity. Source → part/entity → instance transform → accepted positioned geometry
+→ normal CAM source resolution, compensation/WCS/capability/output. Do not translate
+finished code. Clarify sheet/current-stock linkage, operation-to-instance binding and
+source/instance edit invalidation; no duplicate stock or hidden coordinate conversion.
+No concrete schema/matrix/baking contract selected before GEOM2-A/NEST1 architecture
+review. NEST2 starts with algorithm/license/performance audit after NEST1; no optimizer
+library adopted here. Placement constraints and process/path clearance remain separate.
+Common-line cutting changes topology/toolpaths and needs a separate future milestone.
+
+## Planned PERF1 measurement and optimization boundary
+
+[PERF1 plan](PERF1_PLAN.md) consolidates historical core DXF/Criterion and CPS/GRBL
+throughput harnesses with scoped V-Carve evidence; none currently proves reported
+small-text end-to-end latency. Audit actual stage ownership and build/transport
+capability before instrumentation; separate CPU/wall, inclusive/exclusive spans,
+serialization/IPC, post/decoder, preview preparation/rendering and user interaction.
+Equivalent native/WASM comparisons must disclose unsupported CPS paths, startup and
+cache conditions. Existing progress/cooperative cancel and worker termination need
+latency/resource/state coverage, not a second generation owner.
+
+PERF1-A is PLANNED report-first; PERF1-B awaits its human scope gate. Indexes may
+conservatively prune candidates but cannot replace continuous clearance predicates.
+Cache identity/version/tolerance and concurrent correctness, deterministic order,
+source mapping, current-input export checks and final ShopBot parity are retained.
+Numerical approximation changes need independent bounds/comparison and approval.
+No new cache/index/threading ADR, dependency, schema or architecture rewrite chosen.
+Open ivac-htc8 interference must be recorded rather than hidden by benchmarking.
+Generic measurement conventions may serve GEOM/NEST/WJ without coupling their
+functional milestones to a V-Carve algorithm or changing FS semantics.

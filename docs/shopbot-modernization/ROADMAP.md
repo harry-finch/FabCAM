@@ -103,17 +103,21 @@ priorities, dependencies and verified evidence limits. WJ and VINYL remain defer
 | UX2.1 — Direct Manipulation & Collision Feedback | Typed error notifications, compact red critical fixture state and Show collision; 2D fixture XY drag through existing model/history, precise inspector, save/reopen and stale export. No collision math, stock/WCS/CAD drag or schema change | Approved for continuation 2026-10-13; snapping deferred ivac-t68s |
 | UX2.2 — Application Shell & Welcome Experience | Audit existing commands; compact header/project status, welcome and distinct workspace empty states, local recents reuse and guarded navigation; authoritative generation/export state; targeted tests, desktop screenshots and human review. No CAM/FS/post or persistence-semantic changes | **IMPLEMENTED locally**, automated/browser evidence; [qualification](ux/UX2_2_QUALIFICATION.md); human/native review ivac-ein1. Explicit Atelier approval ivac-dwdd closed; not a retroactive CAM3 prerequisite |
 | CAM3 — Tabs / Lead-in / Lead-out qualification | Broader entry × tabs × leads matrix, intentional residual stock/allowance, direction and safe transitions; retain UX1 parity and requested intent | Bounded software qualification; reproduced holding-tab defects corrected; continuation approved (ivac-wh2m closed); see [CAM3 record](CAM3_QUALIFICATION.md) |
-| CAM4 — Remaining Material Analysis / Corner Relief workflow | Diagnostic 2.5D generated-path residual analysis (A), compact preview overlay/diagnostics (B), coordinated dogbone/T-bone assistance (C, retained CAD1 workstream); no generalized simulation or Rest Machining in V1 | A/B bounded software handoff; [qualification](CAM4_QUALIFICATION.md), human gate ivac-tvox; CAD1/C separate scope/approval, not started; [phased plan](REMAINING_MATERIAL_PLAN.md) |
-| UX3 — Planar spoilboard surfacing | Bounded flat-cutter stock raster with explicit margins/overtravel, work area/clearance and coverage proof | Proposed later milling (CAM5+ direction); after CAM4/setup qualification; existing UX3 label retained; separate approval |
-| UX4 — Reusable operation templates | Named operations with explicit geometry/tool rebinding and saved-value/undo invariants; distinct from FS knowledge packs | Proposed later milling (CAM5+ direction); existing UX4 label retained; separate approval |
-| Later milling — V-carve qualification | Dedicated V-carve geometric/output/preview qualification, beyond existing partial evidence | Future scoped milestone after priority CAM work; not started |
+| CAM4 — Remaining Material Analysis / Corner Relief workflow | Diagnostic 2.5D generated-path residual analysis (A), compact preview overlay/diagnostics (B), coordinated dogbone/T-bone assistance (C, retained CAD1 workstream); no generalized simulation or Rest Machining in V1 | A/B bounded software handoff; [qualification](CAM4_QUALIFICATION.md), A/B gate ivac-tvox accepted; CAD1/C bounded software continuation accepted (ivac-7r7r); [phased plan](REMAINING_MATERIAL_PLAN.md) |
+| UX3 — Planar spoilboard surfacing | Bounded flat-cutter stock raster with explicit margins/overtravel, work area/clearance and coverage proof | **SOFTWARE HANDOFF** (ivac-gepq); explicit bounded raster, guarded v6 and final ShopBot parity; [qualification](UX3_QUALIFICATION.md); continuation accepted ivac-k4z3 |
+| UX4 — Reusable operation templates | Named operations with explicit geometry/tool rebinding and saved-value/undo invariants; distinct from FS knowledge packs | **SOFTWARE HANDOFF** (ivac-epg2); bounded local Profile/Pocket/planar-surface library; [qualification](UX4_QUALIFICATION.md); initial review superseded by UX4.1 ivac-si5w |
+| UX4.1 — Operation Templates & Sidebar UX Refinement | Reuse-first library, secondary capture/contextual management, authoritative preview and review information; section-bounded sticky headers and adjacent total counts; no CAM/FS/post/template-format changes | **SOFTWARE HANDOFF** (ivac-01ux); [qualification](UX4_1_QUALIFICATION.md); **accepted by user** ivac-si5w; UX5 audit authorized |
+| UX5 — Command Palette & Quick Actions | Thin local command/tool search and shared action dispatch; contextual availability, explicit compatible tool assignment, keyboard/focus UX and existing safety/history guards; approved UX4 templates only when available. No CAM/post/tool database/project-format changes | **SOFTWARE HANDOFF** (ivac-0vbt); design accepted ivac-2zh9; [qualification](UX5_QUALIFICATION.md), [audit](ux/UX5_AUDIT.md); human software gate **ivac-txve** before later milling work/publication |
+| Later milling — V-carve qualification | Dedicated V-carve geometric/output/preview qualification, beyond existing partial evidence | Active Phase A audit; [findings and architecture decision](VCARVE_AUDIT.md), ivac-2eh7; production implementation pending bounded pass/entry planning approval |
+| Future CAM — Two-Sided Machining & Registration | Explicit drawing/stock/A/B/registration frames, physical X/Y flip, alignment-pin preparation, shared side operations, independent programs/setup instructions; independent geometry, lifecycle, final-output and physical registration qualification | **PLANNED — NOT IMPLEMENTED / NOT QUALIFIED** as a new qualified capability; after active V-Carve and preserved work; [plan](TWO_SIDED_PLAN.md); reuse open ivac-jtkj; inherited/native code is not ShopBot readiness |
+| Later advanced V-carving — V-Carve Inlays | Shared-design female/male pair, depth-dependent V-bit/flat-tip geometry, explicit engagement/fit/glue parameters, pair/section preview and separate output; prerequisite V-Carve scope and independent software/physical fit validation | **PLANNED — NOT IMPLEMENTED / NOT QUALIFIED** as a complete paired capability; after qualified V-Carve foundation and earlier scheduled work; [plan](VCARVE_INLAYS_PLAN.md); historical ivac-rt1.7/inset shortcut is not fit qualification |
 | Rest Machining | Smaller-cutter cleanup operation built on reliable remaining-material analysis | Later advanced capability; excluded from CAM4 V1; not designed/implemented |
 
 UX1 is software-qualified and its human gate was approved by the user's instruction
 to continue. CAM2/UX2 engineering ivac-69ak is complete and accepted for the requested UX2.1
 follow-up. UX2.1 continuation was approved on 2026-10-13 (ivac-svnf closed).
 CAM3 continuation is approved. CAM4 A/B bounded analysis/preview is software-qualified;
-human gate ivac-tvox precedes broader coverage or separately scoped CAD1/C relief.
+A/B human gate ivac-tvox is accepted; CAD1/C now awaits its own human gate ivac-7r7r.
 Current handoff ends at A/B; later milling is not started.
 FS4 is not a software dependency.
 
@@ -166,7 +170,35 @@ dominance follow [design guidance](ux/DESIGN_DIRECTION.md). Rest Machining is a
 separate later cleanup-operation capability, not diagnostic V1. Current bounded
 A/B evidence is in CAM4_QUALIFICATION; broader scope/physical accuracy is not claimed.
 
-### Future direct manipulation (deferred)
+### CAD1 — bounded software handoff accepted for UX3 continuation
+
+The user approved the [architecture audit](CAD1_AUDIT.md) and preceding bounded
+CAM4 A/B prerequisite. [ADR-0013](adr/ADR-0013-persistent-corner-relief.md) implements
+one editable batch over preserved source geometry, actual cutter radius, explicit
+corner selection/preview and Undo/Redo. Normal CAM compensation, preview and ShopBot
+output consume the same evaluated contours. Right/obtuse line-line corners are
+qualified; acute, inaccessible or conflicting geometry is explicitly refused.
+[Qualification and limits](CAD1_QUALIFICATION.md); continuation gate **ivac-7r7r**
+accepted by the request to launch UX3. UX3 now stops at ivac-k4z3 before UX4. Existing A/B curved-target diagnostic exclusions remain.
+
+### UX5 — Command Palette & Quick Actions (planned)
+
+Functional sequence **CAD1 — Dogbones / T-bones → UX3 — Planar spoilboard
+surfacing → UX4 — Reusable operation templates → UX5 — Command Palette & Quick
+Actions** preserves existing milestone labels and history. CAD1 currently awaits
+human qualification; UX3/UX4 and UX5 are unstarted. This plan does not replace
+that next action or close independent CAM/FS/UX gates.
+
+[UX5 specification](ux/UX5_PLAN.md) proposes a future CommandRegistry over existing
+authoritative actions, deterministic local command/tool search, contextual disabled
+reasons, explicit assignment, keyboard/focus behavior and future UX4 integration.
+Cmd+K/Ctrl+K remain candidates pending shortcut audit. Acceptance requires action
+parity, real metadata search, history/persistence and export safeguards, frontend
+regressions, accessibility/desktop review and human approval. No registry schema
+is frozen and no UI/CAM/project/tool behavior changes now. Human planning gate
+ivac-2zh9 precedes implementation; each earlier milestone retains its own gate.
+
+### Future direct manipulation scope (deferred)
 
 UX2.1 enables fixture XY dragging only. Future snapping (grid, stock edges/corners,
 geometry bounds, work zero and disable-snap modifier), explicit Set work zero click,
@@ -211,3 +243,126 @@ three modes and three DOC/limit contexts, deterministic CSV/report and four addi
 regression tests. [Measurements](feeds-speeds/FS3_9_SENSITIVITY.md).
 No production mathematics changed. Selection/interpolation continuity is the next
 proposal for review, not an authorized implementation. FS4 remains deferred/nonblocking.
+
+### UX3 — planar surfacing continuation, 2026-10-14
+
+The user requested the next milestone, accepting continuation from the bounded
+CAD1 software handoff (ivac-7r7r). UX3 implements an operation-owned explicit
+rectangle, flat cutter, X/Y scan, margin and extra edge overtravel, common negative
+Z schedule and retract-between-lines emission. V6 save/reopen retains parameters
+and manual rates; source/stock copying remains deliberate. Work-area/flute/depth
+refusals precede output/cache; final ShopBot path supplies preview and fixture
+checks. Planned XY air travel is distinguished from below-stock cuts; ordinary
+contour guards remain. [Qualification](UX3_QUALIFICATION.md), [ADR-0014](adr/ADR-0014-explicit-planar-surfacing.md).
+
+Human gate **ivac-k4z3** precedes UX4. No physical surfacing or new installer
+qualification, publication, FS expansion, WJ or VINYL work. This launch supersedes
+earlier CAD1-awaiting/unstarted-UX3 next-action wording; historical evidence and
+independent gates remain. UX4 and UX5 retain their sequence and remain unstarted.
+
+### UX4 — reusable operation templates continuation, 2026-10-14
+
+Explicit user request accepts UX3 continuation (ivac-k4z3). UX4 engineering
+ivac-epg2 implements bounded local templates with explicit current source/tool
+binding and retained manual values; library changes cannot mutate created jobs.
+Existing workspace, history and project formats are reused. Source-specific
+contexts and evidence are excluded; unsupported operation types remain deferred.
+[Qualification](UX4_QUALIFICATION.md), [ADR-0015](adr/ADR-0015-reusable-operation-templates.md).
+Human gate **ivac-51gg** now precedes UX5; UX5 remains planned/unimplemented.
+This record supersedes earlier UX3-pending/UX4-unstarted continuation wording.
+No publication, native runtime or physical qualification is implied.
+
+## Future double-sided milling and advanced inlays — documentation checkpoint
+
+Active **V-Carve Qualification** retains engineering priority and its existing human
+HARD STOP. Preserve CAD1/UX3/UX4/UX4.1/UX5 continuation records and independent
+gates; this update starts no milestone or release. Relative proposed priority:
+finish active V-Carve qualification → preserve already approved/planned work →
+Two-Sided Machining & Registration → later V-Carve Inlays. Exact scheduling awaits
+human approval. No new numbered CAM label is assigned; ordinary inlays do not
+require the two-sided milestone merely because it has earlier scheduling priority.
+
+[Two-sided plan](TWO_SIDED_PLAN.md) reuses open ivac-jtkj and preserves CPS/translated
+registration rejection. [Inlay plan](VCARVE_INLAYS_PLAN.md) distinguishes inherited
+source-inset/duplicate behavior from a qualified mating pair and depends on adequate
+V-bit/depth/pass/topology/output evidence. Both begin with architecture/capability
+audits, then independent software matrices and human review; physical registration
+accuracy and fit are separate future supervised qualification. No production code,
+project migration, post capability expansion or machine-zero establishment now.
+
+## V-Carve qualification checkpoint — 2026-10-14
+
+Approved targeted pass/entry replacement implemented. [Software qualification](VCARVE_QUALIFICATION.md): A1–A4 pass for the bounded contour/spine semantics; complete-area coverage remains PARTIAL. Halfpipe unchanged. HARD STOP ivac-1b75 for human review; no physical work or next milestone authorized.
+
+## CAD / geometry preparation — GEOM future family
+
+**PLANNED — NOT IMPLEMENTED.** Existing CAD1 corner relief and milestone IDs are
+retained. GEOM1/GEOM2-A/GEOM2-B/GEOM3 extend the geometry-preparation track; NEST1/2
+add sheet-layout milestones. No full CAD application.
+[Shared source audit, architecture and approval contract](GEOMETRY_PREPARATION_PLAN.md).
+
+| Milestone | Priority / scope / acceptance | Status |
+| --- | --- | --- |
+| GEOM1 — Drawing Cleanup & Repair | HIGH: analyze isolated/duplicate/open/self-intersecting geometry; explicit mm join/closure and bounded simplification proposals; preview/select/Apply, stable operation references, batch history and stale-output safeguards; independent geometry/lifecycle and human UX review | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM1_PLAN.md); after current V-Carve qualification and preserved approvals, preferably before serious ProtoMAX integration |
+| GEOM2-A — Geometry Transformations | HIGH / MEDIUM: grouped move/rotate/numeric position/size, proportional scale, pivot and qualified nonuniform/mirror policies; independent math, source/reference/history and CAM freshness proof | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM2_A_PLAN.md); shared foundation after GEOM1/audit; dedicated architecture review |
+| GEOM2-B — Basic 2D Drawing Tools | MEDIUM: Line/Polyline/Rectangle/Circle/Arc with mouse and exact numeric entry; reuse GEOM2-A, separate geometry from CAM intent | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM2_B_PLAN.md); after qualified shared editing/transforms |
+| NEST1 — Sheet Layout & Manual Nesting | MEDIUM: source parts/placed instances/quantities, explicit sheet/stock linkage, manual transforms, margins/overlap/orientation/grain/keep-outs and audited CAM binding | **PLANNED — NOT IMPLEMENTED**; [specification](NEST1_PLAN.md); depends on GEOM2-A/reliable sources, not all GEOM2-B; no optimizer |
+| NEST2 — Automatic True-Shape Nesting | FUTURE / ADVANCED: irregular outline optimization, explicit objectives/budgets/metrics and user-approved proposals; independent constraint validation; multi-sheet phased later | **PLANNED — NOT IMPLEMENTED**; [specification](NEST2_PLAN.md); after qualified NEST1; algorithm/license audit first; no common-line cutting |
+| GEOM3 — Advanced Geometry Tools | FUTURE/OPTIONAL: individually selected offset/alignment/arrays/trim/boolean/fillet/repair utilities (drawing mirror reviewed in GEOM2-A); audit existing overlap, approve each bounded topology/tolerance/identity scope | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM3_PLAN.md); no promise to deliver all candidates |
+
+Current V-Carve software handoff/HARD STOP ivac-1b75 remains first. GEOM1 is proposed
+for the next separately approved geometry-preparation slot after that qualification;
+relative scheduling against already planned two-sided/inlay/other priorities is open,
+not silently changed. GEOM2-A follows stable prepared sources/shared architecture;
+GEOM2-B reuses it, NEST1 can proceed without all drawing primitives, NEST2 follows
+NEST1, and GEOM3 utilities remain independently scoped optional work.
+Generic cleanup benefits milling and future waterjet without adding process-specific
+kerf/pierce logic. Proposed GEOM2 snapping/CAD placement must reconcile deferred
+ivac-t68s rather than create overlapping implementations. Each milestone begins with
+architecture/capability audit and ends at human review. No implementation authorized.
+
+### Transformations and nesting — dependency and scope refinement
+
+Former GEOM2 is split into A/B without renumbering other work. Dependency branches:
+GEOM1 prepared sources → GEOM2-A transforms → GEOM2-B drawing, and separately
+GEOM2-A → NEST1 manual sheet layout → NEST2 automatic true-shape optimization.
+GEOM3 may proceed per-feature once relevant foundations are qualified.
+[Shared architecture and open decisions](NESTING_PLAN.md) distinguish source edits,
+logical part/instance placement, sheet/stock and normal CAM/output resolution.
+
+Source transform, instance transform and WCS order require explicit review; moving
+parts cannot change work zero or translate finished machine code. Geometric nesting
+validity is not machining clearance certification. Preserve active V-Carve HARD STOP
+ivac-1b75 and existing approvals. Scheduling versus two-sided/inlays stays open;
+GEOM1/GEOM2-A are proposed foundations, NEST1 then optional advanced NEST2.
+Common-line cutting is separate future process/toolpath work, outside initial NEST1/2.
+No implementation, schema/library selection, GitHub issue change or publication now.
+
+### Deferred V-Carve visualization ideas
+
+Following final V-Carve UX review: clearer cutting/travel/retract distinction,
+resolved paths in 2D and improved V-bit material-removal visualization are future
+work (ivac-fqp3), not implemented or authorized by the final polish. Existing 3D
+resolved-output parity remains authoritative. Paired inlays retain their separate
+planned milestone; the historical duplication shortcut is unavailable pending qualification.
+
+## PERF1 — CAM Performance Profiling & Optimization
+
+**PLANNED — NOT IMPLEMENTED.** Cross-cutting engineering milestone, with no
+renumbering of CAM/GEOM/NEST tracks. [Scope, source inventory and acceptance](PERF1_PLAN.md).
+Reported 5–10 s small V-Carve text latency is an informal observation to reproduce,
+not a benchmark or identified bottleneck. Existing core/CPS harnesses and scoped
+V-Carve measurements are reused; their historical evidence is unchanged.
+
+| Phase | Priority / scope / deliverables | Status / gate |
+| --- | --- | --- |
+| PERF1-A — Profiling & Benchmarking | HIGH / MEDIUM: reproducible observed/representative fixtures, actual pipeline/transport/render latency breakdown, equivalent backend comparisons, CPU/memory/count analysis, ranked hotspots, risks and measured proposed targets | **PLANNED**; after current V-Carve acceptance/existing approvals, proposed near-term; report and **HARD STOP before PERF1-B** |
+| PERF1-B — Targeted Optimization | Priority from A findings: bounded approved optimizations, repeatable before/after workflow benefit, independent geometry/determinism and ShopBot output/preview regression proof, memory/stability and remaining limits | **PLANNED**; only after human A report/scope approval; human acceptance at end; no optimization now |
+
+Final V-Carve software/UX handoff remains at human ivac-1b75. PERF1-A is proposed
+near-term following that review, valuable before demanding geometry/NEST2/WJ work,
+without displacing approved milestones or removing GEOM/NEST/two-sided/inlay plans.
+Exact scheduling requires human approval. No benchmark execution/instrumentation,
+algorithm/tolerance/preview/post/FS changes or GitHub issue mutation authorized here.
+Future spatial indexing/caching/parallelism are measured hypotheses, not selected
+architecture; continuous predicates, pass/completion and fail-closed guards remain.

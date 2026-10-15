@@ -1,19 +1,8 @@
 <script lang="ts">
-  /// V-Carve op-properties fieldset. Shown only when op.kind === 'vcarve'.
-  /// Styling is mostly inherited from OpPropertiesPanel's :global(.props ...)
-  /// rules; the local style block below only covers the inlay button.
-  /// (svelte-check treats a literal "style" tag in a JSDoc comment as the
-  /// start of a real style block, so the word is spelled out rather than
-  /// tagged here.)
-  import {
-    project,
-    type OpField,
-    type OpFieldValue,
-    type VCarveOp,
-  } from '../../state/project.svelte';
+  import { project } from '../../state/project.svelte';
+  import type { OpField, OpFieldValue, VCarveOp } from '../../state/project.svelte';
+  import { vcarveStrategy, vcarveStrategyPatch } from '../../state/vcarve-strategy-ui';
   import { t } from '../../i18n';
-  // `project` import kept for the inlay-plug Duplicate-as-plug button
-  // below (line 99). The toolMismatch chip moved to OpPropertiesPanel.
 
   interface Props {
     op: VCarveOp;
@@ -21,6 +10,7 @@
     patch: <K extends OpField>(field: K, value: OpFieldValue<K>) => void;
   }
   let { op, patch }: Props = $props();
+  const strategy = $derived(vcarveStrategy(op.fullMedialAxis));
 </script>
 
 <fieldset>
@@ -35,26 +25,27 @@
     `fullMedialAxis: boolean | undefined` field — undefined means the
     default perimeter-only mode.
   -->
-  <div class="row" title={t('ops.vcarve.mode.help')}>
+  <label class="strategy-choice">
     <span>{t('ops.vcarve.mode.label')}</span>
-    <div class="segmented">
-      <button
-        type="button"
-        class:active={!(op.fullMedialAxis ?? false)}
-        onclick={() => patch('fullMedialAxis', undefined)}
-      >
-        {t('ops.vcarve.mode.perimeter')}
-      </button>
-      <button
-        type="button"
-        class:active={op.fullMedialAxis ?? false}
-        onclick={() => patch('fullMedialAxis', true)}
-      >
-        {t('ops.vcarve.mode.medial_axis')}
-      </button>
-    </div>
-  </div>
-  <details class="subsection" open>
+    <select
+      value={strategy.value}
+      onkeydown={(event) => event.stopPropagation()}
+      aria-describedby={`vcarve-strategy-help-${op.id}`}
+      onchange={(event) =>
+        patch(
+          'fullMedialAxis',
+          vcarveStrategyPatch(event.currentTarget.value as 'perimeter' | 'medial').fullMedialAxis,
+        )}
+    >
+      <option value="perimeter">{t('ops.vcarve.mode.perimeter')}</option>
+      <option value="medial">{t('ops.vcarve.mode.medial_axis')}</option>
+    </select>
+  </label>
+  <p class="hint mode-scope" id={`vcarve-strategy-help-${op.id}`}>
+    {t(strategy.description)}
+    {t(strategy.scope)}
+  </p>
+  <details class="subsection">
     <summary>{t('ops.vcarve.advanced.summary')}</summary>
     <label class="row" title={t('ops.vcarve.max_width.help')}>
       <span>{t('ops.vcarve.max_width.label')}</span>
@@ -90,50 +81,28 @@
         <span class="unit">mm</span>
       </div>
     </label>
-    <label class="row" title={t('ops.vcarve.inlay_plug.help')}>
+    <div class="row" title={t('ops.vcarve.inlay.unavailable')}>
       <span>{t('ops.vcarve.inlay_plug.label')}</span>
       <button
         type="button"
-        class="inlay-btn"
+        disabled
         onclick={() => {
+          // Historical duplication behavior retained; UI stays unavailable until
+          // the separate paired-inlay milestone qualifies it.
           const dup = project.duplicateOperation(op.id);
-          if (!dup) return;
-          project.updateOperation(dup.id, {
-            name: `${op.name} (plug)`,
-            sourceInsetMm: 0.1,
-          });
-        }}
+          if (dup)
+            project.updateOperation(dup.id, { name: `${op.name} (plug)`, sourceInsetMm: 0.1 });
+        }}>{t('ops.vcarve.duplicate_as_inlay_plug')}</button
       >
-        {t('ops.vcarve.duplicate_as_inlay_plug')}
-      </button>
-    </label>
-    <label class="row" title={t('ops.vcarve.refine_pass.help')}>
-      <span>{t('ops.vcarve.refine_pass.label')}</span>
-      <input type="checkbox" checked={false} disabled />
-      <span class="hint hint-trailing">{t('ops.vcarve.refine_pass.not_implemented')}</span>
-    </label>
+    </div>
+    <p class="hint">{t('ops.vcarve.inlay.unavailable')}</p>
   </details>
 </fieldset>
 
 <style>
-  /* Trailing hint sibling — sits inline after a checkbox / input. Was an
-     inline `style="margin-left:.5rem"`; promoted to a class. */
-  :global(.hint.hint-trailing) {
-    margin-left: 0.5rem;
-  }
-  /* 'Duplicate as inlay plug' button. Sized to match the existing
-     per-section action buttons (re-pick, repick) so the V-Carve
-     fieldset doesn't look like it bolted on something special. */
-  .inlay-btn {
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
-    color: var(--text-strong);
-    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
-    border-radius: 3px;
-    padding: 0.15rem 0.55rem;
-    font-size: 0.74rem;
-    cursor: pointer;
-  }
-  .inlay-btn:hover {
-    background: color-mix(in srgb, var(--accent) 30%, transparent);
+  .strategy-choice {
+    display: grid;
+    gap: var(--ui-space-1);
+    font-size: 0.78rem;
   }
 </style>

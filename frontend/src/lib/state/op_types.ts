@@ -51,6 +51,7 @@ export type OpKind =
   | 'probe'
   | 'cycle_marker'
   | 'gcode_include'
+  | 'planar_surface'
   | 'relief_mill'
   | 'waterline_rough'
   | 'raster_engrave';
@@ -264,6 +265,8 @@ export interface ChamferOp extends OpBase {
 /// determined by the inscribed-circle radius (V-bit cone math).
 export interface VCarveOp extends OpBase {
   kind: 'vcarve';
+  /// Retained historical value; rejected by V-Carve and exposed for explicit clearing.
+  finishStep?: number;
   /// Cap on the inscribed-circle radius (mm). Undefined = no cap.
   carveMaxWidthMm?: number;
   /// Multi-pass refinement toggle.
@@ -422,6 +425,11 @@ export interface GcodeIncludeOp extends OpBase {
 /// `[zMinMm, zMaxMm]`; `scallopHeightMm` drives the stepover unless
 /// `stepoverMm` overrides. Has no source-geometry / offset semantics —
 /// the surface comes from the relief source, not the imported chains.
+export interface PlanarSurfaceOp extends OpBase {
+  kind: 'planar_surface';
+  surface: import('../api/generated').components['schemas']['PlanarSurfaceParams'];
+}
+
 export interface ReliefMillOp extends OpBase {
   kind: 'relief_mill';
   /// Id of the `ReliefSource` (in `project.data.reliefSources`) this op cuts.
@@ -509,6 +517,7 @@ export type OpEntry =
   | ProbeOp
   | CycleMarkerOp
   | GcodeIncludeOp
+  | PlanarSurfaceOp
   | ReliefMillOp
   | WaterlineRoughOp
   | RasterEngraveOp;

@@ -1,0 +1,58 @@
+{
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4"
+  },
+  "records": 5250,
+  "cold_index_ms": 7.838,
+  "runs_per_query": 30,
+  "measurements": [
+    {
+      "query": "",
+      "p95_ms": 0.888,
+      "max_ms": 0.925
+    },
+    {
+      "query": "poche",
+      "p95_ms": 1.303,
+      "max_ms": 1.526
+    },
+    {
+      "query": "pokcet",
+      "p95_ms": 1.261,
+      "max_ms": 1.425
+    },
+    {
+      "query": "6mm upcut",
+      "p95_ms": 0.314,
+      "max_ms": 0.414
+    },
+    {
+      "query": "3.175 single flute",
+      "p95_ms": 0.086,
+      "max_ms": 0.102
+    },
+    {
+      "query": "1/8in",
+      "p95_ms": 0.127,
+      "max_ms": 0.15
+    },
+    {
+      "query": "V-bit 60",
+      "p95_ms": 0.308,
+      "max_ms": 0.648
+    },
+    {
+      "query": "stock",
+      "p95_ms": 1.271,
+      "max_ms": 1.374
+    },
+    {
+      "query": "zzzzzzzz",
+      "p95_ms": 0.659,
+      "max_ms": 0.707
+    }
+  ]
+}

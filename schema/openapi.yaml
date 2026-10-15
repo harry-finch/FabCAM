@@ -241,6 +241,28 @@ paths:
                 $ref: '#/components/schemas/HelixRadiusResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+  /corner-relief:
+    post:
+      summary: Preview exact-diameter CAD corner relief
+      operationId: cornerRelief
+      description: |
+        Pure CAD preview in millimetres. Returns exact line/arc geometry and
+        per-corner refusals; never generates toolpaths or machine commands.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CornerReliefRequest'
+      responses:
+        '200':
+          description: Candidate corners, proposed geometry or an atomic refusal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CornerReliefResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
   /relief/stl:
     post:
       summary: Rasterize an STL into a relief height grid
@@ -583,6 +605,102 @@ components:
       - mist
       - flood
       type: string
+    CornerCandidate:
+      properties:
+        center:
+          anyOf:
+          - $ref: '#/components/schemas/Point2'
+          - type: 'null'
+        reason:
+          type:
+          - string
+          - 'null'
+        reference:
+          $ref: '#/components/schemas/CornerRef'
+        vertex:
+          $ref: '#/components/schemas/Point2'
+      required:
+      - reference
+      - vertex
+      type: object
+    CornerRef:
+      properties:
+        corner_index:
+          format: uint
+          minimum: 0.0
+          type: integer
+        object_id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - corner_index
+      - object_id
+      type: object
+    CornerReliefRequest:
+      properties:
+        mode:
+          $ref: '#/components/schemas/ReliefMode'
+        objects:
+          description: One stable object tag per source segment. Zero/unassigned cannot be edited.
+          items:
+            format: uint32
+            minimum: 0.0
+            type: integer
+          type: array
+        removal_side:
+          $ref: '#/components/schemas/RemovalSide'
+        segments:
+          items:
+            $ref: '#/components/schemas/Segment'
+          type: array
+        selected_corners:
+          items:
+            $ref: '#/components/schemas/CornerRef'
+          type: array
+        selected_objects:
+          items:
+            format: uint32
+            minimum: 0.0
+            type: integer
+          type: array
+        tool_diameter_mm:
+          format: double
+          type: number
+      required:
+      - mode
+      - objects
+      - removal_side
+      - segments
+      - selected_corners
+      - selected_objects
+      - tool_diameter_mm
+      type: object
+    CornerReliefResponse:
+      properties:
+        candidates:
+          items:
+            $ref: '#/components/schemas/CornerCandidate'
+          type: array
+        error:
+          type:
+          - string
+          - 'null'
+        objects:
+          items:
+            format: uint32
+            minimum: 0.0
+            type: integer
+          type: array
+        segments:
+          items:
+            $ref: '#/components/schemas/Segment'
+          type: array
+      required:
+      - candidates
+      - objects
+      - segments
+      type: object
     CpsParamValue:
       anyOf:
       - type: boolean
@@ -3497,6 +3615,18 @@ components:
         required:
         - type
         type: object
+      - description: Explicit flat-cutter rectangular planar surfacing, independent of imports.
+        properties:
+          surface:
+            $ref: '#/components/schemas/PlanarSurfaceParams'
+          type:
+            enum:
+            - planar_surface
+            type: string
+        required:
+        - surface
+        - type
+        type: object
       - description: '3-axis ball-nose relief surfacing. Finishes a curved Z(x,y) surface (a [`crate::project::ReliefSource`] referenced by `source_id`, e.g. a grayscale-image relief) with a ball-nose cutter: the drop-cutter engine (`cam::surface_mill`) produces gouge-free raster scanlines whose Z follows the surface. This is a FINISH pass — the bulk should be roughed first (constant-Z endmill). The source''s normalized brightness is mapped to Z in `[z_min_mm, z_max_mm]` at planning time, so depth is a cheap op-level knob (no image re-upload).'
         properties:
           along_step_mm:
@@ -4020,6 +4150,43 @@ components:
       required:
       - kind
       - message
+      type: object
+    PlanarSurfaceParams:
+      properties:
+        direction:
+          $ref: '#/components/schemas/ScanDirection'
+        height_mm:
+          format: double
+          type: number
+        margin_mm:
+          description: Expands the target rectangle on all four sides (mm, nonnegative).
+          format: double
+          type: number
+        origin:
+          items:
+            format: double
+            type: number
+          maxItems: 2
+          minItems: 2
+          type: array
+        overtravel_mm:
+          description: Extra beyond the compulsory radius at each along-scan end (mm).
+          format: double
+          type: number
+        stepover_mm:
+          format: double
+          type: number
+        width_mm:
+          format: double
+          type: number
+      required:
+      - direction
+      - height_mm
+      - margin_mm
+      - origin
+      - overtravel_mm
+      - stepover_mm
+      - width_mm
       type: object
     PlungeStrategy:
       description: Per-pass entry strategy.
@@ -4793,6 +4960,12 @@ components:
         - kind
         - z
         type: object
+    ReliefMode:
+      enum:
+      - dogbone
+      - tbone_incoming
+      - tbone_outgoing
+      type: string
     ReliefSource:
       description: 'A target surface source for relief / ball-nose surfacing. Holds a row-major grid (see [`ReliefGrid`]) plus its world placement. Two producers feed the same type: a grayscale image decoded frontend-side ([`ReliefGrid::Grayscale`]) and an STL rasterized to real geometry Z ([`ReliefGrid::Heightgrid`], via `SurfaceField::from_stl`). The [`OpKind::ReliefMill`] driver turns either kind into a [`crate::cam::surface::SurfaceField`]; the placement (`origin` / `cell` / `cols` / `rows`) is shared, only the per-cell payload differs.'
       properties:
@@ -4866,6 +5039,11 @@ components:
       - regions
       - status
       type: object
+    RemovalSide:
+      enum:
+      - interior
+      - exterior
+      type: string
     RenderTextLayerResponse:
       description: Live-preview response — the rendered `TextLayer` segments plus the cached single-line classification. The pipeline produces the same segments at Generate time; this endpoint lets the frontend show the text on the 2D canvas without round-tripping a full pipeline run.
       properties:

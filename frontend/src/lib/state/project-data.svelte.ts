@@ -243,6 +243,7 @@ export class ProjectDataState {
   /// 0 or 1. The proxy accessors on `ProjectState` (project.imported,
   /// project.fileTransform, etc.) read imports[0] for backward
   /// compatibility.
+  cornerRelief = $state<import('./corner-relief').CornerReliefModifier | undefined>(undefined);
   imports = $state<ImportEntry[]>([]);
 
   /// Ordered list of operations the program runs. Each op has a kind, a

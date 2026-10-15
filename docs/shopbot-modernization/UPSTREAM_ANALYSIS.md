@@ -191,3 +191,12 @@ CAM2/UX2 fork delta: generic once-before-CAM XY work-frame normalization, invali
 origin/fixture guards and resolved-path fixture warnings; compact stock-corner/WCS
 and fixture authoring UI with existing persistence/history. No schema migration,
 FS engine change or machine-specific geometry semantics. See ADR-0008.
+
+## V-Carve qualification fork delta — 2026-10-14
+
+KEEP existing saved modes, source-region combination, axis builder, tool model,
+generic XYZ emitter, CPS/preview pipeline and Halfpipe. REPLACE only V-Carve
+pass/entry scheduling with `cam/vcarve_plan.rs`; EXTEND with continuous clearance
+validation and a narrow ShopBot `vcarve`/type-8 gate. DEFER complete-area clearing,
+paired inlays and exact swept-volume simulation. No schema migration. See
+[qualification](VCARVE_QUALIFICATION.md) and ADR-0017 before upstream reconciliation.

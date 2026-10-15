@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cornerReliefUi } from './lib/state/corner-relief-ui.svelte';
   import ToolpathVisibility from './lib/components/ToolpathVisibility.svelte';
   import { fixtureFocus } from './lib/state/fixture-focus.svelte';
   import FileUpload from './lib/components/FileUpload.svelte';
@@ -48,6 +49,8 @@
   let ReportDialog = $state<ReportDialogComp | null>(null);
   let reportDialogLoading = false;
   import AppNavigation from './lib/components/AppNavigation.svelte';
+  import CommandPalette from './lib/components/CommandPalette.svelte';
+  let commandPalette: CommandPalette;
   import ProjectMenu from './lib/components/ProjectMenu.svelte';
   import WelcomeScreen from './lib/components/WelcomeScreen.svelte';
   import AppBarOverflowMenu from './lib/components/AppBarOverflowMenu.svelte';
@@ -390,7 +393,7 @@
 
   let activePane = $state<'2d' | '3d'>('2d');
   $effect(() => {
-    if (project.gen.remainingVisible) activePane = '2d';
+    if (project.gen.remainingVisible || cornerReliefUi.editing) activePane = '2d';
   });
   let lastFixtureFocus = 0;
   $effect(() => {
@@ -589,10 +592,14 @@
   }
 
   function onKeyDown(e: KeyboardEvent) {
+    if (e.defaultPrevented || document.querySelector('[role=dialog][aria-modal=true]')) return;
     const res = resolveShortcut(e);
     if (!res) return;
     if (res.preventDefault) e.preventDefault();
     switch (res.action) {
+      case 'palette':
+        commandPalette.show();
+        break;
       case 'undo':
         project.undo();
         break;
@@ -746,6 +753,21 @@
   const statusBarText = $derived(composeStatusBar(statusInfoText, statusShortcutHints));
 </script>
 
+<CommandPalette
+  bind:this={commandPalette}
+  shell={{
+    newDocument: () => switchDocument(true),
+    closeDocument: () => switchDocument(false),
+    navigate: (tab) => {
+      mainTab = tab;
+    },
+    pane: (pane) => {
+      activePane = pane;
+    },
+    sidebar: revealSidebarPane,
+  }}
+/>
+
 <svelte:window
   onkeydown={onKeyDown}
   ondragenter={onDragEnter}
@@ -855,6 +877,7 @@
           onNew={() => void switchDocument(true)}
           onClose={() => void switchDocument(false)}
           onReport={() => (reportOpen = true)}
+          onPalette={() => commandPalette.show()}
         />
         <!-- Inline primary actions — hidden on really narrow phones, where
              they collapse into the ☰ overflow menu (see .wide-actions CSS
@@ -1015,7 +1038,7 @@
           <div class="stock-host" class:active={slPane === 'stock'}>
             <button
               type="button"
-              class="group-head"
+              class="group-head sidebar-section-head"
               onclick={() => toggleSl('stock')}
               aria-expanded={slPane === 'stock'}
               title={slPane === 'stock' ? t('app.stock.collapse') : t('app.stock.expand')}
@@ -1100,6 +1123,7 @@
       onNew={() => void switchDocument(true)}
       onClose={() => void switchDocument(false)}
       onReport={() => (reportOpen = true)}
+      onPalette={() => commandPalette.show()}
     />
     <button
       class="tb-btn"
@@ -1328,10 +1352,17 @@
       class:mobile-open={mobilePanelOpen}
       data-active={activeSidebarPane}
     >
-      <div class="stock-host" class:active={activeSidebarPane === 'stock'}>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Active scroll region supports native keyboard scrolling without changing field values.) -->
+      <div
+        class="stock-host"
+        class:active={activeSidebarPane === 'stock'}
+        tabindex={activeSidebarPane === 'stock' ? 0 : undefined}
+        role="region"
+        aria-label={t('app.stock.name')}
+      >
         <button
           type="button"
-          class="group-head"
+          class="group-head sidebar-section-head"
           onclick={() => activateSidebarPane('stock')}
           aria-expanded={activeSidebarPane === 'stock'}
           title={activeSidebarPane === 'stock'
@@ -1350,7 +1381,14 @@
           </div>
         {/if}
       </div>
-      <div class="layers-host" class:active={activeSidebarPane === 'layers'}>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Active scroll region supports native keyboard scrolling without changing field values.) -->
+      <div
+        class="layers-host"
+        class:active={activeSidebarPane === 'layers'}
+        tabindex={activeSidebarPane === 'layers' ? 0 : undefined}
+        role="region"
+        aria-label={t('layers.title')}
+      >
         <LayerList
           active={activeSidebarPane === 'layers'}
           onActivate={() => activateSidebarPane('layers')}
@@ -1361,7 +1399,14 @@
           onReopenDismiss={dismissReopen}
         />
       </div>
-      <div class="text-list-host" class:active={activeSidebarPane === 'text'}>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Active scroll region supports native keyboard scrolling without changing field values.) -->
+      <div
+        class="text-list-host"
+        class:active={activeSidebarPane === 'text'}
+        tabindex={activeSidebarPane === 'text' ? 0 : undefined}
+        role="region"
+        aria-label={t('textlist.title')}
+      >
         <TextList
           active={activeSidebarPane === 'text'}
           onActivate={() => activateSidebarPane('text')}
@@ -1372,7 +1417,14 @@
            (BottomSheet, 7jug.9/.16), not this overlay accordion —
            Stock/Layers/Text stay here. -->
       {#if !layout.isNarrow}
-        <div class="ops-host" class:active={activeSidebarPane === 'operations'}>
+        <!-- svelte-ignore a11y_no_noninteractive_tabindex (Active scroll region supports native keyboard scrolling without changing field values.) -->
+        <div
+          class="ops-host"
+          class:active={activeSidebarPane === 'operations'}
+          tabindex={activeSidebarPane === 'operations' ? 0 : undefined}
+          role="region"
+          aria-label={t('oplist.title')}
+        >
           <OperationsList
             active={activeSidebarPane === 'operations'}
             onActivate={() => activateSidebarPane('operations')}
@@ -1913,6 +1965,16 @@
     min-width: 0;
     overflow: hidden;
   }
+  /* Active top-level host owns scrolling. Intermediate component wrappers
+     must not create a second sticky/scroll boundary. Other layouts retain theirs. */
+  .sidebar :global(.ops),
+  .sidebar :global(.layers),
+  .sidebar :global(.text-panel),
+  .sidebar :global(.layers > .group-body),
+  .sidebar :global(.text-panel > .group-body) {
+    overflow: visible;
+    height: auto;
+  }
   /* Narrow layout: lift the sidebar out of the (now single-column) grid
      and float it over the canvas as a full-screen overlay. The accordion
      inside is unchanged — only its host box changes. Hidden until the
@@ -1968,8 +2030,9 @@
     overflow: auto;
   }
   .stock-host {
+    --stock-header-padding: 0.4rem;
     background: var(--bg-panel);
-    padding: 0.4rem 0.6rem 0.5rem;
+    padding: var(--stock-header-padding) 0.6rem 0.5rem;
     overflow: visible;
     border-bottom: 1px solid var(--border);
   }
@@ -1981,6 +2044,8 @@
      `font-family: inherit` so the <button>-as-group-head doesn't render
      as system-monospace. */
   .stock-host .group-head {
+    /* Stock directly owns its padded scrollport. Cover the top padding while sticky. */
+    top: calc(-1 * var(--stock-header-padding));
     grid-template-columns: auto auto minmax(0, 1fr);
     width: 100%;
     color: var(--text-strong);

@@ -303,6 +303,10 @@ pub struct PipelineStats {
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("operation #{0}: V-Carve: {1}")]
+    VCarve(u32, String),
+    #[error("operation #{0}: invalid planar surfacing: {1}")]
+    PlanarSurface(u32, String),
     #[error("work origin: {0}")]
     WorkOrigin(String),
     #[error("fixture: {0}")]
@@ -346,6 +350,8 @@ impl PipelineError {
         use crate::errors::{AutoFix, Error as Structured, ErrorCode};
         match self {
             PipelineError::Cancelled => None,
+            PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
+            PipelineError::PlanarSurface(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review surfacing zone, flat cutter, depth and work area.")),
             PipelineError::AppliedCutting(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Apply or edit complete cutting rates for the current tool roles.")),
             PipelineError::Fixture(message) => Some(Structured::misconfigured(message.clone())),
             PipelineError::WorkOrigin(message) => Some(Structured::misconfigured(message.clone())),
@@ -588,10 +594,30 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     }
     // Fail an unusable CPS request before any real work happens.
     validate_cps_request(&req)?;
+    if req.post_processor == Some(PostProcessorKind::Hpgl) {
+        if let Some(op) = req
+            .project
+            .operations
+            .iter()
+            .find(|op| op.enabled && matches!(op.kind, OpKind::PlanarSurface { .. }))
+        {
+            return Err(PipelineError::PlanarSurface(
+                op.id,
+                "Planar surfacing requires an XYZ milling post, not HPGL plotting.".into(),
+            ));
+        }
+    }
     let mut project = req.project;
     crate::feeds_speeds::validate_applied_project(&project)?;
     work_origin::validate_fixtures(&project)?;
     work_origin::resolve(&mut project)?;
+    for op in project
+        .operations
+        .iter()
+        .filter(|op| op.enabled && matches!(op.kind, OpKind::PlanarSurface { .. }))
+    {
+        synthesize_op_setup(op, &project, &mut Vec::new())?;
+    }
 
     // Pre-pipeline: render every TextLayer to segments and append them
     // to the project's geometry pool. Each layer's segments live under
@@ -795,7 +821,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // critical `out_of_stock` warning so CLI / server / wasm consumers
     // get the guard centrally rather than synthesizing it per-frontend.
     // No-op when `project.stock` is unset.
-    warnings::push_stock_warning(&toolpath, project.stock.as_ref(), &mut warnings);
+    warnings::push_project_stock_warning(&toolpath, &project, &mut warnings);
     let regions = build_region_previews(&project, &objects);
     // Recorded IR from arbitrary CPS scripts is not evidence of their actual
     // output. Keep that representation distinction at the post adapter boundary.
@@ -1103,7 +1129,7 @@ pub fn stream_gcode_with_preview(
     // Toolpath-derived warnings, exactly as run_pipeline's tail — now
     // computable because the tee reconstructed the toolpath.
     warnings::push_work_area_warning(&toolpath, &prep.project.machine, &mut warnings);
-    warnings::push_stock_warning(&toolpath, prep.project.stock.as_ref(), &mut warnings);
+    warnings::push_project_stock_warning(&toolpath, &prep.project, &mut warnings);
 
     let (total_closed, total_offsets, _) = *stats_collector.borrow();
     Ok(StreamPreviewOutcome {
@@ -1150,6 +1176,13 @@ fn prepare_stream(
     crate::feeds_speeds::validate_applied_project(&project)?;
     work_origin::validate_fixtures(&project)?;
     work_origin::resolve(&mut project)?;
+    for op in project
+        .operations
+        .iter()
+        .filter(|op| op.enabled && matches!(op.kind, OpKind::PlanarSurface { .. }))
+    {
+        synthesize_op_setup(op, &project, &mut Vec::new())?;
+    }
 
     if !project.text_layers.is_empty() {
         for layer in &project.text_layers {
@@ -2434,6 +2467,7 @@ enum SpecialtyKind {
     Thread,
     Halfpipe,
     ReliefMill,
+    PlanarSurface,
     WaterlineRough,
     RasterEngrave,
 }
@@ -2448,6 +2482,7 @@ fn classify_specialty(op: &Op) -> Option<SpecialtyKind> {
             strategy: PocketStrategy::Halfpipe { .. },
             ..
         } => Some(SpecialtyKind::Halfpipe),
+        OpKind::PlanarSurface { .. } => Some(SpecialtyKind::PlanarSurface),
         OpKind::ReliefMill { .. } => Some(SpecialtyKind::ReliefMill),
         OpKind::WaterlineRough { .. } => Some(SpecialtyKind::WaterlineRough),
         OpKind::RasterEngrave { .. } => Some(SpecialtyKind::RasterEngrave),
@@ -2466,6 +2501,7 @@ impl SpecialtyKind {
             SpecialtyKind::Thread => thread_would_emit(op, objects),
             SpecialtyKind::Halfpipe => halfpipe_would_emit(op, objects),
             // Relief emits only when its referenced source exists.
+            SpecialtyKind::PlanarSurface => true,
             SpecialtyKind::ReliefMill => relief_would_emit(op, project),
             // Waterline emits only when its referenced STL source exists.
             SpecialtyKind::WaterlineRough => waterline_would_emit(op, project),
@@ -2500,6 +2536,9 @@ impl SpecialtyKind {
             ),
             // Relief + raster take no `objects` (they read
             // their source from the project, not the chained geometry).
+            SpecialtyKind::PlanarSurface => op_drivers::run_planar_surface_op(
+                op, project, setup, post, last_pos, warnings, cancel,
+            ),
             SpecialtyKind::ReliefMill => {
                 run_relief_op(op, project, setup, post, last_pos, warnings, cancel)
             }

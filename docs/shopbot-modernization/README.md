@@ -56,3 +56,44 @@ Source presence and passing UI tests do not establish machining correctness.
 - [UX2.2 application shell and welcome plan](ux/UX2_2_PLAN.md): **PLANNED**,
   command/state audit, welcome/navigation safeguards and future acceptance;
   sequence conflict preserved, human approval required before implementation.
+
+- [UX5 Command Palette & Quick Actions plan](ux/UX5_PLAN.md): **PLANNED — NOT
+  IMPLEMENTED**, local command/tool search, future shared registry and guarded
+  dispatch; after CAD1/UX3/UX4, subject to separate human approval.
+
+- [UX3 planar surfacing qualification and review](UX3_QUALIFICATION.md): locally
+  implemented explicit flat-cutter raster, saved v6 fixture and evidence limits;
+  human gate ivac-k4z3 is the next action before UX4.
+
+- [UX4 qualification](UX4_QUALIFICATION.md): local operation models, explicit geometry/tool binding, retained manual values and human review ivac-51gg.
+
+- [UX4.1 refinement](UX4_1_QUALIFICATION.md): focused template workflows, sticky section context, adjacent counters and human review ivac-si5w.
+
+- [UX5 action audit/design](ux/UX5_AUDIT.md): completed first checkpoint; proposed architecture and concept await ivac-2zh9 before palette implementation.
+
+- [UX5 command palette](UX5_QUALIFICATION.md): local owner-bound quick actions,
+  origin-aware tools, templates, keyboard/focus and guarded export; human gate ivac-txve.
+
+- [Future Two-Sided Machining & Registration](TWO_SIDED_PLAN.md): inherited foundation,
+  open ivac-jtkj, frame/pin/setup/output and separate physical qualification plan.
+- [Future V-Carve Inlays](VCARVE_INLAYS_PLAN.md): paired depth/fit geometry and separate
+  output after qualified V-Carve prerequisites. Both **PLANNED — NOT IMPLEMENTED /
+  NOT QUALIFIED** in their promised complete scope; current V-Carve priority retained.
+
+- [V-Carve software qualification](VCARVE_QUALIFICATION.md): targeted planner, A1–A4, bounded modes, fixtures/screenshots; human review pending.
+
+- [Geometry preparation shared architecture](GEOMETRY_PREPARATION_PLAN.md): future
+  source/edit/region separation and generic waterjet-compatible tolerance/identity policy.
+- [GEOM1 cleanup/repair](GEOM1_PLAN.md), [GEOM2 basic 2D editing](GEOM2_PLAN.md),
+  [GEOM3 optional utilities](GEOM3_PLAN.md): **PLANNED — NOT IMPLEMENTED**;
+  active V-Carve review and existing milestones/gates preserved.
+
+- [Geometry transformations GEOM2-A](GEOM2_A_PLAN.md) and
+  [basic drawing GEOM2-B](GEOM2_B_PLAN.md) refine the former GEOM2 umbrella.
+- [Sheet-layout architecture](NESTING_PLAN.md), [manual NEST1](NEST1_PLAN.md) and
+  [automatic true-shape NEST2](NEST2_PLAN.md): **PLANNED — NOT IMPLEMENTED**;
+  source/instance/CAM/stock boundaries and independent future qualification.
+
+- [PERF1 CAM performance plan](PERF1_PLAN.md): **PLANNED** profiling/benchmark phase
+  A, report/HARD STOP, then separately approved targeted phase B; historical evidence
+  preserved, reported V-Carve text latency unmeasured, numerical/output guards retained.

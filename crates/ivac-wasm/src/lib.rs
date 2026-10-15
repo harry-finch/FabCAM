@@ -338,3 +338,13 @@ pub fn capture_lab_preset(project: JsValue, op_id: u32) -> Result<JsValue, JsVal
         serde_wasm_bindgen::to_value(&capture).map_err(into_js_error)
     })
 }
+
+#[wasm_bindgen(js_name = cornerRelief)]
+pub fn corner_relief(request: JsValue) -> Result<JsValue, JsValue> {
+    let req: ivac_core::corner_relief::CornerReliefRequest =
+        serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+    guard(|| {
+        serde_wasm_bindgen::to_value(&ivac_core::corner_relief::preview(&req))
+            .map_err(into_js_error)
+    })
+}

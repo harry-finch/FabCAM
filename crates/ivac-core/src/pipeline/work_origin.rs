@@ -54,6 +54,10 @@ pub(super) fn resolve(project: &mut Project) -> Result<(), PipelineError> {
         source.origin.y -= y;
     }
     for op in &mut project.operations {
+        if let OpKind::PlanarSurface { surface } = &mut op.kind {
+            surface.origin[0] -= x;
+            surface.origin[1] -= y;
+        }
         if let Some(c) = op.contour_params_mut() {
             if let Some(point) = &mut c.approach_point {
                 point.0 -= x;

@@ -225,6 +225,7 @@ pub fn apply_cut_direction(
             | OpKind::Dovetail { .. }
             // Relief surfacing has its own drop-cutter driver and
             // never enters the offset cascade — no winding to enforce.
+            | OpKind::PlanarSurface { .. }
             | OpKind::ReliefMill { .. }
             // Raster engrave has its own scanline driver; no
             // vector winding to enforce.

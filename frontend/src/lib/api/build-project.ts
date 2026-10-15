@@ -626,6 +626,8 @@ function buildOpKind(opIn: OpEntry): WireOpKind {
         content: op.content ?? '',
         verbose_unsim_warnings: op.verboseUnsimWarnings ?? false,
       } as WireOpKind;
+    case 'planar_surface':
+      return { type: 'planar_surface', surface: opIn.surface };
     case 'relief_mill':
       return {
         type: 'relief_mill',
@@ -760,8 +762,10 @@ function buildOp(opIn: OpEntry, machine: MachineSettings): WireOp {
       ...(op.plungeRateOverride !== undefined && op.plungeRateOverride > 0
         ? { plunge_rate_override: op.plungeRateOverride }
         : {}),
-      ...(op.finishStep !== undefined && op.finishStep !== 0 ? { finish_step: op.finishStep } : {}),
-      ...(op.throughDepth !== undefined && op.throughDepth > 0
+      ...(op.finishStep !== undefined && (opIn.kind === 'vcarve' || op.finishStep !== 0)
+        ? { finish_step: op.finishStep }
+        : {}),
+      ...(op.throughDepth !== undefined && (opIn.kind === 'vcarve' || op.throughDepth > 0)
         ? { through_depth: op.throughDepth }
         : {}),
       ...(op.depthList && op.depthList.length > 0 ? { depth_list: op.depthList } : {}),
@@ -868,7 +872,12 @@ export function buildProject(state: ProjectStateView): WireProject | null {
   // Text-only is valid: no imported segments, but the backend renders the
   // text_layers in a pre-pass. Only bail when there's truly nothing.
   const hasText = (state.textLayers?.length ?? 0) > 0;
-  if (!imp && !hasText) return null;
+  if (
+    !imp &&
+    !hasText &&
+    !state.operations.some((op) => op.enabled && op.kind === 'planar_surface')
+  )
+    return null;
   const workOffset = state.workOffset ? buildWorkOffset(state.workOffset) : null;
   const stock = buildStock(state);
   return {

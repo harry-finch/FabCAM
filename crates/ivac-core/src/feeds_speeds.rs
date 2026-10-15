@@ -438,7 +438,10 @@ pub(crate) fn validate_applied_project(
         .filter(|o| o.enabled && o.params.applied_cutting.is_some())
     {
         if project.machine.mode != MachineMode::Mill
-            || !matches!(op.kind, OpKind::Profile { .. } | OpKind::Pocket { .. })
+            || !matches!(
+                op.kind,
+                OpKind::Profile { .. } | OpKind::Pocket { .. } | OpKind::PlanarSurface { .. }
+            )
         {
             return Err(PipelineError::AppliedCutting(
                 op.id,
@@ -455,7 +458,10 @@ pub(crate) fn validate_applied_project(
                 .iter()
                 .find(|t| t.id == id)
                 .ok_or(PipelineError::UnknownTool(op.id, id))?;
-            if tool.kind != ToolKind::Endmill {
+            if tool.kind != ToolKind::Endmill
+                && !(matches!(op.kind, OpKind::PlanarSurface { .. })
+                    && tool.kind == ToolKind::Compression)
+            {
                 return Err(PipelineError::AppliedCutting(
                     op.id,
                     "Review applied values after changing cutter family".into(),

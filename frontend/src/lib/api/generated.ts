@@ -215,6 +215,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/corner-relief": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview exact-diameter CAD corner relief
+         * @description Pure CAD preview in millimetres. Returns exact line/arc geometry and
+         *     per-corner refusals; never generates toolpaths or machine commands.
+         */
+        post: operations["cornerRelief"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/relief/stl": {
         parameters: {
             query?: never;
@@ -397,6 +418,35 @@ export interface components {
         };
         /** @enum {string} */
         Coolant: "off" | "mist" | "flood";
+        CornerCandidate: {
+            center?: components["schemas"]["Point2"] | null;
+            reason?: string | null;
+            reference: components["schemas"]["CornerRef"];
+            vertex: components["schemas"]["Point2"];
+        };
+        CornerRef: {
+            /** Format: uint */
+            corner_index: number;
+            /** Format: uint32 */
+            object_id: number;
+        };
+        CornerReliefRequest: {
+            mode: components["schemas"]["ReliefMode"];
+            /** @description One stable object tag per source segment. Zero/unassigned cannot be edited. */
+            objects: number[];
+            removal_side: components["schemas"]["RemovalSide"];
+            segments: components["schemas"]["Segment"][];
+            selected_corners: components["schemas"]["CornerRef"][];
+            selected_objects: number[];
+            /** Format: double */
+            tool_diameter_mm: number;
+        };
+        CornerReliefResponse: {
+            candidates: components["schemas"]["CornerCandidate"][];
+            error?: string | null;
+            objects: number[];
+            segments: components["schemas"]["Segment"][];
+        };
         /** @description One property override. Untagged so the JSON is the bare primitive (`true`, `3.5`, `"G28"`) — the shapes `.cps` properties take. */
         CpsParamValue: boolean | number | string;
         /** @description `.cps` post selection: the script source plus sparse property overrides (only values the user changed from the post's defaults). */
@@ -1738,6 +1788,10 @@ export interface components {
              */
             verbose_unsim_warnings: boolean;
         } | {
+            surface: components["schemas"]["PlanarSurfaceParams"];
+            /** @enum {string} */
+            type: "planar_surface";
+        } | {
             /**
              * Format: double
              * @description Sampling pitch along each scanline (mm). Finer = smoother path.
@@ -2100,6 +2154,26 @@ export interface components {
             params?: {
                 [key: string]: string;
             };
+        };
+        PlanarSurfaceParams: {
+            direction: components["schemas"]["ScanDirection"];
+            /** Format: double */
+            height_mm: number;
+            /**
+             * Format: double
+             * @description Expands the target rectangle on all four sides (mm, nonnegative).
+             */
+            margin_mm: number;
+            origin: number[];
+            /**
+             * Format: double
+             * @description Extra beyond the compulsory radius at each along-scan end (mm).
+             */
+            overtravel_mm: number;
+            /** Format: double */
+            stepover_mm: number;
+            /** Format: double */
+            width_mm: number;
         };
         /** @description Per-pass entry strategy. */
         PlungeStrategy: {
@@ -2484,6 +2558,8 @@ export interface components {
             kind: "heightgrid";
             z: number[];
         };
+        /** @enum {string} */
+        ReliefMode: "dogbone" | "tbone_incoming" | "tbone_outgoing";
         /** @description A target surface source for relief / ball-nose surfacing. Holds a row-major grid (see [`ReliefGrid`]) plus its world placement. Two producers feed the same type: a grayscale image decoded frontend-side ([`ReliefGrid::Grayscale`]) and an STL rasterized to real geometry Z ([`ReliefGrid::Heightgrid`], via `SurfaceField::from_stl`). The [`OpKind::ReliefMill`] driver turns either kind into a [`crate::cam::surface::SurfaceField`]; the placement (`origin` / `cell` / `cols` / `rows`) is shared, only the per-cell payload differs. */
         ReliefSource: {
             /**
@@ -2524,6 +2600,8 @@ export interface components {
             /** @description ready or unsupported; zero area is meaningful only when ready. */
             status: string;
         };
+        /** @enum {string} */
+        RemovalSide: "interior" | "exterior";
         /** @description Live-preview response — the rendered `TextLayer` segments plus the cached single-line classification. The pipeline produces the same segments at Generate time; this endpoint lets the frontend show the text on the 2D canvas without round-tripping a full pipeline run. */
         RenderTextLayerResponse: {
             family_name?: string | null;
@@ -3668,6 +3746,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HelixRadiusResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+        };
+    };
+    cornerRelief: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CornerReliefRequest"];
+            };
+        };
+        responses: {
+            /** @description Candidate corners, proposed geometry or an atomic refusal */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CornerReliefResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];

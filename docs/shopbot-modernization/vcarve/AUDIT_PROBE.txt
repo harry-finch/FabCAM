@@ -1,0 +1,19 @@
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `dev` profile [unoptimized] target(s) in 1.66s
+     Running `/private/tmp/fabcam-cps-runtime/debug/examples/vcarve_audit`
+mode medial=false, segments=10, min_z=-1, warnings=["vcarve_depth_limited"]
+cut Pose3 { x: 17.0, y: 3.0, z: 0.0 } -> Pose3 { x: 17.0, y: 3.0, z: -1.0 }, Plunge
+cut Pose3 { x: 17.0, y: 3.0, z: -1.0 } -> Pose3 { x: 17.0, y: 7.0, z: -1.0 }, Cut
+cut Pose3 { x: 17.0, y: 7.0, z: -1.0 } -> Pose3 { x: 3.0, y: 7.0, z: -1.0 }, Cut
+cut Pose3 { x: 3.0, y: 7.0, z: -1.0 } -> Pose3 { x: 3.0, y: 3.0, z: -1.0 }, Cut
+cut Pose3 { x: 3.0, y: 3.0, z: -1.0 } -> Pose3 { x: 17.0, y: 3.0, z: -1.0 }, Cut
+ShopBot=Err(".cps post failed: post runtime error: Error: ShopBot MVP: unsupported strategy engrave (shopbot.cps:33:32)\n    at fail (shopbot.cps:33:32)\n    at preflight (shopbot.cps:90:11)\n    at onOpen (shopbot.cps:179:12)\n    at apply (native)\n    at __ivacCallOptional (15_driver.js:326:13)\n    at __ivacExecute (15_driver.js:454:23)")
+mode medial=true, segments=3591, min_z=-1, warnings=["vcarve_depth_limited"]
+cut Pose3 { x: 0.05, y: 0.05, z: 0.0 } -> Pose3 { x: 0.15, y: 0.15, z: -0.0249 }, Cut
+cut Pose3 { x: 0.15, y: 0.15, z: -0.0249 } -> Pose3 { x: 0.2, y: 0.2, z: -0.0374 }, Cut
+cut Pose3 { x: 0.2, y: 0.2, z: -0.0374 } -> Pose3 { x: 0.25, y: 0.25, z: -0.0499 }, Cut
+cut Pose3 { x: 0.25, y: 0.25, z: -0.0499 } -> Pose3 { x: 0.35, y: 0.35, z: -0.0748 }, Cut
+cut Pose3 { x: 0.35, y: 0.35, z: -0.0748 } -> Pose3 { x: 0.4, y: 0.4, z: -0.0873 }, Cut
+ShopBot=Err(".cps post failed: post runtime error: Error: ShopBot MVP: unsupported strategy engrave (shopbot.cps:33:32)\n    at fail (shopbot.cps:33:32)\n    at preflight (shopbot.cps:90:11)\n    at onOpen (shopbot.cps:179:12)\n    at apply (native)\n    at __ivacCallOptional (15_driver.js:326:13)\n    at __ivacExecute (15_driver.js:454:23)")
+short chain target=-1, dpp=0.5, actual_min=-0.17632698070846498, paths=1
+ramp in shallow target zone (x>1, target=-0.01): [(2.8356409098088546, 0.0, -0.5)]

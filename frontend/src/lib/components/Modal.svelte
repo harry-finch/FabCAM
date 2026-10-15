@@ -29,6 +29,8 @@
     /// `aria-labelledby` so screen readers announce the dialog by
     /// title rather than as an unlabelled "dialog".
     ariaLabelledBy?: string;
+    restoreFocus?: boolean;
+    initialFocus?: string;
     children: import('svelte').Snippet;
   }
   let {
@@ -40,6 +42,8 @@
     draggable = false,
     resizable = false,
     ariaLabelledBy,
+    restoreFocus = true,
+    initialFocus,
     children,
   }: Props = $props();
 
@@ -163,7 +167,7 @@
     // tabindex="-1") if no inner control is focusable yet.
     queueMicrotask(() => {
       if (!body) return;
-      const first = body.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      const first = body.querySelector<HTMLElement>(initialFocus ?? FOCUSABLE_SELECTOR);
       if (first) first.focus();
       else body.focus();
     });
@@ -173,7 +177,8 @@
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
       resizeObserver?.disconnect();
-      if (trigger instanceof HTMLElement && document.contains(trigger)) trigger.focus();
+      if (restoreFocus && trigger instanceof HTMLElement && document.contains(trigger))
+        trigger.focus();
     };
   });
 

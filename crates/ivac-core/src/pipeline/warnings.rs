@@ -31,6 +31,22 @@ use super::{op_includes_object, resolve_op_segment_refs, PipelineError, Pipeline
 /// We accept a 0.001 mm slack so paths drawn EXACTLY to the origin
 /// edge don't warn (very common — "draw a square from 0,0 to 100,100").
 pub(super) fn push_wcs_origin_warning(project: &Project, warnings: &mut Vec<PipelineWarning>) {
+    // An explicit surfacing zone may lie away from work zero. Its driver
+    // validates resolved center travel against the machine envelope; requiring
+    // zero inside the material would make legitimate edge overtravel impossible.
+    let cutters: Vec<_> = project
+        .operations
+        .iter()
+        .filter(|op| op.enabled && !op.is_program_only())
+        .collect();
+    if !cutters.is_empty()
+        && cutters
+            .iter()
+            .all(|op| matches!(op.kind, OpKind::PlanarSurface { .. }))
+    {
+        return;
+    }
+
     if project.segments.is_empty() {
         return;
     }
@@ -467,6 +483,38 @@ pub(super) fn push_work_area_warning(
 /// a single `out_of_stock` warning (the frontend classifies that kind as
 /// critical, so the block-on-critical gate refuses to ship the program).
 /// Skipped when no stock is modeled or any dimension is non-positive.
+pub(super) fn push_project_stock_warning(
+    toolpath: &[crate::gcode::preview::ToolpathSegment],
+    project: &Project,
+    warnings: &mut Vec<PipelineWarning>,
+) {
+    let Some(stock) = &project.stock else {
+        return;
+    };
+    let surfaces: std::collections::BTreeSet<u32> = project
+        .operations
+        .iter()
+        .filter(|op| op.enabled && matches!(op.kind, OpKind::PlanarSurface { .. }))
+        .map(|op| op.id)
+        .collect();
+    if surfaces.is_empty() {
+        push_stock_warning(toolpath, Some(stock), warnings);
+        return;
+    }
+    let mut scanned = toolpath.to_vec();
+    for move_ in &mut scanned {
+        if surfaces.contains(&move_.op_id) {
+            // Only the known, validated planar raster may leave stock in XY.
+            // Preserve actual Z; under-stock depth remains a critical refusal.
+            for pose in [&mut move_.from, &mut move_.to] {
+                pose.x = stock.origin[0];
+                pose.y = stock.origin[1];
+            }
+        }
+    }
+    push_stock_warning(&scanned, Some(stock), warnings);
+}
+
 pub(super) fn push_stock_warning(
     toolpath: &[crate::gcode::preview::ToolpathSegment],
     stock: Option<&StockConfig>,
@@ -1012,6 +1060,7 @@ pub(super) fn push_tool_fit_kind_warnings(
             OpKind::TSlot { .. } => ("T-slot", &[Mill]),
             OpKind::Dovetail { .. } => ("Dovetail", &[Mill]),
             OpKind::VCarve { .. } => ("V-carve", &[Mill]),
+            OpKind::PlanarSurface { .. } => ("Planar surfacing", &[Mill]),
             OpKind::ReliefMill { .. } => ("Relief", &[Mill]),
             OpKind::WaterlineRough { .. } => ("Waterline roughing", &[Mill]),
             OpKind::RasterEngrave { .. } => ("Raster engrave", &[Laser]),

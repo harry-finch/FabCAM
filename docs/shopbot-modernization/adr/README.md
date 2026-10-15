@@ -32,3 +32,19 @@ is superseded by named tracks in ROADMAP.
   explicit unsupported context and fresh drawing-frame overlay; human review pending.
 
 - [ADR-0011: Bounded cutting-reference adaptation](ADR-0011-bounded-cutting-reference-adaptation.md) — FS3.9; human approval pending.
+
+- [ADR-0013 — Persistent CAD corner relief](ADR-0013-persistent-corner-relief.md): accepted source-preserving modifier, pure geometry evaluator and normal CAM boundary; CAD1 bounded continuation accepted for UX3 (ivac-7r7r).
+
+- [ADR-0014 — Explicit planar surfacing](ADR-0014-explicit-planar-surfacing.md):
+  operation-owned raster rectangle, shared XYZ emission, scoped edge diagnostics
+  and guarded v6; implemented locally, UX3 continuation accepted ivac-k4z3.
+
+- [ADR-0015 — Reusable operation templates](ADR-0015-reusable-operation-templates.md):
+  bounded local recipes, explicit destination binding and independent manual-value
+  operations; UX4 implemented locally; UX4.1 software review ivac-si5w accepted, superseding ivac-51gg.
+
+- [ADR-0016 — Command palette owner dispatch](ADR-0016-command-palette-owner-dispatch.md):
+  accepted UX5 design ivac-2zh9; owner-bound palette implemented with origin-aware
+  tools/templates and existing guards; human software review ivac-txve.
+
+- [ADR-0017 — V-Carve continuous planner](ADR-0017-vcarve-continuous-planner.md): approved architecture, bounded software implementation; human review pending.

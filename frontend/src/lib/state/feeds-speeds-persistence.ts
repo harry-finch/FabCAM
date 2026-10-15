@@ -22,12 +22,50 @@ export function validateProjectFile(value: ProjectFile): void {
       (value.kind === 'ivac-project' && value.version === 1) ||
       (value.kind === 'ivac-project-fs' && value.version === 2) ||
       (value.kind === 'ivac-project-cutting' && value.version === 3) ||
-      (value.kind === 'ivac-project-knowledge' && value.version === 4)
+      (value.kind === 'ivac-project-knowledge' && value.version === 4) ||
+      (value.kind === 'ivac-project-cad' && value.version === 5) ||
+      (value.kind === 'ivac-project-surfacing' && value.version === 6)
     )
   )
     throw new Error('Unsupported project format/version');
   if (value.version === 1 && hasFeedsSpeedsData(value))
     throw new Error('Cutting parameters require a guarded project format');
+  if (value.cornerRelief) {
+    const m = value.cornerRelief;
+    if (
+      (value.version !== 5 && value.version !== 6) ||
+      m.version !== 1 ||
+      typeof m.sourceKey !== 'string' ||
+      !Number.isFinite(m.diameter) ||
+      m.diameter <= 0 ||
+      !Number.isInteger(m.toolId) ||
+      !m.recipe?.selected_corners?.length ||
+      !Array.isArray(m.evaluated?.segments) ||
+      m.evaluated.segments.length !== m.evaluated.objects?.length
+    )
+      throw new Error('Invalid corner-relief project snapshot');
+  } else if (value.version === 5) throw new Error('Missing corner-relief snapshot');
+  const surfaces = (value.operations ?? []).filter((op) => op.kind === 'planar_surface');
+  if (surfaces.length > 0 !== (value.version === 6))
+    throw new Error('Planar surfacing requires guarded project version 6');
+  for (const op of surfaces) {
+    const p = op.surface;
+    if (
+      !p ||
+      !Array.isArray(p.origin) ||
+      p.origin.length !== 2 ||
+      ![...p.origin, p.width_mm, p.height_mm, p.margin_mm, p.overtravel_mm, p.stepover_mm].every(
+        Number.isFinite,
+      ) ||
+      p.width_mm <= 0 ||
+      p.height_mm <= 0 ||
+      p.margin_mm < 0 ||
+      p.overtravel_mm < 0 ||
+      p.stepover_mm <= 0 ||
+      !['along_x', 'along_y'].includes(p.direction)
+    )
+      throw new Error('Invalid planar surfacing parameters');
+  }
   for (const op of value.operations ?? []) {
     const applied = op.appliedCutting;
     if (!applied) continue;
@@ -42,7 +80,7 @@ export function validateProjectFile(value: ProjectFile): void {
     )
       throw new Error('Incomplete recommendation snapshot');
     if (applied.knowledge) {
-      if (value.version !== 4)
+      if (value.version !== 4 && value.version !== 5 && value.version !== 6)
         throw new Error('Source-pack provenance requires guarded project version 4');
       const k = applied.knowledge;
       if (

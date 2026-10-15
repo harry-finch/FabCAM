@@ -1,3 +1,4 @@
+import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // Transport-agnostic client interface. Implementations: HTTP (`http.ts`,
 // talks to ivac-server), Tauri (`tauri.ts`, native invoke), and WASM
 // (`wasm.ts`, runs the CAM pipeline in-browser).
@@ -89,6 +90,7 @@ export interface WiacClient {
    * helix circle fits. Lets the OpPropertiesPanel show
    * `Auto (detected: …)` before gcode generation.
    */
+  cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse>;
   computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse>;
   /**
    * Rasterize an STL byte stream into a relief height grid — the serialized

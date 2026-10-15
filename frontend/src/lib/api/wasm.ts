@@ -1,3 +1,4 @@
+import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // WASM implementation of WiacClient. Loads the ivac-wasm pkg lazily so it
 // only ships when the user opts in via `?api=wasm`. Useful for offline
 // demos and CI smoke tests; the same JSON contract the HTTP / Tauri
@@ -48,6 +49,7 @@ export type WasmModule = {
   renderText: (request: RenderTextRequest) => RenderTextResponse;
   renderTextLayer: (layer: WireTextLayer) => RenderTextLayerResponse;
   feedsSpeeds?: (request: FsCamRequest) => FsCamResponse;
+  cornerRelief: (request: CornerReliefRequest) => CornerReliefResponse;
   computeHelixRadius: (request: HelixRadiusRequest) => HelixRadiusResponse;
   /// Rasterize an STL byte stream to a relief height grid — the serialized
   /// SurfaceField `{origin,cell,cols,rows,z}`, or null when the mesh has no
@@ -194,6 +196,11 @@ export class WasmWiacClient implements WiacClient {
     return m.feedsSpeeds(request);
   }
 
+  async cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {
+    const m = await loadModule();
+    if (!m.cornerRelief) throw new Error('Corner relief unavailable in this WASM build');
+    return m.cornerRelief(request);
+  }
   async computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse> {
     const m = await loadModule();
     return m.computeHelixRadius(request);

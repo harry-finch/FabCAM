@@ -181,3 +181,7 @@ CAM4-B01..B05 drawing-frame, stale, unsupported, toggle and browser persistence
 checks. Optional diagnostics do not change machining output. Explicit unsupported
 contexts are not classified as fully machined. Human gate ivac-tvox before broader
 scope; no CAM4/CAD1 Phase C or physical qualification claim.
+
+## V-Carve software checkpoint
+
+[Current qualification](VCARVE_QUALIFICATION.md): A1 pass scheduling/radius, A2 interpolated envelope, A3 complete short-chain depth, A4 independent OpenSBP/preview parity PASS. Full medial area coverage PARTIAL; Perimeter square-island offset explicitly refused. Halfpipe unchanged/regressions pass. Synthetic settings, no physical test; human gate ivac-1b75.

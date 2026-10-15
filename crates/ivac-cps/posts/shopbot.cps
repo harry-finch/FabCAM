@@ -86,10 +86,15 @@ function preflight() {
   if (!program.sections.length) fail("no milling sections");
   for (var i = 0; i < program.sections.length; i++) {
     var s = program.sections[i];
-    if (["contour2d", "pocket2d", "drill", "milling"].indexOf(s.strategy) < 0)
+    if (["contour2d", "pocket2d", "drill", "milling", "planar_surface", "vcarve"].indexOf(s.strategy) < 0)
       fail("unsupported strategy " + s.strategy);
-    if ([TOOL_MILLING_END_FLAT, TOOL_DRILL].indexOf(s.tool.toolType) < 0)
-      fail("only flat end mills and drills supported");
+    if (s.strategy == "planar_surface" && s.tool.toolType != TOOL_MILLING_END_FLAT)
+      fail("planar surfacing requires a flat end mill");
+    if (s.strategy == "vcarve") {
+      if (s.tool.toolType != TOOL_MILLING_CHAMFER)
+        fail("V-Carve requires its qualified V-bit strategy/tool pairing");
+    } else if ([TOOL_MILLING_END_FLAT, TOOL_DRILL].indexOf(s.tool.toolType) < 0)
+      fail("only flat end mills and drills supported outside qualified V-Carve");
     if (s.tool.coolant != COOLANT_DISABLED || !s.spindleClockwise ||
         !finite(s.spindleRpm) || s.spindleRpm <= 0) fail("requires CW spindle, positive RPM, no coolant");
     if (labSpindle1 && (s.tool.number != 1 || s.tool.toolType != TOOL_MILLING_END_FLAT || s.spindleRpm > 18000 || s.spindleRpm != Math.floor(s.spindleRpm)))
@@ -146,6 +151,7 @@ function preflight() {
         p = r;
         break;
       case "circular":
+        if (s.strategy == "vcarve") fail("V-Carve requires qualified linear XYZ; arcs are unsupported");
         point(r.center); point(r.end); feed(r.feed);
         if ((r.end.z != p.z && entry != "ramp") || r.normal[0] != 0 || r.normal[1] != 0 || r.normal[2] != 1)
           fail("only planar XY arcs supported");

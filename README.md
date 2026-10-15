@@ -86,7 +86,7 @@ For CPS-backed browser development, run `cargo run --locked -p ivac-server` from
 
 ## Roadmap
 
-Priority milling workflow/coverage improvements continue within human approval gates. Dogbone/T-bone relief, planar surfacing, templates and advanced strategies are later work. FabSBP is planning only; ProtoMAX/waterjet and vinyl are deferred. See the canonical [ROADMAP](docs/shopbot-modernization/ROADMAP.md); planned work is not implemented functionality.
+Priority milling workflow/coverage improvements continue within human approval gates. Dogbone/T-bone relief and planar surfacing have bounded local software handoffs. Reusable Profile/Pocket/planar-surface templates have an accepted bounded software handoff ([UX4.1 qualification](docs/shopbot-modernization/UX4_1_QUALIFICATION.md)); advanced strategies remain later work. FabSBP is planning only; ProtoMAX/waterjet and vinyl are deferred. See the canonical [ROADMAP](docs/shopbot-modernization/ROADMAP.md); planned work is not implemented functionality.
 
 ## Project origins
 

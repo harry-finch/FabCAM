@@ -1,10 +1,15 @@
 <script lang="ts">
+  import { bindGeneratePalette, exportProblem } from '../state/generate-palette';
   import { notificationError } from '../api/error-notification';
   import CollisionFeedback from './CollisionFeedback.svelte';
   import RemainingMaterial from './RemainingMaterial.svelte';
   import { CircleX, TriangleAlert, Info, Check, RotateCw } from '@lucide/svelte';
   import { inDrawingFrame } from '../state/work-frame';
-  import { generationContextKey, buildGenerationProject } from '../state/generation-context';
+  import {
+    generationContextKey,
+    buildGenerationProject,
+    checkCornerRelief,
+  } from '../state/generation-context';
   import { resolveExportExtension } from '../services/gcode-export';
   // Simplified bar: post-processor + Generate + Download. The full setup
   // tree lives in SetupPanel and feeds project.setup.
@@ -257,6 +262,7 @@
 
   async function run() {
     if (
+      !checkCornerRelief(project) ||
       !project.documentActive ||
       project.loading ||
       !project.geometryView ||
@@ -265,8 +271,6 @@
       return;
     const epoch = project.documentEpoch;
     const ownsDocument = () => project.documentEpoch === epoch;
-    // Critical warnings block export, never regeneration: generating again
-    // must remain available to clear warnings after correcting the job.
     const inputContextKey = generationContextKey(project, post);
     const origin = { ...project.data.workOffset };
     project.beginGenerate();
@@ -366,34 +370,24 @@
   });
 
   async function downloadGcode(side: 'front' | 'back' = 'front') {
-    // If the program we'd ship has critical warnings and the user hasn't
-    // disabled the safety gate, refuse to write the file — a broken /
-    // unsafe .ngc on a machine is the failure we're guarding against.
-    // This is the ONLY place the critical-warning safety check blocks
-    // (Generate stays open so the operator can iterate to a fix); it
-    // covers BOTH the pipeline's findings (tool_too_large,
-    // pocket_fill_incomplete, out_of_stock, …) AND the heightfield sim's
-    // collisions / rapid-through-material. `criticalCount` aggregates
-    // both, and simDiagnostics is cleared on every Generate (see
-    // setGenerated) so it always reflects the toolpath being exported.
-    // The back program has no sim yet, so its gate is pipeline-only
-    // (backCriticalCount / backWorkAreaCount) — see the twoSided note above.
-    const critical = side === 'back' ? backCriticalCount : criticalCount;
-    const workArea = side === 'back' ? backWorkAreaCount : workAreaViolationCount;
-    if (project.data.settings.blockOnCriticalSimWarnings && critical > 0) {
-      project.setError(t('genbar.error.block_critical', { count: critical }));
-      return;
-    }
-    // Tier-4: opt-in hard gate on out-of-work-area moves. Blocks EXPORT
-    // only (Generate/preview stay open so the operator can see + fix the
-    // violation). The toolpath leaves the machine envelope — sending it
-    // risks a soft-limit fault or a gantry crash.
-    if (project.data.settings.blockOnWorkAreaViolation && workArea > 0) {
-      project.setError(t('genbar.error.block_work_area', { count: workArea }));
+    const problem = exportProblem(exportStatus(), side);
+    if (problem) {
+      project.setError(problem);
       return;
     }
     await exportGeneratedGcode(post, side);
   }
+
+  const exportStatus = () => ({
+    stale: generatedStale,
+    critical: criticalCount,
+    backCritical: backCriticalCount,
+    workArea: workAreaViolationCount,
+    backWorkArea: backWorkAreaCount,
+  });
+  bindGeneratePalette(exportStatus, run, cancelRun, downloadGcode, () => {
+    warningPanelOpen = true;
+  });
 
   function flyToWarning(w: SimWarning) {
     const segIdx = simWarningSegmentIdx(w);
@@ -673,13 +667,16 @@
       {#each allPipelineWarnings as pw, i (`pipe-${i}`)}
         {@const sev = pipelineWarningSeverity(pw)}
         {@const hasFix = pw.kind === 'stock_origin_outside_geometry_bbox'}
+        {@const vcarveContext = pw.kind.startsWith('vcarve_')
+          ? project.data.operations.find((op) => op.id === pw.op_id)?.name
+          : undefined}
         <details class="row severity-{sev} pipeline" data-op-id={pw.op_id ?? undefined}>
           <summary>
             <span class="dot" aria-hidden="true"></span>
             <span class="source pipeline" title={t('genbar.row.pipeline_title')}
               >{t('genbar.row.pipeline')}</span
             >
-            <span class="kind">{pw.kind}</span>
+            <span class="kind" title={pw.kind}>{vcarveContext ?? pw.kind}</span>
             <span class="msg">{warningMessage(pw, t)}</span>
             {#if hasFix}
               <button

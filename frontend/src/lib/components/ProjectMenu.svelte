@@ -4,12 +4,15 @@
   import { workspace } from '../state/workspace.svelte';
   import { openAny, addDrawing } from '../services/file_ops';
   import { openRecentProject } from '../services/workspace-session.svelte';
+  import { paletteShortcut } from '../state/palette-shortcut';
   import { t } from '../i18n';
   let {
     onNew,
     onClose,
     onReport,
-  }: { onNew: () => void; onClose: () => void; onReport: () => void } = $props();
+    onPalette,
+  }: { onNew: () => void; onClose: () => void; onReport: () => void; onPalette: () => void } =
+    $props();
   let menu: HTMLDetailsElement;
   const recents = $derived.by(() => {
     void workspace.version;
@@ -17,6 +20,7 @@
   });
   function run(action: () => void) {
     menu.open = false;
+    menu.querySelector('summary')?.focus();
     action();
   }
   function outside(event: MouseEvent) {
@@ -42,6 +46,9 @@
     >
     <button disabled={project.loading} onclick={() => run(() => void addDrawing())}
       ><Import size={15} />{t('shell.import')}</button
+    >
+    <button onclick={() => run(onPalette)}
+      >{t('palette.menu')} <small>{paletteShortcut()}</small></button
     >
     <hr />
     <span class="label">{t('shell.recents')}</span>

@@ -93,3 +93,27 @@ describe('dragHasFiles', () => {
     expect(dragHasFiles(drag(null))).toBe(false);
   });
 });
+
+describe('palette shortcut', () => {
+  it('maps Cmd/Ctrl K and preserves editable controls', () => {
+    expect(resolveShortcut(key('k', { meta: true }, DIV))).toEqual({
+      action: 'palette',
+      preventDefault: true,
+    });
+    expect(resolveShortcut(key('K', { ctrl: true }, DIV))).toEqual({
+      action: 'palette',
+      preventDefault: true,
+    });
+    expect(resolveShortcut(key('k', { meta: true }, INPUT))).toBeNull();
+    expect(resolveShortcut(key('k', { meta: true, alt: true }, DIV))).toBeNull();
+    expect(resolveShortcut(key('k', { meta: true, shift: true }, DIV))).toBeNull();
+  });
+  it('ignores IME composition and held shortcut repeats', () => {
+    expect(
+      resolveShortcut({ ...key('k', { meta: true }, DIV), isComposing: true } as KeyboardEvent),
+    ).toBeNull();
+    expect(
+      resolveShortcut({ ...key('k', { meta: true }, DIV), repeat: true } as KeyboardEvent),
+    ).toBeNull();
+  });
+});

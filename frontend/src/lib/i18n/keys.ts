@@ -96,6 +96,33 @@ export type MsgKey =
   | "app.undo.tip"
   | "app.viewport.mode"
   | "app.viewport.threed_tip"
+  | "cad1.apply"
+  | "cad1.busy"
+  | "cad1.cancel"
+  | "cad1.cancel_title"
+  | "cad1.clear"
+  | "cad1.corner"
+  | "cad1.cutter"
+  | "cad1.dogbone"
+  | "cad1.edit"
+  | "cad1.empty_contours"
+  | "cad1.entry_tip"
+  | "cad1.hint"
+  | "cad1.incoming"
+  | "cad1.inside"
+  | "cad1.mode"
+  | "cad1.no_tool"
+  | "cad1.outgoing"
+  | "cad1.outside"
+  | "cad1.remove"
+  | "cad1.select"
+  | "cad1.select_contours"
+  | "cad1.select_contours_hint"
+  | "cad1.selected"
+  | "cad1.selection"
+  | "cad1.side"
+  | "cad1.title"
+  | "cad1.toggle"
   | "calib.current"
   | "calib.implausible"
   | "calib.invalid"
@@ -538,7 +565,6 @@ export type MsgKey =
   | "layers.empty.sub"
   | "layers.empty.title"
   | "layers.file_stats"
-  | "layers.file_stats.title"
   | "layers.import_remove.aria"
   | "layers.import_remove.title"
   | "layers.import_stats"
@@ -875,6 +901,25 @@ export type MsgKey =
   | "opprops.from_selection.count"
   | "opprops.from_selection.disabled_aria"
   | "opprops.from_selection.title"
+  | "opprops.geometry.difference_layers.help"
+  | "opprops.geometry.difference_objects.help"
+  | "opprops.geometry.drawings"
+  | "opprops.geometry.drill.help"
+  | "opprops.geometry.empty_layers"
+  | "opprops.geometry.first_operand"
+  | "opprops.geometry.frame.help"
+  | "opprops.geometry.ids"
+  | "opprops.geometry.layer.help"
+  | "opprops.geometry.layer_identity"
+  | "opprops.geometry.layers"
+  | "opprops.geometry.paths.help"
+  | "opprops.geometry.pending"
+  | "opprops.geometry.pocket_auto.help"
+  | "opprops.geometry.source.help"
+  | "opprops.geometry.stock"
+  | "opprops.geometry.stock.help"
+  | "opprops.geometry.svg"
+  | "opprops.geometry.unavailable"
   | "opprops.group"
   | "opprops.group.label"
   | "opprops.group.label.placeholder"
@@ -993,6 +1038,7 @@ export type MsgKey =
   | "ops.help.gcode_include"
   | "ops.help.homing"
   | "ops.help.pause"
+  | "ops.help.planar_surface"
   | "ops.help.pocket"
   | "ops.help.pocket_outside"
   | "ops.help.probe"
@@ -1019,6 +1065,7 @@ export type MsgKey =
   | "ops.kind.gcode_include"
   | "ops.kind.homing"
   | "ops.kind.pause"
+  | "ops.kind.planar_surface"
   | "ops.kind.pocket"
   | "ops.kind.pocket_outside"
   | "ops.kind.probe"
@@ -1265,22 +1312,34 @@ export type MsgKey =
   | "ops.thread.source.help"
   | "ops.thread.source.hint"
   | "ops.vcarve.advanced.summary"
+  | "ops.vcarve.depth.maximum"
+  | "ops.vcarve.depth.medial.help"
+  | "ops.vcarve.depth.perimeter.help"
+  | "ops.vcarve.description.medial"
+  | "ops.vcarve.description.perimeter"
   | "ops.vcarve.duplicate_as_inlay_plug"
-  | "ops.vcarve.inlay_plug.help"
+  | "ops.vcarve.incompatible.clear"
+  | "ops.vcarve.incompatible.enabled"
+  | "ops.vcarve.incompatible.help"
+  | "ops.vcarve.incompatible.reset"
+  | "ops.vcarve.incompatible.title"
+  | "ops.vcarve.inlay.unavailable"
   | "ops.vcarve.inlay_plug.label"
   | "ops.vcarve.legend"
   | "ops.vcarve.max_width.help"
   | "ops.vcarve.max_width.label"
   | "ops.vcarve.max_width.placeholder"
-  | "ops.vcarve.mode.help"
   | "ops.vcarve.mode.label"
   | "ops.vcarve.mode.medial_axis"
   | "ops.vcarve.mode.perimeter"
-  | "ops.vcarve.refine_pass.help"
   | "ops.vcarve.refine_pass.label"
-  | "ops.vcarve.refine_pass.not_implemented"
+  | "ops.vcarve.scope.medial"
+  | "ops.vcarve.scope.perimeter"
   | "ops.vcarve.source_inset.help"
   | "ops.vcarve.source_inset.label"
+  | "ops.vcarve.start.fixed"
+  | "ops.vcarve.start.help"
+  | "ops.vcarve.step.help"
   | "ops.waterline.floor.help"
   | "ops.waterline.floor.label"
   | "ops.waterline.floor.placeholder"
@@ -1292,6 +1351,75 @@ export type MsgKey =
   | "ops.waterline.stepover.label"
   | "ops.waterline.z_step.help"
   | "ops.waterline.z_step.label"
+  | "palette.about"
+  | "palette.angle"
+  | "palette.assign"
+  | "palette.back"
+  | "palette.busy"
+  | "palette.cad"
+  | "palette.cancel"
+  | "palette.capture"
+  | "palette.changed"
+  | "palette.close"
+  | "palette.command"
+  | "palette.delete"
+  | "palette.diameter"
+  | "palette.drill"
+  | "palette.duplicate"
+  | "palette.export_back"
+  | "palette.export_front"
+  | "palette.filters"
+  | "palette.flutes"
+  | "palette.generate"
+  | "palette.geometry_required"
+  | "palette.help"
+  | "palette.help_usage"
+  | "palette.import"
+  | "palette.incompatible"
+  | "palette.inspect"
+  | "palette.inventory"
+  | "palette.keyboard"
+  | "palette.layers"
+  | "palette.legacy"
+  | "palette.machine"
+  | "palette.manual"
+  | "palette.menu"
+  | "palette.new"
+  | "palette.no_document"
+  | "palette.no_history"
+  | "palette.no_output"
+  | "palette.no_results"
+  | "palette.not_running"
+  | "palette.open"
+  | "palette.operations"
+  | "palette.pocket"
+  | "palette.profile"
+  | "palette.project"
+  | "palette.recent"
+  | "palette.redo"
+  | "palette.result_count"
+  | "palette.results"
+  | "palette.review_operation"
+  | "palette.review_rates"
+  | "palette.save"
+  | "palette.search"
+  | "palette.select_operation"
+  | "palette.settings"
+  | "palette.shortcut"
+  | "palette.stale"
+  | "palette.stock"
+  | "palette.stock_tool"
+  | "palette.template"
+  | "palette.templates"
+  | "palette.text"
+  | "palette.title"
+  | "palette.tool"
+  | "palette.tools"
+  | "palette.unavailable"
+  | "palette.undo"
+  | "palette.view2d"
+  | "palette.view3d"
+  | "palette.warnings"
   | "panel.drag_to_move"
   | "panel.drag_to_resize"
   | "panel.header.aria"
@@ -1591,6 +1719,95 @@ export type MsgKey =
   | "stock.width"
   | "stock.work_origin"
   | "stock.work_origin.title"
+  | "surface.center_extent"
+  | "surface.choose_flat"
+  | "surface.cutter_extent"
+  | "surface.direction"
+  | "surface.edges"
+  | "surface.extra_help"
+  | "surface.feed_mm_min"
+  | "surface.height_mm"
+  | "surface.invalid"
+  | "surface.margin_mm"
+  | "surface.origin_x"
+  | "surface.origin_y"
+  | "surface.overtravel_mm"
+  | "surface.plunge_mm_min"
+  | "surface.removal"
+  | "surface.rpm"
+  | "surface.safe_z"
+  | "surface.stepover_mm"
+  | "surface.use_stock"
+  | "surface.width_mm"
+  | "surface.zero_edges"
+  | "surface.zone"
+  | "templates.add"
+  | "templates.bind"
+  | "templates.cancel"
+  | "templates.capture"
+  | "templates.capture_explanation"
+  | "templates.choose"
+  | "templates.choose_geometry"
+  | "templates.choose_stock"
+  | "templates.choose_tool"
+  | "templates.close"
+  | "templates.delete_confirmation"
+  | "templates.diameter_difference"
+  | "templates.distinct_finish"
+  | "templates.document_changed"
+  | "templates.drawing"
+  | "templates.empty"
+  | "templates.explicit_step"
+  | "templates.finish_tool"
+  | "templates.flat_tool"
+  | "templates.front_only"
+  | "templates.geometry"
+  | "templates.geometry_bound"
+  | "templates.geometry_placeholder"
+  | "templates.invalid"
+  | "templates.invalid_rates"
+  | "templates.library"
+  | "templates.manage"
+  | "templates.milling_only"
+  | "templates.name"
+  | "templates.no_matches"
+  | "templates.no_selected_op"
+  | "templates.preview"
+  | "templates.preview.direction"
+  | "templates.preview.entry"
+  | "templates.preview.entry_angle"
+  | "templates.preview.entry_radius"
+  | "templates.preview.finish"
+  | "templates.preview.floor"
+  | "templates.preview.floor_angle"
+  | "templates.preview.floor_radius"
+  | "templates.preview.lead_in"
+  | "templates.preview.lead_out"
+  | "templates.preview.offset"
+  | "templates.preview.overlap"
+  | "templates.preview.rough"
+  | "templates.preview.strategy"
+  | "templates.remove"
+  | "templates.rename"
+  | "templates.reuse_explanation"
+  | "templates.reuse_surface"
+  | "templates.review_values"
+  | "templates.save"
+  | "templates.save_as"
+  | "templates.save_current"
+  | "templates.search"
+  | "templates.select_first"
+  | "templates.selection"
+  | "templates.short"
+  | "templates.source_operation"
+  | "templates.source_tool"
+  | "templates.stock"
+  | "templates.storage_error"
+  | "templates.title"
+  | "templates.tool"
+  | "templates.tool_placeholder"
+  | "templates.undo_remove"
+  | "templates.unsupported"
   | "textlist.activate.aria"
   | "textlist.add"
   | "textlist.add.aria"
@@ -1928,6 +2145,7 @@ export type MsgKey =
   | "warn.stock_origin_outside_geometry_bbox"
   | "warn.stufenfase_no_toolchange"
   | "warn.stufenfase_non_circle_skipped"
+  | "warn.surfacing_edge_overtravel"
   | "warn.tabs_count_clamped_short_contour"
   | "warn.tabs_with_trochoidal_unsupported"
   | "warn.thread_dz_less_than_pitch"
@@ -1962,6 +2180,7 @@ export type MsgKey =
   | "warn.vcarve_depth_limited"
   | "warn.vcarve_no_closed_region"
   | "warn.vcarve_no_medial_axis"
+  | "warn.vcarve_target_capped"
   | "warn.zero_rate_emitted"
   | "warn.zigzag_stride_clamped_below_minimum";
 
@@ -2059,6 +2278,33 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "app.undo.tip",
   "app.viewport.mode",
   "app.viewport.threed_tip",
+  "cad1.apply",
+  "cad1.busy",
+  "cad1.cancel",
+  "cad1.cancel_title",
+  "cad1.clear",
+  "cad1.corner",
+  "cad1.cutter",
+  "cad1.dogbone",
+  "cad1.edit",
+  "cad1.empty_contours",
+  "cad1.entry_tip",
+  "cad1.hint",
+  "cad1.incoming",
+  "cad1.inside",
+  "cad1.mode",
+  "cad1.no_tool",
+  "cad1.outgoing",
+  "cad1.outside",
+  "cad1.remove",
+  "cad1.select",
+  "cad1.select_contours",
+  "cad1.select_contours_hint",
+  "cad1.selected",
+  "cad1.selection",
+  "cad1.side",
+  "cad1.title",
+  "cad1.toggle",
   "calib.current",
   "calib.implausible",
   "calib.invalid",
@@ -2501,7 +2747,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "layers.empty.sub",
   "layers.empty.title",
   "layers.file_stats",
-  "layers.file_stats.title",
   "layers.import_remove.aria",
   "layers.import_remove.title",
   "layers.import_stats",
@@ -2838,6 +3083,25 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "opprops.from_selection.count",
   "opprops.from_selection.disabled_aria",
   "opprops.from_selection.title",
+  "opprops.geometry.difference_layers.help",
+  "opprops.geometry.difference_objects.help",
+  "opprops.geometry.drawings",
+  "opprops.geometry.drill.help",
+  "opprops.geometry.empty_layers",
+  "opprops.geometry.first_operand",
+  "opprops.geometry.frame.help",
+  "opprops.geometry.ids",
+  "opprops.geometry.layer.help",
+  "opprops.geometry.layer_identity",
+  "opprops.geometry.layers",
+  "opprops.geometry.paths.help",
+  "opprops.geometry.pending",
+  "opprops.geometry.pocket_auto.help",
+  "opprops.geometry.source.help",
+  "opprops.geometry.stock",
+  "opprops.geometry.stock.help",
+  "opprops.geometry.svg",
+  "opprops.geometry.unavailable",
   "opprops.group",
   "opprops.group.label",
   "opprops.group.label.placeholder",
@@ -2956,6 +3220,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ops.help.gcode_include",
   "ops.help.homing",
   "ops.help.pause",
+  "ops.help.planar_surface",
   "ops.help.pocket",
   "ops.help.pocket_outside",
   "ops.help.probe",
@@ -2982,6 +3247,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ops.kind.gcode_include",
   "ops.kind.homing",
   "ops.kind.pause",
+  "ops.kind.planar_surface",
   "ops.kind.pocket",
   "ops.kind.pocket_outside",
   "ops.kind.probe",
@@ -3228,22 +3494,34 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ops.thread.source.help",
   "ops.thread.source.hint",
   "ops.vcarve.advanced.summary",
+  "ops.vcarve.depth.maximum",
+  "ops.vcarve.depth.medial.help",
+  "ops.vcarve.depth.perimeter.help",
+  "ops.vcarve.description.medial",
+  "ops.vcarve.description.perimeter",
   "ops.vcarve.duplicate_as_inlay_plug",
-  "ops.vcarve.inlay_plug.help",
+  "ops.vcarve.incompatible.clear",
+  "ops.vcarve.incompatible.enabled",
+  "ops.vcarve.incompatible.help",
+  "ops.vcarve.incompatible.reset",
+  "ops.vcarve.incompatible.title",
+  "ops.vcarve.inlay.unavailable",
   "ops.vcarve.inlay_plug.label",
   "ops.vcarve.legend",
   "ops.vcarve.max_width.help",
   "ops.vcarve.max_width.label",
   "ops.vcarve.max_width.placeholder",
-  "ops.vcarve.mode.help",
   "ops.vcarve.mode.label",
   "ops.vcarve.mode.medial_axis",
   "ops.vcarve.mode.perimeter",
-  "ops.vcarve.refine_pass.help",
   "ops.vcarve.refine_pass.label",
-  "ops.vcarve.refine_pass.not_implemented",
+  "ops.vcarve.scope.medial",
+  "ops.vcarve.scope.perimeter",
   "ops.vcarve.source_inset.help",
   "ops.vcarve.source_inset.label",
+  "ops.vcarve.start.fixed",
+  "ops.vcarve.start.help",
+  "ops.vcarve.step.help",
   "ops.waterline.floor.help",
   "ops.waterline.floor.label",
   "ops.waterline.floor.placeholder",
@@ -3255,6 +3533,75 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ops.waterline.stepover.label",
   "ops.waterline.z_step.help",
   "ops.waterline.z_step.label",
+  "palette.about",
+  "palette.angle",
+  "palette.assign",
+  "palette.back",
+  "palette.busy",
+  "palette.cad",
+  "palette.cancel",
+  "palette.capture",
+  "palette.changed",
+  "palette.close",
+  "palette.command",
+  "palette.delete",
+  "palette.diameter",
+  "palette.drill",
+  "palette.duplicate",
+  "palette.export_back",
+  "palette.export_front",
+  "palette.filters",
+  "palette.flutes",
+  "palette.generate",
+  "palette.geometry_required",
+  "palette.help",
+  "palette.help_usage",
+  "palette.import",
+  "palette.incompatible",
+  "palette.inspect",
+  "palette.inventory",
+  "palette.keyboard",
+  "palette.layers",
+  "palette.legacy",
+  "palette.machine",
+  "palette.manual",
+  "palette.menu",
+  "palette.new",
+  "palette.no_document",
+  "palette.no_history",
+  "palette.no_output",
+  "palette.no_results",
+  "palette.not_running",
+  "palette.open",
+  "palette.operations",
+  "palette.pocket",
+  "palette.profile",
+  "palette.project",
+  "palette.recent",
+  "palette.redo",
+  "palette.result_count",
+  "palette.results",
+  "palette.review_operation",
+  "palette.review_rates",
+  "palette.save",
+  "palette.search",
+  "palette.select_operation",
+  "palette.settings",
+  "palette.shortcut",
+  "palette.stale",
+  "palette.stock",
+  "palette.stock_tool",
+  "palette.template",
+  "palette.templates",
+  "palette.text",
+  "palette.title",
+  "palette.tool",
+  "palette.tools",
+  "palette.unavailable",
+  "palette.undo",
+  "palette.view2d",
+  "palette.view3d",
+  "palette.warnings",
   "panel.drag_to_move",
   "panel.drag_to_resize",
   "panel.header.aria",
@@ -3554,6 +3901,95 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "stock.width",
   "stock.work_origin",
   "stock.work_origin.title",
+  "surface.center_extent",
+  "surface.choose_flat",
+  "surface.cutter_extent",
+  "surface.direction",
+  "surface.edges",
+  "surface.extra_help",
+  "surface.feed_mm_min",
+  "surface.height_mm",
+  "surface.invalid",
+  "surface.margin_mm",
+  "surface.origin_x",
+  "surface.origin_y",
+  "surface.overtravel_mm",
+  "surface.plunge_mm_min",
+  "surface.removal",
+  "surface.rpm",
+  "surface.safe_z",
+  "surface.stepover_mm",
+  "surface.use_stock",
+  "surface.width_mm",
+  "surface.zero_edges",
+  "surface.zone",
+  "templates.add",
+  "templates.bind",
+  "templates.cancel",
+  "templates.capture",
+  "templates.capture_explanation",
+  "templates.choose",
+  "templates.choose_geometry",
+  "templates.choose_stock",
+  "templates.choose_tool",
+  "templates.close",
+  "templates.delete_confirmation",
+  "templates.diameter_difference",
+  "templates.distinct_finish",
+  "templates.document_changed",
+  "templates.drawing",
+  "templates.empty",
+  "templates.explicit_step",
+  "templates.finish_tool",
+  "templates.flat_tool",
+  "templates.front_only",
+  "templates.geometry",
+  "templates.geometry_bound",
+  "templates.geometry_placeholder",
+  "templates.invalid",
+  "templates.invalid_rates",
+  "templates.library",
+  "templates.manage",
+  "templates.milling_only",
+  "templates.name",
+  "templates.no_matches",
+  "templates.no_selected_op",
+  "templates.preview",
+  "templates.preview.direction",
+  "templates.preview.entry",
+  "templates.preview.entry_angle",
+  "templates.preview.entry_radius",
+  "templates.preview.finish",
+  "templates.preview.floor",
+  "templates.preview.floor_angle",
+  "templates.preview.floor_radius",
+  "templates.preview.lead_in",
+  "templates.preview.lead_out",
+  "templates.preview.offset",
+  "templates.preview.overlap",
+  "templates.preview.rough",
+  "templates.preview.strategy",
+  "templates.remove",
+  "templates.rename",
+  "templates.reuse_explanation",
+  "templates.reuse_surface",
+  "templates.review_values",
+  "templates.save",
+  "templates.save_as",
+  "templates.save_current",
+  "templates.search",
+  "templates.select_first",
+  "templates.selection",
+  "templates.short",
+  "templates.source_operation",
+  "templates.source_tool",
+  "templates.stock",
+  "templates.storage_error",
+  "templates.title",
+  "templates.tool",
+  "templates.tool_placeholder",
+  "templates.undo_remove",
+  "templates.unsupported",
   "textlist.activate.aria",
   "textlist.add",
   "textlist.add.aria",
@@ -3891,6 +4327,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "warn.stock_origin_outside_geometry_bbox",
   "warn.stufenfase_no_toolchange",
   "warn.stufenfase_non_circle_skipped",
+  "warn.surfacing_edge_overtravel",
   "warn.tabs_count_clamped_short_contour",
   "warn.tabs_with_trochoidal_unsupported",
   "warn.thread_dz_less_than_pitch",
@@ -3925,6 +4362,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "warn.vcarve_depth_limited",
   "warn.vcarve_no_closed_region",
   "warn.vcarve_no_medial_axis",
+  "warn.vcarve_target_capped",
   "warn.zero_rate_emitted",
   "warn.zigzag_stride_clamped_below_minimum",
 ];

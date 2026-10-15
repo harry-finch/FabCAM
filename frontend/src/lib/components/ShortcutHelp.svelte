@@ -4,6 +4,7 @@
   /// the shared Modal so focus management + Esc-to-close + click-outside
   /// follow the same pattern as MachineDialog / ToolLibraryDialog /
   /// SettingsDialog / AddTextDialog.
+  import { paletteShortcut } from '../state/palette-shortcut';
   import Modal from './Modal.svelte';
   import { t } from '../i18n';
 
@@ -60,6 +61,8 @@
       <section>
         <h3>{t('shortcuts.section.global')}</h3>
         <dl>
+          <dt><kbd>{paletteShortcut()}</kbd></dt>
+          <dd>{t('palette.title')}. {t('palette.help_usage')}</dd>
           <dt><kbd>T</kbd></dt>
           <dd>{t('shortcuts.global.add_text')}</dd>
           <dt><kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>Z</kbd></dt>

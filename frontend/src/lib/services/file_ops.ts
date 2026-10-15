@@ -1,3 +1,4 @@
+import { cornerReliefGenerationError } from '../state/generation-context';
 import { commitDocumentLoad } from '../state/document-load';
 import { notificationError, notificationText } from '../api/error-notification';
 import { generationContextKey } from '../state/generation-context';
@@ -727,6 +728,7 @@ export async function exportGeneratedGcode(
   const gen = side === 'back' ? project.gen.generatedBack : project.gen.generated;
   if (!gen) return;
   const isCurrent = () =>
+    !cornerReliefGenerationError(project) &&
     project.gen.inputContextKey === generationContextKey(project, postProcessor) &&
     project.gen.pipelineState === 'idle' &&
     (side === 'back' ? project.gen.generatedBack : project.gen.generated) === gen;

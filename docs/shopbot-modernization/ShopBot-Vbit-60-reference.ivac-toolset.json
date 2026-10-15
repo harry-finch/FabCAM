@@ -1,0 +1,21 @@
+{
+  "kind": "toolset",
+  "format_version": 1,
+  "updated_at": "2026-10-14T00:00:00Z",
+  "payload": [
+    {
+      "id": 30,
+      "name": "V-bit 60° Ø6 mm — référence démo",
+      "kind": "v_bit",
+      "diameter": 6,
+      "tipDiameter": 0,
+      "tipAngleDeg": 60,
+      "flutes": 2,
+      "speed": 12000,
+      "plungeRate": 150,
+      "feedRate": 600,
+      "coolant": "off",
+      "fluteLengthMm": 5
+    }
+  ]
+}

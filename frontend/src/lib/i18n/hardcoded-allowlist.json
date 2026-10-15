@@ -42,6 +42,7 @@
   "lib/components/op_properties/DrillSection.svelte": ["mm"],
   "lib/components/op_properties/FeedsSpeedsSection.svelte": ["mm", "mm/min", "rpm"],
   "lib/components/op_properties/PatternSection.svelte": ["mm", "Δx", "Δy"],
+  "lib/components/op_properties/PlanarSurfaceSection.svelte": ["mm"],
   "lib/components/op_properties/PocketSection.svelte": ["fraction", "mm"],
   "lib/components/op_properties/ProfileSection.svelte": ["mm"],
   "lib/components/op_properties/RasterEngraveSection.svelte": ["mm", "native"],

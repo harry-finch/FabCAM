@@ -28,6 +28,7 @@
     probe: '⇣',
     cycle_marker: '◈',
     gcode_include: '⎙',
+    planar_surface: '≡',
     relief_mill: '⛰',
     waterline_rough: '≋',
     raster_engrave: '▦',
@@ -50,6 +51,7 @@
     't_slot',
     'dovetail',
     'vcarve',
+    'planar_surface',
     'relief_mill',
     'waterline_rough',
     'raster_engrave',
@@ -116,6 +118,7 @@
     t_slot: ['mill'],
     dovetail: ['mill'],
     vcarve: ['mill'],
+    planar_surface: ['mill'],
     relief_mill: ['mill'],
     // Waterline / Z-level roughing is a milling strategy.
     waterline_rough: ['mill'],

@@ -10,7 +10,6 @@
     type OpEntry,
     type OpField,
     type OpFieldValue,
-    type SourceCombine,
     type CutDirection,
   } from '../state/project.svelte';
   import { defaultClient } from '../api/http';
@@ -23,7 +22,10 @@
   import { partitionToolsForModes } from '../state/tool_picker';
   import { t } from '../i18n';
   import FeedsSpeedsSection from './op_properties/FeedsSpeedsSection.svelte';
+  import VCarveCompatibility from './op_properties/VCarveCompatibility.svelte';
+  import { vcarveDepthPresentation } from '../state/vcarve-strategy-ui';
   import VCarveSection from './op_properties/VCarveSection.svelte';
+  import GeometrySourceSection from './op_properties/GeometrySourceSection.svelte';
   import ChamferSection from './op_properties/ChamferSection.svelte';
   import ThreadSection from './op_properties/ThreadSection.svelte';
   import PatternSection from './op_properties/PatternSection.svelte';
@@ -33,6 +35,7 @@
   import ProfileSection from './op_properties/ProfileSection.svelte';
   import PocketSection from './op_properties/PocketSection.svelte';
   import ReliefMillSection from './op_properties/ReliefMillSection.svelte';
+  import PlanarSurfaceSection from './op_properties/PlanarSurfaceSection.svelte';
   import WaterlineRoughSection from './op_properties/WaterlineRoughSection.svelte';
   import RasterEngraveSection from './op_properties/RasterEngraveSection.svelte';
   import PauseSection from './op_properties/PauseSection.svelte';
@@ -40,10 +43,8 @@
   import ProbeSection from './op_properties/ProbeSection.svelte';
   import GcodeIncludeSection from './op_properties/GcodeIncludeSection.svelte';
   import CycleMarkerSection from './op_properties/CycleMarkerSection.svelte';
-  // Shared op-property styling lives in a plain CSS module so we
-  // don't need 53 :global(.props X) rules in the scoped style block
-  // below. Vite static-imports this once; the .props prefix keeps the
-  // selectors namespaced.
+  // Shared CSS avoids duplicated :global rules. Vite imports it once;
+  // the .props prefix keeps these styles namespaced.
   import './op_properties/op-properties.css';
 
   const apiClient = defaultClient();
@@ -53,14 +54,6 @@
   /// message key; resolved through t() at the use site so it translates
   /// live. Keep these grouped near the top so future translators have one
   /// obvious target.
-  const COMBINE_HELP = {
-    auto: 'opprops.combine.auto.help',
-    union: 'opprops.combine.union.help',
-    difference: 'opprops.combine.difference.help',
-    intersection: 'opprops.combine.intersection.help',
-    xor: 'opprops.combine.xor.help',
-    none: 'opprops.combine.none.help',
-  } as const;
   const CUT_DIRECTION_HELP = {
     conventional: 'opprops.direction.conventional.help',
     climb: 'opprops.direction.climb.help',
@@ -189,6 +182,7 @@
       window.clearTimeout(timer);
     };
   });
+  const depthCopy = $derived(vcarveDepthPresentation(op));
 </script>
 
 <aside class="props" class:embedded>
@@ -230,6 +224,8 @@
     <GcodeIncludeSection {op} {patch} />
   {:else if op.kind === 'cycle_marker'}
     <CycleMarkerSection {op} {patch} />
+  {:else if op.kind === 'planar_surface'}
+    <PlanarSurfaceSection {op} />
   {:else if op.kind === 'relief_mill'}
     <!-- Relief surfacing follows an image-derived Z-surface, not
          source geometry — name + tool + the relief section only. -->
@@ -445,144 +441,18 @@
       </label>
     {/if}
 
-    <fieldset>
-      <legend>{t('opprops.source')}</legend>
-      <!-- Two-sided (flip-stock) face selector. Only meaningful when the
-           stock carries a flip registration; hidden otherwise so a
-           single-sided project never sees a knob that does nothing. Front
-           is stored as `undefined` (the wire omits it) so picking Front
-           normalises the model back to the single-sided default. -->
-      {#if project.data.stock.flip != null}
-        <label class="row" title={t('opprops.side.title')}>
-          <span>{t('opprops.side')}</span>
-          <select
-            value={op.side ?? 'front'}
-            onchange={(e) =>
-              patch(
-                'side',
-                (e.currentTarget as HTMLSelectElement).value === 'back' ? 'back' : undefined,
-              )}
-          >
-            <option value="front">{t('opprops.side.front')}</option>
-            <option value="back">{t('opprops.side.back')}</option>
-          </select>
-        </label>
-      {/if}
-      <label class="row">
-        <span>{t('opprops.source.mode')}</span>
-        <select
-          value={op.sourceObjects && op.sourceObjects.length > 0
-            ? '_objects_'
-            : op.sourceLayers === null
-              ? '_all_'
-              : '_layer_'}
-          onchange={(e) => {
-            const v = (e.currentTarget as HTMLSelectElement).value;
-            if (v === '_all_') {
-              patch('sourceLayers', null);
-              patch('sourceObjects', undefined);
-            } else if (v === '_layer_') {
-              patch('sourceObjects', undefined);
-              if (op && op.sourceLayers === null) patch('sourceLayers', []);
-            } else {
-              patch('sourceLayers', null);
-              if (op && (op.sourceObjects?.length ?? 0) === 0) patch('sourceObjects', []);
-            }
-          }}
-        >
-          <option value="_all_">{t('opprops.source.mode.all')}</option>
-          <option value="_layer_">{t('opprops.source.mode.layer')}</option>
-          <option value="_objects_">{t('opprops.source.mode.objects')}</option>
-        </select>
-      </label>
-      {#if op.sourceLayers !== null && (op.sourceObjects?.length ?? 0) === 0}
-        <label class="row">
-          <span>{t('opprops.source.layer')}</span>
-          <select
-            value={op.sourceLayers[0] ?? ''}
-            onchange={(e) => patch('sourceLayers', [(e.currentTarget as HTMLSelectElement).value])}
-          >
-            <option value="">{t('opprops.source.layer.pick')}</option>
-            {#if project.transformedImport}
-              {#each project.transformedImport.layers.filter((l) => l.segment_count > 0) as layer (layer.name)}
-                <option value={layer.name}>"{layer.name}"</option>
-              {/each}
-            {/if}
-            <!-- Text layers are selectable sources too. Each
-                 TextLayer's rendered geometry lives on the synthetic
-                 layer `__text_<id>` (the same value AddTextDialog seeds
-                 the engrave op with), so listing it here makes the text
-                 source visible + re-selectable instead of rendering blank
-                 and getting clobbered on the next edit. -->
-            {#if project.data.textLayers.length > 0}
-              <optgroup label={t('opprops.source.text_group')}>
-                {#each project.data.textLayers as t (t.id)}
-                  <option value={`__text_${t.id}`}>{t.name}</option>
-                {/each}
-              </optgroup>
-            {/if}
-          </select>
-        </label>
-      {:else if op.sourceObjects && op.sourceObjects.length > 0}
-        <p class="hint">
-          {t('opprops.source.objects_selected', { count: op.sourceObjects.length })}
-        </p>
-      {:else if op.sourceLayers === null}
-        <p class="hint">{t('opprops.source.all_chains')}</p>
-      {/if}
-      <!-- Drill picks a single XY per selected object (POINT / circle
-           center / bbox center) and emits a drill cycle there. The
-           area-based boolean modes (union / difference / intersection
-           / xor) have no effect — each object gets its own hole no
-           matter what. Hide the Combine selector for Drill to stop
-           promising a knob that does nothing. -->
-      {#if op.kind !== 'drill' && ((op.sourceObjects?.length ?? 0) > 1 || (op.sourceLayers !== null && op.sourceLayers.length > 0))}
-        <label class="row" title={t(COMBINE_HELP[op.sourceCombine ?? 'auto'])}>
-          <span>{t('opprops.combine')}</span>
-          <select
-            value={op.sourceCombine ?? 'auto'}
-            onchange={(e) =>
-              patch('sourceCombine', (e.currentTarget as HTMLSelectElement).value as SourceCombine)}
-          >
-            <option value="auto" title={t(COMBINE_HELP.auto)}>{t('opprops.combine.auto')}</option>
-            <option value="union" title={t(COMBINE_HELP.union)}>{t('opprops.combine.union')}</option
-            >
-            <option value="difference" title={t(COMBINE_HELP.difference)}
-              >{t('opprops.combine.difference')}</option
-            >
-            <option value="intersection" title={t(COMBINE_HELP.intersection)}
-              >{t('opprops.combine.intersection')}</option
-            >
-            <option value="xor" title={t(COMBINE_HELP.xor)}>{t('opprops.combine.xor')}</option>
-            <option value="none" title={t(COMBINE_HELP.none)}>{t('opprops.combine.none')}</option>
-          </select>
-        </label>
-      {/if}
-      <button
-        class="from-selection"
-        class:ghost={project.sel.selectedObjects.size === 0}
-        type="button"
-        disabled={project.sel.selectedObjects.size === 0}
-        aria-label={project.sel.selectedObjects.size === 0
-          ? t('opprops.from_selection.disabled_aria')
-          : t('opprops.from_selection.count', { count: project.sel.selectedObjects.size })}
-        title={project.sel.selectedObjects.size === 0
-          ? t('opprops.from_selection.disabled_aria')
-          : t('opprops.from_selection.title')}
-        onclick={() => {
-          patch('sourceLayers', null);
-          patch('sourceObjects', [...project.sel.selectedObjects]);
-        }}
-        >{project.sel.selectedObjects.size === 0
-          ? t('opprops.from_selection')
-          : t('opprops.from_selection.count', { count: project.sel.selectedObjects.size })}</button
-      >
-    </fieldset>
+    {#if op.kind === 'vcarve'}
+      <VCarveCompatibility {op} {patch} />
+    {/if}
+
+    {#key op.id}
+      <GeometrySourceSection {op} />
+    {/key}
 
     <fieldset>
       <legend>{t('opprops.cut')}</legend>
-      <label class="row">
-        <span>{t('opprops.cut.final_depth')}</span>
+      <label class="row" title={depthCopy.help ? t(depthCopy.help) : undefined}>
+        <span>{t(depthCopy.label)}</span>
         <div class="num-cell">
           <input
             type="number"
@@ -591,8 +461,7 @@
             onchange={(e) => {
               const raw = (e.currentTarget as HTMLInputElement).value;
               const v = parseFloat(raw);
-              // Reject NaN — the prior `|| 0` silently snapped a typo
-              // to depth=0 with no UI cue.
+              // Reject NaN: a typo must not silently change the target depth.
               if (Number.isFinite(v)) patch('depth', v);
             }}
           />
@@ -600,24 +469,31 @@
         </div>
       </label>
       {#snippet advancedCutSettings()}
-        <label class="row">
-          <span>{t('opprops.cut.start_depth')}</span>
-          <div class="num-cell">
-            <input
-              type="number"
-              step="0.1"
-              value={op.startDepth}
-              onchange={(e) => {
-                const raw = (e.currentTarget as HTMLInputElement).value;
-                const v = parseFloat(raw);
-                if (Number.isFinite(v)) patch('startDepth', v);
-              }}
-            />
-            <span class="unit">mm</span>
+        {#if op.kind === 'vcarve'}
+          <div class="row" title={t('ops.vcarve.start.help')}>
+            <span>{t('opprops.cut.start_depth')}</span>
+            <span>{op.startDepth === 0 ? t('ops.vcarve.start.fixed') : `${op.startDepth} mm`}</span>
           </div>
-        </label>
-        {#if !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}
+        {:else}
           <label class="row">
+            <span>{t('opprops.cut.start_depth')}</span>
+            <div class="num-cell">
+              <input
+                type="number"
+                step="0.1"
+                value={op.startDepth}
+                onchange={(e) => {
+                  const raw = (e.currentTarget as HTMLInputElement).value;
+                  const v = parseFloat(raw);
+                  if (Number.isFinite(v)) patch('startDepth', v);
+                }}
+              />
+              <span class="unit">mm</span>
+            </div>
+          </label>
+        {/if}
+        {#if !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}
+          <label class="row" title={depthCopy.stepHelp ? t(depthCopy.stepHelp) : undefined}>
             <span>{t('opprops.cut.step')}</span>
             <div class="step-cell">
               <input
@@ -760,45 +636,47 @@
             </div>
           </div>
         {/if}
-        <label class="row" title={t('opprops.cut.through_depth.title')}>
-          <span>{t('opprops.cut.through_depth')}</span>
-          <div class="num-cell">
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              value={op.throughDepth ?? 0}
-              onchange={(e) => {
-                const v = parseFloat((e.currentTarget as HTMLInputElement).value);
-                patch('throughDepth', isNaN(v) || v <= 0 ? undefined : v);
-              }}
-            />
-            <span class="unit">mm</span>
-          </div>
-        </label>
-        <label class="row" title={t('opprops.cut.depth_list.title')}>
-          <span>{t('opprops.cut.depth_list')}</span>
-          <div class="num-cell">
-            <input
-              type="text"
-              placeholder={t('opprops.cut.depth_list.placeholder')}
-              value={op.depthList ? op.depthList.join(', ') : ''}
-              onchange={(e) => {
-                const text = (e.currentTarget as HTMLInputElement).value.trim();
-                if (text === '') {
-                  patch('depthList', undefined);
-                  return;
-                }
-                const parts = text
-                  .split(',')
-                  .map((s) => parseFloat(s.trim()))
-                  .filter((n) => !isNaN(n));
-                patch('depthList', parts.length > 0 ? parts : undefined);
-              }}
-            />
-            <span class="unit">mm</span>
-          </div>
-        </label>
+        {#if op.kind !== 'vcarve'}
+          <label class="row" title={t('opprops.cut.through_depth.title')}>
+            <span>{t('opprops.cut.through_depth')}</span>
+            <div class="num-cell">
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                value={op.throughDepth ?? 0}
+                onchange={(e) => {
+                  const v = parseFloat((e.currentTarget as HTMLInputElement).value);
+                  patch('throughDepth', isNaN(v) || v <= 0 ? undefined : v);
+                }}
+              />
+              <span class="unit">mm</span>
+            </div>
+          </label>
+          <label class="row" title={t('opprops.cut.depth_list.title')}>
+            <span>{t('opprops.cut.depth_list')}</span>
+            <div class="num-cell">
+              <input
+                type="text"
+                placeholder={t('opprops.cut.depth_list.placeholder')}
+                value={op.depthList ? op.depthList.join(', ') : ''}
+                onchange={(e) => {
+                  const text = (e.currentTarget as HTMLInputElement).value.trim();
+                  if (text === '') {
+                    patch('depthList', undefined);
+                    return;
+                  }
+                  const parts = text
+                    .split(',')
+                    .map((s) => parseFloat(s.trim()))
+                    .filter((n) => !isNaN(n));
+                  patch('depthList', parts.length > 0 ? parts : undefined);
+                }}
+              />
+              <span class="unit">mm</span>
+            </div>
+          </label>
+        {/if}
         {#if op.kind === 'profile' || op.kind === 'pocket'}
           <label class="row" title={t(CUT_DIRECTION_HELP[op.cutDirection ?? 'conventional'])}>
             <span>{t('opprops.cut.direction')}</span>

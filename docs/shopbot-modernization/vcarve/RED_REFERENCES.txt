@@ -1,0 +1,36 @@
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized] target(s) in 5.65s
+     Running tests/vcarve_qualification.rs (/private/tmp/fabcam-cps-runtime/debug/deps/vcarve_qualification-55e732f658bf9a7d)
+
+running 3 tests
+test a3_short_chain_reaches_target_at_both_ends ... FAILED
+test a2_interpolated_ramp_never_exceeds_local_target ... FAILED
+test a1_perimeter_honors_pass_step_and_depth_limited_radius ... FAILED
+
+failures:
+
+---- a3_short_chain_reaches_target_at_both_ends stdout ----
+
+thread 'a3_short_chain_reaches_target_at_both_ends' panicked at crates/ivac-core/tests/vcarve_qualification.rs:44:9:
+undercut at 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- a2_interpolated_ramp_never_exceeds_local_target stdout ----
+
+thread 'a2_interpolated_ramp_never_exceeds_local_target' panicked at crates/ivac-core/tests/vcarve_qualification.rs:36:13:
+overcut x=1.0183564090980886 z=-0.0149 target=-0.01
+
+---- a1_perimeter_honors_pass_step_and_depth_limited_radius stdout ----
+
+thread 'a1_perimeter_honors_pass_step_and_depth_limited_radius' panicked at crates/ivac-core/tests/vcarve_qualification.rs:22:9:
+missing pass depth -0.2
+
+
+failures:
+    a1_perimeter_honors_pass_step_and_depth_limited_radius
+    a2_interpolated_ramp_never_exceeds_local_target
+    a3_short_chain_reaches_target_at_both_ends
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-core --test vcarve_qualification`

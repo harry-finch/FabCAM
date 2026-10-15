@@ -1,3 +1,4 @@
+import { reliefSourceKey } from './corner-relief';
 import { notificationError } from '../api/error-notification';
 // Global project state, Svelte 5 runes.
 // Holds the most recently imported geometry plus UI flags.
@@ -157,6 +158,7 @@ export type {
   ProfileOp,
   RasterEngraveOp,
   RasterLink,
+  PlanarSurfaceOp,
   ReliefMillOp,
   ScanDirection,
   SourceCombine,
@@ -169,6 +171,7 @@ export type {
 export { isContourOp, isPathOp } from './op_types';
 
 import { computeFootprint } from '../sim/driver';
+import { surfaceSizingView } from './planar-surface';
 import { augmentWithStockOutline } from './stock-outline';
 
 import { type CommandTarget } from './commands';
@@ -193,6 +196,9 @@ export class ProjectState {
   /// entry case namespaces object ids (entries[0] keeps ids 1..N, later
   /// entries get the next range) so existing op references stay valid.
   transformedImport = $derived.by<ImportResponse | null>(() => {
+    const modifier = this.data.cornerRelief;
+    if (modifier && modifier.sourceKey === reliefSourceKey(this.data.imports))
+      return modifier.evaluated;
     return combineImports(this.data.imports);
   });
 
@@ -206,8 +212,11 @@ export class ProjectState {
   /// bbox matters here, which is all `computeFootprint` reads. Reactive on
   /// the text-preview cache so it tightens as glyphs finish rendering.
   stockSizingImport = $derived.by<ImportResponse | null>(() => {
-    const base = this.transformedImport;
-    if (this.data.textLayers.length === 0) return base; // unchanged path
+    const base = surfaceSizingView(
+      this.data.operations.filter((op) => op.kind === 'planar_surface'),
+      this.transformedImport,
+    );
+    if (this.data.textLayers.length === 0) return base;
     void previewVersion.v;
     let box = base ? { ...base.bbox } : null;
     for (const layer of this.data.textLayers) {
@@ -255,7 +264,7 @@ export class ProjectState {
   /// this back would loop (outline ← footprint ← bbox ← outline).
   geometryView = $derived.by<ImportResponse | null>(() => {
     const base = this.transformedImport;
-    if (!this.data.stock.visible) return base;
+    if (!this.data.stock.visible) return base ?? this.stockSizingImport;
     // Size the footprint from the text-inclusive bbox so a text-only project
     // gets a fitting auto-stock (and a non-null geometryView, which unblocks
     // Generate). The outline still augments the RAW `base` so the canvas

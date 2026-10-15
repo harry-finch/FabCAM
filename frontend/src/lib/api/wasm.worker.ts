@@ -1,3 +1,4 @@
+import type { CornerReliefRequest } from './types';
 import { notificationError } from './error-notification';
 // Web Worker host for the wasm CAM client. Runs the blocking
 // pipeline OFF the main thread so the UI stays responsive, and streams
@@ -112,6 +113,9 @@ ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
       case 'feedsSpeeds':
         if (!m.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this WASM build');
         post({ id, type: 'result', value: m.feedsSpeeds(args[0] as FsCamRequest) });
+        break;
+      case 'cornerRelief':
+        post({ id, type: 'result', value: m.cornerRelief(args[0] as CornerReliefRequest) });
         break;
       case 'computeHelixRadius':
         post({ id, type: 'result', value: m.computeHelixRadius(args[0] as HelixRadiusRequest) });

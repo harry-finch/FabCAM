@@ -1,4 +1,6 @@
 <script lang="ts">
+  import OperationTemplates from './OperationTemplates.svelte';
+  import { CopyPlus } from '@lucide/svelte';
   /// Operations list — ordered flat list of CAM operations the program
   /// runs. Each row shows an enabled checkbox, kind icon, name, tool,
   /// status badge, duplicate, and delete affordance. Click selects the
@@ -27,6 +29,7 @@
   }
   let { active, onActivate }: Props = $props();
 
+  let templatesDialog: OperationTemplates;
   let pickerOpen = $state(false);
   let dragId = $state<number | null>(null);
   let dragOverId = $state<number | null>(null);
@@ -163,7 +166,7 @@
         reason: t('oplist.status.tool_missing', { id: op.toolId }),
       };
     }
-    if (!project.transformedImport) {
+    if (!project.transformedImport && op.kind !== 'planar_surface') {
       return {
         label: '⚠',
         tone: 'warn',
@@ -373,7 +376,7 @@
        the caret's own activation. -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <div class="group-head" onclick={onActivate}>
+  <div class="group-head sidebar-section-head" onclick={onActivate}>
     <button
       class="caret-btn"
       onclick={(e) => {
@@ -382,11 +385,25 @@
       }}
       title={active ? t('oplist.collapse.title') : t('oplist.expand.title')}
       aria-label={active ? t('oplist.collapse.aria') : t('oplist.activate.aria')}
+      aria-expanded={active}
     >
       {active ? '▾' : '▸'}
     </button>
-    <span class="group-name">{t('oplist.title')}</span>
-    <span class="group-count" title={t('oplist.count.title')}>{project.data.operations.length}</span
+    <span class="sidebar-section-identity"
+      ><span class="group-name">{t('oplist.title')}</span>
+      <span class="sidebar-section-count" title={t('oplist.count.title')}
+        >{project.data.operations.length}</span
+      ></span
+    >
+    <button
+      type="button"
+      class="templates-trigger"
+      title={t('templates.title')}
+      aria-label={t('templates.title')}
+      onclick={(e) => {
+        e.stopPropagation();
+        templatesDialog.show();
+      }}><CopyPlus size={14} />{t('templates.short')}</button
     >
     <button
       class="add-btn"
@@ -401,6 +418,13 @@
       +
     </button>
   </div>
+  <!-- Dialog is a sibling: its clicks cannot toggle the section header. -->
+  <OperationTemplates
+    bind:this={templatesDialog}
+    onCreated={() => {
+      if (!active) onActivate();
+    }}
+  />
 
   {#if active}
     {#if pickerOpen}
@@ -550,6 +574,11 @@
         </div>
         {#if selected}
           <div class="props">
+            <button
+              type="button"
+              class="save-template"
+              onclick={() => templatesDialog.saveOperation(op.id)}>{t('templates.save_as')}</button
+            >
             <OpPropertiesPanel embedded />
           </div>
         {/if}
@@ -711,13 +740,28 @@
     color: var(--text-strong);
     font-weight: 600;
   }
-  .group-count {
+  .templates-trigger,
+  .save-template {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: 0;
     color: var(--text-muted);
     font-size: 0.72rem;
-    padding: 0 0.3rem;
-    background: var(--bg-app);
-    border-radius: 10px;
-    line-height: 1.4;
+    cursor: pointer;
+    padding: 3px 5px;
+  }
+  .templates-trigger:focus-visible,
+  .save-template:focus-visible {
+    outline: 2px solid var(--accent);
+  }
+  .templates-trigger:hover,
+  .save-template:hover {
+    color: var(--text-strong);
+  }
+  .save-template {
+    margin-bottom: 4px;
   }
   .add-btn {
     background: var(--bg-elevated);

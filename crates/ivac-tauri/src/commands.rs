@@ -550,3 +550,12 @@ pub async fn feeds_speeds_cmd(
         .map_err(|e| internal(e.to_string()))?
         .map_err(|e| serialize_error(ivac_core::Error::bad_input(e)))
 }
+
+#[tauri::command]
+pub async fn corner_relief_cmd(
+    req: ivac_core::corner_relief::CornerReliefRequest,
+) -> Result<ivac_core::corner_relief::CornerReliefResponse, String> {
+    tokio::task::spawn_blocking(move || ivac_core::corner_relief::preview(&req))
+        .await
+        .map_err(|e| internal(format!("join error: {e}")))
+}

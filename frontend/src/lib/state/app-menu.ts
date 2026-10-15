@@ -16,6 +16,7 @@
 /// on `kind` and performs the (component-coupled) effect — undo/redo on the
 /// project store, opening a file via `file_ops`, flipping a dialog flag.
 export type ShortcutAction =
+  | 'palette'
   | 'undo'
   | 'redo'
   | 'open'
@@ -51,11 +52,14 @@ export function isTypingTarget(t: EventTarget | null): boolean {
 /// DOM mutation and never calls `preventDefault` itself; the caller does
 /// that iff the returned `preventDefault` is true.
 export function resolveShortcut(e: KeyboardEvent): ShortcutResolution | null {
+  if (e.isComposing || e.repeat) return null;
   const mod = e.ctrlKey || e.metaKey;
   if (mod && !e.altKey) {
     const k = e.key.toLowerCase();
     // Ctrl/Cmd combos all defer to the typing guard so the browser's
     // native in-field undo / open / save still work while editing.
+    if (k === 'k' && !e.shiftKey && !isTypingTarget(e.target))
+      return { action: 'palette', preventDefault: true };
     if (k === 'z' && !e.shiftKey) {
       if (isTypingTarget(e.target)) return null;
       return { action: 'undo', preventDefault: true };

@@ -908,3 +908,28 @@ describe('FS3.5 job material display metadata', () => {
     expect(material.label).toBe('MDF atelier');
   });
 });
+
+it('preserves unsupported saved V-Carve schedules for backend refusal, including zero finish step', () => {
+  const op: OpEntry = {
+    ...profileOp(),
+    kind: 'vcarve',
+    finishStep: 0,
+    throughDepth: -0.2,
+    startDepth: -1,
+    depthList: [-0.2, -1],
+    multiPassRefine: true,
+  };
+  const project = buildProject({
+    transformedImport: fakeImport(),
+    machine: baseMachine(),
+    tools: [baseTool({ kind: 'v_bit' })],
+    operations: [op],
+  });
+  expect(project!.operations[0].params).toMatchObject({
+    finish_step: 0,
+    through_depth: -0.2,
+    start_depth: -1,
+    depth_list: [-0.2, -1],
+  });
+  expect(op).toMatchObject({ finishStep: 0, throughDepth: -0.2, multiPassRefine: true });
+});

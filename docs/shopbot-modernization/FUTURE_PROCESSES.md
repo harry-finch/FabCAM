@@ -63,3 +63,33 @@ Post-M4 scheduling uses the WJ track rather than global M5–M10 numbering.
 See ROADMAP for the deferred sequence and priorities. The milling-specific FS
 engine must not become a waterjet or drag-knife dependency; share appropriate
 infrastructure only. No WJ/VINYL work is authorized by the FS planning update.
+
+## Future geometry-preparation prerequisite
+
+[GEOM1 — Drawing Cleanup & Repair](GEOM1_PLAN.md) is HIGH-priority planned generic
+infrastructure, preferably qualified before serious ProtoMAX integration, after
+active V-Carve review and existing approvals. Continuous contours, explicit open/closed
+semantics, duplicates/zero-length/micro-edge diagnosis, stable topology and named
+unit-aware tolerances improve waterjet inputs. Geometry repair requires preview and
+explicit Apply; an intentional open/slit path or drill/reference point is not inherently
+invalid. Cleanup must not add waterjet-specific algorithms or decide pierce/kerf/quality.
+
+[Shared geometry plan](GEOMETRY_PREPARATION_PLAN.md) preserves source/effective-geometry,
+identity/history and CAM-region boundaries; GEOM2/3 are later editing utilities, not
+mandatory full-CAD dependencies. GEOM1 is a recommended qualified foundation, not
+an authorization to start WJ or fabricate OMX/physical evidence. Milling FS stays
+independent and the active V-Carve HARD STOP remains unchanged.
+
+## Future sheet-layout compatibility
+
+[NEST1](NEST1_PLAN.md)/[NEST2](NEST2_PLAN.md) place parts generically using qualified
+GEOM2-A transforms and prepared sources. Kerf, pierce and lead clearances, quality,
+cutting order and no-go/fixture constraints remain explicit waterjet-process inputs,
+not an OMX exporter or milling assumptions hidden in packing. Geometric overlap/
+spacing success alone never claims machining safety. GEOM2-B drawing is not required
+in full for manual sheet layout; [shared architecture](NESTING_PLAN.md) keeps frames,
+instances and CAM binding explicit. No WJ implementation started by this plan.
+
+Common-line cutting is separate future work, excluded from initial NEST1/2: shared
+edges need kerf/topology/order/leads/part-separation/hold-down/output qualification.
+Multi-sheet/remnants can be a later NEST2 phase without full inventory management.

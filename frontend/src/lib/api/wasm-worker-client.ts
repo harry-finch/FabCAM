@@ -1,3 +1,4 @@
+import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // `WiacClient` that runs the wasm CAM pipeline in a Web Worker, so
 // a heavy generate does not block the UI thread, and a long run can be
 // cancelled for real. It speaks the same JSON contract as the HTTP /
@@ -236,6 +237,9 @@ export class WasmWorkerClient implements WiacClient {
     return this.call('feedsSpeeds', [request]);
   }
 
+  cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {
+    return this.call('cornerRelief', [request]);
+  }
   computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse> {
     return this.call('computeHelixRadius', [request]);
   }
