@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-15",
+  "captured_existing_source_files": 779,
+  "unchanged_existing_source_files": 774,
+  "changed_existing_source_files": [
+    "frontend/src/App.svelte",
+    "frontend/src/lib/components/LayerList.svelte",
+    "frontend/src/lib/i18n/keys.ts",
+    "frontend/src/lib/i18n/messages/de.json",
+    "frontend/src/lib/i18n/messages/en.json"
+  ],
+  "new_source_files": [
+    "frontend/src/lib/state/drawing-layers.ts",
+    "frontend/src/lib/state/drawing-layers.test.ts"
+  ],
+  "cam_state_history_serialization_renderers_unchanged": true,
+  "file_transform_markup_handlers_unchanged_ignoring_formatting": true,
+  "browser_roundtrip_imports_exact": true,
+  "browser_roundtrip_operation_source_references_exact": true,
+  "portable_visibility_array": [],
+  "note": "Compared against incoming uncommitted working tree, preserving pre-existing PERF and visual polish. New helper is presentation only; tests exercise actual existing state commands and CAM request identity."
+}

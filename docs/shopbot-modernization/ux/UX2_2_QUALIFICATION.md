@@ -89,3 +89,12 @@ another milestone; publication still needs explicit authorization.
 See [UX2_2_POLISH.md](UX2_2_POLISH.md) for the user-requested three refinements,
 current 1145-pass evidence and updated screenshots. These supersede the earlier
 empty-canvas import and long machine label. Human acceptance remains ivac-ein1.
+
+
+## 2026-10-15 — Focused visual hierarchy continuation
+
+[Visual hierarchy refinement](VISUAL_HIERARCHY_REFINEMENT.md) records the actual
+baseline, four CSS-only changes, equivalent before/after captures, theme/context/
+grid decisions and state/accessibility checks. No redesign or new major milestone;
+1263 frontend passes/1skip, check/lint/build pass. Human visual gate ivac-1drzo
+OPEN; existing PERF and physical/native gates are not advanced.

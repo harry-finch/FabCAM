@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-15",
+  "base_commit": "2032848e8087caf4dd1a1a466aa5bbb8c7027341",
+  "protected_source_files": 779,
+  "unchanged_source_files": 775,
+  "changed_source_files": [
+    "frontend/src/app.css",
+    "frontend/src/lib/components/AppNavigation.svelte",
+    "frontend/src/lib/components/op_properties/op-properties.css",
+    "frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte"
+  ],
+  "svelte_non_style_sections_identical": {
+    "frontend/src/lib/components/AppNavigation.svelte": true,
+    "frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte": true
+  },
+  "dark_contrast_ratios": {
+    "header_vs_toolbar_before": 1.1084465876433773,
+    "header_vs_toolbar_after": 1.1682917470744612,
+    "section_vs_panel_before": 6.084168958953755,
+    "section_vs_panel_after": 8.064542650864931,
+    "minor_vs_canvas_before": 1.1733062549675803,
+    "minor_vs_canvas_after": 1.1160453859229373
+  },
+  "header_px": {
+    "1366_before": 30.2890625,
+    "1366_after": 30.2890625,
+    "1024_before": 45.7890625,
+    "1024_after": 45.7890625
+  },
+  "small_desktop_horizontal_overflow": false,
+  "note": "Initial file hashes taken before this polish, retaining all pre-existing PERF work. Only CSS declarations changed; all core/state/renderer source hashes preserved. Ratios use solid grayscale token values; no timing or human usability study claim."
+}

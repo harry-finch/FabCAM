@@ -12,12 +12,12 @@
   } from '../state/project.svelte';
   import { untrack } from 'svelte';
   import Modal from './Modal.svelte';
+  import FeedsSpeedsCompatibility from './FeedsSpeedsCompatibility.svelte';
+  import { deepEqual } from './dialog-draft';
   import PostProcessorEditor from './PostProcessorEditor.svelte';
   import CpsPostConfigEditor from './CpsPostConfig.svelte';
   import { DialogDraft } from './dialog-draft.svelte';
   import * as fileOps from '../services/file_ops';
-  import { workspace } from '../state/workspace.svelte';
-  import { duplicateProfile, profileFromCurrent } from '../state/machine_profiles';
   import { suggestMachineName } from '../state/tool_naming';
   import { t } from '../i18n';
   import { defaultClient } from '../api/http';
@@ -31,8 +31,38 @@
     /// switches, so an in-progress draft survives), footer becomes
     /// Apply / Revert.
     embedded?: boolean;
+    sourceMachine?: MachineSettings;
+    onSaveMachine?: (machine: MachineSettings) => void;
+    saveLabel?: string;
+    section?: 'general' | 'output' | 'advanced' | 'all';
+    scopeKey?: string;
+    inheritedIdentity?: MachineSettings['fsIdentity'];
+    onDraftState?: (dirty: boolean, conflict: boolean) => void;
   }
-  let { open, onClose, embedded = false }: Props = $props();
+  let {
+    open,
+    onClose,
+    embedded = false,
+    sourceMachine,
+    onSaveMachine,
+    saveLabel,
+    section = 'all',
+    scopeKey = 'project',
+    inheritedIdentity,
+    onDraftState,
+  }: Props = $props();
+  const source = $derived(sourceMachine ?? project.data.machine);
+  let baseline = $state<MachineSettings>(untrack(() => $state.snapshot(source)));
+  $effect(() => {
+    onDraftState?.(dd.isDirty, conflict);
+  });
+  export function discardChanges() {
+    revert();
+  }
+  export function saveChanges(): boolean {
+    return commit();
+  }
+  let baselineScope = $state(untrack(() => scopeKey));
   const active = $derived(open || embedded);
 
   // PostProcessor editor — the heavy editing surface lives in a
@@ -76,14 +106,22 @@
   });
 
   const dd = new DialogDraft<MachineDraft>();
-  dd.open(compositeOf(project.data.machine));
+  const conflict = $derived(
+    dd.isDirty && (!deepEqual(source, baseline) || baselineScope !== scopeKey),
+  );
+  dd.open(compositeOf(untrack(() => source)));
   /// Narrow aliases so the template / commit path keep reading
   /// `draft.*` / `jerkDraft.*` — two-way bindings still mutate the
   /// deeply-reactive dd.draft underneath. The `??` arms are unreachable
   /// (dd is opened at init and never close()d) but keep the types
   /// null-free.
-  const composite = $derived(dd.draft ?? compositeOf(project.data.machine));
+  const composite = $derived(dd.draft ?? compositeOf(source));
   const draft = $derived(composite.machine);
+  const isShopBot = $derived(
+    draft.gcodeDialect === 'cps' &&
+      draft.cpsPost?.source === 'bundled' &&
+      draft.cpsPost.bundledId === 'shopbot',
+  );
   const jerkDraft = $derived(composite.jerk);
 
   $effect(() => {
@@ -93,7 +131,8 @@
     // (deep-reads dd.draft) and then writing dd.draft in the same
     // effect self-invalidates it into an infinite loop (the frozen-
     // tab bug, see ToolLibraryDialog's twin effect).
-    const machine = $state.snapshot(project.data.machine) as MachineSettings;
+    const machine = $state.snapshot(source) as MachineSettings;
+    const owner = scopeKey;
     untrack(() => {
       // Embedded panels stay mounted, so external machine changes
       // (undo, profile switch) re-run this — refresh a CLEAN draft to
@@ -105,10 +144,11 @@
       // visible state stops updating" (see App.svelte:117).
       try {
         dd.open(compositeOf(machine));
+        baseline = machine;
+        baselineScope = owner;
       } catch (e) {
         console.error('MachineDialog.open: init failed', e);
       }
-      confirmingProfileDelete = false;
     });
   });
 
@@ -224,109 +264,26 @@
     return snap;
   }
 
-  function commit() {
-    // Whole body in try/catch so any throw from the snapshot or
-    // setMachine still reaches `onClose()` — otherwise OK appears
-    // broken. The error is logged and surfaces via the global error
-    // banner so the underlying bug stays visible.
+  function commit(): boolean {
+    if (conflict) return false;
     try {
-      project.setMachine(draftSnapshot());
+      const next = draftSnapshot();
+      if (onSaveMachine) onSaveMachine(next);
+      else project.setMachine(next);
+      baseline = $state.snapshot(next);
+      dd.markClean();
+      if (!embedded) onClose();
+      return true;
     } catch (e) {
-      console.error('MachineDialog.commit: setMachine failed', e);
+      project.setError(`Machine settings: ${String(e)}`);
+      return false;
     }
-    // Embedded (tab) mode: Apply commits and stays — re-baseline the
-    // draft instead of closing.
-    if (embedded) dd.markClean();
-    else onClose();
   }
 
-  /// Embedded-mode Revert: drop the draft back to the committed machine.
   function revert() {
-    dd.open(compositeOf(project.data.machine));
-    confirmingProfileDelete = false;
-  }
-
-  // ── machine profiles ──────────────────────────────────────────────
-  // Workspace-level named (machine + tool library) bundles — one per
-  // physical machine. The picker applies a profile to the PROJECT
-  // (machine + tools + reference, one undoable step); while a profile
-  // is referenced, project edits mirror back into it (App-level
-  // effect). The project file keeps its own embedded snapshot, so a
-  // referenced-but-missing profile still loads exactly as saved.
-  const profiles = $derived.by(() => {
-    void workspace.version;
-    return workspace.get().machine_profiles;
-  });
-  const activeProfileId = $derived(project.data.machineProfileId);
-  const activeProfileMissing = $derived(
-    activeProfileId != null && !profiles.some((p) => p.id === activeProfileId),
-  );
-  /// Two-step delete guard, same inline pattern as the discard bar.
-  let confirmingProfileDelete = $state(false);
-
-  function reseedDraft() {
-    try {
-      dd.open(compositeOf(project.data.machine));
-    } catch (e) {
-      console.error('MachineDialog: draft reseed failed', e);
-    }
-    confirmingProfileDelete = false;
-  }
-
-  function onProfileSelect(value: string) {
-    confirmingProfileDelete = false;
-    if (value === (activeProfileId ?? '')) return;
-    if (value === '') {
-      project.detachMachineProfile();
-      reseedDraft();
-      return;
-    }
-    const p = profiles.find((x) => x.id === value);
-    if (!p) return;
-    project.applyMachineProfile(p);
-    reseedDraft();
-  }
-
-  /// Save the CURRENT draft machine + the project's tool library as a
-  /// new profile and link the project to it. Applying the profile also
-  /// commits the draft machine (same undoable step), so the dialog
-  /// reseeds clean afterwards.
-  function saveAsProfile() {
-    try {
-      const profile = profileFromCurrent(draftSnapshot(), project.data.tools, profiles);
-      workspace.upsertMachineProfile(profile);
-      project.applyMachineProfile(profile);
-    } catch (e) {
-      console.error('MachineDialog: save-as-profile failed', e);
-    }
-    reseedDraft();
-  }
-
-  function duplicateActiveProfile() {
-    const src = profiles.find((p) => p.id === activeProfileId);
-    if (!src) return;
-    try {
-      const copy = duplicateProfile(src, profiles);
-      workspace.upsertMachineProfile(copy);
-      project.applyMachineProfile(copy);
-    } catch (e) {
-      console.error('MachineDialog: duplicate-profile failed', e);
-    }
-    reseedDraft();
-  }
-
-  /// First click arms; second deletes the profile from the workspace
-  /// and detaches the project (machine + tools stay as they are —
-  /// deleting a profile never touches the working copy).
-  function deleteActiveProfile() {
-    if (!confirmingProfileDelete) {
-      confirmingProfileDelete = true;
-      return;
-    }
-    confirmingProfileDelete = false;
-    if (activeProfileId == null) return;
-    workspace.deleteMachineProfile(activeProfileId);
-    project.detachMachineProfile();
+    baseline = $state.snapshot(source);
+    baselineScope = scopeKey;
+    dd.open(compositeOf(untrack(() => source)));
   }
 
   /// Close protocol (dd.requestClose): the first attempt on a dirty
@@ -348,698 +305,683 @@
     </header>
   {/if}
 
-  <!-- Machine profiles: named (machine + tool library) bundles
-         stored per-user, one per physical machine. Picking one applies
-         its config AND its tool library to the project as a single
-         undoable step. -->
-  {#if !embedded}
-    <div class="profile-bar">
-      <label class="profile-pick" title={t('machine.profile.pick.title')}>
-        <span>{t('machine.profile.label')}</span>
-        <select
-          value={activeProfileId ?? ''}
-          disabled={dd.isDirty}
-          title={dd.isDirty ? t('machine.profile.dirty_switch.title') : ''}
-          onchange={(e) => onProfileSelect((e.currentTarget as HTMLSelectElement).value)}
-        >
-          <option value="">{t('machine.profile.none_option')}</option>
-          {#each profiles as p (p.id)}
-            <option value={p.id}>{p.name}</option>
-          {/each}
-          {#if activeProfileMissing}
-            <option value={activeProfileId}>{t('machine.profile.referenced_missing_option')}</option
-            >
-          {/if}
-        </select>
-      </label>
-      <button
-        type="button"
-        class="profile-btn"
-        onclick={saveAsProfile}
-        title={t('machine.profile.save_as.title')}>{t('machine.profile.save_as')}</button
+  <p class="storage-note">{t('ux6.dimensions_stay_in_mm_output_units_are_set_in')}</p>
+
+  {#if conflict}
+    <div class="conflict" role="alert">
+      {t('ux6.committed_settings_changed_while_you_were_editing_reload_current')}<button
+        class="btn-secondary"
+        onclick={revert}>{t('ux6.reload_current_settings')}</button
       >
-      {#if activeProfileId != null && !activeProfileMissing}
-        <button
-          type="button"
-          class="profile-btn"
-          onclick={duplicateActiveProfile}
-          title={t('machine.profile.duplicate.title')}>{t('machine.profile.duplicate')}</button
-        >
-        <button
-          type="button"
-          class="profile-btn"
-          class:danger={confirmingProfileDelete}
-          onclick={deleteActiveProfile}
-          title={t('machine.profile.delete.title')}
-          >{confirmingProfileDelete
-            ? t('machine.profile.delete_confirm')
-            : t('machine.profile.delete')}</button
-        >
-      {/if}
-      {#if activeProfileMissing}
-        <span class="profile-note" title={t('machine.profile.missing_note.title')}
-          >{t('machine.profile.missing_note')}</span
-        >
-      {/if}
     </div>
   {/if}
-
-  <!--
-      ninc: storage is always mm regardless of `draft.unit`. The unit
-      selector below only switches the G20/G21 word in emitted gcode.
-      We hint that once here instead of stamping "mm" onto every
-      individual numeric input — a literal "mm" suffix while the user
-      had unit=inch selected was misleading.
-    -->
-  <!-- eslint-disable-next-line svelte/no-at-html-tags -- static, translator-authored markup -->
-  <p class="storage-note">{@html t('machine.storage_note')}</p>
-
   <div class="grid">
-    <label title={t('machine.name.label_title')}>
-      {t('machine.name')}
-      <input
-        type="text"
-        placeholder={suggestMachineName(draft)}
-        value={draft.name ?? ''}
-        title={t('machine.name.input_title')}
-        oninput={(e) => (draft.name = (e.currentTarget as HTMLInputElement).value)}
-      />
-    </label>
-    <label title={t('machine.unit.title')}>
-      {t('machine.unit')}
-      <select bind:value={draft.unit}>
-        <option value="mm">{t('machine.unit.mm')}</option>
-        <option value="inch">{t('machine.unit.inch')}</option>
-      </select>
-    </label>
-    <label title={t('machine.mode.title')}>
-      {t('machine.mode')}
-      <select bind:value={draft.mode}>
-        <option value="mill">{t('machine.mode.mill')}</option>
-        <option value="laser">{t('machine.mode.laser')}</option>
-        <option value="drag">{t('machine.mode.drag')}</option>
-        <option value="plasma">{t('machine.mode.plasma')}</option>
-      </select>
-    </label>
-    <fieldset class="capabilities">
-      <legend title={t('machine.capabilities.legend_title')}>
-        {t('machine.capabilities')}
-      </legend>
-      {#each ['mill', 'laser', 'drag', 'plasma'] as cap (cap)}
-        {@const isPrimary = cap === draft.mode}
-        <!-- The primary mode is always a capability (the gcode
+    {#if section === 'general' || section === 'all'}
+      <label title={t('machine.name.label_title')}>
+        {t('machine.name')}
+        <input
+          type="text"
+          placeholder={suggestMachineName(draft)}
+          value={draft.name ?? ''}
+          title={t('machine.name.input_title')}
+          oninput={(e) => (draft.name = (e.currentTarget as HTMLInputElement).value)}
+        />
+      </label>
+      <label title={t('machine.mode.title')}>
+        {t('machine.mode')}
+        <select bind:value={draft.mode}>
+          <option value="mill">{t('machine.mode.mill')}</option>
+          <option value="laser">{t('machine.mode.laser')}</option>
+          <option value="drag">{t('machine.mode.drag')}</option>
+          <option value="plasma">{t('machine.mode.plasma')}</option>
+        </select>
+      </label>
+      <fieldset class="capabilities">
+        <legend title={t('machine.capabilities.legend_title')}>
+          {t('machine.capabilities')}
+        </legend>
+        {#each ['mill', 'laser', 'drag', 'plasma'] as cap (cap)}
+          {@const isPrimary = cap === draft.mode}
+          <!-- The primary mode is always a capability (the gcode
                emitter targets it), so its checkbox is DISABLED rather
                than silently re-added on commit — unchecking it and
                watching it come back on reopen reads as a bug. -->
-        <label class="cap-toggle">
-          <input
-            type="checkbox"
-            disabled={isPrimary}
-            title={isPrimary ? t('machine.capabilities.primary_title') : ''}
-            checked={isPrimary ||
-              (draft.capabilities ?? [draft.mode]).includes(
-                cap as 'mill' | 'laser' | 'drag' | 'plasma',
-              )}
-            onchange={(e) => {
-              const on = (e.currentTarget as HTMLInputElement).checked;
-              const cur = new Set(draft.capabilities ?? [draft.mode]);
-              if (on) cur.add(cap as 'mill' | 'laser' | 'drag' | 'plasma');
-              else cur.delete(cap as 'mill' | 'laser' | 'drag' | 'plasma');
-              // Belt-and-braces: keep the primary mode in the set so
-              // the gcode emitter never targets a removed capability
-              // (the checkbox above is disabled, but a stale draft
-              // could still lack it).
-              cur.add(draft.mode);
-              draft.capabilities = [...cur];
-            }}
-          />
-          <span
-            >{cap === 'mill'
-              ? t('machine.cap.mill')
-              : cap === 'laser'
-                ? t('machine.cap.laser')
-                : cap === 'drag'
-                  ? t('machine.cap.drag')
-                  : t('machine.cap.plasma')}</span
+          <label class="cap-toggle">
+            <input
+              type="checkbox"
+              disabled={isPrimary}
+              title={isPrimary ? t('machine.capabilities.primary_title') : ''}
+              checked={isPrimary ||
+                (draft.capabilities ?? [draft.mode]).includes(
+                  cap as 'mill' | 'laser' | 'drag' | 'plasma',
+                )}
+              onchange={(e) => {
+                const on = (e.currentTarget as HTMLInputElement).checked;
+                const cur = new Set(draft.capabilities ?? [draft.mode]);
+                if (on) cur.add(cap as 'mill' | 'laser' | 'drag' | 'plasma');
+                else cur.delete(cap as 'mill' | 'laser' | 'drag' | 'plasma');
+                // Belt-and-braces: keep the primary mode in the set so
+                // the gcode emitter never targets a removed capability
+                // (the checkbox above is disabled, but a stale draft
+                // could still lack it).
+                cur.add(draft.mode);
+                draft.capabilities = [...cur];
+              }}
+            />
+            <span
+              >{cap === 'mill'
+                ? t('machine.cap.mill')
+                : cap === 'laser'
+                  ? t('machine.cap.laser')
+                  : cap === 'drag'
+                    ? t('machine.cap.drag')
+                    : t('machine.cap.plasma')}</span
+            >
+          </label>
+        {/each}
+      </fieldset>
+      <label title={t('machine.fast_move_z.title')}>
+        {t('machine.fast_move_z')}
+        <span class="field"
+          ><input type="number" bind:value={draft.fastMoveZ} step="0.1" /><span class="unit"
+            >mm</span
+          ></span
+        >
+      </label>
+      <fieldset class="work-area">
+        <legend title={t('machine.work_area.legend_title')}>{t('machine.work_area')}</legend>
+        <label
+          >X
+          <span class="field"
+            ><input
+              type="number"
+              min="1"
+              step="10"
+              value={draft.workArea?.x ?? 200}
+              oninput={(e) => {
+                const v = (e.target as HTMLInputElement).valueAsNumber;
+                if (Number.isFinite(v) && v > 0) {
+                  draft.workArea = {
+                    x: v,
+                    y: draft.workArea?.y ?? 300,
+                    z: draft.workArea?.z ?? 50,
+                  };
+                }
+              }}
+            /><span class="unit">mm</span></span
           >
         </label>
-      {/each}
-    </fieldset>
-    <label title={t('machine.fast_move_z.title')}>
-      {t('machine.fast_move_z')}
-      <span class="field"
-        ><input type="number" bind:value={draft.fastMoveZ} step="0.1" /><span class="unit">mm</span
-        ></span
-      >
-    </label>
-    <fieldset class="work-area">
-      <legend title={t('machine.work_area.legend_title')}>{t('machine.work_area')}</legend>
-      <label
-        >X
+        <label
+          >Y
+          <span class="field"
+            ><input
+              type="number"
+              min="1"
+              step="10"
+              value={draft.workArea?.y ?? 300}
+              oninput={(e) => {
+                const v = (e.target as HTMLInputElement).valueAsNumber;
+                if (Number.isFinite(v) && v > 0) {
+                  draft.workArea = {
+                    x: draft.workArea?.x ?? 200,
+                    y: v,
+                    z: draft.workArea?.z ?? 50,
+                  };
+                }
+              }}
+            /><span class="unit">mm</span></span
+          >
+        </label>
+        <label
+          >Z
+          <span class="field"
+            ><input
+              type="number"
+              min="1"
+              step="5"
+              value={draft.workArea?.z ?? 50}
+              oninput={(e) => {
+                const v = (e.target as HTMLInputElement).valueAsNumber;
+                if (Number.isFinite(v) && v > 0) {
+                  draft.workArea = {
+                    x: draft.workArea?.x ?? 200,
+                    y: draft.workArea?.y ?? 300,
+                    z: v,
+                  };
+                }
+              }}
+            /><span class="unit">mm</span></span
+          >
+        </label>
+      </fieldset>
+      <div class="section-title">{t('fs391.known_limits')}</div>
+      <label title={t('machine.spindle_min.title')}>
+        {t('machine.spindle_min')}
         <span class="field"
           ><input
             type="number"
-            min="1"
-            step="10"
-            value={draft.workArea?.x ?? 200}
+            min="0"
+            step="100"
+            placeholder="—"
+            value={draft.spindleRpmMin ?? ''}
             oninput={(e) => {
-              const v = (e.target as HTMLInputElement).valueAsNumber;
-              if (Number.isFinite(v) && v > 0) {
-                draft.workArea = {
-                  x: v,
-                  y: draft.workArea?.y ?? 300,
-                  z: draft.workArea?.z ?? 50,
-                };
+              const raw = (e.target as HTMLInputElement).value;
+              if (raw === '') {
+                draft.spindleRpmMin = undefined;
+                return;
               }
+              const v = parseInt(raw, 10);
+              draft.spindleRpmMin = isFinite(v) && v >= 0 ? v : undefined;
             }}
-          /><span class="unit">mm</span></span
+          /><span class="unit">RPM</span></span
         >
       </label>
-      <label
-        >Y
+      <label title={t('machine.spindle_max.title')}>
+        {t('machine.spindle_max')}
         <span class="field"
           ><input
             type="number"
-            min="1"
-            step="10"
-            value={draft.workArea?.y ?? 300}
+            min="0"
+            step="500"
+            placeholder="—"
+            value={draft.spindleRpmMax ?? ''}
             oninput={(e) => {
-              const v = (e.target as HTMLInputElement).valueAsNumber;
-              if (Number.isFinite(v) && v > 0) {
-                draft.workArea = {
-                  x: draft.workArea?.x ?? 200,
-                  y: v,
-                  z: draft.workArea?.z ?? 50,
-                };
+              const raw = (e.target as HTMLInputElement).value;
+              if (raw === '') {
+                draft.spindleRpmMax = undefined;
+                return;
               }
+              const v = parseInt(raw, 10);
+              draft.spindleRpmMax = isFinite(v) && v >= 0 ? v : undefined;
             }}
-          /><span class="unit">mm</span></span
+          /><span class="unit">RPM</span></span
         >
       </label>
-      <label
-        >Z
+      <label title={t('machine.max_feed.title')}>
+        {t('machine.max_feed')}
         <span class="field"
           ><input
             type="number"
-            min="1"
-            step="5"
-            value={draft.workArea?.z ?? 50}
+            min="0"
+            step="100"
+            placeholder="—"
+            value={draft.maxFeedMmMin ?? ''}
             oninput={(e) => {
-              const v = (e.target as HTMLInputElement).valueAsNumber;
-              if (Number.isFinite(v) && v > 0) {
-                draft.workArea = {
-                  x: draft.workArea?.x ?? 200,
-                  y: draft.workArea?.y ?? 300,
-                  z: v,
-                };
+              const raw = (e.target as HTMLInputElement).value;
+              if (raw === '') {
+                draft.maxFeedMmMin = undefined;
+                return;
               }
+              const v = parseInt(raw, 10);
+              draft.maxFeedMmMin = isFinite(v) && v >= 0 ? v : undefined;
             }}
-          /><span class="unit">mm</span></span
+          /><span class="unit">mm/min</span></span
         >
       </label>
-    </fieldset>
-    <label class="check" title={t('machine.emit_comments.title')}>
-      <input type="checkbox" bind:checked={draft.comments} />
-      {t('machine.emit_comments')}
-    </label>
-    <label class="check" title={t('machine.emit_arcs.title')}>
-      <input type="checkbox" bind:checked={draft.arcs} />
-      {t('machine.emit_arcs')}
-    </label>
-    <label class:disabled={!draft.arcs} title={t('machine.arc_tol.title')}>
-      {t('machine.arc_tol')}
-      <span class="field"
-        ><input
-          type="number"
-          min="0"
-          step="0.001"
-          disabled={!draft.arcs}
-          value={draft.arcFitToleranceMm ?? 0.01}
-          oninput={(e) => {
-            const v = (e.target as HTMLInputElement).valueAsNumber;
-            draft.arcFitToleranceMm = isFinite(v) && v >= 0 ? v : undefined;
-          }}
-        /><span class="unit">mm</span></span
-      >
-    </label>
-    <label title={t('machine.toolchange.title')}>
-      {t('machine.toolchange')}
-      <select bind:value={draft.toolchangeStrategy}>
-        <option value="atc">{t('machine.toolchange.atc')}</option>
-        <option value="manual_m6_prompt">{t('machine.toolchange.m6_prompt')}</option>
-        <option value="manual_m0_pause">{t('machine.toolchange.m0_pause')}</option>
-        <option value="ignore">{t('machine.toolchange.ignore')}</option>
-      </select>
-    </label>
-    <!-- Optional-stop M1 alternative to M0 at program pauses. -->
-    <label class="check" title={t('machine.optional_stop.title')}>
-      <input type="checkbox" bind:checked={draft.optionalStop} />
-      {t('machine.optional_stop')}
-    </label>
-    <!-- z9zh: GRBL dynamic-power laser mode (M4). -->
-    <label class="check" title={t('machine.laser_dynamic.title')}>
-      <input type="checkbox" bind:checked={draft.laserDynamicPower} />
-      {t('machine.laser_dynamic')}
-    </label>
-    <label class="check" title={t('machine.plot_mode.title')}>
-      <input type="checkbox" bind:checked={draft.plotModeZ} />
-      {t('machine.plot_mode')}
-    </label>
 
-    <div class="section-title">{t('machine.section.gcode_formatting')}</div>
-    <label title={t('machine.dialect.title')}>
-      {t('machine.dialect')}
-      <span class="field">
-        <select
-          value={draft.gcodeDialect ?? 'linuxcnc'}
-          onchange={(e) => {
-            const v = (e.currentTarget as HTMLSelectElement).value;
-            draft.gcodeDialect = v === 'grbl' || v === 'hpgl' || v === 'cps' ? v : 'linuxcnc';
-          }}
-        >
-          <option value="linuxcnc">LinuxCNC</option>
-          <option value="grbl">GRBL</option>
-          <option value="hpgl">HPGL</option>
-          {#if cpsSupported}
-            <option value="cps">{t('machine.dialect.cps')}</option>
-          {/if}
-        </select>
-      </span>
-    </label>
-    {#if draft.gcodeDialect === 'cps'}
-      <CpsPostConfigEditor
-        value={draft.cpsPost}
-        onchange={(next) => {
-          draft.cpsPost = next;
-        }}
+      <p class="help">
+        {t('ux6.unknown_limits_stay_unset_workspace_dimensions_and_clearance_are')}
+      </p>
+      <FeedsSpeedsCompatibility
+        kind="machines"
+        value={draft.fsIdentity !== undefined ? draft.fsIdentity : inheritedIdentity}
+        onChange={(identity) => (draft.fsIdentity = identity)}
       />
     {/if}
-    <label title={t('machine.decimal_sep.title')}>
-      {t('machine.decimal_sep')}
-      <span class="field">
-        <select
-          value={draft.decimalSeparator ?? '.'}
-          onchange={(e) => {
-            const v = (e.currentTarget as HTMLSelectElement).value;
-            draft.decimalSeparator = v === ',' ? ',' : '.';
-          }}
-        >
-          <option value=".">{t('machine.decimal_sep.period')}</option>
-          <option value=",">{t('machine.decimal_sep.comma')}</option>
-        </select>
-      </span>
-    </label>
-    <label title={t('machine.line_num.title')}>
-      {t('machine.line_num')}
-      <span class="field">
-        <input
-          type="number"
-          min="0"
-          step="10"
-          placeholder={t('machine.line_num.placeholder')}
-          value={draft.lineNumberStart ?? ''}
-          oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            if (raw === '') {
-              draft.lineNumberStart = undefined;
-              return;
-            }
-            const v = parseInt(raw, 10);
-            draft.lineNumberStart = isFinite(v) && v > 0 ? v : undefined;
+    {#if section === 'output' || section === 'all'}
+      {#if isShopBot}<p class="help">{t('ux6.shopbot_context')}</p>
+        {#if draft.unit !== 'mm' || draft.mode !== 'mill' || draft.toolchangeStrategy !== 'manual_m0_pause' || draft.parkAtHome || draft.parkXy || draft.postProfile}<p
+            class="conflict"
+            role="status"
+          >
+            {t('ux6.shopbot_retained')}
+          </p>{/if}{/if}
+      <div class="section-title">{t('machine.section.gcode_formatting')}</div>
+      <label title={t('machine.dialect.title')}>
+        {t('machine.dialect')}
+        <span class="field">
+          <select
+            value={draft.gcodeDialect ?? ''}
+            onchange={(e) => {
+              const v = (e.currentTarget as HTMLSelectElement).value;
+              draft.gcodeDialect =
+                v === '' ? undefined : v === 'grbl' || v === 'hpgl' || v === 'cps' ? v : 'linuxcnc';
+            }}
+          >
+            <option value="">{t('ux6.workspace_output_default')}</option>
+            <option value="linuxcnc">LinuxCNC</option>
+            <option value="grbl">GRBL</option>
+            <option value="hpgl">HPGL</option>
+            {#if cpsSupported || draft.gcodeDialect === 'cps'}
+              <option value="cps">{t('machine.dialect.cps')}</option>
+            {/if}
+          </select>
+        </span>
+      </label>
+      {#if draft.gcodeDialect === 'cps'}
+        {#if !cpsSupported}<p class="conflict" role="status">
+            CPS is unavailable on this backend. Saved selection retained; generation remains
+            blocked.
+          </p>{/if}
+        <CpsPostConfigEditor
+          value={draft.cpsPost}
+          onchange={(next) => {
+            draft.cpsPost = next;
           }}
         />
-        <span class="unit">N</span>
-      </span>
-    </label>
+      {/if}
 
-    <div class="section-title">{t('machine.section.post_profile')}</div>
-    {#if draft.mode === 'drag'}
-      <p class="hpgl-note">{t('machine.hpgl_note')}</p>
-    {/if}
-    <label title={t('machine.profile_preset.title')}>
-      {t('machine.profile_preset')}
-      <span class="field">
-        <select
-          value={profilePreset(draft.postProfile)}
-          onchange={(e) => {
-            const v = (e.currentTarget as HTMLSelectElement).value;
-            if (v === 'none') {
-              draft.postProfile = undefined;
-            } else if (v === 'linuxcnc') {
-              draft.postProfile = {
-                name: 'LinuxCNC default',
-                file_extension: 'nc',
-                line_ending: '\n',
-              };
-            } else if (v === 'mach3') {
-              draft.postProfile = {
-                name: 'Mach3 metric',
-                file_extension: 'tap',
-                line_ending: '\r\n',
-                program_start: '%\nN10 G21 G90 (ivac <version>)',
-                program_end: 'M30\n%',
-              };
-            } else if (v === 'grbl') {
-              draft.postProfile = {
-                name: 'GRBL default',
-                file_extension: 'nc',
-                line_ending: '\n',
-                program_start: '; ivac <version> — GRBL',
-                program_end: 'M2',
-                tool_change: '; toolchange to T<t> (manual on GRBL)',
-              };
-            } else if (v === 'custom') {
-              draft.postProfile = draft.postProfile ?? { name: 'Custom' };
-            }
-          }}
-        >
-          <option value="none">{t('machine.profile_preset.none')}</option>
-          <option value="linuxcnc">{t('machine.profile_preset.linuxcnc')}</option>
-          <option value="grbl">{t('machine.profile_preset.grbl')}</option>
-          <option value="mach3">{t('machine.profile_preset.mach3')}</option>
-          <option value="custom">{t('machine.profile_preset.custom')}</option>
+      <label title={t('machine.unit.title')}>
+        {t('machine.unit')}
+        <select bind:value={draft.unit}>
+          <option value="mm">{t('machine.unit.mm')}</option>
+          <option value="inch">{t('machine.unit.inch')}</option>
         </select>
-      </span>
-    </label>
-    {#if draft.postProfile}
-      <div class="pp-summary">
-        <span class="pp-summary-tweaks">
-          {#if profileTweakSummary(draft.postProfile)}
-            {t('machine.pp.overrides')} <em>{profileTweakSummary(draft.postProfile)}</em>
-          {:else}
-            {t('machine.pp.no_overrides')}
-          {/if}
-        </span>
-        <button type="button" class="pp-edit-btn" onclick={() => (editorOpen = true)}
-          >{t('machine.pp.edit_btn')}</button
+      </label>
+      <label class="check" title={t('machine.emit_comments.title')}>
+        <input type="checkbox" bind:checked={draft.comments} />
+        {t('machine.emit_comments')}
+      </label>
+      <label class="check" title={t('machine.emit_arcs.title')}>
+        <input type="checkbox" bind:checked={draft.arcs} />
+        {t('machine.emit_arcs')}
+      </label>
+      <label class:disabled={!draft.arcs} title={t('machine.arc_tol.title')}>
+        {t('machine.arc_tol')}
+        <span class="field"
+          ><input
+            type="number"
+            min="0"
+            step="0.001"
+            disabled={!draft.arcs}
+            value={draft.arcFitToleranceMm ?? 0.01}
+            oninput={(e) => {
+              const v = (e.target as HTMLInputElement).valueAsNumber;
+              draft.arcFitToleranceMm = isFinite(v) && v >= 0 ? v : undefined;
+            }}
+          /><span class="unit">mm</span></span
         >
-      </div>
-    {/if}
+      </label>
+      <label title={t('machine.toolchange.title')}>
+        {t('machine.toolchange')}
+        <select bind:value={draft.toolchangeStrategy}>
+          <option value="atc"
+            >{isShopBot ? t('ux6.atc_unsupported') : t('machine.toolchange.atc')}</option
+          >
+          <option value="manual_m6_prompt"
+            >{isShopBot ? t('ux6.m6_unsupported') : t('machine.toolchange.m6_prompt')}</option
+          >
+          <option value="manual_m0_pause"
+            >{isShopBot ? t('ux6.manual_shopbot') : t('machine.toolchange.m0_pause')}</option
+          >
+          <option value="ignore"
+            >{isShopBot ? t('ux6.ignore_unsupported') : t('machine.toolchange.ignore')}</option
+          >
+        </select>
+      </label>
+      <!-- Optional-stop M1 alternative to M0 at program pauses. -->
+      <label class="check" title={t('machine.optional_stop.title')}>
+        <input type="checkbox" bind:checked={draft.optionalStop} />
+        {t('machine.optional_stop')}
+      </label>
+      <!-- z9zh: GRBL dynamic-power laser mode (M4). -->
+      <details
+        class="field-group"
+        open={draft.mode === 'laser' ||
+          draft.mode === 'drag' ||
+          draft.laserDynamicPower ||
+          draft.plotModeZ}
+      >
+        <summary
+          >Specialized process settings{draft.laserDynamicPower || draft.plotModeZ
+            ? ' — saved values enabled'
+            : ''}</summary
+        >
+        <p class="help">
+          Dynamic power applies to GRBL laser output. Plot mode changes Z cutting behavior; it is
+          not a preview setting. Unsupported combinations remain subject to generation checks.
+        </p>
+        <label class="check" title={t('machine.laser_dynamic.title')}>
+          <input type="checkbox" bind:checked={draft.laserDynamicPower} />
+          {t('machine.laser_dynamic')}
+        </label>
+        <label class="check" title={t('machine.plot_mode.title')}>
+          <input type="checkbox" bind:checked={draft.plotModeZ} />
+          {t('machine.plot_mode')}
+        </label>
+      </details>
+      <details class="field-group" open={draft.gcodeDialect !== 'cps'}>
+        <summary
+          >Built-in output formatting{draft.gcodeDialect === 'cps'
+            ? ' — retained, not CPS properties'
+            : ''}</summary
+        >
+        <p class="help">
+          Decimal separator, line numbers and templates configure built-in output. CPS posts use
+          their own properties above; stored values are preserved.
+        </p>
+        <label title={t('machine.decimal_sep.title')}>
+          {t('machine.decimal_sep')}
+          <span class="field">
+            <select
+              value={draft.decimalSeparator ?? '.'}
+              onchange={(e) => {
+                const v = (e.currentTarget as HTMLSelectElement).value;
+                draft.decimalSeparator = v === ',' ? ',' : '.';
+              }}
+            >
+              <option value=".">{t('machine.decimal_sep.period')}</option>
+              <option value=",">{t('machine.decimal_sep.comma')}</option>
+            </select>
+          </span>
+        </label>
+        <label title={t('machine.line_num.title')}>
+          {t('machine.line_num')}
+          <span class="field">
+            <input
+              type="number"
+              min="0"
+              step="10"
+              placeholder={t('machine.line_num.placeholder')}
+              value={draft.lineNumberStart ?? ''}
+              oninput={(e) => {
+                const raw = (e.target as HTMLInputElement).value;
+                if (raw === '') {
+                  draft.lineNumberStart = undefined;
+                  return;
+                }
+                const v = parseInt(raw, 10);
+                draft.lineNumberStart = isFinite(v) && v > 0 ? v : undefined;
+              }}
+            />
+            <span class="unit">N</span>
+          </span>
+        </label>
 
-    <div class="section-title">{t('machine.section.kinematics')}</div>
-    <label title={t('machine.rapid.title')}>
-      {t('machine.rapid')}
-      <span class="field"
-        ><input type="number" min="0" step="100" bind:value={draft.rapidSpeed} /><span class="unit"
-          >mm/min</span
-        ></span
-      >
-    </label>
-    <label title={t('machine.toolchange_time.title')}>
-      {t('machine.toolchange_time')}
-      <span class="field"
-        ><input type="number" min="0" step="0.5" bind:value={draft.toolchangeS} /><span class="unit"
-          >s</span
-        ></span
-      >
-    </label>
-    <div class="triplet-label">{t('machine.accel_label')} <span class="unit">mm/s²</span></div>
-    <div class="triplet">
-      <input
-        type="number"
-        min="0"
-        step="10"
-        aria-label={t('machine.accel.x.aria')}
-        value={draft.accel?.x ?? 250}
-        oninput={(e) => {
-          const v = (e.target as HTMLInputElement).valueAsNumber;
-          draft.accel = {
-            ...(draft.accel ?? { x: 250, y: 250, z: 250 }),
-            x: isFinite(v) ? v : 250,
-          };
-        }}
-      />
-      <input
-        type="number"
-        min="0"
-        step="10"
-        aria-label={t('machine.accel.y.aria')}
-        value={draft.accel?.y ?? 250}
-        oninput={(e) => {
-          const v = (e.target as HTMLInputElement).valueAsNumber;
-          draft.accel = {
-            ...(draft.accel ?? { x: 250, y: 250, z: 250 }),
-            y: isFinite(v) ? v : 250,
-          };
-        }}
-      />
-      <input
-        type="number"
-        min="0"
-        step="10"
-        aria-label={t('machine.accel.z.aria')}
-        value={draft.accel?.z ?? 250}
-        oninput={(e) => {
-          const v = (e.target as HTMLInputElement).valueAsNumber;
-          draft.accel = {
-            ...(draft.accel ?? { x: 250, y: 250, z: 250 }),
-            z: isFinite(v) ? v : 250,
-          };
-        }}
-      />
-    </div>
-    <label class="check" title={t('machine.jerk_enable.title')}>
-      <input type="checkbox" bind:checked={composite.jerkEnabled} />
-      {t('machine.jerk_enable')}
-    </label>
-    {#if composite.jerkEnabled}
-      <div class="triplet-label">{t('machine.jerk_label')} <span class="unit">mm/s³</span></div>
+        <div class="section-title">{t('machine.section.post_profile')}</div>
+        {#if draft.mode === 'drag'}
+          <p class="hpgl-note">{t('machine.hpgl_note')}</p>
+        {/if}
+        <label title={t('machine.profile_preset.title')}>
+          {t('machine.profile_preset')}
+          <span class="field">
+            <select
+              value={profilePreset(draft.postProfile)}
+              onchange={(e) => {
+                const v = (e.currentTarget as HTMLSelectElement).value;
+                if (v === 'none') {
+                  draft.postProfile = undefined;
+                } else if (v === 'linuxcnc') {
+                  draft.postProfile = {
+                    name: 'LinuxCNC default',
+                    file_extension: 'nc',
+                    line_ending: '\n',
+                  };
+                } else if (v === 'mach3') {
+                  draft.postProfile = {
+                    name: 'Mach3 metric',
+                    file_extension: 'tap',
+                    line_ending: '\r\n',
+                    program_start: '%\nN10 G21 G90 (ivac <version>)',
+                    program_end: 'M30\n%',
+                  };
+                } else if (v === 'grbl') {
+                  draft.postProfile = {
+                    name: 'GRBL default',
+                    file_extension: 'nc',
+                    line_ending: '\n',
+                    program_start: '; ivac <version> — GRBL',
+                    program_end: 'M2',
+                    tool_change: '; toolchange to T<t> (manual on GRBL)',
+                  };
+                } else if (v === 'custom') {
+                  draft.postProfile = draft.postProfile ?? { name: 'Custom' };
+                }
+              }}
+            >
+              <option value="none">{t('machine.profile_preset.none')}</option>
+              <option value="linuxcnc">{t('machine.profile_preset.linuxcnc')}</option>
+              <option value="grbl">{t('machine.profile_preset.grbl')}</option>
+              <option value="mach3">{t('machine.profile_preset.mach3')}</option>
+              <option value="custom">{t('machine.profile_preset.custom')}</option>
+            </select>
+          </span>
+        </label>
+        {#if draft.postProfile}
+          <div class="pp-summary">
+            <span class="pp-summary-tweaks">
+              {#if profileTweakSummary(draft.postProfile)}
+                {t('machine.pp.overrides')} <em>{profileTweakSummary(draft.postProfile)}</em>
+              {:else}
+                {t('machine.pp.no_overrides')}
+              {/if}
+            </span>
+            <button type="button" class="pp-edit-btn" onclick={() => (editorOpen = true)}
+              >{t('machine.pp.edit_btn')}</button
+            >
+          </div>
+        {/if}
+      </details>
+      <label title={t('machine.spindle_start_dwell.title')}>
+        {t('machine.spindle_start_dwell')}
+        <span class="field"
+          ><input
+            type="number"
+            min="0"
+            step="0.1"
+            placeholder="0.5"
+            value={draft.spindleStartDwellSec ?? ''}
+            oninput={(e) => {
+              const raw = (e.target as HTMLInputElement).value;
+              if (raw === '') {
+                draft.spindleStartDwellSec = undefined;
+                return;
+              }
+              const v = parseFloat(raw);
+              draft.spindleStartDwellSec = isFinite(v) && v >= 0 ? v : undefined;
+            }}
+          /><span class="unit">s</span></span
+        >
+      </label>
+      <label title={t('machine.spindle_stop_dwell.title')}>
+        {t('machine.spindle_stop_dwell')}
+        <span class="field"
+          ><input
+            type="number"
+            min="0"
+            step="0.1"
+            placeholder="0.5"
+            value={draft.spindleStopDwellSec ?? ''}
+            oninput={(e) => {
+              const raw = (e.target as HTMLInputElement).value;
+              if (raw === '') {
+                draft.spindleStopDwellSec = undefined;
+                return;
+              }
+              const v = parseFloat(raw);
+              draft.spindleStopDwellSec = isFinite(v) && v >= 0 ? v : undefined;
+            }}
+          /><span class="unit">s</span></span
+        >
+      </label>
+      <label class="check" title={t('machine.park_home.title')}>
+        <input type="checkbox" bind:checked={draft.parkAtHome} />
+        {t('machine.park_home')}
+      </label>
+      {#if !draft.parkAtHome}
+        <div class="triplet-label">
+          {t('machine.park_xy_label')} <span class="unit">mm, WCS</span>
+          <small class="park-help">{t('machine.park_xy.help')}</small>
+        </div>
+        <div class="park-pair">
+          <input
+            type="number"
+            step="1"
+            aria-label={t('machine.park.x.aria')}
+            placeholder="X"
+            value={draft.parkXy?.[0] ?? ''}
+            oninput={(e) => {
+              const raw = (e.target as HTMLInputElement).value;
+              const cur = draft.parkXy ?? [0, 0];
+              if (raw === '') {
+                // Clearing X drops the whole pair — both must be set
+                // for park_xy to mean anything on the wire.
+                draft.parkXy = undefined;
+                return;
+              }
+              const v = parseFloat(raw);
+              if (!isFinite(v)) return;
+              draft.parkXy = [v, cur[1]];
+            }}
+          />
+          <input
+            type="number"
+            step="1"
+            aria-label={t('machine.park.y.aria')}
+            placeholder="Y"
+            value={draft.parkXy?.[1] ?? ''}
+            oninput={(e) => {
+              const raw = (e.target as HTMLInputElement).value;
+              const cur = draft.parkXy ?? [0, 0];
+              if (raw === '') {
+                draft.parkXy = undefined;
+                return;
+              }
+              const v = parseFloat(raw);
+              if (!isFinite(v)) return;
+              draft.parkXy = [cur[0], v];
+            }}
+          />
+        </div>
+      {/if}
+    {/if}
+    {#if section === 'advanced' || section === 'all'}
+      <p class="help">{t('ux6.time_estimate_assumptions_only_these_values_do_not_configure')}</p>
+      <div class="section-title">{t('machine.section.kinematics')}</div>
+      <label title={t('machine.rapid.title')}>
+        {t('machine.rapid')}
+        <span class="field"
+          ><input type="number" min="0" step="100" bind:value={draft.rapidSpeed} /><span
+            class="unit">mm/min</span
+          ></span
+        >
+      </label>
+      <label title={t('machine.toolchange_time.title')}>
+        {t('machine.toolchange_time')}
+        <span class="field"
+          ><input type="number" min="0" step="0.5" bind:value={draft.toolchangeS} /><span
+            class="unit">s</span
+          ></span
+        >
+      </label>
+      <div class="triplet-label">{t('machine.accel_label')} <span class="unit">mm/s²</span></div>
       <div class="triplet">
         <input
           type="number"
           min="0"
           step="10"
-          aria-label={t('machine.jerk.x.aria')}
-          bind:value={jerkDraft.x}
+          aria-label={t('machine.accel.x.aria')}
+          value={draft.accel?.x ?? 250}
+          oninput={(e) => {
+            const v = (e.target as HTMLInputElement).valueAsNumber;
+            draft.accel = {
+              ...(draft.accel ?? { x: 250, y: 250, z: 250 }),
+              x: isFinite(v) ? v : 250,
+            };
+          }}
         />
         <input
           type="number"
           min="0"
           step="10"
-          aria-label={t('machine.jerk.y.aria')}
-          bind:value={jerkDraft.y}
+          aria-label={t('machine.accel.y.aria')}
+          value={draft.accel?.y ?? 250}
+          oninput={(e) => {
+            const v = (e.target as HTMLInputElement).valueAsNumber;
+            draft.accel = {
+              ...(draft.accel ?? { x: 250, y: 250, z: 250 }),
+              y: isFinite(v) ? v : 250,
+            };
+          }}
         />
         <input
           type="number"
           min="0"
           step="10"
-          aria-label={t('machine.jerk.z.aria')}
-          bind:value={jerkDraft.z}
-        />
-      </div>
-    {/if}
-
-    <div class="section-title">{t('machine.section.spindle')}</div>
-    <label title={t('machine.spindle_min.title')}>
-      {t('machine.spindle_min')}
-      <span class="field"
-        ><input
-          type="number"
-          min="0"
-          step="100"
-          placeholder="—"
-          value={draft.spindleRpmMin ?? ''}
+          aria-label={t('machine.accel.z.aria')}
+          value={draft.accel?.z ?? 250}
           oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            if (raw === '') {
-              draft.spindleRpmMin = undefined;
-              return;
-            }
-            const v = parseInt(raw, 10);
-            draft.spindleRpmMin = isFinite(v) && v >= 0 ? v : undefined;
-          }}
-        /><span class="unit">RPM</span></span
-      >
-    </label>
-    <label title={t('machine.spindle_max.title')}>
-      {t('machine.spindle_max')}
-      <span class="field"
-        ><input
-          type="number"
-          min="0"
-          step="500"
-          placeholder="—"
-          value={draft.spindleRpmMax ?? ''}
-          oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            if (raw === '') {
-              draft.spindleRpmMax = undefined;
-              return;
-            }
-            const v = parseInt(raw, 10);
-            draft.spindleRpmMax = isFinite(v) && v >= 0 ? v : undefined;
-          }}
-        /><span class="unit">RPM</span></span
-      >
-    </label>
-    <label title={t('machine.max_feed.title')}>
-      {t('machine.max_feed')}
-      <span class="field"
-        ><input
-          type="number"
-          min="0"
-          step="100"
-          placeholder="—"
-          value={draft.maxFeedMmMin ?? ''}
-          oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            if (raw === '') {
-              draft.maxFeedMmMin = undefined;
-              return;
-            }
-            const v = parseInt(raw, 10);
-            draft.maxFeedMmMin = isFinite(v) && v >= 0 ? v : undefined;
-          }}
-        /><span class="unit">mm/min</span></span
-      >
-    </label>
-    <label title={t('machine.spindle_start_dwell.title')}>
-      {t('machine.spindle_start_dwell')}
-      <span class="field"
-        ><input
-          type="number"
-          min="0"
-          step="0.1"
-          placeholder="0.5"
-          value={draft.spindleStartDwellSec ?? ''}
-          oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            if (raw === '') {
-              draft.spindleStartDwellSec = undefined;
-              return;
-            }
-            const v = parseFloat(raw);
-            draft.spindleStartDwellSec = isFinite(v) && v >= 0 ? v : undefined;
-          }}
-        /><span class="unit">s</span></span
-      >
-    </label>
-    <label title={t('machine.spindle_stop_dwell.title')}>
-      {t('machine.spindle_stop_dwell')}
-      <span class="field"
-        ><input
-          type="number"
-          min="0"
-          step="0.1"
-          placeholder="0.5"
-          value={draft.spindleStopDwellSec ?? ''}
-          oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            if (raw === '') {
-              draft.spindleStopDwellSec = undefined;
-              return;
-            }
-            const v = parseFloat(raw);
-            draft.spindleStopDwellSec = isFinite(v) && v >= 0 ? v : undefined;
-          }}
-        /><span class="unit">s</span></span
-      >
-    </label>
-    <label class="check" title={t('machine.park_home.title')}>
-      <input type="checkbox" bind:checked={draft.parkAtHome} />
-      {t('machine.park_home')}
-    </label>
-    {#if !draft.parkAtHome}
-      <div class="triplet-label">
-        {t('machine.park_xy_label')} <span class="unit">mm, WCS</span>
-        <small class="park-help">{t('machine.park_xy.help')}</small>
-      </div>
-      <div class="park-pair">
-        <input
-          type="number"
-          step="1"
-          aria-label={t('machine.park.x.aria')}
-          placeholder="X"
-          value={draft.parkXy?.[0] ?? ''}
-          oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            const cur = draft.parkXy ?? [0, 0];
-            if (raw === '') {
-              // Clearing X drops the whole pair — both must be set
-              // for park_xy to mean anything on the wire.
-              draft.parkXy = undefined;
-              return;
-            }
-            const v = parseFloat(raw);
-            if (!isFinite(v)) return;
-            draft.parkXy = [v, cur[1]];
-          }}
-        />
-        <input
-          type="number"
-          step="1"
-          aria-label={t('machine.park.y.aria')}
-          placeholder="Y"
-          value={draft.parkXy?.[1] ?? ''}
-          oninput={(e) => {
-            const raw = (e.target as HTMLInputElement).value;
-            const cur = draft.parkXy ?? [0, 0];
-            if (raw === '') {
-              draft.parkXy = undefined;
-              return;
-            }
-            const v = parseFloat(raw);
-            if (!isFinite(v)) return;
-            draft.parkXy = [cur[0], v];
+            const v = (e.target as HTMLInputElement).valueAsNumber;
+            draft.accel = {
+              ...(draft.accel ?? { x: 250, y: 250, z: 250 }),
+              z: isFinite(v) ? v : 250,
+            };
           }}
         />
       </div>
+      <label
+        class="check"
+        title="Retained compatibility field; jerk is not used in current time estimates."
+      >
+        <input type="checkbox" bind:checked={composite.jerkEnabled} />
+        {t('machine.jerk_enable')}
+      </label>
+      {#if composite.jerkEnabled}
+        <div class="triplet-label">{t('machine.jerk_label')} <span class="unit">mm/s³</span></div>
+        <div class="triplet">
+          <input
+            type="number"
+            min="0"
+            step="10"
+            aria-label={t('machine.jerk.x.aria')}
+            bind:value={jerkDraft.x}
+          />
+          <input
+            type="number"
+            min="0"
+            step="10"
+            aria-label={t('machine.jerk.y.aria')}
+            bind:value={jerkDraft.y}
+          />
+          <input
+            type="number"
+            min="0"
+            step="10"
+            aria-label={t('machine.jerk.z.aria')}
+            bind:value={jerkDraft.z}
+          />
+        </div>
+      {/if}
     {/if}
   </div>
 
   <footer>
     {#if dd.confirmingDiscard}
-      <span class="discard-prompt">{t('common.discard_unsaved')}</span>
-      <button class="btn-secondary" onclick={() => dd.cancelDiscard()}
-        >{t('common.keep_editing')}</button
-      >
-      <button class="btn-danger" onclick={close}>{t('common.discard')}</button>
+      <span>{t('common.discard_unsaved')}</span>
+      <button onclick={() => dd.cancelDiscard()}>{t('common.keep_editing')}</button>
+      <button onclick={close}>{t('common.discard')}</button>
     {:else}
       <button
         class="btn-secondary"
-        onclick={async () => {
-          // Commit any pending edits first so the saved snapshot
-          // reflects what the user is looking at, not the
-          // previously-committed values.
-          commit();
-          await fileOps.saveMachine();
-        }}
-        title={t('machine.save.title')}
+        title={t('ux6.export_the_displayed_draft_only_does_not_apply_changes')}
+        onclick={() => fileOps.saveMachine(draftSnapshot())}>{t('ux6.export_settings')}</button
       >
-        {t('common.save_ellipsis')}
-      </button>
       <button
         class="btn-secondary"
+        disabled={dd.isDirty}
+        title="Import into this draft; Apply or Save is still required. Resolve unsaved changes first."
         onclick={async () => {
-          await fileOps.loadMachine();
-          // Refresh draft so the dialog shows the freshly-loaded
-          // values; otherwise it still mirrors the old pre-load draft.
-          // Assigned directly (not dd.open) so the pristine snapshot
-          // from open is kept — loading a different config counts as
-          // an unsaved change, same as before.
-          const m = $state.snapshot(project.data.machine) as MachineSettings;
-          dd.draft = {
-            machine: m,
-            jerkEnabled: !!m.jerk,
-            jerk: m.jerk ? { ...m.jerk } : { x: 0, y: 0, z: 0 },
-          };
-        }}
-        title={t('machine.load.title')}
+          const m = await fileOps.readMachine();
+          if (m) dd.draft = compositeOf(m);
+        }}>{t('ux6.import_settings')}</button
       >
-        {t('common.load_ellipsis')}
-      </button>
       <span class="sep"></span>
-      {#if embedded}
-        <button class="btn-secondary" onclick={revert} disabled={!dd.isDirty}
-          >{t('common.revert')}</button
-        >
-        <button class="btn-primary" onclick={commit} disabled={!dd.isDirty}
-          >{t('common.apply')}</button
-        >
-      {:else}
-        <button class="btn-secondary" onclick={close}>{t('common.cancel')}</button>
-        <button class="btn-primary" onclick={commit}>{t('common.ok')}</button>
-      {/if}
+      <button class="btn-secondary" onclick={revert} disabled={!dd.isDirty && !conflict}
+        >{t('common.revert')}</button
+      >
+      <button class="btn-primary" onclick={commit} disabled={!dd.isDirty || conflict}
+        >{saveLabel ?? 'Apply to project'}</button
+      >
     {/if}
   </footer>
 {/snippet}
@@ -1072,6 +1014,52 @@
 {/if}
 
 <style>
+  .field-group {
+    display: grid;
+    gap: 8px;
+    font-size: 0.8rem;
+  }
+  .field-group summary {
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  .field-group label {
+    margin-top: 8px;
+  }
+  .help {
+    margin: 4px 0;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .conflict {
+    padding: 8px 12px;
+    color: var(--warning);
+    font-size: 0.8rem;
+  }
+  .grid {
+    max-width: 650px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .grid input[type='number'] {
+    width: 96px;
+    flex: 0 0 96px;
+  }
+  .grid .triplet {
+    max-width: 330px;
+  }
+  .grid .triplet input[type='number'] {
+    width: 100%;
+  }
+  footer {
+    flex-wrap: wrap;
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    margin-top: auto;
+  }
+
   header {
     display: flex;
     align-items: center;
@@ -1096,44 +1084,6 @@
     min-height: 0;
     background: var(--bg-panel);
     overflow: auto;
-  }
-  /* Machine-profile picker strip under the header. */
-  .profile-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.45rem 0.7rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-elevated);
-    font-size: 0.8rem;
-  }
-  .profile-pick {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    min-width: 0;
-  }
-  .profile-pick select {
-    max-width: 220px;
-  }
-  .profile-btn {
-    background: var(--bg-elevated);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.2rem 0.55rem;
-    font-size: 0.74rem;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .profile-btn.danger {
-    border-color: var(--danger);
-    color: var(--danger);
-  }
-  .profile-note {
-    color: var(--text-muted);
-    font-size: 0.74rem;
-    font-style: italic;
   }
   .storage-note {
     margin: 0;
@@ -1274,5 +1224,22 @@
   }
   .pp-edit-btn:hover {
     background: var(--bg);
+  }
+  .grid .field input[type='number'] {
+    width: 96px;
+    flex: 0 0 96px;
+  }
+  .grid .capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .grid .capabilities .cap-toggle {
+    display: flex;
+    gap: 5px;
+  }
+  .grid .work-area label {
+    grid-template-columns: minmax(0, 9rem) auto;
+    margin: 5px 0;
   }
 </style>

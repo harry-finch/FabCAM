@@ -36,6 +36,10 @@
   --text-strong: #ffffff;
   --text-muted: #a0a0a0;
   --text-faint: #777777;
+  /* Structural hierarchy: navigation chrome and compact inspector headings.
+     Derived from the active theme; field/help and semantic colors stay intact. */
+  --bg-navigation: color-mix(in srgb, var(--bg-elevated) 80%, var(--border));
+  --text-section: color-mix(in srgb, var(--text-muted) 65%, var(--text));
   --accent: #4a8df0;
   --accent-strong: #88b1f5;
   --success: #84d676;
@@ -48,7 +52,7 @@
   --danger: #c0392b;
   --warn-bg: color-mix(in srgb, var(--warn) 18%, transparent);
   --grid-major: #3a3a3a;
-  --grid-minor: #262626;
+  --grid-minor: #222222;
   --axis-x: #c44343;
   --axis-y: #43a463;
   --canvas-empty: #707070;

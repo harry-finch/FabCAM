@@ -1,0 +1,15 @@
+{
+  "source_files_checked": 781,
+  "changed_since_phase0_start": [],
+  "fields_covered": {
+    "MachineSettings": 30,
+    "ToolEntry": 48
+  },
+  "targeted_tests": {
+    "files": 8,
+    "passed": 140
+  },
+  "production_ui_implemented": false,
+  "physical_qualification": false,
+  "human_gate": "ivac-tjgt1"
+}

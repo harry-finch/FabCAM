@@ -17,7 +17,7 @@
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-muted);
+  color: var(--text-section);
 }
 .props .empty {
   color: var(--text-faint);
@@ -63,7 +63,7 @@
 }
 .props legend {
   font-size: 0.7rem;
-  color: var(--text-muted);
+  color: var(--text-section);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding: 0 var(--ui-space-1) 0 0;
@@ -283,7 +283,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--text-muted);
+  color: var(--text-section);
   padding: 0.15rem 0;
   list-style: none;
   display: flex;
@@ -449,7 +449,7 @@
 .props .inspector-disclosure > summary {
   font-size: var(--inspector-font-meta);
   font-weight: 500;
-  color: var(--text-muted);
+  color: var(--text-section);
   padding: var(--ui-space-1) 0;
   min-height: 24px;
   cursor: pointer;

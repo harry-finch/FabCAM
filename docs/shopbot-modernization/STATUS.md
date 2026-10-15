@@ -1,4 +1,131 @@
-# Status — 2026-10-14
+# Status — 2026-10-15
+
+## Source publication — authorized
+
+User explicitly requested committing and pushing all pending PERF1 and UX work
+on 2026-10-15. This supersedes earlier publication restrictions for this source
+checkpoint only. Pending human review gates, the CPS cancellation latency target,
+native/physical qualification limits and future milestone approvals remain unchanged.
+
+## UX6-B — engineering complete, human software/visual review pending
+
+User accepted UX6-A (ivac-osa4z closed) and authorized B. [Results and actual
+captures](ux/UX6_B_RESULTS.md): searchable compact list/contextual editor, whole-library
+draft, same-ID consequence review, staged import, copy availability and retained unknown
+fields. Existing manual rates/history/guards preserved. 1284 frontend passes/1 existing
+skip; check/lint/build pass; actual desktop/keyboard/1024px review. No physical claim.
+
+**ivac-y2aln OPEN — HARD STOP before another milestone.** Engineering ivac-f8w26 complete.
+Independent PERF/hierarchy gates unchanged; no publication authorized.
+
+## UX6-A — accepted
+
+[Results and actual desktop captures](ux/UX6_A_RESULTS.md): independent profile
+inspection, explicit assignment review, scoped drafts/conflict protection, staged
+creation/import/export and contextual compact editor. Existing project commands,
+formats, CAM/post behavior and manual cutting values preserved. 1277 frontend
+passes/1 existing skip; check/lint/production build pass. Browser desktop reviewed;
+no packaged-native or physical qualification claim.
+
+Review polish delivered: persistent active-section accent and spaced icon/text
+library-add button; [actual capture](ux/ux6-a/tools-polish.png). Same checks pass.
+
+**ivac-osa4z closed: user accepted A and authorized B.** Engineering ivac-jhfns complete.
+Independent PERF/hierarchy gates unchanged; no commit/publication authorized.
+
+## UX6 Phase 0 — architecture and UX proposal accepted
+
+User accepted Drawings/Layers; ivac-ena7m closed. UX6 Phase 0 audit ivac-4df39
+complete: [78-field ownership/effects matrix, action contracts and qualification plan](ux/UX6_PHASE0_AUDIT.md),
+[representative layouts](ux/ux6-phase0/proposed-layouts.png). Existing current UI and
+dirty-draft-after-Undo behavior reviewed; 140 targeted tests pass. No production
+source, machine/tool files, CAM/FS/post behavior or persistence formats changed.
+
+**Phase 0 accepted; ivac-tjgt1 closed when user authorized UX6-A.**
+Proposed A introduces independent profile inspection, explicit project assignment,
+contextual grouped editing and honest limits/time estimates. UX6-B tool library
+follows only after A's separate acceptance. Independent ivac-1drzo, ivac-nh6q and
+UX2.2 gates remain open. No publication authorized.
+
+## Drawings and layers clarification — accepted
+
+Focused continuation ivac-yjcv2 delivered and human review ivac-ena7m accepted
+2026-10-15. [Audit, qualification and actual before/after](ux/DRAWINGS_LAYERS_CLARIFICATION.md).
+Consistent Drawings/import count, separate Layers count, visibility controls and
+read-only ACI swatches; no CAM/import/history/serialization changes. 1270 frontend
+passes/1 existing skip; check/lint/build pass. Portable view-state limits retained.
+
+## Visual hierarchy polish — human visual review pending
+
+Focused UX2.2 continuation ivac-28e92: slightly distinct navigation surface, quiet
+machine/tool context cues, compact section-heading contrast and less prominent
+dark minor grid. Four source files, CSS only; all CAM/state/export/persistence
+logic unchanged relative to the incoming working tree. [Qualification and actual
+before/after captures](ux/VISUAL_HIERARCHY_REFINEMENT.md). Header heights preserved;
+1024px names truncate without overflow or hiding SOFTWARE ONLY.1263 frontend
+passes/1skip; check0 diagnostics; lint/production build pass.
+
+**Next action: human visual review ivac-1drzo.** No new major milestone or functional
+roadmap edit. Existing PERF cancellation gate ivac-nh6q remains independent/open;
+no acceptance, next implementation or publication is inferred from this polish.
+
+## CPS cancellation — cooperative improvement, latency target still unmet
+
+B2 accepted by user; ivac-s5xy closed. [Results](PERF1_CPS_CANCELLATION_RESULTS.md)
+and [ADR-0020](adr/ADR-0020-cooperative-cps-cancellation.md): connect existing CPS
+probe to native token, retain cancellation/cache/output guards. Native Test median
+750→213ms, dense contour1181→193ms; HTTP743→207ms. Proposed p95≤200ms target
+**not met** (Test216ms/native,218ms/HTTP). All18 output/refusal outcomes unchanged.
+44 CPS and1086 core unit tests pass; actual UI cancel/stale export/retry reviewed.
+Engineering scope ivac-sxmw hands off the remaining latency objective to
+ivac-q1nz1 (phase attribution before stronger boundary). **ivac-nh6q OPEN — HARD
+STOP for human review.** No next work/publication/physical qualification.
+Older pending-gate wording below is historical and superseded by acceptance above.
+
+## PERF1-B2 — engineering complete, human results review pending
+
+[Results/evidence](PERF1_B2_RESULTS.md): qualified planar-kernel reuse,4entries/
+8MiB, live eligibility/stock/provenance guards. Repeated Pocket islands stage
+337.845→0.222ms; total338.370→0.625ms. Cold409.988→413.449ms, no cold speedup.
+All18 native outcomes unchanged; WASM remaining/program parity;1085 core and38
+integration tests pass. UI stock edit/Undo, unsupported reasons and overlay checked.
+Small CAM4 UI fixture shows no material latency gain (separate from native benchmark).
+ivac-dlrm complete; **ivac-s5xy OPEN — HARD STOP** for human results review.
+No physical qualification/publication. B1 human gate ivac-sf7y accepted by user.
+
+## PERF1-B1 — engineering complete, human results review pending
+
+[Results and evidence](PERF1_B_RESULTS.md): bounded bundled ShopBot post reuse,
+fail-closed benchmark evidence, finer simulation attribution. Native Test repeat
+832→15ms; HTTP first 3D frame899→141ms, rendered relief2259→1516ms. First/new
+calculation unchanged within small-sample variation. All18 A outcomes preserved;
+1081 core,10 V-Carve,7 ShopBot guard and1263 frontend tests pass (1optional skip).
+Actual UI edit/Undo freshness and byte-identical SBP checked. ivac-rnsg and
+ivac-lf1e closed; **human gate ivac-sf7y OPEN — HARD STOP**. No B2, physical
+qualification or publication. [ADR-0018](adr/ADR-0018-bounded-shopbot-post-reuse.md).
+Older A pending wording below is historical; ivac-xzys closed by B authorization.
+
+## PERF1-A — engineering complete, human report review pending
+
+User explicitly accepted delivered software/UX on 2026-10-15 and authorized the
+next milestone. Geometry ivac-xy3w, V-Carve ivac-1b75 and UX5 ivac-txve human gates
+are closed as software acceptance, with their documented numerical/native/physical
+limits retained. Published snapshot: main 2032848 (270 files), pushed 2026-10-15.
+Earlier pending/STOP wording below is historical and superseded by this record.
+
+PERF1-A engineering ivac-sgnd is complete: [results and proposed B scope](PERF1_A_RESULTS.md),
+[raw summary](perf1/SUMMARY.md). Saved Test is a **representative surrogate**, not
+the reported 5–10-second project. Native Test CPS warm median904ms; profiled post
+share98.4%. Actual HTTP first frame median935ms; simulation replay2310–4051ms
+including debounce. Pocket bottleneck is remaining-material analysis. Output
+checks,1262 frontend/1075 core tests and qualification/check/lint/build gates pass.
+
+**Next action: human report and PERF1-B scope review ivac-xzys.** Proposed B1 is
+audited unchanged bundled ShopBot whole-post reuse (ivac-rnsg); no optimization
+implemented or authorized. Cancellation latency ivac-sxmw and finer simulation
+attribution ivac-lf1e are deferred. Older independent machine/FS gates remain
+separate; no new physical observations or publication authorization.
+
 
 ## Geometry source UX refinement — human review pending
 

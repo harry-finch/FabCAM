@@ -1387,7 +1387,7 @@
         class:active={activeSidebarPane === 'layers'}
         tabindex={activeSidebarPane === 'layers' ? 0 : undefined}
         role="region"
-        aria-label={t('layers.title')}
+        aria-label={t('layers.drawings')}
       >
         <LayerList
           active={activeSidebarPane === 'layers'}

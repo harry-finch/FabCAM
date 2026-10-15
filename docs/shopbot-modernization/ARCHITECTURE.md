@@ -422,3 +422,27 @@ No new cache/index/threading ADR, dependency, schema or architecture rewrite cho
 Open ivac-htc8 interference must be recorded rather than hidden by benchmarking.
 Generic measurement conventions may serve GEOM/NEST/WJ without coupling their
 functional milestones to a V-Carve algorithm or changing FS semantics.
+
+## UX6 planned machine/tool management presentation boundary
+
+[UX6 plan](ux/UX6_PLAN.md) records preliminary source inventory, not completed Phase 0.
+Workspace profiles are named machine+tool bundles; project owns embedded machine/tools
+and optional profile ID. Applying copies payload/reference through existing history;
+project edits mirror to referenced workspace profile. Current MachineDialog picker
+immediately applies, rather than independently browsing. AppNavigation reads project
+machine.name; generated profile display names may differ. Audit exact naming/draft/
+assignment transitions before treating a mismatch as a bug or changing behavior.
+
+Workspace shop tool inventory and same-ID stocked/project copies are distinct. Tool
+Apply may sync stocked copies and mirrored profile; legacy/project-local tools and
+operation tool IDs need explicit dependency handling. Workspace editing and project
+Undo are not one assumed global transaction. KEEP existing formats/snapshots/mirror,
+FS applied-value/fallback precedence, capability resolution and generation preflight.
+EXTEND presentation after field-consumer/action matrix and UX approval; no new schema,
+association model, autosave policy or domain ADR selected. Future browser/inspector
+patterns must not create parallel authoritative machine/tool state.
+
+[UX6-A](ux/UX6_A_PLAN.md) and [UX6-B](ux/UX6_B_PLAN.md) each need separate tests,
+actual screenshots and human gates. FabCAM program-level output settings stay distinct
+from future FabSBP live control; draft/software/physical evidence labels are not invented.
+No active PERF/CAM algorithm/post behavior changes in this planning checkpoint.

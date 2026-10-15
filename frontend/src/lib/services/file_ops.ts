@@ -1044,14 +1044,14 @@ export async function loadToolset(mode: 'replace' | 'add') {
 }
 
 /// Export the current machine config to a `.ivac-machine.json` file.
-export async function saveMachine() {
+export async function saveMachine(machine: MachineSettings = project.data.machine) {
   const envelope: SnapshotEnvelope<'machine', MachineSettings> = {
     kind: 'machine',
     format_version: MACHINE_FORMAT_VERSION,
     updated_at: new Date().toISOString(),
-    payload: { ...project.data.machine },
+    payload: { ...machine },
   };
-  const fileBase = (project.data.machine.name && project.data.machine.name.trim()) || 'machine';
+  const fileBase = machine.name?.trim() || 'machine';
   await writeJson(`${fileBase}.ivac-machine.json`, JSON.stringify(envelope, null, 2), [
     { name: 'FabCAM machine', extensions: ['ivac-machine.json', 'json'] },
   ]);
@@ -1059,7 +1059,7 @@ export async function saveMachine() {
 
 /// Import a `.ivac-machine.json`. Replaces the active machine
 /// config wholesale.
-export async function loadMachine() {
+export async function readMachine(): Promise<MachineSettings | undefined> {
   let text: string | null;
   try {
     text = await pickAndReadJson([
@@ -1088,14 +1088,14 @@ export async function loadMachine() {
     project.setError('machine load: not a .ivac-machine.json file');
     return;
   }
-  // Machine swap invalidates the cache the same way as a tool
-  // library swap — hash_machine folds every relevant field, so the
-  // post-swap Generate will miss-and-recompute. Drop the old entries
-  // proactively.
+  return migrateMachineSettings(env.payload);
+}
+
+export async function loadMachine() {
+  const machine = await readMachine();
+  if (!machine) return;
   await clearPipelineCacheOnReplace();
-  // An older .ivac-machine.json carries `supportsToolchange` instead
-  // of `toolchangeStrategy` — migrate before applying.
-  project.setMachine(migrateMachineSettings(env.payload));
+  project.setMachine(machine);
 }
 
 /// Explicit user-local source backup. Never publishes, synchronizes or changes a project.

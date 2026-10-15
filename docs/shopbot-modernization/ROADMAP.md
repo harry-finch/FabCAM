@@ -366,3 +366,93 @@ Exact scheduling requires human approval. No benchmark execution/instrumentation
 algorithm/tolerance/preview/post/FS changes or GitHub issue mutation authorized here.
 Future spatial indexing/caching/parallelism are measured hypotheses, not selected
 architecture; continuous predicates, pass/completion and fail-closed guards remain.
+
+
+### PERF1-A launch and preceding acceptance — 2026-10-15
+
+Explicit human validation closes current Geometry UX ivac-xy3w, V-Carve software
+ivac-1b75 and UX5 ivac-txve gates with documented limits. Snapshot main2032848 is
+published. User authorizes **PERF1-A Profiling & Benchmarking** (ivac-sgnd) as the
+next checkpoint, superseding its earlier unstarted/pending-acceptance wording.
+Test is explicitly a representative surrogate; the exact 5–10 s case is unavailable.
+A measures and proposes; **PERF1-B remains unstarted and requires A report/scope
+approval**. Two-sided, inlays, GEOM/NEST and independent physical/native gates remain.
+
+
+### PERF1-A engineering handoff — 2026-10-15
+
+[Results, raw evidence and proposed targets](PERF1_A_RESULTS.md): engineering
+ivac-sgnd complete; human report/scope approval ivac-xzys pending. Measurements
+rank bundled CPS post first for Test/profile, remaining-material analysis for
+pocket; simulation replay needs finer attribution. Proposed B1 extends existing
+ivac-rnsg with audited deterministic bundled-post reuse and exact invalidation.
+No B implementation starts before explicit review. Cancellation ivac-sxmw and
+simulation attribution ivac-lf1e are separate deferred findings. No physical
+qualification or new publication; previous milestone names and priorities remain.
+
+### PERF1-B1 authorization — 2026-10-15
+
+User approved B after the independent PERF1_A_AUDIT. Scope is bounded bundled
+ShopBot post reuse, reproducible/fail-closed evidence, hit/miss and UI timing
+qualification. No B2 Pocket analysis optimization, VM rewrite or physical claims.
+ADR-0018 records the existing PipelineCache extension. HARD STOP for result review.
+
+### PERF1-B1 software handoff — 2026-10-15
+
+[Results](PERF1_B_RESULTS.md): exact bounded bundled ShopBot reuse qualified.
+Native repeat Test832→15ms; HTTP first frame899→141ms; relief2259→1516ms.
+Full output equality, refusal/invalidation/cancellation/cache-bound tests and
+frontend/core/ShopBot/V-Carve gates pass. Simulation boundaries now measured;
+no simulation algorithm change. ivac-rnsg/ivac-lf1e closed; **ivac-sf7y OPEN**
+for human review. HARD STOP before B2/further work; no publication/physical claim.
+
+### PERF1-B2 authorization and implementation — 2026-10-15
+
+User accepts B1 and authorizes continuation; ivac-sf7y closed. B2 ivac-dlrm
+extends PipelineCache with bounded exact-input remaining-material kernel reuse.
+Live eligibility/stock/provenance and diagnostic checks retained. ADR-0019
+records the boundary; paired benchmarks, output equivalence and regression
+qualification in progress. HARD STOP for human results review, no publication.
+
+### PERF1-B2 software handoff — 2026-10-15
+
+[Results and limits](PERF1_B2_RESULTS.md): pure remaining-material kernel reused
+with live guards. Pocket repeated analysis337.845→0.222ms, total338.370→0.625ms;
+first/new input still computes. All18 native outcomes unchanged; WASM parity,
+1085unit/38integration tests and actual UI freshness/overlay reviewed. Small
+CAM4 UI case has no material latency gain; no universal end-to-end claim.
+ivac-dlrm complete, **human gate ivac-s5xy OPEN — HARD STOP**. No publication or
+physical claim. Bounded CPS interruption ivac-sxmw remains separately deferred.
+
+### CPS cancellation follow-up — 2026-10-15
+
+User accepted B2 and authorized ivac-sxmw. [Results](PERF1_CPS_CANCELLATION_RESULTS.md):
+existing CPS host probe now reads real atomic cancellation; no partial successful
+output or successful-cache insertion. Native Test750→213ms, dense contour1181→193ms,
+HTTP743→207ms medians. Target p95≤200ms is **not met** (216/218ms Test native/HTTP).
+44 CPS/1086 core unit tests pass, all18 full output/refusal outcomes unchanged,
+UI cancel/export-disabled/retry verified. An obsolete two-sided CPS integration
+expectation was corrected to assert the existing CAM2 refusal, not remove it.
+Review gate ivac-nh6q OPEN; remaining latency attribution ivac-q1nz1 deferred.
+HARD STOP before any further implementation, publication or physical claims.
+
+## UX6 — Machine Profiles & Tool Library UX Redesign
+
+**Phase 0/A accepted; B implemented with human review pending.** Coordinated information-architecture/task-clarity
+initiative; numbering available after UX5, no unrelated milestone renumbering.
+[Preliminary ownership inventory, Phase 0 requirements and shared contracts](ux/UX6_PLAN.md).
+
+| Checkpoint | Included scope / future acceptance | Status / approval |
+| --- | --- | --- |
+| UX6 Phase 0 — architecture and UX audit | Complete field owner/persistence/consumer/output-validation-estimate-preview-legacy matrix; draft/profile/active-project and inventory/loadout/action semantics; proposed layouts/compatibility plan | **ACCEPTED — ivac-tjgt1 closed**; [matrix, contracts and layouts](ux/UX6_PHASE0_AUDIT.md); user authorized A |
+| UX6-A — Machine Profiles UX Redesign | Profile browser/contextual grouped editor, post-aware output, limits versus estimates, explicit project assignment and machine-tools clarity; preserved data/snapshots/output; regression and actual desktop evidence | **ACCEPTED — ivac-osa4z closed**; [results](ux/UX6_A_RESULTS.md); user authorized B |
+| UX6-B — Tool Library UX Redesign | Search/list/selected-tool detail, type-specific physical geometry, optional annotated 2D silhouette, machine availability and secondary legacy defaults; preserved operation rates/identity/export guards | **IMPLEMENTED — human gate ivac-y2aln OPEN**; [results](ux/UX6_B_RESULTS.md); human software/visual HARD STOP |
+
+Proposed order: UX6 audit → UX6-A → UX6-B; no automatic precedence over approved
+PERF/CAM/GEOM/NEST work or current visual reviews. Current ivac-nh6q cancellation,
+ivac-1drzo visual gates retain status. Drawings/Layers ivac-ena7m accepted; user
+accepted UX6-A and authorized B; B software/visual acceptance now pending.
+Mandatory future Professional Workshop UI + CAM UX. Physical tools, saved operation
+cutting values and FS recommendations stay separate; no new rate/association model.
+No machine-control/FabSBP functionality, FS redesign, output capability, project/tool
+migration, active optimization change or broad navigation rewrite included.

@@ -230,3 +230,14 @@ Documentation updated: this operation-source/CAM UX report, STATUS, DEVLOG and
 No commit, push, merge, release or next milestone.
 
 **STOP — waiting for human review ivac-xy3w; V-Carve gate ivac-1b75 remains open.**
+
+
+## 2026-10-15 — Imported drawings / layers presentation continuation
+
+[Drawings and layers clarification](ux/DRAWINGS_LAYERS_CLARIFICATION.md) records
+the pre-edit control/model audit, same-name union provenance, view-only visibility
+versus authoritative CAM sources, read-only ACI swatches and actual before/after
+checks. Imported geometry, selection/source bindings and persistence rules are
+unchanged. Seven targeted regressions, 1270 frontend passes/1skip, check/lint/build
+pass. Human visual gate ivac-ena7m remains open; no new major CAM milestone or
+functional roadmap/previous qualification acceptance is inferred.

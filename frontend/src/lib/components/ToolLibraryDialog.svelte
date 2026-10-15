@@ -1,8 +1,6 @@
 <script lang="ts">
-  /// Tool library dialog. Project-scoped table of every tool the user
-  /// has configured; ops will reference an entry by id once UX-7 lands.
-  /// Each row is editable in place; the modal commits/cancels as a
-  /// single unit so the user can revert without touching project.data.tools.
+  /// Inventory-wide draft transaction with independent selected-tool inspection.
+  /// Existing project commands own copy propagation, history and stale output.
   import {
     project,
     type ToolEntry,
@@ -17,18 +15,22 @@
   import {
     effectiveModes,
     KIND_DISPLAY_LABELS,
-    machineModesLabel,
     toolCompatibleWithAnyMode,
   } from '../state/tool_family';
   import { workspace } from '../state/workspace.svelte';
   import { seedInventoryFromProject, syncStockedFromInventory } from '../state/tool_inventory';
   import { isAutoToolName, suggestToolName } from '../state/tool_naming';
   import ToolRowExpandedEditor from './ToolRowExpandedEditor.svelte';
-  import ToolRowSummary from './ToolRowSummary.svelte';
+  import ToolLibraryFilters from './ToolLibraryFilters.svelte';
+  import ToolRetainedFields from './ToolRetainedFields.svelte';
+  import ToolDetailBasics from './ToolDetailBasics.svelte';
+  import { Plus, Trash2 } from '@lucide/svelte';
+  import { deepEqual } from './dialog-draft';
+  import { changeToolKind, toolLibraryImpacts } from '../state/tool-library-review';
+  import { stockTool } from '../state/tool_inventory';
   import {
     applyToolTableView,
     EMPTY_TOOL_VIEW,
-    nextSortState,
     pageOfTool,
     paginateToolRows,
     type ToolSortKey,
@@ -37,7 +39,7 @@
   import { defaultToolForMode } from '../state/tool_mode_defaults';
   import { applyPresetPatch } from '../state/tool_presets';
   import ToolCalibrationDialog from './ToolCalibrationDialog.svelte';
-  import { rowInvalid, kindNeedsExpansion } from '../state/tool_validation';
+  import { rowInvalid, fieldApplies } from '../state/tool_validation';
 
   interface Props {
     open: boolean;
@@ -56,7 +58,7 @@
   }
   let { open, onClose, embedded = false, source = 'project' }: Props = $props();
   const active = $derived(open || embedded);
-  let showDefaults = $state(false);
+
   const isInventory = $derived(source === 'inventory');
   /// The list this editor seeds from / commits to.
   const backingTools = $derived.by(() => {
@@ -73,14 +75,106 @@
   /// rebuilds always reassign `dd.draft`, never the alias.
   const dd = new DialogDraft<ToolEntry[]>();
   const draft = $derived(dd.draft ?? []);
-  /// Per-row UI flag — Holder sub-panel collapsed by default to keep the
-  /// table compact. Stored as a Set of row ids so reorders / additions
-  /// don't accidentally move the toggle to a different tool.
-  let expanded = $state<Set<number>>(new Set());
-  /// Tool id that flashes briefly when the dialog is opened with a focus
-  /// request (the "edit this tool" link in OpPropertiesPanel).
-  let highlightedId = $state<number | null>(null);
-  let bodyEl = $state<HTMLDivElement | null>(null);
+  let selectedId = $state<number | null>(null);
+  let section = $state<'geometry' | 'mounting' | 'availability' | 'advanced'>('geometry');
+  const selectedIndex = $derived(draft.findIndex((t) => t.id === selectedId));
+  const selectedTool = $derived(draft[selectedIndex]);
+  let baseline = $state<ToolEntry[]>([]);
+  let baselineStocked = $state<ToolEntry[]>([]);
+  let deleting = $state<number | null>(null);
+  let pendingImport = $state<ToolEntry[] | null>(null);
+  let importing = $state(false);
+  let reviewToken = $state<string | null>(null);
+  const conflict = $derived(
+    dd.isDirty &&
+      (!deepEqual(backingTools, baseline) ||
+        (isInventory && !deepEqual(project.data.tools, baselineStocked))),
+  );
+  const currentToken = $derived(
+    JSON.stringify([draft, backingTools, project.data.tools, project.data.operations, source]),
+  );
+  const impacts = $derived(toolLibraryImpacts(draft, project.data.tools, project.data.operations));
+  const reviewCurrent = $derived(reviewToken !== null && reviewToken === currentToken);
+  const removedReferences = $derived(
+    !isInventory
+      ? project.data.operations.filter((op) => !draft.some((t) => t.id === op.toolId))
+      : [],
+  );
+  const savedProfiles = $derived.by(() => {
+    void workspace.version;
+    return workspace.get().machine_profiles;
+  });
+  const selectedUses = $derived(project.data.operations.filter((op) => op.toolId === selectedId));
+  const selectedCopies = $derived(
+    savedProfiles.filter((p) => p.tools.some((t) => t.id === selectedId)),
+  );
+  const selectedStocked = $derived(project.data.tools.find((t) => t.id === selectedId));
+  const cannotRemoveStocked = $derived(
+    dd.isDirty || !selectedStocked || selectedUses.length > 0 || project.data.tools.length <= 1,
+  );
+
+  function selectTool(id: number) {
+    selectedId = id;
+    deleting = null;
+  }
+  function navigate(event: KeyboardEvent) {
+    const host = event.currentTarget as HTMLElement;
+    const buttons = Array.from(
+      host.parentElement?.querySelectorAll<HTMLButtonElement>('button[data-tool-id]') ?? [],
+    );
+    const i = buttons.indexOf(host as HTMLButtonElement);
+    const next =
+      event.key === 'ArrowDown'
+        ? Math.min(i + 1, buttons.length - 1)
+        : event.key === 'ArrowUp'
+          ? Math.max(i - 1, 0)
+          : event.key === 'Home'
+            ? 0
+            : event.key === 'End'
+              ? buttons.length - 1
+              : -1;
+    if (next >= 0) {
+      event.preventDefault();
+      buttons[next]?.focus();
+    }
+  }
+  async function importTools(mode: 'replace' | 'add') {
+    if (importing || conflict) return;
+    importing = true;
+    const token = currentToken;
+    try {
+      const next = await fileOps.importToolset(mode, $state.snapshot(draft));
+      if (!next) return;
+      if (currentToken !== token) {
+        project.setError(
+          'Tool state changed during import. Review current changes and import again.',
+        );
+        return;
+      }
+      if (mode === 'replace') pendingImport = next;
+      else dd.draft = next;
+    } finally {
+      importing = false;
+    }
+  }
+  function acceptImport() {
+    if (!pendingImport || conflict) return;
+    dd.draft = pendingImport;
+    selectedId = pendingImport[0]?.id ?? null;
+    pendingImport = null;
+    clearFilters();
+  }
+  function addToMachine() {
+    if (dd.isDirty || !selectedTool || !toolCompatibleWithAnyMode(selectedTool.kind, machineModes))
+      return;
+    const copy = stockTool($state.snapshot(selectedTool), $state.snapshot(project.data.tools));
+    if (copy) project.addTool(copy);
+  }
+  function removeFromMachine() {
+    if (dd.isDirty || !selectedStocked || selectedUses.length || project.data.tools.length <= 1)
+      return;
+    project.removeTool(selectedStocked.id);
+  }
   /// Mode filter: the default view shows only tools the machine's
   /// EFFECTIVE mode set (primary mode + capabilities — a combo
   /// mill+plasma machine keeps both halves visible) can run; the
@@ -122,16 +216,7 @@
     ),
   );
   const paged = $derived(paginateToolRows(viewedRows, page));
-  const filtersActive = $derived(view.query.trim() !== '' || view.kind !== '' || view.mode !== '');
-  function setSort(key: ToolSortKey) {
-    const next = nextSortState(view, key);
-    view.sortKey = next.sortKey;
-    view.sortDir = next.sortDir;
-  }
-  function sortArrow(key: ToolSortKey): string {
-    if (view.sortKey !== key) return '';
-    return view.sortDir === 'asc' ? ' ▲' : ' ▼';
-  }
+
   function clearFilters() {
     view.query = '';
     view.kind = '';
@@ -141,6 +226,8 @@
   /// Make a specific tool visible: drop filters that would hide it and
   /// jump to its page under the current sort.
   function revealTool(id: number) {
+    const tool = draft.find((t) => t.id === id);
+    if (tool && !rowVisible(tool)) showIncompatible = true;
     clearFilters();
     const rows = applyToolTableView(
       draft.map((tool, i) => ({ tool, i })).filter((r) => rowVisible(r.tool)),
@@ -176,19 +263,18 @@
         tools = seeded;
       }
       dd.open(tools);
+      baseline = structuredClone(tools);
+      baselineStocked = structuredClone(projectTools);
+      if (!tools.some((t) => t.id === selectedId)) selectedId = tools[0]?.id ?? null;
       showIncompatible = false;
       calibratingIdx = null;
-      // Tools whose kind has a REQUIRED kind-specific field open by
-      // default so the user sees `dragoff` / `cornerRadiusMm` / T-slot
-      // neck dims without hunting for them. Other kinds start collapsed.
-      expanded = new Set(tools.filter((t) => kindNeedsExpansion(t.kind)).map((t) => t.id));
     });
   });
 
   // Numeric-field validation, fieldApplies, and the per-kind
   // disabled-reason tooltips all live in lib/state/tool_validation.ts;
   // the dialog wires them in via the imports up top.
-  let hasInvalidRow = $derived(draft.some(rowInvalid));
+  let hasInvalidRow = $derived(draft.length === 0 || draft.some(rowInvalid));
 
   /// Close protocol (dd.requestClose): the first attempt on a dirty
   /// draft arms the inline "Discard / Keep editing" footer pair; the
@@ -207,16 +293,7 @@
     const target = draft.find((t) => t.id === focusId);
     if (target && !rowVisible(target)) showIncompatible = true;
     if (target) revealTool(focusId);
-    queueMicrotask(() => {
-      const host = bodyEl;
-      if (!host) return;
-      const row = host.querySelector(`[data-tool-id="${focusId}"]`) as HTMLElement | null;
-      if (row) row.scrollIntoView({ block: 'center', behavior: 'smooth' });
-      highlightedId = focusId;
-      window.setTimeout(() => {
-        if (highlightedId === focusId) highlightedId = null;
-      }, 1400);
-    });
+    if (target) selectedId = focusId;
   });
 
   function commit() {
@@ -224,7 +301,15 @@
     // OK button is also disabled in that state — belt-and-braces so a
     // keyboard / programmatic invocation can't smuggle a zero-rate tool
     // through.
-    if (draft.some(rowInvalid)) return;
+    if (
+      draft.some(rowInvalid) ||
+      conflict ||
+      !reviewCurrent ||
+      removedReferences.length ||
+      importing ||
+      pendingImport
+    )
+      return;
     // Deep-snapshot so the command system receives plain objects —
     // Svelte 5 `$state` proxies inside `draft[i]` can trip up the
     // `structuredClone` call inside replaceToolsCommand on some
@@ -247,11 +332,15 @@
           project.replaceTools(snap);
         }
       } catch (e) {
-        console.error('ToolLibraryDialog.commit: apply failed', e);
+        project.setError(`Tool library apply failed: ${String(e)}`);
+        return;
       }
     }
     // Embedded (tab) mode: Apply commits and stays — re-baseline the
     // draft instead of closing.
+    baseline = $state.snapshot(backingTools);
+    baselineStocked = $state.snapshot(project.data.tools);
+    reviewToken = null;
     if (embedded) dd.markClean();
     else onClose();
   }
@@ -259,6 +348,11 @@
   /// Embedded-mode Revert: drop the draft back to the committed tools.
   function revert() {
     dd.open(backingTools);
+    baseline = $state.snapshot(backingTools);
+    baselineStocked = $state.snapshot(project.data.tools);
+    reviewToken = null;
+    pendingImport = null;
+    deleting = null;
   }
 
   function addTool() {
@@ -268,11 +362,19 @@
     // immediately hide.
     dd.draft = [...draft, defaultToolForMode(project.data.machine.mode, nextId)];
     revealTool(nextId);
+    selectedId = nextId;
+    section = 'geometry';
   }
 
   function removeAt(idx: number) {
-    if (draft.length <= 1) return;
+    if (
+      draft.length <= 1 ||
+      (!isInventory && project.data.operations.some((o) => o.toolId === draft[idx]?.id))
+    )
+      return;
     dd.draft = draft.filter((_, i) => i !== idx);
+    selectedId = draft[0]?.id ?? null;
+    deleting = null;
   }
 
   function updateField<K extends keyof ToolEntry>(idx: number, key: K, value: ToolEntry[K]) {
@@ -289,53 +391,8 @@
     });
   }
 
-  /// Per-kind default fill-in on `kind` change. Pre-populates the
-  /// fields that newly APPLY to the target kind so the user doesn't
-  /// see blank inputs when flipping endmill → drill (twist drills
-  /// usually have 2 flutes and a 118° tip). Existing user-set values
-  /// are preserved.
   function onKindChange(idx: number, kind: ToolKind) {
-    let touchedId: number | null = null;
-    dd.draft = draft.map((t, i) => {
-      if (i !== idx) return t;
-      const wasAuto = isAutoToolName(t);
-      const next: ToolEntry = { ...t, kind };
-      if (wasAuto) next.name = suggestToolName(next);
-      if (kind === 'drill') {
-        if (next.flutes === 0 || next.flutes === undefined) next.flutes = 2;
-        if (next.tipAngleDeg === undefined) next.tipAngleDeg = 118;
-      }
-      if (
-        (kind === 'v_bit' || kind === 'engraver' || kind === 'cone') &&
-        next.tipAngleDeg === undefined
-      ) {
-        // Cone bits are commonly steeper than engraving V-bits; 30° is a
-        // sensible cone default vs 60° for V/engrave.
-        next.tipAngleDeg = kind === 'cone' ? 30 : 60;
-      }
-      if (kind === 'thread_mill') {
-        // Thread mill: tipAngleDeg is the thread flank angle (60° metric
-        // / 55° Whitworth); seed a 1 mm pitch and the metric flank.
-        if (next.tipAngleDeg === undefined) next.tipAngleDeg = 60;
-        if (next.threadPitchMm === undefined) next.threadPitchMm = 1.0;
-      }
-      touchedId = next.id;
-      return next;
-    });
-    // Open the expanded section so the new kind's required kind-specific
-    // field is in view (e.g. dragoff for drag_knife).
-    if (touchedId != null && kindNeedsExpansion(kind)) {
-      const next = new Set(expanded);
-      next.add(touchedId);
-      expanded = next;
-    }
-  }
-
-  function toggleExpanded(id: number) {
-    const next = new Set(expanded);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    expanded = next;
+    dd.draft = draft.map((tool, i) => (i === idx ? changeToolKind(tool, kind) : tool));
   }
 
   /// Apply a holder preset (by label) to draft row `idx`, merging its patch.
@@ -355,281 +412,262 @@
   function setHolder(idx: number, holder: HolderShape | undefined) {
     dd.draft = draft.map((t, i) => (i === idx ? { ...t, holder } : t));
   }
-
-  // Display labels for the kind dropdown live in tool_family.ts so the
-  // dialog, the disabled-reason tooltips, and any other UI surface that
-  // names a tool kind read from the same source.
-  const kindLabels = KIND_DISPLAY_LABELS;
-  const kindOptions = Object.keys(kindLabels) as ToolKind[];
 </script>
 
 {#snippet shell()}
-  {#if !embedded}
-    <header>
+  {#if !embedded}<header>
       <h2 id="tools-title">{t('tools.title')}</h2>
       <button class="dlg-close" onclick={close} aria-label={t('common.close')}>×</button>
-    </header>
-  {/if}
-  <!-- Header-attached filters: text search + kind + machine
-       capability. View-only — filtering never touches the library. -->
+    </header>{/if}
   <div class="table-actions">
-    <!-- File actions left-aligned, matching the Project toolbar. In
-         inventory mode they import/export the SHOP INVENTORY (via the
-         draft — Apply persists); in project mode the working tool set. -->
-    <button
-      type="button"
-      class="tc-file"
-      onclick={async () => {
-        if (isInventory) await fileOps.exportToolset(JSON.parse(JSON.stringify(draft)));
-        else await fileOps.saveToolset();
-      }}
-      title={isInventory
-        ? t('tools.file.save.inventory.title')
-        : t('tools.file.save.project.title')}>{t('common.save_ellipsis')}</button
+    <button class="tc-file" onclick={() => fileOps.exportToolset($state.snapshot(draft))}
+      >{t('ux6b.export_draft')}</button
     >
     <button
-      type="button"
       class="tc-file"
-      onclick={async () => {
-        if (isInventory) {
-          const merged = await fileOps.importToolset('replace', draft);
-          if (merged) dd.draft = merged;
-        } else {
-          await fileOps.loadToolset('replace');
-          dd.draft = project.data.tools.map((t) => ({ ...t }));
-        }
-      }}
-      title={isInventory
-        ? t('tools.file.load_replace.inventory.title')
-        : t('tools.file.load_replace.project.title')}>{t('tools.file.load_replace')}</button
+      disabled={importing || conflict || pendingImport !== null}
+      onclick={() => importTools('replace')}>{t('tools.file.load_replace')}</button
     >
     <button
-      type="button"
       class="tc-file"
-      onclick={async () => {
-        if (isInventory) {
-          const merged = await fileOps.importToolset('add', draft);
-          if (merged) dd.draft = merged;
-        } else {
-          await fileOps.loadToolset('add');
-          dd.draft = project.data.tools.map((t) => ({ ...t }));
-        }
-      }}
-      title={t('tools.file.load_add.title')}>{t('tools.file.load_add')}</button
+      disabled={importing || conflict || pendingImport !== null}
+      onclick={() => importTools('add')}>{t('tools.file.load_add')}</button
     >
+    <span class="hint">{isInventory ? t('ux6b.inventory_scope') : t('ux6b.project_scope')}</span>
   </div>
-  <div class="table-filters">
-    <input
-      type="text"
-      class="tc-search"
-      placeholder={t('tools.search.placeholder')}
-      value={view.query}
-      oninput={(e) => {
-        view.query = (e.currentTarget as HTMLInputElement).value;
-        page = 0;
-      }}
-      title={t('tools.search.title')}
-    />
-    <label class="tc-filter">
-      <span>{t('tools.filter.kind')}</span>
-      <select
-        value={view.kind}
-        onchange={(e) => {
-          view.kind = (e.currentTarget as HTMLSelectElement).value as typeof view.kind;
-          page = 0;
-        }}
+  <ToolLibraryFilters
+    bind:view
+    total={draft.length}
+    shown={paged.total}
+    onFilterChange={() => (page = 0)}
+    {clearFilters}
+  />
+
+  {#if conflict}<div class="notice" role="alert">
+      {t('ux6b.conflict')}
+      <button class="btn-secondary" onclick={revert}>{t('common.revert')}</button>
+    </div>{/if}
+  {#if pendingImport}<div class="notice" role="status">
+      <strong>{t('ux6b.replace_title')}</strong>
+      <p>{t('ux6b.replace_help', { before: draft.length, after: pendingImport.length })}</p>
+      <button class="btn-secondary" onclick={() => (pendingImport = null)}
+        >{t('common.cancel')}</button
       >
-        <option value="">{t('tools.filter.all')}</option>
-        {#each kindOptions as k (k)}
-          <option value={k}>{kindLabels[k]}</option>
-        {/each}
-      </select>
-    </label>
-    <label class="tc-filter" title={t('tools.filter.runs_on.title')}>
-      <span>{t('tools.filter.runs_on')}</span>
-      <select
-        value={view.mode}
-        onchange={(e) => {
-          view.mode = (e.currentTarget as HTMLSelectElement).value as typeof view.mode;
-          page = 0;
-        }}
+      <button class="btn-primary" disabled={conflict} onclick={acceptImport}
+        >{t('ux6b.replace_draft')}</button
       >
-        <option value="">{t('tools.filter.runs_on.any')}</option>
-        <option value="mill">{t('tools.filter.runs_on.mill')}</option>
-        <option value="laser">{t('tools.filter.runs_on.laser')}</option>
-        <option value="drag">{t('tools.filter.runs_on.drag')}</option>
-        <option value="plasma">{t('tools.filter.runs_on.plasma')}</option>
-      </select>
-    </label>
-    {#if filtersActive}
-      <button type="button" class="tc-clear" onclick={clearFilters}
-        >{t('tools.filter.clear')}</button
+    </div>{/if}
+  {#if reviewToken !== null}<div class="notice" role="status">
+      <strong>{t('ux6b.apply_title')}</strong>
+      <p>{isInventory ? t('ux6b.apply_scope') : t('ux6b.project_scope')}</p>
+      {#if isInventory && impacts.length}<ul>
+          {#each impacts as impact (impact.id)}<li>
+              #{impact.id}
+              {impact.before} → {impact.after} · {impact.operations.join(', ') ||
+                t('ux6b.no_operations')}
+            </li>{/each}
+        </ul>{:else if isInventory}<p>{t('ux6b.no_sync')}</p>{/if}
+      {#if !reviewCurrent}<p>{t('ux6b.review_changed')}</p>{/if}
+      <button class="btn-secondary" onclick={() => (reviewToken = null)}
+        >{t('common.cancel')}</button
       >
-    {/if}
-    <span class="tc-count"
-      >{paged.total === draft.length
-        ? draft.length === 1
-          ? t('tools.count.one', { count: draft.length })
-          : t('tools.count.many', { count: draft.length })
-        : t('tools.count.filtered', { shown: paged.total, total: draft.length })}</span
-    >
-  </div>
-  <details>
-    <summary>{t('fs35.fallback')}</summary>
-    <p>{t('fs35.fallback_help')}</p>
-    <label><input type="checkbox" bind:checked={showDefaults} />{t('fs35.fallback')}</label>
-  </details>
-  <div class="body" class:physical-only={!showDefaults} bind:this={bodyEl}>
-    <div class="table">
-      <div class="row head">
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('id')}
-          title={t('tools.col.id.title')}>#{sortArrow('id')}</button
-        >
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('name')}
-          title={t('tools.col.name.title')}>{t('tools.col.name')}{sortArrow('name')}</button
-        >
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('kind')}
-          title={t('tools.col.kind.title')}>{t('tools.col.kind')}{sortArrow('kind')}</button
-        >
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('diameter')}
-          title={t('tools.col.diameter.title')}
-          >⌀ <span class="unit-hdr">mm</span>{sortArrow('diameter')}</button
-        >
-        <span>{t('tools.col.tip_diameter')} <span class="unit-hdr">mm</span></span>
-        <span title={t('tools.col.tip_angle.title')}
-          >{t('tools.col.tip_angle')} <span class="unit-hdr">°</span></span
-        >
-        <button
-          class="sort-h"
-          type="button"
-          onclick={() => setSort('flutes')}
-          title={t('tools.col.flutes.title')}>{t('tools.col.flutes')}{sortArrow('flutes')}</button
-        >
-        {#if showDefaults}
-          <button
-            class="sort-h"
-            type="button"
-            onclick={() => setSort('speed')}
-            title={t('tools.col.speed.title')}
-            >{t('tools.col.speed')} <span class="unit-hdr">RPM</span>{sortArrow('speed')}</button
-          >
-          <button
-            class="sort-h"
-            type="button"
-            onclick={() => setSort('feedRate')}
-            title={t('tools.col.feed.title')}
-            >{t('tools.col.feed')} <span class="unit-hdr">mm/min</span>{sortArrow(
-              'feedRate',
-            )}</button
-          >
-          <button
-            class="sort-h"
-            type="button"
-            onclick={() => setSort('plungeRate')}
-            title={t('tools.col.plunge.title')}
-            >{t('tools.col.plunge')} <span class="unit-hdr">mm/min</span>{sortArrow(
-              'plungeRate',
-            )}</button
-          >
-          <span title={t('tools.col.dflt_step.title')}
-            >{t('tools.col.dflt_step')} <span class="unit-hdr">mm</span></span
-          >
-        {/if}
-        <span>{t('tools.col.coolant')}</span>
-        <span></span>
-      </div>
-      {#each paged.rows as { tool, i } (tool.id)}
-        <div class="row" class:highlight={highlightedId === tool.id} data-tool-id={tool.id}>
-          <ToolRowSummary
-            {tool}
-            {showDefaults}
-            expanded={expanded.has(tool.id)}
-            canDelete={draft.length > 1}
-            onUpdateField={(key, value) => updateField(i, key, value)}
-            onKindChange={(kind) => onKindChange(i, kind)}
-            onToggleExpanded={() => toggleExpanded(tool.id)}
-            onRemove={() => removeAt(i)}
-          />
-        </div>
-        {#if expanded.has(tool.id)}
-          <ToolRowExpandedEditor
-            {tool}
-            onUpdateField={(key, value) => updateField(i, key, value)}
-            onApplyPreset={(label) => applyPreset(i, label)}
-            onSetHolder={(h) => setHolder(i, h)}
-            onCalibrate={() => (calibratingIdx = i)}
-          />
-        {/if}
-      {/each}
-      {#if paged.total === 0 && filtersActive}
-        <div class="mode-filter-row">
-          <span>{t('tools.no_match')}</span>
-          <button type="button" class="btn-secondary" onclick={clearFilters}
-            >{t('tools.clear_filters')}</button
-          >
-        </div>
-      {/if}
-      {#if !showIncompatible && incompatibleCount > 0}
-        <div class="mode-filter-row">
-          <span
-            >{incompatibleCount === 1
-              ? t('tools.hidden.one', {
-                  count: incompatibleCount,
-                  machine: machineModesLabel(machineModes),
-                })
-              : t('tools.hidden.many', {
-                  count: incompatibleCount,
-                  machine: machineModesLabel(machineModes),
-                })}</span
-          >
-          <button
-            type="button"
-            class="btn-secondary"
-            onclick={() => (showIncompatible = true)}
-            title={t('tools.show_all.title')}>{t('tools.show_all')}</button
-          >
-        </div>
-      {:else if showIncompatible && incompatibleCount > 0}
-        <div class="mode-filter-row">
-          <span
-            >{t('tools.showing_all', {
-              count: incompatibleCount,
-              machine: machineModesLabel(machineModes),
-            })}</span
-          >
-          <button type="button" class="btn-secondary" onclick={() => (showIncompatible = false)}
-            >{t('tools.hide_incompatible')}</button
-          >
-        </div>
-      {/if}
-    </div>
-    <button class="add" onclick={addTool}>{t('tools.add')}</button>
-  </div>
-  {#if paged.pageCount > 1}
-    <div class="table-pager">
-      <button type="button" disabled={paged.page === 0} onclick={() => (page = paged.page - 1)}
-        >{t('tools.pager.prev')}</button
-      >
-      <span>{t('tools.pager.status', { page: paged.page + 1, total: paged.pageCount })}</span>
       <button
-        type="button"
-        disabled={paged.page >= paged.pageCount - 1}
-        onclick={() => (page = paged.page + 1)}>{t('tools.pager.next')}</button
+        class="btn-primary"
+        disabled={!reviewCurrent ||
+          conflict ||
+          hasInvalidRow ||
+          removedReferences.length > 0 ||
+          pendingImport !== null}
+        onclick={commit}>{t('common.apply')}</button
       >
-    </div>
-  {/if}
+    </div>{/if}
+  <div class="body">
+    <aside>
+      <label class="sort"
+        >{t('ux6b.sort')}<select
+          value={view.sortKey ?? ''}
+          onchange={(e) => {
+            view.sortKey = (e.currentTarget.value || null) as ToolSortKey | null;
+            page = 0;
+          }}
+          ><option value="">{t('ux6b.library_order')}</option><option value="name"
+            >{t('tools.col.name')}</option
+          ><option value="diameter">{t('ux6b.diameter')}</option><option value="kind"
+            >{t('tools.col.kind')}</option
+          ></select
+        ></label
+      >
+      <div class="tool-list" aria-label={t('tools.title')}>
+        {#each paged.rows as { tool } (tool.id)}<button
+            type="button"
+            data-tool-id={tool.id}
+            aria-pressed={selectedId === tool.id}
+            onclick={() => selectTool(tool.id)}
+            onkeydown={navigate}
+            title={tool.name}
+          >
+            <strong>#{tool.id} {tool.name}</strong>
+            <span
+              >{KIND_DISPLAY_LABELS[tool.kind]} · Ø{tool.diameter} mm{#if fieldApplies('flutes', tool.kind)}
+                · {tool.flutes} {t('tools.col.flutes')}{/if}</span
+            >
+            {#if rowInvalid(tool)}<span class="invalid-label">{t('ux6b.needs_review')}</span>{/if}
+          </button>{/each}
+      </div>
+      {#if paged.total === 0}<p class="hint">{t('tools.no_match')}</p>{/if}
+      {#if incompatibleCount > 0}<button
+          class="tc-file"
+          onclick={() => (showIncompatible = !showIncompatible)}
+          >{showIncompatible ? t('tools.hide_incompatible') : t('tools.show_all')} ({incompatibleCount})</button
+        >{/if}
+      <button class="add" onclick={addTool}
+        ><Plus size={16} aria-hidden="true" />{t('ux6b.add_tool')}</button
+      >
+      {#if paged.pageCount > 1}
+        <div class="table-pager">
+          <button type="button" disabled={paged.page === 0} onclick={() => (page = paged.page - 1)}
+            >{t('tools.pager.prev')}</button
+          >
+          <span>{t('tools.pager.status', { page: paged.page + 1, total: paged.pageCount })}</span>
+          <button
+            type="button"
+            disabled={paged.page >= paged.pageCount - 1}
+            onclick={() => (page = paged.page + 1)}>{t('tools.pager.next')}</button
+          >
+        </div>
+      {/if}
+    </aside>
+    <section class="detail">
+      {#if selectedTool}
+        {@const tool = selectedTool}
+        {@const i = selectedIndex}
+        <header>
+          <div>
+            <h2>#{tool.id} {tool.name}</h2>
+            <p class="hint">{t('ux6b.draft_scope')}</p>
+          </div>
+          <button
+            class="tc-file"
+            disabled={draft.length <= 1 || (!isInventory && selectedUses.length > 0)}
+            onclick={() => (deleting = tool.id)}
+            ><Trash2 size={14} aria-hidden="true" />{isInventory
+              ? t('ux6b.delete_library')
+              : t('ux6b.remove_project')}</button
+          >
+        </header>
+        {#if deleting === tool.id}<div class="notice">
+            <p>{isInventory ? t('ux6b.delete_help') : t('ux6b.remove_help')}</p>
+            <p>
+              {t('ux6b.copy_counts', {
+                operations: selectedUses.length,
+                profiles: selectedCopies.length,
+              })}
+            </p>
+            <button class="btn-secondary" onclick={() => (deleting = null)}
+              >{t('common.cancel')}</button
+            ><button class="btn-danger" onclick={() => removeAt(i)}>{t('ux6b.remove_draft')}</button
+            >
+          </div>{/if}
+        {#if !paged.rows.some((row) => row.tool.id === tool.id)}
+          <div class="notice">
+            {t('ux6b.filtered_selection')}
+            <button class="tc-file" onclick={() => revealTool(tool.id)}
+              >{t('ux6b.reveal_selection')}</button
+            >
+          </div>
+        {/if}
+        <nav aria-label={t('ux6b.sections')}>
+          {#each [['geometry', t('ux6b.geometry')], ['mounting', t('ux6b.mounting')], ['availability', t('ux6b.availability')], ['advanced', t('ux6b.advanced')]] as item (item[0])}<button
+              aria-pressed={section === item[0]}
+              onclick={() => (section = item[0] as typeof section)}>{item[1]}</button
+            >{/each}
+        </nav>
+        <div class="detail-body">
+          {#if section === 'geometry'}
+            <ToolDetailBasics
+              {tool}
+              onUpdateField={(k, v) => updateField(i, k, v)}
+              onKindChange={(kind) => onKindChange(i, kind)}
+            />
+            <p class="hint">{t('ux6b.geometry_help')}</p>
+          {/if}
+          {#if section === 'mounting'}<p class="hint">{t('ux6b.mounting_help')}</p>{/if}
+          {#if section === 'availability'}
+            <h3>{t('ux6b.current_machine')}</h3>
+            <p>{selectedStocked ? t('ux6b.same_id_copy') : t('ux6b.not_stocked')}</p>
+            {#if selectedStocked && !deepEqual(tool, selectedStocked)}<p class="notice">
+                {t('ux6b.copy_differs')}
+              </p>{/if}
+            <p>
+              {toolCompatibleWithAnyMode(tool.kind, machineModes)
+                ? t('ux6b.compatible')
+                : t('ux6b.incompatible')}
+            </p>
+            {#if isInventory}<div class="actions">
+                <button
+                  class="tc-file"
+                  disabled={dd.isDirty ||
+                    !toolCompatibleWithAnyMode(tool.kind, machineModes) ||
+                    (selectedStocked !== undefined && deepEqual(tool, selectedStocked))}
+                  onclick={addToMachine}
+                  ><Plus size={16} aria-hidden="true" />{t('ux6b.add_machine')}</button
+                ><button class="tc-file" disabled={cannotRemoveStocked} onclick={removeFromMachine}
+                  >{t('ux6b.remove_machine')}</button
+                >
+              </div>{/if}
+            <p class="hint">{t('ux6b.association_help')}</p>
+            <h3>{t('ux6b.operations')}</h3>
+            <ul>
+              {#each selectedUses as op (op.id)}<li>{op.name}</li>{:else}<li>
+                  {t('ux6b.no_operations')}
+                </li>{/each}
+            </ul>
+            <h3>{t('ux6b.profile_copies')}</h3>
+            <ul>
+              {#each selectedCopies as profile (profile.id)}<li>{profile.name}</li>{:else}<li>
+                  {t('ux6b.no_profiles')}
+                </li>{/each}
+            </ul>
+            <p class="hint">{t('ux6b.copy_help')}</p>
+          {:else}
+            <ToolRowExpandedEditor
+              {tool}
+              {section}
+              onUpdateField={(k, v) => updateField(i, k, v)}
+              onApplyPreset={(label) => applyPreset(i, label)}
+              onSetHolder={(h) => setHolder(i, h)}
+              onCalibrate={() => (calibratingIdx = i)}
+            />
+          {/if}
+          {#if section === 'advanced'}
+            <details>
+              <summary>{t('ux6b.legacy')}</summary>
+              <p class="hint">{t('fs35.fallback_help')}</p>
+              <p class="hint">{tool.speed} RPM · {tool.feedRate} / {tool.plungeRate} mm/min</p>
+              <ToolDetailBasics
+                {tool}
+                legacy
+                onUpdateField={(k, v) => updateField(i, k, v)}
+                onKindChange={(kind) => onKindChange(i, kind)}
+              />
+              <ToolRowExpandedEditor
+                {tool}
+                section="legacy"
+                onUpdateField={(k, v) => updateField(i, k, v)}
+                onApplyPreset={(label) => applyPreset(i, label)}
+                onSetHolder={(h) => setHolder(i, h)}
+                onCalibrate={() => (calibratingIdx = i)}
+              />
+            </details>
+            <ToolRetainedFields {tool} />
+          {/if}
+        </div>
+      {:else}<p class="hint">{t('ux6b.select_tool')}</p>{/if}
+    </section>
+  </div>
+  {#if removedReferences.length}<p class="validation-msg">
+      {t('ux6b.missing_refs')}: {removedReferences.map((o) => o.name).join(', ')}
+    </p>{/if}
   <footer>
     {#if dd.confirmingDiscard}
       <span class="discard-prompt">{t('common.discard_unsaved')}</span>
@@ -649,17 +687,28 @@
         >
         <button
           class="btn-primary"
-          onclick={commit}
-          disabled={hasInvalidRow || !dd.isDirty}
-          title={hasInvalidRow ? t('tools.apply.invalid.title') : ''}>{t('common.apply')}</button
+          onclick={() => (reviewToken = currentToken)}
+          disabled={hasInvalidRow ||
+            !dd.isDirty ||
+            conflict ||
+            removedReferences.length > 0 ||
+            importing ||
+            pendingImport !== null}
+          title={hasInvalidRow ? t('tools.apply.invalid.title') : ''}
+          >{t('ux6b.review_apply')}</button
         >
       {:else}
         <button class="btn-secondary" onclick={close}>{t('common.cancel')}</button>
         <button
           class="btn-primary"
-          onclick={commit}
-          disabled={hasInvalidRow}
-          title={hasInvalidRow ? t('tools.save.invalid.title') : ''}>{t('common.ok')}</button
+          onclick={() => (reviewToken = currentToken)}
+          disabled={hasInvalidRow ||
+            conflict ||
+            removedReferences.length > 0 ||
+            importing ||
+            pendingImport !== null}
+          title={hasInvalidRow ? t('tools.save.invalid.title') : ''}
+          >{t('ux6b.review_apply')}</button
         >
       {/if}
     {/if}
@@ -697,63 +746,20 @@
 <style>
   header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.7rem;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
     border-bottom: 1px solid var(--border);
-    background: var(--bg-elevated);
   }
   h2 {
     font-size: 0.95rem;
     margin: 0;
-    color: var(--text-strong);
+    overflow-wrap: anywhere;
   }
-  .body {
-    padding: 0.6rem 0.7rem;
-    overflow: auto;
-    min-width: 0;
-    /* Bound the scroll container's height so its OWN horizontal
-       scrollbar always sits at the fixed bottom edge of the visible
-       body — reachable without first scrolling the (potentially long)
-       tool list vertically. `flex: 1` claims the space between the
-       sticky header/filters and the footer; the modal shell and the
-       embedded shell are both flex columns, so this works in both. The
-       wide `.table` (min-width: min-content) overflows horizontally
-       here and `overflow-x: auto` turns it into the pinned scroller. */
-    flex: 1;
-    min-height: 0;
-    /* Touch: allow horizontal panning of the wide rows (and vertical
-       scroll of the list) without the browser claiming the gesture. */
-    touch-action: pan-x pan-y;
-    /* Firefox: a thicker-than-thin scrollbar with themed colours. */
-    scrollbar-width: auto;
-    scrollbar-color: var(--text-muted) var(--bg-elevated);
+  h3 {
+    font-size: 0.82rem;
   }
-  /* WebKit/Blink: give the horizontal scrollbar a clearly grabbable
-     height with a contrasting thumb, so it reads as an interactive
-     control on both pointer and touch. Theme-driven, so it tracks
-     light/dark via the CSS vars. */
-  .body::-webkit-scrollbar {
-    height: 13px;
-    width: 13px;
-  }
-  .body::-webkit-scrollbar-track {
-    background: var(--bg-elevated);
-    border-radius: 7px;
-  }
-  .body::-webkit-scrollbar-thumb {
-    background: var(--text-muted);
-    border: 3px solid var(--bg-elevated);
-    border-radius: 7px;
-  }
-  .body::-webkit-scrollbar-thumb:hover {
-    background: var(--text);
-  }
-  .body::-webkit-scrollbar-corner {
-    background: var(--bg-elevated);
-  }
-  /* Tab-panel (embedded) shell — fills the main area; the body scrolls
-     between the sticky header and footer. */
   .embedded-shell {
     display: flex;
     flex-direction: column;
@@ -761,91 +767,143 @@
     min-height: 0;
     background: var(--bg-panel);
   }
-  .table {
+  .body {
     display: grid;
-    gap: 0.2rem;
-    /* Below ~720 px the 13-column tools grid (id, name, kind, diameter,
-       reach, flutes, ∠, speed, feed, plunge, warmup, notes, trash) used
-       to squash numeric inputs to unreadable widths because every column
-       was fr-based. min-content forces the cells to their intrinsic
-       width and the body's `overflow: auto` kicks in as a horizontal
-       scroller — a clearly worse-than-fitting outcome only on tiny
-       windows, but never an unreadable squash on the common 900-1200 px
-       laptop sizes. */
-    min-width: min-content;
+    grid-template-columns: 300px minmax(0, 1fr);
+    flex: 1;
+    min-height: 0;
   }
-  .physical-only .row {
-    grid-template-columns:
-      2.5rem minmax(8rem, 1.6fr) minmax(6rem, 1fr)
-      4.5rem 4.5rem 4rem 3.5rem minmax(6rem, 1fr) 2rem;
+  aside {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-right: 1px solid var(--border);
+    min-height: 0;
+    overflow: auto;
   }
-  .row {
-    display: grid;
-    /* Numeric columns are widened past their English-label minimum so
-       longer localized headers (de: "Geschw", "Eintauchen",
-       "Std.-Zustellung") don't spill into their neighbours. Units render
-       on their own line under the label (see `.row.head .unit-hdr`), so a
-       column only has to fit the label word, not "label + unit". */
-    grid-template-columns:
-      2.5rem minmax(8rem, 1.6fr) minmax(6rem, 1fr)
-      4.5rem 4.5rem 4rem 3.5rem 5rem 5.5rem 5.5rem 6rem minmax(6rem, 1fr) 2rem;
-    gap: 0.3rem;
+  .tool-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    overflow: auto;
+    min-height: 100px;
+  }
+  .tool-list button {
+    text-align: left;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+  .tool-list strong,
+  .tool-list span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tool-list span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .tool-list .invalid-label {
+    color: var(--danger);
+  }
+  .detail {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+  .detail-body {
+    padding: 16px;
+    overflow: auto;
+    flex: 1;
+    min-height: 0;
+  }
+  .detail-body > :global(*) {
+    max-width: 640px;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  nav button,
+  .add {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--bg-elevated);
+    color: var(--text);
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    min-height: 28px;
+  }
+  nav button[aria-pressed='true'],
+  .tool-list button[aria-pressed='true'] {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, var(--bg-panel));
+  }
+  nav button[aria-pressed='true'] {
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+  .tc-file,
+  .add,
+  .actions {
+    display: inline-flex;
     align-items: center;
+    gap: 6px;
+  }
+  .hint {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+  .notice {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elevated);
+    font-size: 0.8rem;
+    max-height: 220px;
+    overflow: auto;
+  }
+  .notice button {
+    margin-right: 6px;
+  }
+  .sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+  }
+  details {
+    margin: 16px 0;
+  }
+
+  footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-elevated);
+  }
+  .validation-msg {
+    color: var(--danger);
     font-size: 0.78rem;
   }
-  .row.head {
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-size: 0.68rem;
-    padding-bottom: 0.2rem;
-    border-bottom: 1px solid var(--border);
-    /* Sticky so unit headers (mm / ° / RPM / mm/min) stay visible while
-       scrolling through a long tool library; without it they scroll
-       off and leave rows context-free. `.body` is the scroll container. */
-    position: sticky;
-    top: 0;
-    background: var(--bg-panel);
-    z-index: var(--z-anchor);
-  }
-  /* Header cells must never let a long localized label overflow into the
-     next column. Allow shrink-to-fit and break over-long single words
-     (e.g. de "Std.-Zustellung") at hyphenation points instead of spilling. */
-  .row.head > * {
-    min-width: 0;
-  }
-  .row.head button,
-  .row.head > span {
-    overflow-wrap: anywhere;
-    hyphens: auto;
-    line-height: 1.15;
-  }
-  .row.head .unit-hdr {
-    /* Unit drops onto its own line under the label so the column width is
-       governed by the (translated) label alone, not "label + unit". */
-    display: block;
-    color: var(--text-faint);
-    font-size: 0.62rem;
-    text-transform: none;
-    letter-spacing: 0;
-    margin-left: 0;
-    line-height: 1.1;
-  }
-  @keyframes ivac-tool-flash {
-    0%,
-    100% {
-      background: transparent;
-    }
-    25%,
-    75% {
-      background: color-mix(in srgb, var(--accent) 22%, transparent);
+  @media (max-width: 1050px) {
+    .body {
+      grid-template-columns: 220px minmax(0, 1fr);
     }
   }
-  .row.highlight {
-    border-radius: 3px;
-    animation: ivac-tool-flash 1.2s ease-in-out;
-  }
-  input,
   select {
     background: var(--bg-input);
     color: var(--text);
@@ -869,17 +927,6 @@
     font-size: 0.78rem;
     flex-wrap: wrap;
   }
-  .table-filters {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.35rem 0.7rem;
-    background: var(--bg-elevated);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    font-size: 0.78rem;
-    flex-wrap: wrap;
-  }
   .tc-file {
     background: var(--bg-panel);
     color: var(--text);
@@ -890,46 +937,6 @@
     cursor: pointer;
     white-space: nowrap;
   }
-  .tc-search {
-    width: 14rem;
-    max-width: 40vw;
-  }
-  .tc-filter {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    color: var(--text-muted);
-  }
-  .tc-clear {
-    background: var(--bg-panel);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.15rem 0.5rem;
-    font-size: 0.72rem;
-    cursor: pointer;
-  }
-  .tc-count {
-    margin-left: auto;
-    color: var(--text-muted);
-  }
-  /* Sortable column headers — tri-state (natural → ▲ → ▼). */
-  .sort-h {
-    background: none;
-    border: none;
-    padding: 0;
-    font: inherit;
-    font-weight: inherit;
-    color: inherit;
-    text-align: left;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .sort-h:hover {
-    color: var(--text-strong);
-    text-decoration: underline;
-  }
-  /* Pager — appears only when the filtered set exceeds one page. */
   .table-pager {
     display: flex;
     align-items: center;
@@ -952,54 +959,5 @@
   .table-pager button:disabled {
     opacity: 0.5;
     cursor: default;
-  }
-  /* Machine-mode filter banner — the "N tools hidden — Show all" /
-     "Hide incompatible" row under the table. Muted: it's a view
-     control, not a warning (the library itself is untouched). */
-  .mode-filter-row {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.35rem 0.5rem;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    border-top: 1px dashed var(--border);
-  }
-  .mode-filter-row button {
-    background: var(--bg-elevated);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.15rem 0.5rem;
-    font-size: 0.72rem;
-    cursor: pointer;
-  }
-  .add {
-    margin-top: 0.5rem;
-    background: var(--bg-elevated);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.25rem 0.6rem;
-    font-size: 0.78rem;
-    cursor: pointer;
-  }
-  footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.4rem;
-    padding: 0.5rem 0.7rem;
-    border-top: 1px solid var(--border);
-    background: var(--bg-elevated);
-  }
-  /* Footer-side validation hint shown when an OK-disabling row is
-     present. Same red palette as `.discard-prompt`, but keeps the
-     action buttons aligned to the right by NOT setting
-     `margin-right: auto` — we want this slot inline with the buttons,
-     not pushed to the start. */
-  .validation-msg {
-    color: var(--danger);
-    font-size: 0.78rem;
-    align-self: center;
   }
 </style>

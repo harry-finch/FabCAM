@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="1050" viewBox="0 0 1366 1050"><style>text{font-family:Arial,sans-serif;font-size:14px;fill:#dedede}.muted{fill:#a7a7a7;font-size:12px}.title{font-size:18px;font-weight:bold}.section{font-size:12px;fill:#c0c0c0;font-weight:bold}</style><rect width="1366" height="1050" fill="#191919"/>
+<text x="26" y="30" class="title">UX6 · Proposition à valider — écrans non implémentés</text>
+<text x="26" y="53" class="muted">Phase 0 · Consultation distincte de l’affectation · A Profils machine, puis B Bibliothèque d’outils</text>
+<rect x="24" y="74" width="1318" height="440" rx="3" fill="#232323" stroke="#424242"/>
+<text x="40" y="101" class="title">A · Profils machine</text>
+<text x="730" y="101" class="muted">Projet actuel : Routeur atelier — SOFTWARE ONLY</text>
+<rect x="40" y="117" width="222" height="369" rx="3" fill="#242424" stroke="#424242"/>
+<rect x="50" y="129" width="202" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="60" y="148" class="muted">Rechercher un profil…</text>
+<rect x="50" y="173" width="202" height="54" rx="3" fill="#293745" stroke="#6789ac"/>
+<text x="61" y="194" class="">Routeur atelier</text>
+<text x="61" y="214" class="muted">Affecté au projet</text>
+<text x="61" y="255" class="">Petit routeur GRBL</text>
+<text x="61" y="275" class="muted">Profil local · non vérifié</text>
+<text x="61" y="313" class="">Projet local</text>
+<text x="61" y="333" class="muted">Instantané intégré</text>
+<rect x="50" y="444" width="92" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="60" y="463" class="">Nouveau</text>
+<rect x="149" y="444" width="103" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="159" y="463" class="">Dupliquer</text>
+<text x="286" y="141" class="title">Routeur atelier</text>
+<text x="286" y="164" class="muted">Consultation du profil local · aucune commande envoyée à la machine</text>
+<rect x="286" y="180" width="88" height="28" rx="3" fill="#365e86" stroke="#424242"/>
+<text x="296" y="199" class="">Général</text>
+<rect x="382" y="180" width="165" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="392" y="199" class="">Sortie du programme</text>
+<rect x="555" y="180" width="70" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="565" y="199" class="">Outils</text>
+<rect x="633" y="180" width="82" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="643" y="199" class="">Avancé</text>
+<text x="286" y="235" class="section">IDENTITÉ &amp; ESPACE DE TRAVAIL</text>
+<text x="286" y="265" class="">Nom</text>
+<rect x="448" y="247" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="458" y="266" class="">Routeur…</text>
+<text x="560" y="265" class="muted"></text>
+<text x="286" y="300" class="">Procédé</text>
+<rect x="448" y="282" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="458" y="301" class="">Fraisage</text>
+<text x="560" y="300" class="muted"></text>
+<text x="286" y="335" class="">Enveloppe X</text>
+<rect x="448" y="317" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="458" y="336" class="">200</text>
+<text x="560" y="335" class="muted">mm</text>
+<text x="286" y="370" class="">Z de déplacement</text>
+<rect x="448" y="352" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="458" y="371" class="">5</text>
+<text x="560" y="370" class="muted">mm</text>
+<text x="750" y="235" class="section">LIMITES CONNUES</text>
+<text x="750" y="265" class="">Broche minimum</text>
+<rect x="912" y="247" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="922" y="266" class="">—</text>
+<text x="1024" y="265" class="muted">tr/min</text>
+<text x="750" y="300" class="">Broche maximum</text>
+<rect x="912" y="282" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="922" y="301" class="">—</text>
+<text x="1024" y="300" class="muted">tr/min</text>
+<text x="750" y="335" class="">Avance maximum</text>
+<rect x="912" y="317" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="922" y="336" class="">—</text>
+<text x="1024" y="335" class="muted">mm/min</text>
+<text x="750" y="371" class="muted">— Inconnu : aucune limite déclarée</text>
+<text x="750" y="396" class="muted">Les hypothèses de temps se trouvent dans Avancé.</text>
+<text x="286" y="420" class="muted">Les modifications affecteront le projet et son profil lié.</text>
+<rect x="286" y="444" width="86" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="296" y="463" class="">Rétablir</text>
+<rect x="380" y="444" width="256" height="28" rx="3" fill="#365e86" stroke="#424242"/>
+<text x="390" y="463" class="">Appliquer au projet et au profil</text>
+<rect x="1000" y="444" width="312" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="1010" y="463" class="">Déjà utilisé par ce projet</text>
+<rect x="24" y="534" width="1318" height="432" rx="3" fill="#232323" stroke="#424242"/>
+<text x="40" y="561" class="title">B · Bibliothèque d’outils</text>
+<text x="730" y="561" class="muted">Inventaire local · outils disponibles ≠ outils physiquement montés</text>
+<rect x="40" y="580" width="355" height="360" rx="3" fill="#242424" stroke="#424242"/>
+<rect x="50" y="591" width="335" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="60" y="610" class="muted">Rechercher par nom ou type…</text>
+<text x="50" y="643" class="muted">Type : Tous      Procédé : Tous</text>
+<rect x="50" y="659" width="335" height="52" rx="3" fill="#293745" stroke="#6789ac"/>
+<text x="61" y="680" class="">SOFTWARE ONLY — Fraise V 90°</text>
+<text x="61" y="700" class="muted">Ø 6 mm · 1 dent · V-bit</text>
+<text x="61" y="739" class="">Fraise droite 6 mm</text>
+<text x="61" y="759" class="muted">Ø 6 mm · 2 dents</text>
+<text x="61" y="794" class="">Fraise boule 3 mm</text>
+<text x="61" y="814" class="muted">Ø 3 mm · 2 dents</text>
+<rect x="50" y="900" width="135" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="60" y="919" class="">Ajouter un outil</text>
+<text x="417" y="604" class="title">SOFTWARE ONLY — Fraise V 90°</text>
+<text x="417" y="628" class="section">GÉOMÉTRIE DE COUPE</text>
+<text x="417" y="659" class="">Diamètre nominal</text>
+<rect x="579" y="641" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="589" y="660" class="">6.00</text>
+<text x="691" y="659" class="muted">mm</text>
+<text x="417" y="696" class="">Angle inclus</text>
+<rect x="579" y="678" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="589" y="697" class="">90</text>
+<text x="691" y="696" class="muted">°</text>
+<text x="417" y="733" class="">Diamètre de pointe</text>
+<rect x="579" y="715" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="589" y="734" class="">0.00</text>
+<text x="691" y="733" class="muted">mm</text>
+<text x="417" y="770" class="">Longueur taillée</text>
+<rect x="579" y="752" width="100" height="28" rx="3" fill="#202020" stroke="#424242"/>
+<text x="589" y="771" class="">6.00</text>
+<text x="691" y="770" class="muted">mm</text>
+<text x="417" y="814" class="muted">▸ Montage / dégagement · dimensions inconnues conservées</text>
+<text x="417" y="839" class="muted">▸ Disponibilité · exemplaires du projet, référence et associations</text>
+<text x="417" y="864" class="muted">▸ Comportement / notes / usure / valeurs de coupe héritées</text>
+<rect x="944" y="641" width="368" height="196" rx="3" fill="#202020" stroke="#424242"/>
+<text x="960" y="666" class="section">SCHÉMA INDICATIF — COTES RENSEIGNÉES</text>
+<path d="M1058 700 L1198 700 L1128 770 Z" fill="#3b3b3b" stroke="#9d9d9d" stroke-width="2"/><path d="M1058 689 H1198 M1058 683 V695 M1198 683 V695" fill="none" stroke="#8ca8c4"/>
+<text x="1108" y="682" class="">Ø 6</text>
+<text x="1206" y="739" class="">90°</text>
+<text x="959" y="820" class="muted">Porte-outil inconnu · aucune preuve de dégagement</text>
+<text x="417" y="930" class="muted">Modifications du brouillon de bibliothèque</text>
+<rect x="942" y="900" width="88" height="28" rx="3" fill="#2a2a2a" stroke="#424242"/>
+<text x="952" y="919" class="">Rétablir</text>
+<rect x="1038" y="900" width="274" height="28" rx="3" fill="#365e86" stroke="#424242"/>
+<text x="1048" y="919" class="">Appliquer à la bibliothèque</text>
+<text x="26" y="996" class="muted">À 1024 px : liste 200–220 px, détail compact à défilement vertical ; valeurs courtes et unités alignées.</text>
+<text x="26" y="1021" class="muted">Maquette de structure : libellés et densité à qualifier dans l’application. Aucun statut de validation physique ajouté.</text>
+</svg>

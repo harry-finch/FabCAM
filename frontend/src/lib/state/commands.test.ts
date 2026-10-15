@@ -1,3 +1,5 @@
+import { editOperationRate, operationRates } from './feeds-speeds';
+import { syncStockedFromInventory } from './tool_inventory';
 /// Command-builder coverage. Each builder is exercised in isolation with
 /// a plain CommandTarget mock so the tests don't pull in the Svelte
 /// rune runtime. Apply → revert should restore byte-for-byte; coalesce
@@ -292,6 +294,30 @@ describe('tools', () => {
     expect(t.tools.map((x) => x.id)).toEqual([1, 3]);
     cmd.revert(t);
     expect(t.tools.map((x) => x.id)).toEqual([1, 2, 3]);
+  });
+
+  it('inventory sync and project Undo/Redo preserve saved manual rates across serialization', () => {
+    const target = blankTarget();
+    const tool = sampleTool(1);
+    target.tools = [tool];
+    const op = sampleOp(1);
+    op.appliedCutting = editOperationRate(op, [tool], 1, 'finish', 'feed_mm_min', 731);
+    target.operations = [op];
+    const saved = JSON.stringify(target.operations);
+    const synced = syncStockedFromInventory(
+      [{ ...tool, diameter: 6, feedRate: 9999 }],
+      target.tools,
+    )!;
+    const command = replaceToolsCommand(synced);
+    command.apply(target);
+    expect(target.tools[0].diameter).toBe(6);
+    expect(JSON.stringify(target.operations)).toBe(saved);
+    command.revert(target);
+    expect(target.tools[0].diameter).toBe(tool.diameter);
+    command.apply(target);
+    expect(JSON.stringify(target.operations)).toBe(saved);
+    const restored = JSON.parse(JSON.stringify(target.operations)) as OpEntry[];
+    expect(operationRates(restored[0], target.tools[0], 'finish')?.feed_mm_min).toBe(731);
   });
 
   it('replaceToolsCommand swaps the whole array', () => {

@@ -6,6 +6,7 @@
   /// (= project.data.tools — exactly what op tool dropdowns offer and
   /// what the machine profile persists). Stock / remove are undoable
   /// project edits; the inventory itself is NEVER mutated here.
+  import { Plus } from '@lucide/svelte';
   import { project } from '../state/project.svelte';
   import { workspace } from '../state/workspace.svelte';
   import { stockTool } from '../state/tool_inventory';
@@ -68,9 +69,15 @@
     <h3 title={t('machinetool.stocked_col.title')}>
       {t('fs35.available_tools')}
     </h3>
-    <button type="button" onclick={() => (adding = !adding)} aria-expanded={adding}
-      >{t('fs35.add_library')}</button
+    <button
+      type="button"
+      class="add-library"
+      onclick={() => (adding = !adding)}
+      aria-expanded={adding}
     >
+      <Plus size={16} aria-hidden="true" />
+      {t('fs35.add_library')}
+    </button>
     <ul>
       {#each stocked as tool (tool.id)}
         {@const uses = usedByOps(tool.id)}
@@ -160,6 +167,26 @@
     min-height: 0;
     overflow: auto;
     align-content: start;
+  }
+  .add-library {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    margin: 4px 0 12px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--bg-elevated);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .add-library:hover,
+  .add-library[aria-expanded='true'] {
+    background: var(--hover-bg-elevated);
+    border-color: var(--accent);
   }
   .col h3 {
     font-size: 0.85rem;

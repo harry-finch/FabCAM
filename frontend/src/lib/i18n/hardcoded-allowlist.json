@@ -37,7 +37,6 @@
     "two-finger drag"
   ],
   "lib/components/StockPanel.svelte": ["mm"],
-  "lib/components/ToolLibraryDialog.svelte": ["mm", "mm/min"],
   "lib/components/op_properties/ChamferSection.svelte": ["mm"],
   "lib/components/op_properties/DrillSection.svelte": ["mm"],
   "lib/components/op_properties/FeedsSpeedsSection.svelte": ["mm", "mm/min", "rpm"],

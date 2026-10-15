@@ -9,7 +9,9 @@ describe('suggestToolName', () => {
   });
   it('conical kinds name by angle; engraver prefers its tip diameter', () => {
     expect(suggestToolName({ kind: 'v_bit', diameter: 6, tipAngleDeg: 90 })).toBe('90° v-bit');
-    expect(suggestToolName({ kind: 'cone', diameter: 6 })).toBe('30° cone');
+    expect(suggestToolName({ kind: 'v_bit', diameter: 6 })).toBe('6mm v-bit');
+    expect(suggestToolName({ kind: 'engraver', diameter: 6 })).toBe('6mm engraver');
+    expect(suggestToolName({ kind: 'cone', diameter: 6 })).toBe('6mm cone');
     expect(suggestToolName({ kind: 'engraver', diameter: 6, tipDiameter: 0.2 })).toBe(
       '0.2mm engraver',
     );

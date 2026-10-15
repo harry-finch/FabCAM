@@ -25,7 +25,6 @@ export type MsgKey =
   | "app.context.missing_tool"
   | "app.context.operation_tool"
   | "app.context.operation_tool_tip"
-  | "app.context.unnamed_machine"
   | "app.drop.sub"
   | "app.drop.title"
   | "app.gcode.label"
@@ -186,10 +185,7 @@ export type MsgKey =
   | "common.discard_unsaved"
   | "common.done"
   | "common.keep_editing"
-  | "common.load_ellipsis"
-  | "common.ok"
   | "common.revert"
-  | "common.save_ellipsis"
   | "dialog.action.load_recent_project"
   | "dialog.action.load_sample"
   | "dialog.action.open_another_file"
@@ -560,24 +556,39 @@ export type MsgKey =
   | "layers.caret.collapse.title"
   | "layers.caret.expand.aria"
   | "layers.caret.expand.title"
+  | "layers.color"
+  | "layers.documents_count"
+  | "layers.documents_count.one"
   | "layers.drawings"
   | "layers.empty.open_file"
   | "layers.empty.sub"
   | "layers.empty.title"
-  | "layers.file_stats"
+  | "layers.empty_layers.sub"
+  | "layers.empty_layers.title"
+  | "layers.hide"
+  | "layers.hide_tip"
   | "layers.import_remove.aria"
   | "layers.import_remove.title"
   | "layers.import_stats"
+  | "layers.import_stats.one"
+  | "layers.imported_files"
   | "layers.reopen.accept"
   | "layers.reopen.dismiss"
   | "layers.reopen.prefix"
   | "layers.reopen.suffix"
   | "layers.row.delete.aria"
   | "layers.row.delete.title"
-  | "layers.row.toggle.title"
+  | "layers.segment_count"
+  | "layers.segment_count.one"
+  | "layers.segment_count.short"
+  | "layers.shared"
+  | "layers.show"
+  | "layers.show_tip"
+  | "layers.source_file"
   | "layers.title"
   | "layers.toggle_all.aria"
   | "layers.toggle_all.title"
+  | "layers.view_only"
   | "layers.xform.active.aria"
   | "layers.xform.head.title"
   | "layers.xform.label"
@@ -630,14 +641,12 @@ export type MsgKey =
   | "machine.jerk.y.aria"
   | "machine.jerk.z.aria"
   | "machine.jerk_enable"
-  | "machine.jerk_enable.title"
   | "machine.jerk_label"
   | "machine.laser_dynamic"
   | "machine.laser_dynamic.title"
   | "machine.line_num"
   | "machine.line_num.placeholder"
   | "machine.line_num.title"
-  | "machine.load.title"
   | "machine.max_feed"
   | "machine.max_feed.title"
   | "machine.mode"
@@ -669,20 +678,6 @@ export type MsgKey =
   | "machine.pp.tweak.header"
   | "machine.pp.tweak.mist"
   | "machine.pp.tweak.toolchange"
-  | "machine.profile.delete"
-  | "machine.profile.delete.title"
-  | "machine.profile.delete_confirm"
-  | "machine.profile.dirty_switch.title"
-  | "machine.profile.duplicate"
-  | "machine.profile.duplicate.title"
-  | "machine.profile.label"
-  | "machine.profile.missing_note"
-  | "machine.profile.missing_note.title"
-  | "machine.profile.none_option"
-  | "machine.profile.pick.title"
-  | "machine.profile.referenced_missing_option"
-  | "machine.profile.save_as"
-  | "machine.profile.save_as.title"
   | "machine.profile_preset"
   | "machine.profile_preset.custom"
   | "machine.profile_preset.grbl"
@@ -692,11 +687,9 @@ export type MsgKey =
   | "machine.profile_preset.title"
   | "machine.rapid"
   | "machine.rapid.title"
-  | "machine.save.title"
   | "machine.section.gcode_formatting"
   | "machine.section.kinematics"
   | "machine.section.post_profile"
-  | "machine.section.spindle"
   | "machine.spindle_max"
   | "machine.spindle_max.title"
   | "machine.spindle_min"
@@ -705,7 +698,6 @@ export type MsgKey =
   | "machine.spindle_start_dwell.title"
   | "machine.spindle_stop_dwell"
   | "machine.spindle_stop_dwell.title"
-  | "machine.storage_note"
   | "machine.title"
   | "machine.toolchange"
   | "machine.toolchange.atc"
@@ -740,28 +732,7 @@ export type MsgKey =
   | "machinetool.stocked"
   | "machinetool.stocked_col"
   | "machinetool.stocked_col.title"
-  | "machinews.delete"
-  | "machinews.delete.confirm"
-  | "machinews.delete.title"
-  | "machinews.duplicate"
-  | "machinews.duplicate.title"
-  | "machinews.load_file"
-  | "machinews.load_file.title"
-  | "machinews.machine"
-  | "machinews.missing"
-  | "machinews.missing.title"
-  | "machinews.new"
-  | "machinews.new.title"
-  | "machinews.pick.title"
-  | "machinews.project_local"
-  | "machinews.referenced_missing"
-  | "machinews.save_file"
-  | "machinews.save_file.title"
   | "machinews.sections.aria"
-  | "machinews.settings"
-  | "machinews.settings.title"
-  | "machinews.tooling"
-  | "machinews.tooling.title"
   | "menu.aria.more_actions"
   | "menu.aria.trigger"
   | "menu.exit"
@@ -1866,32 +1837,21 @@ export type MsgKey =
   | "toolform.tslot_head_dia"
   | "toolform.tslot_head_dia.title"
   | "toolform.z_above_tip"
-  | "tools.add"
   | "tools.apply.invalid.title"
   | "tools.bullnose"
   | "tools.bullnose.corner_radius"
   | "tools.bullnose.corner_radius.title"
   | "tools.bullnose.title"
-  | "tools.clear_filters"
   | "tools.col.coolant"
   | "tools.col.dflt_step"
-  | "tools.col.dflt_step.title"
   | "tools.col.diameter.title"
   | "tools.col.feed"
-  | "tools.col.feed.title"
   | "tools.col.flutes"
-  | "tools.col.flutes.title"
-  | "tools.col.id.title"
   | "tools.col.kind"
-  | "tools.col.kind.title"
   | "tools.col.name"
-  | "tools.col.name.title"
   | "tools.col.plunge"
-  | "tools.col.plunge.title"
   | "tools.col.speed"
-  | "tools.col.speed.title"
   | "tools.col.tip_angle"
-  | "tools.col.tip_angle.title"
   | "tools.col.tip_diameter"
   | "tools.comment"
   | "tools.comment.placeholder"
@@ -1922,12 +1882,7 @@ export type MsgKey =
   | "tools.drill.xy_overlap.title"
   | "tools.field.na"
   | "tools.file.load_add"
-  | "tools.file.load_add.title"
   | "tools.file.load_replace"
-  | "tools.file.load_replace.inventory.title"
-  | "tools.file.load_replace.project.title"
-  | "tools.file.save.inventory.title"
-  | "tools.file.save.project.title"
   | "tools.filter.all"
   | "tools.filter.clear"
   | "tools.filter.kind"
@@ -1941,8 +1896,6 @@ export type MsgKey =
   | "tools.finish.feed"
   | "tools.finish.plunge"
   | "tools.finish.rpm"
-  | "tools.hidden.many"
-  | "tools.hidden.one"
   | "tools.hide_incompatible"
   | "tools.holder.cone.bottom_diameter"
   | "tools.holder.cone.top_diameter"
@@ -1960,8 +1913,6 @@ export type MsgKey =
   | "tools.holder.preset"
   | "tools.holder.preset.apply"
   | "tools.holder.preset.title"
-  | "tools.holder.runs_on"
-  | "tools.holder.runs_on.title"
   | "tools.holder.shank_diameter"
   | "tools.holder.shank_diameter.placeholder"
   | "tools.holder.shank_diameter.title"
@@ -2016,8 +1967,6 @@ export type MsgKey =
   | "tools.search.placeholder"
   | "tools.search.title"
   | "tools.show_all"
-  | "tools.show_all.title"
-  | "tools.showing_all"
   | "tools.spindle_dir"
   | "tools.spindle_dir.ccw"
   | "tools.spindle_dir.cw"
@@ -2089,6 +2038,113 @@ export type MsgKey =
   | "ux21.override"
   | "ux21.reason"
   | "ux21.show"
+  | "ux6.assigned_to_project"
+  | "ux6.atc_unsupported"
+  | "ux6.cancel_assignment"
+  | "ux6.cancel_creation"
+  | "ux6.choose_an_existing_output_format_for_shopbot_or_a"
+  | "ux6.committed_settings_changed_while_you_were_editing_reload_current"
+  | "ux6.copy_committed_machine_settings_and_tools_does_not_assign"
+  | "ux6.copy_current_setup"
+  | "ux6.current_project"
+  | "ux6.delete"
+  | "ux6.delete_local_profile"
+  | "ux6.delete_this_local_profile_embedded_project_settings_and_tools"
+  | "ux6.detach_profile"
+  | "ux6.dimensions_stay_in_mm_output_units_are_set_in"
+  | "ux6.discard_and_continue"
+  | "ux6.drag_knife"
+  | "ux6.export_settings"
+  | "ux6.export_the_displayed_draft_only_does_not_apply_changes"
+  | "ux6.find_a_machine_profile"
+  | "ux6.find_profile"
+  | "ux6.ignore_unsupported"
+  | "ux6.import_settings"
+  | "ux6.keep_profile"
+  | "ux6.linuxcnc"
+  | "ux6.m6_unsupported"
+  | "ux6.machine_profiles"
+  | "ux6.manual_shopbot"
+  | "ux6.milling"
+  | "ux6.new_machine_profile"
+  | "ux6.new_profile"
+  | "ux6.next"
+  | "ux6.no_matching_saved_profiles"
+  | "ux6.primary_process"
+  | "ux6.profiles_are_stored_on_this_installation_project_files_keep"
+  | "ux6.program_output"
+  | "ux6.project_assignment"
+  | "ux6.reload_current_settings"
+  | "ux6.review_profile_assignment"
+  | "ux6.save_creates_a_local_profile_assignment_to_this_project"
+  | "ux6.save_new_profile"
+  | "ux6.saved_cutting_values_and_operation_tool_ids_stay_unchanged"
+  | "ux6.shopbot_context"
+  | "ux6.shopbot_retained"
+  | "ux6.these_are_saved_copies_assign_this_profile_to_stock"
+  | "ux6.this_local_profile_is_no_longer_available_select_current"
+  | "ux6.time_estimate_assumptions_only_these_values_do_not_configure"
+  | "ux6.unknown_limits_stay_unset_workspace_dimensions_and_clearance_are"
+  | "ux6.use_for_this_project"
+  | "ux6.use_for_this_project_2"
+  | "ux6.workspace_output_default"
+  | "ux6b.add_machine"
+  | "ux6b.add_tool"
+  | "ux6b.advanced"
+  | "ux6b.apply_scope"
+  | "ux6b.apply_title"
+  | "ux6b.association_help"
+  | "ux6b.availability"
+  | "ux6b.compatible"
+  | "ux6b.conflict"
+  | "ux6b.copy_counts"
+  | "ux6b.copy_differs"
+  | "ux6b.copy_help"
+  | "ux6b.current_machine"
+  | "ux6b.delete_help"
+  | "ux6b.delete_library"
+  | "ux6b.diameter"
+  | "ux6b.draft_scope"
+  | "ux6b.export_draft"
+  | "ux6b.filtered_selection"
+  | "ux6b.flank_angle"
+  | "ux6b.geometry"
+  | "ux6b.geometry_help"
+  | "ux6b.incompatible"
+  | "ux6b.inventory_scope"
+  | "ux6b.legacy"
+  | "ux6b.library_order"
+  | "ux6b.missing_refs"
+  | "ux6b.mounting"
+  | "ux6b.mounting_help"
+  | "ux6b.needs_review"
+  | "ux6b.no_operations"
+  | "ux6b.no_profiles"
+  | "ux6b.no_sync"
+  | "ux6b.not_stocked"
+  | "ux6b.operations"
+  | "ux6b.profile_copies"
+  | "ux6b.project_scope"
+  | "ux6b.remove_draft"
+  | "ux6b.remove_help"
+  | "ux6b.remove_machine"
+  | "ux6b.remove_project"
+  | "ux6b.replace_draft"
+  | "ux6b.replace_help"
+  | "ux6b.replace_title"
+  | "ux6b.retained"
+  | "ux6b.retained_help"
+  | "ux6b.retained_profile"
+  | "ux6b.retained_reference"
+  | "ux6b.reveal_selection"
+  | "ux6b.review_apply"
+  | "ux6b.review_changed"
+  | "ux6b.same_id_copy"
+  | "ux6b.sections"
+  | "ux6b.select_tool"
+  | "ux6b.sort"
+  | "ux6b.tip_angle"
+  | "ux6b.tip_diameter"
   | "warn.chamfer_non_vbit"
   | "warn.chamfer_width_clamped_to_reach"
   | "warn.compression_transition_above_cut"
@@ -2207,7 +2263,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "app.context.missing_tool",
   "app.context.operation_tool",
   "app.context.operation_tool_tip",
-  "app.context.unnamed_machine",
   "app.drop.sub",
   "app.drop.title",
   "app.gcode.label",
@@ -2368,10 +2423,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "common.discard_unsaved",
   "common.done",
   "common.keep_editing",
-  "common.load_ellipsis",
-  "common.ok",
   "common.revert",
-  "common.save_ellipsis",
   "dialog.action.load_recent_project",
   "dialog.action.load_sample",
   "dialog.action.open_another_file",
@@ -2742,24 +2794,39 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "layers.caret.collapse.title",
   "layers.caret.expand.aria",
   "layers.caret.expand.title",
+  "layers.color",
+  "layers.documents_count",
+  "layers.documents_count.one",
   "layers.drawings",
   "layers.empty.open_file",
   "layers.empty.sub",
   "layers.empty.title",
-  "layers.file_stats",
+  "layers.empty_layers.sub",
+  "layers.empty_layers.title",
+  "layers.hide",
+  "layers.hide_tip",
   "layers.import_remove.aria",
   "layers.import_remove.title",
   "layers.import_stats",
+  "layers.import_stats.one",
+  "layers.imported_files",
   "layers.reopen.accept",
   "layers.reopen.dismiss",
   "layers.reopen.prefix",
   "layers.reopen.suffix",
   "layers.row.delete.aria",
   "layers.row.delete.title",
-  "layers.row.toggle.title",
+  "layers.segment_count",
+  "layers.segment_count.one",
+  "layers.segment_count.short",
+  "layers.shared",
+  "layers.show",
+  "layers.show_tip",
+  "layers.source_file",
   "layers.title",
   "layers.toggle_all.aria",
   "layers.toggle_all.title",
+  "layers.view_only",
   "layers.xform.active.aria",
   "layers.xform.head.title",
   "layers.xform.label",
@@ -2812,14 +2879,12 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "machine.jerk.y.aria",
   "machine.jerk.z.aria",
   "machine.jerk_enable",
-  "machine.jerk_enable.title",
   "machine.jerk_label",
   "machine.laser_dynamic",
   "machine.laser_dynamic.title",
   "machine.line_num",
   "machine.line_num.placeholder",
   "machine.line_num.title",
-  "machine.load.title",
   "machine.max_feed",
   "machine.max_feed.title",
   "machine.mode",
@@ -2851,20 +2916,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "machine.pp.tweak.header",
   "machine.pp.tweak.mist",
   "machine.pp.tweak.toolchange",
-  "machine.profile.delete",
-  "machine.profile.delete.title",
-  "machine.profile.delete_confirm",
-  "machine.profile.dirty_switch.title",
-  "machine.profile.duplicate",
-  "machine.profile.duplicate.title",
-  "machine.profile.label",
-  "machine.profile.missing_note",
-  "machine.profile.missing_note.title",
-  "machine.profile.none_option",
-  "machine.profile.pick.title",
-  "machine.profile.referenced_missing_option",
-  "machine.profile.save_as",
-  "machine.profile.save_as.title",
   "machine.profile_preset",
   "machine.profile_preset.custom",
   "machine.profile_preset.grbl",
@@ -2874,11 +2925,9 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "machine.profile_preset.title",
   "machine.rapid",
   "machine.rapid.title",
-  "machine.save.title",
   "machine.section.gcode_formatting",
   "machine.section.kinematics",
   "machine.section.post_profile",
-  "machine.section.spindle",
   "machine.spindle_max",
   "machine.spindle_max.title",
   "machine.spindle_min",
@@ -2887,7 +2936,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "machine.spindle_start_dwell.title",
   "machine.spindle_stop_dwell",
   "machine.spindle_stop_dwell.title",
-  "machine.storage_note",
   "machine.title",
   "machine.toolchange",
   "machine.toolchange.atc",
@@ -2922,28 +2970,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "machinetool.stocked",
   "machinetool.stocked_col",
   "machinetool.stocked_col.title",
-  "machinews.delete",
-  "machinews.delete.confirm",
-  "machinews.delete.title",
-  "machinews.duplicate",
-  "machinews.duplicate.title",
-  "machinews.load_file",
-  "machinews.load_file.title",
-  "machinews.machine",
-  "machinews.missing",
-  "machinews.missing.title",
-  "machinews.new",
-  "machinews.new.title",
-  "machinews.pick.title",
-  "machinews.project_local",
-  "machinews.referenced_missing",
-  "machinews.save_file",
-  "machinews.save_file.title",
   "machinews.sections.aria",
-  "machinews.settings",
-  "machinews.settings.title",
-  "machinews.tooling",
-  "machinews.tooling.title",
   "menu.aria.more_actions",
   "menu.aria.trigger",
   "menu.exit",
@@ -4048,32 +4075,21 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "toolform.tslot_head_dia",
   "toolform.tslot_head_dia.title",
   "toolform.z_above_tip",
-  "tools.add",
   "tools.apply.invalid.title",
   "tools.bullnose",
   "tools.bullnose.corner_radius",
   "tools.bullnose.corner_radius.title",
   "tools.bullnose.title",
-  "tools.clear_filters",
   "tools.col.coolant",
   "tools.col.dflt_step",
-  "tools.col.dflt_step.title",
   "tools.col.diameter.title",
   "tools.col.feed",
-  "tools.col.feed.title",
   "tools.col.flutes",
-  "tools.col.flutes.title",
-  "tools.col.id.title",
   "tools.col.kind",
-  "tools.col.kind.title",
   "tools.col.name",
-  "tools.col.name.title",
   "tools.col.plunge",
-  "tools.col.plunge.title",
   "tools.col.speed",
-  "tools.col.speed.title",
   "tools.col.tip_angle",
-  "tools.col.tip_angle.title",
   "tools.col.tip_diameter",
   "tools.comment",
   "tools.comment.placeholder",
@@ -4104,12 +4120,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "tools.drill.xy_overlap.title",
   "tools.field.na",
   "tools.file.load_add",
-  "tools.file.load_add.title",
   "tools.file.load_replace",
-  "tools.file.load_replace.inventory.title",
-  "tools.file.load_replace.project.title",
-  "tools.file.save.inventory.title",
-  "tools.file.save.project.title",
   "tools.filter.all",
   "tools.filter.clear",
   "tools.filter.kind",
@@ -4123,8 +4134,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "tools.finish.feed",
   "tools.finish.plunge",
   "tools.finish.rpm",
-  "tools.hidden.many",
-  "tools.hidden.one",
   "tools.hide_incompatible",
   "tools.holder.cone.bottom_diameter",
   "tools.holder.cone.top_diameter",
@@ -4142,8 +4151,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "tools.holder.preset",
   "tools.holder.preset.apply",
   "tools.holder.preset.title",
-  "tools.holder.runs_on",
-  "tools.holder.runs_on.title",
   "tools.holder.shank_diameter",
   "tools.holder.shank_diameter.placeholder",
   "tools.holder.shank_diameter.title",
@@ -4198,8 +4205,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "tools.search.placeholder",
   "tools.search.title",
   "tools.show_all",
-  "tools.show_all.title",
-  "tools.showing_all",
   "tools.spindle_dir",
   "tools.spindle_dir.ccw",
   "tools.spindle_dir.cw",
@@ -4271,6 +4276,113 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ux21.override",
   "ux21.reason",
   "ux21.show",
+  "ux6.assigned_to_project",
+  "ux6.atc_unsupported",
+  "ux6.cancel_assignment",
+  "ux6.cancel_creation",
+  "ux6.choose_an_existing_output_format_for_shopbot_or_a",
+  "ux6.committed_settings_changed_while_you_were_editing_reload_current",
+  "ux6.copy_committed_machine_settings_and_tools_does_not_assign",
+  "ux6.copy_current_setup",
+  "ux6.current_project",
+  "ux6.delete",
+  "ux6.delete_local_profile",
+  "ux6.delete_this_local_profile_embedded_project_settings_and_tools",
+  "ux6.detach_profile",
+  "ux6.dimensions_stay_in_mm_output_units_are_set_in",
+  "ux6.discard_and_continue",
+  "ux6.drag_knife",
+  "ux6.export_settings",
+  "ux6.export_the_displayed_draft_only_does_not_apply_changes",
+  "ux6.find_a_machine_profile",
+  "ux6.find_profile",
+  "ux6.ignore_unsupported",
+  "ux6.import_settings",
+  "ux6.keep_profile",
+  "ux6.linuxcnc",
+  "ux6.m6_unsupported",
+  "ux6.machine_profiles",
+  "ux6.manual_shopbot",
+  "ux6.milling",
+  "ux6.new_machine_profile",
+  "ux6.new_profile",
+  "ux6.next",
+  "ux6.no_matching_saved_profiles",
+  "ux6.primary_process",
+  "ux6.profiles_are_stored_on_this_installation_project_files_keep",
+  "ux6.program_output",
+  "ux6.project_assignment",
+  "ux6.reload_current_settings",
+  "ux6.review_profile_assignment",
+  "ux6.save_creates_a_local_profile_assignment_to_this_project",
+  "ux6.save_new_profile",
+  "ux6.saved_cutting_values_and_operation_tool_ids_stay_unchanged",
+  "ux6.shopbot_context",
+  "ux6.shopbot_retained",
+  "ux6.these_are_saved_copies_assign_this_profile_to_stock",
+  "ux6.this_local_profile_is_no_longer_available_select_current",
+  "ux6.time_estimate_assumptions_only_these_values_do_not_configure",
+  "ux6.unknown_limits_stay_unset_workspace_dimensions_and_clearance_are",
+  "ux6.use_for_this_project",
+  "ux6.use_for_this_project_2",
+  "ux6.workspace_output_default",
+  "ux6b.add_machine",
+  "ux6b.add_tool",
+  "ux6b.advanced",
+  "ux6b.apply_scope",
+  "ux6b.apply_title",
+  "ux6b.association_help",
+  "ux6b.availability",
+  "ux6b.compatible",
+  "ux6b.conflict",
+  "ux6b.copy_counts",
+  "ux6b.copy_differs",
+  "ux6b.copy_help",
+  "ux6b.current_machine",
+  "ux6b.delete_help",
+  "ux6b.delete_library",
+  "ux6b.diameter",
+  "ux6b.draft_scope",
+  "ux6b.export_draft",
+  "ux6b.filtered_selection",
+  "ux6b.flank_angle",
+  "ux6b.geometry",
+  "ux6b.geometry_help",
+  "ux6b.incompatible",
+  "ux6b.inventory_scope",
+  "ux6b.legacy",
+  "ux6b.library_order",
+  "ux6b.missing_refs",
+  "ux6b.mounting",
+  "ux6b.mounting_help",
+  "ux6b.needs_review",
+  "ux6b.no_operations",
+  "ux6b.no_profiles",
+  "ux6b.no_sync",
+  "ux6b.not_stocked",
+  "ux6b.operations",
+  "ux6b.profile_copies",
+  "ux6b.project_scope",
+  "ux6b.remove_draft",
+  "ux6b.remove_help",
+  "ux6b.remove_machine",
+  "ux6b.remove_project",
+  "ux6b.replace_draft",
+  "ux6b.replace_help",
+  "ux6b.replace_title",
+  "ux6b.retained",
+  "ux6b.retained_help",
+  "ux6b.retained_profile",
+  "ux6b.retained_reference",
+  "ux6b.reveal_selection",
+  "ux6b.review_apply",
+  "ux6b.review_changed",
+  "ux6b.same_id_copy",
+  "ux6b.sections",
+  "ux6b.select_tool",
+  "ux6b.sort",
+  "ux6b.tip_angle",
+  "ux6b.tip_diameter",
   "warn.chamfer_non_vbit",
   "warn.chamfer_width_clamped_to_reach",
   "warn.compression_transition_above_cut",

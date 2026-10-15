@@ -1,0 +1,62 @@
+
+> build
+> node scripts/ensure-wasm-fresh.mjs && vite build
+
+[ensure-wasm] ivac-wasm pkg is up to date
+vite v8.0.10 building client environment for production...
+[2Ktransforming...✓ 4520 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                  2.21 kB │ gzip:     0.67 kB
+dist/assets/wasm.worker-DtZgTc9S.js             22.74 kB
+dist/assets/ivac_wasm_bg-D5doSwFu.wasm       4,575.32 kB │ gzip: 1,737.84 kB
+dist/assets/tool_inventory-C9dQ4UYz.css          0.29 kB │ gzip:     0.18 kB
+dist/assets/Scene3D-BBqyjIFX.css                 2.01 kB │ gzip:     0.73 kB
+dist/assets/ReportDialog-DfTZZiF-.css            2.68 kB │ gzip:     0.76 kB
+dist/assets/AboutDialog-BaILN9aX.css             3.73 kB │ gzip:     0.93 kB
+dist/assets/AddTextDialog-BJlzrc0R.css           4.02 kB │ gzip:     1.07 kB
+dist/assets/GcodePanel-CpuoXhYj.css              4.43 kB │ gzip:     1.23 kB
+dist/assets/SettingsDialog-zKF1eNeR.css          5.10 kB │ gzip:     1.28 kB
+dist/assets/ToolLibraryDialog-DFk1W2_-.css      12.06 kB │ gzip:     2.14 kB
+dist/assets/MachineWorkspace-Ce8AgMSZ.css       13.21 kB │ gzip:     2.63 kB
+dist/assets/index-xrv2K-ip.css                 110.60 kB │ gzip:    18.29 kB
+dist/assets/dist-js-D5VtG2Wj.js                  0.11 kB │ gzip:     0.12 kB
+dist/assets/dist-js-C7ClHlr0.js                  0.13 kB │ gzip:     0.13 kB
+dist/assets/rolldown-runtime-lhHHWwHU.js         0.15 kB │ gzip:     0.15 kB
+dist/assets/env-te886uE6.js                      0.27 kB │ gzip:     0.22 kB
+dist/assets/dist-js-ILPldoE_.js                  0.28 kB │ gzip:     0.17 kB
+dist/assets/path-Dnwq5Exg.js                     0.84 kB │ gzip:     0.43 kB
+dist/assets/client-BGYsPDuj.js                   0.88 kB │ gzip:     0.44 kB
+dist/assets/preload-helper-rov5CBGT.js           1.19 kB │ gzip:     0.68 kB
+dist/assets/dialog-draft.svelte-YbiL_KjA.js      1.33 kB │ gzip:     0.56 kB
+dist/assets/core-DlDrKENi.js                     2.02 kB │ gzip:     0.87 kB
+dist/assets/project-types-BpHPJJEL.js            2.10 kB │ gzip:     0.95 kB
+dist/assets/wasm-CcufAIoq.js                     2.47 kB │ gzip:     0.93 kB
+dist/assets/wasm-worker-client-CRlwS5-n.js       2.60 kB │ gzip:     1.15 kB
+dist/assets/tool_inventory-DqRrfuDV.js           2.76 kB │ gzip:     1.27 kB
+dist/assets/tauri-DqftzKiY.js                    2.96 kB │ gzip:     1.24 kB
+dist/assets/dist-js-CpDCbxVd.js                  6.69 kB │ gzip:     1.71 kB
+dist/assets/GcodePanel-YTOtCqJ1.js               7.91 kB │ gzip:     3.03 kB
+dist/assets/AboutDialog-CA3mLE1O.js             10.54 kB │ gzip:     4.78 kB
+dist/assets/text_preview.svelte-DJmp4HOv.js     11.17 kB │ gzip:     3.32 kB
+dist/assets/ReportDialog-BCiHT0mX.js            13.38 kB │ gzip:     4.22 kB
+dist/assets/AddTextDialog-BjmF9NTs.js           15.96 kB │ gzip:     5.61 kB
+dist/assets/ivac_wasm-DOozaUVw.js               19.48 kB │ gzip:     5.19 kB
+dist/assets/import-ops-DuIgwQpE.js              23.19 kB │ gzip:     6.99 kB
+dist/assets/SettingsDialog-DPlrLL0U.js          33.68 kB │ gzip:     9.61 kB
+dist/assets/Scene3D-4qTd4R70.js                 40.60 kB │ gzip:    14.02 kB
+dist/assets/index-client-Di85hkIJ.js            52.26 kB │ gzip:    19.95 kB
+dist/assets/driver-CuuyLfyN.js                  54.59 kB │ gzip:    16.13 kB
+dist/assets/ToolLibraryDialog-BgkU_rZ2.js       62.42 kB │ gzip:    15.02 kB
+dist/assets/MachineWorkspace-DFcn-mQx.js        71.27 kB │ gzip:    20.95 kB
+dist/assets/three-Dya-JutH.js                  597.96 kB │ gzip:   152.42 kB
+dist/assets/index-BK-CqWv9.js                  971.25 kB │ gzip:   283.73 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 600 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] Warning:[0m node_modules/.pnpm/@tauri-apps+api@2.11.0/node_modules/@tauri-apps/api/event.js is dynamically imported by src/lib/state/desktop.ts but also statically imported by src/lib/api/tauri.ts, dynamic import will not move module into another chunk.
+
+✓ built in 1.73s

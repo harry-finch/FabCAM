@@ -97,3 +97,8 @@ Source presence and passing UI tests do not establish machining correctness.
 - [PERF1 CAM performance plan](PERF1_PLAN.md): **PLANNED** profiling/benchmark phase
   A, report/HARD STOP, then separately approved targeted phase B; historical evidence
   preserved, reported V-Carve text latency unmeasured, numerical/output guards retained.
+
+- [UX6 machine/tool management plan](ux/UX6_PLAN.md),
+  [UX6-A profiles](ux/UX6_A_PLAN.md), [UX6-B tool library](ux/UX6_B_PLAN.md):
+  **PLANNED — NOT IMPLEMENTED**; field/action architecture audit and separate UX gates,
+  existing snapshots/FS/output safeguards preserved, no active-priority displacement.

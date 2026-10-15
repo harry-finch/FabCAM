@@ -1,0 +1,15 @@
+{
+  "baseline": "../ux6-phase0/SOURCE_BASELINE.json",
+  "checked": 781,
+  "changed": [
+    "frontend/src/lib/components/MachineDialog.svelte",
+    "frontend/src/lib/components/AppNavigation.svelte",
+    "frontend/src/lib/components/MachineWorkspace.svelte",
+    "frontend/src/lib/i18n/keys.ts",
+    "frontend/src/lib/i18n/messages/de.json",
+    "frontend/src/lib/i18n/messages/en.json",
+    "frontend/src/lib/services/file_ops.ts",
+    "frontend/src/lib/services/shopbot-machine-load.test.ts"
+  ],
+  "missing": []
+}

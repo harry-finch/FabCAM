@@ -1,0 +1,49 @@
+npm run check
+
+> check
+> svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json
+
+Loading svelte-check in workspace: /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings
+
+npm test
+ ✓ src/lib/components/dialog-draft.test.ts (5 tests) 2ms
+ ✓ src/lib/components/LoadingOverlay.test.ts (4 tests) 1ms
+ ✓ src/lib/state/op-color.test.ts (4 tests) 5ms
+ ✓ src/lib/state/cutting-origin-presentation.test.ts (4 tests) 13ms
+ ✓ src/lib/state/sidebar-pane.test.ts (6 tests) 6ms
+ ✓ src/lib/state/palette-shortcut.test.ts (9 tests) 4ms
+ ✓ src/lib/actions/swipe-horizontal.test.ts (5 tests) 3ms
+ ✓ src/lib/services/file-kind.test.ts (2 tests) 1ms
+
+ Test Files  139 passed (139)
+      Tests  1263 passed | 1 skipped (1264)
+   Start at  16:13:44
+   Duration  4.37s (transform 2.56s, setup 0ms, collect 6.14s, tests 3.06s, environment 27ms, prepare 8.68s)
+
+
+npm run lint
+
+> lint
+> eslint . && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+npm run build
+dist/assets/driver-CuuyLfyN.js                  54.59 kB │ gzip:    16.13 kB
+dist/assets/MachineWorkspace-DM7pZ57k.js        60.81 kB │ gzip:    17.13 kB
+dist/assets/ToolLibraryDialog-AV2oVff7.js       62.43 kB │ gzip:    15.02 kB
+dist/assets/three-Dya-JutH.js                  597.96 kB │ gzip:   152.42 kB
+dist/assets/index-C99HE7ls.js                  970.52 kB │ gzip:   283.25 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 600 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] Warning:[0m node_modules/.pnpm/@tauri-apps+api@2.11.0/node_modules/@tauri-apps/api/event.js is dynamically imported by src/lib/state/desktop.ts but also statically imported by src/lib/api/tauri.ts, dynamic import will not move module into another chunk.
+
+✓ built in 1.85s

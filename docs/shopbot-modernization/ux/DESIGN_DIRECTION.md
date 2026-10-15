@@ -242,3 +242,29 @@ actual source ordering. Avoid universal nesting diagrams or invented resolved co
 Use existing shared rows, native selects, tooltips and one concise help line.
 
 [Detailed source semantics, qualification, deferred highlight and manual review](../GEOMETRY_SOURCE_UX.md).
+
+
+## Structural hierarchy tokens — 2026-10-15
+
+`--bg-navigation` derives from elevated surface80% / border20%, separating global
+navigation from the existing panel-colored project toolbar. `--text-section`
+derives from muted65% / primary35% text for compact inspector headings; field
+and help tokens remain unchanged. The dark minor grid is#222222, with major
+grid/axes, light grid and spacing/zoom/snap rules retained. These are structural
+roles, not extra semantic colors or a shell redesign. [Actual visual qualification
+and pending human review](VISUAL_HIERARCHY_REFINEMENT.md).
+
+## UX6 planned machine profiles and tool-library experience
+
+[UX6](UX6_PLAN.md) mandates canonical Professional Workshop UI + CAM UX for future
+implementation, with source-backed field/action audit before layouts. Machine browser/
+selected detail and searchable tools/contextual inspector replace undifferentiated
+forms conceptually; no UI implementation now. Keep controlled widths, aligned short
+numeric values/units and contextual post/type fields, not a full-width spreadsheet.
+
+Progressive disclosure must retain essential/consequential settings and make Advanced
+and incompatible authored values discoverable. Clearly distinguish profile inspection,
+project assignment, library/loadout/operation tool, and draft Apply/Revert/file exchange.
+Optional 2D tool schematic uses actual dimensions and shows unknowns. No physical-
+validation badge from saving a profile or drawing a plausible tool. Actual desktop
+screenshots/accessibility review required at separate A/B gates; tests alone insufficient.

@@ -1,0 +1,21 @@
+
+> test
+> vitest run src/lib/state/machine_profiles.test.ts src/lib/state/tool_inventory.test.ts src/lib/state/workspace.test.ts src/lib/state/commands.test.ts src/lib/state/dialog-draft.test.ts src/lib/components/dialog-draft.test.ts src/lib/api/build-project.test.ts src/lib/state/feeds-speeds.test.ts src/lib/state/generation-context.test.ts
+
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ✓ src/lib/components/dialog-draft.test.ts (5 tests) 2ms
+ ✓ src/lib/state/tool_inventory.test.ts (7 tests) 2ms
+ ✓ src/lib/state/machine_profiles.test.ts (5 tests) 2ms
+ ✓ src/lib/state/commands.test.ts (49 tests) 9ms
+ ✓ src/lib/state/workspace.test.ts (12 tests) 3ms
+ ✓ src/lib/state/feeds-speeds.test.ts (14 tests) 6ms
+ ✓ src/lib/api/build-project.test.ts (45 tests) 11ms
+ ✓ src/lib/state/generation-context.test.ts (3 tests) 11ms
+
+ Test Files  8 passed (8)
+      Tests  140 passed (140)
+   Start at  17:10:16
+   Duration  293ms (transform 403ms, setup 0ms, collect 675ms, tests 46ms, environment 1ms, prepare 380ms)
+

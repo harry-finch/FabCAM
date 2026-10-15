@@ -1340,3 +1340,236 @@ windows/arrow-key navigation remain manual acceptance checks.
 Engineering ivac-uebs complete; focused human review ivac-xy3w pending. Existing
 V-Carve acceptance ivac-1b75 remains open and unchanged in scope. No publication,
 new CAM milestone, physical/native qualification or geometry fixes performed.
+
+
+## 2026-10-15 — PERF1-A profiling and reproducible baselines
+
+Human software acceptance closes Geometry UX ivac-xy3w, V-Carve ivac-1b75 and UX5
+ivac-txve with existing limits. Published snapshot2032848 pushed before this phase.
+User authorizes PERF1-A and explicitly chooses saved Test as representative, not
+the unknown reported5–10-second case. Added opt-in native spans/counts, version-bound
+frontend console endpoints and fixture/native/WASM/summary developer harnesses.
+No CAM algorithm, tolerance, cache policy or post optimization.
+
+18 native request/post cases each measured control/profile cold+warm,9 generic
+WASM cases plus explicit unsupported CPS, actual production HTTP UI, imports,
+CPU/RSS and cancellation. Control Test CPS warm904ms; profiled post98.4% of total.
+Pocket remaining-material analysis83%; many-segment CPS99.6%. Browser first frame
+median935ms, simulation2310–4051ms including existing debounce. CPS cancellation
+inside post waits another730–739ms; no partial output. Exact native output hashes
+match instrumentation control; browser SBP matches native; generic WASM programs
+match (one preview-coordinate difference2.84e-14mm). Refusals and empty-source
+diagnostics are separate, not speedups. Debug timeout/late result is exploratory.
+
+1262 frontend passes/1skip;1075 core unit passes serial; geometry-source7,
+V-Carve10, ShopBot7 pass; check/lint/build/strict fixture TS/Clippy/rustfmt pass.
+[PERF1_A_RESULTS.md](PERF1_A_RESULTS.md) retains methods, raw evidence, build limits
+and proposed numerical B targets. Engineering ivac-sgnd complete; human report/
+scope gate ivac-xzys open, HARD STOP before B. Existing CPS reuse ivac-rnsg gets
+evidence; cancellation ivac-sxmw and simulation attribution ivac-lf1e deferred.
+No new physical evidence, optimization, commit or push in this phase.
+
+## 2026-10-15 — PERF1-B1 implementation after explicit user approval
+
+Following PERF1_A_AUDIT, human A gate ivac-xzys accepted; B1 ivac-rnsg implements
+bounded, process-local, exact-input bundled ShopBot PostOutput reuse in the existing
+PipelineCache. ADR-0018 records the boundary and limits. Evidence helpers now
+reject mixed outcomes, verify request/response hashes, expose absent comparisons,
+and avoid truncated path-delta claims. Frontend opt-in diagnostics separate debounce,
+configuration, replay, LOD and first rendered relief. No geometry/post semantics,
+Pocket analysis optimization or physical qualification. Qualification underway;
+HARD STOP before any further milestone or publication.
+
+### PERF1-B1 software handoff — 2026-10-15
+
+[Results](PERF1_B_RESULTS.md): exact bounded bundled ShopBot reuse qualified.
+Native repeat Test832→15ms; HTTP first frame899→141ms; relief2259→1516ms.
+Full output equality, refusal/invalidation/cancellation/cache-bound tests and
+frontend/core/ShopBot/V-Carve gates pass. Simulation boundaries now measured;
+no simulation algorithm change. ivac-rnsg/ivac-lf1e closed; **ivac-sf7y OPEN**
+for human review. HARD STOP before B2/further work; no publication/physical claim.
+
+### PERF1-B2 authorization and implementation — 2026-10-15
+
+User accepts B1 and authorizes continuation; ivac-sf7y closed. B2 ivac-dlrm
+extends PipelineCache with bounded exact-input remaining-material kernel reuse.
+Live eligibility/stock/provenance and diagnostic checks retained. ADR-0019
+records the boundary; paired benchmarks, output equivalence and regression
+qualification in progress. HARD STOP for human results review, no publication.
+
+### PERF1-B2 software handoff — 2026-10-15
+
+[Results and limits](PERF1_B2_RESULTS.md): pure remaining-material kernel reused
+with live guards. Pocket repeated analysis337.845→0.222ms, total338.370→0.625ms;
+first/new input still computes. All18 native outcomes unchanged; WASM parity,
+1085unit/38integration tests and actual UI freshness/overlay reviewed. Small
+CAM4 UI case has no material latency gain; no universal end-to-end claim.
+ivac-dlrm complete, **human gate ivac-s5xy OPEN — HARD STOP**. No publication or
+physical claim. Bounded CPS interruption ivac-sxmw remains separately deferred.
+
+### CPS cancellation follow-up — 2026-10-15
+
+User accepted B2 and authorized ivac-sxmw. [Results](PERF1_CPS_CANCELLATION_RESULTS.md):
+existing CPS host probe now reads real atomic cancellation; no partial successful
+output or successful-cache insertion. Native Test750→213ms, dense contour1181→193ms,
+HTTP743→207ms medians. Target p95≤200ms is **not met** (216/218ms Test native/HTTP).
+44 CPS/1086 core unit tests pass, all18 full output/refusal outcomes unchanged,
+UI cancel/export-disabled/retry verified. An obsolete two-sided CPS integration
+expectation was corrected to assert the existing CAM2 refusal, not remove it.
+Review gate ivac-nh6q OPEN; remaining latency attribution ivac-q1nz1 deferred.
+HARD STOP before any further implementation, publication or physical claims.
+
+
+## 2026-10-15 — Visual hierarchy and contrast continuation
+
+User requests presentation-only polish under Professional Workshop UI. Actual
+1366×768/1024×768 baseline captured first. Four CSS-only source changes: derived
+navigation and section-text tokens, existing-context border cue and smaller
+context prefixes, dark minor grid38→34 gray. Keep toolbar/sidebar/canvas surfaces,
+active/selected styling, spacing, warning colors and grid threshold/math.
+
+[Qualification](ux/VISUAL_HIERARCHY_REFINEMENT.md) retains before/after welcome,
+workspace, inspector, warnings, three grid views and small-desktop captures.
+Long-name stress, keyboard focus/navigation, sticky header, real drawing selection,
+Save, stale edit/Undo/Redo, critical export refusal and incompatible V-Carve alert
+checked. Critical Download remains visually enabled after settling in the existing
+design, with the action guard refusing export; stale export is actually disabled.
+No export-policy change. Original theme and viewport restored.
+
+775/779 captured source files unchanged; four exceptions CSS only, Svelte non-style
+sections identical.1263 frontend passes/1skip; check zero errors/warnings; lint/build
+pass. No CSS-mirroring tests or CAM requalification added. Design direction,
+UX2.2 qualification and STATUS updated; functional ROADMAP untouched. Engineering
+ivac-28e92 complete; visual review ivac-1drzo OPEN, STOP. Existing PERF gates,
+including cancellation ivac-nh6q, remain unchanged. No commit/push/release.
+
+
+## 2026-10-15 — Drawings and layers UX clarification
+
+User requests focused imported-file/layer clarification. Pre-implementation audit
+finds exact-name layer union, first metadata color, view-only visibleLayers,
+read-only swatch inside the old checkbox label, and an incorrect tooltip claiming
+CAM inclusion. Portable saves intentionally omit visibility preferences; workspace
+view-state/legacy defaults remain unchanged. Layer deletion removes real geometry
+across imports; file/layer undo and visibility pruning have separate boundaries.
+
+Consistent Drawings/import count, Imported files versus Layers grouping, eye/off
+buttons, passive 14 px swatches, view-only CAM reminder, mixed master indication,
+provenance tooltips and narrow count formatting. Reuse existing ACI resolver
+(including 9), not a new palette. Preserve file transform markup/handlers and
+file-removal availability. Add accurate empty-layer state when file records remain.
+English/German catalogs and generated keys updated; no dependency/model migration.
+
+[Qualification](ux/DRAWINGS_LAYERS_CLARIFICATION.md): paired actual screenshots,
+240px sidebar, keyboard focus/Space, aggregate 12/4 counts, 1535-move generation
+with imported layers hidden, stale export after deletion and Undo restoration.
+Actual Save/reopen retains exact imports/colors/transforms and operation source
+references; portable all-hidden retention is not claimed. Seven new actual
+state-command/CAM-identity/data tests; 1270 frontend passes/1skip; check/lint/build
+pass. 774/779 incoming existing source files unchanged; exceptions are presentation,
+locales and generated keys, plus new UI helper/tests. Core/state/serialization
+untouched. No physical qualification or numerical expectation changes.
+
+Engineering ivac-yjcv2 complete; human visual review ivac-ena7m OPEN — STOP.
+Functional ROADMAP, earlier visual gate ivac-1drzo and PERF gate ivac-nh6q unchanged.
+No commit/push/merge/release or unrelated next work.
+
+## 2026-10-15 — UX6 Machine Profiles & Tool Library roadmap planning
+
+Documentation only (ivac-afey9): added shared UX6 plan/preliminary ownership inventory
+and UX6-A/B specifications, roadmap/status/architecture/UX/index and FabSBP boundary
+references. UX6 numbering available; Phase 0 field/action matrix + architecture/layout
+approval precedes A, A human gate precedes B, B ends at review. Current visual and PERF
+cancellation reviews/remaining latency objective and existing priorities stay intact.
+
+Source inventory confirms profile selection currently applies immediately; named
+workspace bundles copy machine/tools/reference into project with history, then mirror
+project edits. Header reads project machine.name while profile names may be generated;
+this is a possible explanation, not proof of screenshot defect. Inventory Apply syncs
+same-ID stocked copies; workspace and project history have different scopes. Preserve
+embedded snapshots, local-only copies, FS saved/manual rates/fallbacks and stale/export
+preflight. Full field effects/classification, browse/edit/assign model, delete/import
+relationships and exact persistence semantics require Phase 0, not guessed from labels.
+
+Plans cover compact grouped machine editor, post-aware output/limits/estimates, profile
+assistant with honest evidence, searchable tool/contextual type editor, optional actual-
+dimension 2D schematic, secondary legacy defaults and explicit machine associations.
+Program output declarations remain FabCAM; live execution/setup control remains future
+FabSBP. Canonical documentation/architecture/CAM UX/Professional Workshop UI/validation/
+feeds-speeds skills plus ShopBot boundary guidance used. No new rate/association model,
+autosave policy, importer/project format, FS/CAM/post/optimization/UI change, physical
+validation, GitHub issue mutation or commit/push/merge/release. Both A/B PLANNED — NOT
+IMPLEMENTED. Stop before UX6 audit/implementation pending human approval.
+
+Documentation checks: new links/whitespace verified, existing document history and
+current state retained; baseline source/config/data hashes unchanged. No tests/build
+or new software/physical qualification required or claimed for documentation only.
+
+## 2026-10-15 — Drawings/Layers accepted; UX6 Phase 0 audit delivered
+
+User accepted ivac-ena7m and requested next UX checkpoint. Completed ivac-4df39:
+[UX6 Phase 0 audit](ux/UX6_PHASE0_AUDIT.md), 30 machine + 48 tool fields traced
+through persistence, adapters and actual consumers; draft/action/history and same-ID
+copy/mirror contracts; static machine/tool layout sheet and A/B compatibility plan.
+Current UI captures include actual dirty machine draft surviving external project
+Undo, then restored with Revert in a blank unlinked project. No authored files or
+workspace profile/inventory changes. Existing source comments conflict with actual
+jerk, laser-lead, compression-warning and kerf consumers; discrepancies recorded,
+not numerically changed. Proposed inspection/assignment and edit scopes need approval.
+
+140 targeted existing tests pass (8 files); no production source changes relative
+to incoming dirty tree, no new schema/domain/FS/post/CAM behavior. Static SVG rendered
+and visually reviewed; not an implemented screen or packaged native qualification.
+Human gate ivac-tjgt1 OPEN — HARD STOP before UX6-A. Other visual/PERF/UX2.2 gates
+unchanged. No commit/push/PR/release. After A's independent review, B covers contextual
+tool inventory, geometry/association clarity and secondary legacy defaults.
+
+
+## 2026-10-15 — UX6-A machine profile workspace
+
+User accepted Phase 0 and authorized A. Implemented independent searchable profile
+inspection, explicit reviewed project assignment, active/inactive draft ownership,
+conflict detection after external changes/Undo, staged creation and machine-file I/O.
+Grouped General/output/tools/estimation fields with compact numeric inputs and honest
+ShopBot/unknown-limit/jerk context. Existing shared project commands and formats retained.
+[Results](ux/UX6_A_RESULTS.md): 1277 frontend passes/1 existing skip, check/lint/build pass;
+actual browser desktop scope/history/stale-output/conflict/creation/keyboard/narrow review.
+781-file baseline check: 8 existing frontend files changed, two helper/test files added;
+no core/post/schema edits. No packaged Tauri or physical claim, commit or publication.
+Engineering ivac-jhfns complete; human gate ivac-osa4z OPEN. HARD STOP before UX6-B;
+independent hierarchy/PERF gates unchanged.
+
+
+### UX6-A review polish — 2026-10-15
+
+User requested clearer section selection and library-add action. ivac-26854 fixes
+button-style specificity, adds a persistent accent underline, and gives Add tool
+from library a Lucide Plus and 12px list separation. Actual UI reviewed with focus
+away from the section; inventory disclosure works. 1277 frontend passes/1 skip,
+check/lint/build pass. [Evidence](ux/ux6-a/tools-polish.png). Existing A human gate
+retained; no UX6-B, domain behavior or publication.
+
+
+## 2026-10-15 — UX6-B tool library redesign
+
+User accepted A and authorized B. Replaced multi-column editable table with a compact
+searchable list and selected contextual detail while preserving whole-library drafts.
+Added explicit same-ID/project-operation review, staged replace/add import for both
+entry scopes, external-tool-change conflict guard, copy availability and separate
+library deletion. Existing inventory/project commands, history, post guards and saved
+operation rates retained. Type changes preserve unknown/hidden fields; auto naming
+no longer invents an unentered conical angle. Optional schematic not implemented.
+[Results](ux/UX6_B_RESULTS.md): 1284 tests pass/1 existing skip; check/lint/build pass;
+actual desktop generation/stale export/Undo/conflict, imports, copy removal, type,
+unknowns, keyboard/filter and 1024px review. Software only; no packaged native or
+physical qualification, Git publication or next milestone. Engineering ivac-f8w26
+complete; human gate ivac-y2aln OPEN — HARD STOP. Independent earlier gates unchanged.
+
+## 2026-10-15 — PERF1 and UX source publication authorized
+
+User explicitly requested committing and pushing all pending work to `main`.
+Publication includes PERF1 profiling/cache/cancellation improvements and evidence,
+visual hierarchy, Drawings/Layers clarification, UX6 machine profiles and tool
+library work with their qualification records. Source publication does not close
+pending human gates, qualify native/physical behavior, satisfy the remaining CPS
+cancellation latency target or authorize another milestone or binary release.

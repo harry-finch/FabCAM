@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Eye, EyeOff } from '@lucide/svelte';
+  import { drawingLayers, layerSwatch } from '../state/drawing-layers';
   import CornerReliefPanel from './CornerReliefPanel.svelte';
   /// Imported-drawing layer list. Restyled (audit follow-up) to match
   /// the OperationsList group-header pattern: caret-to-collapse, a
@@ -118,36 +120,11 @@
     });
   }
 
-  const ACI: Record<number, string> = {
-    1: '#ff0000',
-    2: '#ffff00',
-    3: '#00ff00',
-    4: '#00ffff',
-    5: '#0000ff',
-    6: '#ff00ff',
-  };
-  // ACI 7 / 256 = BYLAYER white (paper-color). Theme-tracked.
-  function swatch(c: number): string {
-    if (c === 7 || c === 256) return 'var(--text-strong)';
-    if (c === 8) return 'var(--text-muted)';
-    return ACI[c] ?? 'var(--text-faint)';
-  }
-
-  /// Usable layers across ALL imports. When several drawings share a
-  /// layer name (e.g. both have "0") the counts sum; visibility toggles
-  /// apply across imports.
-  let usableLayers = $derived.by(() => {
-    const byName = new Map<string, { name: string; color: number; segment_count: number }>();
-    for (const entry of project.data.imports) {
-      for (const l of entry.source.layers) {
-        if (l.segment_count <= 0) continue;
-        const existing = byName.get(l.name);
-        if (existing) existing.segment_count += l.segment_count;
-        else byName.set(l.name, { ...l });
-      }
-    }
-    return Array.from(byName.values());
-  });
+  // Same layer-name union as before, with read-only import provenance.
+  let usableLayers = $derived(drawingLayers(project.data.imports));
+  let someVisible = $derived(
+    usableLayers.some((layer) => project.data.visibleLayers.has(layer.name)),
+  );
 
   let allVisible = $derived(
     usableLayers.length > 0 && usableLayers.every((l) => project.data.visibleLayers.has(l.name)),
@@ -186,6 +163,7 @@
       <input
         type="checkbox"
         checked={allVisible}
+        indeterminate={someVisible && !allVisible}
         title={t('layers.toggle_all.title')}
         aria-label={t('layers.toggle_all.aria')}
         onclick={(e) => e.stopPropagation()}
@@ -193,26 +171,16 @@
       />
     {/if}
     <span class="sidebar-section-identity">
-      {#if project.data.imports.length === 1 && usableLayers.length > 0}
-        <span class="filename" title={project.data.imports[0].source.filename}
-          >{project.data.imports[0].source.filename}</span
-        >
-        <span
-          class="sidebar-section-count"
-          title={t('layers.file_stats', {
-            segments: project.data.imports[0].source.segments.length,
-            layers: usableLayers.length,
-          })}>{usableLayers.length}</span
-        >
-      {:else if project.data.imports.length > 1}
-        <span class="group-name">{t('layers.drawings')}</span><span class="sidebar-section-count"
-          >{project.data.imports.length}</span
-        >
-      {:else}
-        <span class="group-name">{t('layers.title')}</span><span class="sidebar-section-count"
-          >{usableLayers.length}</span
-        >
-      {/if}
+      <span class="group-name">{t('layers.drawings')}</span>
+      <span
+        class="sidebar-section-count"
+        title={t(
+          project.data.imports.length === 1
+            ? 'layers.documents_count.one'
+            : 'layers.documents_count',
+          { count: project.data.imports.length },
+        )}>{project.data.imports.length}</span
+      >
     </span>
     {#if onAddDrawingClick || onAddTextClick}
       <div class="add-menu" class:open={addMenuOpen}>
@@ -264,21 +232,34 @@
   </div>
   {#if !collapsed}
     <div class="group-body">
+      {#if project.data.imports.length > 0}
+        <h3 class="list-heading">{t('layers.imported_files')}</h3>
+      {/if}
       {#each project.data.imports as entry (entry.id)}
         {@const xfActive = !isIdentityFileTransform(entry.fileTransform)}
         {@const transformOpen = openTransforms.has(entry.id)}
         <div class="import-card">
-          {#if project.data.imports.length > 1}
-            <div class="import-head">
-              <span class="import-filename" title={entry.source.filename}
-                >{entry.source.filename}</span
-              >
-              <span class="import-stats"
-                >{t('layers.import_stats', {
-                  segments: entry.source.segments.length,
+          <div class="import-head">
+            <span class="import-filename" title={entry.source.filename}
+              >{entry.source.filename}</span
+            >
+            <span class="import-stats"
+              >{t(
+                entry.source.layers.length === 1
+                  ? 'layers.import_stats.one'
+                  : 'layers.import_stats',
+                {
+                  segments: t(
+                    entry.source.segments.length === 1
+                      ? 'layers.segment_count.one'
+                      : 'layers.segment_count',
+                    { count: entry.source.segments.length },
+                  ),
                   layers: entry.source.layers.length,
-                })}</span
-              >
+                },
+              )}</span
+            >
+            {#if project.data.imports.length > 1}
               <button
                 type="button"
                 class="import-remove"
@@ -287,8 +268,8 @@
                 aria-label={t('layers.import_remove.aria', { filename: entry.source.filename })}
                 >×</button
               >
-            </div>
-          {/if}
+            {/if}
+          </div>
           <div class="xform" class:xform-active={xfActive}>
             <div class="xform-head-row">
               <button
@@ -409,20 +390,59 @@
         </div>
       {/each}
       {#if usableLayers.length > 0}
-        <ul>
+        <h3 class="list-heading layer-heading">
+          {t('layers.title')} <span class="layer-total">{usableLayers.length}</span>
+        </h3>
+        <p class="layer-help">{t('layers.view_only')}</p>
+        <ul aria-label={t('layers.title')}>
           {#each usableLayers as layer (layer.name)}
+            {@const visible = project.data.visibleLayers.has(layer.name)}
+            {@const provenance = t(
+              layer.sources.length > 1 ? 'layers.shared' : 'layers.source_file',
+              {
+                files: layer.sources.map((source) => source.filename).join(', '),
+              },
+            )}
             <li class="layer-row">
-              <label class="layer-label">
-                <input
-                  type="checkbox"
-                  checked={project.data.visibleLayers.has(layer.name)}
-                  onchange={() => project.toggleLayer(layer.name)}
-                  title={t('layers.row.toggle.title')}
-                />
-                <span class="swatch" style:background={swatch(layer.color)}></span>
-                <span class="name">{layer.name}</span>
-                <span class="count">{layer.segment_count}</span>
-              </label>
+              <button
+                type="button"
+                class="visibility-btn"
+                class:layer-hidden={!visible}
+                aria-pressed={visible}
+                aria-label={t(visible ? 'layers.hide' : 'layers.show', { name: layer.name })}
+                title={t(visible ? 'layers.hide_tip' : 'layers.show_tip', { name: layer.name })}
+                onclick={() => project.toggleLayer(layer.name)}
+              >
+                {#if visible}<Eye size={15} aria-hidden="true" />{:else}<EyeOff
+                    size={15}
+                    aria-hidden="true"
+                  />{/if}
+              </button>
+              <span
+                class="swatch"
+                role="img"
+                aria-label={t('layers.color', { index: layer.color })}
+                title={t('layers.color', { index: layer.color })}
+                style:background={layerSwatch(layer.color)}
+              ></span>
+              <span class="name" title={`${layer.name} — ${provenance}`}>{layer.name}</span>
+              <span
+                class="count"
+                title={t(
+                  layer.segment_count === 1 ? 'layers.segment_count.one' : 'layers.segment_count',
+                  { count: layer.segment_count },
+                )}
+              >
+                <span class="count-full"
+                  >{t(
+                    layer.segment_count === 1 ? 'layers.segment_count.one' : 'layers.segment_count',
+                    { count: layer.segment_count },
+                  )}</span
+                >
+                <span class="count-short"
+                  >{t('layers.segment_count.short', { count: layer.segment_count })}</span
+                >
+              </span>
               <button
                 type="button"
                 class="del-btn"
@@ -437,8 +457,12 @@
         </ul>
       {:else}
         <div class="empty-card">
-          <p class="empty-title">{t('layers.empty.title')}</p>
-          <p class="empty-sub">{t('layers.empty.sub')}</p>
+          <p class="empty-title">
+            {t(project.data.imports.length ? 'layers.empty_layers.title' : 'layers.empty.title')}
+          </p>
+          <p class="empty-sub">
+            {t(project.data.imports.length ? 'layers.empty_layers.sub' : 'layers.empty.sub')}
+          </p>
           {#if onAddDrawingClick}
             <button class="primary-cta" type="button" onclick={onAddDrawingClick}>
               {t('layers.empty.open_file')}
@@ -471,6 +495,7 @@
 
 <style>
   .layers {
+    container-type: inline-size;
     width: 100%;
     background: var(--bg-panel);
     color: var(--text);
@@ -567,13 +592,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .filename {
-    color: var(--text-strong);
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   .group-body {
     margin: 0.2rem 0 0 0.5rem;
     padding-left: 0.3rem;
@@ -581,9 +599,8 @@
     /* Active host limits long content; short lists retain natural height. */
     overflow-y: auto;
   }
-  /* Per-import card. When the project has multiple drawings the head
-     row identifies each one and offers a remove button; single-import
-     projects skip the head row entirely. */
+  /* Each imported document has a filename/count row. Preserve the existing
+     remove action availability: only shown when several imports exist. */
   .import-card {
     margin: 0.1rem 0 0.4rem;
   }
@@ -727,12 +744,12 @@
   }
   li.layer-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: 24px 14px minmax(0, 1fr) auto 24px;
     align-items: center;
-    gap: 0.2rem;
+    gap: var(--ui-space-1);
+    font-size: 0.82rem;
   }
-  label,
-  .layer-label {
+  label {
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -766,9 +783,9 @@
     accent-color: var(--accent);
   }
   .swatch {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 1px;
     display: inline-block;
     border: 1px solid var(--border);
   }
@@ -780,8 +797,75 @@
   }
   .count {
     font-variant-numeric: tabular-nums;
-    color: var(--text-faint);
-    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+  .list-heading {
+    margin: var(--ui-space-1) 0;
+    font-size: var(--inspector-font-meta);
+    font-weight: 600;
+    color: var(--text-section);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .layer-heading {
+    border-top: 1px solid var(--border);
+    padding-top: var(--ui-space-2);
+    margin-top: var(--ui-space-2);
+  }
+  .layer-total {
+    color: var(--text-muted);
+    margin-left: var(--ui-space-1);
+    font-variant-numeric: tabular-nums;
+  }
+  .layer-help {
+    margin: var(--ui-space-1) 0;
+    color: var(--text-muted);
+    font-size: var(--inspector-font-meta);
+  }
+  .visibility-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .visibility-btn.layer-hidden {
+    color: var(--text-muted);
+  }
+  .visibility-btn:hover {
+    background: var(--bg-elevated);
+    color: var(--text-strong);
+  }
+  .count-short {
+    display: none;
+  }
+  @container (max-width: 240px) {
+    .import-head {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0 var(--ui-space-1);
+    }
+    .import-stats {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .import-remove {
+      grid-column: 2;
+      grid-row: 1 / 3;
+    }
+    .count-full {
+      display: none;
+    }
+    .count-short {
+      display: inline;
+    }
   }
   /* Empty-state card matches OperationsList's pattern for visual
      consistency across the sidebar (audit 0ki0). */

@@ -36,13 +36,15 @@ export function suggestToolName(t: NameInputs): string {
     case 'form_profile':
       return `${d}mm form cutter`;
     case 'v_bit':
-      return `${fmt(t.tipAngleDeg ?? 60)}° v-bit`;
+      return t.tipAngleDeg == null ? `${d}mm v-bit` : `${fmt(t.tipAngleDeg)}° v-bit`;
     case 'cone':
-      return `${fmt(t.tipAngleDeg ?? 30)}° cone`;
+      return t.tipAngleDeg == null ? `${d}mm cone` : `${fmt(t.tipAngleDeg)}° cone`;
     case 'engraver':
       return t.tipDiameter != null && t.tipDiameter > 0
         ? `${fmt(t.tipDiameter)}mm engraver`
-        : `${fmt(t.tipAngleDeg ?? 60)}° engraver`;
+        : t.tipAngleDeg == null
+          ? `${d}mm engraver`
+          : `${fmt(t.tipAngleDeg)}° engraver`;
     case 'drag_knife':
       return 'drag knife';
     case 'laser_beam':

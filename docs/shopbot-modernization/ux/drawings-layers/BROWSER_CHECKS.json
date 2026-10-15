@@ -1,0 +1,100 @@
+{
+  "hiddenGeneration": {
+    "exportEnabled": true,
+    "visibleButtons": [
+      "",
+      "×",
+      "",
+      "×"
+    ],
+    "snapshot": "- navigation \"Main areas\":\n  - text: FabCAM\n  - button \"Project\"\n  - 'button \"Machine: VCARVE SOFTWARE ONLY — ShopBot post\"':\n    - generic: \"Machine:\"\n    - generic: VCARVE — ShopBot post\n    - text: SOFTWARE ONLY\n  - button \"Tool library\"\n  - button \"Settings\"\n  - button \"Help\"\n  - button \"About\"\n- generic \"File\":\n  - text: File\n- button \"Open\"\n- button \"Save\"\n- generic \"GEOMETRY-software-sources.ivac-project.json — Saved project\":\n  - generic: GEOMETRY-software-sources.ivac-project.json\n  - generic: Saved project\n- button \"Undo\" [disabled]:\n- button \"Redo\" [disabled]:\n- button \"Generate G-code\"\n- button \"Download .sbp\"\n- button \"STL\"\n- generic: 5 obj · 8 offsets · 1535 moves\n- button \"Time breakdown\": ⏱ 00:02:14\n- button \"1 warning(s)\":\n  - text: 1 warning(s)\n- generic \"Remaining material\":\n  - generic: Remaining material\n  - text: 9 regions · 6.99 mm² · Z -1.00 mm\n  - button \"Show in 2D\"\n  - generic \"Analysis details\"\n- generic \"Show / hide the translucent fill that marks each pocket operation's machined region.\":\n  - checkbox \"Regions\" [checked]\n  - generic: Regions\n- generic \"Show toolpath lines and direction arrows in 3D wireframe/both modes. Stock and simulation stay active.\":\n  - checkbox \"Toolpaths\" [checked]\n  - generic: Toolpaths\n- tablist \"Viewport mode\":\n  - tab \"2D\"\n  - tab \"3D\" [selected]\n- main:\n  - button \"Fit view to scene\": ⌖\n  - button \"Previous op\" [disabled]: ⏮\n  - button \"Play\": ▶\n  - button \"Next op\" [disabled]: ⏭\n  - slider \"Toolpath playback position\": \"1\"\n  - text: ×\n  - spinbutton \"Playback speed multiplier\": \"1\"\n  - generic: 1535/1535\n  - button \"▶ G-code 1603 lines\":\n    - text: ▶ G-code\n    - generic: 1603 lines\n  - separator \"Drag to resize the side panel · double-click to reset\"\n  - complementary:\n    - region \"Stock\":\n      - button \"▸"
+  },
+  "afterLayerDeleteExportEnabled": false,
+  "afterUndoExportEnabled": true,
+  "saved": {
+    "visibleLayers": [],
+    "files": [
+      {
+        "name": "nested.svg",
+        "segments": 8,
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 8
+          }
+        ]
+      },
+      {
+        "name": "detail.svg",
+        "segments": 4,
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 4
+          }
+        ]
+      },
+      {
+        "name": "plate.dxf",
+        "segments": 4,
+        "layers": [
+          {
+            "name": "Cuts",
+            "color": 7,
+            "segment_count": 4
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": 1,
+        "layers": [
+          "svg"
+        ]
+      },
+      {
+        "id": 2,
+        "layers": [
+          "svg",
+          "Cuts"
+        ]
+      },
+      {
+        "id": 3,
+        "layers": null,
+        "objects": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "layers": [
+          "Missing layer"
+        ]
+      },
+      {
+        "id": 5,
+        "layers": []
+      }
+    ]
+  },
+  "reopenedSnapshot": "- navigation \"Main areas\":\n  - text: FabCAM\n  - button \"Project\"\n  - 'button \"Machine: VCARVE SOFTWARE ONLY — ShopBot post\"':\n    - generic: \"Machine:\"\n    - generic: VCARVE — ShopBot post\n    - text: SOFTWARE ONLY\n  - button \"Tool library\"\n  - button \"Settings\"\n  - button \"Help\"\n  - button \"About\"\n- generic \"File\":\n  - text: File\n- button \"Open\"\n- button \"Save\"\n- generic \"GEOMETRY-software-sources.ivac-project (1).json — Saved project\":\n  - generic: GEOMETRY-software-sources.ivac-project (1).json\n  - generic: Saved project\n- button \"Undo\" [disabled]:\n- button \"Redo\" [disabled]:\n- button \"Generate G-code\"\n- generic \"Sim verification runs after Generate. Catches rapid moves through stock, fixture collisions, and cutter holder collisions before you cut.\":\n  - text: \"Warnings: not run yet — Generate first\"\n- generic \"Show toolpath lines and direction arrows in 3D wireframe/both modes. Stock and simulation stay active.\":\n  - checkbox \"Toolpaths\" [checked]\n  - generic: Toolpaths\n- tablist \"Viewport mode\":\n  - tab \"2D\"\n  - tab \"3D\" [selected]\n- main:\n  - button \"Fit view to scene\": ⌖\n  - separator \"Drag to resize the side panel · double-click to reset\"\n  - complementary:\n    - region \"Stock\":\n      - button \"▸ Stock 90 × 60 × 10 mm\":\n        - generic: ▸\n        - generic: Stock\n        - generic \"Current stock dimensions (Length × Width × Thickness) in mm\": 90 × 60 × 10 mm\n    - region \"Drawings\":\n      - complementary:\n        - button \"Collapse layers panel\": ▾\n        - checkbox \"Toggle visibility of all imported layers\" [checked=mixed]\n        - generic: Drawings\n        - generic \"3 imported drawings\": \"3\"\n        - button \"+ Add\"\n        - heading \"Imported files\" [level=3]\n        - generic \"nested.svg\"\n        - generic: 8 segments · 1 layer\n        - button \"Remove nested.svg\": ×\n        - button \"▸ File transform\":\n          - generic: ▸\n          - generic: File transform\n        - generic \"detail.svg\"\n        - generic: 4 segments · 1 layer\n        - button \"Remove detail.svg\": ×\n        - button \"▸ File transform\":\n          - generic: ▸\n          - generic: File transform\n        - generic \"plate.dxf\"\n        - generic: 4 segments · 1 layer\n        - button \"Remove plate.dxf\": ×\n        - button \"▸ File transform\":\n          - generic: ▸\n          - generic: File transform\n        - heading \"Layers 2\" [level=3]\n        - paragraph: Hidden layers are still used by CAM.\n        - list \"Layers\":\n          - button \"Hide layer svg\" [pressed]:\n          - 'img \"Imported layer color: ACI 7 (read-only; drawing palette). Not a toolpath color.\"'\n          - 'generic \"svg — Shared layer from imported drawings: nested.svg, detail.svg.\"': svg\n          - generic \"12 segments\"\n          - button \"Delete layer svg\": ×\n          - button \"Show layer Cuts\":\n          - 'img \"Imported layer color: ACI 7 (read-only; drawing palette). Not a toolpath color.\"'\n          - 'generic \"Cuts — Imported drawing: plate.dxf.\"': Cuts\n          - generic \"4 segments\"\n          - button \"Delete layer Cuts\": ×\n      - button \"Corner relief\" [disabled]:\n        - text: Corner relief\n      - paragraph: Click a contour edge in the drawing, then open Corner relief.\n    - region \"Text\":\n      - complementary:\n        - button \"Activate text panel\": ▸\n        - generic: Text\n        - generic: \"0\"\n        - button \"Add text\": + Add\n    - region \"Operations\":\n      - button \"Activate operations panel\": ▸\n      - generic: Operations\n      - generic \"Number of operations\": \"5\"\n      - button \"Operation templates\":\n        - text: Templates\n      - button \"Add operation\": +\n- contentinfo \"bbox=(10.00,10.00)–(72.00,50.00) · 16 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts\"",
+  "narrow": {
+    "documentOverflow": false,
+    "rows": [
+      {
+        "scroll": 205,
+        "width": 205
+      },
+      {
+        "scroll": 205,
+        "width": 205
+      }
+    ],
+    "sidebarWidth": 240
+  }
+}

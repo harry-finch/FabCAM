@@ -1,0 +1,32 @@
+{
+  "kind": "toolset",
+  "version": 1,
+  "payload": [
+    {
+      "id": 1,
+      "name": "UX6-B flat endmill \u2014 SOFTWARE ONLY",
+      "kind": "endmill",
+      "diameter": 3,
+      "flutes": 2,
+      "speed": 12000,
+      "plungeRate": 150,
+      "feedRate": 600,
+      "coolant": "off",
+      "fluteLengthMm": 5
+    },
+    {
+      "id": 2,
+      "name": "V-bit 60\u00b0 \u00d86 mm \u2014 r\u00e9f\u00e9rence d\u00e9mo",
+      "kind": "v_bit",
+      "diameter": 6,
+      "tipDiameter": 0,
+      "tipAngleDeg": 60,
+      "flutes": 2,
+      "speed": 12000,
+      "plungeRate": 150,
+      "feedRate": 600,
+      "coolant": "off",
+      "fluteLengthMm": 5
+    }
+  ]
+}

@@ -787,7 +787,7 @@
   h4 {
     font-size: var(--inspector-font-meta);
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-section);
     margin: 0 0 var(--ui-space-2);
     letter-spacing: 0.04em;
     text-transform: uppercase;

@@ -195,3 +195,18 @@ from declarations alone; default guided flow with explicit expert policy; and a
 compact shared UI with separate persistent/job/live contexts. Physical profile
 validation requires actual machine evidence. Existing milling and FS evidence is
 not broadened by this document.
+
+## UX6 machine/tool management clarification (planned, 2026-10-15)
+
+[UX6 roadmap plan](ux/UX6_PLAN.md) improves FabCAM profile/tool information architecture,
+not FabSBP implementation or a shared-profile format migration. FabCAM retains CAM
+limits/envelope, supported post/output features, relevant tool availability and program-
+level spindle/tool-change/end/park declarations needed for standalone usable output.
+These are different from live park movement or spindle control. No controller connection,
+jog/home/probe workflow, execution automation or recovery journal enters UX6.
+
+Current machine/tools snapshots, workspace profile mirroring and inventory/stocked-copy
+semantics stay authoritative pending audit. Machine association does not mean installed
+or physically verified; saved/configured/software-qualified/physical evidence requires
+real authority. Preserve unknowns and post restrictions. UX6 phase 0/A/B each has a
+human gate and does not reorder existing PERF/visual/CAM work.

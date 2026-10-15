@@ -9,6 +9,7 @@ import { toCpsPostRequest } from '../components/cps-post-form';
 
 const io = vi.hoisted(() => ({
   text: '',
+  cancelSave: false,
   project: {
     data: { machine: {} as MachineSettings },
     setMachine: vi.fn(),
@@ -26,14 +27,14 @@ vi.mock('../api/client', () => ({ tryParseStructuredError: () => null }));
 vi.mock('../i18n', () => ({ t: (key: string) => key }));
 vi.mock('@tauri-apps/plugin-dialog', () => ({
   open: async () => '/profile.ivac-machine.json',
-  save: async () => '/saved.ivac-machine.json',
+  save: async () => (io.cancelSave ? null : '/saved.ivac-machine.json'),
 }));
 vi.mock('@tauri-apps/plugin-fs', () => ({
   readTextFile: async () => io.text,
   writeTextFile: io.write,
 }));
 vi.mock('@tauri-apps/api/core', () => ({ invoke: io.invoke }));
-import { loadMachine, saveMachine } from './file_ops';
+import { loadMachine, readMachine, saveMachine } from './file_ops';
 
 describe('Sorbonne ShopBot M3 snapshot', () => {
   it('loads, selects the owned post, and survives workspace/profile and file round trips', async () => {
@@ -130,5 +131,54 @@ describe('Sorbonne ShopBot M3 snapshot', () => {
     io.text = JSON.stringify(saved);
     await loadMachine();
     expect(io.project.data.machine).toEqual(machine);
+  });
+});
+
+describe('UX6-A staged machine file exchange', () => {
+  it('reads and migrates a draft without changing the project or clearing generation caches', async () => {
+    vi.clearAllMocks();
+    const before = JSON.stringify(io.project.data.machine);
+    io.text = JSON.stringify({
+      kind: 'machine',
+      format_version: 1,
+      payload: {
+        ...io.project.data.machine,
+        name: 'Imported draft',
+        spindleRpmMax: undefined,
+        postProfile: { name: 'Retained incompatible scaffold', program_end: 'M30' },
+      },
+    });
+    const draft = await readMachine();
+    expect(draft?.name).toBe('Imported draft');
+    expect(draft?.postProfile?.program_end).toBe('M30');
+    expect(draft?.spindleRpmMax).toBeUndefined();
+    expect(JSON.stringify(io.project.data.machine)).toBe(before);
+    expect(io.project.setMachine).not.toHaveBeenCalled();
+    expect(io.invoke).not.toHaveBeenCalled();
+  });
+  it('exports the displayed draft and preserves the committed project even if the picker is canceled', async () => {
+    vi.clearAllMocks();
+    const before = JSON.stringify(io.project.data.machine);
+    const draft = { ...io.project.data.machine, name: 'Export only', unit: 'inch' as const };
+    io.cancelSave = false;
+    await saveMachine(draft);
+    expect(JSON.parse(io.write.mock.calls[0][1] as string).payload).toEqual(draft);
+    io.write.mockClear();
+    io.cancelSave = true;
+    await saveMachine(draft);
+    io.cancelSave = false;
+    expect(io.write).not.toHaveBeenCalled();
+    expect(io.project.setMachine).not.toHaveBeenCalled();
+    expect(JSON.stringify(io.project.data.machine)).toBe(before);
+  });
+  it('canceled and invalid imports do not replace the machine', async () => {
+    vi.clearAllMocks();
+    io.text = '';
+    expect(await readMachine()).toBeUndefined();
+    io.text = '{invalid';
+    expect(await readMachine()).toBeUndefined();
+    expect(io.project.setError).toHaveBeenCalledOnce();
+    expect(io.project.setMachine).not.toHaveBeenCalled();
+    expect(io.invoke).not.toHaveBeenCalled();
   });
 });

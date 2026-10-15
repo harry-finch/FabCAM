@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { suggestMachineName } from '../state/tool_naming';
   import { machineIdentity } from '../state/machine-identity';
   import { TriangleAlert } from '@lucide/svelte';
   import { project } from '../state/project.svelte';
@@ -19,7 +20,7 @@
     project.data.operations.find((op) => op.id === project.sel.selectedOpId) ?? null,
   );
   const activeMachineName = $derived(
-    machineIdentity(project.data.machine.name, t('app.context.unnamed_machine')),
+    machineIdentity(project.data.machine.name, suggestMachineName(project.data.machine)),
   );
   const selectedOperationTool = $derived(
     selectedOpForHint == null
@@ -137,7 +138,7 @@
     display: flex;
     gap: 0.15rem;
     padding: 0.2rem 0.7rem 0;
-    background: var(--bg-elevated);
+    background: var(--bg-navigation);
     border-bottom: 1px solid var(--border);
   }
   .main-tabs-flex {
@@ -152,6 +153,12 @@
   }
   .context-tab > span:first-child {
     flex-shrink: 0;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+  }
+  .context-tab:not(.active) {
+    /* Context keeps its existing navigation action, with a quiet group cue. */
+    border-inline-start-color: var(--border);
   }
   .machine-limitation {
     display: inline-flex;
