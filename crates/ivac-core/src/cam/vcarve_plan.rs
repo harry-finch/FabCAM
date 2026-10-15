@@ -39,6 +39,7 @@ pub fn plan(
     step: f64,
     angle: f64,
 ) -> Result<Vec<(f64, f64, f64)>, String> {
+    crate::profile_scope!("vcarve.plan");
     if axis.len() < 2
         || axis.len() > 20_000
         || !step.is_finite()

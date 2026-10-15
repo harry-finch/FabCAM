@@ -1,0 +1,68 @@
+{
+  "request": "docs/shopbot-modernization/perf1/requests/pocket-islands-linuxcnc.json",
+  "request_sha256": "76664af7b48be3d61dec7bc45d198eaa28fc241b32b030db430fbd2e16e1aea7",
+  "wasm_sha256": "587fab834b4566897f3820607fe6e37a77dd45fe93f092e885b73f642cee5ad2",
+  "wasm_bytes": 4565974,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 12.94775,
+  "parse_ms": 0.06266699999999759,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 394.428791,
+      "serialize_ms": 4.471916999999962,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 1,
+      "generate_ms": 334.178084,
+      "serialize_ms": 4.641250000000014,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 2,
+      "generate_ms": 327.14312499999994,
+      "serialize_ms": 3.372624999999971,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 3,
+      "generate_ms": 361.0135829999999,
+      "serialize_ms": 2.84054100000003,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 4,
+      "generate_ms": 337.3441250000001,
+      "serialize_ms": 2.5328329999999823,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 5,
+      "generate_ms": 365.93179199999986,
+      "serialize_ms": 3.1453749999996035,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 6,
+      "generate_ms": 361.1430840000003,
+      "serialize_ms": 4.191665999999714,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    }
+  ]
+}

@@ -45,6 +45,10 @@
 //! every running process so we never serve stale shapes from before
 //! the change.
 
+#[cfg(feature = "cps")]
+pub(crate) mod cps;
+mod remaining;
+
 use std::hash::{Hash, Hasher};
 use std::num::NonZeroUsize;
 use std::sync::Mutex;
@@ -129,10 +133,13 @@ struct InterpretMemo {
 
 #[derive(Debug)]
 pub struct PipelineCache {
+    pub(crate) remaining_memo: remaining::RemainingMemo,
     inner: Mutex<LruCache<u64, OpCacheValue>>,
     /// Single-slot memo for the final whole-program toolpath interpret.
     /// See [`PipelineCache::interpret_memoized`].
     interp_memo: Mutex<Option<InterpretMemo>>,
+    #[cfg(feature = "cps")]
+    cps_memo: cps::CpsMemo,
 }
 
 impl PipelineCache {
@@ -148,6 +155,9 @@ impl PipelineCache {
         Self {
             inner: Mutex::new(LruCache::new(cap)),
             interp_memo: Mutex::new(None),
+            remaining_memo: remaining::RemainingMemo::default(),
+            #[cfg(feature = "cps")]
+            cps_memo: cps::CpsMemo::default(),
         }
     }
 
@@ -214,7 +224,20 @@ impl PipelineCache {
         }
     }
 
+    #[cfg(feature = "cps")]
+    pub(crate) fn cps_get(&self, key: &[u8]) -> Option<ivac_cps::PostOutput> {
+        self.cps_memo.get(key)
+    }
+
+    #[cfg(feature = "cps")]
+    pub(crate) fn cps_put(&self, key: Vec<u8>, output: &ivac_cps::PostOutput) {
+        self.cps_memo.put(key, output);
+    }
+
     pub fn clear(&self) {
+        self.remaining_memo.clear();
+        #[cfg(feature = "cps")]
+        self.cps_memo.clear();
         if let Ok(mut g) = self.inner.lock() {
             g.clear();
         }

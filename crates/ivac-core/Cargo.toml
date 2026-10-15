@@ -17,6 +17,8 @@ workspace = true
 # Off by default at the core so size-sensitive builds (wasm) opt in
 # explicitly; the cli/server/tauri transports default it ON.
 cps = ["dep:ivac-cps"]
+# Developer-only native timing. No timers or record collection in default/WASM builds.
+profiling = []
 
 [dependencies]
 ivac-feeds-speeds = { path = "../ivac-feeds-speeds", features = ["schema"] }

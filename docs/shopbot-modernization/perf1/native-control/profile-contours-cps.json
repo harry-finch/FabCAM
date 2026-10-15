@@ -1,0 +1,374 @@
+{
+  "input_segments": 20,
+  "instrumented": false,
+  "parse_ms": 0.058,
+  "post": "cps",
+  "profile": "release",
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/profile-contours-cps.json",
+  "request_bytes": 3143,
+  "runs": [
+    {
+      "cache_state": "process-cold",
+      "clone_ms": 0.002458,
+      "identical_to_first": true,
+      "moves": 307,
+      "objects": 5,
+      "pipeline_ms": 25.742708,
+      "program_bytes": 9194,
+      "progress": [
+        {
+          "at_ms": 0.0048330000000000005,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.021625000000000002,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.082458,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.083041,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 25.677,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 25.739166,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 49839,
+      "run": 0,
+      "serialize_ms": 0.059167,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warmup",
+      "clone_ms": 0.002792,
+      "identical_to_first": true,
+      "moves": 307,
+      "objects": 5,
+      "pipeline_ms": 25.607125,
+      "program_bytes": 9194,
+      "progress": [
+        {
+          "at_ms": 0.000166,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.009833,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.037333000000000005,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.037666000000000005,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 25.558,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 25.604541,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 49839,
+      "run": 1,
+      "serialize_ms": 0.057834,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.004959,
+      "identical_to_first": true,
+      "moves": 307,
+      "objects": 5,
+      "pipeline_ms": 24.923083,
+      "program_bytes": 9194,
+      "progress": [
+        {
+          "at_ms": 0.00025,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.009208000000000001,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.032666,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.032833,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 24.874541,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 24.921083,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 49839,
+      "run": 2,
+      "serialize_ms": 0.056875,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.001333,
+      "identical_to_first": true,
+      "moves": 307,
+      "objects": 5,
+      "pipeline_ms": 25.192167,
+      "program_bytes": 9194,
+      "progress": [
+        {
+          "at_ms": 0.000125,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.007417,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.027208,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.027542,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 25.143917,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 25.190292,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 49839,
+      "run": 3,
+      "serialize_ms": 0.057083999999999996,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.0013340000000000001,
+      "identical_to_first": true,
+      "moves": 307,
+      "objects": 5,
+      "pipeline_ms": 25.110875,
+      "program_bytes": 9194,
+      "progress": [
+        {
+          "at_ms": 0.000125,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.00775,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.029249999999999998,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.0295,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 25.0625,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 25.108708,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 49839,
+      "run": 4,
+      "serialize_ms": 0.057624999999999996,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.001209,
+      "identical_to_first": true,
+      "moves": 307,
+      "objects": 5,
+      "pipeline_ms": 24.994167,
+      "program_bytes": 9194,
+      "progress": [
+        {
+          "at_ms": 0.000125,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.0077919999999999994,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.028416999999999998,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.028625,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 24.945959,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 24.992292,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 49839,
+      "run": 5,
+      "serialize_ms": 0.056542,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.00125,
+      "identical_to_first": true,
+      "moves": 307,
+      "objects": 5,
+      "pipeline_ms": 25.235416999999998,
+      "program_bytes": 9194,
+      "progress": [
+        {
+          "at_ms": 0.000167,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.008042,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.028583,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.029,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 25.187667,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 25.233667,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 49839,
+      "run": 6,
+      "serialize_ms": 0.056708,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    }
+  ],
+  "text_layers": 0,
+  "process_wall_ms": 183.8855420000005,
+  "process_resources": {
+    "real_s": 0.18,
+    "user_s": 0.17,
+    "sys_s": 0.0,
+    "peak_rss_bytes": 32374784
+  },
+  "response_sha256": "04e547f24613179b532803cb9c7a750678017a248dc07cfc28b23a99698344a2",
+  "program_sha256": "10d6313e7f1cc77783afd3632d12b164795f3eb2768f7453abff4c0888f80d05",
+  "request_sha256": "fc413e553c850a30368b910e535c8bfa4eb7c6dd7ded6ba26b74918954c80ccf",
+  "binary_sha256": "cef8fecbf751191ae0f20c2dd7decee9c91b2034c745de91b8b2747eab851b98",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/private/tmp/fabcam-perf1/perf1-control",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/profile-contours-cps.json",
+    "/private/tmp/fabcam-perf1/control/profile-contours-cps.json",
+    "7"
+  ]
+}

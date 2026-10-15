@@ -1,0 +1,322 @@
+{
+  "request_sha256": "71d48ac5d59f5683a843f2002aadafeb1c2f0e682b17095a00b69b97277f75ec",
+  "rows": [
+    {
+      "label": "control",
+      "iteration": 0,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 729.5221670000001,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 0,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 205.35824999999997,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 1,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 202.28070799999998,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 1,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 721.6686250000001,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 2,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 733.7877920000002,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 2,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 203.4207910000001,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 3,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 210.8594159999999,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 3,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 861.6271669999995,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 4,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 780.5990830000003,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 4,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 217.5298330000004,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 5,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 203.7033749999999,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 5,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 783.7057500000002,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 6,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 744.9555000000006,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 6,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 209.10583299999973,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 7,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 206.94066700000047,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 7,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 739.8752920000006,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 8,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 741.7267919999997,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 8,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 208.75041600000088,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "candidate",
+      "iteration": 9,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 206.8471669999994,
+      "ack": {
+        "ok": true
+      }
+    },
+    {
+      "label": "control",
+      "iteration": 9,
+      "events": [
+        "token",
+        "pipeline",
+        "pipeline",
+        "pipeline",
+        "cancelled"
+      ],
+      "latency_ms": 747.6385839999988,
+      "ack": {
+        "ok": true
+      }
+    }
+  ],
+  "summary": [
+    {
+      "label": "control",
+      "n": 10,
+      "median_ms": 743.3411460000002,
+      "p95_ms": 861.6271669999995,
+      "max_ms": 861.6271669999995
+    },
+    {
+      "label": "candidate",
+      "n": 10,
+      "median_ms": 206.89391699999993,
+      "p95_ms": 217.5298330000004,
+      "max_ms": 217.5298330000004
+    }
+  ],
+  "retry_full_response_equals_native": true
+}

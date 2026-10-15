@@ -1,0 +1,21 @@
+{
+  "cancelled": true,
+  "latency_ms": 192.167458,
+  "requested_ms": 55.029375,
+  "returned_ms": 247.196833,
+  "returned_valid_result": false,
+  "case": "profile-many-segments-cps",
+  "delay_ms": 50,
+  "iteration": 4,
+  "label": "candidate",
+  "request_sha256": "b28e2fab395c641d23aaa0161da4096160ec8693d28dbda0b12379c25e66b9eb",
+  "binary_sha256": "c4f77daf1b386eb0f32cf3460cd417b13600b3172618ea72e35f8531f0298f88",
+  "command": [
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/examples/perf1_probe",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/profile-many-segments-cps.json",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1-cancel/profile-many-segments-cps-50-4-candidate.json",
+    "1",
+    "cancel",
+    "50"
+  ]
+}

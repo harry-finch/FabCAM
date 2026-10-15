@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { beginGenerationProbe } from '../state/performance-probe';
   import { bindGeneratePalette, exportProblem } from '../state/generate-palette';
   import { notificationError } from '../api/error-notification';
   import CollisionFeedback from './CollisionFeedback.svelte';
@@ -269,14 +270,17 @@
       project.data.operations.length === 0
     )
       return;
+    const perf = beginGenerationProbe(post);
     const epoch = project.documentEpoch;
     const ownsDocument = () => project.documentEpoch === epoch;
     const inputContextKey = generationContextKey(project, post);
+    perf?.mark('context_ready');
     const origin = { ...project.data.workOffset };
     project.beginGenerate();
     abortController = new AbortController();
     try {
       const opProject = buildGenerationProject(project);
+      perf?.mark('project_ready');
       if (!opProject) {
         // Early bail: `beginGenerate()` flipped pipelineState to 'running'
         // above, so just `setError + return` would leave the UI stuck on
@@ -285,12 +289,7 @@
         project.failGenerate(t('genbar.error.no_operations'));
         return;
       }
-      // The hand-rolled WireProject in build-project.ts trims the
-      // openapi-generated request shape: every serde-default field on
-      // the Rust side appears as required in the generated TS, while
-      // we omit them when they match defaults. Cast through `unknown`
-      // — the runtime payload is correct; the structural mismatch is
-      // purely about which fields are optional.
+      // Wire adapter omits serde defaults; cast only at this existing boundary.
       const req: GenerateRequestWithProject = {
         post_processor: post,
         project: opProject as unknown as GenerateRequestWithProject['project'],
@@ -308,6 +307,7 @@
       // Two-sided (flip-stock) jobs emit two programs, so they take the
       // buffered `generateTwoSided` path (no streaming — two-sided jobs are
       // small relative to the unbounded-raster case streaming targets).
+      perf?.mark('request_sent');
       const twoSided = project.data.stock?.flip != null && client.generateTwoSided != null;
       if (twoSided) {
         const both = await client.generateTwoSided!(req);
@@ -324,6 +324,7 @@
             (ev) => {
               // Live progress is read from project.gen.pipelineProgress, which
               // notePipelineEvent maintains; the bar binds to that.
+              perf?.mark('first_event');
               if (ownsDocument()) project.notePipelineEvent(ev);
             },
             abortController.signal,
@@ -337,12 +338,15 @@
           r = await client.generate(req);
         }
         if (!ownsDocument()) return;
+        perf?.mark('response_received', { moves: r.toolpath.length });
         project.setGenerated(inDrawingFrame(r, origin));
       }
       project.gen.inputContextKey = inputContextKey;
       generatedPost = postTag;
       project.finishGenerate();
+      perf?.bind(project.gen.generatedVersion);
     } catch (e) {
+      perf?.mark(e instanceof CancelledError ? 'cancelled' : 'failed');
       if (!ownsDocument()) return;
       if (e instanceof CancelledError) {
         // Cancelled by the user — just snap back to idle.

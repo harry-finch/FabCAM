@@ -1,0 +1,69 @@
+{
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/square-medial-linuxcnc.json",
+  "response_sha256": "01ee5692fed2782a950625f30282b9f0527134b9560cc590d9a2b05234fce7a4",
+  "request_sha256": "77b856c02e3f7509e79fb142ce63234515a8f3e5a063f05e35d64964651d7a0b",
+  "wasm_sha256": "83a8de478f1cc27e7336c74ec1d65da7a7e4297873e86853e7bb17864434a0d1",
+  "wasm_bytes": 4575323,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 11.647958,
+  "parse_ms": 0.04029200000000088,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 42.36170800000001,
+      "serialize_ms": 14.111666,
+      "success": true,
+      "moves": 5865,
+      "identical_to_first": true
+    },
+    {
+      "run": 1,
+      "generate_ms": 4.3225829999999945,
+      "serialize_ms": 10.47675000000001,
+      "success": true,
+      "moves": 5865,
+      "identical_to_first": true
+    },
+    {
+      "run": 2,
+      "generate_ms": 4.227625000000003,
+      "serialize_ms": 10.811250000000001,
+      "success": true,
+      "moves": 5865,
+      "identical_to_first": true
+    },
+    {
+      "run": 3,
+      "generate_ms": 3.830833999999996,
+      "serialize_ms": 9.485624999999985,
+      "success": true,
+      "moves": 5865,
+      "identical_to_first": true
+    },
+    {
+      "run": 4,
+      "generate_ms": 5.338875000000002,
+      "serialize_ms": 10.261084000000011,
+      "success": true,
+      "moves": 5865,
+      "identical_to_first": true
+    },
+    {
+      "run": 5,
+      "generate_ms": 4.148291999999998,
+      "serialize_ms": 10.216916999999995,
+      "success": true,
+      "moves": 5865,
+      "identical_to_first": true
+    },
+    {
+      "run": 6,
+      "generate_ms": 3.773042000000004,
+      "serialize_ms": 9.290959000000015,
+      "success": true,
+      "moves": 5865,
+      "identical_to_first": true
+    }
+  ]
+}

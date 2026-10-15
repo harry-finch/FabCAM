@@ -1,0 +1,56 @@
+[
+  {
+    "case": "profile-many-segments-cps",
+    "delay_ms": 50,
+    "label": "control",
+    "n": 10,
+    "median_ms": 1174.719458,
+    "p95_ms": 1264.07675,
+    "max_ms": 1264.07675
+  },
+  {
+    "case": "profile-many-segments-cps",
+    "delay_ms": 50,
+    "label": "candidate",
+    "n": 10,
+    "median_ms": 194.9735625,
+    "p95_ms": 216.00137500000002,
+    "max_ms": 216.00137500000002
+  },
+  {
+    "case": "text-Test-medial-cps",
+    "delay_ms": 1,
+    "label": "control",
+    "n": 5,
+    "median_ms": 0.6192500000000001,
+    "p95_ms": 0.633375,
+    "max_ms": 0.633375
+  },
+  {
+    "case": "text-Test-medial-cps",
+    "delay_ms": 1,
+    "label": "candidate",
+    "n": 5,
+    "median_ms": 0.6025830000000001,
+    "p95_ms": 0.6604999999999999,
+    "max_ms": 0.6604999999999999
+  },
+  {
+    "case": "text-Test-medial-cps",
+    "delay_ms": 50,
+    "label": "control",
+    "n": 20,
+    "median_ms": 735.805292,
+    "p95_ms": 780.062167,
+    "max_ms": 826.045208
+  },
+  {
+    "case": "text-Test-medial-cps",
+    "delay_ms": 50,
+    "label": "candidate",
+    "n": 20,
+    "median_ms": 207.6044585,
+    "p95_ms": 218.67245899999998,
+    "max_ms": 219.862583
+  }
+]

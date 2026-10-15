@@ -2626,6 +2626,7 @@ name = "ivac-cps"
 version = "0.5.0"
 dependencies = [
  "boa_engine",
+ "boa_gc",
  "criterion",
  "schemars 0.8.22",
  "serde",

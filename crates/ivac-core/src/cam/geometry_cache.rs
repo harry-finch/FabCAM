@@ -106,6 +106,7 @@ fn medial_axis_lock() -> MutexGuard<'static, LruCache<u64, MedialAxisOutput>> {
 /// (a clone is cheap and the caller still gets to react to the flag
 /// itself).
 pub fn medial_axis_cached(region: &VcRegion, cancel: Option<&CancelToken>) -> MedialAxisOutput {
+    crate::profile_scope!("medial.cache_lookup");
     let mut h = SeaHasher::new();
     PIPELINE_VERSION.hash(&mut h);
     h.write_u8(ALG_MEDIAL_AXIS);

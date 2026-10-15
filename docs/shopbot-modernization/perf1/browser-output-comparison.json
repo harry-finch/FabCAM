@@ -1,0 +1,8 @@
+{
+  "browser_download_filename": "output (4).sbp",
+  "sha256": "8ad60bebff66c831019a0ae8d08bd94fd089dfdfee01b01bc20bfbaacf99b12d",
+  "bytes": 511497,
+  "native_program_sha256": "8ad60bebff66c831019a0ae8d08bd94fd089dfdfee01b01bc20bfbaacf99b12d",
+  "exact_program_equal": true,
+  "scope": "Actual HTTP production browser representative Test CPS output; no physical machine qualification."
+}

@@ -1,0 +1,69 @@
+{
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/missing-layer-linuxcnc.json",
+  "response_sha256": "4b69b336f992e7e3347f63dc110421e31a69a75999b5da755c96775664d18615",
+  "request_sha256": "e8f5e25c48fb0a5becbd9f7cec9e9dc17a95a56fc79c6b91923fe2daeec51df5",
+  "wasm_sha256": "83a8de478f1cc27e7336c74ec1d65da7a7e4297873e86853e7bb17864434a0d1",
+  "wasm_bytes": 4575323,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 13.669458000000002,
+  "parse_ms": 0.08425000000000438,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 27.012291999999995,
+      "serialize_ms": 0.09987499999999727,
+      "success": true,
+      "moves": 1,
+      "identical_to_first": true
+    },
+    {
+      "run": 1,
+      "generate_ms": 0.8095420000000075,
+      "serialize_ms": 0.03249999999999886,
+      "success": true,
+      "moves": 1,
+      "identical_to_first": true
+    },
+    {
+      "run": 2,
+      "generate_ms": 0.6839580000000041,
+      "serialize_ms": 0.02558299999999747,
+      "success": true,
+      "moves": 1,
+      "identical_to_first": true
+    },
+    {
+      "run": 3,
+      "generate_ms": 0.24091699999999605,
+      "serialize_ms": 0.017582999999987692,
+      "success": true,
+      "moves": 1,
+      "identical_to_first": true
+    },
+    {
+      "run": 4,
+      "generate_ms": 0.24995799999999235,
+      "serialize_ms": 0.01845900000000711,
+      "success": true,
+      "moves": 1,
+      "identical_to_first": true
+    },
+    {
+      "run": 5,
+      "generate_ms": 0.4183749999999975,
+      "serialize_ms": 0.05883299999999281,
+      "success": true,
+      "moves": 1,
+      "identical_to_first": true
+    },
+    {
+      "run": 6,
+      "generate_ms": 0.5230829999999997,
+      "serialize_ms": 0.04824999999999591,
+      "success": true,
+      "moves": 1,
+      "identical_to_first": true
+    }
+  ]
+}

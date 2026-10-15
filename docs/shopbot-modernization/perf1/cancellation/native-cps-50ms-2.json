@@ -1,0 +1,7 @@
+{
+  "cancelled": true,
+  "latency_ms": 730.4281669999999,
+  "requested_ms": 55.031458,
+  "returned_ms": 785.459625,
+  "returned_valid_result": false
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "case": "missing-layer-cps",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "d2bf8203a481ba94721807df1f7bbd3cbc25b96875d8090c135fb1f4047aa7df"
+  },
+  {
+    "case": "missing-layer-linuxcnc",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "e33192790ab8e325718d09c7887c0759416c95ce6c09516e16a62ae981592f78"
+  },
+  {
+    "case": "pocket-islands-cps",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "e5a60c58f5b6916e1b0ee444926e677237877eda79cae8dcc82a56014534736d"
+  },
+  {
+    "case": "pocket-islands-linuxcnc",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "548ae66431944fc52eb3ea51d898f54f7c730309190dfb17889dd82880d3219f"
+  },
+  {
+    "case": "profile-contours-cps",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "04e547f24613179b532803cb9c7a750678017a248dc07cfc28b23a99698344a2"
+  },
+  {
+    "case": "profile-contours-linuxcnc",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "4db0a122ce1f7cc7d24ff1d049b545a6628dce930d5ec26de11a1b398c84b4e1"
+  },
+  {
+    "case": "profile-many-segments-cps",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "094bff7fdd762e521e2e84fd5ff5ff2acce424d33ea658eaf8f75760af889af4"
+  },
+  {
+    "case": "profile-many-segments-linuxcnc",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "d860cfee02269e0485bb7a8151c1593975f87425d7fc6248b3895e59cbdaa154"
+  },
+  {
+    "case": "square-medial-cps",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "dd89163bd67e60e61bd66c1852038fbc61ec6a39e145895991b96940c13a3a9a"
+  },
+  {
+    "case": "square-medial-linuxcnc",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "cd7c25856012fc201cb4fb0ae69c3706ce1041fdc007f2de2b3c7ee70caae246"
+  },
+  {
+    "case": "square-outline-cps",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "b61977cca001d7a9e8e368e05fec73bc9b8f3810ac630004a24bf079e294a234"
+  },
+  {
+    "case": "square-outline-linuxcnc",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "f41cd425c857c431c85a2d18051a2bd58af38fe328e8ba661d5c4896db26cc4a"
+  },
+  {
+    "case": "text-B8-medial-cps",
+    "equivalent": true,
+    "success": false,
+    "response_sha256": null
+  },
+  {
+    "case": "text-B8-medial-linuxcnc",
+    "equivalent": true,
+    "success": false,
+    "response_sha256": null
+  },
+  {
+    "case": "text-Test-medial-cps",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "3807f2dad6d24b891c0ab261ff13c76bf316cca212cab2bc0cb3c222ffff0329"
+  },
+  {
+    "case": "text-Test-medial-linuxcnc",
+    "equivalent": true,
+    "success": true,
+    "response_sha256": "8d54475aae221b8d015e0d12274d26551a1f2c90d75db156fe85a00bb714a60c"
+  },
+  {
+    "case": "text-Test-outline-cps",
+    "equivalent": true,
+    "success": false,
+    "response_sha256": null
+  },
+  {
+    "case": "text-Test-outline-linuxcnc",
+    "equivalent": true,
+    "success": false,
+    "response_sha256": null
+  }
+]

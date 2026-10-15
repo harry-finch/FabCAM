@@ -1,0 +1,69 @@
+{
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/profile-many-segments-linuxcnc.json",
+  "response_sha256": "fb78207b5f6859af482036094760a969001d76c27a65aa8cfe9a05b81cb9ac54",
+  "request_sha256": "e2f8ae3c93264262adca0ecf61235ac7efda828e2279225d517dad5142c916e1",
+  "wasm_sha256": "83a8de478f1cc27e7336c74ec1d65da7a7e4297873e86853e7bb17864434a0d1",
+  "wasm_bytes": 4575323,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 12.104624999999999,
+  "parse_ms": 2.4868750000000013,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 105.71437499999999,
+      "serialize_ms": 95.798959,
+      "success": true,
+      "moves": 41602,
+      "identical_to_first": true
+    },
+    {
+      "run": 1,
+      "generate_ms": 36.47345800000002,
+      "serialize_ms": 92.82825000000003,
+      "success": true,
+      "moves": 41602,
+      "identical_to_first": true
+    },
+    {
+      "run": 2,
+      "generate_ms": 47.53200000000004,
+      "serialize_ms": 90.65849999999995,
+      "success": true,
+      "moves": 41602,
+      "identical_to_first": true
+    },
+    {
+      "run": 3,
+      "generate_ms": 35.126583000000096,
+      "serialize_ms": 90.310292,
+      "success": true,
+      "moves": 41602,
+      "identical_to_first": true
+    },
+    {
+      "run": 4,
+      "generate_ms": 34.24166600000001,
+      "serialize_ms": 89.81524999999999,
+      "success": true,
+      "moves": 41602,
+      "identical_to_first": true
+    },
+    {
+      "run": 5,
+      "generate_ms": 33.01770900000008,
+      "serialize_ms": 84.47716700000001,
+      "success": true,
+      "moves": 41602,
+      "identical_to_first": true
+    },
+    {
+      "run": 6,
+      "generate_ms": 35.89041599999996,
+      "serialize_ms": 86.9063329999999,
+      "success": true,
+      "moves": 41602,
+      "identical_to_first": true
+    }
+  ]
+}

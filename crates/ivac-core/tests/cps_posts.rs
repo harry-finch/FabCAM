@@ -1,7 +1,7 @@
 //! CPS pipeline integration (cps.7, ivac-yhdf.8): the full
 //! request → recorder → JS post → response path, snapshot-pinned for
 //! the bundled grbl post and the refs FANUC oracle (skip-if-absent),
-//! plus geometry parity and two-sided coverage.
+//! plus geometry parity and the unqualified two-sided output guard.
 //!
 //! Snapshots are seahash digests (the full text lives in the JS run —
 //! refresh with `IVAC_UPDATE_SNAPSHOTS=1`, which prints digest AND
@@ -193,10 +193,10 @@ fn bundled_grbl_geometry_parity() {
     );
 }
 
-/// Two-sided jobs run both sides through the CPS post (the sub-requests
-/// forward `cps_post`).
+/// Genuine two-sided CPS output remains unqualified (ivac-jtkj). Do not
+/// accidentally bypass the work-origin guard while changing CPS execution.
 #[test]
-fn two_sided_runs_both_sides() {
+fn two_sided_cps_refuses_unqualified_output() {
     let mut project = fixture_project();
     let mut stock = stock();
     stock.flip = Some(FlipRegistration {
@@ -206,17 +206,17 @@ fn two_sided_runs_both_sides() {
     project.stock = Some(stock);
     project.operations[1].side = WorkpieceSide::Back;
 
-    let response = run_pipeline_two_sided(
+    let result = run_pipeline_two_sided(
         PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(selection(CpsPostSource::Bundled { id: "grbl".into() })),
         },
         |_, _, _| {},
-    )
-    .expect("two-sided cps runs");
-    let back = response.back.expect("back program present");
-    assert!(response.front.gcode.contains("M30"));
-    assert!(back.gcode.contains("M30"));
-    assert_eq!(back.output_extension.as_deref(), Some("gcode"));
+    );
+    assert!(matches!(
+        result,
+        Err(ivac_core::pipeline::PipelineError::WorkOrigin(message))
+            if message.contains("two-sided CPS output")
+    ));
 }

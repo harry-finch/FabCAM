@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { probePreview } from '../state/performance-probe';
   import { onMount, onDestroy, untrack } from 'svelte';
   import * as THREE from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -154,6 +155,8 @@
       renderer.getSize(resVec);
       if (resVec.x > 0 && resVec.y > 0) updateLineResolution(resVec.x, resVec.y);
       renderer.render(scene, camera);
+      probePreview('first_3d_frame', project.gen.generatedVersion);
+      probePreview('first_3d_frame_after_simulation', project.gen.generatedVersion);
       needsRender = false;
     }
     raf = requestAnimationFrame(tickFrame);
@@ -561,6 +564,7 @@
       cumLen: fade.cumLen,
       totalLen: fade.totalLen,
     });
+    probePreview('wire_buffers_ready', project.gen.generatedVersion);
     updateSceneRadius();
     requestRender();
   });
@@ -770,6 +774,7 @@
     // solid sim never built, leaving only the wireframe).
     const imported = project.stockSizingImport;
     const generated = project.gen.generated;
+    const generationVersion = project.gen.generatedVersion;
     // The back program of a two-sided (flip-stock) run drives the reflected
     // dual-surface preview; `null` for the common single-sided job.
     const generatedBack = project.gen.generatedBack;
@@ -824,11 +829,14 @@
     if (simRebuildTimer != null) {
       clearTimeout(simRebuildTimer);
     }
+    probePreview('simulation_scheduled', generationVersion);
     simRebuildTimer = setTimeout(() => {
+      probePreview('simulation_timer_fired', generationVersion);
       simRebuildTimer = null;
       ensureDriver()
         .then(() => {
           if (!driver) return;
+          probePreview('simulation_configure_begin', generationVersion);
           driver.build({
             imported,
             generated,
@@ -845,6 +853,7 @@
             settings,
             fixtures: project.data.fixtures,
           });
+          probePreview('simulation_configure_end', generationVersion);
           driver.setVisible(true);
           driver.setSolidVisible(
             settings.previewMode === 'solid' || settings.previewMode === 'both',
@@ -855,6 +864,7 @@
           lastSimKey = key;
           // Replay 0..head so we see the carved state immediately (not
           // an unmilled stock we have to scrub forward through).
+          probePreview('simulation_replay_begin', generationVersion);
           driver.advanceTo(
             project.playhead,
             generated.toolpath,
@@ -862,10 +872,13 @@
             project.gen.toolpathCumLen,
             project.gen.toolpathTotalLen,
           );
+          if (project.gen.generated === generated)
+            probePreview('simulation_replayed', project.gen.generatedVersion);
           // Select the right LOD level for the current camera
           // distance once the new pyramid exists, so the first paint
           // uses the affordable level instead of L0.
           updateHeightfieldLod();
+          probePreview('simulation_lod_ready', generationVersion);
           // Publish any two-sided conflict clusters (empty single-sided) so
           // the conflict-marker effect repaints the red diamonds.
           conflictMarkers = driver.getTwoSidedConflicts();

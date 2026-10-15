@@ -21,6 +21,11 @@ impl CancelToken {
         Self(Arc::new(AtomicBool::new(false)))
     }
 
+    #[cfg(feature = "cps")]
+    pub(crate) fn shared_flag(&self) -> Arc<AtomicBool> {
+        self.0.clone()
+    }
+
     pub fn cancel(&self) {
         self.0.store(true, Ordering::Relaxed);
     }

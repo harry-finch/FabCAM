@@ -1,8 +1,11 @@
 # PERF1 — CAM Performance Profiling & Optimization
 
-2026-10-14 · **PLANNED — NOT IMPLEMENTED / NOT QUALIFIED**.
-Documentation checkpoint ivac-yrk8. No instrumentation, benchmark execution,
-algorithm/tolerance/preview/post change, dependency or GitHub issue mutation here.
+2026-10-14 plan · 2026-10-15: **PERF1-A ENGINEERING COMPLETE / HUMAN REVIEW PENDING;
+PERF1-B PLANNED, NOT STARTED**. [Results and bounded proposal](PERF1_A_RESULTS.md),
+human scope gate ivac-xzys. Original planning checkpoint ivac-yrk8 contained no
+instrumentation or execution; the inventory and pending wording below describe
+that plan-time state. User software acceptance on 2026-10-15 supersedes its
+V-Carve pending gate. A adds diagnostics/benchmarks only, no optimization.
 
 ## Goal, placement and phase gates
 
@@ -10,7 +13,7 @@ Reduce measured user-visible CAM latency and redundant computation/memory use,
 preserving numerical correctness, deterministic paths, output fidelity and safety.
 Rust implementation alone is not a performance guarantee.
 
-- **PERF1-A — Profiling & Benchmarking: PLANNED, HIGH / MEDIUM.** Reproduce the
+- **PERF1-A — Profiling & Benchmarking: ENGINEERING COMPLETE, REVIEW PENDING.** Reproduce the
   observed workload, instrument actual boundaries, characterize CPU/wall/memory and
   backend/UI overhead, then rank bottlenecks and propose numerical targets/optimizations.
 - **PERF1-B — Targeted Optimization: PLANNED, priority determined by A.** Only
@@ -198,4 +201,7 @@ backend subset, timing/profiling tools, cache isolation, representative sizes, a
 overhead, responsiveness/cancel coverage, numerical targets and highest-benefit bounded
 B scope. No new ADR selecting caching/index/threading architecture at this plan stage.
 
-**STOP — waiting for human approval before starting PERF1-A.**
+**2026-10-15 authorization:** user accepted delivered software/UX and authorized
+the next milestone. PERF1-A ivac-sgnd is active; Test is explicitly a representative
+surrogate, not the exact reported case. Earlier pending-acceptance prose records
+the plan-time context. **HARD STOP after A report, before PERF1-B.**

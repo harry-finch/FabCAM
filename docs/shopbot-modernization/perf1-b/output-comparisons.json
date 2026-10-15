@@ -1,0 +1,128 @@
+[
+  {
+    "case": "missing-layer-cps",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "d2bf8203a481ba94721807df1f7bbd3cbc25b96875d8090c135fb1f4047aa7df",
+    "request_sha256": "3f926d57d6a221269867b636e7aa7799b5345865875ed1f2d2526b553895124b"
+  },
+  {
+    "case": "missing-layer-linuxcnc",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "e33192790ab8e325718d09c7887c0759416c95ce6c09516e16a62ae981592f78",
+    "request_sha256": "e8f5e25c48fb0a5becbd9f7cec9e9dc17a95a56fc79c6b91923fe2daeec51df5"
+  },
+  {
+    "case": "pocket-islands-cps",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "e5a60c58f5b6916e1b0ee444926e677237877eda79cae8dcc82a56014534736d",
+    "request_sha256": "78f39a2c59600f24ffb175c93a81a236dd78b4f649dbdec3d649038907464c8f"
+  },
+  {
+    "case": "pocket-islands-linuxcnc",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "548ae66431944fc52eb3ea51d898f54f7c730309190dfb17889dd82880d3219f",
+    "request_sha256": "76664af7b48be3d61dec7bc45d198eaa28fc241b32b030db430fbd2e16e1aea7"
+  },
+  {
+    "case": "profile-contours-cps",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "04e547f24613179b532803cb9c7a750678017a248dc07cfc28b23a99698344a2",
+    "request_sha256": "fc413e553c850a30368b910e535c8bfa4eb7c6dd7ded6ba26b74918954c80ccf"
+  },
+  {
+    "case": "profile-contours-linuxcnc",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "4db0a122ce1f7cc7d24ff1d049b545a6628dce930d5ec26de11a1b398c84b4e1",
+    "request_sha256": "91770439c0c454ea5e28a756152c6a65cf5db5f61be49d01274590a2669a195d"
+  },
+  {
+    "case": "profile-many-segments-cps",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "094bff7fdd762e521e2e84fd5ff5ff2acce424d33ea658eaf8f75760af889af4",
+    "request_sha256": "b28e2fab395c641d23aaa0161da4096160ec8693d28dbda0b12379c25e66b9eb"
+  },
+  {
+    "case": "profile-many-segments-linuxcnc",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "d860cfee02269e0485bb7a8151c1593975f87425d7fc6248b3895e59cbdaa154",
+    "request_sha256": "e2f8ae3c93264262adca0ecf61235ac7efda828e2279225d517dad5142c916e1"
+  },
+  {
+    "case": "square-medial-cps",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "dd89163bd67e60e61bd66c1852038fbc61ec6a39e145895991b96940c13a3a9a",
+    "request_sha256": "7d51a26bbaaa2551aa802cbb81f1b354c511332ee3bba1333380298476d5f5ef"
+  },
+  {
+    "case": "square-medial-linuxcnc",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "cd7c25856012fc201cb4fb0ae69c3706ce1041fdc007f2de2b3c7ee70caae246",
+    "request_sha256": "77b856c02e3f7509e79fb142ce63234515a8f3e5a063f05e35d64964651d7a0b"
+  },
+  {
+    "case": "square-outline-cps",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "b61977cca001d7a9e8e368e05fec73bc9b8f3810ac630004a24bf079e294a234",
+    "request_sha256": "85bdb653ccdaf900fe4417c4e8c1998ba796555c039aa311d6c522e8b89f88d0"
+  },
+  {
+    "case": "square-outline-linuxcnc",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "f41cd425c857c431c85a2d18051a2bd58af38fe328e8ba661d5c4896db26cc4a",
+    "request_sha256": "c2b4bc78fe2d3572558b35d589790669207ee80fd6c92aadab0cb627c9279410"
+  },
+  {
+    "case": "text-B8-medial-cps",
+    "success": false,
+    "all_outcomes_match": true,
+    "response_sha256": null,
+    "request_sha256": "6cbae73630f7bef90539ffaaa8168529bbeab7cf8aaa31ec69522d628b8ef035"
+  },
+  {
+    "case": "text-B8-medial-linuxcnc",
+    "success": false,
+    "all_outcomes_match": true,
+    "response_sha256": null,
+    "request_sha256": "55bee9b1b9e25d0e205cbd0e3fae24242a7f7d960eba06a70c33d195c5939966"
+  },
+  {
+    "case": "text-Test-medial-cps",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "3807f2dad6d24b891c0ab261ff13c76bf316cca212cab2bc0cb3c222ffff0329",
+    "request_sha256": "71d48ac5d59f5683a843f2002aadafeb1c2f0e682b17095a00b69b97277f75ec"
+  },
+  {
+    "case": "text-Test-medial-linuxcnc",
+    "success": true,
+    "all_outcomes_match": true,
+    "response_sha256": "8d54475aae221b8d015e0d12274d26551a1f2c90d75db156fe85a00bb714a60c",
+    "request_sha256": "89a605c62b70357b79ced7c0ab8efb439d0155d95315229f812ab01aa70c1585"
+  },
+  {
+    "case": "text-Test-outline-cps",
+    "success": false,
+    "all_outcomes_match": true,
+    "response_sha256": null,
+    "request_sha256": "86f6a7e11b1886169d80e4e1b7bd1129e4dfa07573a2dc67381e24bc981449d1"
+  },
+  {
+    "case": "text-Test-outline-linuxcnc",
+    "success": false,
+    "all_outcomes_match": true,
+    "response_sha256": null,
+    "request_sha256": "f186ebfa18b68d5ba6ed6d6e9aaddb648b022111c38b450617d3eff88db36671"
+  }
+]

@@ -16,6 +16,7 @@ workspace = true
 
 [dependencies]
 boa_engine = { workspace = true }
+boa_gc = "=0.21.1"
 serde = { workspace = true }
 serde_json = { workspace = true }
 # Same pin + feature as ivac-core: PostMeta/PropertyMeta cross the

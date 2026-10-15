@@ -1,0 +1,206 @@
+[
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T11:14:47.158Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"context_ready\",\"elapsed_ms\":1}",
+    "timestamp": "2026-10-15T11:14:47.159Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"project_ready\",\"elapsed_ms\":1.1999999284744263}",
+    "timestamp": "2026-10-15T11:14:47.159Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"request_sent\",\"elapsed_ms\":1.1999999284744263}",
+    "timestamp": "2026-10-15T11:14:47.159Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"first_event\",\"elapsed_ms\":10}",
+    "timestamp": "2026-10-15T11:14:47.168Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"response_received\",\"elapsed_ms\":787.5,\"moves\":17788}",
+    "timestamp": "2026-10-15T11:14:47.945Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"state_applied\",\"elapsed_ms\":788.3999999761581,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:47.946Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":849.1999999284744,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:48.007Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":861.3999999761581,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:48.019Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"first_3d_frame\",\"elapsed_ms\":864.6999999284744,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:48.022Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1862.6000000238419,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:49.021Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1862.8999999761581,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:49.021Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":2155.399999976158,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:49.313Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":2155.5,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:49.313Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"simulation_replayed\",\"elapsed_ms\":2213.1999999284744,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:49.371Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":2213.1999999284744,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:49.371Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":8,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":2232.600000023842,\"version\":9}",
+    "timestamp": "2026-10-15T11:14:49.390Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T11:15:17.311Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"context_ready\",\"elapsed_ms\":0.8999999761581421}",
+    "timestamp": "2026-10-15T11:15:17.312Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"project_ready\",\"elapsed_ms\":1}",
+    "timestamp": "2026-10-15T11:15:17.312Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"request_sent\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T11:15:17.312Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"first_event\",\"elapsed_ms\":9.700000047683716}",
+    "timestamp": "2026-10-15T11:15:17.321Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"response_received\",\"elapsed_ms\":55.10000002384186,\"moves\":18874}",
+    "timestamp": "2026-10-15T11:15:17.366Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"state_applied\",\"elapsed_ms\":56.10000002384186,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:17.367Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":108.79999995231628,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:17.420Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":117.29999995231628,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:17.428Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"first_3d_frame\",\"elapsed_ms\":119.89999997615814,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:17.431Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1119,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:18.431Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1119.2999999523163,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:18.431Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1400.7000000476837,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:18.712Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1400.7999999523163,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:18.712Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1462.2999999523163,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:18.773Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1462.2999999523163,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:18.773Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":9,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1478.8999999761581,\"version\":10}",
+    "timestamp": "2026-10-15T11:15:18.790Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  }
+]

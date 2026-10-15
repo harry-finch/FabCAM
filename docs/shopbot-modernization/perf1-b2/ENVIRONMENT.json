@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-15",
+  "control": "PERF1-B1 retained profiled release",
+  "scope": "Remaining-material pure planar kernel only",
+  "protocol": "3 serial alternating process pairs, 7 calls per process, first cold and second warmup excluded from warm medians; no build during benchmarks",
+  "control_sha256": "46f59e67eff0193012a961a642d630ad9e1a6600ce0748f50b8cbfca3756ce99",
+  "artifacts": {
+    "target/release/examples/perf1_probe": {
+      "sha256": "7bf40e826b6257276f7732d26073c4ec63f58c452390e74f67ecf62701f54d7a",
+      "bytes": 11476240
+    },
+    "target/release/ivac-server": {
+      "sha256": "1e23b44c75764433d6d183b69fca5925a69a08556264a0129626a22fec35a7a3",
+      "bytes": 14586560
+    },
+    "crates/ivac-wasm/pkg/ivac_wasm_bg.wasm": {
+      "sha256": "83a8de478f1cc27e7336c74ec1d65da7a7e4297873e86853e7bb17864434a0d1",
+      "bytes": 4575323
+    }
+  },
+  "ui": {
+    "fixture": "CAM4-software-pocket.ivac-project.json",
+    "viewport": [
+      1280,
+      720
+    ],
+    "control_api": "http://127.0.0.1:18796",
+    "candidate_api": "http://127.0.0.1:18797",
+    "frontend": "http://127.0.0.1:18795",
+    "purpose": "three-run smoke timing plus visual/freshness review, not the Pocket-islands benchmark fixture"
+  }
+}

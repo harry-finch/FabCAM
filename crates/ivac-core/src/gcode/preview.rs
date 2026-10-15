@@ -169,6 +169,7 @@ pub fn interpret(gcode: &str) -> Vec<ToolpathSegment> {
 /// exact same `feed_line`.
 #[must_use]
 pub fn interpret_with_index(gcode: &str) -> (Vec<ToolpathSegment>, GcodeIndex) {
+    crate::profile_scope!("preview.decode_builtin");
     let mut interp = Interpreter::default();
     for raw in gcode.lines() {
         interp.feed_line(raw);

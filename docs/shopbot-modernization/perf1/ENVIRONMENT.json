@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-15",
+  "commit": "2032848e8087caf4dd1a1a466aa5bbb8c7027341",
+  "os": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.2\nBuildVersion:\t\t25F84",
+  "arch": "arm64",
+  "cpu": "Apple M4",
+  "memory_bytes": 17179869184,
+  "logical_cpus": 10,
+  "rust": "rustc 1.88.0 (6b00bc388 2025-06-23)\nbinary: rustc\ncommit-hash: 6b00bc3880198600130e1cf62b8f8a93494488cc\ncommit-date: 2025-06-23\nhost: aarch64-apple-darwin\nrelease: 1.88.0\nLLVM version: 20.1.5",
+  "node": "v24.21.0",
+  "features": {
+    "native_profile": [
+      "cps",
+      "profiling"
+    ],
+    "native_control": [
+      "cps"
+    ],
+    "server": [
+      "cps"
+    ],
+    "wasm": []
+  },
+  "observed_case": "unavailable; user explicitly selected Test as representative on 2026-10-15",
+  "cache_protocol": "Each request/post starts fresh process; run0 process-cold, run1 warmup, runs2-6 warm; OS filesystem/page cache not flushed. Serial processes, no global cache reset races.",
+  "measured_source_sha256": {
+    "crates/ivac-core/Cargo.toml": "44a4a02ef5b04e7bd04f9ae7cc0cc41fda87762725a3b01e31b4cc835c1e705c",
+    "crates/ivac-core/examples/perf1_probe.rs": "899adff6bdfc6cba7085d9bd4d2ab745fc59f0de1a9da268a62463c18af222b0",
+    "crates/ivac-core/src/cam/geometry_cache.rs": "ac5010999a5dcc92196f187bec87c58064d3db47d1308d84625e9f54589507fb",
+    "crates/ivac-core/src/cam/vcarve.rs": "9946f716263d51e5836e5382b51423ded1853181e6a3185eb3d198851b04b4fa",
+    "crates/ivac-core/src/cam/vcarve_plan.rs": "266a89f4928bc9a2bfb8ad00ff861dfe0eb66e58c9af42e7dafe9121bee17bd4",
+    "crates/ivac-core/src/cam/vcarve_validate.rs": "bf8648ca4dd8d9d7368940379418050df325c3d72ffc4c9f0190d3a56c01f51a",
+    "crates/ivac-core/src/gcode/preview.rs": "2ce0b43aae8e5ca91a2ecbd78fb8c7bf6b0976037afef70ce08a5f788e6c866d",
+    "crates/ivac-core/src/lib.rs": "4ad4ce9f1c3ae4d88f2ffd6c638ba363a3558ce28cd8b87b6d32ab23b00803ef",
+    "crates/ivac-core/src/pipeline.rs": "e1e638fe50a48043d8bf8f79d8e475eee6b5458f68f11d12a8b244a110151931",
+    "crates/ivac-core/src/pipeline/op_drivers/vcarve.rs": "62a748f5ca001fbde4e4ae992710ed94e4d9eff1e872e6b92cdc493986f70b8f",
+    "crates/ivac-core/src/profiling.rs": "c44f6d4744b5fcd0b6bf67cd9062d92db61cfea0812776fb8c746d659cb8f52c",
+    "frontend/scripts/perf1-fixtures.ts": "2d9658a1c6a03dac0a03ebbea68694777289bffb4a86eaa268193a2342828f6a",
+    "frontend/scripts/perf1-wasm.mjs": "1976914ce8c7b0f0cf74abd093f51b42f37862007a5ac9d00795d521328ba357",
+    "frontend/src/lib/components/GenerateBar.svelte": "b2243c263c8da6d87a953f7575e3092dc76e2b7cafee543f6e41f0d0d6bd8e2e",
+    "frontend/src/lib/components/Scene3D.svelte": "a9253436e81f0b417d4c3ec930f496e46eda77f687786db7eb94e4c2fff287b8",
+    "frontend/src/lib/state/performance-probe.test.ts": "7afe94ea7a1d5cf95abc477f9a3bf693ec9188d066640a680aea8c68f54c4a84",
+    "frontend/src/lib/state/performance-probe.ts": "1d38ba5eae42c51e8417cb3f9211618ae03bb92d5cbf168c5bbef3b02fb9c31b",
+    "scripts/perf1-native.py": "9a0c51d2b9a925a650a5e484946e8462af973ee5066455e7979f91f673c55800",
+    "scripts/perf1-report.py": "c6219655695d7b0202a903fb48d90874b8f2325dd79eb20485d7836e70bfe0ec"
+  },
+  "artifacts": {
+    "/private/tmp/fabcam-perf1/perf1-profile": {
+      "sha256": "c3967e8747d757e6b5e44877e2a1cedf124703035851fa5cf2d35c0d0e971f4b",
+      "bytes": 11442864
+    },
+    "/private/tmp/fabcam-perf1/perf1-control": {
+      "sha256": "cef8fecbf751191ae0f20c2dd7decee9c91b2034c745de91b8b2747eab851b98",
+      "bytes": 11426048
+    },
+    "crates/ivac-wasm/pkg/ivac_wasm_bg.wasm": {
+      "sha256": "587fab834b4566897f3820607fe6e37a77dd45fe93f092e885b73f642cee5ad2",
+      "bytes": 4565974
+    },
+    "target/release/ivac-server": {
+      "sha256": "a2b3b68d8668d8f9a5214f2175b2b82e1dca401fc8e6f9cede91ecac6ec75596",
+      "bytes": 14553232
+    }
+  },
+  "build_notes": "Native release defaults thin LTO/codegen-units=1; WASM release size optimization (-Oz). MSRV-compatible map_or edit and timeout cleanup in harness after measurement do not alter production pipeline. Rebuild before future comparisons; raw records retain exact measured binary hashes."
+}

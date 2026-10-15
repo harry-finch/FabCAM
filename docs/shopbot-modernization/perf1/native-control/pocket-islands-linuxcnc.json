@@ -1,0 +1,325 @@
+{
+  "input_segments": 20,
+  "instrumented": false,
+  "parse_ms": 0.094,
+  "post": "linuxcnc",
+  "profile": "release",
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/pocket-islands-linuxcnc.json",
+  "request_bytes": 4299,
+  "runs": [
+    {
+      "cache_state": "process-cold",
+      "clone_ms": 0.003583,
+      "identical_to_first": true,
+      "moves": 1538,
+      "objects": 5,
+      "pipeline_ms": 338.911541,
+      "program_bytes": 31333,
+      "progress": [
+        {
+          "at_ms": 0.005083000000000001,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.022625000000000003,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 1.2275,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 1.2581660000000001,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 338.90716599999996,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 258534,
+      "run": 0,
+      "serialize_ms": 0.265459,
+      "spans": [],
+      "success": true,
+      "warnings": []
+    },
+    {
+      "cache_state": "warmup",
+      "clone_ms": 0.00575,
+      "identical_to_first": true,
+      "moves": 1538,
+      "objects": 5,
+      "pipeline_ms": 335.760542,
+      "program_bytes": 31333,
+      "progress": [
+        {
+          "at_ms": 0.00033299999999999996,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.014833,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.10124999999999999,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.138958,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 335.758708,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 258534,
+      "run": 1,
+      "serialize_ms": 0.257625,
+      "spans": [],
+      "success": true,
+      "warnings": []
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.003,
+      "identical_to_first": true,
+      "moves": 1538,
+      "objects": 5,
+      "pipeline_ms": 335.094875,
+      "program_bytes": 31333,
+      "progress": [
+        {
+          "at_ms": 0.000209,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.010125,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.06516699999999999,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.102709,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 335.093084,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 258534,
+      "run": 2,
+      "serialize_ms": 0.263042,
+      "spans": [],
+      "success": true,
+      "warnings": []
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.00175,
+      "identical_to_first": true,
+      "moves": 1538,
+      "objects": 5,
+      "pipeline_ms": 340.08824999999996,
+      "program_bytes": 31333,
+      "progress": [
+        {
+          "at_ms": 0.00020800000000000001,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.008333,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.060958,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.09883299999999999,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 340.085875,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 258534,
+      "run": 3,
+      "serialize_ms": 0.264208,
+      "spans": [],
+      "success": true,
+      "warnings": []
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.003042,
+      "identical_to_first": true,
+      "moves": 1538,
+      "objects": 5,
+      "pipeline_ms": 335.917125,
+      "program_bytes": 31333,
+      "progress": [
+        {
+          "at_ms": 0.00025,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.009666000000000001,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.074875,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.110166,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 335.91279099999997,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 258534,
+      "run": 4,
+      "serialize_ms": 0.275,
+      "spans": [],
+      "success": true,
+      "warnings": []
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.005958000000000001,
+      "identical_to_first": true,
+      "moves": 1538,
+      "objects": 5,
+      "pipeline_ms": 334.02241599999996,
+      "program_bytes": 31333,
+      "progress": [
+        {
+          "at_ms": 0.00020800000000000001,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.019583,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.0995,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.1425,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 334.02029100000004,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 258534,
+      "run": 5,
+      "serialize_ms": 0.261834,
+      "spans": [],
+      "success": true,
+      "warnings": []
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.0022500000000000003,
+      "identical_to_first": true,
+      "moves": 1538,
+      "objects": 5,
+      "pipeline_ms": 335.525209,
+      "program_bytes": 31333,
+      "progress": [
+        {
+          "at_ms": 0.000209,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.009542,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.077834,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.11316699999999999,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 335.52308400000004,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 258534,
+      "run": 6,
+      "serialize_ms": 0.25704200000000005,
+      "spans": [],
+      "success": true,
+      "warnings": []
+    }
+  ],
+  "text_layers": 0,
+  "process_wall_ms": 2365.2039170000007,
+  "process_resources": {
+    "real_s": 2.36,
+    "user_s": 2.35,
+    "sys_s": 0.0,
+    "peak_rss_bytes": 15466496
+  },
+  "response_sha256": "548ae66431944fc52eb3ea51d898f54f7c730309190dfb17889dd82880d3219f",
+  "program_sha256": "26004593abbb2476f968206b43ed6f7af85538234a1933d1275383a2f7115ad5",
+  "request_sha256": "76664af7b48be3d61dec7bc45d198eaa28fc241b32b030db430fbd2e16e1aea7",
+  "binary_sha256": "cef8fecbf751191ae0f20c2dd7decee9c91b2034c745de91b8b2747eab851b98",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/private/tmp/fabcam-perf1/perf1-control",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/pocket-islands-linuxcnc.json",
+    "/private/tmp/fabcam-perf1/control/pocket-islands-linuxcnc.json",
+    "7"
+  ]
+}

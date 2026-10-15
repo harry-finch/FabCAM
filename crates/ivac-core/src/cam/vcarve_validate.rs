@@ -14,6 +14,7 @@ pub const CLEARANCE_ERROR: f64 = 0.0002;
 const TOPOLOGY_EPS: f64 = 1e-7;
 /// Clone only the caller's objects; other operations keep their original curves.
 pub fn prepared(objects: &[VcObject], selected: &[usize]) -> Result<Vec<VcObject>, String> {
+    crate::profile_scope!("vcarve.prepare");
     if selected.is_empty() {
         return Err("Select closed contours for V-Carve; use Engrave for open paths.".into());
     }
@@ -80,6 +81,7 @@ pub fn check_envelope(
     tip: f64,
     tan: f64,
 ) -> Result<(), String> {
+    crate::profile_scope!("vcarve.clearance");
     let edges: Vec<_> = rings
         .iter()
         .flat_map(|r| (0..r.len()).map(|i| (r[i], r[(i + 1) % r.len()])))

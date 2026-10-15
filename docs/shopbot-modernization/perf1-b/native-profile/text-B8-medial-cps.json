@@ -1,0 +1,2388 @@
+{
+  "input_segments": 4,
+  "instrumented": true,
+  "parse_ms": 0.337584,
+  "post": "cps",
+  "profile": "release",
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/text-B8-medial-cps.json",
+  "request_bytes": 1014744,
+  "runs": [
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 7.2785,
+      "progress": [
+        {
+          "at_ms": 0.006458,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.087708,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.240542,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 0,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 53708,
+          "name": "source.render_text",
+          "start_ns": 9667
+        },
+        {
+          "count": 781,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 87917
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 126459,
+          "name": "source.chaining",
+          "start_ns": 88000
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 25583,
+          "name": "source.containment",
+          "start_ns": 214542
+        },
+        {
+          "count": 7,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 240167
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 122791,
+          "name": "vcarve.prepare",
+          "start_ns": 304459
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 20458,
+          "name": "vcarve.regions",
+          "start_ns": 427292
+        },
+        {
+          "count": 1033,
+          "depth": 5,
+          "elapsed_ns": 0,
+          "name": "medial.samples",
+          "start_ns": 463625
+        },
+        {
+          "count": null,
+          "depth": 5,
+          "elapsed_ns": 335125,
+          "name": "medial.triangulation",
+          "start_ns": 465334
+        },
+        {
+          "count": 1643,
+          "depth": 5,
+          "elapsed_ns": 0,
+          "name": "medial.triangles",
+          "start_ns": 800667
+        },
+        {
+          "count": null,
+          "depth": 4,
+          "elapsed_ns": 1283708,
+          "name": "medial.build",
+          "start_ns": 455417
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1291583,
+          "name": "medial.cache_lookup",
+          "start_ns": 450667
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 292,
+          "name": "vcarve.target_depth",
+          "start_ns": 1742250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 167,
+          "name": "vcarve.target_depth",
+          "start_ns": 1743125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 959,
+          "name": "vcarve.target_depth",
+          "start_ns": 1743625
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 167,
+          "name": "vcarve.target_depth",
+          "start_ns": 1745042
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 125,
+          "name": "vcarve.target_depth",
+          "start_ns": 1745417
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 41,
+          "name": "vcarve.target_depth",
+          "start_ns": 1745959
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 2792,
+          "name": "vcarve.target_depth",
+          "start_ns": 1746167
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1753584
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 103458,
+          "name": "vcarve.clearance",
+          "start_ns": 1753709
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 11625,
+          "name": "vcarve.plan",
+          "start_ns": 1857209
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1868875
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1868959
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 108625,
+          "name": "vcarve.clearance",
+          "start_ns": 1868959
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 12084,
+          "name": "vcarve.plan",
+          "start_ns": 1977625
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1989750
+        },
+        {
+          "count": 67,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1989792
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 335333,
+          "name": "vcarve.clearance",
+          "start_ns": 1989792
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 21292,
+          "name": "vcarve.plan",
+          "start_ns": 2325167
+        },
+        {
+          "count": 569,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 2346459
+        },
+        {
+          "count": 26,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 2346542
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 132916,
+          "name": "vcarve.clearance",
+          "start_ns": 2346584
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 11083,
+          "name": "vcarve.plan",
+          "start_ns": 2479667
+        },
+        {
+          "count": 256,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 2490792
+        },
+        {
+          "count": 14,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 2490834
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 69750,
+          "name": "vcarve.clearance",
+          "start_ns": 2490834
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6875,
+          "name": "vcarve.plan",
+          "start_ns": 2560584
+        },
+        {
+          "count": 164,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 2567500
+        },
+        {
+          "count": 12,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 2567584
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 59334,
+          "name": "vcarve.clearance",
+          "start_ns": 2567625
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6209,
+          "name": "vcarve.plan",
+          "start_ns": 2627000
+        },
+        {
+          "count": 138,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 2633250
+        },
+        {
+          "count": 882,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 2633250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4623583,
+          "name": "vcarve.clearance",
+          "start_ns": 2633292
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 6962583,
+          "name": "vcarve.driver",
+          "start_ns": 302417
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 7014541,
+          "name": "pipeline.operations",
+          "start_ns": 251709
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 7273833,
+          "name": "pipeline.total",
+          "start_ns": 4542
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 5.3800419999999995,
+      "progress": [
+        {
+          "at_ms": 0.0006670000000000001,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.035750000000000004,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.14962499999999998,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 1,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 33125,
+          "name": "source.render_text",
+          "start_ns": 1375
+        },
+        {
+          "count": 781,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 35833
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 94417,
+          "name": "source.chaining",
+          "start_ns": 35875
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 19000,
+          "name": "source.containment",
+          "start_ns": 130333
+        },
+        {
+          "count": 7,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 149375
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 139000,
+          "name": "vcarve.prepare",
+          "start_ns": 190750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 21917,
+          "name": "vcarve.regions",
+          "start_ns": 329958
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 25500,
+          "name": "medial.cache_lookup",
+          "start_ns": 352333
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 292,
+          "name": "vcarve.target_depth",
+          "start_ns": 377875
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 209,
+          "name": "vcarve.target_depth",
+          "start_ns": 378958
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 250,
+          "name": "vcarve.target_depth",
+          "start_ns": 379417
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 380458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 41,
+          "name": "vcarve.target_depth",
+          "start_ns": 380792
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 381083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1917,
+          "name": "vcarve.target_depth",
+          "start_ns": 381333
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 387125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 94416,
+          "name": "vcarve.clearance",
+          "start_ns": 387167
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 10083,
+          "name": "vcarve.plan",
+          "start_ns": 481667
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 491792
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 491833
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 95750,
+          "name": "vcarve.clearance",
+          "start_ns": 491875
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9958,
+          "name": "vcarve.plan",
+          "start_ns": 587625
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 597583
+        },
+        {
+          "count": 67,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 597667
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 314791,
+          "name": "vcarve.clearance",
+          "start_ns": 597667
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 17542,
+          "name": "vcarve.plan",
+          "start_ns": 912458
+        },
+        {
+          "count": 569,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 930000
+        },
+        {
+          "count": 26,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 930042
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 122208,
+          "name": "vcarve.clearance",
+          "start_ns": 930042
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9791,
+          "name": "vcarve.plan",
+          "start_ns": 1052292
+        },
+        {
+          "count": 256,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1062125
+        },
+        {
+          "count": 14,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1062125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 64958,
+          "name": "vcarve.clearance",
+          "start_ns": 1062167
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6750,
+          "name": "vcarve.plan",
+          "start_ns": 1127208
+        },
+        {
+          "count": 164,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1133958
+        },
+        {
+          "count": 12,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1134083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 55292,
+          "name": "vcarve.clearance",
+          "start_ns": 1134083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6125,
+          "name": "vcarve.plan",
+          "start_ns": 1189375
+        },
+        {
+          "count": 138,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1195500
+        },
+        {
+          "count": 882,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1195542
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4162292,
+          "name": "vcarve.clearance",
+          "start_ns": 1195583
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 5174833,
+          "name": "vcarve.driver",
+          "start_ns": 189917
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 5211083,
+          "name": "pipeline.operations",
+          "start_ns": 154417
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 5379917,
+          "name": "pipeline.total",
+          "start_ns": 83
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 5.327709,
+      "progress": [
+        {
+          "at_ms": 0.00025,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.033,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.14375,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 2,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 29625,
+          "name": "source.render_text",
+          "start_ns": 1208
+        },
+        {
+          "count": 781,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 33041
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 89917,
+          "name": "source.chaining",
+          "start_ns": 33083
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 19500,
+          "name": "source.containment",
+          "start_ns": 123000
+        },
+        {
+          "count": 7,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 142500
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 108541,
+          "name": "vcarve.prepare",
+          "start_ns": 184750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 21042,
+          "name": "vcarve.regions",
+          "start_ns": 293458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4334,
+          "name": "medial.cache_lookup",
+          "start_ns": 314916
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 250,
+          "name": "vcarve.target_depth",
+          "start_ns": 319291
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 83,
+          "name": "vcarve.target_depth",
+          "start_ns": 320083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 209,
+          "name": "vcarve.target_depth",
+          "start_ns": 320416
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 125,
+          "name": "vcarve.target_depth",
+          "start_ns": 321125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 83,
+          "name": "vcarve.target_depth",
+          "start_ns": 321500
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 321791
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1958,
+          "name": "vcarve.target_depth",
+          "start_ns": 322000
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 328250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 95000,
+          "name": "vcarve.clearance",
+          "start_ns": 328250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 10708,
+          "name": "vcarve.plan",
+          "start_ns": 423375
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 434125
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 434166
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 99625,
+          "name": "vcarve.clearance",
+          "start_ns": 434208
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9417,
+          "name": "vcarve.plan",
+          "start_ns": 533833
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 543291
+        },
+        {
+          "count": 67,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 543333
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 315500,
+          "name": "vcarve.clearance",
+          "start_ns": 543333
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 16166,
+          "name": "vcarve.plan",
+          "start_ns": 858875
+        },
+        {
+          "count": 569,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 875041
+        },
+        {
+          "count": 26,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 875083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 110041,
+          "name": "vcarve.clearance",
+          "start_ns": 875125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 8833,
+          "name": "vcarve.plan",
+          "start_ns": 985208
+        },
+        {
+          "count": 256,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 994083
+        },
+        {
+          "count": 14,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 994083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 57666,
+          "name": "vcarve.clearance",
+          "start_ns": 994125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6500,
+          "name": "vcarve.plan",
+          "start_ns": 1051875
+        },
+        {
+          "count": 164,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1058375
+        },
+        {
+          "count": 12,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1058458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 54583,
+          "name": "vcarve.clearance",
+          "start_ns": 1058458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6042,
+          "name": "vcarve.plan",
+          "start_ns": 1113083
+        },
+        {
+          "count": 138,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1119125
+        },
+        {
+          "count": 882,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1119166
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4187042,
+          "name": "vcarve.clearance",
+          "start_ns": 1119208
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 5131208,
+          "name": "vcarve.driver",
+          "start_ns": 184375
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 5168083,
+          "name": "pipeline.operations",
+          "start_ns": 148208
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 5327292,
+          "name": "pipeline.total",
+          "start_ns": 166
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 5.377041,
+      "progress": [
+        {
+          "at_ms": 0.0005,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.031458,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.139583,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 3,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 29208,
+          "name": "source.render_text",
+          "start_ns": 1000
+        },
+        {
+          "count": 781,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 31541
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 89417,
+          "name": "source.chaining",
+          "start_ns": 31541
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 18291,
+          "name": "source.containment",
+          "start_ns": 121000
+        },
+        {
+          "count": 7,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 139291
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 100458,
+          "name": "vcarve.prepare",
+          "start_ns": 175125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 19083,
+          "name": "vcarve.regions",
+          "start_ns": 275625
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6000,
+          "name": "medial.cache_lookup",
+          "start_ns": 295000
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 250,
+          "name": "vcarve.target_depth",
+          "start_ns": 301041
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 83,
+          "name": "vcarve.target_depth",
+          "start_ns": 301833
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 250,
+          "name": "vcarve.target_depth",
+          "start_ns": 302166
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 250,
+          "name": "vcarve.target_depth",
+          "start_ns": 302875
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 83,
+          "name": "vcarve.target_depth",
+          "start_ns": 303333
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 84,
+          "name": "vcarve.target_depth",
+          "start_ns": 303666
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1542,
+          "name": "vcarve.target_depth",
+          "start_ns": 303916
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 309125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 100916,
+          "name": "vcarve.clearance",
+          "start_ns": 309125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 10750,
+          "name": "vcarve.plan",
+          "start_ns": 410208
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 421000
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 421041
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 94500,
+          "name": "vcarve.clearance",
+          "start_ns": 421083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 8541,
+          "name": "vcarve.plan",
+          "start_ns": 515625
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 524208
+        },
+        {
+          "count": 67,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 524250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 314750,
+          "name": "vcarve.clearance",
+          "start_ns": 524291
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 17417,
+          "name": "vcarve.plan",
+          "start_ns": 839041
+        },
+        {
+          "count": 569,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 856500
+        },
+        {
+          "count": 26,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 856541
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 120875,
+          "name": "vcarve.clearance",
+          "start_ns": 856583
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 8791,
+          "name": "vcarve.plan",
+          "start_ns": 977500
+        },
+        {
+          "count": 256,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 986333
+        },
+        {
+          "count": 14,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 986375
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 58250,
+          "name": "vcarve.clearance",
+          "start_ns": 986375
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6625,
+          "name": "vcarve.plan",
+          "start_ns": 1044750
+        },
+        {
+          "count": 164,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1051416
+        },
+        {
+          "count": 12,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1051500
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 54625,
+          "name": "vcarve.clearance",
+          "start_ns": 1051500
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6000,
+          "name": "vcarve.plan",
+          "start_ns": 1106125
+        },
+        {
+          "count": 138,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1112166
+        },
+        {
+          "count": 882,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1112208
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4253458,
+          "name": "vcarve.clearance",
+          "start_ns": 1112208
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 5195209,
+          "name": "vcarve.driver",
+          "start_ns": 174666
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 5227458,
+          "name": "pipeline.operations",
+          "start_ns": 142708
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 5376833,
+          "name": "pipeline.total",
+          "start_ns": 83
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 5.3163339999999994,
+      "progress": [
+        {
+          "at_ms": 0.000209,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.023875,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.133459,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 4,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 22375,
+          "name": "source.render_text",
+          "start_ns": 458
+        },
+        {
+          "count": 781,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 23958
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 90083,
+          "name": "source.chaining",
+          "start_ns": 23958
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 19125,
+          "name": "source.containment",
+          "start_ns": 114083
+        },
+        {
+          "count": 7,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 133208
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 97292,
+          "name": "vcarve.prepare",
+          "start_ns": 169916
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 21208,
+          "name": "vcarve.regions",
+          "start_ns": 267250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6583,
+          "name": "medial.cache_lookup",
+          "start_ns": 288833
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 167,
+          "name": "vcarve.target_depth",
+          "start_ns": 295458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 83,
+          "name": "vcarve.target_depth",
+          "start_ns": 296125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 334,
+          "name": "vcarve.target_depth",
+          "start_ns": 296416
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 208,
+          "name": "vcarve.target_depth",
+          "start_ns": 297250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 297666
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 297916
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1791,
+          "name": "vcarve.target_depth",
+          "start_ns": 298125
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 303291
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 100417,
+          "name": "vcarve.clearance",
+          "start_ns": 303291
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 10000,
+          "name": "vcarve.plan",
+          "start_ns": 403833
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 413875
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 413916
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 99917,
+          "name": "vcarve.clearance",
+          "start_ns": 413958
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9375,
+          "name": "vcarve.plan",
+          "start_ns": 513916
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 523333
+        },
+        {
+          "count": 67,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 523375
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 317917,
+          "name": "vcarve.clearance",
+          "start_ns": 523416
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 17458,
+          "name": "vcarve.plan",
+          "start_ns": 841375
+        },
+        {
+          "count": 569,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 858833
+        },
+        {
+          "count": 26,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 858875
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 122084,
+          "name": "vcarve.clearance",
+          "start_ns": 858916
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9541,
+          "name": "vcarve.plan",
+          "start_ns": 981000
+        },
+        {
+          "count": 256,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 990541
+        },
+        {
+          "count": 14,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 990583
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 64083,
+          "name": "vcarve.clearance",
+          "start_ns": 990625
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6583,
+          "name": "vcarve.plan",
+          "start_ns": 1054875
+        },
+        {
+          "count": 164,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1061500
+        },
+        {
+          "count": 12,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1061583
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 54541,
+          "name": "vcarve.clearance",
+          "start_ns": 1061625
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 7625,
+          "name": "vcarve.plan",
+          "start_ns": 1116208
+        },
+        {
+          "count": 138,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1123833
+        },
+        {
+          "count": 882,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1123875
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4183875,
+          "name": "vcarve.clearance",
+          "start_ns": 1123916
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 5141541,
+          "name": "vcarve.driver",
+          "start_ns": 169500
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 5174541,
+          "name": "pipeline.operations",
+          "start_ns": 136625
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 5316208,
+          "name": "pipeline.total",
+          "start_ns": 83
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 5.458292,
+      "progress": [
+        {
+          "at_ms": 0.00033299999999999996,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.021792000000000002,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.141875,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 5,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 20167,
+          "name": "source.render_text",
+          "start_ns": 500
+        },
+        {
+          "count": 781,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 21833
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 99334,
+          "name": "source.chaining",
+          "start_ns": 21833
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 20334,
+          "name": "source.containment",
+          "start_ns": 121208
+        },
+        {
+          "count": 7,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 141583
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 78542,
+          "name": "vcarve.prepare",
+          "start_ns": 179708
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 19500,
+          "name": "vcarve.regions",
+          "start_ns": 258250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4000,
+          "name": "medial.cache_lookup",
+          "start_ns": 277958
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 209,
+          "name": "vcarve.target_depth",
+          "start_ns": 281958
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 83,
+          "name": "vcarve.target_depth",
+          "start_ns": 282542
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 250,
+          "name": "vcarve.target_depth",
+          "start_ns": 282792
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 167,
+          "name": "vcarve.target_depth",
+          "start_ns": 283458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 283833
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 284083
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1375,
+          "name": "vcarve.target_depth",
+          "start_ns": 284333
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 288750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 104917,
+          "name": "vcarve.clearance",
+          "start_ns": 288750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 11084,
+          "name": "vcarve.plan",
+          "start_ns": 393833
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 404958
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 405042
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 102208,
+          "name": "vcarve.clearance",
+          "start_ns": 405042
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9458,
+          "name": "vcarve.plan",
+          "start_ns": 507250
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 516708
+        },
+        {
+          "count": 67,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 516750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 325708,
+          "name": "vcarve.clearance",
+          "start_ns": 516792
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 17791,
+          "name": "vcarve.plan",
+          "start_ns": 842542
+        },
+        {
+          "count": 569,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 860333
+        },
+        {
+          "count": 26,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 860458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 124834,
+          "name": "vcarve.clearance",
+          "start_ns": 860458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9833,
+          "name": "vcarve.plan",
+          "start_ns": 985292
+        },
+        {
+          "count": 256,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 995167
+        },
+        {
+          "count": 14,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 995208
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 65417,
+          "name": "vcarve.clearance",
+          "start_ns": 995208
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6417,
+          "name": "vcarve.plan",
+          "start_ns": 1060750
+        },
+        {
+          "count": 164,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1067167
+        },
+        {
+          "count": 12,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1067250
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 55625,
+          "name": "vcarve.clearance",
+          "start_ns": 1067292
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 5750,
+          "name": "vcarve.plan",
+          "start_ns": 1122958
+        },
+        {
+          "count": 138,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1128708
+        },
+        {
+          "count": 882,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1128750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4317166,
+          "name": "vcarve.clearance",
+          "start_ns": 1128792
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 5271458,
+          "name": "vcarve.driver",
+          "start_ns": 179375
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 5306708,
+          "name": "pipeline.operations",
+          "start_ns": 144500
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 5458083,
+          "name": "pipeline.total",
+          "start_ns": 167
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 5.381375,
+      "progress": [
+        {
+          "at_ms": 0.000375,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.030542,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.15375,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 6,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 28375,
+          "name": "source.render_text",
+          "start_ns": 959
+        },
+        {
+          "count": 781,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 30625
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 101667,
+          "name": "source.chaining",
+          "start_ns": 30625
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 21083,
+          "name": "source.containment",
+          "start_ns": 132292
+        },
+        {
+          "count": 7,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 153417
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 99375,
+          "name": "vcarve.prepare",
+          "start_ns": 192959
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 17375,
+          "name": "vcarve.regions",
+          "start_ns": 292375
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 3708,
+          "name": "medial.cache_lookup",
+          "start_ns": 310084
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 375,
+          "name": "vcarve.target_depth",
+          "start_ns": 313834
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 125,
+          "name": "vcarve.target_depth",
+          "start_ns": 314709
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 166,
+          "name": "vcarve.target_depth",
+          "start_ns": 315084
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 166,
+          "name": "vcarve.target_depth",
+          "start_ns": 315709
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 316167
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 42,
+          "name": "vcarve.target_depth",
+          "start_ns": 316417
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1833,
+          "name": "vcarve.target_depth",
+          "start_ns": 316667
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 321792
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 102000,
+          "name": "vcarve.clearance",
+          "start_ns": 321792
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 11250,
+          "name": "vcarve.plan",
+          "start_ns": 423959
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 435209
+        },
+        {
+          "count": 22,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 435292
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 103000,
+          "name": "vcarve.clearance",
+          "start_ns": 435292
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9917,
+          "name": "vcarve.plan",
+          "start_ns": 538292
+        },
+        {
+          "count": 249,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 548250
+        },
+        {
+          "count": 67,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 548292
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 315000,
+          "name": "vcarve.clearance",
+          "start_ns": 548334
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 18000,
+          "name": "vcarve.plan",
+          "start_ns": 863334
+        },
+        {
+          "count": 569,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 881375
+        },
+        {
+          "count": 26,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 881417
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 125541,
+          "name": "vcarve.clearance",
+          "start_ns": 881459
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 9875,
+          "name": "vcarve.plan",
+          "start_ns": 1007042
+        },
+        {
+          "count": 256,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1016959
+        },
+        {
+          "count": 14,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1017000
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 65834,
+          "name": "vcarve.clearance",
+          "start_ns": 1017000
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6834,
+          "name": "vcarve.plan",
+          "start_ns": 1083000
+        },
+        {
+          "count": 164,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1089875
+        },
+        {
+          "count": 12,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1089959
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 56000,
+          "name": "vcarve.clearance",
+          "start_ns": 1090000
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 6042,
+          "name": "vcarve.plan",
+          "start_ns": 1146042
+        },
+        {
+          "count": 138,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.planned_points",
+          "start_ns": 1152125
+        },
+        {
+          "count": 882,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1152167
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 4218333,
+          "name": "vcarve.clearance",
+          "start_ns": 1152167
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 5182167,
+          "name": "vcarve.driver",
+          "start_ns": 192417
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 5217875,
+          "name": "pipeline.operations",
+          "start_ns": 157084
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 5381292,
+          "name": "pipeline.total",
+          "start_ns": 42
+        }
+      ],
+      "success": false
+    }
+  ],
+  "text_layers": 1,
+  "process_wall_ms": 47.33374999999995,
+  "process_resources": {
+    "real_s": 0.04,
+    "user_s": 0.04,
+    "sys_s": 0.0,
+    "peak_rss_bytes": 13467648
+  },
+  "request_sha256": "6cbae73630f7bef90539ffaaa8168529bbeab7cf8aaa31ec69522d628b8ef035",
+  "binary_sha256": "46f59e67eff0193012a961a642d630ad9e1a6600ce0748f50b8cbfca3756ce99",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/examples/perf1_probe",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/text-B8-medial-cps.json",
+    "/private/tmp/fabcam-perf1-b/profile/text-B8-medial-cps.json",
+    "7"
+  ]
+}

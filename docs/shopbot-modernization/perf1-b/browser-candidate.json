@@ -1,0 +1,716 @@
+[
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T10:57:59.499Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"context_ready\",\"elapsed_ms\":1.5}",
+    "timestamp": "2026-10-15T10:57:59.500Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"project_ready\",\"elapsed_ms\":1.7000000476837158}",
+    "timestamp": "2026-10-15T10:57:59.500Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"request_sent\",\"elapsed_ms\":1.7000000476837158}",
+    "timestamp": "2026-10-15T10:57:59.500Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"first_event\",\"elapsed_ms\":13.200000047683716}",
+    "timestamp": "2026-10-15T10:57:59.512Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"response_received\",\"elapsed_ms\":864.7000000476837,\"moves\":18874}",
+    "timestamp": "2026-10-15T10:58:00.364Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"state_applied\",\"elapsed_ms\":865.8999999761581,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:00.364Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":962,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:00.461Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":970.5,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:00.469Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"first_3d_frame\",\"elapsed_ms\":984.8000000715256,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:00.483Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1971.8999999761581,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:01.471Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1998.1000000238419,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:01.497Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":2307.399999976158,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:01.806Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":2307.5,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:01.806Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"simulation_replayed\",\"elapsed_ms\":2374.600000023842,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:01.873Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":2374.8000000715256,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:01.873Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":1,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":2399.899999976158,\"version\":2}",
+    "timestamp": "2026-10-15T10:58:01.898Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T10:58:20.497Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"context_ready\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T10:58:20.498Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"project_ready\",\"elapsed_ms\":1.2000000476837158}",
+    "timestamp": "2026-10-15T10:58:20.499Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"request_sent\",\"elapsed_ms\":1.2000000476837158}",
+    "timestamp": "2026-10-15T10:58:20.499Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"first_event\",\"elapsed_ms\":11.100000023841858}",
+    "timestamp": "2026-10-15T10:58:20.508Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"response_received\",\"elapsed_ms\":56,\"moves\":18874}",
+    "timestamp": "2026-10-15T10:58:20.553Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"state_applied\",\"elapsed_ms\":56.89999997615814,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:20.554Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":128.60000002384186,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:20.626Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":136.30000007152557,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:20.634Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"first_3d_frame\",\"elapsed_ms\":140.20000004768372,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:20.637Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1136.8000000715256,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:21.635Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1137.1000000238419,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:21.636Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1453.5,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:21.951Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1453.7000000476837,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:21.951Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1517.6000000238419,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:22.015Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1517.7000000476837,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:22.015Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":2,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1536.8000000715256,\"version\":3}",
+    "timestamp": "2026-10-15T10:58:22.034Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T10:58:46.104Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"context_ready\",\"elapsed_ms\":0.8000000715255737}",
+    "timestamp": "2026-10-15T10:58:46.105Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"project_ready\",\"elapsed_ms\":1}",
+    "timestamp": "2026-10-15T10:58:46.105Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"request_sent\",\"elapsed_ms\":1}",
+    "timestamp": "2026-10-15T10:58:46.105Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"first_event\",\"elapsed_ms\":8.900000095367432}",
+    "timestamp": "2026-10-15T10:58:46.114Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"response_received\",\"elapsed_ms\":50.10000002384186,\"moves\":18874}",
+    "timestamp": "2026-10-15T10:58:46.155Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"state_applied\",\"elapsed_ms\":51.200000047683716,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:46.156Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":116,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:46.221Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":138.70000004768372,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:46.243Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"first_3d_frame\",\"elapsed_ms\":141.40000009536743,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:46.246Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1140.1000000238419,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:47.246Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1140.2000000476837,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:47.246Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1451.7000000476837,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:47.557Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1451.8000000715256,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:47.557Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1514.8000000715256,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:47.619Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1514.8000000715256,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:47.619Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":3,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1533.1000000238419,\"version\":4}",
+    "timestamp": "2026-10-15T10:58:47.638Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T10:59:07.734Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"context_ready\",\"elapsed_ms\":1}",
+    "timestamp": "2026-10-15T10:59:07.735Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"project_ready\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T10:59:07.735Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"request_sent\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T10:59:07.735Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"first_event\",\"elapsed_ms\":9.799999952316284}",
+    "timestamp": "2026-10-15T10:59:07.743Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"response_received\",\"elapsed_ms\":53.39999997615814,\"moves\":18874}",
+    "timestamp": "2026-10-15T10:59:07.787Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"state_applied\",\"elapsed_ms\":54,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:07.788Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":115.5,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:07.849Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":133.89999997615814,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:07.868Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"first_3d_frame\",\"elapsed_ms\":145.20000004768372,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:07.879Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1135,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:08.870Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1135.2000000476837,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:08.870Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1417.7000000476837,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:09.151Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1417.7000000476837,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:09.152Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1480.6000000238419,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:09.214Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1480.6000000238419,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:09.214Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1496.7000000476837,\"version\":5}",
+    "timestamp": "2026-10-15T10:59:09.230Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T10:59:30.867Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"context_ready\",\"elapsed_ms\":1}",
+    "timestamp": "2026-10-15T10:59:30.868Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"project_ready\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T10:59:30.868Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"request_sent\",\"elapsed_ms\":1.2000000476837158}",
+    "timestamp": "2026-10-15T10:59:30.868Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"first_event\",\"elapsed_ms\":10}",
+    "timestamp": "2026-10-15T10:59:30.877Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"response_received\",\"elapsed_ms\":55.60000002384186,\"moves\":18874}",
+    "timestamp": "2026-10-15T10:59:30.923Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"state_applied\",\"elapsed_ms\":56.60000002384186,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:30.923Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":121.80000007152557,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:30.989Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":142.10000002384186,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:31.009Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"first_3d_frame\",\"elapsed_ms\":144.80000007152557,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:31.012Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1143,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:32.011Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1143.3000000715256,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:32.011Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1471.4000000953674,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:32.338Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1471.5,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:32.339Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1534.6000000238419,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:32.401Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1534.6000000238419,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:32.402Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1553.8000000715256,\"version\":6}",
+    "timestamp": "2026-10-15T10:59:32.421Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"start\",\"elapsed_ms\":0.10000002384185791,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T11:00:05.171Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"context_ready\",\"elapsed_ms\":0.9000000953674316}",
+    "timestamp": "2026-10-15T11:00:05.172Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"project_ready\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T11:00:05.172Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"request_sent\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T11:00:05.172Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"first_event\",\"elapsed_ms\":9.700000047683716}",
+    "timestamp": "2026-10-15T11:00:05.181Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"response_received\",\"elapsed_ms\":51.700000047683716,\"moves\":18874}",
+    "timestamp": "2026-10-15T11:00:05.223Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"state_applied\",\"elapsed_ms\":52.800000071525574,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:05.224Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":117,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:05.288Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":124.90000009536743,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:05.296Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"first_3d_frame\",\"elapsed_ms\":128.60000002384186,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:05.299Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1126.6000000238419,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:06.298Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1126.9000000953674,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:06.298Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1435.6000000238419,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:06.607Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1435.6000000238419,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:06.607Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1497.5,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:06.668Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1497.6000000238419,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:06.668Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":6,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1515.5,\"version\":7}",
+    "timestamp": "2026-10-15T11:00:06.686Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18796\"}",
+    "timestamp": "2026-10-15T11:00:32.312Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"context_ready\",\"elapsed_ms\":0.9000000953674316}",
+    "timestamp": "2026-10-15T11:00:32.313Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"project_ready\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T11:00:32.313Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"request_sent\",\"elapsed_ms\":1.100000023841858}",
+    "timestamp": "2026-10-15T11:00:32.313Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"first_event\",\"elapsed_ms\":9.200000047683716}",
+    "timestamp": "2026-10-15T11:00:32.321Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"response_received\",\"elapsed_ms\":52.90000009536743,\"moves\":18874}",
+    "timestamp": "2026-10-15T11:00:32.365Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"state_applied\",\"elapsed_ms\":53.40000009536743,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:32.366Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":124.20000004768372,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:32.437Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":132.30000007152557,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:32.445Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"first_3d_frame\",\"elapsed_ms\":135.70000004768372,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:32.448Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1133.9000000953674,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:33.447Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1134,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:33.447Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1425.2000000476837,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:33.738Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1425.2000000476837,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:33.738Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1486.8000000715256,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:33.799Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1486.8000000715256,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:33.799Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":7,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1504.3000000715256,\"version\":8}",
+    "timestamp": "2026-10-15T11:00:33.817Z",
+    "url": "http://127.0.0.1:18795/assets/index-DH5zUfgg.js"
+  }
+]

@@ -1,0 +1,103 @@
+{
+  "request": "docs/shopbot-modernization/perf1/requests/text-B8-medial-linuxcnc.json",
+  "request_sha256": "55bee9b1b9e25d0e205cbd0e3fae24242a7f7d960eba06a70c33d195c5939966",
+  "wasm_sha256": "587fab834b4566897f3820607fe6e37a77dd45fe93f092e885b73f642cee5ad2",
+  "wasm_bytes": 4565974,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 11.960792000000001,
+  "parse_ms": 1.2807920000000017,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 38.99220799999999,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 1,
+      "generate_ms": 7.853875000000002,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 2,
+      "generate_ms": 7.197917000000004,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 3,
+      "generate_ms": 6.954999999999998,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 4,
+      "generate_ms": 7.792583000000008,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 5,
+      "generate_ms": 7.6146249999999895,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 6,
+      "generate_ms": 7.362250000000003,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    }
+  ]
+}

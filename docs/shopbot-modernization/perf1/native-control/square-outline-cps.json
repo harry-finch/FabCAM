@@ -1,0 +1,388 @@
+{
+  "input_segments": 8,
+  "instrumented": false,
+  "parse_ms": 0.071125,
+  "post": "cps",
+  "profile": "release",
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/square-outline-cps.json",
+  "request_bytes": 1737,
+  "runs": [
+    {
+      "cache_state": "process-cold",
+      "clone_ms": 0.0024590000000000002,
+      "identical_to_first": true,
+      "moves": 130,
+      "objects": 2,
+      "pipeline_ms": 28.016541,
+      "program_bytes": 3962,
+      "progress": [
+        {
+          "at_ms": 0.006166,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.020832999999999997,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.147791,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.14837499999999998,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 27.972707999999997,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 28.01325,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 21053,
+      "run": 0,
+      "serialize_ms": 0.039542,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope",
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warmup",
+      "clone_ms": 0.001917,
+      "identical_to_first": true,
+      "moves": 130,
+      "objects": 2,
+      "pipeline_ms": 22.812709,
+      "program_bytes": 3962,
+      "progress": [
+        {
+          "at_ms": 0.000167,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.006542,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.047875,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.048209,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 22.779584,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 22.810459,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 21053,
+      "run": 1,
+      "serialize_ms": 0.031124999999999996,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope",
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.001375,
+      "identical_to_first": true,
+      "moves": 130,
+      "objects": 2,
+      "pipeline_ms": 19.831208,
+      "program_bytes": 3962,
+      "progress": [
+        {
+          "at_ms": 0.000125,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.005083000000000001,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.035375,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.035833000000000004,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 19.805542,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 19.8295,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 21053,
+      "run": 2,
+      "serialize_ms": 0.028458,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope",
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.001333,
+      "identical_to_first": true,
+      "moves": 130,
+      "objects": 2,
+      "pipeline_ms": 18.49775,
+      "program_bytes": 3962,
+      "progress": [
+        {
+          "at_ms": 0.000166,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.0047079999999999995,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.030750000000000003,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.030875,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 18.472333,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 18.496041,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 21053,
+      "run": 3,
+      "serialize_ms": 0.02875,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope",
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.00125,
+      "identical_to_first": true,
+      "moves": 130,
+      "objects": 2,
+      "pipeline_ms": 18.782791,
+      "program_bytes": 3962,
+      "progress": [
+        {
+          "at_ms": 0.000166,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.006083,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.030625,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.031,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 18.760541,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 18.7815,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 21053,
+      "run": 4,
+      "serialize_ms": 0.026042,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope",
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.000875,
+      "identical_to_first": true,
+      "moves": 130,
+      "objects": 2,
+      "pipeline_ms": 18.6825,
+      "program_bytes": 3962,
+      "progress": [
+        {
+          "at_ms": 0.000125,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.0036669999999999997,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.027917,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.028084,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 18.654334000000002,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 18.680916999999997,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 21053,
+      "run": 5,
+      "serialize_ms": 0.029750000000000002,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope",
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.001583,
+      "identical_to_first": true,
+      "moves": 130,
+      "objects": 2,
+      "pipeline_ms": 19.224042,
+      "program_bytes": 3962,
+      "progress": [
+        {
+          "at_ms": 0.000209,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.005667,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.039542,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.039834,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 19.197292,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 19.222584,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 21053,
+      "run": 6,
+      "serialize_ms": 0.026667,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope",
+        "cps_post_warning"
+      ]
+    }
+  ],
+  "text_layers": 0,
+  "process_wall_ms": 154.01575,
+  "process_resources": {
+    "real_s": 0.15,
+    "user_s": 0.14,
+    "sys_s": 0.0,
+    "peak_rss_bytes": 32358400
+  },
+  "response_sha256": "b61977cca001d7a9e8e368e05fec73bc9b8f3810ac630004a24bf079e294a234",
+  "program_sha256": "e2a5e94fd735f06eb93ee4020b9bf4d66131b06a60d6a226093940cf97566e24",
+  "request_sha256": "85bdb653ccdaf900fe4417c4e8c1998ba796555c039aa311d6c522e8b89f88d0",
+  "binary_sha256": "cef8fecbf751191ae0f20c2dd7decee9c91b2034c745de91b8b2747eab851b98",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/private/tmp/fabcam-perf1/perf1-control",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/square-outline-cps.json",
+    "/private/tmp/fabcam-perf1/control/square-outline-cps.json",
+    "7"
+  ]
+}

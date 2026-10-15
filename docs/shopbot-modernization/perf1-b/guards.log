@@ -1,0 +1,19 @@
+    Blocking waiting for file lock on build directory
+   Compiling bytemuck v1.25.0
+   Compiling itertools v0.14.0
+   Compiling boa_engine v0.21.1
+   Compiling ivac-cps v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+    Finished `release` profile [optimized] target(s) in 1m 23s
+     Running tests/shopbot_guards.rs (target/release/deps/shopbot_guards-be2c0db964312550)
+
+running 7 tests
+test positive_output_and_comment_injection ... ok
+test lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test scaffold_work_plane_and_tools_fail_closed ... ok
+test unsupported_records_fail_before_export ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+

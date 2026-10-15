@@ -1,0 +1,68 @@
+{
+  "request": "docs/shopbot-modernization/perf1/requests/square-outline-linuxcnc.json",
+  "request_sha256": "c2b4bc78fe2d3572558b35d589790669207ee80fd6c92aadab0cb627c9279410",
+  "wasm_sha256": "587fab834b4566897f3820607fe6e37a77dd45fe93f092e885b73f642cee5ad2",
+  "wasm_bytes": 4565974,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 11.924208999999998,
+  "parse_ms": 0.04512499999999875,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 23.221083999999998,
+      "serialize_ms": 0.7100410000000039,
+      "success": true,
+      "moves": 133,
+      "identical_to_first": true
+    },
+    {
+      "run": 1,
+      "generate_ms": 0.5055839999999989,
+      "serialize_ms": 0.4772919999999985,
+      "success": true,
+      "moves": 133,
+      "identical_to_first": true
+    },
+    {
+      "run": 2,
+      "generate_ms": 0.5456670000000017,
+      "serialize_ms": 0.20487500000000125,
+      "success": true,
+      "moves": 133,
+      "identical_to_first": true
+    },
+    {
+      "run": 3,
+      "generate_ms": 0.3002919999999989,
+      "serialize_ms": 0.19874999999999687,
+      "success": true,
+      "moves": 133,
+      "identical_to_first": true
+    },
+    {
+      "run": 4,
+      "generate_ms": 0.31945799999999736,
+      "serialize_ms": 0.39399999999999835,
+      "success": true,
+      "moves": 133,
+      "identical_to_first": true
+    },
+    {
+      "run": 5,
+      "generate_ms": 0.22325000000000017,
+      "serialize_ms": 0.20533400000000057,
+      "success": true,
+      "moves": 133,
+      "identical_to_first": true
+    },
+    {
+      "run": 6,
+      "generate_ms": 0.22766699999999673,
+      "serialize_ms": 0.20425000000000182,
+      "success": true,
+      "moves": 133,
+      "identical_to_first": true
+    }
+  ]
+}

@@ -1,0 +1,871 @@
+{
+  "input_segments": 4100,
+  "instrumented": true,
+  "parse_ms": 1.045791,
+  "post": "cps",
+  "profile": "release",
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/profile-many-segments-cps.json",
+  "request_bytes": 626221,
+  "runs": [
+    {
+      "cache_state": "process-cold",
+      "clone_ms": 0.028083,
+      "identical_to_first": true,
+      "moves": 25215,
+      "objects": 129,
+      "pipeline_ms": 1310.635958,
+      "program_bytes": 714452,
+      "progress": [
+        {
+          "at_ms": 0.005167,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.839708,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 2.4387499999999998,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 2.4405,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 1307.690083,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1310.5767500000002,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 4215607,
+      "run": 0,
+      "serialize_ms": 4.154625,
+      "spans": [
+        {
+          "count": 4100,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 16292
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 658875,
+          "name": "source.chaining",
+          "start_ns": 16459
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 163917,
+          "name": "source.containment",
+          "start_ns": 675417
+        },
+        {
+          "count": 129,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 839417
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1584208,
+          "name": "pipeline.operations",
+          "start_ns": 854917
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1305241208,
+          "name": "post.cps",
+          "start_ns": 2440709
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 2476042,
+          "name": "preview.decode_shopbot",
+          "start_ns": 1307693167
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "preview.regions",
+          "start_ns": 1310226792
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 38125,
+          "name": "preview.remaining",
+          "start_ns": 1310226834
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1310629750,
+          "name": "pipeline.total",
+          "start_ns": 4667
+        }
+      ],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warmup",
+      "clone_ms": 0.015375000000000002,
+      "identical_to_first": true,
+      "moves": 25215,
+      "objects": 129,
+      "pipeline_ms": 1297.131917,
+      "program_bytes": 714452,
+      "progress": [
+        {
+          "at_ms": 0.000292,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.8589169999999999,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 2.202084,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 2.2032089999999998,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 1292.9082919999998,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1297.060959,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 4215607,
+      "run": 1,
+      "serialize_ms": 4.5164159999999995,
+      "spans": [
+        {
+          "count": 4100,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 9000
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 699917,
+          "name": "source.chaining",
+          "start_ns": 9083
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 149209,
+          "name": "source.containment",
+          "start_ns": 709041
+        },
+        {
+          "count": 129,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 858416
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1334084,
+          "name": "pipeline.operations",
+          "start_ns": 868291
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1290701750,
+          "name": "post.cps",
+          "start_ns": 2203458
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 3496750,
+          "name": "preview.decode_shopbot",
+          "start_ns": 1292911875
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 417,
+          "name": "preview.regions",
+          "start_ns": 1296568833
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 90875,
+          "name": "preview.remaining",
+          "start_ns": 1296569791
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1297131333,
+          "name": "pipeline.total",
+          "start_ns": 83
+        }
+      ],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.018125,
+      "identical_to_first": true,
+      "moves": 25215,
+      "objects": 129,
+      "pipeline_ms": 1276.590084,
+      "program_bytes": 714452,
+      "progress": [
+        {
+          "at_ms": 0.000417,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.848417,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 2.296625,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 2.307084,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 1273.681542,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1276.527417,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 4215607,
+      "run": 2,
+      "serialize_ms": 4.310834000000001,
+      "spans": [
+        {
+          "count": 4100,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 8667
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 710917,
+          "name": "source.chaining",
+          "start_ns": 9042
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 128000,
+          "name": "source.containment",
+          "start_ns": 720000
+        },
+        {
+          "count": 129,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 848042
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1439917,
+          "name": "pipeline.operations",
+          "start_ns": 857250
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1271371875,
+          "name": "post.cps",
+          "start_ns": 2307334
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 2402459,
+          "name": "preview.decode_shopbot",
+          "start_ns": 1273683375
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 333,
+          "name": "preview.regions",
+          "start_ns": 1276157792
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 35083,
+          "name": "preview.remaining",
+          "start_ns": 1276158209
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1276589750,
+          "name": "pipeline.total",
+          "start_ns": 209
+        }
+      ],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.015959,
+      "identical_to_first": true,
+      "moves": 25215,
+      "objects": 129,
+      "pipeline_ms": 1266.635334,
+      "program_bytes": 714452,
+      "progress": [
+        {
+          "at_ms": 0.000334,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.812084,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 2.145375,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 2.146334,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 1263.665959,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1266.563375,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 4215607,
+      "run": 3,
+      "serialize_ms": 5.411041999999999,
+      "spans": [
+        {
+          "count": 4100,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 9042
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 652375,
+          "name": "source.chaining",
+          "start_ns": 9209
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 150084,
+          "name": "source.containment",
+          "start_ns": 661625
+        },
+        {
+          "count": 129,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 811709
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1325041,
+          "name": "pipeline.operations",
+          "start_ns": 820584
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1261517292,
+          "name": "post.cps",
+          "start_ns": 2146417
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 2439958,
+          "name": "preview.decode_shopbot",
+          "start_ns": 1263667417
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 291,
+          "name": "preview.regions",
+          "start_ns": 1266168709
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 52250,
+          "name": "preview.remaining",
+          "start_ns": 1266169125
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1266635083,
+          "name": "pipeline.total",
+          "start_ns": 42
+        }
+      ],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.018709,
+      "identical_to_first": true,
+      "moves": 25215,
+      "objects": 129,
+      "pipeline_ms": 1263.195958,
+      "program_bytes": 714452,
+      "progress": [
+        {
+          "at_ms": 0.000792,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.8099580000000001,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 2.1736669999999996,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 2.174792,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 1260.253167,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1263.1128330000001,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 4215607,
+      "run": 4,
+      "serialize_ms": 4.290166,
+      "spans": [
+        {
+          "count": 4100,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 10083
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 664000,
+          "name": "source.chaining",
+          "start_ns": 10583
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 134875,
+          "name": "source.containment",
+          "start_ns": 674708
+        },
+        {
+          "count": 129,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 809625
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1355042,
+          "name": "pipeline.operations",
+          "start_ns": 818958
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1258075416,
+          "name": "post.cps",
+          "start_ns": 2174917
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 2411916,
+          "name": "preview.decode_shopbot",
+          "start_ns": 1260254792
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 250,
+          "name": "preview.regions",
+          "start_ns": 1262725292
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 45833,
+          "name": "preview.remaining",
+          "start_ns": 1262725875
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1263195500,
+          "name": "pipeline.total",
+          "start_ns": 167
+        }
+      ],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.015833,
+      "identical_to_first": true,
+      "moves": 25215,
+      "objects": 129,
+      "pipeline_ms": 1287.394583,
+      "program_bytes": 714452,
+      "progress": [
+        {
+          "at_ms": 0.00033299999999999996,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.845375,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 3.056208,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 3.057916,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 1284.156625,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1287.217,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 4215607,
+      "run": 5,
+      "serialize_ms": 4.323917,
+      "spans": [
+        {
+          "count": 4100,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 9458
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 692500,
+          "name": "source.chaining",
+          "start_ns": 9625
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 142917,
+          "name": "source.containment",
+          "start_ns": 702166
+        },
+        {
+          "count": 129,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 845083
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 2202875,
+          "name": "pipeline.operations",
+          "start_ns": 853791
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1281093625,
+          "name": "post.cps",
+          "start_ns": 3058083
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 2613250,
+          "name": "preview.decode_shopbot",
+          "start_ns": 1284159166
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 292,
+          "name": "preview.regions",
+          "start_ns": 1286833791
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 44000,
+          "name": "preview.remaining",
+          "start_ns": 1286834208
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1287394250,
+          "name": "pipeline.total",
+          "start_ns": 166
+        }
+      ],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.034083,
+      "identical_to_first": true,
+      "moves": 25215,
+      "objects": 129,
+      "pipeline_ms": 1299.374625,
+      "program_bytes": 714452,
+      "progress": [
+        {
+          "at_ms": 0.000334,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.840709,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 2.1462090000000003,
+          "message": "emitted op 2",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 2.1469169999999997,
+          "message": "running .cps post",
+          "phase": "post"
+        },
+        {
+          "at_ms": 1296.267875,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1299.311292,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 4215607,
+      "run": 6,
+      "serialize_ms": 4.271167,
+      "spans": [
+        {
+          "count": 4100,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 9084
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 687333,
+          "name": "source.chaining",
+          "start_ns": 9209
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 143875,
+          "name": "source.containment",
+          "start_ns": 696542
+        },
+        {
+          "count": 129,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 840459
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1297208,
+          "name": "pipeline.operations",
+          "start_ns": 849209
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 1294118500,
+          "name": "post.cps",
+          "start_ns": 2146959
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 2517875,
+          "name": "preview.decode_shopbot",
+          "start_ns": 1296270125
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 375,
+          "name": "preview.regions",
+          "start_ns": 1298895334
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 56792,
+          "name": "preview.remaining",
+          "start_ns": 1298896250
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1299374334,
+          "name": "pipeline.total",
+          "start_ns": 125
+        }
+      ],
+      "success": true,
+      "warnings": [
+        "cps_post_warning"
+      ]
+    }
+  ],
+  "text_layers": 0,
+  "process_wall_ms": 9050.976833,
+  "process_resources": {
+    "real_s": 9.04,
+    "user_s": 8.91,
+    "sys_s": 0.07,
+    "peak_rss_bytes": 142442496
+  },
+  "response_sha256": "094bff7fdd762e521e2e84fd5ff5ff2acce424d33ea658eaf8f75760af889af4",
+  "program_sha256": "c52b0badfc1e0094d954f6c10512d5d001c92fda4ca3303081ff9bf9e2ff5fbf",
+  "request_sha256": "b28e2fab395c641d23aaa0161da4096160ec8693d28dbda0b12379c25e66b9eb",
+  "binary_sha256": "c3967e8747d757e6b5e44877e2a1cedf124703035851fa5cf2d35c0d0e971f4b",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/private/tmp/fabcam-perf1/perf1-profile",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/profile-many-segments-cps.json",
+    "/private/tmp/fabcam-perf1-b/paired/1/control/profile-many-segments-cps.json",
+    "7"
+  ]
+}

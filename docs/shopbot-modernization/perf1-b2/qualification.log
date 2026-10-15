@@ -1,0 +1,59 @@
+    Blocking waiting for file lock on build directory
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `release` profile [optimized] target(s) in 5m 21s
+     Running tests/cad1_qualification.rs (target/release/deps/cad1_qualification-97ac28237212e60a)
+
+running 1 test
+test exact_diameter_corners_are_reached_in_emitted_profile_and_pocket ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/shopbot_m2_post.rs (target/release/deps/shopbot_m2_post-0496e3061315b313)
+
+running 27 tests
+test cam3_curved_tabs_preserve_center_and_compensated_radius ... ok
+test cam3_direct_entry_tab_lead_direction_matrix_has_output_preview_parity ... ok
+test cam3_tab_at_entry_cannot_be_plunged_through ... ok
+test cam3_tab_width_and_absolute_height_override_preserve_material ... ok
+test cam4_pocket_residual_tracks_emitted_path_and_work_origin ... ok
+test circular_profile ... ok
+test island_pocket ... ok
+test m3_unverified_clearance_refuses_sbp_export ... ok
+test m4_lab_spindle_runs_real_cam_and_preserves_manual_default ... ok
+test multiple_operations ... ok
+test peck_drilling ... ok
+test square_profile ... ok
+test unsupported_machine_policies_fail ... ok
+test ux1_circular_ramp_chords_obey_post_tolerance_and_direction ... ok
+test ux1_curved_ramp_exports_instead_of_rejecting_varying_z_arc ... ok
+test ux1_direct_tabs_and_leads_remain_explicit_supported_choices ... ok
+test ux1_explicit_geometry_and_stock_translation_preserves_entry_preview ... ok
+test ux1_final_preview_matches_emitted_xyz_lines_for_profile_and_pocket ... ok
+test ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct ... ok
+test ux1_pocket_islands_and_open_profile_helix_never_gain_silent_machine_fallback ... ok
+test ux1_ramps_qualify_simple_curved_concave_open_and_island_sources ... ok
+test ux1_unqualified_entry_and_origin_combinations_fail_explicitly ... ok
+test ux2_fixture_collision_and_pocket_regions_stay_in_the_same_work_frame ... ok
+test ux2_invalid_origin_and_obstacle_geometry_fail_before_output ... ok
+test ux2_polar_drill_center_and_explicit_approach_translate_with_the_drawing ... ok
+test ux2_unqualified_two_sided_shopbot_scaffold_blocks_before_invalid_output ... ok
+test ux2_work_zero_translates_actual_output_without_changing_intent_or_depths ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.14s
+
+     Running tests/vcarve_qualification.rs (target/release/deps/vcarve_qualification-ed206fc79001db6b)
+
+running 10 tests
+test a1_perimeter_honors_pass_step_and_depth_limited_radius ... ok
+test a2_interpolated_ramp_never_exceeds_local_target ... ok
+test a3_short_chain_reaches_target_at_both_ends ... ok
+test a4_decoded_output_preview_generic_parity_and_persistence ... ok
+test circle_islands_and_disconnected_regions_are_explicit ... ok
+test continuous_clearance_catches_between_sample_collision ... ok
+test invalid_inputs_and_physical_limits_fail_closed ... ok
+test medial_axis_is_variable_finite_deterministic_and_does_not_clear_plateau ... ok
+test reference_cones_caps_and_flat_tips ... ok
+test topology_matrix_and_winding ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+

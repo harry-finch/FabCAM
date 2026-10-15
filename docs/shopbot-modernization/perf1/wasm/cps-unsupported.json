@@ -1,0 +1,23 @@
+{
+  "request": "docs/shopbot-modernization/perf1/requests/square-outline-cps.json",
+  "request_sha256": "85bdb653ccdaf900fe4417c4e8c1998ba796555c039aa311d6c522e8b89f88d0",
+  "wasm_sha256": "587fab834b4566897f3820607fe6e37a77dd45fe93f092e885b73f642cee5ad2",
+  "wasm_bytes": 4565974,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 20.576917,
+  "parse_ms": 0.08787500000000392,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 25.357167000000004,
+      "success": false,
+      "error": {
+        "kind": "unsupported",
+        "code": "cps_unavailable",
+        "message": "this build does not support .cps post-processors",
+        "recovery_hint": "Use a build with the cps feature enabled, or pick linuxcnc, grbl, or hpgl."
+      }
+    }
+  ]
+}

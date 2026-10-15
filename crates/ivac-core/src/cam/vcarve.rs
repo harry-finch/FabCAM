@@ -181,6 +181,7 @@ pub fn medial_axis_cancellable(
     region: &VcRegion,
     cancel: Option<&CancelToken>,
 ) -> Vec<Vec<VPoint>> {
+    crate::profile_scope!("medial.build");
     let is_cancelled = || cancel.is_some_and(super::super::pipeline::CancelToken::is_cancelled);
     // Densify all boundaries (outer + holes) into a single sample list.
     // Voronoi-of-points needs >= 3 samples to triangulate at all.
@@ -189,6 +190,7 @@ pub fn medial_axis_cancellable(
     for h in &region.holes {
         samples.extend(densify_ring(h, BOUNDARY_SAMPLE_MM));
     }
+    crate::profile_count!("medial.samples", samples.len());
     if samples.len() < 3 {
         return Vec::new();
     }
@@ -197,7 +199,8 @@ pub fn medial_axis_cancellable(
         .iter()
         .map(|p| VPointXy { x: p.x, y: p.y })
         .collect();
-    let Some(tri) = triangulate(&voronator_pts) else {
+    let Some(tri) = crate::profile_measure!("medial.triangulation", triangulate(&voronator_pts))
+    else {
         return Vec::new();
     };
 
@@ -217,6 +220,7 @@ pub fn medial_axis_cancellable(
     // the actual distance from each circumcenter to the nearest
     // boundary segment below.
     let n_tri = tri.len();
+    crate::profile_count!("medial.triangles", n_tri);
     let mut centers: Vec<Option<Point2>> = Vec::with_capacity(n_tri);
     for t in 0..n_tri {
         let i0 = tri.triangles[3 * t];

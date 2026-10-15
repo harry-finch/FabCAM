@@ -30,6 +30,7 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     warnings: &mut Vec<PipelineWarning>,
     cancel: Option<&CancelToken>,
 ) -> Result<(), PipelineError> {
+    crate::profile_scope!("vcarve.driver");
     let invalid = |s: &str| PipelineError::VCarve(op.id, s.into());
     let tool = project
         .tools
@@ -115,7 +116,10 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     }
     let selected = ordered_selection(op, objects);
     let prepared = vcarve_validate::prepared(objects, &selected).map_err(|e| invalid(&e))?;
-    let regions = combine_source_regions(&prepared, &selected, source_combine_mode(op));
+    let regions = crate::profile_measure!(
+        "vcarve.regions",
+        combine_source_regions(&prepared, &selected, source_combine_mode(op))
+    );
     if regions.is_empty() {
         return Err(invalid(
             "No closed carving region remains after geometry combination.",
@@ -158,12 +162,15 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
                 return Err(invalid("No medial axis could be resolved at the 0.1 mm sampling spacing. Geometry is unsupported; no output generated."));
             }
             for axis in axes.iter() {
-                let (path, limited, zero) = crate::cam::vcarve::polyline_to_z(
-                    axis,
-                    tool.tip_angle_deg.to_radians(),
-                    tip_r,
-                    Some(r_cap),
-                    Some(-z_limit),
+                let (path, limited, zero) = crate::profile_measure!(
+                    "vcarve.target_depth",
+                    crate::cam::vcarve::polyline_to_z(
+                        axis,
+                        tool.tip_angle_deg.to_radians(),
+                        tip_r,
+                        Some(r_cap),
+                        Some(-z_limit),
+                    )
                 );
                 capped |= limited;
                 if zero {
@@ -212,9 +219,11 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
         let mut rings = vec![boundary];
         rings.extend(holes.iter().map(Vec::as_slice));
         for target in targets {
+            crate::profile_count!("vcarve.target_points", target.len());
             vcarve_validate::check_envelope(&target, &rings, tip_r, tan)
                 .map_err(|e| invalid(&e))?;
             let path = vcarve_plan::plan(&target, dpp, angle).map_err(|e| invalid(&e))?;
+            crate::profile_count!("vcarve.planned_points", path.len());
             total += path.len();
             if total > 1_000_000 {
                 return Err(invalid("Undercut: operation exceeds the one-million-waypoint budget before completion."));
@@ -231,7 +240,10 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     warnings.push(PipelineWarning::for_op(op.id,"vcarve_scope",if params.full_medial_axis {"Full medial axis: completed sampled spine paths (0.1 mm boundary spacing), not a complete-area pocket or exact swept-volume simulation."} else {"Perimeter: V-bit contour groove at constant final depth; the interior is not cleared."}));
     // Shared emitter is unchanged: the plan begins at Z=0 and contains its own
     // qualified continuous entry. Between separate chains it retracts to safe Z.
-    emit_vcarve_block(setup, &polylines, post, last_pos);
+    crate::profile_measure!(
+        "vcarve.emit",
+        emit_vcarve_block(setup, &polylines, post, last_pos)
+    );
     Ok(())
 }
 

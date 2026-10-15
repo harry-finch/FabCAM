@@ -1,0 +1,1420 @@
+[
+  {
+    "name": "square-outline-linuxcnc.json",
+    "case": "square-outline",
+    "description": "Existing software qualification fixture; outline groove.",
+    "sha256": "c2b4bc78fe2d3572558b35d589790669207ee80fd6c92aadab0cb627c9279410",
+    "bytes": 1670,
+    "adapter_ms_single_observation": 0.024292000000002645,
+    "input_segments": 8,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 50,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 1,
+        "name": "VCARVE SOFTWARE ONLY — perimeter",
+        "enabled": true,
+        "kind": "vcarve",
+        "toolId": 1,
+        "sourceLayers": [
+          "svg"
+        ],
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.2,
+        "fullMedialAxis": false,
+        "multiPassRefine": false
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 50,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "square-outline-cps.json",
+    "case": "square-outline",
+    "description": "Existing software qualification fixture; outline groove.",
+    "sha256": "85bdb653ccdaf900fe4417c4e8c1998ba796555c039aa311d6c522e8b89f88d0",
+    "bytes": 1737,
+    "adapter_ms_single_observation": 0.024292000000002645,
+    "input_segments": 8,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 50,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 1,
+        "name": "VCARVE SOFTWARE ONLY — perimeter",
+        "enabled": true,
+        "kind": "vcarve",
+        "toolId": 1,
+        "sourceLayers": [
+          "svg"
+        ],
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.2,
+        "fullMedialAxis": false,
+        "multiPassRefine": false
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 50,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "square-medial-linuxcnc.json",
+    "case": "square-medial",
+    "description": "Same square, variable-depth strategy.",
+    "sha256": "77b856c02e3f7509e79fb142ce63234515a8f3e5a063f05e35d64964651d7a0b",
+    "bytes": 1693,
+    "adapter_ms_single_observation": 0.018916999999987638,
+    "input_segments": 8,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 50,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 1,
+        "name": "VCARVE SOFTWARE ONLY — perimeter",
+        "enabled": true,
+        "kind": "vcarve",
+        "toolId": 1,
+        "sourceLayers": [
+          "svg"
+        ],
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.2,
+        "fullMedialAxis": true,
+        "multiPassRefine": false
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 50,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "square-medial-cps.json",
+    "case": "square-medial",
+    "description": "Same square, variable-depth strategy.",
+    "sha256": "7d51a26bbaaa2551aa802cbb81f1b354c511332ee3bba1333380298476d5f5ef",
+    "bytes": 1760,
+    "adapter_ms_single_observation": 0.018916999999987638,
+    "input_segments": 8,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 50,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 1,
+        "name": "VCARVE SOFTWARE ONLY — perimeter",
+        "enabled": true,
+        "kind": "vcarve",
+        "toolId": 1,
+        "sourceLayers": [
+          "svg"
+        ],
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.2,
+        "fullMedialAxis": true,
+        "multiPassRefine": false
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 50,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "text-Test-medial-linuxcnc.json",
+    "case": "text-Test-medial",
+    "description": "Saved Test text demo, representative surrogate unless human confirms observed case.",
+    "sha256": "89a605c62b70357b79ced7c0ab8efb439d0155d95315229f812ab01aa70c1585",
+    "bytes": 1014643,
+    "adapter_ms_single_observation": 0.028667000000012877,
+    "input_segments": 4,
+    "font_families": [
+      "DejaVu Sans"
+    ],
+    "stock_sizing_bbox": {
+      "min_x": 9.94140625,
+      "min_y": 11.716796875,
+      "max_x": 52.3046875,
+      "max_y": 26.580078125
+    },
+    "text": [
+      {
+        "text": "Test",
+        "size_mm": 20,
+        "font_source_kind": "bundled"
+      }
+    ],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Carve Inside TEXT — \"Test\"",
+        "enabled": true,
+        "toolId": 2,
+        "sourceCombine": "auto",
+        "sourceLayers": [
+          "__text_1"
+        ],
+        "kind": "vcarve",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.25,
+        "offset": "outside",
+        "pocketStrategy": null,
+        "cutDirection": "conventional",
+        "finishCutDirection": "conventional",
+        "plunge": {
+          "kind": "direct"
+        },
+        "xyOverlap": 0.5,
+        "multiPassRefine": false,
+        "fullMedialAxis": true
+      }
+    ],
+    "tools": [
+      {
+        "id": 2,
+        "name": "V-bit 60° Ø6 mm — référence démo",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 60,
+        "flutes": 2,
+        "speed": 12000,
+        "plungeRate": 150,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 5
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 100,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "text-Test-medial-cps.json",
+    "case": "text-Test-medial",
+    "description": "Saved Test text demo, representative surrogate unless human confirms observed case.",
+    "sha256": "71d48ac5d59f5683a843f2002aadafeb1c2f0e682b17095a00b69b97277f75ec",
+    "bytes": 1014710,
+    "adapter_ms_single_observation": 0.028667000000012877,
+    "input_segments": 4,
+    "font_families": [
+      "DejaVu Sans"
+    ],
+    "stock_sizing_bbox": {
+      "min_x": 9.94140625,
+      "min_y": 11.716796875,
+      "max_x": 52.3046875,
+      "max_y": 26.580078125
+    },
+    "text": [
+      {
+        "text": "Test",
+        "size_mm": 20,
+        "font_source_kind": "bundled"
+      }
+    ],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Carve Inside TEXT — \"Test\"",
+        "enabled": true,
+        "toolId": 2,
+        "sourceCombine": "auto",
+        "sourceLayers": [
+          "__text_1"
+        ],
+        "kind": "vcarve",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.25,
+        "offset": "outside",
+        "pocketStrategy": null,
+        "cutDirection": "conventional",
+        "finishCutDirection": "conventional",
+        "plunge": {
+          "kind": "direct"
+        },
+        "xyOverlap": 0.5,
+        "multiPassRefine": false,
+        "fullMedialAxis": true
+      }
+    ],
+    "tools": [
+      {
+        "id": 2,
+        "name": "V-bit 60° Ø6 mm — référence démo",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 60,
+        "flutes": 2,
+        "speed": 12000,
+        "plungeRate": 150,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 5
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 100,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "text-Test-outline-linuxcnc.json",
+    "case": "text-Test-outline",
+    "description": "Same saved text with outline strategy; refusals reported separately.",
+    "sha256": "f186ebfa18b68d5ba6ed6d6e9aaddb648b022111c38b450617d3eff88db36671",
+    "bytes": 1014620,
+    "adapter_ms_single_observation": 0.025584000000009155,
+    "input_segments": 4,
+    "font_families": [
+      "DejaVu Sans"
+    ],
+    "stock_sizing_bbox": {
+      "min_x": 9.94140625,
+      "min_y": 11.716796875,
+      "max_x": 52.3046875,
+      "max_y": 26.580078125
+    },
+    "text": [
+      {
+        "text": "Test",
+        "size_mm": 20,
+        "font_source_kind": "bundled"
+      }
+    ],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Carve Inside TEXT — \"Test\"",
+        "enabled": true,
+        "toolId": 2,
+        "sourceCombine": "auto",
+        "sourceLayers": [
+          "__text_1"
+        ],
+        "kind": "vcarve",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.25,
+        "offset": "outside",
+        "pocketStrategy": null,
+        "cutDirection": "conventional",
+        "finishCutDirection": "conventional",
+        "plunge": {
+          "kind": "direct"
+        },
+        "xyOverlap": 0.5,
+        "multiPassRefine": false,
+        "fullMedialAxis": false
+      }
+    ],
+    "tools": [
+      {
+        "id": 2,
+        "name": "V-bit 60° Ø6 mm — référence démo",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 60,
+        "flutes": 2,
+        "speed": 12000,
+        "plungeRate": 150,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 5
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 100,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "text-Test-outline-cps.json",
+    "case": "text-Test-outline",
+    "description": "Same saved text with outline strategy; refusals reported separately.",
+    "sha256": "86f6a7e11b1886169d80e4e1b7bd1129e4dfa07573a2dc67381e24bc981449d1",
+    "bytes": 1014687,
+    "adapter_ms_single_observation": 0.025584000000009155,
+    "input_segments": 4,
+    "font_families": [
+      "DejaVu Sans"
+    ],
+    "stock_sizing_bbox": {
+      "min_x": 9.94140625,
+      "min_y": 11.716796875,
+      "max_x": 52.3046875,
+      "max_y": 26.580078125
+    },
+    "text": [
+      {
+        "text": "Test",
+        "size_mm": 20,
+        "font_source_kind": "bundled"
+      }
+    ],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Carve Inside TEXT — \"Test\"",
+        "enabled": true,
+        "toolId": 2,
+        "sourceCombine": "auto",
+        "sourceLayers": [
+          "__text_1"
+        ],
+        "kind": "vcarve",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.25,
+        "offset": "outside",
+        "pocketStrategy": null,
+        "cutDirection": "conventional",
+        "finishCutDirection": "conventional",
+        "plunge": {
+          "kind": "direct"
+        },
+        "xyOverlap": 0.5,
+        "multiPassRefine": false,
+        "fullMedialAxis": false
+      }
+    ],
+    "tools": [
+      {
+        "id": 2,
+        "name": "V-bit 60° Ø6 mm — référence démo",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 60,
+        "flutes": 2,
+        "speed": 12000,
+        "plungeRate": 150,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 5
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 100,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "text-B8-medial-linuxcnc.json",
+    "case": "text-B8-medial",
+    "description": "Representative nested glyph holes; not the observed case.",
+    "sha256": "55bee9b1b9e25d0e205cbd0e3fae24242a7f7d960eba06a70c33d195c5939966",
+    "bytes": 1014677,
+    "adapter_ms_single_observation": 0.05279200000001083,
+    "input_segments": 4,
+    "font_families": [
+      "DejaVu Sans"
+    ],
+    "stock_sizing_bbox": {
+      "min_x": 11.962890625,
+      "min_y": 11.716796875,
+      "max_x": 35.078125,
+      "max_y": 26.84375
+    },
+    "text": [
+      {
+        "text": "B8",
+        "size_mm": 20,
+        "font_source_kind": "bundled"
+      }
+    ],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Carve Inside TEXT — \"Test\"",
+        "enabled": true,
+        "toolId": 2,
+        "sourceCombine": "auto",
+        "sourceLayers": [
+          "__text_1"
+        ],
+        "kind": "vcarve",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.25,
+        "offset": "outside",
+        "pocketStrategy": null,
+        "cutDirection": "conventional",
+        "finishCutDirection": "conventional",
+        "plunge": {
+          "kind": "direct"
+        },
+        "xyOverlap": 0.5,
+        "multiPassRefine": false,
+        "fullMedialAxis": true
+      }
+    ],
+    "tools": [
+      {
+        "id": 2,
+        "name": "V-bit 60° Ø6 mm — référence démo",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 60,
+        "flutes": 2,
+        "speed": 12000,
+        "plungeRate": 150,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 5
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 100,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "text-B8-medial-cps.json",
+    "case": "text-B8-medial",
+    "description": "Representative nested glyph holes; not the observed case.",
+    "sha256": "6cbae73630f7bef90539ffaaa8168529bbeab7cf8aaa31ec69522d628b8ef035",
+    "bytes": 1014744,
+    "adapter_ms_single_observation": 0.05279200000001083,
+    "input_segments": 4,
+    "font_families": [
+      "DejaVu Sans"
+    ],
+    "stock_sizing_bbox": {
+      "min_x": 11.962890625,
+      "min_y": 11.716796875,
+      "max_x": 35.078125,
+      "max_y": 26.84375
+    },
+    "text": [
+      {
+        "text": "B8",
+        "size_mm": 20,
+        "font_source_kind": "bundled"
+      }
+    ],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Carve Inside TEXT — \"Test\"",
+        "enabled": true,
+        "toolId": 2,
+        "sourceCombine": "auto",
+        "sourceLayers": [
+          "__text_1"
+        ],
+        "kind": "vcarve",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.25,
+        "offset": "outside",
+        "pocketStrategy": null,
+        "cutDirection": "conventional",
+        "finishCutDirection": "conventional",
+        "plunge": {
+          "kind": "direct"
+        },
+        "xyOverlap": 0.5,
+        "multiPassRefine": false,
+        "fullMedialAxis": true
+      }
+    ],
+    "tools": [
+      {
+        "id": 2,
+        "name": "V-bit 60° Ø6 mm — référence démo",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 60,
+        "flutes": 2,
+        "speed": 12000,
+        "plungeRate": 150,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 5
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 100,
+      "customY": 50,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "pocket-islands-linuxcnc.json",
+    "case": "pocket-islands",
+    "description": "Existing multi-import Pocket source fixture; normal outer/inner nesting.",
+    "sha256": "76664af7b48be3d61dec7bc45d198eaa28fc241b32b030db430fbd2e16e1aea7",
+    "bytes": 4299,
+    "adapter_ms_single_observation": 0.025374999999996817,
+    "input_segments": 20,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 72,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Pocket — nested SVG contours",
+        "enabled": true,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [
+          "svg"
+        ],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      },
+      {
+        "id": 2,
+        "name": "Profile — saved two-layer source",
+        "enabled": false,
+        "kind": "profile",
+        "toolId": 2,
+        "sourceLayers": [
+          "svg",
+          "Cuts"
+        ],
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "offset": "outside"
+      },
+      {
+        "id": 3,
+        "name": "Pocket — ordered Difference",
+        "enabled": false,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": null,
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "sourceObjects": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Pocket — unavailable layer",
+        "enabled": false,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [
+          "Missing layer"
+        ],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      },
+      {
+        "id": 5,
+        "name": "Pocket — legacy empty binding",
+        "enabled": false,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 90,
+      "customY": 60,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "pocket-islands-cps.json",
+    "case": "pocket-islands",
+    "description": "Existing multi-import Pocket source fixture; normal outer/inner nesting.",
+    "sha256": "78f39a2c59600f24ffb175c93a81a236dd78b4f649dbdec3d649038907464c8f",
+    "bytes": 4366,
+    "adapter_ms_single_observation": 0.025374999999996817,
+    "input_segments": 20,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 72,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 1,
+        "name": "Pocket — nested SVG contours",
+        "enabled": true,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [
+          "svg"
+        ],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      },
+      {
+        "id": 2,
+        "name": "Profile — saved two-layer source",
+        "enabled": false,
+        "kind": "profile",
+        "toolId": 2,
+        "sourceLayers": [
+          "svg",
+          "Cuts"
+        ],
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "offset": "outside"
+      },
+      {
+        "id": 3,
+        "name": "Pocket — ordered Difference",
+        "enabled": false,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": null,
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "sourceObjects": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Pocket — unavailable layer",
+        "enabled": false,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [
+          "Missing layer"
+        ],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      },
+      {
+        "id": 5,
+        "name": "Pocket — legacy empty binding",
+        "enabled": false,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 90,
+      "customY": 60,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "profile-contours-linuxcnc.json",
+    "case": "profile-contours",
+    "description": "Same SVG/DXF contours, saved Profile multi-layer binding.",
+    "sha256": "91770439c0c454ea5e28a756152c6a65cf5db5f61be49d01274590a2669a195d",
+    "bytes": 3076,
+    "adapter_ms_single_observation": 0.016999999999995907,
+    "input_segments": 20,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 72,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 2,
+        "name": "Profile — saved two-layer source",
+        "enabled": true,
+        "kind": "profile",
+        "toolId": 2,
+        "sourceLayers": [
+          "svg",
+          "Cuts"
+        ],
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "offset": "outside"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 90,
+      "customY": 60,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "profile-contours-cps.json",
+    "case": "profile-contours",
+    "description": "Same SVG/DXF contours, saved Profile multi-layer binding.",
+    "sha256": "fc413e553c850a30368b910e535c8bfa4eb7c6dd7ded6ba26b74918954c80ccf",
+    "bytes": 3143,
+    "adapter_ms_single_observation": 0.016999999999995907,
+    "input_segments": 20,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 72,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 2,
+        "name": "Profile — saved two-layer source",
+        "enabled": true,
+        "kind": "profile",
+        "toolId": 2,
+        "sourceLayers": [
+          "svg",
+          "Cuts"
+        ],
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "offset": "outside"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 90,
+      "customY": 60,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "profile-many-segments-linuxcnc.json",
+    "case": "profile-many-segments",
+    "description": "Synthetic 128 circular polygons × 32 edges (4096 line segments); clearly sampled fixture geometry, no CAM approximation change.",
+    "sha256": "e2f8ae3c93264262adca0ecf61235ac7efda828e2279225d517dad5142c916e1",
+    "bytes": 626154,
+    "adapter_ms_single_observation": 0.009666000000038366,
+    "input_segments": 4100,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 7,
+      "min_y": 7,
+      "max_x": 283,
+      "max_y": 139
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 2,
+        "name": "Profile — saved two-layer source",
+        "enabled": true,
+        "kind": "profile",
+        "toolId": 2,
+        "sourceLayers": [
+          "bench"
+        ],
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "offset": "outside"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 300,
+      "customY": 160,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "profile-many-segments-cps.json",
+    "case": "profile-many-segments",
+    "description": "Synthetic 128 circular polygons × 32 edges (4096 line segments); clearly sampled fixture geometry, no CAM approximation change.",
+    "sha256": "b28e2fab395c641d23aaa0161da4096160ec8693d28dbda0b12379c25e66b9eb",
+    "bytes": 626221,
+    "adapter_ms_single_observation": 0.009666000000038366,
+    "input_segments": 4100,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 7,
+      "min_y": 7,
+      "max_x": 283,
+      "max_y": 139
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 2,
+        "name": "Profile — saved two-layer source",
+        "enabled": true,
+        "kind": "profile",
+        "toolId": 2,
+        "sourceLayers": [
+          "bench"
+        ],
+        "sourceCombine": "difference",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade",
+        "offset": "outside"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 300,
+      "customY": 160,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "missing-layer-linuxcnc.json",
+    "case": "missing-layer",
+    "description": "Known missing source: diagnostics/empty result, never counted as successful machining.",
+    "sha256": "e8f5e25c48fb0a5becbd9f7cec9e9dc17a95a56fc79c6b91923fe2daeec51df5",
+    "bytes": 3071,
+    "adapter_ms_single_observation": 0.012041000000010627,
+    "input_segments": 20,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 72,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 4,
+        "name": "Pocket — unavailable layer",
+        "enabled": true,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [
+          "Missing layer"
+        ],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 90,
+      "customY": 60,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  },
+  {
+    "name": "missing-layer-cps.json",
+    "case": "missing-layer",
+    "description": "Known missing source: diagnostics/empty result, never counted as successful machining.",
+    "sha256": "3f926d57d6a221269867b636e7aa7799b5345865875ed1f2d2526b553895124b",
+    "bytes": 3138,
+    "adapter_ms_single_observation": 0.012041000000010627,
+    "input_segments": 20,
+    "font_families": [],
+    "stock_sizing_bbox": {
+      "min_x": 10,
+      "min_y": 10,
+      "max_x": 72,
+      "max_y": 50
+    },
+    "text": [],
+    "operation": [
+      {
+        "id": 4,
+        "name": "Pocket — unavailable layer",
+        "enabled": true,
+        "kind": "pocket",
+        "toolId": 2,
+        "sourceLayers": [
+          "Missing layer"
+        ],
+        "sourceCombine": "auto",
+        "depth": -1,
+        "startDepth": 0,
+        "step": -0.5,
+        "pocketStrategy": "cascade"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "SOFTWARE ONLY — 90° V-bit D6",
+        "kind": "v_bit",
+        "diameter": 6,
+        "tipDiameter": 0,
+        "tipAngleDeg": 90,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 200,
+        "feedRate": 600,
+        "coolant": "off",
+        "fluteLengthMm": 6
+      },
+      {
+        "id": 2,
+        "name": "GEOMETRY SOFTWARE ONLY — endmill D4",
+        "kind": "endmill",
+        "diameter": 4,
+        "flutes": 1,
+        "speed": 10000,
+        "plungeRate": 500,
+        "feedRate": 1000,
+        "coolant": "off"
+      }
+    ],
+    "stock": {
+      "visible": true,
+      "mode": "manual",
+      "margin": 0,
+      "thickness": 10,
+      "customX": 90,
+      "customY": 60,
+      "offsetX": 0,
+      "offsetY": 0,
+      "offsetZ": 0
+    }
+  }
+]

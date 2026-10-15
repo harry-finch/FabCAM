@@ -39,6 +39,7 @@ pub(super) fn analyze(
     targets: &[RegionPreview],
     toolpath: &[ToolpathSegment],
     execution_path: bool,
+    cache: Option<&crate::pipeline_cache::PipelineCache>,
 ) -> Vec<RemainingMaterial> {
     project
         .operations
@@ -140,7 +141,7 @@ pub(super) fn analyze(
                 return result;
             }
             let radius = tool.expect("qualified tool").diameter * 0.5;
-            result.regions = remaining_regions(&own_targets, &moves, radius, depth);
+            result.regions = memoized_regions(&own_targets, &moves, radius, depth, cache);
             let areas: Vec<_> = result.regions.iter().map(region_area).collect();
             result.area_mm2 = areas.iter().sum();
             result.largest_area_mm2 = areas.into_iter().fold(0., f64::max);
@@ -149,6 +150,54 @@ pub(super) fn analyze(
             result
         })
         .collect()
+}
+
+// All eligibility guards run before this function. Stock/operation changes that
+// leave the qualified kernel inputs identical may safely reuse only its output.
+fn memoized_regions(
+    targets: &[RegionPreview],
+    moves: &[&ToolpathSegment],
+    radius: f64,
+    depth: f64,
+    cache: Option<&crate::pipeline_cache::PipelineCache>,
+) -> Vec<RegionPreview> {
+    let key = cache.and_then(|_| {
+        // serde JSON maps nonfinite floats to null: never use that as identity.
+        let finite = targets
+            .iter()
+            .flat_map(|r| r.outer.iter().chain(r.holes.iter().flatten()))
+            .all(|p| p.x.is_finite() && p.y.is_finite())
+            && moves.iter().all(|m| {
+                [m.from.x, m.from.y, m.from.z, m.to.x, m.to.y, m.to.z]
+                    .iter()
+                    .all(|v| v.is_finite())
+            });
+        if !finite || !radius.is_finite() || !depth.is_finite() {
+            return None;
+        }
+        crate::profile_measure!(
+            "preview.remaining_key",
+            serde_json::to_vec(&(
+                crate::pipeline_cache::PIPELINE_VERSION,
+                targets,
+                moves,
+                radius,
+                depth
+            ))
+            .ok()
+            .filter(|k| k.len() <= 8 * 1024 * 1024)
+        )
+    });
+    if let Some(regions) = key.as_ref().and_then(|k| cache?.remaining_memo.get(k)) {
+        crate::profile_count!("preview.remaining_cache_hit", 1);
+        return regions;
+    }
+    crate::profile_count!("preview.remaining_cache_miss", 1);
+    let result = remaining_regions(targets, moves, radius, depth);
+    if let (Some(cache), Some(key)) = (cache, key) {
+        cache.remaining_memo.put(key, &result);
+    }
+    result
 }
 
 fn ring_path(points: &[Point2], positive: bool) -> PathD {
@@ -418,5 +467,53 @@ mod tests {
             .iter()
             .flat_map(|r| &r.outer)
             .all(|p| p.x >= -0.00001 && p.x <= 5.00001 && p.y >= 4.99999 && p.y <= 10.00001));
+    }
+    #[test]
+    fn memo_kernel_exact_inputs_include_holes_movements_radius_and_depth() {
+        let cache = crate::pipeline_cache::PipelineCache::new(4);
+        let target = RegionPreview {
+            op_id: 1,
+            outer: vec![
+                Point2::new(0., 0.),
+                Point2::new(10., 0.),
+                Point2::new(10., 10.),
+                Point2::new(0., 10.),
+            ],
+            holes: vec![],
+        };
+        let cut = movement([0., 0., -2.], [10., 0., -2.], MoveKind::Cut);
+        let value = |r| serde_json::to_value(r).unwrap();
+        for i in 0..5 {
+            let mut t = target.clone();
+            let mut m = cut.clone();
+            let mut radius = 1.;
+            let mut depth = -2.;
+            match i {
+                1 => t.holes.push(vec![
+                    Point2::new(4., 4.),
+                    Point2::new(5., 4.),
+                    Point2::new(5., 5.),
+                ]),
+                2 => m.to.y = 5.,
+                3 => radius = 2.,
+                4 => depth = -3.,
+                _ => {}
+            }
+            let expected = value(remaining_regions(&[t.clone()], &[&m], radius, depth));
+            assert_eq!(
+                value(memoized_regions(
+                    &[t.clone()],
+                    &[&m],
+                    radius,
+                    depth,
+                    Some(&cache)
+                )),
+                expected
+            );
+            assert_eq!(
+                value(memoized_regions(&[t], &[&m], radius, depth, Some(&cache))),
+                expected
+            );
+        }
     }
 }

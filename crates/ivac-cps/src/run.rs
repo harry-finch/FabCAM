@@ -2,6 +2,10 @@
 //! NC text) and [`inspect_post`] (top-level eval → property sheet).
 
 use boa_engine::JsValue;
+use std::sync::{
+    atomic::{AtomicBool, Ordering},
+    Arc,
+};
 
 use crate::diag::{Diagnostic, PostError};
 use crate::engine::{Engine, PRELUDE};
@@ -286,6 +290,51 @@ pub fn run_post_with_limits(
     properties: &serde_json::Value,
     limits: RunLimits,
 ) -> Result<PostOutput, PostError> {
+    run_post_inner(script, script_name, program, properties, limits, None)
+}
+
+/// Cooperative cancellation at existing driver checkpoints (every 1024 records).
+/// Long individual post callbacks and script parsing are not preemptible. The
+/// host owns a monotonic false→true flag; cancellation never exposes partial text.
+///
+/// # Errors
+/// As [`run_post`], including [`PostError::Cancelled`] when the flag is set.
+pub fn run_post_cancellable(
+    script: &str,
+    script_name: &str,
+    program: &ir::Program,
+    properties: &serde_json::Value,
+    cancel: Arc<AtomicBool>,
+) -> Result<PostOutput, PostError> {
+    run_post_inner(
+        script,
+        script_name,
+        program,
+        properties,
+        RunLimits::default(),
+        Some(cancel),
+    )
+}
+
+fn run_post_inner(
+    script: &str,
+    script_name: &str,
+    program: &ir::Program,
+    properties: &serde_json::Value,
+    limits: RunLimits,
+    cancel: Option<Arc<AtomicBool>>,
+) -> Result<PostOutput, PostError> {
+    let check_cancel = || {
+        if cancel
+            .as_ref()
+            .is_some_and(|flag| flag.load(Ordering::Relaxed))
+        {
+            Err(PostError::Cancelled)
+        } else {
+            Ok(())
+        }
+    };
+    check_cancel()?;
     if program.version != ir::IR_VERSION {
         return Err(PostError::IrVersionMismatch(format!(
             "program is v{}, runtime supports v{}",
@@ -293,9 +342,11 @@ pub fn run_post_with_limits(
             ir::IR_VERSION
         )));
     }
-    let mut engine = Engine::new();
+    let mut engine = Engine::with_cancel(cancel.clone());
     apply_limits(&mut engine, limits);
-    let map = eval_bundled(&mut engine, script, script_name)?;
+    let evaluated = eval_bundled(&mut engine, script, script_name);
+    check_cancel()?;
+    let map = evaluated?;
 
     let program_json =
         serde_json::to_value(program).map_err(|e| PostError::Contract(e.to_string()))?;
@@ -304,19 +355,19 @@ pub fn run_post_with_limits(
     let overrides_js = JsValue::from_json(properties, engine.context_mut())
         .map_err(|e| PostError::Contract(e.to_string()))?;
 
-    let envelope =
-        call_export(&mut engine, "execute", &[program_js, overrides_js]).map_err(|e| {
-            let message = e.to_string();
-            if message.contains("__IVAC_CANCELLED__") {
-                PostError::Cancelled
-            } else if is_budget_error(&e) {
-                PostError::BudgetExceeded(map.remap_message(&message))
-            } else {
-                PostError::PostRuntime {
-                    message: map.remap_message(&message),
-                }
+    check_cancel()?;
+    let executed = call_export(&mut engine, "execute", &[program_js, overrides_js]);
+    check_cancel()?;
+    let envelope = executed.map_err(|e| {
+        let message = e.to_string();
+        if is_budget_error(&e) {
+            PostError::BudgetExceeded(map.remap_message(&message))
+        } else {
+            PostError::PostRuntime {
+                message: map.remap_message(&message),
             }
-        })?;
+        }
+    })?;
 
     let envelope = envelope
         .to_json(engine.context_mut())
@@ -341,6 +392,7 @@ pub fn run_post_with_limits(
         });
     }
 
+    check_cancel()?;
     let field = |key: &str| envelope[key].as_str().unwrap_or_default().to_string();
     Ok(PostOutput {
         text: engine.output_text(),

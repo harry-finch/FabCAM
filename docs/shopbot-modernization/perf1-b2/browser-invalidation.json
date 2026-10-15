@@ -1,0 +1,206 @@
+[
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18797\"}",
+    "timestamp": "2026-10-15T12:59:48.831Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"context_ready\",\"elapsed_ms\":0.2999999523162842}",
+    "timestamp": "2026-10-15T12:59:48.831Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"project_ready\",\"elapsed_ms\":0.6000000238418579}",
+    "timestamp": "2026-10-15T12:59:48.831Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"request_sent\",\"elapsed_ms\":0.6000000238418579}",
+    "timestamp": "2026-10-15T12:59:48.831Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"first_event\",\"elapsed_ms\":26.600000023841858}",
+    "timestamp": "2026-10-15T12:59:48.858Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"response_received\",\"elapsed_ms\":27,\"moves\":38}",
+    "timestamp": "2026-10-15T12:59:48.858Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"state_applied\",\"elapsed_ms\":27.100000023841858,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:48.858Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":30.799999952316284,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:48.862Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":31.100000023841858,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:48.862Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"first_3d_frame\",\"elapsed_ms\":60.5,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:48.891Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1031.7999999523163,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:49.863Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1032.2999999523163,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:49.864Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1089.6000000238419,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:49.920Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1089.7000000476837,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:49.920Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1090.3999999761581,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:49.920Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1090.7000000476837,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:49.921Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":4,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1107.6000000238419,\"version\":5}",
+    "timestamp": "2026-10-15T12:59:49.938Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"start\",\"elapsed_ms\":0,\"post\":\"cps\",\"requested_api\":\"http://127.0.0.1:18797\"}",
+    "timestamp": "2026-10-15T13:00:21.927Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"context_ready\",\"elapsed_ms\":0.20000004768371582}",
+    "timestamp": "2026-10-15T13:00:21.928Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"project_ready\",\"elapsed_ms\":0.3999999761581421}",
+    "timestamp": "2026-10-15T13:00:21.928Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"request_sent\",\"elapsed_ms\":0.3999999761581421}",
+    "timestamp": "2026-10-15T13:00:21.928Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"first_event\",\"elapsed_ms\":28.5}",
+    "timestamp": "2026-10-15T13:00:21.956Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"response_received\",\"elapsed_ms\":29.100000023841858,\"moves\":38}",
+    "timestamp": "2026-10-15T13:00:21.957Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"state_applied\",\"elapsed_ms\":29.399999976158142,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:21.957Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"wire_buffers_ready\",\"elapsed_ms\":32.60000002384186,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:21.960Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_scheduled\",\"elapsed_ms\":32.799999952316284,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:21.960Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"first_3d_frame\",\"elapsed_ms\":62.700000047683716,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:21.990Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_timer_fired\",\"elapsed_ms\":1033.6000000238419,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:22.962Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_configure_begin\",\"elapsed_ms\":1033.8999999761581,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:22.962Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_configure_end\",\"elapsed_ms\":1107.1000000238419,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:23.035Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_replay_begin\",\"elapsed_ms\":1107.2999999523163,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:23.035Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_replayed\",\"elapsed_ms\":1107.7000000476837,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:23.035Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"simulation_lod_ready\",\"elapsed_ms\":1108.5,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:23.036Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  },
+  {
+    "level": "info",
+    "message": "PERF1 {\"id\":5,\"stage\":\"first_3d_frame_after_simulation\",\"elapsed_ms\":1123.1000000238419,\"version\":6}",
+    "timestamp": "2026-10-15T13:00:23.051Z",
+    "url": "http://127.0.0.1:18795/assets/index-Bj4oeNGo.js"
+  }
+]

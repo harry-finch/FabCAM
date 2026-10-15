@@ -1,0 +1,152 @@
+{
+  "control": {
+    "runs": [
+      {
+        "id": 1,
+        "response_ms": 895.8999999761581,
+        "first_frame_ms": 1085.3999999761581,
+        "relief_frame_ms": 2518.2000000476837,
+        "debounce_ms": 1001.2999999523163,
+        "configure_ms": 313.39999997615814,
+        "replay_ms": 67.5
+      },
+      {
+        "id": 2,
+        "response_ms": 827.1000000238419,
+        "first_frame_ms": 907.2000000476837,
+        "relief_frame_ms": 2300.7000000476837,
+        "debounce_ms": 1001.0,
+        "configure_ms": 315.10000002384186,
+        "replay_ms": 64.39999997615814
+      },
+      {
+        "id": 3,
+        "response_ms": 840.6000000238419,
+        "first_frame_ms": 916,
+        "relief_frame_ms": 2295.5,
+        "debounce_ms": 1001.2999999523163,
+        "configure_ms": 299.60000002384186,
+        "replay_ms": 63.89999997615814
+      },
+      {
+        "id": 4,
+        "response_ms": 822.7999999523163,
+        "first_frame_ms": 895.1999999284744,
+        "relief_frame_ms": 2259.399999976158,
+        "debounce_ms": 1000.8999999761581,
+        "configure_ms": 286.09999990463257,
+        "replay_ms": 63.200000047683716
+      },
+      {
+        "id": 5,
+        "response_ms": 821.7999999523163,
+        "first_frame_ms": 899.1999999284744,
+        "relief_frame_ms": 2251.7999999523163,
+        "debounce_ms": 1000.4000000953674,
+        "configure_ms": 273.89999997615814,
+        "replay_ms": 62.89999997615814
+      },
+      {
+        "id": 6,
+        "response_ms": 828.9000000953674,
+        "first_frame_ms": 904,
+        "relief_frame_ms": 2276,
+        "debounce_ms": 1001.7000000476837,
+        "configure_ms": 291.8000000715256,
+        "replay_ms": 63.0
+      },
+      {
+        "id": 7,
+        "response_ms": 817,
+        "first_frame_ms": 889.8000000715256,
+        "relief_frame_ms": 2258.600000023842,
+        "debounce_ms": 1000.2000000476837,
+        "configure_ms": 292.89999997615814,
+        "replay_ms": 61.800000071525574
+      }
+    ],
+    "warm_medians": {
+      "response_ms": 822.7999999523163,
+      "first_frame_ms": 899.1999999284744,
+      "relief_frame_ms": 2259.399999976158,
+      "debounce_ms": 1000.8999999761581,
+      "configure_ms": 291.8000000715256,
+      "replay_ms": 63.0
+    }
+  },
+  "candidate": {
+    "runs": [
+      {
+        "id": 1,
+        "response_ms": 864.7000000476837,
+        "first_frame_ms": 984.8000000715256,
+        "relief_frame_ms": 2399.899999976158,
+        "debounce_ms": 1001.3999999761581,
+        "configure_ms": 309.2999999523163,
+        "replay_ms": 67.10000002384186
+      },
+      {
+        "id": 2,
+        "response_ms": 56,
+        "first_frame_ms": 140.20000004768372,
+        "relief_frame_ms": 1536.8000000715256,
+        "debounce_ms": 1000.5,
+        "configure_ms": 316.39999997615814,
+        "replay_ms": 63.89999997615814
+      },
+      {
+        "id": 3,
+        "response_ms": 50.10000002384186,
+        "first_frame_ms": 141.40000009536743,
+        "relief_frame_ms": 1533.1000000238419,
+        "debounce_ms": 1001.3999999761581,
+        "configure_ms": 311.5,
+        "replay_ms": 63.0
+      },
+      {
+        "id": 4,
+        "response_ms": 53.39999997615814,
+        "first_frame_ms": 145.20000004768372,
+        "relief_frame_ms": 1496.7000000476837,
+        "debounce_ms": 1001.1000000238419,
+        "configure_ms": 282.5,
+        "replay_ms": 62.89999997615814
+      },
+      {
+        "id": 5,
+        "response_ms": 55.60000002384186,
+        "first_frame_ms": 144.80000007152557,
+        "relief_frame_ms": 1553.8000000715256,
+        "debounce_ms": 1000.8999999761581,
+        "configure_ms": 328.10000002384186,
+        "replay_ms": 63.10000002384186
+      },
+      {
+        "id": 6,
+        "response_ms": 51.700000047683716,
+        "first_frame_ms": 128.60000002384186,
+        "relief_frame_ms": 1515.5,
+        "debounce_ms": 1001.6999999284744,
+        "configure_ms": 308.6999999284744,
+        "replay_ms": 61.89999997615814
+      },
+      {
+        "id": 7,
+        "response_ms": 52.90000009536743,
+        "first_frame_ms": 135.70000004768372,
+        "relief_frame_ms": 1504.3000000715256,
+        "debounce_ms": 1001.6000000238419,
+        "configure_ms": 291.2000000476837,
+        "replay_ms": 61.60000002384186
+      }
+    ],
+    "warm_medians": {
+      "response_ms": 52.90000009536743,
+      "first_frame_ms": 141.40000009536743,
+      "relief_frame_ms": 1515.5,
+      "debounce_ms": 1001.3999999761581,
+      "configure_ms": 308.6999999284744,
+      "replay_ms": 62.89999997615814
+    }
+  }
+}

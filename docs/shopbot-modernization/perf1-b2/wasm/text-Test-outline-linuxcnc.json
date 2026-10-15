@@ -1,0 +1,104 @@
+{
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/text-Test-outline-linuxcnc.json",
+  "response_sha256": null,
+  "request_sha256": "f186ebfa18b68d5ba6ed6d6e9aaddb648b022111c38b450617d3eff88db36671",
+  "wasm_sha256": "83a8de478f1cc27e7336c74ec1d65da7a7e4297873e86853e7bb17864434a0d1",
+  "wasm_bytes": 4575323,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 12.925,
+  "parse_ms": 1.475875000000002,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 32.86837499999999,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 1,
+      "generate_ms": 3.4581249999999955,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 2,
+      "generate_ms": 3.541250000000005,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 3,
+      "generate_ms": 3.135666999999998,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 4,
+      "generate_ms": 3.3974170000000044,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 5,
+      "generate_ms": 3.7362499999999983,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    },
+    {
+      "run": 6,
+      "generate_ms": 3.221709000000004,
+      "success": false,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1"
+        },
+        "message": "V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+        "recovery_hint": "Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated."
+      }
+    }
+  ]
+}

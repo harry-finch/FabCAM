@@ -1,0 +1,17 @@
+{
+  "crates/ivac-core/src/pipeline_cache/cps.rs": "3f93edf9175efbe5f998109e62c2c3e724680421ee6a268f5171eaa05fc9b8e6",
+  "crates/ivac-core/src/pipeline_cache.rs": "0a24888b8872a8e46fc3498a0a7cd535b11d8b0b5ebc21278d72b0caea4b0a3f",
+  "crates/ivac-core/src/pipeline.rs": "a649c72b3b2afb039464227104a442820b110e2d240cf96fea47eecb59eb6011",
+  "crates/ivac-core/src/pipeline/perf1_b_tests.rs": "f0fbff979108922d8d8b08adbae87a5d2a8356e5174979a7bb4dafb319ec1392",
+  "frontend/src/lib/components/Scene3D.svelte": "55f66e521fc868dd8d900a3e6b32649d000dc8334b324a4201ec83da0d436e05",
+  "frontend/src/lib/state/performance-probe.ts": "59643e58691659090911ca98ede6ac307311027c777e577df827f61d990a05c6",
+  "scripts/perf1_evidence.py": "3a2b9b9c422017fd50e041a3ab3f0d063e81ce969bb70874de2e1c67d496fe45",
+  "scripts/perf1-native.py": "6b9488231158441c791122f780a64bdddef60bb43a4f0744ce4e2899fe1871d2",
+  "scripts/perf1-report.py": "c285d5d678725608e93cdbc9ab5a195293fa619bdd41694904387240a48e5bbd",
+  "scripts/perf1-paired.py": "4f37a5b5c80ecd453d70c9123aa469becb6a33454a25b941d649170a58cb3d56",
+  "scripts/perf1-b-summary.py": "ea1dd352eb1cc033b38b2c26a98901b9ec33521e0a47566297b0ab33aebf7726",
+  "scripts/perf1-browser-summary.py": "276796a849c0ffa7e0fdea1bfa4edf180afc32a9e9f8c3bb380c6fac9315d69b",
+  "scripts/test_perf1_evidence.py": "d9c8a2740d2a5f0f8086a20da29bc599674f86b41c02a8d572cad1018752d5b1",
+  "frontend/scripts/perf1-wasm.mjs": "dd96ec6c609b7f26965f1a08ee2da5312f08ca56c32b77a8a30ca06eecdf5a80",
+  "frontend/src/lib/state/performance-probe.test.ts": "05d5ae6e0947d4d31a4ec5c662f950a992cc363aaf9abaf5ede96e0ddd9ff10c"
+}

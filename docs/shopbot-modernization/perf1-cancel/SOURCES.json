@@ -1,0 +1,12 @@
+{
+  "crates/ivac-cps/Cargo.toml": "573b1f907face4bfe4bacebd7cc88fbe71836a7b61aa6c00bcd957371f3ed60a",
+  "crates/ivac-cps/src/engine.rs": "7437c418912b70af1e80622f30fe9685e400d8b9d78cb88714525193c8e4842d",
+  "crates/ivac-cps/src/run.rs": "fff8d4ed8585d3496450e82ee6fdbb2441f8d056569acbb9839e38dae69313a2",
+  "crates/ivac-cps/src/lib.rs": "0d87878dd5834a76eff79b271c9d76bfc26f8d1b151547793e1692823ce10a53",
+  "crates/ivac-cps/tests/cancellation.rs": "d2ad211919d6bedacba9af1fe2c3b2dd182311e6bec5ad3026d03a5872c2e48e",
+  "crates/ivac-core/src/cancel.rs": "cdabb9cd9a571e49d8f57ddc616ce2eead4ced22061f5acb01a4f18bb2d897da",
+  "crates/ivac-core/src/pipeline.rs": "d9f0d0c5d967f059aadae8eef25e5da2dc159f7992ac0fdc970aeb9ea67633f1",
+  "crates/ivac-core/src/pipeline/perf1_b_tests.rs": "4b1a15e91ec2827c1f8cfca7bd6f031f8813c189c4c9eb5e5504503c66f3d792",
+  "Cargo.lock": "ce29af92485dcf7bacd13f8b35b534078af275ab59d55ba30c3ef701b1c715d0",
+  "crates/ivac-core/tests/cps_posts.rs": "ff37fc13a481a25fab095c58248bf561e137c11d19964b6250b4311c0644529d"
+}

@@ -1,0 +1,1 @@
+{"status":"unavailable","attempt":"Seven-run debug diagnostic on representative Test CPS","timeout_seconds":90,"used_in_performance_comparison":false,"note":"Timed out before complete batch report; no per-run latency asserted. Release baselines remain authoritative."}

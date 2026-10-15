@@ -1,0 +1,4 @@
+   Compiling ivac-cps v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-server v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-server)
+    Finished `release` profile [optimized] target(s) in 1m 12s

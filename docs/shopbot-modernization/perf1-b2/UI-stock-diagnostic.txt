@@ -1,0 +1,184 @@
+Browser tab: 14, Title: "FabCAM v0.5.0 (v0.4.0-31-g2032848-dirty)", URL: "http://127.0.0.1:18795/?api=http%3A%2F%2F127.0.0.1%3A18797&perf=1".
+0 AXWebArea FabCAM v0.5.0 (v0.4.0-31-g2032848-dirty), URL: 127.0.0.1:18795/?api=http%3A%2F%2F127.0.0.1%3A18797&perf=1
+	1 container app
+		2 container Main areas
+			3 text FabCAM
+			4 button Project
+			5 button Description: Machine: CAM4 SOFTWARE ONLY — ShopBot post, Help: CAM4 SOFTWARE ONLY — ShopBot post — Active machine, its tooling, and its settings
+				6 text Machine:
+				7 text ShopBot post
+				12 text SOFTWARE ONLY
+			8 button Tool library, Help: The shop's tool inventory
+			9 button Settings, Help: App settings — theme, sim safety, performance
+			10 button Help, Help: Keyboard & mouse shortcuts and usage help
+			11 button About, Help: Version, license, acknowledgements
+		69 container
+			70 button (collapsed) File, Secondary Actions: Expand
+				71 text File
+		15 button Open, Help: Open a drawing (DXF / SVG) or a saved .ivac-project.json (Ctrl+O)
+		16 button Save, Help: Save the current project (Ctrl+S)
+		17 container CAM4-software-pocket.ivac-project.json — Unsaved changes
+			18 text CAM4-software-pocket.ivac-project.json Unsaved changes
+		19 button Description: Undo, Help: Undo Update stock (Ctrl+Z)
+		20 button (disabled) Description: Redo, Help: Nothing to redo
+		209 button Generate G-code, Help: Run the CAM pipeline and produce a toolpath. Reads the current ops, tools, stock, and machine — output is cached so unchanged ops re-emit instantly.
+		73 button Download .sbp, Help: Save the generated toolpath to disk in the selected dialect's file extension.
+		74 button STL, Help: Export the simulated (carved) stock as a binary STL mesh.
+		75 text 2 obj · 3 offsets · 38 moves
+		76 button Time breakdown
+		77 button (collapsed) 2 warning(s) (1 critical), Help: Click for details, Secondary Actions: Expand
+		78 container Remaining material
+			79 text Remaining material Not analyzed
+			210 container
+				211 button (expanded) Analysis details, Secondary Actions: Collapse
+					212 text Analysis details
+				213 text Requires stock top at Z0 and an analysis depth within the stock thickness.
+		83 container Show / hide the translucent fill that marks each pocket operation's machined region.
+			84 checkbox (settable, integer) Description: Regions, Value: 1
+			85 text Regions
+		86 container Show toolpath lines and direction arrows in 3D wireframe/both modes. Stock and simulation stay active.
+			87 checkbox (settable, integer) Description: Toolpaths, Value: 1
+			88 text Toolpaths
+		23 tab group Viewport mode
+			24 tab (selectable, settable, boolean) 2D, Value: 0
+			25 tab (selected, settable, boolean) 3D, Value: 1, Help: Click to switch to 3D. Click again to cycle preview mode: both → wireframe → solid. Shift+click reverses.
+		26 container
+			89 button Description: Fit view to scene, Help: Fit view to scene (F)
+			90 button (disabled) Previous op
+			91 button Play
+			92 button (disabled) Next op
+			93 slider (settable, integer) Description: Toolpath playback position, Value: 1, Help: Scrub: the 3D heightfield exactly tracks the playhead — backstep restores the nearest checkpoint and replays only the remainder. Toggle "Exact 3D rewind" off in Settings → Performance for the fastest scrubbing at the price of time-accurate rewind.
+			94 container
+				95 text ×
+				96 stepper (settable, integer) Description: Playback speed multiplier, Help: Playback speed, Value: 1
+			97 text 38/38
+			98 button ▶ G-code 76 lines, Help: Show / hide the G-code text panel. Click a line to scrub the playhead; the playhead's current line scrolls into view.
+				99 text ▶ G-code
+				100 text 76 lines
+			32 splitter Drag to resize the side panel · double-click to reset
+			33 container Stock
+				34 button (expanded) ▾ Stock 50 × 50 × 1 mm, Help: Collapse stock, Secondary Actions: Collapse
+					35 text ▾
+					36 text Stock
+					37 text 50 × 50 × 1 mm
+				105 container
+					106 text Material
+					107 pop up button (collapsed, settable) Material, Value: Choose job material, Secondary Actions: Expand
+						108 menu
+							109 (selected) Choose job material
+							110 WOOD
+							111 WOOD / MDF
+							112 WOOD / PLYWOOD
+							113 WOOD / PLYWOOD / POPLAR
+							114 WOOD / PLYWOOD / BIRCH
+							115 WOOD / HARDWOOD
+							116 WOOD / SOFTWOOD
+							117 PLASTIC
+							118 PLASTIC / PMMA
+							119 PLASTIC / PMMA / CAST
+							120 PLASTIC / PMMA / EXTRUDED
+							121 PLASTIC / POM
+							122 PLASTIC / HDPE
+							123 PLASTIC / POLYCARBONATE
+							124 PLASTIC / PVC
+							125 METAL
+							126 METAL / ALUMINIUM
+							127 METAL / ALUMINIUM / 6061
+							128 METAL / ALUMINIUM / 7075
+							129 Source softwood / soft plywood / MDF category
+							130 Other material…
+				131 text Applies to every operation in this job. Material identity is separate from stock dimensions.
+				132 container MODE
+					133 text MODE
+					134 container
+						135 radio button (settable, integer) Description: Auto (fit to drawing), Value: 0
+						136 text Auto (fit to drawing)
+					137 container
+						138 radio button (settable, integer) Description: Manual, Value: 1
+						139 text Manual
+				140 container DIMENSIONS
+					141 text DIMENSIONS
+					142 container
+						143 text Length
+						144 stepper (settable, integer) Length mm, Value: 50
+						145 text mm
+					146 container
+						147 text Width
+						148 stepper (settable, integer) Width mm, Value: 50
+						149 text mm
+					150 container
+						151 text Thickness
+						152 stepper (settable, integer) Thickness mm, Value: 1
+						153 text mm
+				154 container STOCK MINIMUM CORNER · DRAWING COORDINATES
+					155 text Manual stock keeps its existing drawing-bbox reference. Edit the effective minimum corner here; its base follows drawing bounds.
+					156 text STOCK MINIMUM CORNER · DRAWING COORDINATES
+					157 container
+						158 text X
+						159 stepper (settable, integer) X mm, Value: 5
+						160 text mm
+					161 container
+						162 text Y
+						163 stepper (settable, integer) Y mm, Value: 5
+						164 text mm
+					165 container
+						166 text Z
+						167 stepper (settable, integer) Z mm, Value: 0, Help: Z of the stock top plane (mm). 0 = top at the WCS origin (zeroed on the stock top). Positive raises the stock above z=0 — e.g. set it to the stock thickness if you zeroed on the bed. Shifts the 3D stock box, sim heightmap, and out-of-stock check.
+						168 text mm
+				169 container Lower-left corner · relative to work zero
+					170 text Lower-left corner · relative to work zero X 0.00 · Y 0.00 mm
+				171 container WORK ORIGIN (WCS)
+					172 container The WCS origin — where on the imported drawing the operator zeroed the machine. Cuts are emitted relative to this point; if it falls outside the geometry bbox the simulator warns. Auto-defaults to the bbox bottom-left on fresh import.
+						173 text WORK ORIGIN (WCS)
+					174 container
+						175 text WCS
+						176 pop up button (collapsed, settable) WCS, Value: G54, Secondary Actions: Expand
+							177 menu
+								178 (selected) G54
+								179 (disabled) G55
+								180 (disabled) G56
+								181 (disabled) G57
+								182 (disabled) G58
+								183 (disabled) G59
+					184 container
+						185 text X
+						186 stepper (settable, integer) X mm, Value: 5
+						187 text mm
+					188 container
+						189 text Y
+						190 stepper (settable, integer) Y mm, Value: 5
+						191 text mm
+					192 button Snap to bbox bottom-left, Help: Snap the WCS origin to the bottom-left of the imported drawing's bounding box — the canonical CNC zeroing convention.
+					193 button Set work zero to stock corner
+					194 text Work X/Y are the zero point in the drawing. Output subtracts this point; preview stays aligned with the drawing. Stock top Z and cut depths keep their existing convention.
+				195 button (collapsed) Fixtures / keep-outs 0, Secondary Actions: Expand
+					196 text Fixtures / keep-outs 
+					197 text 0
+				198 container TWO-SIDED (FLIP STOCK)
+					199 text TWO-SIDED (FLIP STOCK)
+					200 container
+						201 checkbox (settable, integer) Description: Enable two-sided machining, Value: 0
+						202 text Enable two-sided machining
+			38 container Layers
+				203 container
+					204 button Description: Activate layers panel, Help: Expand layers
+					205 checkbox (settable, integer) Description: Toggle all layers, Help: Show / hide every layer, Value: 1
+					206 text CAM4-square40-software.svg
+					207 text 1
+					208 pop up button (collapsed) + Add, Help: Add a layer — open a drawing or add text geometry, Secondary Actions: Expand
+			55 container Text
+				56 container
+					57 button Description: Activate text panel, Help: Expand text panel
+					58 text Text 0
+					59 button Description: Add text, Help: Add text engraving (T)
+			60 container Operations
+				61 container
+					62 button (collapsed) Description: Activate operations panel, Help: Expand operations panel, Secondary Actions: Expand
+					63 text Operations
+					64 text 1
+					65 button Operation templates
+					66 button Add operation
+		67 container
+			68 text bbox=(10.00,10.00)–(50.00,50.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts
+
+The focused UI element is 211 button (expanded) Analysis details, Secondary Actions: Collapse

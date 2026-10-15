@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-15",
+  "base_commit": "2032848e8087caf4dd1a1a466aa5bbb8c7027341",
+  "environment_reference": "../perf1/ENVIRONMENT.json",
+  "native_protocol": "Three serial alternating-order pairs, release cps+profiling both sides, seven calls/process; no compilation during runs. Process-cold only; OS page caches retained.",
+  "scope": "B1 bundled ShopBot exact-input successful PostOutput memo only; no B2",
+  "artifacts": {
+    "target/release/examples/perf1_probe": {
+      "sha256": "46f59e67eff0193012a961a642d630ad9e1a6600ce0748f50b8cbfca3756ce99",
+      "bytes": 11476128
+    },
+    "/private/tmp/fabcam-perf1/perf1-profile": {
+      "sha256": "c3967e8747d757e6b5e44877e2a1cedf124703035851fa5cf2d35c0d0e971f4b"
+    },
+    "target/release/ivac-server": {
+      "sha256": "acbfe7f79901065556651a8b7f69679ae54dbfd1219d9e56b8e56599d2b59dc6",
+      "bytes": 14569968,
+      "features": "cps, without profiling"
+    }
+  },
+  "browser_protocol": "Same release frontend on port18795; A control API18794 and B candidate18796. Same saved Test fixture; serial alternating generations; first two excluded from warm medians.",
+  "browser_viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "browser_fixture": "docs/shopbot-modernization/VCARVE-texte-Test.ivac-project.json"
+}

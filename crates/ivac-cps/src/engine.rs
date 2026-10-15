@@ -8,6 +8,17 @@
 //! execution API is [`crate::run_post`] / [`crate::inspect_post`].
 
 use std::path::Path;
+use std::sync::{
+    atomic::{AtomicBool, Ordering},
+    Arc,
+};
+
+// Only an owned Rust atomic handle: no Boa GC references to trace.
+#[derive(boa_gc::Trace, boa_gc::Finalize)]
+struct AbortProbe {
+    #[unsafe_ignore_trace]
+    flag: Option<Arc<AtomicBool>>,
+}
 
 use boa_engine::gc::{Gc, GcRefCell};
 use boa_engine::object::ObjectInitializer;
@@ -98,6 +109,10 @@ impl Engine {
     /// already carry that binding.
     #[must_use]
     pub fn new() -> Self {
+        Self::with_cancel(None)
+    }
+
+    pub(crate) fn with_cancel(cancel: Option<Arc<AtomicBool>>) -> Self {
         let mut context = Context::default();
         let sink: EmitSink = Gc::new(GcRefCell::new(Vec::new()));
 
@@ -151,10 +166,17 @@ impl Engine {
             },
             diags.clone(),
         );
-        // Cancellation probe — always "keep going" until the pipeline
-        // wires a real token through (cps.7/cps.8 budgets).
-        let abort_check =
-            NativeFunction::from_copy_closure(|_this, _args, _ctx| Ok(JsValue::from(false)));
+        let abort_check = NativeFunction::from_copy_closure_with_captures(
+            |_this, _args, probe, _ctx| {
+                Ok(JsValue::from(
+                    probe
+                        .flag
+                        .as_ref()
+                        .is_some_and(|flag| flag.load(Ordering::Relaxed)),
+                ))
+            },
+            AbortProbe { flag: cancel },
+        );
         // Deterministic clock: posts occasionally timestamp headers;
         // a fixed epoch keeps output byte-stable across runs.
         let now = NativeFunction::from_copy_closure(|_this, _args, _ctx| Ok(JsValue::from(0)));
@@ -256,5 +278,37 @@ impl Engine {
     #[must_use]
     pub fn sink(&self) -> EmitSink {
         self.sink.clone()
+    }
+}
+
+#[cfg(test)]
+mod cancellation_tests {
+    use super::*;
+    #[test]
+    fn host_probe_reads_live_atomic_and_default_stays_false() {
+        let flag = Arc::new(AtomicBool::new(false));
+        let mut engine = Engine::with_cancel(Some(flag.clone()));
+        assert_eq!(
+            engine
+                .eval_named("probe", "__ivac.abortCheck()")
+                .unwrap()
+                .as_boolean(),
+            Some(false)
+        );
+        flag.store(true, Ordering::Relaxed);
+        assert_eq!(
+            engine
+                .eval_named("probe", "__ivac.abortCheck()")
+                .unwrap()
+                .as_boolean(),
+            Some(true)
+        );
+        assert_eq!(
+            Engine::new()
+                .eval_named("probe", "__ivac.abortCheck()")
+                .unwrap()
+                .as_boolean(),
+            Some(false)
+        );
     }
 }

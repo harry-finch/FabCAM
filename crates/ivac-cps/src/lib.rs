@@ -16,5 +16,6 @@ pub mod run;
 
 pub use diag::{Diagnostic, PostError, Severity};
 pub use run::{
-    inspect_post, inspect_post_with_limits, run_post, run_post_with_limits, PostOutput, RunLimits,
+    inspect_post, inspect_post_with_limits, run_post, run_post_cancellable, run_post_with_limits,
+    PostOutput, RunLimits,
 };

@@ -1,0 +1,346 @@
+{
+  "input_segments": 8,
+  "instrumented": false,
+  "parse_ms": 0.920958,
+  "post": "linuxcnc",
+  "profile": "release",
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/square-outline-linuxcnc.json",
+  "request_bytes": 1670,
+  "runs": [
+    {
+      "cache_state": "process-cold",
+      "clone_ms": 0.021540999999999998,
+      "identical_to_first": true,
+      "moves": 133,
+      "objects": 2,
+      "pipeline_ms": 1.5915000000000001,
+      "program_bytes": 1577,
+      "progress": [
+        {
+          "at_ms": 0.10029199999999999,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.298292,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 1.3921249999999998,
+          "message": "emitted op 1",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 1.4070829999999999,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 1.588667,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 18749,
+      "run": 0,
+      "serialize_ms": 0.118167,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope"
+      ]
+    },
+    {
+      "cache_state": "warmup",
+      "clone_ms": 0.0022919999999999998,
+      "identical_to_first": true,
+      "moves": 133,
+      "objects": 2,
+      "pipeline_ms": 0.11283299999999999,
+      "program_bytes": 1577,
+      "progress": [
+        {
+          "at_ms": 0.00041600000000000003,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.016625,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.047916,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.065375,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 0.111125,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 18749,
+      "run": 1,
+      "serialize_ms": 0.08425,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.0015,
+      "identical_to_first": true,
+      "moves": 133,
+      "objects": 2,
+      "pipeline_ms": 0.103125,
+      "program_bytes": 1577,
+      "progress": [
+        {
+          "at_ms": 0.000375,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.00825,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.038167,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.059750000000000004,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 0.0995,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 18749,
+      "run": 2,
+      "serialize_ms": 0.08662500000000001,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.0011250000000000001,
+      "identical_to_first": true,
+      "moves": 133,
+      "objects": 2,
+      "pipeline_ms": 0.094709,
+      "program_bytes": 1577,
+      "progress": [
+        {
+          "at_ms": 0.000334,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.011250000000000001,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.039,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.049499999999999995,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 0.093334,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 18749,
+      "run": 3,
+      "serialize_ms": 0.07216700000000001,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.0011250000000000001,
+      "identical_to_first": true,
+      "moves": 133,
+      "objects": 2,
+      "pipeline_ms": 0.08445899999999999,
+      "program_bytes": 1577,
+      "progress": [
+        {
+          "at_ms": 0.000334,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.010042,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.034416999999999996,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.0445,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 0.08287499999999999,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 18749,
+      "run": 4,
+      "serialize_ms": 0.072375,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.0014169999999999999,
+      "identical_to_first": true,
+      "moves": 133,
+      "objects": 2,
+      "pipeline_ms": 0.095083,
+      "program_bytes": 1577,
+      "progress": [
+        {
+          "at_ms": 0.00033299999999999996,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.008083,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.041832999999999995,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.054333000000000006,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 0.093666,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 18749,
+      "run": 5,
+      "serialize_ms": 0.07387500000000001,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope"
+      ]
+    },
+    {
+      "cache_state": "warm",
+      "clone_ms": 0.002042,
+      "identical_to_first": true,
+      "moves": 133,
+      "objects": 2,
+      "pipeline_ms": 0.07825,
+      "program_bytes": 1577,
+      "progress": [
+        {
+          "at_ms": 0.00033299999999999996,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.007208,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        },
+        {
+          "at_ms": 0.032875,
+          "message": "emitted op 1 (cached)",
+          "phase": "gcode"
+        },
+        {
+          "at_ms": 0.042707999999999996,
+          "message": "interpreting toolpath",
+          "phase": "preview"
+        },
+        {
+          "at_ms": 0.077125,
+          "message": "complete",
+          "phase": "done"
+        }
+      ],
+      "response_bytes": 18749,
+      "run": 6,
+      "serialize_ms": 0.073209,
+      "spans": [],
+      "success": true,
+      "warnings": [
+        "vcarve_target_capped",
+        "vcarve_scope"
+      ]
+    }
+  ],
+  "text_layers": 0,
+  "process_wall_ms": 408.369084,
+  "process_resources": {
+    "real_s": 0.4,
+    "user_s": 0.0,
+    "sys_s": 0.0,
+    "peak_rss_bytes": 9076736
+  },
+  "response_sha256": "f41cd425c857c431c85a2d18051a2bd58af38fe328e8ba661d5c4896db26cc4a",
+  "program_sha256": "f84cbc443ecbe8268a8e673f4026e2d43f2916a427401ef1cecbe327e90b8b15",
+  "request_sha256": "c2b4bc78fe2d3572558b35d589790669207ee80fd6c92aadab0cb627c9279410",
+  "binary_sha256": "cef8fecbf751191ae0f20c2dd7decee9c91b2034c745de91b8b2747eab851b98",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/private/tmp/fabcam-perf1/perf1-control",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/square-outline-linuxcnc.json",
+    "/private/tmp/fabcam-perf1/control/square-outline-linuxcnc.json",
+    "7"
+  ]
+}

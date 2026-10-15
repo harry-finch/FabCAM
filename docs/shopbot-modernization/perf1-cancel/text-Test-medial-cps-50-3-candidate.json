@@ -1,0 +1,21 @@
+{
+  "cancelled": true,
+  "latency_ms": 207.65616700000004,
+  "requested_ms": 55.035708,
+  "returned_ms": 262.69187500000004,
+  "returned_valid_result": false,
+  "case": "text-Test-medial-cps",
+  "delay_ms": 50,
+  "iteration": 3,
+  "label": "candidate",
+  "request_sha256": "71d48ac5d59f5683a843f2002aadafeb1c2f0e682b17095a00b69b97277f75ec",
+  "binary_sha256": "c4f77daf1b386eb0f32cf3460cd417b13600b3172618ea72e35f8531f0298f88",
+  "command": [
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/examples/perf1_probe",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/text-Test-medial-cps.json",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1-cancel/text-Test-medial-cps-50-3-candidate.json",
+    "1",
+    "cancel",
+    "50"
+  ]
+}

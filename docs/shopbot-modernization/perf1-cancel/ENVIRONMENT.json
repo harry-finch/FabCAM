@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-15",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "artifacts": {
+    "/private/tmp/fabcam-perf1-cancel/control": "7bf40e826b6257276f7732d26073c4ec63f58c452390e74f67ecf62701f54d7a",
+    "target/release/examples/perf1_probe": "c4f77daf1b386eb0f32cf3460cd417b13600b3172618ea72e35f8531f0298f88",
+    "target/release/ivac-server": "5bedbbc1822d04a27fd68b9e6e7ad05551895dc08886e70cf450fa0a869c92bf"
+  },
+  "protocol": "Native cancellation fresh processes, serial alternating control/candidate; final series no concurrent benchmark/build. HTTP 10 serial alternating pairs, 50ms after SSE token. p95 nearest-rank. Full-response matrix overlapped INITIAL cancellation series, used only for equality, not timings.",
+  "ui": "Existing frontend dist on 18795; candidate server 18798, B2 control 18797. No frontend changes. Demo renamed operation only to force post-cache miss."
+}

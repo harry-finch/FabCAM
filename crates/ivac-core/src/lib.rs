@@ -23,11 +23,41 @@ pub mod input;
 pub mod math;
 pub mod pipeline;
 pub mod pipeline_cache;
+#[cfg(all(feature = "profiling", not(target_arch = "wasm32")))]
+pub mod profiling;
 pub mod project;
 pub mod schema;
 pub mod sim;
 pub mod testing;
 pub mod version;
+
+/// Native developer instrumentation; expands to the original expression by default.
+#[macro_export]
+macro_rules! profile_measure {
+    ($name:expr, $body:expr) => {{
+        #[cfg(all(feature = "profiling", not(target_arch = "wasm32")))]
+        let _profile_span = $crate::profiling::Span::enter($name);
+        $body
+    }};
+}
+
+/// Inclusive function scope. Child spans must not be summed into parent time.
+#[macro_export]
+macro_rules! profile_scope {
+    ($name:expr) => {
+        #[cfg(all(feature = "profiling", not(target_arch = "wasm32")))]
+        let _profile_span = $crate::profiling::Span::enter($name);
+    };
+}
+
+/// Actual workload count, only in the opt-in native diagnostic build.
+#[macro_export]
+macro_rules! profile_count {
+    ($name:expr, $value:expr) => {
+        #[cfg(all(feature = "profiling", not(target_arch = "wasm32")))]
+        $crate::profiling::count($name, $value);
+    };
+}
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

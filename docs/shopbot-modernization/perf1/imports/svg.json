@@ -1,0 +1,57 @@
+{
+  "boundary": "in-memory input::import_bytes; excludes disk read",
+  "bytes": 4197,
+  "path": "docs/shopbot-modernization/perf1/requests/moderate.svg",
+  "runs": [
+    {
+      "import_ms": 8.343708,
+      "layers": 1,
+      "objects": 128,
+      "run": 0,
+      "segments": 4096
+    },
+    {
+      "import_ms": 4.079791999999999,
+      "layers": 1,
+      "objects": 128,
+      "run": 1,
+      "segments": 4096
+    },
+    {
+      "import_ms": 4.248709,
+      "layers": 1,
+      "objects": 128,
+      "run": 2,
+      "segments": 4096
+    },
+    {
+      "import_ms": 4.310958,
+      "layers": 1,
+      "objects": 128,
+      "run": 3,
+      "segments": 4096
+    },
+    {
+      "import_ms": 4.027042,
+      "layers": 1,
+      "objects": 128,
+      "run": 4,
+      "segments": 4096
+    },
+    {
+      "import_ms": 3.741875,
+      "layers": 1,
+      "objects": 128,
+      "run": 5,
+      "segments": 4096
+    },
+    {
+      "import_ms": 3.7522919999999997,
+      "layers": 1,
+      "objects": 128,
+      "run": 6,
+      "segments": 4096
+    }
+  ],
+  "input_sha256": "1c4bead38f631932c309521aee48d78026624a70987a4449494cb893d9f95eb3"
+}

@@ -1,0 +1,792 @@
+{
+  "input_segments": 4,
+  "instrumented": true,
+  "parse_ms": 0.351667,
+  "post": "linuxcnc",
+  "profile": "release",
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/text-Test-outline-linuxcnc.json",
+  "request_bytes": 1014620,
+  "runs": [
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 1.187667,
+      "progress": [
+        {
+          "at_ms": 0.006917,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.07075,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.22716699999999998,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 0,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 55709,
+          "name": "source.render_text",
+          "start_ns": 9500
+        },
+        {
+          "count": 738,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 70834
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 125542,
+          "name": "source.chaining",
+          "start_ns": 70875
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 30250,
+          "name": "source.containment",
+          "start_ns": 196459
+        },
+        {
+          "count": 6,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 226750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 144375,
+          "name": "vcarve.prepare",
+          "start_ns": 973042
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 27584,
+          "name": "vcarve.regions",
+          "start_ns": 1117500
+        },
+        {
+          "count": 11,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 1165375
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1500,
+          "name": "vcarve.clearance",
+          "start_ns": 1165667
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 209833,
+          "name": "vcarve.driver",
+          "start_ns": 971417
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 946417,
+          "name": "pipeline.operations",
+          "start_ns": 235250
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 1181833,
+          "name": "pipeline.total",
+          "start_ns": 5792
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 0.96825,
+      "progress": [
+        {
+          "at_ms": 0.00033299999999999996,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.026458,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.1505,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 1,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 24583,
+          "name": "source.render_text",
+          "start_ns": 708
+        },
+        {
+          "count": 738,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 26500
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 100042,
+          "name": "source.chaining",
+          "start_ns": 26541
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 23500,
+          "name": "source.containment",
+          "start_ns": 126625
+        },
+        {
+          "count": 6,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 150166
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 125833,
+          "name": "vcarve.prepare",
+          "start_ns": 797583
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 20875,
+          "name": "vcarve.regions",
+          "start_ns": 923458
+        },
+        {
+          "count": 11,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 958916
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1166,
+          "name": "vcarve.clearance",
+          "start_ns": 959000
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 166167,
+          "name": "vcarve.driver",
+          "start_ns": 796916
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 811042,
+          "name": "pipeline.operations",
+          "start_ns": 152458
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 968125,
+          "name": "pipeline.total",
+          "start_ns": 83
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 0.966708,
+      "progress": [
+        {
+          "at_ms": 0.00033299999999999996,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.028625,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.150583,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 2,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 26625,
+          "name": "source.render_text",
+          "start_ns": 625
+        },
+        {
+          "count": 738,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 28667
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 102542,
+          "name": "source.chaining",
+          "start_ns": 28708
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 18875,
+          "name": "source.containment",
+          "start_ns": 131292
+        },
+        {
+          "count": 6,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 150167
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 136000,
+          "name": "vcarve.prepare",
+          "start_ns": 783417
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 24625,
+          "name": "vcarve.regions",
+          "start_ns": 919583
+        },
+        {
+          "count": 11,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 957750
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 1041,
+          "name": "vcarve.clearance",
+          "start_ns": 957792
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 178541,
+          "name": "vcarve.driver",
+          "start_ns": 783042
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 809709,
+          "name": "pipeline.operations",
+          "start_ns": 152333
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 966625,
+          "name": "pipeline.total",
+          "start_ns": 42
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 0.9316669999999999,
+      "progress": [
+        {
+          "at_ms": 0.00025,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.028,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.155167,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 3,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 26292,
+          "name": "source.render_text",
+          "start_ns": 500
+        },
+        {
+          "count": 738,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 28042
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 105417,
+          "name": "source.chaining",
+          "start_ns": 28083
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 21167,
+          "name": "source.containment",
+          "start_ns": 133500
+        },
+        {
+          "count": 6,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 154708
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 117500,
+          "name": "vcarve.prepare",
+          "start_ns": 776958
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 20584,
+          "name": "vcarve.regions",
+          "start_ns": 894458
+        },
+        {
+          "count": 11,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 924458
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 750,
+          "name": "vcarve.clearance",
+          "start_ns": 924500
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 150833,
+          "name": "vcarve.driver",
+          "start_ns": 776625
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 770542,
+          "name": "pipeline.operations",
+          "start_ns": 157250
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 931625,
+          "name": "pipeline.total",
+          "start_ns": 42
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 0.888625,
+      "progress": [
+        {
+          "at_ms": 0.000167,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.022875,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.14441700000000002,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 4,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 20417,
+          "name": "source.render_text",
+          "start_ns": 375
+        },
+        {
+          "count": 738,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 22959
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 100500,
+          "name": "source.chaining",
+          "start_ns": 22959
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 20708,
+          "name": "source.containment",
+          "start_ns": 123459
+        },
+        {
+          "count": 6,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 144167
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 94542,
+          "name": "vcarve.prepare",
+          "start_ns": 761000
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 20625,
+          "name": "vcarve.regions",
+          "start_ns": 855584
+        },
+        {
+          "count": 11,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 882084
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 542,
+          "name": "vcarve.clearance",
+          "start_ns": 882125
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 123833,
+          "name": "vcarve.driver",
+          "start_ns": 760792
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 739166,
+          "name": "pipeline.operations",
+          "start_ns": 145709
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 888583,
+          "name": "pipeline.total",
+          "start_ns": 42
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 0.8652920000000001,
+      "progress": [
+        {
+          "at_ms": 0.000209,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.019875,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.13933399999999999,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 5,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 18375,
+          "name": "source.render_text",
+          "start_ns": 417
+        },
+        {
+          "count": 738,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 19875
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 98750,
+          "name": "source.chaining",
+          "start_ns": 19917
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 20417,
+          "name": "source.containment",
+          "start_ns": 118667
+        },
+        {
+          "count": 6,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 139125
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 80875,
+          "name": "vcarve.prepare",
+          "start_ns": 750959
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 20209,
+          "name": "vcarve.regions",
+          "start_ns": 831875
+        },
+        {
+          "count": 11,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 859042
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 500,
+          "name": "vcarve.clearance",
+          "start_ns": 859042
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 110875,
+          "name": "vcarve.driver",
+          "start_ns": 750709
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 721125,
+          "name": "pipeline.operations",
+          "start_ns": 140584
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 865250,
+          "name": "pipeline.total",
+          "start_ns": 42
+        }
+      ],
+      "success": false
+    },
+    {
+      "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+      "pipeline_ms": 0.846333,
+      "progress": [
+        {
+          "at_ms": 0.00020800000000000001,
+          "message": "preparing project",
+          "phase": "import"
+        },
+        {
+          "at_ms": 0.018916,
+          "message": "rendered text layers",
+          "phase": "text"
+        },
+        {
+          "at_ms": 0.138958,
+          "message": "chained segments into objects",
+          "phase": "objects"
+        }
+      ],
+      "run": 6,
+      "spans": [
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 17625,
+          "name": "source.render_text",
+          "start_ns": 333
+        },
+        {
+          "count": 738,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.segments_after_text",
+          "start_ns": 18916
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 99292,
+          "name": "source.chaining",
+          "start_ns": 18958
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 20458,
+          "name": "source.containment",
+          "start_ns": 118250
+        },
+        {
+          "count": 6,
+          "depth": 1,
+          "elapsed_ns": 0,
+          "name": "source.objects",
+          "start_ns": 138708
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 74542,
+          "name": "vcarve.prepare",
+          "start_ns": 742541
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 20166,
+          "name": "vcarve.regions",
+          "start_ns": 817125
+        },
+        {
+          "count": 11,
+          "depth": 3,
+          "elapsed_ns": 0,
+          "name": "vcarve.target_points",
+          "start_ns": 840708
+        },
+        {
+          "count": null,
+          "depth": 3,
+          "elapsed_ns": 375,
+          "name": "vcarve.clearance",
+          "start_ns": 840750
+        },
+        {
+          "count": null,
+          "depth": 2,
+          "elapsed_ns": 100500,
+          "name": "vcarve.driver",
+          "start_ns": 742375
+        },
+        {
+          "count": null,
+          "depth": 1,
+          "elapsed_ns": 703000,
+          "name": "pipeline.operations",
+          "start_ns": 140041
+        },
+        {
+          "count": null,
+          "depth": 0,
+          "elapsed_ns": 846166,
+          "name": "pipeline.total",
+          "start_ns": 125
+        }
+      ],
+      "success": false
+    }
+  ],
+  "text_layers": 1,
+  "process_wall_ms": 14.390667000000024,
+  "process_resources": {
+    "real_s": 0.01,
+    "user_s": 0.0,
+    "sys_s": 0.0,
+    "peak_rss_bytes": 14680064
+  },
+  "request_sha256": "f186ebfa18b68d5ba6ed6d6e9aaddb648b022111c38b450617d3eff88db36671",
+  "binary_sha256": "c4f77daf1b386eb0f32cf3460cd417b13600b3172618ea72e35f8531f0298f88",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/examples/perf1_probe",
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/text-Test-outline-linuxcnc.json",
+    "/private/tmp/fabcam-perf1-cancel/profile/text-Test-outline-linuxcnc.json",
+    "7"
+  ]
+}

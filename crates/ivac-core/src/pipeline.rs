@@ -588,6 +588,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     cancel: Option<&CancelToken>,
     cache: Option<&PipelineCache>,
 ) -> Result<PipelineResponse, PipelineError> {
+    crate::profile_scope!("pipeline.total");
     progress("import", 0.05, "preparing project");
     if cancelled(cancel) {
         return Err(PipelineError::Cancelled);
@@ -627,7 +628,10 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // with no text layers behaves exactly as before.
     if !project.text_layers.is_empty() {
         for layer in &project.text_layers {
-            match crate::input::text::render_text_layer(layer) {
+            match crate::profile_measure!(
+                "source.render_text",
+                crate::input::text::render_text_layer(layer)
+            ) {
                 Ok(mut segs) => project.segments.append(&mut segs),
                 Err(e) => {
                     return Err(PipelineError::TextRender(format!(
@@ -643,8 +647,11 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         }
     }
 
-    let mut objects = segments_to_objects(&project.segments);
-    classify_containment(&mut objects);
+    crate::profile_count!("source.segments_after_text", project.segments.len());
+    let mut objects =
+        crate::profile_measure!("source.chaining", segments_to_objects(&project.segments));
+    crate::profile_measure!("source.containment", classify_containment(&mut objects));
+    crate::profile_count!("source.objects", objects.len());
     progress("objects", 0.20, "chained segments into objects");
     if cancelled(cancel) {
         return Err(PipelineError::Cancelled);
@@ -748,8 +755,59 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
                 return Err(PipelineError::Cancelled);
             }
             let overrides = cps_properties_json(&selection.properties);
-            let output = ivac_cps::run_post(&resolved.source, &resolved.name, &program, &overrides)
+            // Only audited bundled ShopBot is deterministic. Inline/path posts,
+            // even with identical text or names, must execute normally.
+            let memo_key = cache.and_then(|_| {
+                if matches!(&selection.source, CpsPostSource::Bundled { id } if id == "shopbot") {
+                    crate::profile_measure!(
+                        "post.cps_key",
+                        crate::pipeline_cache::cps::key(
+                            &resolved.source,
+                            &resolved.name,
+                            &program,
+                            &overrides
+                        )
+                    )
+                } else {
+                    None
+                }
+            });
+            let cached = memo_key.as_ref().and_then(|key| cache?.cps_get(key));
+            let output = if let Some(output) = cached {
+                crate::profile_count!("post.cps_cache_hit", 1);
+                output
+            } else {
+                crate::profile_count!("post.cps_cache_miss", 1);
+                let output = crate::profile_measure!(
+                    "post.cps",
+                    match cancel {
+                        Some(token) => ivac_cps::run_post_cancellable(
+                            &resolved.source,
+                            &resolved.name,
+                            &program,
+                            &overrides,
+                            token.shared_flag()
+                        ),
+                        None => ivac_cps::run_post(
+                            &resolved.source,
+                            &resolved.name,
+                            &program,
+                            &overrides
+                        ),
+                    }
+                )
                 .map_err(cps_post_error)?;
+                if cancelled(cancel) {
+                    return Err(PipelineError::Cancelled);
+                }
+                if let (Some(cache), Some(key)) = (cache, memo_key) {
+                    cache.cps_put(key, &output);
+                }
+                output
+            };
+            if cancelled(cancel) {
+                return Err(PipelineError::Cancelled);
+            }
             for diagnostic in &output.diagnostics {
                 warnings.push(PipelineWarning::new(
                     "cps_post_warning",
@@ -787,8 +845,11 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         });
         let (ir_preview, index) = if shopbot {
             warnings.extend(shopbot_resolution::entry_diagnostics(program));
-            shopbot_resolution::resolved_preview(&gcode)
-                .map_err(|message| PipelineError::CpsPostFailed { message })?
+            crate::profile_measure!(
+                "preview.decode_shopbot",
+                shopbot_resolution::resolved_preview(&gcode)
+            )
+            .map_err(|message| PipelineError::CpsPostFailed { message })?
         } else {
             crate::gcode::cps_recorder::preview_with_line_sync(program, &gcode)
         };
@@ -822,7 +883,8 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // get the guard centrally rather than synthesizing it per-frontend.
     // No-op when `project.stock` is unset.
     warnings::push_project_stock_warning(&toolpath, &project, &mut warnings);
-    let regions = build_region_previews(&project, &objects);
+    let regions =
+        crate::profile_measure!("preview.regions", build_region_previews(&project, &objects));
     // Recorded IR from arbitrary CPS scripts is not evidence of their actual
     // output. Keep that representation distinction at the post adapter boundary.
     let execution_path = post_kind != PostProcessorKind::Cps
@@ -830,8 +892,17 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
             .cps_post
             .as_ref()
             .is_some_and(|p| matches!(&p.source, CpsPostSource::Bundled { id } if id == "shopbot"));
-    let remaining_material =
-        remaining::analyze(&project, &objects, &regions, &toolpath, execution_path);
+    let remaining_material = crate::profile_measure!(
+        "preview.remaining",
+        remaining::analyze(
+            &project,
+            &objects,
+            &regions,
+            &toolpath,
+            execution_path,
+            cache
+        )
+    );
     let tool_changes = count_tool_changes(&project);
     let spindle_warmup_s = spindle_warmup_seconds(&project);
     // Build per-op tool-rate lookup so the estimator clamps
@@ -1186,7 +1257,10 @@ fn prepare_stream(
 
     if !project.text_layers.is_empty() {
         for layer in &project.text_layers {
-            match crate::input::text::render_text_layer(layer) {
+            match crate::profile_measure!(
+                "source.render_text",
+                crate::input::text::render_text_layer(layer)
+            ) {
                 Ok(mut segs) => project.segments.append(&mut segs),
                 Err(e) => {
                     return Err(PipelineError::TextRender(format!(
@@ -1199,8 +1273,10 @@ fn prepare_stream(
         }
     }
 
-    let mut objects = segments_to_objects(&project.segments);
-    classify_containment(&mut objects);
+    crate::profile_count!("source.segments_after_text", project.segments.len());
+    let mut objects =
+        crate::profile_measure!("source.chaining", segments_to_objects(&project.segments));
+    crate::profile_measure!("source.containment", classify_containment(&mut objects));
     let header_setup = header_setup_for(&project);
     let n_ops = project
         .operations
@@ -2069,6 +2145,7 @@ where
     P: PostProcessor,
     F: Fn(&str, f64, &str),
 {
+    crate::profile_scope!("pipeline.operations");
     // Pipeline progress budget for the gcode-emission phase. The full
     // curve is import (0 → 0.20) → gcode (0.30 → 0.85) → preview (0.92)
     // → done (1.0). Each emitted op advances the fraction by
@@ -3272,3 +3349,6 @@ mod count_tool_changes_tests {
         assert_eq!(count_tool_changes(&project), 2);
     }
 }
+
+#[cfg(all(test, feature = "cps"))]
+mod perf1_b_tests;

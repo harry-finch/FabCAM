@@ -1,0 +1,57 @@
+{
+  "boundary": "in-memory input::import_bytes; excludes disk read",
+  "bytes": 4780,
+  "path": "docs/shopbot-modernization/perf1/requests/moderate.dxf",
+  "runs": [
+    {
+      "import_ms": 1.896167,
+      "layers": 1,
+      "objects": 128,
+      "run": 0,
+      "segments": 256
+    },
+    {
+      "import_ms": 0.34049999999999997,
+      "layers": 1,
+      "objects": 128,
+      "run": 1,
+      "segments": 256
+    },
+    {
+      "import_ms": 0.319875,
+      "layers": 1,
+      "objects": 128,
+      "run": 2,
+      "segments": 256
+    },
+    {
+      "import_ms": 0.31633300000000003,
+      "layers": 1,
+      "objects": 128,
+      "run": 3,
+      "segments": 256
+    },
+    {
+      "import_ms": 0.31837499999999996,
+      "layers": 1,
+      "objects": 128,
+      "run": 4,
+      "segments": 256
+    },
+    {
+      "import_ms": 0.32733300000000004,
+      "layers": 1,
+      "objects": 128,
+      "run": 5,
+      "segments": 256
+    },
+    {
+      "import_ms": 0.322292,
+      "layers": 1,
+      "objects": 128,
+      "run": 6,
+      "segments": 256
+    }
+  ],
+  "input_sha256": "e950ff7ea00fe6fb4220712db99915fee16e52b4695a6c565a9af41e191b73b7"
+}

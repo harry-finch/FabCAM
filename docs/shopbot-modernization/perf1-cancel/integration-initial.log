@@ -1,0 +1,25 @@
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `release` profile [optimized] target(s) in 55.62s
+     Running tests/cps_posts.rs (target/release/deps/cps_posts-07a4a46cc90fc315)
+
+running 4 tests
+test fanuc_refs_snapshot ... ok
+test two_sided_runs_both_sides ... FAILED
+test bundled_grbl_geometry_parity ... ok
+test bundled_grbl_snapshot ... ok
+
+failures:
+
+---- two_sided_runs_both_sides stdout ----
+
+thread 'two_sided_runs_both_sides' panicked at crates/ivac-core/tests/cps_posts.rs:217:6:
+two-sided cps runs: WorkOrigin("two-sided CPS output or translated XY registration is not qualified; use a single-sided job or an unshifted native setup")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    two_sided_runs_both_sides
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+error: test failed, to rerun pass `-p ivac-core --test cps_posts`

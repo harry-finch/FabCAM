@@ -1,0 +1,69 @@
+{
+  "request": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/shopbot-modernization/perf1/requests/pocket-islands-linuxcnc.json",
+  "response_sha256": "6b8b2e543bee7e0c0344e3e47bfee48e242fe15a728658624821cfdca5444cb7",
+  "request_sha256": "76664af7b48be3d61dec7bc45d198eaa28fc241b32b030db430fbd2e16e1aea7",
+  "wasm_sha256": "83a8de478f1cc27e7336c74ec1d65da7a7e4297873e86853e7bb17864434a0d1",
+  "wasm_bytes": 4575323,
+  "engine": "v24.21.0 / 13.6.233.17-node.53",
+  "init_ms": 11.511417000000002,
+  "parse_ms": 0.07658400000000043,
+  "boundary": "generate: includes JS→Rust request and Rust→JS response conversion; excludes init, JSON parsing and explicit serialization",
+  "runs": [
+    {
+      "run": 0,
+      "generate_ms": 519.8206670000001,
+      "serialize_ms": 3.654957999999965,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 1,
+      "generate_ms": 2.9491669999999885,
+      "serialize_ms": 6.201291999999967,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 2,
+      "generate_ms": 2.4269590000000107,
+      "serialize_ms": 3.266124999999988,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 3,
+      "generate_ms": 2.3257500000000846,
+      "serialize_ms": 2.8270840000000135,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 4,
+      "generate_ms": 1.9387080000000196,
+      "serialize_ms": 2.869999999999891,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 5,
+      "generate_ms": 2.2793750000000728,
+      "serialize_ms": 2.7990420000000995,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    },
+    {
+      "run": 6,
+      "generate_ms": 2.020915999999943,
+      "serialize_ms": 2.4685419999999567,
+      "success": true,
+      "moves": 1538,
+      "identical_to_first": true
+    }
+  ]
+}

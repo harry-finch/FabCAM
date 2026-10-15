@@ -1,0 +1,66 @@
+[
+  {
+    "case": "missing-layer-linuxcnc",
+    "success": true,
+    "program_equal": true,
+    "moves_exactly_equal": true,
+    "max_xyz_delta_mm": 0.0,
+    "remaining_equal": true
+  },
+  {
+    "case": "pocket-islands-linuxcnc",
+    "success": true,
+    "program_equal": true,
+    "moves_exactly_equal": true,
+    "max_xyz_delta_mm": 0.0,
+    "remaining_equal": true
+  },
+  {
+    "case": "profile-contours-linuxcnc",
+    "success": true,
+    "program_equal": true,
+    "moves_exactly_equal": true,
+    "max_xyz_delta_mm": 0.0,
+    "remaining_equal": true
+  },
+  {
+    "case": "profile-many-segments-linuxcnc",
+    "success": true,
+    "program_equal": true,
+    "moves_exactly_equal": false,
+    "max_xyz_delta_mm": 2.842170943040401e-14,
+    "remaining_equal": true
+  },
+  {
+    "case": "square-medial-linuxcnc",
+    "success": true,
+    "program_equal": true,
+    "moves_exactly_equal": true,
+    "max_xyz_delta_mm": 0.0,
+    "remaining_equal": true
+  },
+  {
+    "case": "square-outline-linuxcnc",
+    "success": true,
+    "program_equal": true,
+    "moves_exactly_equal": true,
+    "max_xyz_delta_mm": 0.0,
+    "remaining_equal": true
+  },
+  {
+    "case": "text-B8-medial-linuxcnc",
+    "success": false
+  },
+  {
+    "case": "text-Test-medial-linuxcnc",
+    "success": true,
+    "program_equal": true,
+    "moves_exactly_equal": true,
+    "max_xyz_delta_mm": 0.0,
+    "remaining_equal": true
+  },
+  {
+    "case": "text-Test-outline-linuxcnc",
+    "success": false
+  }
+]
