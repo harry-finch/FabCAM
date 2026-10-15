@@ -51,7 +51,7 @@
         <dl>
           <dt><kbd>left-drag</kbd></dt>
           <dd>{t('shortcuts.view3d.orbit')}</dd>
-          <dt><kbd>right-drag</kbd></dt>
+          <dt><kbd>{t('help.key.middle_drag')}</kbd> / <kbd>right-drag</kbd></dt>
           <dd>{t('shortcuts.view3d.pan')}</dd>
           <dt><kbd>scroll</kbd></dt>
           <dd>{t('shortcuts.zoom')}</dd>

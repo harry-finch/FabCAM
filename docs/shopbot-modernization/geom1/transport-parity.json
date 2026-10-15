@@ -1,0 +1,10 @@
+{
+  "software_only": true,
+  "contract": 1,
+  "evaluated_segments": 5,
+  "wasm_native_evaluation_equal": true,
+  "generic_program_equal": true,
+  "resolved_preview_equal": true,
+  "legacy_endpoint_status": 422,
+  "moves": 41
+}

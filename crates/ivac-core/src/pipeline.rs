@@ -303,6 +303,8 @@ pub struct PipelineStats {
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("drawing: {0}")]
+    Drawing(String),
     #[error("operation #{0}: V-Carve: {1}")]
     VCarve(u32, String),
     #[error("operation #{0}: invalid planar surfacing: {1}")]
@@ -350,6 +352,7 @@ impl PipelineError {
         use crate::errors::{AutoFix, Error as Structured, ErrorCode};
         match self {
             PipelineError::Cancelled => None,
+            PipelineError::Drawing(message) => Some(Structured::misconfigured(message.clone()).with_hint("Review edited drawing and source bindings; no output generated.")),
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
             PipelineError::PlanarSurface(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review surfacing zone, flat cutter, depth and work area.")),
             PipelineError::AppliedCutting(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Apply or edit complete cutting rates for the current tool roles.")),
@@ -542,7 +545,14 @@ pub fn run_pipeline<F: Fn(&str, f64, &str)>(
     progress: F,
 ) -> Result<PipelineResponse, PipelineError> {
     let mut no_events = |_e: PipelineEvent| {};
-    run_pipeline_impl(req, &progress, &mut no_events, None, Some(global_cache()))
+    run_pipeline_impl(
+        req,
+        &progress,
+        &mut no_events,
+        None,
+        Some(global_cache()),
+        None,
+    )
 }
 
 /// Streaming entry point: walks ops one at a time, emitting
@@ -562,7 +572,14 @@ pub fn generate_streaming(
     sink: &mut dyn FnMut(PipelineEvent),
 ) -> Result<PipelineResponse, PipelineError> {
     let progress = |_p: &str, _f: f64, _m: &str| {};
-    match run_pipeline_impl(request, &progress, sink, Some(cancel), Some(global_cache())) {
+    match run_pipeline_impl(
+        request,
+        &progress,
+        sink,
+        Some(cancel),
+        Some(global_cache()),
+        None,
+    ) {
         Ok(resp) => {
             sink(PipelineEvent::Done {
                 op_count: resp.stats.offset_count,
@@ -587,6 +604,10 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     sink: &mut dyn FnMut(PipelineEvent),
     cancel: Option<&CancelToken>,
     cache: Option<&PipelineCache>,
+    drawing: Option<(
+        crate::drawing::Evaluated,
+        Vec<crate::drawing::api::OperationBinding>,
+    )>,
 ) -> Result<PipelineResponse, PipelineError> {
     crate::profile_scope!("pipeline.total");
     progress("import", 0.05, "preparing project");
@@ -648,8 +669,11 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     }
 
     crate::profile_count!("source.segments_after_text", project.segments.len());
-    let mut objects =
-        crate::profile_measure!("source.chaining", segments_to_objects(&project.segments));
+    let mut objects = if let Some((evaluated, bindings)) = drawing {
+        resolve_edited_objects(&mut project, &evaluated, &bindings)?
+    } else {
+        crate::profile_measure!("source.chaining", segments_to_objects(&project.segments))
+    };
     crate::profile_measure!("source.containment", classify_containment(&mut objects));
     crate::profile_count!("source.objects", objects.len());
     progress("objects", 0.20, "chained segments into objects");
@@ -3352,3 +3376,192 @@ mod count_tool_changes_tests {
 
 #[cfg(all(test, feature = "cps"))]
 mod perf1_b_tests;
+
+/// Explicit edited-drawing entry point: an old engine cannot deserialize this
+/// as a PipelineRequest (there is no top-level project). Never downgrade it.
+pub fn generate_drawing(
+    request: crate::drawing::api::DrawingGenerationRequest,
+) -> Result<PipelineResponse, PipelineError> {
+    if request.version != crate::drawing::CONTRACT {
+        return Err(PipelineError::Drawing(
+            "Unsupported GEOM1 generation revision".into(),
+        ));
+    }
+    request
+        .drawing
+        .validate_for_generation()
+        .map_err(PipelineError::Drawing)?;
+    let evaluated = request.drawing.evaluate().map_err(PipelineError::Drawing)?;
+    let mut req = request.machining;
+    let has_stock_outline = req
+        .project
+        .segments
+        .iter()
+        .any(|s| s.layer.as_ref() == "__stock_outline");
+    for b in &request.bindings {
+        if !req
+            .project
+            .operations
+            .iter()
+            .any(|op| op.id == b.operation && op.enabled)
+        {
+            continue;
+        }
+        if matches!(&b.binding, crate::drawing::Binding::Layers {names} if names.iter().any(|n| n=="__stock_outline"))
+            || (has_stock_outline && matches!(b.binding, crate::drawing::Binding::All))
+        {
+            return Err(PipelineError::Drawing("Synthetic stock outline with edited geometry requires an explicit imported-contour/layer selection; this combination is not qualified".into()));
+        }
+    }
+    // The evaluated Rust drawing owns the coordinates. Caller-supplied legacy
+    // segments are not used as a fallback or independent source of truth.
+    req.project.segments = evaluated.segments.clone();
+    let progress = |_: &str, _: f64, _: &str| {};
+    let mut sink = |_: PipelineEvent| {};
+    run_pipeline_impl(
+        req,
+        &progress,
+        &mut sink,
+        None,
+        Some(global_cache()),
+        Some((evaluated, request.bindings)),
+    )
+}
+
+fn resolve_edited_objects(
+    project: &mut Project,
+    evaluated: &crate::drawing::Evaluated,
+    bindings: &[crate::drawing::api::OperationBinding],
+) -> Result<Vec<VcObject>, PipelineError> {
+    use crate::project::OpSource;
+    // Refuse a disagreement with legacy fuzzy interpretation; never use it to
+    // retarget stable IDs or silently turn a formerly closed contour into an open one.
+    for (legacy, indices) in crate::cam::chaining::segments_to_objects_indexed(
+        &project.segments[..evaluated.segments.len()],
+    ) {
+        let id = evaluated.membership[indices[0]];
+        let ci = evaluated
+            .contours
+            .iter()
+            .position(|c| *c == id)
+            .expect("validated membership");
+        if indices.iter().any(|&i| evaluated.membership[i] != id)
+            || indices.len() != evaluated.membership.iter().filter(|c| **c == id).count()
+            || legacy.closed != evaluated.closed[ci]
+        {
+            return Err(PipelineError::Drawing("Legacy fuzzy chaining and exact repaired membership disagree; explicitly repair the remaining gaps before generation".into()));
+        }
+    }
+    // Called after the normal WCS and text adapters. Only group membership is
+    // carried across the adapter; coordinates are those used by actual CAM.
+    let mut objects = Vec::new();
+    for (ci, id) in evaluated.contours.iter().enumerate() {
+        let indices: Vec<_> = evaluated
+            .membership
+            .iter()
+            .enumerate()
+            .filter_map(|(i, c)| (c == id).then_some(i))
+            .collect();
+        let segments: Vec<_> = indices
+            .iter()
+            .map(|&i| project.segments[i].clone())
+            .collect();
+        if segments.windows(2).any(|p| p[0].end != p[1].start) {
+            return Err(PipelineError::Drawing(
+                "Contour has unrepaired gaps; repair or reselect geometry".into(),
+            ));
+        }
+        if segments.iter().any(|s| s.layer != segments[0].layer) {
+            return Err(PipelineError::Drawing(
+                "Mixed-layer contour binding is not qualified".into(),
+            ));
+        }
+        objects.push(VcObject::new(segments, evaluated.closed[ci]));
+    }
+    // Live text remains the existing renderer/chainer, outside editable imports.
+    objects.extend(segments_to_objects(
+        &project.segments[evaluated.segments.len()..],
+    ));
+    let mut seen = std::collections::BTreeSet::new();
+    for binding in bindings {
+        if !seen.insert(binding.operation)
+            || !project
+                .operations
+                .iter()
+                .any(|op| op.id == binding.operation)
+        {
+            return Err(PipelineError::Drawing(
+                "Duplicate or unknown operation binding".into(),
+            ));
+        }
+    }
+    for op in &mut project.operations {
+        let binding = bindings
+            .iter()
+            .find(|b| b.operation == op.id)
+            .ok_or_else(|| {
+                PipelineError::Drawing(format!(
+                    "Operation #{} needs an explicit drawing binding",
+                    op.id
+                ))
+            })?;
+        let combine = match &op.source {
+            OpSource::Layers { combine, .. } | OpSource::Objects { combine, .. } => *combine,
+            OpSource::All => Default::default(),
+        };
+        if op.enabled && !matches!(op.kind, crate::project::OpKind::PlanarSurface { .. }) {
+            let empty = match &binding.binding {
+                crate::drawing::Binding::All => objects.is_empty(),
+                crate::drawing::Binding::Layers { names } => !objects.iter().any(|o| {
+                    o.segments
+                        .iter()
+                        .any(|s| names.iter().any(|n| n == s.layer.as_ref()))
+                }),
+                _ => false,
+            };
+            if empty {
+                return Err(PipelineError::Drawing(format!(
+                    "Operation #{} has no remaining geometry after repair; review its sources",
+                    op.id
+                )));
+            }
+        }
+        op.source = match &binding.binding {
+            crate::drawing::Binding::All => OpSource::All,
+            crate::drawing::Binding::Layers { names } => OpSource::Layers {
+                layers: names.clone(),
+                combine,
+            },
+            crate::drawing::Binding::Unresolved { reason, .. } if !op.enabled => {
+                let _ = reason;
+                OpSource::Objects {
+                    ids: vec![],
+                    combine,
+                }
+            }
+            b => OpSource::Objects {
+                ids: evaluated
+                    .resolve(b)
+                    .map_err(PipelineError::Drawing)?
+                    .into_iter()
+                    .map(|i| u32::try_from(i + 1).expect("bounded contour count"))
+                    .collect(),
+                combine,
+            },
+        };
+        // Pattern/frame synthesis can replace the object pool. Until its stable
+        // identity adapter is qualified it must not reinterpret edited bindings.
+        if op.enabled
+            && (op.pattern().is_some()
+                || op.pocket_params().is_some_and(|p| p.frame_shape.is_some())
+                || op.contour_params().is_some_and(|c| {
+                    c.tabs.active || !c.tab_placements.is_empty() || c.approach_point.is_some()
+                }))
+        {
+            return Err(PipelineError::Drawing(
+                "Patterned edited geometry is not yet qualified".into(),
+            ));
+        }
+    }
+    Ok(objects)
+}

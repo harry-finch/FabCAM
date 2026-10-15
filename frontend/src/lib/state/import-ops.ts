@@ -96,6 +96,7 @@ export function removeImport(p: ProjectState, id: number) {
 
 export function setImported(p: ProjectState, r: ImportResponse, sourcePath?: string | null) {
   p.documentActive = true;
+  p.data.drawing = undefined;
   // Replace imports[0] in place: inherit the previous entry's id when
   // there was one (so undo entries built against that id stay valid),
   // reset the per-import fileTransform to identity (a new source means
@@ -209,6 +210,13 @@ export async function stopSourceWatch(): Promise<void> {
 /// entry matches the path (stale watch), bail rather than overwrite
 /// an unrelated import.
 export async function reimportFromPath(p: ProjectState, path: string): Promise<boolean> {
+  if (p.data.drawing) {
+    p.sourceFileStaleNotice = { path, auto_reload: false };
+    p.setError(
+      'Accepted drawing repairs are preserved. Reset repairs before replacing the source.',
+    );
+    return false;
+  }
   if (typeof window === 'undefined') return false;
   if (!isTauriEnv()) return false;
   const idx = p.data.imports.findIndex((e) => e.lastImportPath === path);

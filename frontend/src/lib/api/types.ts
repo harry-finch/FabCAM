@@ -65,3 +65,7 @@ export type CornerReliefResponse = components['schemas']['CornerReliefResponse']
 export type CornerRef = components['schemas']['CornerRef'];
 export type ReliefMode = components['schemas']['ReliefMode'];
 export type RemovalSide = components['schemas']['RemovalSide'];
+
+export type DrawingRequest = components['schemas']['DrawingRequest'];
+export type DrawingResponse = components['schemas']['DrawingResponse'];
+export type DrawingGenerationRequest = components['schemas']['DrawingGenerationRequest'];

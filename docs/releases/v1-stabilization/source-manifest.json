@@ -1,0 +1,14 @@
+{
+  "crates/ivac-core/src/cam/source_combine.rs": "690204956026ef5dfabc5eb612d901d96c9a2b574dfd7074fa4bfdaead66343d",
+  "crates/ivac-core/src/pipeline/offset_builder.rs": "739dd85c289db1dff55e4938731d1caca7d0d0bc8e325f97124fe603532131ba",
+  "crates/ivac-core/tests/v1_stabilization.rs": "89e6adcdec4863b447e6d530767115d10dc9c74c511ab46e650261cb4df35917",
+  "frontend/src/App.svelte": "dac8d828b009c3327d5ef8be2baf495e195cde5b7a6e5395116942057fad797e",
+  "frontend/src/lib/components/EntityCanvas2D.svelte": "5928bfc148bba5eaaffa8b972e2574c6fa14d991eed61ad2dbdad1ed6321eed9",
+  "frontend/src/lib/components/OperationsList.svelte": "1ff01a542440494fa1c7d6a95416bbbf4d9bbca18ede4d44da02a0e8806f8426",
+  "frontend/src/lib/components/ToolLibraryDialog.svelte": "a1b323a4fd2d0e69014a4228956c2f0ed131a5e31570830016c6f22febe14ab3",
+  "frontend/src/lib/canvas/viewport.ts": "b831e242b4bc41c6e290be8d2a3f5044631b692dc85e0b5f2c3b59dfa97114bb",
+  "frontend/scripts/ensure-wasm-fresh.mjs": "3a88d8f2abffdf29f2d5557481f05f721d8ef9799fd224d228564ea02ccde5d8",
+  "frontend/scripts/wasm-package-state.mjs": "be39e25d3c446ded2fe9050fd7522a427565362f826b11f0c2d5f6d3f36eed8b",
+  "frontend/scripts/wasm-package-state.test.mjs": "6910449c5a4b94cc807944346dc33e38d83db6e9df135343a1be838807a8a9fe",
+  "frontend/package.json": "8461077fea63360826cd0d214b84e7e659bc7cabe01965b5ad7baac8deb6883a"
+}

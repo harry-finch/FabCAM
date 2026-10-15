@@ -1,3 +1,4 @@
+import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // Transport-agnostic client interface. Implementations: HTTP (`http.ts`,
 // talks to ivac-server), Tauri (`tauri.ts`, native invoke), and WASM
@@ -90,6 +91,8 @@ export interface WiacClient {
    * helix circle fits. Lets the OpPropertiesPanel show
    * `Auto (detected: …)` before gcode generation.
    */
+  evaluateDrawing?(request: DrawingRequest): Promise<DrawingResponse>;
+  generateDrawing?(request: DrawingGenerationRequest): Promise<GenerateResponse>;
   cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse>;
   computeHelixRadius(request: HelixRadiusRequest): Promise<HelixRadiusResponse>;
   /**

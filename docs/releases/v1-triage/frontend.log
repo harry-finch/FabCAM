@@ -1,0 +1,16 @@
+
+> test
+> vitest run --run src/lib/state/tool-library-review.test.ts src/lib/state/tool_inventory.test.ts src/lib/state/geometry-source-ui.test.ts
+
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ✓ src/lib/state/tool_inventory.test.ts (7 tests) 2ms
+ ✓ src/lib/state/tool-library-review.test.ts (4 tests) 2ms
+ ✓ src/lib/state/geometry-source-ui.test.ts (11 tests) 4ms
+
+ Test Files  3 passed (3)
+      Tests  22 passed (22)
+   Start at  21:33:38
+   Duration  270ms (transform 124ms, setup 0ms, collect 170ms, tests 8ms, environment 0ms, prepare 127ms)
+

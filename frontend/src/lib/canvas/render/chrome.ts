@@ -10,7 +10,9 @@ export interface GridColors {
   major: string;
 }
 
-/// Major grid every 10 units, minor every 1, when the unit is small enough.
+/// Origin-anchored decimal grid: keep minor lines 6–60 screen pixels apart
+/// at every zoom level, with a major line every ten minor intervals.
+/// This is visual spacing only; drawing coordinates and snap distances stay unchanged.
 export function drawGrid(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -20,30 +22,29 @@ export function drawGrid(
   offY: number,
   colors: GridColors,
 ) {
-  const majorStep = 10;
-  const minorStep = 1;
-  const px = Math.abs(scale * minorStep);
-  if (px < 6) return; // too tight to be useful
+  const zoom = Math.abs(scale);
+  if (!Number.isFinite(zoom) || zoom === 0 || w <= 0 || h <= 0) return;
+  const minorStep = 10 ** Math.ceil(Math.log10(6 / zoom));
+  const minorPitch = minorStep * zoom;
+  if (!Number.isFinite(minorPitch) || minorPitch <= 0) return;
   ctx.lineWidth = 1;
-  for (const [step, color] of [
-    [minorStep, colors.minor],
-    [majorStep, colors.major],
+  for (const [pitch, color] of [
+    [minorPitch, colors.minor],
+    [minorPitch * 10, colors.major],
   ] as const) {
     ctx.strokeStyle = color;
-    const start = Math.floor(-offX / scale / step) * step;
-    const end = Math.ceil((w - offX) / scale / step) * step;
     ctx.beginPath();
-    for (let x = start; x <= end; x += step) {
-      const X = x * scale + offX;
-      ctx.moveTo(X, 0);
-      ctx.lineTo(X, h);
+    // Work in screen space: bounded line counts even at extreme zoom or
+    // far from the origin, without accumulating sub-mm world-coordinate error.
+    const firstX = ((offX % pitch) + pitch) % pitch;
+    for (let x = firstX; x <= w; x += pitch) {
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
     }
-    const ystart = Math.floor((offY - h) / scale / step) * step;
-    const yend = Math.ceil(offY / scale / step) * step;
-    for (let y = ystart; y <= yend; y += step) {
-      const Y = offY - y * scale;
-      ctx.moveTo(0, Y);
-      ctx.lineTo(w, Y);
+    const firstY = ((offY % pitch) + pitch) % pitch;
+    for (let y = firstY; y <= h; y += pitch) {
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
     }
     ctx.stroke();
   }

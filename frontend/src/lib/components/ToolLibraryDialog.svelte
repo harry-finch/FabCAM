@@ -287,7 +287,7 @@
 
   $effect(() => {
     const focusId = project.sel.toolsDialogFocusId;
-    if (!active || focusId == null) return;
+    if (isInventory || !active || focusId == null) return;
     // The focus target may be mode-filtered out (an op still
     // referencing a mill tool on a plasma machine) — reveal it.
     const target = draft.find((t) => t.id === focusId);
@@ -593,42 +593,46 @@
           {/if}
           {#if section === 'mounting'}<p class="hint">{t('ux6b.mounting_help')}</p>{/if}
           {#if section === 'availability'}
-            <h3>{t('ux6b.current_machine')}</h3>
-            <p>{selectedStocked ? t('ux6b.same_id_copy') : t('ux6b.not_stocked')}</p>
-            {#if selectedStocked && !deepEqual(tool, selectedStocked)}<p class="notice">
-                {t('ux6b.copy_differs')}
-              </p>{/if}
-            <p>
-              {toolCompatibleWithAnyMode(tool.kind, machineModes)
-                ? t('ux6b.compatible')
-                : t('ux6b.incompatible')}
-            </p>
-            {#if isInventory}<div class="actions">
-                <button
-                  class="tc-file"
-                  disabled={dd.isDirty ||
-                    !toolCompatibleWithAnyMode(tool.kind, machineModes) ||
-                    (selectedStocked !== undefined && deepEqual(tool, selectedStocked))}
-                  onclick={addToMachine}
-                  ><Plus size={16} aria-hidden="true" />{t('ux6b.add_machine')}</button
-                ><button class="tc-file" disabled={cannotRemoveStocked} onclick={removeFromMachine}
-                  >{t('ux6b.remove_machine')}</button
-                >
-              </div>{/if}
-            <p class="hint">{t('ux6b.association_help')}</p>
-            <h3>{t('ux6b.operations')}</h3>
-            <ul>
-              {#each selectedUses as op (op.id)}<li>{op.name}</li>{:else}<li>
-                  {t('ux6b.no_operations')}
-                </li>{/each}
-            </ul>
-            <h3>{t('ux6b.profile_copies')}</h3>
-            <ul>
-              {#each selectedCopies as profile (profile.id)}<li>{profile.name}</li>{:else}<li>
-                  {t('ux6b.no_profiles')}
-                </li>{/each}
-            </ul>
-            <p class="hint">{t('ux6b.copy_help')}</p>
+            <div class="availability">
+              <h3>{t('ux6b.current_machine')}</h3>
+              <p>{selectedStocked ? t('ux6b.same_id_copy') : t('ux6b.not_stocked')}</p>
+              {#if selectedStocked && !deepEqual(tool, selectedStocked)}<p class="notice">
+                  {t('ux6b.copy_differs')}
+                </p>{/if}
+              <p>
+                {toolCompatibleWithAnyMode(tool.kind, machineModes)
+                  ? t('ux6b.compatible')
+                  : t('ux6b.incompatible')}
+              </p>
+              {#if isInventory}<div class="actions">
+                  <button
+                    class="tc-file"
+                    disabled={dd.isDirty ||
+                      !toolCompatibleWithAnyMode(tool.kind, machineModes) ||
+                      (selectedStocked !== undefined && deepEqual(tool, selectedStocked))}
+                    onclick={addToMachine}
+                    ><Plus size={16} aria-hidden="true" />{t('ux6b.add_machine')}</button
+                  ><button
+                    class="tc-file"
+                    disabled={cannotRemoveStocked}
+                    onclick={removeFromMachine}>{t('ux6b.remove_machine')}</button
+                  >
+                </div>{/if}
+              <p class="hint">{t('ux6b.association_help')}</p>
+              <h3>{t('ux6b.operations')}</h3>
+              <ul>
+                {#each selectedUses as op (op.id)}<li>{op.name}</li>{:else}<li>
+                    {t('ux6b.no_operations')}
+                  </li>{/each}
+              </ul>
+              <h3>{t('ux6b.profile_copies')}</h3>
+              <ul>
+                {#each selectedCopies as profile (profile.id)}<li>{profile.name}</li>{:else}<li>
+                    {t('ux6b.no_profiles')}
+                  </li>{/each}
+              </ul>
+              <p class="hint">{t('ux6b.copy_help')}</p>
+            </div>
           {:else}
             <ToolRowExpandedEditor
               {tool}
@@ -757,9 +761,6 @@
     margin: 0;
     overflow-wrap: anywhere;
   }
-  h3 {
-    font-size: 0.82rem;
-  }
   .embedded-shell {
     display: flex;
     flex-direction: column;
@@ -860,6 +861,58 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+  }
+  /* Match the compact geometry/mounting inspectors instead of inheriting
+     document-sized paragraphs and browser-default list spacing. */
+  .availability {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+  .availability h3 {
+    margin: 16px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-section);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .availability h3:first-child {
+    margin-top: 0;
+  }
+  .availability p {
+    margin: 8px 0;
+  }
+  .availability .notice {
+    padding: 8px 10px;
+    border-bottom: 0;
+    border-left: 2px solid var(--border);
+    font-size: inherit;
+    max-height: none;
+    overflow: visible;
+  }
+  .availability .actions {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 12px 0 8px;
+  }
+  .availability .tc-file {
+    min-height: 28px;
+    white-space: normal;
+    text-align: left;
+  }
+  .availability ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .availability li {
+    padding: 6px 0;
+  }
+  .availability li + li {
+    border-top: 1px solid var(--border);
   }
   .hint {
     color: var(--text-muted);

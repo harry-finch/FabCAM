@@ -132,10 +132,19 @@ fn separate_contours_does_not_preserve_nested_holes() {
 }
 
 #[test]
-fn xor_currently_stops_at_an_empty_intermediate_result() {
-    // Existing limitation, explicitly documented; do not advertise an arbitrary
-    // N-way parity guarantee or fix the boolean engine in a presentation checkpoint.
+fn xor_preserves_parity_after_empty_intermediate() {
     let a = VcObject::new(square(10., 0., 0.), true);
-    let o = vec![a.clone(), a.clone(), a];
-    assert!(combine_source_regions(&o, &[0, 1, 2], SourceCombine::Xor).is_empty());
+    for n in 2..=4 {
+        let o = vec![a.clone(); n];
+        let selected: Vec<_> = (0..n).collect();
+        let regions = combine_source_regions(&o, &selected, SourceCombine::Xor);
+        assert_eq!(regions.len(), n % 2);
+        if n % 2 == 1 {
+            assert!((area(&regions[0]) - 100.).abs() < 1e-6);
+        }
+    }
+    let b = VcObject::new(square(4., 20., 20.), true);
+    let regions = combine_source_regions(&[a.clone(), a, b], &[0, 1, 2], SourceCombine::Xor);
+    assert_eq!(regions.len(), 1);
+    assert!((area(&regions[0]) - 16.).abs() < 1e-6);
 }

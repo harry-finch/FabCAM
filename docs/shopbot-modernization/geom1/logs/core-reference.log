@@ -1,0 +1,31 @@
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.34s
+     Running tests/geom1_contract.rs (target/debug/deps/geom1_contract-e325ffd2ad5e4342)
+
+running 23 tests
+test distance_thresholds_are_visible_mm_independent_of_rotation_translation_mirror ... ok
+test evaluated_coordinates_use_frozen_pivot_and_similarity_transform ... ok
+test identical_imports_have_distinct_identity_and_exact_provenance ... ok
+test direct_ambiguous_join_refuses_without_relying_on_ui_analysis ... ok
+test deletion_does_not_retarget_to_the_next_import ... ok
+test reversed_chaining_retains_source_ordinals ... ok
+test merge_requires_review_even_if_both_parents_were_selected ... ok
+test crossing_result_is_refused_even_within_join_tolerance ... ok
+test gap_preview_is_nonmutating_and_matches_inclusive_visible_tolerance ... ok
+test exact_duplicate_closed_paths_can_be_removed_but_not_rebound ... ok
+test invalid_revision_identity_transform_and_unresolved_binding_refuse ... ok
+test split_does_not_automatically_select_children ... ok
+test simplification_has_continuous_bound_and_protects_already_modified_edges ... ok
+test snap_and_connector_are_distinct_and_join_requires_binding_review ... ok
+test unique_modification_preserves_binding_and_original ... ok
+test zero_line_removal_preserves_intentional_point ... ok
+test simplification_refuses_contained_island_in_removed_sliver ... ok
+test legacy_conversion_proves_membership_and_preserves_unrelated_import ... ok
+test edited_sources_fail_explicitly_for_empty_or_synthetic_or_fuzzy_ambiguous_scope ... ok
+test scaled_gap_repairs_preserve_independent_import_and_pivot ... ok
+test edited_generation_uses_authoritative_geometry_and_refuses_old_request_shape ... ok
+test deleting_an_earlier_import_cannot_redirect_an_unrelated_operation ... ok
+test ui_saved_repair_matches_generated_decoded_program_and_resolved_preview ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+

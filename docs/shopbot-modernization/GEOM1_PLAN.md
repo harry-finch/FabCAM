@@ -1,6 +1,8 @@
 # GEOM1 — Drawing Cleanup & Repair
 
-2026-10-14 · **PLANNED — NOT IMPLEMENTED · HIGH PRIORITY**.
+2026-10-15 · **AUDIT COMPLETE — ARCHITECTURE PROPOSED · HIGH PRIORITY**.
+User selected GEOM1; see [audit and implementation proposal](GEOM1_AUDIT.md).
+ADR-0021 and refinements approved; bounded implementation and evidence are recorded in [GEOM1_RESULTS](GEOM1_RESULTS.md).
 Depends on the audit and common contracts in [shared plan](GEOMETRY_PREPARATION_PLAN.md).
 After active V-Carve review and preserved approvals; preferred before serious WJ work.
 
@@ -60,8 +62,7 @@ stable references or explained refusal; history/persistence/current-output prote
 relevant regression tests and desktop/accessibility evidence; human software review.
 Numerical proof does not establish physical machining tolerance.
 
-Open decisions: supported repair subset, candidate selection and ambiguity, cross-layer
-duplicate intent, curve snapping strategy, simplification metric/budget, importer loss,
-preview proposal invalidation and identity remapping. Resolve in architecture audit first.
+The approved subset, ambiguity/refusal rules, simplification budget and remaining
+limitations are now explicit in GEOM1_CONTRACT and GEOM1_RESULTS.
 
-**STOP — waiting for human approval before implementation.**
+**HARD STOP — human acceptance of GEOM1 before another milestone.**

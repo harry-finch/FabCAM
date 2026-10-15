@@ -1,0 +1,17 @@
+✔ incomplete package rejected: ivac_wasm_bg.wasm (3.711083ms)
+✔ incomplete package rejected: ivac_wasm.js (2.040875ms)
+✔ incomplete package rejected: ivac_wasm.d.ts (2.06725ms)
+✔ incomplete package rejected: ivac_wasm_bg.wasm.d.ts (1.959667ms)
+✔ incomplete package rejected: package.json (2.009625ms)
+✔ content fingerprints detect old timestamps, changed bindings and lockfile; unchanged package passes (3.066416ms)
+✔ concurrent source edit prevents stamping successful old build (2.021959ms)
+✔ release CLI fails closed without toolchain; only explicit dev accepts complete stale package (129.797166ms)
+✔ empty assets and malformed manifest are never complete (2.4345ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 189.881625

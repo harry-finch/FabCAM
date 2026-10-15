@@ -70,3 +70,16 @@ error budget, negative-scale policy, bounds, source/relief ordering and parity m
 Dedicated architecture review starts this milestone. No production changes now.
 
 **STOP — waiting for human approval before implementation.**
+
+## Early subtask — GEOM2-A1 Precise Imported-File Dimensions
+
+**PLANNED — NOT IMPLEMENTED.** [Bounded specification](GEOM2_A1_PLAN.md) adds
+whole-import Width/Height inputs over the existing one uniform Scale, using effective
+local extents after accepted GEOM1 edits, before rotation. Original pivot/transform
+order from ADR-0021 stays fixed; selected-object/project bboxes are not file bounds.
+Could precede full selected-group/direct-manipulation work if compatible audit proves
+reuse. No unlocked aspect ratio, nonuniform scale, handles, source edits or nesting.
+
+Current GEOM1 software/UX gate ivac-e2jnb supersedes earlier V-Carve-pending next-action
+wording above; it remains open. A1 is planning only, not permission to start or a new
+source schema. See shared plan for history/bindings/freshness and measurement boundary.

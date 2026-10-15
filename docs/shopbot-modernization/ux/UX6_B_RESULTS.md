@@ -154,3 +154,28 @@ No commit, push, PR, release or subsequent milestone was authorized/performed.
 **Next action: human software and visual acceptance ivac-y2aln — HARD STOP.**
 Independent PERF cancellation ivac-nh6q and visual hierarchy ivac-1drzo gates retain
 status. A new milestone needs its own explicit authorization.
+
+## Availability presentation polish — 2026-10-15
+
+User-requested review correction ivac-b54jh: the Availability body inherited document
+paragraph/list typography, unlike Geometry/Mounting. Added one scoped styling wrapper:
+0.8rem body, 0.7rem section headings using shared text-section/border tokens, consistent
+8/16px spacing, compact unbulleted lists, quieter same-ID notice, wrapping 28px actions.
+Existing component script, copy, conditions and action handlers are identical. No
+association, draft, persistence, CAM or export behavior changes.
+
+Actual [before](ux6-b/availability-before-polish.png),
+[after](ux6-b/availability-after-polish.png),
+[1024px](ux6-b/availability-polish-narrow.png). Same-ID/different-copy notice and last-tool
+removal guard visible; 1024px page width equals viewport, visible keyboard focus retained.
+No inventory/profile edits or association mutations performed during this visual review.
+[Checks](ux6-b/availability-polish-checks.json): Svelte0 errors/warnings, lint/build pass
+(existing build warnings), 32 targeted tests pass. No new tests needed for scoped styles.
+Human UX6-B gate ivac-y2aln remains open; no next milestone or publication inferred.
+
+## Human acceptance
+
+User explicitly accepted UX6-B including Availability polish; ivac-y2aln closed.
+Software/visual acceptance retains documented native/physical and independent-gate
+limits. User asks for the next step, not a new implementation launch. No UX7 is
+defined; GEOM1 cleanup/repair and its preliminary audit are proposed, not started.

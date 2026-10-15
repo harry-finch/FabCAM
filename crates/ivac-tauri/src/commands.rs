@@ -559,3 +559,21 @@ pub async fn corner_relief_cmd(
         .await
         .map_err(|e| internal(format!("join error: {e}")))
 }
+
+#[tauri::command]
+pub async fn evaluate_drawing_cmd(
+    req: ivac_core::drawing::api::DrawingRequest,
+) -> Result<ivac_core::drawing::api::DrawingResponse, String> {
+    tokio::task::spawn_blocking(move || ivac_core::drawing::api::evaluate(req))
+        .await
+        .map_err(|e| e.to_string())?
+}
+#[tauri::command]
+pub async fn generate_drawing_cmd(
+    req: ivac_core::drawing::api::DrawingGenerationRequest,
+) -> Result<ivac_core::pipeline::PipelineResponse, String> {
+    tokio::task::spawn_blocking(move || ivac_core::pipeline::generate_drawing(req))
+        .await
+        .map_err(|e| e.to_string())?
+        .map_err(|e| e.to_string())
+}

@@ -5,9 +5,35 @@ import { stubCtx, flipY } from './stub-ctx';
 const GRID_COLORS = { minor: '#111', major: '#222' };
 
 describe('drawGrid', () => {
-  it('skips entirely when the minor pitch is under 6px', () => {
+  it.each([0.000001, 0.05, 0.6, 5, 6, 10, 60, 1000, 1000000])(
+    'keeps an origin-anchored grid visible and bounded at %s px/mm',
+    (scale) => {
+      const s = stubCtx();
+      drawGrid(s.ctx, 800, 600, scale, 127, -83, GRID_COLORS);
+      const vertical = s.ops('moveTo').filter((c) => c.strokeStyle === '#111' && c.args[1] === 0);
+      const pitch = Number(vertical[1].args[0]) - Number(vertical[0].args[0]);
+      expect(pitch).toBeGreaterThanOrEqual(6 - 1e-9);
+      expect(pitch).toBeLessThanOrEqual(60 + 1e-9);
+      expect((127 - Number(vertical[0].args[0])) / pitch).toBeCloseTo(
+        Math.round((127 - Number(vertical[0].args[0])) / pitch),
+      );
+      expect(s.ops('stroke')).toHaveLength(2);
+      expect(s.ops('moveTo').length).toBeLessThan(270);
+    },
+  );
+
+  it('preserves the 1mm / 10mm grid at ordinary zoom', () => {
     const s = stubCtx();
-    drawGrid(s.ctx, 100, 100, 5, 0, 100, GRID_COLORS); // 5px per unit
+    drawGrid(s.ctx, 100, 100, 10, 0, 100, GRID_COLORS);
+    const minor = s.ops('moveTo').filter((c) => c.strokeStyle === '#111' && c.args[1] === 0);
+    expect(minor.slice(0, 3).map((c) => c.args[0])).toEqual([0, 10, 20]);
+    const major = s.ops('moveTo').filter((c) => c.strokeStyle === '#222' && c.args[1] === 0);
+    expect(major.slice(0, 2).map((c) => c.args[0])).toEqual([0, 100]);
+  });
+
+  it.each([0, NaN, Infinity])('ignores an invalid scale %s', (scale) => {
+    const s = stubCtx();
+    drawGrid(s.ctx, 100, 100, scale, 0, 100, GRID_COLORS);
     expect(s.calls).toHaveLength(0);
   });
 

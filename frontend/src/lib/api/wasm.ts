@@ -1,3 +1,4 @@
+import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // WASM implementation of WiacClient. Loads the ivac-wasm pkg lazily so it
 // only ships when the user opts in via `?api=wasm`. Useful for offline
@@ -27,6 +28,8 @@ import type {
 type SourcePack = import('./generated').components['schemas']['FsSourcePack'];
 type LabCapture = import('./generated').components['schemas']['FsLabCapture'];
 export type WasmModule = {
+  evaluateDrawing?: (request: DrawingRequest) => DrawingResponse;
+  generateDrawing?: (request: DrawingGenerationRequest) => GenerateResponse;
   captureLabPreset?: (
     project: import('./generated').components['schemas']['Project'],
     opId: number,
@@ -196,6 +199,16 @@ export class WasmWiacClient implements WiacClient {
     return m.feedsSpeeds(request);
   }
 
+  async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
+    const m = await loadModule();
+    if (!m.evaluateDrawing) throw new Error('WASM does not support GEOM1');
+    return m.evaluateDrawing(request);
+  }
+  async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
+    const m = await loadModule();
+    if (!m.generateDrawing) throw new Error('WASM does not support GEOM1');
+    return m.generateDrawing(request);
+  }
   async cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {
     const m = await loadModule();
     if (!m.cornerRelief) throw new Error('Corner relief unavailable in this WASM build');

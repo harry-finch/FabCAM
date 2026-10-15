@@ -72,10 +72,27 @@ fn fuzzy_for_segments(segments: &[Segment]) -> f64 {
 /// loop starts, so the chain is non-empty whenever they execute.
 #[must_use]
 pub fn segments_to_objects(segments: &[Segment]) -> Vec<VcObject> {
+    let mut out = Vec::new();
+    walk_chains::<false>(segments, |object, _| out.push(object));
+    out
+}
+
+/// Preserve source ordinals while walking. Identity consumers must use this
+/// provenance, never recover membership by endpoint equality after chaining.
+#[must_use]
+pub fn segments_to_objects_indexed(segments: &[Segment]) -> Vec<(VcObject, Vec<usize>)> {
+    let mut out = Vec::new();
+    walk_chains::<true>(segments, |object, indices| out.push((object, indices)));
+    out
+}
+
+fn walk_chains<const INDEXED: bool>(
+    segments: &[Segment],
+    mut emit: impl FnMut(VcObject, Vec<usize>),
+) {
     let fuzzy = fuzzy_for_segments(segments);
     let cell_size = fuzzy * 4.0;
     let mut taken = vec![false; segments.len()];
-    let mut out = Vec::new();
     // Spatial hash over endpoints — each segment contributes both its
     // start and end so `find_neighbor` can probe nearby cells in O(1)
     // amortized instead of the legacy O(n) full scan. A 5000-segment
@@ -86,6 +103,7 @@ pub fn segments_to_objects(segments: &[Segment]) -> Vec<VcObject> {
         taken[seed] = true;
         consume_endpoints(&mut grid, seed, &segments[seed], cell_size);
         let mut chain = vec![segments[seed].clone()];
+        let mut indices = if INDEXED { vec![seed] } else { Vec::new() };
         loop {
             let tail = chain.last().unwrap().end;
             let Some(next_idx) = find_neighbor(segments, &taken, &grid, tail, fuzzy, cell_size)
@@ -100,6 +118,9 @@ pub fn segments_to_objects(segments: &[Segment]) -> Vec<VcObject> {
                 s.bulge = -s.bulge;
             }
             chain.push(s);
+            if INDEXED {
+                indices.push(next_idx);
+            }
         }
         loop {
             let head = chain.first().unwrap().start;
@@ -115,6 +136,9 @@ pub fn segments_to_objects(segments: &[Segment]) -> Vec<VcObject> {
                 s.bulge = -s.bulge;
             }
             chain.insert(0, s);
+            if INDEXED {
+                indices.insert(0, prev_idx);
+            }
         }
         let closed = chain
             .first()
@@ -122,10 +146,8 @@ pub fn segments_to_objects(segments: &[Segment]) -> Vec<VcObject> {
             .start
             .distance(chain.last().unwrap().end)
             < fuzzy;
-        out.push(VcObject::new(chain, closed));
+        emit(VcObject::new(chain, closed), indices);
     }
-
-    out
 }
 
 /// (`cell_x`, `cell_y`) -> list of segment indices whose start OR end falls

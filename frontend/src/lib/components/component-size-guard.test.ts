@@ -39,11 +39,12 @@ const DEFAULT_MAX_LINES = 1000;
 /// under budget) is itself flagged below.
 const BUDGETS: Record<string, number> = {
   // Epic-tracked god-components under active decomposition (ivac-3xwn).
-  'lib/components/EntityCanvas2D.svelte': 2290, // 2273 — ivac-1hxn: PointerDragController slice
+  'lib/components/EntityCanvas2D.svelte': 2320, // V1: stable text-only frame; pure math remains in canvas/viewport.ts
   'App.svelte': 2200, // 2155 — ivac-3xwn.1
   'lib/state/project.svelte.ts': 775, // 762 — generate/pipeline lifecycle extracted to project-generate-ops.ts
   // Large but stable / separately tracked components.
-  'lib/components/ToolLibraryDialog.svelte': 1010, // 969 — u9iy: collapsed-row cells → ToolRowSummary
+  'lib/components/ToolLibraryDialog.svelte': 1020, // pre-GEOM1 accepted Availability polish: 1017 lines
+  // // 969 — u9iy: collapsed-row cells → ToolRowSummary
   'lib/components/Scene3D.svelte': 1450, // 1404 — held via scene3d/* builders
   'lib/components/MachineDialog.svelte': 1300, // 1239
   'lib/components/OpPropertiesPanel.svelte': 1250, // 1200

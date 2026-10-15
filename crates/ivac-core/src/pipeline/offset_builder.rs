@@ -329,6 +329,19 @@ pub(super) fn build_op_offsets(
         .filter(|i| op_includes_object(effective_op, &objects[*i], *i))
         .collect();
 
+    // Match Auto region preview's selected-ancestor parity. Even depths
+    // are machinable regions; only their immediate selected odd depth is
+    // an island. Preserve original analytic boundaries/offset generation.
+    let selected_depths: Vec<usize> = objects
+        .iter()
+        .map(|obj| {
+            obj.outer_objects
+                .iter()
+                .filter(|i| selected_set.contains(i))
+                .count()
+        })
+        .collect();
+
     // Non-Auto combine modes (Union/Difference/Intersection/Xor/None) for
     // Pocket short-circuit the per-object loop: we materialize the
     // combined regions once via clipper2 and emit a pocket per region.
@@ -410,11 +423,9 @@ pub(super) fn build_op_offsets(
 
         match effective_op.kind {
             OpKind::Pocket { strategy, .. } => {
-                // Skip objects that are geometrically inside another
-                // selected object — they belong to that pocket as islands.
-                let contained_by_selected =
-                    obj.outer_objects.iter().any(|o| selected_set.contains(o));
-                if contained_by_selected {
+                // Odd selected nesting depths are retained islands; even
+                // descendants become independent machinable regions.
+                if selected_depths[idx] % 2 == 1 {
                     continue;
                 }
                 let pocket_emit = pocket_emit_for(strategy, effective_op);
@@ -428,7 +439,9 @@ pub(super) fn build_op_offsets(
                 let mut islands: Vec<Vec<Point2>> = obj
                     .inner_objects
                     .iter()
-                    .filter(|i| selected_set.contains(i))
+                    .filter(|i| {
+                        selected_set.contains(i) && selected_depths[**i] == selected_depths[idx] + 1
+                    })
                     .filter_map(|i| objects.get(*i))
                     .filter(|inner| inner.closed)
                     .map(|inner| segments_to_points(&inner.segments, 6))

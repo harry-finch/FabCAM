@@ -1,3 +1,4 @@
+import { drawingInputKey } from './drawing';
 import type { OpEntry } from './op_types';
 import type { ProjectFile } from './project-types';
 export function hasFeedsSpeedsData(value: {
@@ -24,16 +25,85 @@ export function validateProjectFile(value: ProjectFile): void {
       (value.kind === 'ivac-project-cutting' && value.version === 3) ||
       (value.kind === 'ivac-project-knowledge' && value.version === 4) ||
       (value.kind === 'ivac-project-cad' && value.version === 5) ||
-      (value.kind === 'ivac-project-surfacing' && value.version === 6)
+      (value.kind === 'ivac-project-surfacing' && value.version === 6) ||
+      (value.kind === 'ivac-project-geometry' && value.version === 7)
     )
   )
     throw new Error('Unsupported project format/version');
+  if (
+    !value.drawing &&
+    (value.operations ?? []).some(
+      (op) => op.geometryBinding?.kind === 'contours' || op.geometryBinding?.kind === 'unresolved',
+    )
+  )
+    throw new Error(
+      'Stable or unresolved geometry bindings require guarded edited-drawing format; reselect geometry before saving',
+    );
+  if ((value.version === 7) !== !!value.drawing)
+    throw new Error('Edited drawing requires guarded version 7');
+  if (
+    value.drawing &&
+    (!Array.isArray(value.drawing.originalBindings) ||
+      value.drawing.version !== 1 ||
+      value.drawing.response?.version !== 1 ||
+      value.drawing.response.drawing?.version !== 1 ||
+      value.drawing.inputKey !== drawingInputKey(value.imports))
+  )
+    throw new Error('Invalid or incompatible edited drawing snapshot');
+  if (value.drawing) {
+    const ids = new Set<number>();
+    for (const binding of value.drawing.originalBindings) {
+      if (
+        !binding ||
+        !Number.isSafeInteger(binding.id) ||
+        binding.id <= 0 ||
+        ids.has(binding.id) ||
+        (binding.sourceObjects != null &&
+          (!Array.isArray(binding.sourceObjects) ||
+            !binding.sourceObjects.every((id) => Number.isSafeInteger(id) && id > 0))) ||
+        (binding.sourceLayers != null &&
+          (!Array.isArray(binding.sourceLayers) ||
+            !binding.sourceLayers.every((name) => typeof name === 'string'))) ||
+        binding.geometryBinding?.kind === 'contours' ||
+        binding.geometryBinding?.kind === 'unresolved'
+      )
+        throw new Error('Invalid original operation bindings');
+      ids.add(binding.id);
+    }
+    for (const op of value.operations ?? []) {
+      const b = op.geometryBinding;
+      if (!b) continue;
+      const identity = (id: { import: number; entity: number }) =>
+        id &&
+        Number.isInteger(id.import) &&
+        id.import > 0 &&
+        Number.isInteger(id.entity) &&
+        id.entity > 0;
+      if (
+        !(
+          b.kind === 'all' ||
+          (b.kind === 'layers' &&
+            Array.isArray(b.names) &&
+            b.names.every((n) => typeof n === 'string')) ||
+          (b.kind === 'contours' &&
+            Array.isArray(b.ids) &&
+            b.ids.length > 0 &&
+            b.ids.every(identity)) ||
+          (b.kind === 'unresolved' &&
+            Array.isArray(b.previous) &&
+            b.previous.every(identity) &&
+            typeof b.reason === 'string')
+        )
+      )
+        throw new Error('Invalid edited operation binding');
+    }
+  }
   if (value.version === 1 && hasFeedsSpeedsData(value))
     throw new Error('Cutting parameters require a guarded project format');
   if (value.cornerRelief) {
     const m = value.cornerRelief;
     if (
-      (value.version !== 5 && value.version !== 6) ||
+      (value.version !== 5 && value.version !== 6 && value.version !== 7) ||
       m.version !== 1 ||
       typeof m.sourceKey !== 'string' ||
       !Number.isFinite(m.diameter) ||
@@ -46,7 +116,7 @@ export function validateProjectFile(value: ProjectFile): void {
       throw new Error('Invalid corner-relief project snapshot');
   } else if (value.version === 5) throw new Error('Missing corner-relief snapshot');
   const surfaces = (value.operations ?? []).filter((op) => op.kind === 'planar_surface');
-  if (surfaces.length > 0 !== (value.version === 6))
+  if (value.version !== 7 && surfaces.length > 0 !== (value.version === 6))
     throw new Error('Planar surfacing requires guarded project version 6');
   for (const op of surfaces) {
     const p = op.surface;
@@ -80,7 +150,7 @@ export function validateProjectFile(value: ProjectFile): void {
     )
       throw new Error('Incomplete recommendation snapshot');
     if (applied.knowledge) {
-      if (value.version !== 4 && value.version !== 5 && value.version !== 6)
+      if (value.version !== 4 && value.version !== 5 && value.version !== 6 && value.version !== 7)
         throw new Error('Source-pack provenance requires guarded project version 4');
       const k = applied.knowledge;
       if (

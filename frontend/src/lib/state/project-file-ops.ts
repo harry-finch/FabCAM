@@ -34,6 +34,8 @@ export function clearProject(p: ProjectState) {
   p.documentBaseline = null;
   p.data.imports = [];
   p.data.cornerRelief = undefined;
+  p.data.drawing = undefined;
+  p.data.serializedExtensions = {};
   p.data.operations = [];
   p.data.material = undefined;
   p.data.fsContext = undefined;
@@ -136,25 +138,31 @@ export function persistPerProjectState(p: ProjectState) {
 /// `?? []` fallback in restore().
 export function snapshotProject(p: ProjectState): ProjectFile {
   return {
+    ...p.data.serializedExtensions,
+    ...(p.data.drawing ? { drawing: p.data.drawing } : {}),
     ...(p.data.cornerRelief ? { cornerRelief: p.data.cornerRelief } : {}),
-    kind: p.data.operations.some((op) => op.kind === 'planar_surface')
-      ? 'ivac-project-surfacing'
-      : p.data.cornerRelief
-        ? 'ivac-project-cad'
-        : p.data.operations.some((op) => op.appliedCutting?.knowledge)
-          ? 'ivac-project-knowledge'
-          : hasFeedsSpeedsData(p.data)
-            ? 'ivac-project-cutting'
-            : 'ivac-project',
-    version: p.data.operations.some((op) => op.kind === 'planar_surface')
-      ? 6
-      : p.data.cornerRelief
-        ? 5
-        : p.data.operations.some((op) => op.appliedCutting?.knowledge)
-          ? 4
-          : hasFeedsSpeedsData(p.data)
-            ? 3
-            : 1,
+    kind: p.data.drawing
+      ? 'ivac-project-geometry'
+      : p.data.operations.some((op) => op.kind === 'planar_surface')
+        ? 'ivac-project-surfacing'
+        : p.data.cornerRelief
+          ? 'ivac-project-cad'
+          : p.data.operations.some((op) => op.appliedCutting?.knowledge)
+            ? 'ivac-project-knowledge'
+            : hasFeedsSpeedsData(p.data)
+              ? 'ivac-project-cutting'
+              : 'ivac-project',
+    version: p.data.drawing
+      ? 7
+      : p.data.operations.some((op) => op.kind === 'planar_surface')
+        ? 6
+        : p.data.cornerRelief
+          ? 5
+          : p.data.operations.some((op) => op.appliedCutting?.knowledge)
+            ? 4
+            : hasFeedsSpeedsData(p.data)
+              ? 3
+              : 1,
     ...(p.data.material ? { material: p.data.material } : {}),
     ...(p.data.fsContext ? { fsContext: p.data.fsContext } : {}),
     imports: p.data.imports,
@@ -181,6 +189,30 @@ export function snapshotProject(p: ProjectState): ProjectFile {
 
 export function restoreProject(p: ProjectState, file: ProjectFile) {
   validateProjectFile(file);
+  const known = new Set([
+    'kind',
+    'version',
+    'drawing',
+    'cornerRelief',
+    'material',
+    'fsContext',
+    'imports',
+    'visibleLayers',
+    'selectedEntities',
+    'stock',
+    'tools',
+    'machine',
+    'operations',
+    'fixtures',
+    'textLayers',
+    'reliefSources',
+    'workOffset',
+    'groupOpsByTool',
+    'machineProfileId',
+  ]);
+  p.data.serializedExtensions = Object.fromEntries(
+    Object.entries(file).filter(([key]) => !known.has(key)),
+  );
   p.data.material = file.material;
   p.data.fsContext = file.fsContext;
   // imports[] is the canonical shape. Pre-migration project
@@ -194,6 +226,7 @@ export function restoreProject(p: ProjectState, file: ProjectFile) {
   // Restore all saved imports/transforms after the import initializer.
   p.data.imports = Array.isArray(file.imports) ? file.imports : [];
   p.data.cornerRelief = file.cornerRelief;
+  p.data.drawing = file.drawing;
   // Layer visibility precedence (best wins):
   //   1. workspace.per_project[path].visible_layers (applied in
   //      setActiveProjectPath after restore returns).

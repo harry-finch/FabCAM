@@ -1,0 +1,148 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s
+     Running unittests src/lib.rs (target/debug/deps/ivac_cps-18d5a9d62f05f08d)
+
+running 7 tests
+test ir::tests::five_d_tags ... ok
+test ir::tests::wire_shape_is_camel_case_and_kind_tagged ... ok
+test meta::tests::wire_shape ... ok
+test ir::tests::round_trip ... ok
+test ir::tests::version_gate_rejects_mismatch ... ok
+test engine::cancellation_tests::host_probe_reads_live_atomic_and_default_stays_false ... ok
+test library::tests::bundled_posts_inspect_cleanly ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running tests/cancellation.rs (target/debug/deps/cancellation-7bdfe4bce02cd144)
+
+running 2 tests
+test pre_cancelled_returns_no_output_and_never_parses_script ... ok
+test uncancelled_output_matches_legacy_and_error_text_cannot_forge_cancel ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+
+     Running tests/constants_consistency.rs (target/debug/deps/constants_consistency-9a7137652b192155)
+
+running 1 test
+test recorder_codes_match_prelude_constants ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/differential.rs (target/debug/deps/differential-b61bc6658fdfb9c5)
+
+running 3 tests
+test format_matrix_matches_v8 ... ok
+fresh format_expected.json
+fresh scenarios_expected.json
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (4.868333ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (1.246ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (0.959709ms)
+✔ abcFormat: scale DEG converts radians to degrees (0.935542ms)
+✔ oFormat: width 4 zeropad (program numbers) (1.501041ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (1.207167ms)
+✔ clamping applies after rounding (1.251917ms)
+✔ trimLeadZero renders FANUC-style bare fractions (2.032584ms)
+✔ forceSign marks positives, never zero (2.224208ms)
+✔ getResultingValue/areDifferent compare on the output grid (2.322708ms)
+✔ differential fixtures are fresh (committed == recomputed) (9.449042ms)
+✔ every Euler convention round-trips a rotation matrix (8.938916ms)
+✔ Euler extraction handles the gimbal-lock singularity (1.121459ms)
+✔ rotation factories agree with axis-angle (1.068ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (7.377917ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (5.511042ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (5.019791ms)
+✔ unreachable orientation throws (1.874708ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.089375ms)
+✔ remapToABC takes the shortest path from the current angles (0.911083ms)
+✔ getPreferredABC honors a positive axis preference (0.869834ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (1.834875ms)
+✔ isABCSupported reflects axis ranges (0.892792ms)
+✔ multi-axis feed: inverse time and DPM (1.06325ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (6.992959ms)
+✔ reset forces the next output; force outputs every time (2.413958ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (2.419541ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (1.083667ms)
+✔ modal carries the format's address letter and getCurrent (1.389125ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (1.067ms)
+✔ createOutputVariable: control + incremental type (1.102625ms)
+✔ ModalGroup enforces per-group exclusivity (1.959875ms)
+✔ formatWords flattens arguments objects and nested arrays (4.22325ms)
+✔ writeWords drops empty lines entirely (1.122583ms)
+✔ writeWords2 outputs only when args 2+ produce text (1.006291ms)
+✔ word separator and EOL are honored (0.941833ms)
+✔ redirection captures words; close returns to normal output (2.131542ms)
+✔ nested redirection pops innermost first (1.2695ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (1.187667ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126.885916
+test node_harness_agrees ... ok
+test scenarios_match_v8 ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests/golden_fanuc.rs (target/debug/deps/golden_fanuc-eb0f0485f4dbf86f)
+
+running 12 tests
+test fanuc_machine_paths_run_on_three_axis ... ok
+test fixture_c_full_circle_and_helix ... ok
+test fixture_b_canned_cycles ... ok
+test fixture_a_two_sections_toolchange ... ok
+test inspect_post_returns_fanuc_property_sheet ... ok
+test fixture_c_use_radius_override ... ok
+test ir_version_gate ... ok
+test syntax_error_maps_to_parse_with_line ... ok
+test runaway_script_hits_budget ... ok
+test validate_throw_maps_to_runtime_error ... ok
+test error_call_halts_with_partial_output ... ok
+test five_d_records_dispatch_with_solved_abc ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests/shopbot_guards.rs (target/debug/deps/shopbot_guards-9d1fd6405b4ea57a)
+
+running 7 tests
+test positive_output_and_comment_injection ... ok
+test lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test scaffold_work_plane_and_tools_fail_closed ... ok
+test vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test unsupported_records_fail_before_export ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.19s
+
+     Running tests/spike.rs (target/debug/deps/spike-360a5d752e9965a1)
+
+running 10 tests
+test json_round_trip ... ok
+test native_function_sink ... ok
+test named_source_errors_carry_line_info ... ok
+test substr_annex_b ... ok
+test minimal_post_end_to_end ... ok
+test script_can_overwrite_host_global ... ok
+test boa_new_after_prototype_assignment_bug ... ok
+test define_property_accessors ... ok
+test arguments_object_semantics ... ok
+test regexp_literal_and_constructor ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/symbol_audit.rs (target/debug/deps/symbol_audit-67d9043639acb782)
+
+running 2 tests
+test undeclared_but_used_symbols_are_defined ... ok
+test every_declared_symbol_is_defined ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+   Doc-tests ivac_cps
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

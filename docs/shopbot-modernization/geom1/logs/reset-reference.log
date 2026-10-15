@@ -1,0 +1,14 @@
+
+> test
+> vitest run src/lib/state/drawing.test.ts
+
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ✓ src/lib/state/drawing.test.ts (8 tests) 6ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  20:52:44
+   Duration  183ms (transform 32ms, setup 0ms, collect 31ms, tests 6ms, environment 0ms, prepare 34ms)
+

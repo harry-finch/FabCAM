@@ -1,5 +1,14 @@
 # ShopBot modernization
 
+## Release planning — approved roadmap
+
+- [FabCAM 1.0 / 1.5 / 2.0+ roadmap and approval decisions](../releases/RELEASE_ROADMAP.md)
+- [V1 ShopBot scope and acceptance matrix](../releases/FABCAM_V1_SCOPE.md)
+- [V1.5 ProtoMAX feasibility and acceptance matrix](../releases/FABCAM_V1_5_SCOPE.md)
+
+Roadmap approved 2026-10-15 with macOS, Windows and Linux required for V1.
+Existing engineering/physical evidence and independent human gates remain unchanged.
+
 FabCAM is a university-fablab fork of [ivaCAM](https://github.com/aalarchiv/ivacam).
 Public product identity and compatibility policy: [ADR-0012](adr/ADR-0012-fabcam-product-identity.md).
 First target: ShopBot PRS Gantry, approximately
@@ -102,3 +111,7 @@ Source presence and passing UI tests do not establish machining correctness.
   [UX6-A profiles](ux/UX6_A_PLAN.md), [UX6-B tool library](ux/UX6_B_PLAN.md):
   **PLANNED — NOT IMPLEMENTED**; field/action architecture audit and separate UX gates,
   existing snapshots/FS/output safeguards preserved, no active-priority displacement.
+
+- [GEOM2-A1 precise imported-file dimensions](GEOM2_A1_PLAN.md): **PLANNED — NOT
+  IMPLEMENTED**, linked local Width/Height via existing Scale, original GEOM1 pivot
+  and source/CAM safeguards; early subtask without selection transforms or nesting.

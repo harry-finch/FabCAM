@@ -1,3 +1,4 @@
+import { drawingImport } from './drawing';
 import { reliefSourceKey } from './corner-relief';
 import { notificationError } from '../api/error-notification';
 // Global project state, Svelte 5 runes.
@@ -185,17 +186,11 @@ export class ProjectState {
   /// the command bus.
   data = new ProjectDataState();
 
-  /// All imports merged into one ImportResponse with each entry's
-  /// fileTransform applied. Every visual consumer (canvas
-  /// / 3D scene / OSnap / sim / build-project payload / footprint) reads
-  /// this rather than `imported`, so the user sees N drawings on stock
-  /// with independent layout transforms.
-  ///
-  /// Single-entry case short-circuits to `applyFileTransform(entry.source,
-  /// entry.fileTransform)` — same identity-fast path as Phase 1. Multi-
-  /// entry case namespaces object ids (entries[0] keeps ids 1..N, later
-  /// entries get the next range) so existing op references stay valid.
+  /// One authoritative drawing for rendering, selection, bounds and generation:
+  /// Rust-evaluated accepted edits, otherwise qualified relief or legacy imports.
+  /// UI object indices are display handles; edited CAM binds stable identities.
   transformedImport = $derived.by<ImportResponse | null>(() => {
+    if (this.data.drawing) return drawingImport(this.data.drawing, this.data.imports);
     const modifier = this.data.cornerRelief;
     if (modifier && modifier.sourceKey === reliefSourceKey(this.data.imports))
       return modifier.evaluated;

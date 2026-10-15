@@ -1,3 +1,11 @@
+> 2026-10-15 approved release roadmap: ProtoMAX is the **V1.5 REQUIRED** second horizon.
+> [Bounded feasibility/output contract and acceptance plan](../releases/FABCAM_V1_5_SCOPE.md).
+> Early documentation/research may overlap V1 stabilization only after approval;
+> no output format or machine compatibility is verified here. GEOM1 is implemented
+> in bounded software review (ivac-e2jnb), not merely planned. V-Carve software review
+> is accepted; its physical/coverage limits remain. Historical assessment below is
+> retained; its older scheduling statements do not start or block current work.
+
 # Deferred ProtoMAX architecture assessment
 
 M0 conclusion: **B — moderate architectural extension**. This is an engineering

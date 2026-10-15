@@ -1,0 +1,15 @@
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.82s
+     Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-dac422117bbd319e)
+
+running 7 tests
+test all_region_modes_ignore_open_contours_and_missing_indices ... ok
+test difference_preserves_explicit_operand_order ... ok
+test dxf_named_layers_and_import_layer_filter_are_preserved ... ok
+test separate_contours_does_not_preserve_nested_holes ... ok
+test shared_auto_kernel_uses_selected_nesting_depth_not_svg_fill_rules ... ok
+test svg_named_groups_remain_one_synthetic_layer ... ok
+test xor_currently_stops_at_an_empty_intermediate_result ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

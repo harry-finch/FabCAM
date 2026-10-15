@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running tests/v1_stabilization.rs (target/debug/deps/v1_stabilization-8557ecc7316fa551)
+
+running 1 test
+test nested_auto_pocket_cuts_even_depth_region_and_preserves_odd_depth_island ... FAILED
+
+failures:
+
+---- nested_auto_pocket_cuts_even_depth_region_and_preserves_odd_depth_island stdout ----
+
+thread 'nested_auto_pocket_cuts_even_depth_region_and_preserves_odd_depth_island' panicked at crates/ivac-core/tests/v1_stabilization.rs:29:13:
+tool center entered retained island: 37.0894,22.0029
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    nested_auto_pocket_cuts_even_depth_region_and_preserves_odd_depth_island
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+error: test failed, to rerun pass `-p ivac-core --test v1_stabilization`

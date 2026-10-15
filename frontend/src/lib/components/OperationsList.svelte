@@ -166,7 +166,11 @@
         reason: t('oplist.status.tool_missing', { id: op.toolId }),
       };
     }
-    if (!project.transformedImport && op.kind !== 'planar_surface') {
+    if (
+      !project.transformedImport &&
+      project.data.textLayers.length === 0 &&
+      op.kind !== 'planar_surface'
+    ) {
       return {
         label: '⚠',
         tone: 'warn',

@@ -1,0 +1,10 @@
+src/App.svelte 196ms
+src/lib/components/ToolLibraryDialog.svelte 71ms (unchanged)
+src/lib/components/OperationsList.svelte 45ms
+src/lib/components/EntityCanvas2D.svelte 77ms
+src/lib/components/component-size-guard.test.ts 26ms (unchanged)
+src/lib/canvas/viewport.ts 16ms (unchanged)
+src/lib/canvas/viewport.test.ts 10ms
+scripts/ensure-wasm-fresh.mjs 10ms
+scripts/wasm-package-state.mjs 5ms
+scripts/wasm-package-state.test.mjs 4ms

@@ -1,0 +1,16 @@
+{
+  "script_unchanged": true,
+  "availability_content_and_handlers_unchanged": true,
+  "narrow_viewport": 1024,
+  "document_scroll_width": 1024,
+  "availability_max_width": 640,
+  "paragraph_px": 12.8,
+  "keyboard_focus": "Process & notes; solid outline",
+  "svelte_check": "0 errors, 0 warnings",
+  "lint": "pass",
+  "build": "pass; existing chunk/dynamic-import warnings",
+  "tests": {
+    "files": 3,
+    "passed": 32
+  }
+}

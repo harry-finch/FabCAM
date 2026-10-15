@@ -16,6 +16,7 @@ fn run(value: &Value, cache: Option<&PipelineCache>) -> Result<Value, PipelineEr
         &mut |_| {},
         None,
         cache,
+        None,
     )
     .map(|r| serde_json::to_value(r).unwrap())
 }
@@ -105,6 +106,7 @@ fn cancelled_warm_post_never_returns_valid_output() {
         &mut |_| {},
         Some(&cancel),
         Some(&cache),
+        None,
     );
     assert!(matches!(result, Err(PipelineError::Cancelled)));
 }
@@ -172,6 +174,7 @@ fn interrupted_cps_execution_has_no_result_or_successful_post_cache_entry() {
         &mut |e| events.push(e),
         Some(&token),
         Some(&cache),
+        None,
     );
     worker.join().unwrap();
     assert!(matches!(result, Err(PipelineError::Cancelled)));

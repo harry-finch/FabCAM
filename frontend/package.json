@@ -4,13 +4,13 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "dev": "node scripts/ensure-wasm-fresh.mjs && vite",
+    "dev": "node scripts/ensure-wasm-fresh.mjs --dev && vite",
     "build": "node scripts/ensure-wasm-fresh.mjs && vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "vitest run",
+    "test": "node --test scripts/wasm-package-state.test.mjs && vitest run",
     "codegen": "openapi-typescript ../schema/openapi.yaml -o src/lib/api/generated.ts",
     "i18n:codegen": "node scripts/i18n-codegen.mjs",
     "i18n:report": "node scripts/i18n-codegen.mjs --report"

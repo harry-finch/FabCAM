@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-15",
+  "host": "macOS; Codex in-app browser, Vite 18803/native API 18804",
+  "toolBefore": "project T2 D12 opened inventory T2 D6",
+  "toolAfter": "project modal T2 D12; applied D10",
+  "undo": 12,
+  "redo": 10,
+  "inventoryAfter": 6,
+  "cancelDiscard": 10,
+  "savedReopenedDiameter": 10,
+  "manualRatesAndOperationsAndTextPreserved": true,
+  "textBefore": "glyphs tiny at machine-bed scale; false no-drawing warning",
+  "textAfter": "content framed at desktop 1280x900 and 1440x960; narrow 900x800",
+  "scope": "UI and persistence; not packaged app or physical qualification"
+}

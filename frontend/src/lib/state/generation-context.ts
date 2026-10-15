@@ -1,3 +1,4 @@
+import { drawingInputKey } from './drawing';
 import { reliefError, reliefOperationError } from './corner-relief';
 import { buildProject } from '../api/build-project';
 import { toCpsPostRequest } from '../components/cps-post-form';
@@ -8,6 +9,8 @@ import type { ProjectState } from './project.svelte';
 export function generationContextKey(p: ProjectState, post: string): string {
   return JSON.stringify({
     post,
+    drawing: p.data.drawing,
+    drawingBindings: p.data.operations.map((op) => op.geometryBinding),
     cornerReliefError: cornerReliefGenerationError(p),
     cps: post === 'cps' ? toCpsPostRequest(p.data.machine.cpsPost) : undefined,
     project: buildGenerationProject(p),
@@ -34,6 +37,38 @@ export function buildGenerationProject(p: ProjectState) {
 }
 
 export function cornerReliefGenerationError(p: ProjectState): string | null {
+  const unresolvedBinding = p.data.operations.find(
+    (op) => op.enabled && op.geometryBinding?.kind === 'unresolved',
+  );
+  if (unresolvedBinding)
+    return `${unresolvedBinding.name}: select geometry again after drawing repair.`;
+  if (
+    !p.data.drawing &&
+    p.data.operations.some((op) => op.enabled && op.geometryBinding?.kind === 'contours')
+  )
+    return 'Edited contour identity has no drawing snapshot — reselect geometry before generation.';
+  if (p.data.drawing) {
+    if (p.sourceFileStaleNotice)
+      return 'External drawing changed — review the source notice before generating the accepted snapshot.';
+    if (p.data.drawing.inputKey !== drawingInputKey(p.data.imports))
+      return 'Drawing source or transform changed — review repairs before generation.';
+    if (
+      p.data.operations.some(
+        (op) =>
+          op.enabled &&
+          ((op.geometryBinding?.kind === 'layers' &&
+            op.geometryBinding.names.includes('__stock_outline')) ||
+            (op.geometryBinding?.kind === 'all' && p.data.stock.visible)),
+      )
+    )
+      return 'For repaired drawings, select imported contours or named layers instead of the synthetic stock outline.';
+    if (p.data.cornerRelief || p.data.stock.flip)
+      return 'Edited drawing with relief/two-sided setup is not yet qualified.';
+    const unresolved = p.data.operations.find(
+      (op) => op.enabled && op.geometryBinding?.kind === 'unresolved',
+    );
+    if (unresolved) return `${unresolved.name}: select geometry again after drawing repair.`;
+  }
   if (p.data.cornerRelief && (p.data.machine.unit !== 'mm' || p.data.stock.flip))
     return 'Corner relief requires metric single-sided milling.';
   return (

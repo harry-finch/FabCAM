@@ -1,5 +1,85 @@
 # Status — 2026-10-15
 
+## Current version — 0.9.0-beta.1
+
+User authorized version assessment, documentation/UI alignment and publication of
+all pending work on 2026-10-15. [Version policy](../releases/VERSIONING.md): bounded
+V1 software scope is implemented and stabilizing; installer, human and physical
+gates remain open. This publication supersedes earlier no-publish statements for
+this checkpoint, without closing reviews or declaring 1.0 ready.
+
+## V1 bounded stabilization — software corrections delivered
+
+2026-10-15 · ivac-chhz0 · Lot explicitly approved by the user.
+[Results, regressions and actual UX evidence](../releases/V1_STABILIZATION_RESULTS.md).
+XOR parity and deep Pocket selected-nesting semantics corrected; operation-tool gear
+now edits the project copy; text-only reopen framing/diagnostics corrected; production
+WASM guard checks complete assets and content fingerprints with locked rebuild.
+Native/WASM program parity and independent OpenSBP/preview decoding are qualified.
+Known parallel cache-test race ivac-htc8 remains; serialized core qualification and
+all final check counts are recorded in the linked report.
+
+**Not release-ready:** current macOS/Windows 11/Ubuntu packages and actual install,
+upgrade/runtime qualification remain pending; Windows host/VM still needed.
+GEOM1 user review remains explicitly open; no physical validation, commit or publication.
+**HARD STOP before the next checkpoint.** Earlier entries below are historical.
+
+## V1 Scope Freeze & Release-Blocker Triage — handoff
+
+2026-10-15 · ivac-oznar. [Results, target matrix and stabilization proposal](../releases/V1_SCOPE_FREEZE_TRIAGE.md).
+User confirms Windows/Linux Intel x64; Windows 11 selected after Windows 7 compatibility
+review. Latest Ubuntu pinned to 26.10; macOS reference remains 26.5.2 arm64. Proposed
+packages: macOS DMG, Windows NSIS, Ubuntu DEB. Actual installs remain unqualified;
+a Windows 11 test host/VM is still needed.
+
+7 core geometry characterization, 22 frontend logic and 7 CPS guard tests pass.
+XOR defect and partial-WASM freshness acceptance reproduced; Pocket nesting/tool
+shortcut risks source-confirmed, full UI/output repros remain for bounded fixes.
+GEOM1 explicitly **not yet reviewed** by user; ivac-e2jnb stays open. Independent
+human/physical gates unchanged. No production fixes/build/release performed.
+**HARD STOP before proposed V1 stabilization lot implementation.**
+
+## Release roadmap approved — V1 macOS, Windows and Linux
+
+2026-10-15. User approved the [release roadmap](../releases/RELEASE_ROADMAP.md)
+with an explicit amendment: **Windows and Linux are V1 REQUIRED alongside macOS**.
+[V1 matrix](../releases/FABCAM_V1_SCOPE.md) now requires packages and actual clean
+install/upgrade/runtime checks on all three platforms. Exact OS versions, CPU
+architectures, Linux distributions and package formats remain to be pinned.
+V1.5 ProtoMAX and 2.0+ direction accepted; no waterjet implementation authorized.
+
+Documentation update only (ivac-zgmds); no new code, build, platform qualification,
+physical test, commit/push or release. GEOM1 ivac-e2jnb and independent FS/UX/
+cancellation gates remain open; M4 physical evidence retains its narrow scope.
+Next unstarted checkpoint: **V1 Scope Freeze & Release-Blocker Triage** — complete
+GEOM1 human review, pin target variants and operation claims, then prioritize defects.
+
+**HARD STOP — roadmap approved; no next milestone started by this update.**
+
+## GEOM1 — engineering complete; human software/UX review pending
+
+2026-10-15. ADR-0021 and four refinements approved; bounded phases A–F implemented.
+[Results, screenshots and limits](GEOM1_RESULTS.md), [normative contract](GEOM1_CONTRACT.md),
+[serialization](GEOM1_SERIALIZATION.md), [checks](geom1/checks.json).
+Stable source identity/lineage, authoritative Rust drawing evaluation, explicit line
+repairs, undoable geometry/bindings, guarded v7 and safe old-backend refusal are present.
+Automatic curves/complex healing, source rebasing, synthetic stock/modifier combinations
+and new machine capabilities remain excluded/refused as documented.
+
+Validation: 1198 full core tests, 23 final focused references (overlapping), 44 CPS,
+1312 frontend tests (1 existing skip); check/lint/clippy/schema/build pass. Real
+WASM/native parity and UI save/reopen/Undo/Redo/stale-export reviewed. Reset/import-ID
+reuse and unsafe old-format binding downgrade counterexamples have explicit guards.
+Engineering `ivac-8rura`; human gate **ivac-e2jnb OPEN**. Software only; no physical or
+packaged-app qualification. **HARD STOP before any next milestone.** No commit/push/
+merge/release performed. Independent prior gates remain unchanged.
+
+GEOM2-A1 — Precise Imported-File Dimensions is **PLANNED — NOT IMPLEMENTED**;
+[specification](GEOM2_A1_PLAN.md). Early GEOM2-A subtask: local whole-file Width/
+Height over existing uniform Scale, preserving ADR-0021 pivot and edited-source
+lineage. Current GEOM1 review ivac-e2jnb remains next; no new implementation or
+publication authorization is inferred from this documentation update.
+
 ## Source publication — authorized
 
 User explicitly requested committing and pushing all pending PERF1 and UX work
@@ -7,7 +87,15 @@ on 2026-10-15. This supersedes earlier publication restrictions for this source
 checkpoint only. Pending human review gates, the CPS cancellation latency target,
 native/physical qualification limits and future milestone approvals remain unchanged.
 
-## UX6-B — engineering complete, human software/visual review pending
+## Preview navigation — focused follow-up delivered
+
+ivac-tgxsn: zoom-adaptive decimal2D grid and middle-button3D pan; updated gesture
+help. [Results and actual zoom captures](ux/PREVIEW_NAVIGATION_POLISH.md).42 targeted
+tests pass; Svelte0 diagnostics, lint/build pass. Actual2D zoom/fit and3D/help reviewed;
+central drag mapping source-verified, physical gesture not automated. No CAM/snap/
+project-format changes. UX6-B accepted; GEOM1 audit is now authorized; see current checkpoint above.
+
+## UX6-B — accepted
 
 User accepted UX6-A (ivac-osa4z closed) and authorized B. [Results and actual
 captures](ux/UX6_B_RESULTS.md): searchable compact list/contextual editor, whole-library
@@ -15,8 +103,14 @@ draft, same-ID consequence review, staged import, copy availability and retained
 fields. Existing manual rates/history/guards preserved. 1284 frontend passes/1 existing
 skip; check/lint/build pass; actual desktop/keyboard/1024px review. No physical claim.
 
-**ivac-y2aln OPEN — HARD STOP before another milestone.** Engineering ivac-f8w26 complete.
-Independent PERF/hierarchy gates unchanged; no publication authorized.
+Availability review polish: compact inspector typography/section headings, lists and
+messages now match Geometry/Mounting; [actual after](ux/ux6-b/availability-after-polish.png).
+Svelte/check/lint/build pass; 32 targeted tests pass; 1024px and keyboard focus reviewed.
+Association/draft behavior unchanged (ivac-b54jh).
+
+**ivac-y2aln closed: user accepted UX6-B and Availability polish.** Engineering
+ivac-f8w26 and polish ivac-b54jh complete. The subsequent user request authorizes the GEOM1 architecture/tolerance audit;
+see the current checkpoint above. No UX7 is defined. Independent PERF/hierarchy/native/physical gates unchanged.
 
 ## UX6-A — accepted
 

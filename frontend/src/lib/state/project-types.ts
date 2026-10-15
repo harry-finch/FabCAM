@@ -800,8 +800,10 @@ export interface ProjectFile {
     | 'ivac-project-cutting'
     | 'ivac-project-knowledge'
     | 'ivac-project-cad'
-    | 'ivac-project-surfacing';
-  version: 1 | 2 | 3 | 4 | 5 | 6;
+    | 'ivac-project-surfacing'
+    | 'ivac-project-geometry';
+  version: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  drawing?: import('./drawing').DrawingState;
   cornerRelief?: import('./corner-relief').CornerReliefModifier;
   material?: MaterialIdentity;
   fsContext?: import('../api/generated').components['schemas']['FsContext'];

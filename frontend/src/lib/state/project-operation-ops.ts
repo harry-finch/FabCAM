@@ -1,3 +1,4 @@
+import { nextDrawingOperationId } from './drawing';
 import { preserveManualCutting } from './feeds-speeds';
 // Operation + tool-library CRUD extracted from the ProjectState god
 // root: the CAM entities the undo/redo command bus mutates. Every edit
@@ -65,7 +66,7 @@ export function addOperation(p: ProjectState, kind: OpKind): OpEntry {
           surfaceZone: computeFootprint(p.stockSizingImport, p.data.stock, p.data.machine.workArea),
         }
       : {}),
-    nextId: p.data.operations.reduce((m, o) => Math.max(m, o.id), 0) + 1,
+    nextId: nextDrawingOperationId(p.data.operations, p.data.drawing),
     tools: p.data.tools,
     reliefSources: p.data.reliefSources,
     selectionIds: [...p.sel.selectedObjects],
@@ -88,7 +89,7 @@ export function removeOperation(p: ProjectState, id: number) {
 export function duplicateOperation(p: ProjectState, id: number): OpEntry | null {
   const src = p.data.operations.find((o) => o.id === id);
   if (!src) return null;
-  const nextId = p.data.operations.reduce((m, o) => Math.max(m, o.id), 0) + 1;
+  const nextId = nextDrawingOperationId(p.data.operations, p.data.drawing);
   // JSON-roundtrip clone: Svelte 5 `$state` proxies make structuredClone
   // throw DataCloneError in production builds — the dup button would die
   // with an uncaught exception and look dead.

@@ -122,15 +122,6 @@
       document.title = `FabCAM v${pkgVersion}`;
     }
   });
-  // Open the Tool library dialog when OpPropertiesPanel's "edit this
-  // tool" icon requests focus on a specific tool row. The dialog reads
-  // project.sel.toolsDialogFocusId and handles scroll/highlight.
-  $effect(() => {
-    if (project.sel.toolsDialogFocusId != null) {
-      mainTab = 'tools';
-    }
-  });
-
   // G-code panel visibility. The playback bar always sits below the
   // 3D canvas; the gcode panel opens as an extra row beneath it so
   // the user sees the toolpath, the playhead, and the program text
@@ -514,7 +505,11 @@
     }
   });
   $effect(() => {
-    if (mainTab === 'tools' && !ToolLibraryDialog && !toolLibraryDialogLoading) {
+    if (
+      (mainTab === 'tools' || project.sel.toolsDialogFocusId != null) &&
+      !ToolLibraryDialog &&
+      !toolLibraryDialogLoading
+    ) {
       toolLibraryDialogLoading = true;
       void import('./lib/components/ToolLibraryDialog.svelte').then((m) => {
         ToolLibraryDialog = m.default;
@@ -1445,6 +1440,13 @@
   {/if}
   {#if ToolLibraryDialog}
     {@const ToolsPanel = ToolLibraryDialog}
+    {#if project.sel.toolsDialogFocusId != null}
+      <ToolsPanel
+        source="project"
+        open={true}
+        onClose={() => (project.sel.toolsDialogFocusId = null)}
+      />
+    {/if}
     <main class="tab-panel" class:tab-hidden={mainTab !== 'tools'}>
       <ToolsPanel embedded source="inventory" open={false} onClose={() => (mainTab = 'project')} />
     </main>

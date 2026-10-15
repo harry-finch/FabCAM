@@ -1,0 +1,6 @@
+{
+  "software_only": true,
+  "native_wasm_program_byte_equal": true,
+  "wasm_inner_region_cut": true,
+  "preview_moves": 9804
+}

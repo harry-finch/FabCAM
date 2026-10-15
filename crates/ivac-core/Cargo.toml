@@ -24,6 +24,8 @@ profiling = []
 ivac-feeds-speeds = { path = "../ivac-feeds-speeds", features = ["schema"] }
 ivac-cps = { workspace = true, optional = true }
 serde = { workspace = true }
+# Existing transitive dependency; exact binary-float orientation fallback for GEOM1.
+num-bigint = "0.4"
 serde_json = { workspace = true }
 # dya2: base64 codec for the `font_bytes` wire field — compact string form
 # instead of a JSON Vec<u8> integer array. Already in the tree via usvg, so

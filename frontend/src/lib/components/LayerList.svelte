@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Eye, EyeOff } from '@lucide/svelte';
   import { drawingLayers, layerSwatch } from '../state/drawing-layers';
+  import DrawingCleanupPanel from './DrawingCleanupPanel.svelte';
   import CornerReliefPanel from './CornerReliefPanel.svelte';
   /// Imported-drawing layer list. Restyled (audit follow-up) to match
   /// the OperationsList group-header pattern: caret-to-collapse, a
@@ -491,7 +492,7 @@
   {/if}
 </aside>
 
-{#if active}<CornerReliefPanel />{/if}
+{#if active}<DrawingCleanupPanel /><CornerReliefPanel />{/if}
 
 <style>
   .layers {

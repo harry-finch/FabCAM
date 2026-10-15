@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { generateEditedDrawing } from '../state/drawing';
   import { beginGenerationProbe } from '../state/performance-probe';
   import { bindGeneratePalette, exportProblem } from '../state/generate-palette';
   import { notificationError } from '../api/error-notification';
@@ -103,7 +104,6 @@
   let warningPanelOpen = $state(false);
   let abortController: AbortController | null = null;
 
-  /// React to a per-op warning-focus request (set by the op status
   /// badge in OperationsList). Open the warnings panel, then — after
   /// the rows render — expand every <details> for that op and scroll
   /// the first into view. Reads `seq` so repeat clicks on the same op
@@ -318,7 +318,9 @@
         });
       } else {
         let r;
-        if (client.generateStreaming) {
+        if (project.data.drawing) {
+          r = await generateEditedDrawing(project, client, req, abortController.signal);
+        } else if (client.generateStreaming) {
           r = await client.generateStreaming(
             req,
             (ev) => {

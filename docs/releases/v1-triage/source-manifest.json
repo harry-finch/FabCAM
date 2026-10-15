@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-15",
+  "scope": "Read/test current dirty tree; no production corrections",
+  "sha256": {
+    "rust-toolchain.toml": "dc5c00ca414155e3efb75b45cfe9caa7b3149575cd36a743a6fcf126183ca004",
+    "Cargo.lock": "a0b40b4a63e0ae8714328b887073318e30dff38a3028e08761c062a09ad97338",
+    "crates/ivac-core/src/cam/source_combine.rs": "b90a7bc912aee2083749066259f448088228ea3f209e41eaf26e6006e3025f08",
+    "crates/ivac-core/src/pipeline/offset_builder.rs": "ff13cd4d32594d0e062b5986734cfe25b4ede19a49891d31be02979962ddb7b7",
+    "crates/ivac-core/tests/geometry_source_ux.rs": "4940fa5e02a13b82ec1f1eff82f1feb54dcce04a6c353a74942ab8742c6c4ac8",
+    "crates/ivac-cps/tests/shopbot_guards.rs": "33f8c251ee0d40cf3719f384575a4152169987e2a38ecdadd5285e6a7ab2f726",
+    "crates/ivac-cps/posts/shopbot.cps": "fea4f62c3a0ef9d070fc1eec9b0f04922648efd710dd86b12a4fd6bb58340b21",
+    "frontend/src/App.svelte": "b8f1a911928e598c394eb725639f4a31b1f15dccde286aa9e1d5973faca38691",
+    "frontend/src/lib/components/OpPropertiesPanel.svelte": "7ace99ef23c32ded1e27f9c350813ffdd00870246b9527647a4e9bd3f33faa94",
+    "frontend/src/lib/components/ToolLibraryDialog.svelte": "91464e0c020d28e9a927cfcddaf3587bc3344ac68bd31cd5b75baa42dd974c83",
+    "frontend/src/lib/components/OperationsList.svelte": "b06a4a692d87dfd9a2e46f67813fddba4cc0bde71cb86cf69482faf8ec2f68a7",
+    "frontend/scripts/ensure-wasm-fresh.mjs": "8cb23df244ac6bff5655953c344ba1f7589e637dec0c7ea926d0e47be1f4eb8e",
+    ".github/workflows/release-desktop.yml": "3bd80cebfecef1ce7b1c1bf760b4138a6acb247cbda4b5cccc6d2308a0e6529f"
+  }
+}

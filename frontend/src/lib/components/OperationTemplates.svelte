@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { nextDrawingOperationId } from '../state/drawing';
   import { paletteDispatch } from '../state/palette-dispatch';
   import { paletteContext } from '../state/palette-shell';
   import { onMount, tick } from 'svelte';
@@ -61,7 +62,7 @@
   );
   const selectionIds = $derived([...project.sel.selectedObjects]);
   const binding = $derived({
-    nextId: project.data.operations.reduce((max, op) => Math.max(max, op.id), 0) + 1,
+    nextId: nextDrawingOperationId(project.data.operations, project.data.drawing),
     toolId: Number(toolId),
     finishToolId: finishId ? Number(finishId) : undefined,
     tools: project.data.tools,

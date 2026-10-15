@@ -147,3 +147,26 @@ describe('existing view-state and CAM boundaries', () => {
     expect(drawingLayers(p.data.imports).find((l) => l.name === 'svg')!.segment_count).toBe(12);
   });
 });
+
+it('preserves accepted repairs when a watched source changes', async () => {
+  const { reimportFromPath } = await import('./import-ops');
+  const p = projectFixture();
+  const file = JSON.parse(
+    readFileSync(
+      new URL(
+        '../../../../docs/shopbot-modernization/geom1/square-repaired.ivac-project.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+  p.data.drawing = file.drawing;
+  p.setError = vi.fn();
+  const originals = p.data.imports;
+  const edits = p.data.drawing;
+  expect(await reimportFromPath(p, '/changed/source.svg')).toBe(false);
+  expect(p.data.imports).toBe(originals);
+  expect(p.data.drawing).toBe(edits);
+  expect(p.sourceFileStaleNotice).toEqual({ path: '/changed/source.svg', auto_reload: false });
+  expect(p.setError).toHaveBeenCalled();
+});

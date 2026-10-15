@@ -1,3 +1,4 @@
+import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // Tauri implementation of WiacClient. The desktop app is detected by the
 // `__TAURI_INTERNALS__` global Tauri injects into the WebView; when absent
@@ -200,6 +201,12 @@ export class TauriWiacClient implements WiacClient {
     return invoke<FsCamResponse>('feeds_speeds_cmd', { req: request });
   }
 
+  async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
+    return invoke('evaluate_drawing_cmd', { req: request });
+  }
+  async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
+    return invoke('generate_drawing_cmd', { req: request });
+  }
   async cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {
     return invoke<CornerReliefResponse>('corner_relief_cmd', { req: request });
   }

@@ -1,0 +1,4 @@
+    Checking ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Checking ivac-wasm v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm)
+    Checking ivac-server v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-server)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.61s

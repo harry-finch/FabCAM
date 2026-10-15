@@ -446,3 +446,34 @@ patterns must not create parallel authoritative machine/tool state.
 actual screenshots and human gates. FabCAM program-level output settings stay distinct
 from future FabSBP live control; draft/software/physical evidence labels are not invented.
 No active PERF/CAM algorithm/post behavior changes in this planning checkpoint.
+
+## GEOM1 — authoritative edited drawings (ADR-0021)
+
+`ivac-core::drawing` owns source-preserving local snapshots, stable import/entity
+identity, provenance/lineage, bounded repair proposals and evaluated membership.
+The frontend adapts that evaluated geometry for drawing/picking; it does not perform
+repair math. Dedicated revision-1 transports carry edits to the same generic CAM
+pipeline. Stable operation sources are resolved inside Rust, with explicit refusal
+of ambiguous/deleted bindings and unsupported synthetic/modifier combinations.
+The source-to-work adapter and all machine post boundaries remain downstream.
+Guarded project v7 prevents an older reader from machining the unedited original.
+See [contract](GEOM1_CONTRACT.md), [serialization](GEOM1_SERIALIZATION.md) and
+[software evidence and limits](GEOM1_RESULTS.md). No general parametric model,
+GEOM2 editing, new toolpath strategy or additional ShopBot capability was introduced.
+
+## Planned GEOM2-A1 imported-file dimensions
+
+[GEOM2-A1](GEOM2_A1_PLAN.md) is a small planned view/command extension over existing
+FileTransform.scale, not independent persisted dimensions. Whole-import effective
+local bounds after GEOM1 edits supply W0/H0; displayed dimensions are scaled before
+rotation. Selection bbox and combined world/project bounds cannot serve that role.
+Audit authoritative per-import local bounds and curves/extrema; current legacy TS
+endpoint helpers and edited Rust bounds need explicit agreement, not inverse-AABB math.
+
+ADR-0021 original pivot and local-edit→file-transform→applicable-relief order remain.
+Patch only Scale; keep translation/angle/mirrors, work zero and stock semantics. A repaired
+bbox is measurement, not a new pivot. Preserve lineage/bindings/async guards, command
+history/serialization and CAM preflight; no new format, geometric evaluator or FS
+recalculation. File, future selected-group and nesting-instance transforms share math
+but distinct ownership. Existing status dimensions are read-only measurement; A1 is
+editable whole-file sizing. Degenerate/invalid input and early-delivery scope need audit.

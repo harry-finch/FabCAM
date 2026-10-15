@@ -1,0 +1,11 @@
+   Compiling boa_ast v0.21.1
+   Compiling tracing v0.1.44
+   Compiling tracing-subscriber v0.3.23
+   Compiling boa_parser v0.21.1
+   Compiling boa_engine v0.21.1
+   Compiling ivac-cps v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+   Compiling ivac-core v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-cli v0.5.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 14.08s
+     Running `target/debug/ivac stream-gcode docs/releases/v1-stabilization/deep-pocket.request.json --output docs/releases/v1-stabilization/deep-pocket-native.ngc`
+wrote gcode to docs/releases/v1-stabilization/deep-pocket-native.ngc (3 objects, 24 offsets)

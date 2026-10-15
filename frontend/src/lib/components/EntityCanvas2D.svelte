@@ -38,6 +38,7 @@
   import {
     computeViewportTransform,
     placementsBBox,
+    PlacementFrame,
     segsBBox,
     type Rect,
   } from '../canvas/viewport';
@@ -235,6 +236,7 @@
     void project.data.textLayers;
     void project.sel.selectedTextLayerId;
     void previewVersion.v;
+    void project.documentEpoch;
     void project.data.machine.workArea;
     void project.data.stock;
     void project.data.settings.previewLineWidth;
@@ -982,7 +984,10 @@
   /// Shared reset — invoked from the fit-view button, double-click
   /// empty space, and the keyboard `F` / `Home` shortcuts. Pulls the
   /// canvas back to its auto-fit baseline (no user pan, no user zoom).
+  const placementFrame = new PlacementFrame();
+
   function fitView() {
+    placementFrame.reset();
     view.reset();
     drawBackground();
   }
@@ -1859,13 +1864,8 @@
     return null;
   }
 
-  /// A viewport bbox for a project with no imported
-  /// geometry + no visible stock, so placement-only entities (raster
-  /// images, text layers) still render + drag. Prefers the machine work
-  /// area — a STABLE reference, so the view doesn't jiggle while an
-  /// origin is dragged (the entity moves within the bed). Falls back to
-  /// the union of all placement extents (+10% margin) when no bed is
-  /// defined. Null when there's nothing placeable to frame.
+  /// Text-only projects fit their content, retaining the frame during dragging.
+  /// Raster-only placement keeps its existing machine-bed reference.
   function placementFallbackBBox(): BBox | null {
     const rects: Rect[] = [];
     for (const { src } of rasterPlacements) {
@@ -1876,10 +1876,23 @@
         maxY: src.origin.y + src.rows * src.cell,
       });
     }
+    const readyTextIds: number[] = [];
     for (const layer of project.data.textLayers) {
       const bb = segsBBox(previewSegmentsFor(layer.id, layer.origin) ?? []);
-      if (bb) rects.push(bb);
+      if (bb) {
+        rects.push(bb);
+        readyTextIds.push(layer.id);
+      }
     }
+    if (project.data.textLayers.length > 0) {
+      const key = JSON.stringify([
+        project.documentEpoch,
+        readyTextIds,
+        rasterPlacements.map(({ src }) => src.id),
+      ]);
+      return placementFrame.fit(key, rects);
+    }
+    placementFrame.reset();
     if (rects.length === 0) return null;
     const wa = project.data.machine.workArea;
     if (wa && wa.x > 0 && wa.y > 0) {

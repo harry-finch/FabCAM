@@ -61,6 +61,10 @@
   );
   const key = $derived(JSON.stringify([request, sourceKey, project.documentEpoch]));
   function begin(edit = false) {
+    if (project.data.drawing) {
+      project.setError('Reset drawing repairs before applying corner relief.');
+      return;
+    }
     const old = edit ? project.data.cornerRelief : undefined;
     selectedObjects = old?.recipe.selected_objects ?? [...project.sel.selectedObjects];
     toolId = old?.toolId ?? tools[0]?.id ?? 0;

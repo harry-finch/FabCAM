@@ -68,6 +68,8 @@ async fn main() -> Result<()> {
         .route("/text/layer", post(render_text_layer_handler))
         .route("/helix-radius", post(helix_radius_handler))
         .route("/corner-relief", post(corner_relief_handler))
+        .route("/drawing", post(drawing_handler))
+        .route("/generate-drawing", post(generate_drawing_handler))
         .route("/feeds-speeds", post(feeds_speeds_handler))
         .route("/relief/stl", post(relief_stl_handler));
     // Post-library surfaces exist only in cps builds; the /version
@@ -1139,4 +1141,24 @@ mod tests {
         assert_eq!(parsed.kind, ErrorKind::Unsupported);
         assert!(parsed.recovery_hint.is_some());
     }
+}
+
+async fn drawing_handler(
+    Json(req): Json<ivac_core::drawing::api::DrawingRequest>,
+) -> Result<Json<ivac_core::drawing::api::DrawingResponse>, AppError> {
+    tokio::task::spawn_blocking(move || ivac_core::drawing::api::evaluate(req))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
+        .map(Json)
+        .map_err(AppError::bad_request)
+}
+async fn generate_drawing_handler(
+    Json(req): Json<ivac_core::drawing::api::DrawingGenerationRequest>,
+) -> Result<Json<PipelineResponse>, AppError> {
+    reject_cps_path(&req.machining)?;
+    tokio::task::spawn_blocking(move || ivac_core::pipeline::generate_drawing(req))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
+        .map(Json)
+        .map_err(AppError::from)
 }

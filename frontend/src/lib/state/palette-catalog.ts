@@ -24,6 +24,7 @@ const COMMANDS = [
   ['sidebar-layers', 'palette.layers', 'calques geometrie ebenen'],
   ['sidebar-text', 'palette.text', 'texte schrift'],
   ['sidebar-operations', 'palette.operations', 'operations usinage bearbeitungen'],
+  ['drawing-cleanup', 'cleanup.title', 'cleanup repair nettoyer dessin reparer geometrie'],
   ['cad', 'palette.cad', 'dogbone t bone preparation geometrie eckenfreistellung'],
   ['nav-machine', 'palette.machine', 'machine maschine'],
   ['nav-tools', 'palette.tools', 'outils fraises werkzeugbibliothek'],

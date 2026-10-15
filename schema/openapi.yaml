@@ -241,6 +241,44 @@ paths:
                 $ref: '#/components/schemas/HelixRadiusResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+  /drawing:
+    post:
+      summary: Evaluate or preview source-preserving drawing edits (GEOM1 revision 1)
+      operationId: evaluateDrawing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DrawingRequest'
+      responses:
+        '200':
+          description: Authoritative geometry, membership, diagnostics and transient changes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrawingResponse'
+        '400':
+          description: Unsupported revision or invalid geometry; no legacy fallback
+  /generate-drawing:
+    post:
+      summary: Generate from validated edited geometry (GEOM1 revision 1)
+      operationId: generateDrawing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DrawingGenerationRequest'
+      responses:
+        '200':
+          description: Existing qualified pipeline response from authoritative edited sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineResponse'
+        '400':
+          description: Invalid geometry, binding, version or unsupported feature combination
   /corner-relief:
     post:
       summary: Preview exact-diameter CAD corner relief
@@ -530,6 +568,62 @@ components:
       - min_x
       - min_y
       type: object
+    Binding:
+      oneOf:
+      - additionalProperties: false
+        properties:
+          ids:
+            items:
+              $ref: '#/components/schemas/Identity'
+            type: array
+          kind:
+            enum:
+            - contours
+            type: string
+        required:
+        - ids
+        - kind
+        type: object
+      - additionalProperties: false
+        properties:
+          kind:
+            enum:
+            - unresolved
+            type: string
+          previous:
+            items:
+              $ref: '#/components/schemas/Identity'
+            type: array
+          reason:
+            type: string
+        required:
+        - kind
+        - previous
+        - reason
+        type: object
+      - additionalProperties: false
+        properties:
+          kind:
+            enum:
+            - layers
+            type: string
+          names:
+            items:
+              type: string
+            type: array
+        required:
+        - kind
+        - names
+        type: object
+      - additionalProperties: false
+        properties:
+          kind:
+            enum:
+            - all
+            type: string
+        required:
+        - kind
+        type: object
     CatalogEntry:
       additionalProperties: false
       properties:
@@ -543,6 +637,24 @@ components:
       - identity
       - label
       - notes
+      type: object
+    Contour:
+      additionalProperties: false
+      properties:
+        edges:
+          items:
+            $ref: '#/components/schemas/Edge'
+          type: array
+        id:
+          $ref: '#/components/schemas/Identity'
+        parents:
+          items:
+            $ref: '#/components/schemas/Identity'
+          type: array
+      required:
+      - edges
+      - id
+      - parents
       type: object
     ContourParams:
       description: Parameters shared by every closed-contour op (Profile / Pocket / Engrave / `DragKnife`). Embedded in the matching [`super::op::OpKind`] variants. Holds tab shape + placement, lead-in / lead-out, cut direction, corner-feed reduction, and the optional user-picked approach point.
@@ -836,6 +948,217 @@ components:
       required:
       - diameter_mm
       type: object
+    Drawing:
+      additionalProperties: false
+      properties:
+        contours:
+          items:
+            $ref: '#/components/schemas/Contour'
+          type: array
+        imports:
+          items:
+            $ref: '#/components/schemas/Source'
+          type: array
+        transitions:
+          items:
+            $ref: '#/components/schemas/Transition'
+          type: array
+        version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - contours
+      - imports
+      - transitions
+      - version
+      type: object
+    DrawingChange:
+      properties:
+        after:
+          anyOf:
+          - $ref: '#/components/schemas/Segment'
+          - type: 'null'
+        before:
+          anyOf:
+          - $ref: '#/components/schemas/Segment'
+          - type: 'null'
+        id:
+          $ref: '#/components/schemas/Identity'
+      required:
+      - id
+      type: object
+    DrawingGenerationRequest:
+      additionalProperties: false
+      properties:
+        bindings:
+          items:
+            $ref: '#/components/schemas/OperationBinding'
+          type: array
+        drawing:
+          $ref: '#/components/schemas/Drawing'
+        machining:
+          $ref: '#/components/schemas/PipelineRequest'
+        version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - bindings
+      - drawing
+      - machining
+      - version
+      type: object
+    DrawingRequest:
+      oneOf:
+      - additionalProperties: false
+        properties:
+          imports:
+            items:
+              $ref: '#/components/schemas/Source'
+            type: array
+          kind:
+            enum:
+            - start
+            type: string
+          legacy_auxiliary:
+            default: []
+            items:
+              $ref: '#/components/schemas/Segment'
+            type: array
+          legacy_offset:
+            $ref: '#/components/schemas/Point2'
+          legacy_text:
+            default: []
+            items:
+              $ref: '#/components/schemas/TextLayer'
+            type: array
+          simplification_mm:
+            default: null
+            format: double
+            type:
+            - number
+            - 'null'
+          tolerance_mm:
+            default: null
+            format: double
+            type:
+            - number
+            - 'null'
+          version:
+            format: uint32
+            minimum: 0.0
+            type: integer
+        required:
+        - imports
+        - kind
+        - legacy_offset
+        - version
+        type: object
+      - additionalProperties: false
+        properties:
+          drawing:
+            $ref: '#/components/schemas/Drawing'
+          kind:
+            enum:
+            - evaluate
+            type: string
+          simplification_mm:
+            default: null
+            format: double
+            type:
+            - number
+            - 'null'
+          tolerance_mm:
+            default: null
+            format: double
+            type:
+            - number
+            - 'null'
+          version:
+            format: uint32
+            minimum: 0.0
+            type: integer
+        required:
+        - drawing
+        - kind
+        - version
+        type: object
+      - additionalProperties: false
+        properties:
+          bindings:
+            items:
+              $ref: '#/components/schemas/Binding'
+            type: array
+          drawing:
+            $ref: '#/components/schemas/Drawing'
+          kind:
+            enum:
+            - preview
+            type: string
+          repairs:
+            items:
+              $ref: '#/components/schemas/Repair'
+            type: array
+          version:
+            format: uint32
+            minimum: 0.0
+            type: integer
+        required:
+        - bindings
+        - drawing
+        - kind
+        - repairs
+        - version
+        type: object
+    DrawingResponse:
+      properties:
+        binding_indices:
+          items:
+            items:
+              format: uint
+              minimum: 0.0
+              type: integer
+            type:
+            - array
+            - 'null'
+          type: array
+        bindings:
+          items:
+            $ref: '#/components/schemas/Binding'
+          type: array
+        changes:
+          items:
+            $ref: '#/components/schemas/DrawingChange'
+          type: array
+        drawing:
+          $ref: '#/components/schemas/Drawing'
+        evaluated:
+          $ref: '#/components/schemas/Evaluated'
+        findings:
+          items:
+            $ref: '#/components/schemas/Finding'
+          type: array
+        legacy_contours:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/Identity'
+            - type: 'null'
+          type: array
+        version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - binding_indices
+      - bindings
+      - changes
+      - drawing
+      - evaluated
+      - findings
+      - legacy_contours
+      - version
+      type: object
     DrillCycle:
       description: Drill-cycle picker for [`OpKind::Drill`]. Mirrors the canned cycles G81 / G83 / G73 from the `LinuxCNC` / Fanuc dialect plus the dwell-at-bottom parameter `PyCAM`'s `Drilling.py` exposes. Posts that don't support canned cycles fall back to a manual G0/G1 expansion of the same cycle (see `PostProcessor::drill_*` defaults).
       oneOf:
@@ -893,6 +1216,24 @@ components:
       - seconds
       - milliseconds
       type: string
+    Edge:
+      additionalProperties: false
+      properties:
+        geometry:
+          $ref: '#/components/schemas/Segment'
+        id:
+          $ref: '#/components/schemas/Identity'
+        original_indices:
+          items:
+            format: uint
+            minimum: 0.0
+            type: integer
+          type: array
+      required:
+      - geometry
+      - id
+      - original_indices
+      type: object
     EnumValueMeta:
       description: One selectable value of an enum property.
       properties:
@@ -962,6 +1303,58 @@ components:
       - io
       - internal
       type: string
+    Evaluated:
+      properties:
+        bbox:
+          $ref: '#/components/schemas/BBox'
+        closed:
+          items:
+            type: boolean
+          type: array
+        contour_bounds:
+          items:
+            $ref: '#/components/schemas/BBox'
+          type: array
+        contours:
+          items:
+            $ref: '#/components/schemas/Identity'
+          type: array
+        membership:
+          description: Same cardinality as segments; each entry is an authoritative stable ID.
+          items:
+            $ref: '#/components/schemas/Identity'
+          type: array
+        segments:
+          items:
+            $ref: '#/components/schemas/Segment'
+          type: array
+        version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - bbox
+      - closed
+      - contour_bounds
+      - contours
+      - membership
+      - segments
+      - version
+      type: object
+    Finding:
+      properties:
+        contour:
+          $ref: '#/components/schemas/Identity'
+        message:
+          type: string
+        repair:
+          anyOf:
+          - $ref: '#/components/schemas/Repair'
+          - type: 'null'
+      required:
+      - contour
+      - message
+      type: object
     Fixture:
       description: A user-declared physical obstacle on the stock the cutter must miss. Lives in drawing XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check.
       properties:
@@ -2794,6 +3187,20 @@ components:
         - cylinder_length_mm
         - kind
         type: object
+    Identity:
+      properties:
+        entity:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        import:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - entity
+      - import
+      type: object
     ImportResponse:
       properties:
         bbox:
@@ -3975,6 +4382,19 @@ components:
         required:
         - kind
         type: object
+    OperationBinding:
+      additionalProperties: false
+      properties:
+        binding:
+          $ref: '#/components/schemas/Binding'
+        operation:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - binding
+      - operation
+      type: object
     PatternConfig:
       description: |-
         Pattern repetition for an [`Op`]. When attached, the pipeline expands the op into N instances by translating (or rotating) the source geometry per instance — useful for "drill the same hole pattern N times" or "pocket N copies of the same shape on a grid".
@@ -4059,6 +4479,24 @@ components:
         - count
         - kind
         type: object
+    PipelineRequest:
+      properties:
+        cps_post:
+          anyOf:
+          - $ref: '#/components/schemas/CpsPostSelection'
+          - type: 'null'
+          description: Which `.cps` post to run and with what property overrides. Required when `post_processor` is [`PostProcessorKind::Cps`], ignored otherwise.
+        post_processor:
+          anyOf:
+          - $ref: '#/components/schemas/PostProcessorKind'
+          - type: 'null'
+        project:
+          allOf:
+          - $ref: '#/components/schemas/Project'
+          description: The full project — geometry + machine + tools + operations + tabs.
+      required:
+      - project
+      type: object
     PipelineResponse:
       properties:
         gcode:
@@ -5106,6 +5544,122 @@ components:
       - segments
       - single_line
       type: object
+    Repair:
+      oneOf:
+      - additionalProperties: false
+        properties:
+          contour:
+            $ref: '#/components/schemas/Identity'
+          edge:
+            $ref: '#/components/schemas/Identity'
+          kind:
+            enum:
+            - remove_zero_line
+            type: string
+        required:
+        - contour
+        - edge
+        - kind
+        type: object
+      - additionalProperties: false
+        description: Move the tail endpoint to the next start, or append a connector.
+        properties:
+          connector:
+            type: boolean
+          contour:
+            $ref: '#/components/schemas/Identity'
+          edge:
+            $ref: '#/components/schemas/Identity'
+          kind:
+            enum:
+            - gap
+            type: string
+          tolerance_mm:
+            format: double
+            type: number
+        required:
+        - connector
+        - contour
+        - edge
+        - kind
+        - tolerance_mm
+        type: object
+      - additionalProperties: false
+        description: Endpoint orientation is explicit; reverse whole chains if requested.
+        properties:
+          a:
+            $ref: '#/components/schemas/Identity'
+          b:
+            $ref: '#/components/schemas/Identity'
+          connector:
+            type: boolean
+          kind:
+            enum:
+            - join
+            type: string
+          reverse_a:
+            type: boolean
+          reverse_b:
+            type: boolean
+          tolerance_mm:
+            format: double
+            type: number
+        required:
+        - a
+        - b
+        - connector
+        - kind
+        - reverse_a
+        - reverse_b
+        - tolerance_mm
+        type: object
+      - additionalProperties: false
+        properties:
+          contour:
+            $ref: '#/components/schemas/Identity'
+          kind:
+            enum:
+            - remove_repeated_loop
+            type: string
+        required:
+        - contour
+        - kind
+        type: object
+      - additionalProperties: false
+        properties:
+          keep:
+            $ref: '#/components/schemas/Identity'
+          kind:
+            enum:
+            - remove_duplicate
+            type: string
+          remove:
+            $ref: '#/components/schemas/Identity'
+        required:
+        - keep
+        - kind
+        - remove
+        type: object
+      - additionalProperties: false
+        description: One original interior vertex; previously edited edges are protected.
+        properties:
+          contour:
+            $ref: '#/components/schemas/Identity'
+          deviation_mm:
+            format: double
+            type: number
+          edge:
+            $ref: '#/components/schemas/Identity'
+          kind:
+            enum:
+            - simplify
+            type: string
+        required:
+        - contour
+        - deviation_mm
+        - edge
+        - kind
+        type: object
     ScanDirection:
       description: Direction the parallel finishing scanlines run. `AlongX` lines sweep in X and step over in Y; `AlongY` is the transpose. (Diagonal raster is a future addition — X/Y cover the common cases and keep coverage math simple.)
       enum:
@@ -5309,6 +5863,41 @@ components:
         - original_cell_size_mm
         - reason
         type: object
+    Source:
+      additionalProperties: false
+      properties:
+        id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        legacy_objects:
+          default: []
+          items:
+            format: uint32
+            minimum: 0.0
+            type: integer
+          type: array
+        next_entity:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        original:
+          items:
+            $ref: '#/components/schemas/Segment'
+          type: array
+        pivot:
+          allOf:
+          - $ref: '#/components/schemas/Point2'
+          description: Immutable original bbox center, not edited bounds.
+        transform:
+          $ref: '#/components/schemas/Transform'
+      required:
+      - id
+      - next_entity
+      - original
+      - pivot
+      - transform
+      type: object
     SourceCombine:
       description: How a multi-object source selection is combined into the region(s) the operation actually consumes. Default is `Auto` — containment-based, which gives the user "outer + inner = annulus" behavior with no extra thought. The other modes are clipper2-driven boolean ops; `None` keeps each selected object as its own boundary (the pre-combine behavior, surfaced for callers who really want it).
       oneOf:
@@ -6231,6 +6820,43 @@ components:
       - from
       - kind
       - to
+      type: object
+    Transform:
+      additionalProperties: false
+      properties:
+        mirror_x:
+          type: boolean
+        mirror_y:
+          type: boolean
+        rotation_deg:
+          format: double
+          type: number
+        scale:
+          format: double
+          type: number
+        translate:
+          $ref: '#/components/schemas/Point2'
+      required:
+      - mirror_x
+      - mirror_y
+      - rotation_deg
+      - scale
+      - translate
+      type: object
+    Transition:
+      additionalProperties: false
+      properties:
+        children:
+          items:
+            $ref: '#/components/schemas/Identity'
+          type: array
+        parents:
+          items:
+            $ref: '#/components/schemas/Identity'
+          type: array
+      required:
+      - children
+      - parents
       type: object
     TransportKind:
       enum:

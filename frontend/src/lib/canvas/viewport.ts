@@ -151,3 +151,23 @@ export function segsBBox(segs: readonly Segment[]): Rect | null {
   if (!Number.isFinite(minX)) return null;
   return { minX, minY, maxX, maxY };
 }
+
+/// Freeze the initial content frame while placements move. A new document or
+/// newly available glyph geometry changes the key; explicit Fit clears it.
+export class PlacementFrame {
+  private key: string | null = null;
+  private bbox: BBox | null = null;
+
+  reset(): void {
+    this.key = null;
+    this.bbox = null;
+  }
+
+  fit(key: string, rects: readonly Rect[]): BBox | null {
+    if (this.key !== key || !this.bbox) {
+      this.key = key;
+      this.bbox = placementsBBox(rects);
+    }
+    return this.bbox;
+  }
+}

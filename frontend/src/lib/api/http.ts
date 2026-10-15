@@ -1,3 +1,4 @@
+import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // HTTP implementation of WiacClient. Talks to ivac-server (axum) over the
 // JSON contract in schema/openapi.yaml.
@@ -148,6 +149,26 @@ export class HttpWiacClient implements WiacClient {
     return (await res.json()) as FsCamResponse;
   }
 
+  async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
+    const res = await fetch(`${this.base}/drawing`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!res.ok) await throwHttpError('/drawing', res);
+    const value = (await res.json()) as DrawingResponse;
+    if (value.version !== 1) throw new Error('Unsupported GEOM1 backend revision');
+    return value;
+  }
+  async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
+    const res = await fetch(`${this.base}/generate-drawing`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!res.ok) await throwHttpError('/generate-drawing', res);
+    return (await res.json()) as GenerateResponse;
+  }
   async cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {
     const res = await fetch(`${this.base}/corner-relief`, {
       method: 'POST',
@@ -502,6 +523,16 @@ class WasmClientLazy {
           if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
           return c.feedsSpeeds(req);
         }),
+      evaluateDrawing: (req) =>
+        ensure().then((c) => {
+          if (!c.evaluateDrawing) throw new Error('Backend does not support GEOM1');
+          return c.evaluateDrawing(req);
+        }),
+      generateDrawing: (req) =>
+        ensure().then((c) => {
+          if (!c.generateDrawing) throw new Error('Backend does not support GEOM1');
+          return c.generateDrawing(req);
+        }),
       cornerRelief: (req) => ensure().then((c) => c.cornerRelief(req)),
       computeHelixRadius: (req) => ensure().then((c) => c.computeHelixRadius(req)),
       rasterizeStl: (bytes, maxDim) => ensure().then((c) => c.rasterizeStl(bytes, maxDim)),
@@ -561,6 +592,16 @@ class TauriClientLazy {
         ensure().then((c) => {
           if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
           return c.feedsSpeeds(req);
+        }),
+      evaluateDrawing: (req) =>
+        ensure().then((c) => {
+          if (!c.evaluateDrawing) throw new Error('Backend does not support GEOM1');
+          return c.evaluateDrawing(req);
+        }),
+      generateDrawing: (req) =>
+        ensure().then((c) => {
+          if (!c.generateDrawing) throw new Error('Backend does not support GEOM1');
+          return c.generateDrawing(req);
         }),
       cornerRelief: (req) => ensure().then((c) => c.cornerRelief(req)),
       computeHelixRadius: (req) => ensure().then((c) => c.computeHelixRadius(req)),

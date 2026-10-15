@@ -12,6 +12,9 @@ export async function commitDocumentLoad(
 ): Promise<void> {
   const data = capture(p.data, [
     'imports',
+    'drawing',
+    'serializedExtensions',
+    'cornerRelief',
     'operations',
     'material',
     'fsContext',

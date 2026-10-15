@@ -243,6 +243,8 @@ export class ProjectDataState {
   /// 0 or 1. The proxy accessors on `ProjectState` (project.imported,
   /// project.fileTransform, etc.) read imports[0] for backward
   /// compatibility.
+  serializedExtensions = $state<Record<string, unknown>>({});
+  drawing = $state<import('./drawing').DrawingState | undefined>(undefined);
   cornerRelief = $state<import('./corner-relief').CornerReliefModifier | undefined>(undefined);
   imports = $state<ImportEntry[]>([]);
 

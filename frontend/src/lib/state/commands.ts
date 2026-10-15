@@ -1,3 +1,4 @@
+import { selectedBinding } from './drawing';
 /// Command builders for every undoable project mutation. Each builder
 /// returns a `Command { label, apply, revert, coalesce_key? }`. The
 /// closure captures whatever it needs to undo (saved index, prior
@@ -45,6 +46,7 @@ function clone<T>(v: T): T {
 /// commands.ts doesn't pull in the Svelte-runtime class itself; only
 /// the fields it touches.
 export interface CommandTarget {
+  drawing?: import('./drawing').DrawingState;
   material?: import('./project-types').MaterialIdentity;
   fsContext?: import('../api/generated').components['schemas']['FsContext'];
   imports: ImportEntry[];
@@ -73,7 +75,10 @@ export function addOperationCommand(op: OpEntry): Command {
     label: 'Add operation',
     apply: (s) => {
       const t = s as CommandTarget;
-      t.operations = [...t.operations, clone(op)];
+      const added = clone(op);
+      if (t.drawing && !added.geometryBinding)
+        added.geometryBinding = selectedBinding(added, t.drawing);
+      t.operations = [...t.operations, added];
       t.dirty = true;
     },
     revert: (s) => {
@@ -146,6 +151,14 @@ export function updateOperationCommand(opId: number, patch: Partial<OpEntry>): C
       const t = s as CommandTarget;
       const cur = t.operations.find((o) => o.id === opId);
       if (!cur) return;
+      if (!t.drawing && ('sourceObjects' in patch || 'sourceLayers' in patch))
+        patch = { ...patch, geometryBinding: undefined };
+      if (t.drawing && ('sourceObjects' in patch || 'sourceLayers' in patch)) {
+        patch = {
+          ...patch,
+          geometryBinding: selectedBinding({ ...cur, ...patch } as OpEntry, t.drawing),
+        };
+      }
       prevPatch = {};
       for (const k of Object.keys(patch) as (keyof OpEntry)[]) {
         (prevPatch as Record<string, unknown>)[k as string] = cur[k];

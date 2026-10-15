@@ -268,3 +268,13 @@ project assignment, library/loadout/operation tool, and draft Apply/Revert/file 
 Optional 2D tool schematic uses actual dimensions and shows unknowns. No physical-
 validation badge from saving a profile or drawing a plausible tool. Actual desktop
 screenshots/accessibility review required at separate A/B gates; tests alone insufficient.
+
+## Planned File transform dimensions (GEOM2-A1)
+
+[GEOM2-A1](../GEOM2_A1_PLAN.md) uses canonical Professional Workshop UI + CAM UX:
+compact aligned Width/Height mm fields derived with Scale, fixed linked-proportions
+cue and existing angle/mirror/position controls. Preserve sidebar density; no card or
+interactive unlock for unsupported nonuniform scale. Label local pre-rotation size
+and any optional rotated AABB distinctly. Invalid/empty/degenerate dimensions need
+honest feedback, no fabricated values. Status selection dimensions remain read-only
+measurement; these controls size the entire import. No UI implementation now.

@@ -437,9 +437,8 @@ fn combine_xor(
     for &idx in &selected[1..] {
         let next = paths_for(&[idx], objects, cache);
         running = xor_d(&running, &next, FillRule::NonZero, CLIPPER_PRECISION);
-        if running.is_empty() {
-            return Vec::new();
-        }
+        // An empty intermediate XOR is the identity for the next operand,
+        // not a terminal result (A xor A xor B must produce B).
     }
     let clips = PathsD::new();
     let mut tree = PolyTreeD::new();

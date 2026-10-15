@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-15",
+  "software_only": true,
+  "core_serial_passed": 1202,
+  "core_parallel": {
+    "passed": 1085,
+    "failed": 1,
+    "issue": "ivac-htc8"
+  },
+  "cps_passed": 44,
+  "frontend_passed": 1313,
+  "frontend_skipped": 1,
+  "wasm_guard_passed": 10,
+  "svelte_check_errors": 0,
+  "svelte_check_warnings": 0,
+  "eslint_prettier": "pass",
+  "clippy_core_tests_warnings_denied": "pass",
+  "schema": "up to date",
+  "frontend_wasm_build": "pass; chunk size/dynamic import warnings",
+  "fresh_package_verification": "pass",
+  "native_wasm_deep_pocket_program_parity": "pass",
+  "actual_ui": "see ui-checks.json",
+  "windows_linux_runtime": "not performed",
+  "current_installer_qualification": "not performed",
+  "physical_validation": false
+}

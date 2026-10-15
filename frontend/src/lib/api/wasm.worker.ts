@@ -1,3 +1,4 @@
+import type { DrawingRequest, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest } from './types';
 import { notificationError } from './error-notification';
 // Web Worker host for the wasm CAM client. Runs the blocking
@@ -113,6 +114,14 @@ ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
       case 'feedsSpeeds':
         if (!m.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this WASM build');
         post({ id, type: 'result', value: m.feedsSpeeds(args[0] as FsCamRequest) });
+        break;
+      case 'evaluateDrawing':
+        if (!m.evaluateDrawing) throw new Error('WASM does not support GEOM1');
+        post({ id, type: 'result', value: m.evaluateDrawing(args[0] as DrawingRequest) });
+        break;
+      case 'generateDrawing':
+        if (!m.generateDrawing) throw new Error('WASM does not support GEOM1');
+        post({ id, type: 'result', value: m.generateDrawing(args[0] as DrawingGenerationRequest) });
         break;
       case 'cornerRelief':
         post({ id, type: 'result', value: m.cornerRelief(args[0] as CornerReliefRequest) });

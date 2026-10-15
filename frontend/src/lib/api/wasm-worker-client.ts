@@ -1,3 +1,4 @@
+import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // `WiacClient` that runs the wasm CAM pipeline in a Web Worker, so
 // a heavy generate does not block the UI thread, and a long run can be
@@ -237,6 +238,12 @@ export class WasmWorkerClient implements WiacClient {
     return this.call('feedsSpeeds', [request]);
   }
 
+  evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
+    return this.call('evaluateDrawing', [request]);
+  }
+  generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
+    return this.call('generateDrawing', [request]);
+  }
   cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {
     return this.call('cornerRelief', [request]);
   }

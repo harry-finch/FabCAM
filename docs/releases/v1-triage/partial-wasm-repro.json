@@ -1,0 +1,7 @@
+{
+  "case": "Isolated copied production guard, only a placeholder wasm file, no JS/types/package metadata or source inputs",
+  "exit": 0,
+  "stdout": "[ensure-wasm] ivac-wasm pkg is up to date\n",
+  "stderr": "",
+  "note": "Tests completeness guard only, not WASM validity or whole frontend build; production package untouched."
+}

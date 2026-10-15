@@ -76,6 +76,10 @@
   }
 </script>
 
+{#if op.geometryBinding?.kind === 'unresolved'}
+  <p role="alert">{t('cleanup.reselect')}</p>
+{/if}
+
 <fieldset>
   <legend>{t('opprops.source')}</legend>
   {#if project.data.stock.flip != null}

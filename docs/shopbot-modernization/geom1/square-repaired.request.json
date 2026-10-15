@@ -1,0 +1,386 @@
+{
+  "version": 1,
+  "drawing": {
+    "version": 1,
+    "imports": [
+      {
+        "id": 1,
+        "original": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 10
+            },
+            "end": {
+              "x": 50,
+              "y": 10
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50,
+              "y": 10
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 50,
+              "y": 50
+            },
+            "end": {
+              "x": 10,
+              "y": 50
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 50
+            },
+            "end": {
+              "x": 10,
+              "y": 10.08
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "legacy_objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "pivot": {
+          "x": 30,
+          "y": 30
+        },
+        "transform": {
+          "translate": {
+            "x": 0,
+            "y": 0
+          },
+          "rotation_deg": 0,
+          "scale": 1,
+          "mirror_x": false,
+          "mirror_y": false
+        },
+        "next_entity": 7
+      }
+    ],
+    "contours": [
+      {
+        "id": {
+          "import": 1,
+          "entity": 1
+        },
+        "parents": [],
+        "edges": [
+          {
+            "id": {
+              "import": 1,
+              "entity": 2
+            },
+            "original_indices": [
+              0
+            ],
+            "geometry": {
+              "type": "LINE",
+              "start": {
+                "x": 10,
+                "y": 10
+              },
+              "end": {
+                "x": 50,
+                "y": 10
+              },
+              "bulge": 0,
+              "layer": "svg",
+              "color": 7
+            }
+          },
+          {
+            "id": {
+              "import": 1,
+              "entity": 3
+            },
+            "original_indices": [
+              1
+            ],
+            "geometry": {
+              "type": "LINE",
+              "start": {
+                "x": 50,
+                "y": 10
+              },
+              "end": {
+                "x": 50,
+                "y": 50
+              },
+              "bulge": 0,
+              "layer": "svg",
+              "color": 7
+            }
+          },
+          {
+            "id": {
+              "import": 1,
+              "entity": 4
+            },
+            "original_indices": [
+              2
+            ],
+            "geometry": {
+              "type": "LINE",
+              "start": {
+                "x": 50,
+                "y": 50
+              },
+              "end": {
+                "x": 10,
+                "y": 50
+              },
+              "bulge": 0,
+              "layer": "svg",
+              "color": 7
+            }
+          },
+          {
+            "id": {
+              "import": 1,
+              "entity": 5
+            },
+            "original_indices": [
+              3
+            ],
+            "geometry": {
+              "type": "LINE",
+              "start": {
+                "x": 10,
+                "y": 50
+              },
+              "end": {
+                "x": 10,
+                "y": 10.08
+              },
+              "bulge": 0,
+              "layer": "svg",
+              "color": 7
+            }
+          },
+          {
+            "id": {
+              "import": 1,
+              "entity": 6
+            },
+            "original_indices": [],
+            "geometry": {
+              "type": "LINE",
+              "start": {
+                "x": 10,
+                "y": 10.08
+              },
+              "end": {
+                "x": 10,
+                "y": 10
+              },
+              "bulge": 0,
+              "layer": "svg",
+              "color": 7
+            }
+          }
+        ]
+      }
+    ],
+    "transitions": []
+  },
+  "bindings": [
+    {
+      "operation": 1,
+      "binding": {
+        "kind": "layers",
+        "names": [
+          "svg"
+        ]
+      }
+    }
+  ],
+  "machining": {
+    "project": {
+      "segments": [
+        {
+          "type": "LINE",
+          "start": {
+            "x": 10,
+            "y": 10
+          },
+          "end": {
+            "x": 50,
+            "y": 10
+          },
+          "bulge": 0,
+          "layer": "svg",
+          "color": 7
+        },
+        {
+          "type": "LINE",
+          "start": {
+            "x": 50,
+            "y": 10
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          },
+          "bulge": 0,
+          "layer": "svg",
+          "color": 7
+        },
+        {
+          "type": "LINE",
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 10,
+            "y": 50
+          },
+          "bulge": 0,
+          "layer": "svg",
+          "color": 7
+        },
+        {
+          "type": "LINE",
+          "start": {
+            "x": 10,
+            "y": 50
+          },
+          "end": {
+            "x": 10,
+            "y": 10.079999999999998
+          },
+          "bulge": 0,
+          "layer": "svg",
+          "color": 7
+        },
+        {
+          "type": "LINE",
+          "start": {
+            "x": 10,
+            "y": 10.079999999999998
+          },
+          "end": {
+            "x": 10,
+            "y": 10
+          },
+          "bulge": 0,
+          "layer": "svg",
+          "color": 7
+        }
+      ],
+      "machine": {
+        "unit": "mm",
+        "mode": "mill",
+        "comments": true,
+        "arcs": false,
+        "tool_change": "manual_m0_pause",
+        "accel": {
+          "x": 250,
+          "y": 250,
+          "z": 250
+        },
+        "rapid_speed": 9144,
+        "work_area": {
+          "x": 1200,
+          "y": 600,
+          "z": 203
+        },
+        "spindle_rpm_max": 24000
+      },
+      "tools": [
+        {
+          "id": 1,
+          "name": "Ø12 mm — CAM4 SOFTWARE ONLY",
+          "kind": "endmill",
+          "diameter": 12,
+          "tip_angle_deg": 60,
+          "flutes": 1,
+          "speed": 10000,
+          "plunge_rate": 500,
+          "feed_rate": 1000,
+          "coolant": "off"
+        }
+      ],
+      "operations": [
+        {
+          "id": 1,
+          "name": "GEOM1 software reference — repaired square",
+          "enabled": true,
+          "kind": {
+            "type": "pocket",
+            "strategy": "cascade",
+            "contour": {},
+            "pocket": {
+              "xy_overlap": 0.5,
+              "pocket_islands": true
+            }
+          },
+          "tool_id": 1,
+          "source": {
+            "kind": "layers",
+            "layers": [
+              "svg"
+            ]
+          },
+          "params": {
+            "depth": -2,
+            "start_depth": 0,
+            "step": -1,
+            "fast_move_z": 15,
+            "objectorder": "nearest"
+          }
+        }
+      ],
+      "work_offset": {
+        "x_mm": 5,
+        "y_mm": 5
+      },
+      "stock": {
+        "origin": [
+          5,
+          5
+        ],
+        "width_mm": 50,
+        "height_mm": 50,
+        "thickness_mm": 10
+      }
+    },
+    "post_processor": "cps",
+    "cps_post": {
+      "source": {
+        "kind": "bundled",
+        "id": "shopbot"
+      },
+      "properties": {}
+    }
+  }
+}

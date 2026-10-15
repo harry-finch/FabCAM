@@ -1,6 +1,9 @@
 # Drawing cleanup and lightweight geometry editing — shared plan
 
-2026-10-14 · **PLANNED — NOT IMPLEMENTED**. Documentation checkpoint ivac-gpn7.
+2026-10-15 · **GEOM1 ARCHITECTURE APPROVED; BOUNDED IMPLEMENTATION IN REVIEW**.
+User selected GEOM1 after accepted V-Carve/UX6-B software gates. See
+[the concrete audit](GEOM1_AUDIT.md) and approved ADR-0021, plus [results](GEOM1_RESULTS.md). The original placement
+text below is historical; GEOM2/3 and nesting remain unstarted. Documentation checkpoint ivac-gpn7.
 Future family within the existing CAD/geometry-preparation track; CAD1 is retained:
 [GEOM1](GEOM1_PLAN.md) HIGH, [GEOM2-A](GEOM2_A_PLAN.md) HIGH/MEDIUM,
 [GEOM2-B](GEOM2_B_PLAN.md) MEDIUM and [GEOM3](GEOM3_PLAN.md) FUTURE/OPTIONAL.
@@ -135,3 +138,13 @@ or refusal; no silent approximation. Current per-import transforms are partial r
 Stable parts/instances/operations and current stock/WCS need audit before schema choice.
 A valid drawing open path remains valid even if unusable as a nestable outer boundary.
 No permanent source change or implicit zero/stock change through layout manipulation.
+
+## Precise whole-import sizing — GEOM2-A1
+
+[GEOM2-A1 specification](GEOM2_A1_PLAN.md) is an early PLANNED/unimplemented subtask
+within transformations, using existing uniform Scale rather than independent Width/
+Height storage. Effective local pre-rotation whole-import bounds and original GEOM1
+pivot have different roles. Selected status bounds and project envelope are distinct;
+hidden view layers do not change source membership. Preserve accepted GEOM1 authority,
+lineage/history, preview/CAM identity and safe unsupported contexts. No selection/instance
+editing, measurement system, repair change or format migration included.

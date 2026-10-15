@@ -283,6 +283,9 @@
     renderer.domElement.addEventListener('contextmenu', onContextMenu);
 
     controls = new OrbitControls(camera, renderer.domElement);
+    // Match the 2D viewport: wheel-button drag pans, wheel scrolling zooms.
+    // Keep left-drag orbit and the existing right-drag pan/context-menu behavior.
+    controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
     // Damping defaults to true on OrbitControls, which produced a ~30-
     // frame ease-out drift after every drag/zoom/pan release. Users
     // read that as lag, not smoothness — disable it so motion stops on

@@ -348,3 +348,20 @@ pub fn corner_relief(request: JsValue) -> Result<JsValue, JsValue> {
             .map_err(into_js_error)
     })
 }
+
+#[wasm_bindgen(js_name = evaluateDrawing)]
+pub fn evaluate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
+    guard(|| {
+        let req = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+        let result = ivac_core::drawing::api::evaluate(req).map_err(into_js_error)?;
+        serde_wasm_bindgen::to_value(&result).map_err(into_js_error)
+    })
+}
+#[wasm_bindgen(js_name = generateDrawing)]
+pub fn generate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
+    guard(|| {
+        let req = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+        let result = ivac_core::pipeline::generate_drawing(req).map_err(into_js_error)?;
+        serde_wasm_bindgen::to_value(&result).map_err(into_js_error)
+    })
+}

@@ -48,3 +48,5 @@ is superseded by named tracks in ROADMAP.
   tools/templates and existing guards; human software review ivac-txve.
 
 - [ADR-0017 — V-Carve continuous planner](ADR-0017-vcarve-continuous-planner.md): approved architecture, bounded software implementation; human review pending.
+
+- [ADR-0021 — Edited drawing contract](ADR-0021-edited-drawing-contract.md): GEOM1 approved architecture with mandatory refinements; stable bindings, Rust evaluation and guarded v7, bounded implementation under final software review.

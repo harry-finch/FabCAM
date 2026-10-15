@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-15",
+  "software_only": true,
+  "engineering_issue": "ivac-8rura",
+  "human_gate": "ivac-e2jnb",
+  "core_full": {
+    "command": "RUSTC_WRAPPER='' cargo test --offline --release -p ivac-core --features cps -- --test-threads=1",
+    "passed": 1198,
+    "includes_focused_at_that_run": 22
+  },
+  "core_final_reference": {
+    "command": "RUSTC_WRAPPER='' cargo test --offline -p ivac-core --features cps --test geom1_contract",
+    "passed": 23,
+    "note": "After equivalent Rust 1.80-compatible iterator/Option rewrites and added unrelated-import/WCS regression. This suite overlaps the full suite."
+  },
+  "cps": {
+    "passed": 44,
+    "command": "RUSTC_WRAPPER='' cargo test --offline -p ivac-cps"
+  },
+  "frontend": {
+    "passed": 1312,
+    "skipped": 1,
+    "command": "npm --prefix frontend test",
+    "final_reset_fixture_reference": 8
+  },
+  "frontend_check": "pass",
+  "frontend_lint": "pass",
+  "clippy_core_server_wasm": "pass with -D warnings",
+  "transport_compile": "server, Tauri and WASM pass",
+  "schema_check": "pass",
+  "cargo_fmt": "pass",
+  "git_diff_check": "pass",
+  "production_wasm_frontend_build": "pass; existing chunk-size and ineffective dynamic-import warnings remain",
+  "compiled_transport_parity": {
+    "software_only": true,
+    "contract": 1,
+    "evaluated_segments": 5,
+    "wasm_native_evaluation_equal": true,
+    "generic_program_equal": true,
+    "resolved_preview_equal": true,
+    "legacy_endpoint_status": 422,
+    "moves": 41
+  },
+  "ui_verified": [
+    "analyze/preview nonmutation",
+    "detail/overview preview",
+    "Apply",
+    "Undo/Redo geometry and bindings",
+    "v7 save/reopen",
+    "regeneration",
+    "OpenSBP download",
+    "stale export after reset",
+    "pending preview invalidation after tolerance edit",
+    "cancel preview leaves original saved state",
+    "narrow 900x800 and keyboard focus",
+    "final guarded Reset then Undo restores v7"
+  ],
+  "not_qualified": [
+    "hardware",
+    "packaged native GUI launch",
+    "edited-generation cancellation latency",
+    "curve healing",
+    "automatic source/transform rebase",
+    "synthetic stock and modifier combinations described in GEOM1_RESULTS"
+  ]
+}

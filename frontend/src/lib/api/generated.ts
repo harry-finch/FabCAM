@@ -215,6 +215,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/drawing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Evaluate or preview source-preserving drawing edits (GEOM1 revision 1) */
+        post: operations["evaluateDrawing"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/generate-drawing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generate from validated edited geometry (GEOM1 revision 1) */
+        post: operations["generateDrawing"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/corner-relief": {
         parameters: {
             query?: never;
@@ -370,10 +404,32 @@ export interface components {
             /** Format: double */
             min_y: number;
         };
+        Binding: {
+            ids: components["schemas"]["Identity"][];
+            /** @enum {string} */
+            kind: "contours";
+        } | {
+            /** @enum {string} */
+            kind: "unresolved";
+            previous: components["schemas"]["Identity"][];
+            reason: string;
+        } | {
+            /** @enum {string} */
+            kind: "layers";
+            names: string[];
+        } | {
+            /** @enum {string} */
+            kind: "all";
+        };
         CatalogEntry: {
             identity: components["schemas"]["FsIdentity"];
             label: string;
             notes: string;
+        };
+        Contour: {
+            edges: components["schemas"]["Edge"][];
+            id: components["schemas"]["Identity"];
+            parents: components["schemas"]["Identity"][];
         };
         /** @description Parameters shared by every closed-contour op (Profile / Pocket / Engrave / `DragKnife`). Embedded in the matching [`super::op::OpKind`] variants. Holds tab shape + placement, lead-in / lead-out, cut direction, corner-feed reduction, and the optional user-picked approach point. */
         ContourParams: {
@@ -513,6 +569,82 @@ export interface components {
              */
             margin_mm: number;
         };
+        Drawing: {
+            contours: components["schemas"]["Contour"][];
+            imports: components["schemas"]["Source"][];
+            transitions: components["schemas"]["Transition"][];
+            /** Format: uint32 */
+            version: number;
+        };
+        DrawingChange: {
+            after?: components["schemas"]["Segment"] | null;
+            before?: components["schemas"]["Segment"] | null;
+            id: components["schemas"]["Identity"];
+        };
+        DrawingGenerationRequest: {
+            bindings: components["schemas"]["OperationBinding"][];
+            drawing: components["schemas"]["Drawing"];
+            machining: components["schemas"]["PipelineRequest"];
+            /** Format: uint32 */
+            version: number;
+        };
+        DrawingRequest: {
+            imports: components["schemas"]["Source"][];
+            /** @enum {string} */
+            kind: "start";
+            /** @default [] */
+            legacy_auxiliary: components["schemas"]["Segment"][];
+            legacy_offset: components["schemas"]["Point2"];
+            /** @default [] */
+            legacy_text: components["schemas"]["TextLayer"][];
+            /**
+             * Format: double
+             * @default null
+             */
+            simplification_mm: number | null;
+            /**
+             * Format: double
+             * @default null
+             */
+            tolerance_mm: number | null;
+            /** Format: uint32 */
+            version: number;
+        } | {
+            drawing: components["schemas"]["Drawing"];
+            /** @enum {string} */
+            kind: "evaluate";
+            /**
+             * Format: double
+             * @default null
+             */
+            simplification_mm: number | null;
+            /**
+             * Format: double
+             * @default null
+             */
+            tolerance_mm: number | null;
+            /** Format: uint32 */
+            version: number;
+        } | {
+            bindings: components["schemas"]["Binding"][];
+            drawing: components["schemas"]["Drawing"];
+            /** @enum {string} */
+            kind: "preview";
+            repairs: components["schemas"]["Repair"][];
+            /** Format: uint32 */
+            version: number;
+        };
+        DrawingResponse: {
+            binding_indices: (number[] | null)[];
+            bindings: components["schemas"]["Binding"][];
+            changes: components["schemas"]["DrawingChange"][];
+            drawing: components["schemas"]["Drawing"];
+            evaluated: components["schemas"]["Evaluated"];
+            findings: components["schemas"]["Finding"][];
+            legacy_contours: (components["schemas"]["Identity"] | null)[];
+            /** Format: uint32 */
+            version: number;
+        };
         /** @description Drill-cycle picker for [`OpKind::Drill`]. Mirrors the canned cycles G81 / G83 / G73 from the `LinuxCNC` / Fanuc dialect plus the dwell-at-bottom parameter `PyCAM`'s `Drilling.py` exposes. Posts that don't support canned cycles fall back to a manual G0/G1 expansion of the same cycle (see `PostProcessor::drill_*` defaults). */
         DrillCycle: {
             /**
@@ -549,6 +681,11 @@ export interface components {
          * @enum {string}
          */
         DwellUnit: "seconds" | "milliseconds";
+        Edge: {
+            geometry: components["schemas"]["Segment"];
+            id: components["schemas"]["Identity"];
+            original_indices: number[];
+        };
         /** @description One selectable value of an enum property. */
         EnumValueMeta: {
             /** @description Stored value (`id` in the post's `values` list). */
@@ -564,6 +701,22 @@ export interface components {
         ErrorCode: "unknown_post_processor" | "missing_tool" | "unimplemented_op_kind" | "text_render_failed" | "internal_panic" | "two_sided_through" | "cps_selection_missing" | "cps_unavailable" | "cps_post_failed";
         /** @enum {string} */
         ErrorKind: "bad_input" | "misconfigured" | "limit" | "unsupported" | "io" | "internal";
+        Evaluated: {
+            bbox: components["schemas"]["BBox"];
+            closed: boolean[];
+            contour_bounds: components["schemas"]["BBox"][];
+            contours: components["schemas"]["Identity"][];
+            /** @description Same cardinality as segments; each entry is an authoritative stable ID. */
+            membership: components["schemas"]["Identity"][];
+            segments: components["schemas"]["Segment"][];
+            /** Format: uint32 */
+            version: number;
+        };
+        Finding: {
+            contour: components["schemas"]["Identity"];
+            message: string;
+            repair?: components["schemas"]["Repair"] | null;
+        };
         /** @description A user-declared physical obstacle on the stock the cutter must miss. Lives in drawing XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check. */
         Fixture: {
             /**
@@ -1258,6 +1411,12 @@ export interface components {
             cylinder_length_mm: number;
             /** @enum {string} */
             kind: "stepped";
+        };
+        Identity: {
+            /** Format: uint32 */
+            entity: number;
+            /** Format: uint32 */
+            import: number;
         };
         ImportResponse: {
             bbox: components["schemas"]["BBox"];
@@ -2070,6 +2229,11 @@ export interface components {
             /** @enum {string} */
             kind: "all";
         };
+        OperationBinding: {
+            binding: components["schemas"]["Binding"];
+            /** Format: uint32 */
+            operation: number;
+        };
         /**
          * @description Pattern repetition for an [`Op`]. When attached, the pipeline expands the op into N instances by translating (or rotating) the source geometry per instance — useful for "drill the same hole pattern N times" or "pocket N copies of the same shape on a grid".
          *
@@ -2108,6 +2272,13 @@ export interface components {
             kind: "polar";
             /** Format: double */
             start_angle_deg?: number;
+        };
+        PipelineRequest: {
+            /** @description Which `.cps` post to run and with what property overrides. Required when `post_processor` is [`PostProcessorKind::Cps`], ignored otherwise. */
+            cps_post?: components["schemas"]["CpsPostSelection"] | null;
+            post_processor?: components["schemas"]["PostProcessorKind"] | null;
+            /** @description The full project — geometry + machine + tools + operations + tabs. */
+            project: components["schemas"]["Project"];
         };
         PipelineResponse: {
             gcode: string;
@@ -2632,6 +2803,46 @@ export interface components {
             /** @description True if the font is a single-line / engraving / Hershey-port style font. Drives the dialog's "use a single-line font" chip. */
             single_line: boolean;
         };
+        Repair: {
+            contour: components["schemas"]["Identity"];
+            edge: components["schemas"]["Identity"];
+            /** @enum {string} */
+            kind: "remove_zero_line";
+        } | {
+            connector: boolean;
+            contour: components["schemas"]["Identity"];
+            edge: components["schemas"]["Identity"];
+            /** @enum {string} */
+            kind: "gap";
+            /** Format: double */
+            tolerance_mm: number;
+        } | {
+            a: components["schemas"]["Identity"];
+            b: components["schemas"]["Identity"];
+            connector: boolean;
+            /** @enum {string} */
+            kind: "join";
+            reverse_a: boolean;
+            reverse_b: boolean;
+            /** Format: double */
+            tolerance_mm: number;
+        } | {
+            contour: components["schemas"]["Identity"];
+            /** @enum {string} */
+            kind: "remove_repeated_loop";
+        } | {
+            keep: components["schemas"]["Identity"];
+            /** @enum {string} */
+            kind: "remove_duplicate";
+            remove: components["schemas"]["Identity"];
+        } | {
+            contour: components["schemas"]["Identity"];
+            /** Format: double */
+            deviation_mm: number;
+            edge: components["schemas"]["Identity"];
+            /** @enum {string} */
+            kind: "simplify";
+        };
         /**
          * @description Direction the parallel finishing scanlines run. `AlongX` lines sweep in X and step over in Y; `AlongY` is the transpose. (Diagonal raster is a future addition — X/Y cover the common cases and keep coverage math simple.)
          * @enum {string}
@@ -2730,6 +2941,18 @@ export interface components {
             original_cell_size_mm: number;
             /** @description Why the coarsening fired — `max_simulation_cells` for the budget cap (the canonical case), other strings reserved for future paths. */
             reason: string;
+        };
+        Source: {
+            /** Format: uint32 */
+            id: number;
+            /** @default [] */
+            legacy_objects: number[];
+            /** Format: uint32 */
+            next_entity: number;
+            original: components["schemas"]["Segment"][];
+            /** @description Immutable original bbox center, not edited bounds. */
+            pivot: components["schemas"]["Point2"];
+            transform: components["schemas"]["Transform"];
         };
         /** @description How a multi-object source selection is combined into the region(s) the operation actually consumes. Default is `Auto` — containment-based, which gives the user "outer + inner = annulus" behavior with no extra thought. The other modes are clipper2-driven boolean ops; `None` keeps each selected object as its own boundary (the pre-combine behavior, surfaced for callers who really want it). */
         SourceCombine: "auto" | "union" | "difference" | "intersection" | "xor" | "none";
@@ -3327,6 +3550,19 @@ export interface components {
             op_id: number;
             to: components["schemas"]["Pose3"];
         };
+        Transform: {
+            mirror_x: boolean;
+            mirror_y: boolean;
+            /** Format: double */
+            rotation_deg: number;
+            /** Format: double */
+            scale: number;
+            translate: components["schemas"]["Point2"];
+        };
+        Transition: {
+            children: components["schemas"]["Identity"][];
+            parents: components["schemas"]["Identity"][];
+        };
         /** @enum {string} */
         TransportKind: "python-bridge" | "rust-server" | "tauri" | "wasm";
         /** @description Result of a two-sided emission: the front program plus, for a genuine two-sided job, the back program. `back` is `None` for a single-sided project — the orchestrator then returns the front field unchanged from the ordinary single-program path, so single-sided callers see byte-identical output. */
@@ -3749,6 +3985,68 @@ export interface operations {
                 };
             };
             400: components["responses"]["BadRequest"];
+        };
+    };
+    evaluateDrawing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DrawingRequest"];
+            };
+        };
+        responses: {
+            /** @description Authoritative geometry, membership, diagnostics and transient changes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DrawingResponse"];
+                };
+            };
+            /** @description Unsupported revision or invalid geometry; no legacy fallback */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    generateDrawing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DrawingGenerationRequest"];
+            };
+        };
+        responses: {
+            /** @description Existing qualified pipeline response from authoritative edited sources */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PipelineResponse"];
+                };
+            };
+            /** @description Invalid geometry, binding, version or unsupported feature combination */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
     cornerRelief: {

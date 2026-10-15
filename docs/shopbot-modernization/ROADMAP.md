@@ -1,3 +1,48 @@
+# FabCAM release roadmap
+
+Current development version: **0.9.0-beta.1**, V1 stabilization beta.
+[Version decision and progression](../releases/VERSIONING.md); 1.0 release gates remain open.
+
+> 2026-10-15 continuation: user approved bounded V1 stabilization. See
+> [correction results](../releases/V1_STABILIZATION_RESULTS.md). Current stop is
+> before the next checkpoint; three-platform installation and human gates remain.
+
+2026-10-15 · **ROADMAP APPROVED — V1 requires macOS, Windows and Linux.** Documentation/planning only.
+No functionality, CAM/post behavior, serialization, hardware tests or release changed.
+
+| Horizon | Objective / required path | Current blockers and exclusions |
+| --- | --- | --- |
+| **FabCAM 1.0 — ShopBot Milling** | Reliable single-sided import → geometry preparation → machine/tools → supported operations → preview/warnings → OpenSBP. Retain bounded qualified capabilities; stabilize, install, workshop-validate, then human RC approval. | GEOM1 human gate, correctness triage, current macOS/Windows/Linux installation qualification, release-level physical evidence and user docs. No full CAD, nesting, two-sided, arbitrary-region V-carving or FabSBP dependency. |
+| **FabCAM 1.5 — ProtoMAX Waterjet** | Confirm actual output/target-software contract, then explicit bounded waterjet process, shared geometry, output/preview qualification and separate workshop trials. | Output contract unverified; process/export/physical qualification absent. Early feasibility research may run in parallel after authorization. No automatic nesting or direct machine control. |
+| **FabCAM 2.0+ — Advanced Manufacturing** | Preserve GEOM2/3, NEST1/2, two-sided registration, advanced V-Carve/inlays/rest machining and other processes as scoped future work. | Separate architecture/software/physical gates; no near-term commitment to all features. Existing useful functions remain. |
+
+**Progress:** accepted bounded milling/UX6/PERF1 foundations; GEOM1 implemented in
+software review. M4 has narrow historical operator-confirmed physical evidence;
+post-M4 features are not thereby physically qualified. No current release is ready.
+
+- [Approved direction, full classification, dependency graph and approval decisions](../releases/RELEASE_ROADMAP.md)
+- [V1 operation/acceptance matrices, blockers, workshop and packaging plan](../releases/FABCAM_V1_SCOPE.md)
+- [V1.5 feasibility, process ownership and acceptance matrix](../releases/FABCAM_V1_5_SCOPE.md)
+
+**Current checkpoint delivered:** [V1 Scope Freeze & Release-Blocker Triage](../releases/V1_SCOPE_FREEZE_TRIAGE.md).
+Windows 11 x64 confirmed; Ubuntu 26.10 x64 pinned; macOS reference retained.
+GEOM1 remains unreviewed. Next proposed step is the bounded V1 stabilization lot.
+GEOM2-A1 exact dimensions is V1 CONDITIONAL, not the automatic next implementation.
+Roadmap approval is recorded; implementation, hardware and release gates remain separate. No speculative release date.
+
+The approved release roadmap controls future priority; the detailed plan below is
+preserved verbatim as milestone history and technical acceptance detail. Older
+“pending/unstarted/next” statements are superseded by their later dated records and
+current STATUS, not retroactive changes to evidence. Existing IDs and human gates
+remain unchanged. Current fork publication governance in AGENTS.md takes precedence
+over historical branch/publication language below.
+
+**HARD STOP — roadmap approved; next checkpoint not started by this documentation update.**
+
+---
+
+## Historical detailed milestone plan (preserved)
+
 # Roadmap and approval gates
 
 Every milestone ends with a human approval gate. Never proceed automatically.
@@ -303,17 +348,16 @@ add sheet-layout milestones. No full CAD application.
 
 | Milestone | Priority / scope / acceptance | Status |
 | --- | --- | --- |
-| GEOM1 — Drawing Cleanup & Repair | HIGH: analyze isolated/duplicate/open/self-intersecting geometry; explicit mm join/closure and bounded simplification proposals; preview/select/Apply, stable operation references, batch history and stale-output safeguards; independent geometry/lifecycle and human UX review | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM1_PLAN.md); after current V-Carve qualification and preserved approvals, preferably before serious ProtoMAX integration |
+| GEOM1 — Drawing Cleanup & Repair | HIGH: analyze isolated/duplicate/open/self-intersecting geometry; explicit mm join/closure and bounded simplification proposals; preview/select/Apply, stable operation references, batch history and stale-output safeguards; independent geometry/lifecycle and human UX review | **IMPLEMENTED — SOFTWARE REVIEW**; [results and limits](GEOM1_RESULTS.md), [contract](GEOM1_CONTRACT.md); architecture/refinements accepted, final human gate separate |
 | GEOM2-A — Geometry Transformations | HIGH / MEDIUM: grouped move/rotate/numeric position/size, proportional scale, pivot and qualified nonuniform/mirror policies; independent math, source/reference/history and CAM freshness proof | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM2_A_PLAN.md); shared foundation after GEOM1/audit; dedicated architecture review |
+| GEOM2-A1 — Precise Imported-File Dimensions | Early bounded A subtask: exact whole-import Width/Height in mm linked to one uniform Scale; effective local pre-rotation bounds, original pivot, GEOM1 identity/history and CAM freshness | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM2_A1_PLAN.md); may precede full selection transforms after compatibility audit/human approval; no nonuniform scaling |
 | GEOM2-B — Basic 2D Drawing Tools | MEDIUM: Line/Polyline/Rectangle/Circle/Arc with mouse and exact numeric entry; reuse GEOM2-A, separate geometry from CAM intent | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM2_B_PLAN.md); after qualified shared editing/transforms |
 | NEST1 — Sheet Layout & Manual Nesting | MEDIUM: source parts/placed instances/quantities, explicit sheet/stock linkage, manual transforms, margins/overlap/orientation/grain/keep-outs and audited CAM binding | **PLANNED — NOT IMPLEMENTED**; [specification](NEST1_PLAN.md); depends on GEOM2-A/reliable sources, not all GEOM2-B; no optimizer |
 | NEST2 — Automatic True-Shape Nesting | FUTURE / ADVANCED: irregular outline optimization, explicit objectives/budgets/metrics and user-approved proposals; independent constraint validation; multi-sheet phased later | **PLANNED — NOT IMPLEMENTED**; [specification](NEST2_PLAN.md); after qualified NEST1; algorithm/license audit first; no common-line cutting |
 | GEOM3 — Advanced Geometry Tools | FUTURE/OPTIONAL: individually selected offset/alignment/arrays/trim/boolean/fillet/repair utilities (drawing mirror reviewed in GEOM2-A); audit existing overlap, approve each bounded topology/tolerance/identity scope | **PLANNED — NOT IMPLEMENTED**; [specification](GEOM3_PLAN.md); no promise to deliver all candidates |
 
-Current V-Carve software handoff/HARD STOP ivac-1b75 remains first. GEOM1 is proposed
-for the next separately approved geometry-preparation slot after that qualification;
-relative scheduling against already planned two-sided/inlay/other priorities is open,
-not silently changed. GEOM2-A follows stable prepared sources/shared architecture;
+V-Carve software gate ivac-1b75 is accepted. User selected GEOM1 on 2026-10-15;
+its architecture/refinements are approved and the bounded implementation is in software review. Other future tracks remain unstarted. GEOM2-A follows stable prepared sources/shared architecture;
 GEOM2-B reuses it, NEST1 can proceed without all drawing primitives, NEST2 follows
 NEST1, and GEOM3 utilities remain independently scoped optional work.
 Generic cleanup benefits milling and future waterjet without adding process-specific
@@ -438,7 +482,7 @@ HARD STOP before any further implementation, publication or physical claims.
 
 ## UX6 — Machine Profiles & Tool Library UX Redesign
 
-**Phase 0/A accepted; B implemented with human review pending.** Coordinated information-architecture/task-clarity
+**Phase 0/A/B accepted, including Availability presentation polish.** Coordinated information-architecture/task-clarity
 initiative; numbering available after UX5, no unrelated milestone renumbering.
 [Preliminary ownership inventory, Phase 0 requirements and shared contracts](ux/UX6_PLAN.md).
 
@@ -446,13 +490,28 @@ initiative; numbering available after UX5, no unrelated milestone renumbering.
 | --- | --- | --- |
 | UX6 Phase 0 — architecture and UX audit | Complete field owner/persistence/consumer/output-validation-estimate-preview-legacy matrix; draft/profile/active-project and inventory/loadout/action semantics; proposed layouts/compatibility plan | **ACCEPTED — ivac-tjgt1 closed**; [matrix, contracts and layouts](ux/UX6_PHASE0_AUDIT.md); user authorized A |
 | UX6-A — Machine Profiles UX Redesign | Profile browser/contextual grouped editor, post-aware output, limits versus estimates, explicit project assignment and machine-tools clarity; preserved data/snapshots/output; regression and actual desktop evidence | **ACCEPTED — ivac-osa4z closed**; [results](ux/UX6_A_RESULTS.md); user authorized B |
-| UX6-B — Tool Library UX Redesign | Search/list/selected-tool detail, type-specific physical geometry, optional annotated 2D silhouette, machine availability and secondary legacy defaults; preserved operation rates/identity/export guards | **IMPLEMENTED — human gate ivac-y2aln OPEN**; [results](ux/UX6_B_RESULTS.md); human software/visual HARD STOP |
+| UX6-B — Tool Library UX Redesign | Search/list/selected-tool detail, type-specific physical geometry, optional annotated 2D silhouette, machine availability and secondary legacy defaults; preserved operation rates/identity/export guards | **ACCEPTED — ivac-y2aln closed**; [results](ux/UX6_B_RESULTS.md); human software/visual HARD STOP |
 
 Proposed order: UX6 audit → UX6-A → UX6-B; no automatic precedence over approved
 PERF/CAM/GEOM/NEST work or current visual reviews. Current ivac-nh6q cancellation,
 ivac-1drzo visual gates retain status. Drawings/Layers ivac-ena7m accepted; user
-accepted UX6-A and authorized B; B software/visual acceptance now pending.
+accepted UX6-A and then B, including Availability polish. No subsequent implementation
+is authorized; GEOM1 now has its own approved contract and separate final human gate.
 Mandatory future Professional Workshop UI + CAM UX. Physical tools, saved operation
 cutting values and FS recommendations stay separate; no new rate/association model.
 No machine-control/FabSBP functionality, FS redesign, output capability, project/tool
 migration, active optimization change or broad navigation rewrite included.
+
+### GEOM2-A1 — precise dimensions refinement, 2026-10-15
+
+Early subtask of existing GEOM2-A, not a renumbering: Width/Height derive from the
+same uniform Scale. Use effective local whole-file extents after accepted GEOM1
+edits, before rotation; preserve original pivot, transform order, translation/mirrors,
+source lineage, operation bindings and output invalidation. [Plan and test matrix](GEOM2_A1_PLAN.md).
+Current GEOM1 human software/UX gate ivac-e2jnb remains the next checkpoint; no
+implementation/format/CAM/post or publication authorization in this update.
+
+Existing selected-object status-bar dimensions partially provide measurement. No
+MEAS1 entry was found in this roadmap; the requested future measurement direction
+is recorded in the A1 plan (distance/point-to-point/radius/angle/length/overlays),
+without creating or implementing another milestone or duplicating selected bounds.

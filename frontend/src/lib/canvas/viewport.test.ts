@@ -153,3 +153,22 @@ describe('placementsBBox (rt1.12 fvb0)', () => {
     expect(bb).toEqual({ min_x: 4, min_y: 4, max_x: 7, max_y: 6 });
   });
 });
+
+describe('text-only placement framing', () => {
+  it('waits for glyphs, keeps drag stable, and reframes on Fit or document replacement', async () => {
+    const { PlacementFrame } = await import('./viewport');
+    const frame = new PlacementFrame();
+    const original = [{ minX: 10, minY: 10, maxX: 80, maxY: 30 }];
+    const moved = [{ minX: 110, minY: 110, maxX: 180, maxY: 130 }];
+    expect(frame.fit('doc1', [])).toBeNull();
+    const first = frame.fit('doc1', original);
+    expect(first).toEqual(placementsBBox(original));
+    expect(frame.fit('doc1', moved)).toEqual(first);
+    frame.reset();
+    expect(frame.fit('doc1', moved)).toEqual(placementsBBox(moved));
+    expect(frame.fit('doc2', original)).toEqual(first);
+    expect(frame.fit('doc2:second-glyph-ready', [...original, ...moved])).toEqual(
+      placementsBBox([...original, ...moved]),
+    );
+  });
+});

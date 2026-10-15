@@ -367,3 +367,56 @@ it('saves and restores both V-Carve modes, radius caps and physical bit properti
   expect(p.data.operations).toEqual(saved.operations);
   expect(p.data.tools).toEqual(saved.tools);
 });
+
+// Exercise actual restore/snapshot code, not only the file validator.
+const geomFiles = [
+  'GEOMETRY-software-sources-saved.ivac-project.json',
+  'feeds-speeds/FS3-software-manual-saved.ivac-project.json',
+  'CAM4-software-pocket.ivac-project.json',
+  'feeds-speeds/FS3_7-software-private-safe.ivac-project.json',
+  'CAD1-software-dogbone.ivac-project.json',
+  'UX3-software-surfacing.ivac-project.json',
+  'geom1/square-repaired.ivac-project.json',
+];
+it.each(geomFiles)('round trips representative geometry/operation data: %s', async (name) => {
+  const { readFileSync } = await import('node:fs');
+  const file = JSON.parse(
+    readFileSync(
+      new URL(`../../../../docs/shopbot-modernization/${name}`, import.meta.url),
+      'utf8',
+    ),
+  );
+  file.workshopNote = { revision: 3, label: 'inert metadata retained' };
+  const p = io.project;
+  restoreProject(p, file);
+  const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
+  clearProject(p);
+  restoreProject(p, saved);
+  const reopened = JSON.parse(JSON.stringify(snapshotProject(p)));
+  for (const key of [
+    'imports',
+    'operations',
+    'tools',
+    'machineProfileId',
+    'material',
+    'fsContext',
+    'cornerRelief',
+    'drawing',
+    'workshopNote',
+  ]) {
+    expect(reopened[key] ?? null, key).toEqual(file[key] ?? null);
+  }
+  // Machine defaults may be filled by the existing migration, but saved fields survive.
+  expect(reopened.machine).toMatchObject(file.machine);
+  expect(reopened).toEqual(saved);
+  if (file.version === 7) {
+    expect(reopened.version).toBe(7);
+    const { drawingCommand } = await import('../state/drawing');
+    p.history.exec(drawingCommand(p.data.drawing, undefined, p.data.operations, []), p.data);
+    p.history.undo(p.data);
+    expect(p.data.drawing).toEqual(file.drawing);
+    expect(p.data.operations).toEqual(file.operations);
+    p.history.redo(p.data);
+    expect(p.data.drawing).toBeUndefined();
+  }
+});

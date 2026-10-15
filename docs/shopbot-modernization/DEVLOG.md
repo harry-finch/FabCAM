@@ -1573,3 +1573,200 @@ visual hierarchy, Drawings/Layers clarification, UX6 machine profiles and tool
 library work with their qualification records. Source publication does not close
 pending human gates, qualify native/physical behavior, satisfy the remaining CPS
 cancellation latency target or authorize another milestone or binary release.
+
+## 2026-10-15 — UX6-B Availability visual harmonization
+
+User screenshot prompted focused correction ivac-b54jh: document-sized paragraphs/lists
+replaced by scoped compact inspector presentation in ToolLibraryDialog. Existing script,
+messages/conditions/actions verified unchanged; wrapping action row and quiet copy notice.
+Actual before/after and1024px captures in ux/ux6-b; keyboard focus checked. Svelte zero
+diagnostics, lint/build pass and32 targeted tests pass. No inventory/profile/association
+mutations, core/FS/CAM/schema changes or publication. UX6-B human gate ivac-y2aln open.
+
+## 2026-10-15 — UX6-B accepted
+
+User accepted tool-library UX6-B and Availability polish; ivac-y2aln closed as
+software/visual acceptance. No new milestone launched. Roadmap has no defined UX7;
+GEOM1 Drawing Cleanup & Repair (high priority) proposed as next geometry checkpoint,
+beginning with architecture/tolerance/reference audit. Exact scheduling remains
+open against existing CAM/PERF priorities; independent reviews and physical/native
+limits retained. No new publication authorization.
+
+## 2026-10-15 — Adaptive2D grid and central-button3D pan
+
+Focused user request ivac-tgxsn: grid decimal spacing adapts to zoom instead of
+vanishing under6px/mm; origin-anchored screen-space drawing bounds line count.
+3D OrbitControls middle button pans; left orbit/right pan/wheel zoom retained and
+help updated.42 targeted tests pass, Svelte0 diagnostics, lint/build pass. Actual
+browser demo zoom out/in, fit,3D and help checked; central drag mapping source-
+verified but gesture not automated (CUA drag has no button parameter). No CAM/snap/
+file-format or machine/tool changes. GEOM1 not launched; no new publication.
+
+
+## 2026-10-15 — GEOM1 launch and architecture audit
+
+User selected GEOM1 after UX6-B acceptance. ivac-cbgkk audited imports, source
+identity, global CAM rechaining, transform pivots, relief, history, watcher and
+persistence. GEOM1_AUDIT.md and proposed ADR-0021 recommend a preserved original
+plus edited snapshot, stable source binding and guarded format before bounded
+repairs. 86 existing frontend and 7 core source tests pass (compiler cache disabled
+after sccache permission failure). Human decision ivac-rcmta. No production code
+or user files changed.
+HARD STOP at the architecture decision; no GEOM2 or publication authorization.
+
+
+## 2026-10-15 — GEOM1 approved architecture and bounded software delivery
+
+- Integrated all four ADR-0021 refinements before structural work. Implemented pure
+  Rust drawing identity/provenance/lineage/evaluation, conservative line repairs,
+  exact fallback topology predicates and one shared source-to-CAM adapter.
+- Added explicit preview/Apply/reset with coherent history and source-review guards;
+  actual screenshots led to changed-endpoint framing and compact styled controls.
+- Guarded v7 preserves originals and compatible data; old reader/endpoint refuse.
+  Final review closed reset-after-source-change, original operation-ID reuse and
+  orphaned binding downgrade counterexamples. No automatic rebase or guessed binding.
+- 1198 full core / 23 final focused (overlapping) / 44 CPS / 1312 frontend tests pass
+  (1 existing skip). Check/lint/clippy/schema/build and compiled WASM/native parity
+  pass. Actual UI save/reopen/generate/output download, Undo/Redo, stale export,
+  pending preview cancellation and narrow keyboard review captured.
+- See GEOM1_RESULTS/CONTRACT/SERIALIZATION and geom1/checks.json/logs for exact
+  scope, commands and limitations. Engineering ivac-8rura complete; human gate
+  ivac-e2jnb open. No physical validation, commit/push/merge/release or next milestone.
+
+## 2026-10-15 — GEOM2-A1 precise imported-file sizing plan
+
+Documentation only (ivac-hx3xq): early GEOM2-A subtask, existing numbering/priorities
+retained. Added GEOM2_A1_PLAN, parent/shared/roadmap/status/architecture/UX/index
+references. Source audit confirms per-import X/Y/angle/uniform Scale/mirror controls,
+legacy TS transforms and authoritative edited Rust drawing with original pivot under
+ADR-0021. Current GEOM1 software/UX human ivac-e2jnb remains open/next.
+
+Planned W/H derive from effective local whole-import extents before rotation and one
+persisted scale; no contour-selection/project bbox substitution or shadow size storage.
+Accepted local edits change measured bounds without redefining original pivot. Preserve
+translate/angle/mirror and normal scale displacement, bindings/lineage/history/v7,
+source membership and CAM freshness; no physical tool/rate/FS change. Empty/point/line,
+curve extrema, small/large units and rounding/drift matrix requires independent proof.
+MEAS1 not found in current planning; recorded requested future residual measurement
+scope, distinguishing existing status selection dimensions from editable file sizing.
+
+Documentation/architecture/geometry/validation/CAM UX/Professional Workshop UI applied.
+PLANNED — NOT IMPLEMENTED; no code, source rewrite, GEOM1 repair, format/post change,
+new GitHub issue, commit/push/merge/release or next milestone authorized. Stop pending
+human approval before implementation.
+
+Documentation checks: added links/whitespace and retained prior content verified;
+baseline source/config/data hashes unchanged. No software tests/build or new
+qualification evidence for this documentation-only checkpoint.
+
+
+## 2026-10-15 — Release-oriented roadmap proposal (documentation only)
+
+User requested a shorter release-led route: FabCAM 1.0 ShopBot milling, 1.5 ProtoMAX,
+2.0+ advanced manufacturing. Read current STATUS, historical ROADMAP/DEVLOG, ADRs,
+CAM/V-Carve/GEOM1/FS/UX6/PERF records, machine/process architecture and packaging
+configuration/guides. Applied project-documentation, ivacam-architecture,
+cam-validation, cam-geometry, shopbot-opensbp, protomax-waterjet, feeds-speeds,
+cam-ux-ui and professional-workshop-ui skills. No architecture or code changed.
+
+Added docs/releases/RELEASE_ROADMAP.md, FABCAM_V1_SCOPE.md and FABCAM_V1_5_SCOPE.md;
+prepended concise release summary to ROADMAP while retaining its prior text verbatim.
+Updated STATUS, documentation index and FUTURE_PROCESSES placement note. Classified
+existing milestone families with rationale/remaining effort, linked evidence and
+separate software/human/physical status. Preserved narrow M4 r2 physical acceptance;
+current release workshop validation remains pending. Identified existing tool-identity,
+nested Pocket/XOR, text-reopen, RPM-refusal and package-freshness issues for triage,
+without asserting every old ticket still reproduces or weakening refusal policy.
+
+Proposed macOS Apple Silicon first (human confirmation required), conditional bounded
+V-Carve/surfacing/relief and GEOM2-A1, minimal workshop/FS4 campaign and early WJ
+output-contract research. Defined explicit release gates, dependency sequence and
+scope-change control. Next recommendation is V1 Scope Freeze & Release-Blocker Triage,
+not immediate implementation or a new large feature program.
+
+Verified local Markdown links, preserved historical roadmap payload and whitespace.
+No test/build rerun for this documentation task; cited counts are prior evidence.
+Local Beads ivac-7m4al tracks this proposal; no existing human gates closed and no
+GitHub issues created/modified. Working-tree source preserved. No release branch,
+version bump, commit, push, merge, publication or physical action.
+
+HARD STOP — waiting for human approval of the FabCAM 1.0 / 1.5 release roadmap.
+
+
+## 2026-10-15 — Roadmap approved; Windows and Linux required for V1
+
+User approved the release roadmap with explicit Windows and Linux inclusion alongside
+macOS. Supersedes the initial optional Windows/Linux and macOS-first recommendation.
+Updated release strategy, V1/V1.5 scope headers, acceptance/packaging matrices,
+dependency graph, ROADMAP, STATUS, index and future-process placement note.
+All three desktop platforms require actual installation/upgrade/runtime and supported
+ShopBot workflow qualification; exact OS/architecture/distribution/package variants
+remain to be pinned. Configuration/build availability is not platform acceptance.
+
+Independent GEOM1/FS/UX/cancellation and physical gates remain unchanged. Next
+checkpoint remains V1 Scope Freeze & Release-Blocker Triage, not started here.
+Documentation-only checks: links/whitespace and removal of superseded optional-platform
+policy. No code/build/hardware/GitHub/version/commit/push/release action. ivac-zgmds.
+
+
+## 2026-10-15 — V1 scope freeze and release-blocker triage
+
+Authorized checkpoint ivac-oznar. Recorded three-platform matrix and bounded
+stabilization lot in docs/releases/V1_SCOPE_FREEZE_TRIAGE.md, with logs and source
+hashes. User confirmed Windows/Linux Intel x64, latest Ubuntu, and GEOM1 not yet
+reviewed. Official Rust/WebView2 compatibility research identified Windows 7 conflict
+with current standard build; user explicitly selected Windows 11 x64 and finding a
+test environment. Ubuntu latest pinned to 26.10 using Canonical announcement.
+
+Executed 7 geometry-source, 22 frontend and 7 CPS guard tests; XOR characterization
+still reproduces wrong empty result. Isolated copied WASM freshness script accepts
+incomplete pkg. Static audits retain Pocket nesting, tool shortcut identity and
+text warning risks; no claim of complete UI/path reproduction. Proposed bounded
+geometry, tool/text and package integrity fixes before multi-platform qualification.
+No production code, machine action, installer build, GitHub issue or publication.
+Independent gates unchanged; HARD STOP before stabilization implementation.
+
+
+## 2026-10-15 — V1 bounded stabilization corrections
+
+Explicit user approval, ivac-chhz0. Added failing XOR and deep Pocket emitted-path
+counterexamples before fixes; corrected fold continuation and selected-ancestor
+parity without changing ShopBot semantics. Added three/four-level and partial-selection
+matrix plus independent OpenSBP decoding and fresh native/WASM program parity.
+Reproduced and corrected project-tool/inventory ID confusion; actual Apply/Cancel,
+Undo/Redo and saved-text/project-tool reopen reviewed. Text-only fit now frames text
+with stable placement math instead of the entire machine bed; false no-drawing
+warning removed. Production WASM completeness/content-fingerprint guard fails closed,
+with locked rebuild and ten guard tests wired into npm test.
+[Report, commands, counts and limitations](../releases/V1_STABILIZATION_RESULTS.md).
+Known cache-count race ivac-htc8 reproduced in parallel tests; serialized qualification
+retained separately. No package installation, physical testing or publication.
+Independent GEOM1/human gates remain; HARD STOP before next checkpoint.
+
+
+## 2026-10-15 — Version 0.9.0-beta.1 and source publication
+
+User requested a maturity-based version update, publication of all pending work,
+preview shutdown and debug cleanup. Selected 0.9.0-beta.1 for implemented bounded
+V1 scope undergoing stabilization; 1.0 and RC remain gated on integrated acceptance,
+three-platform installation and workshop evidence. Cargo workspace and Tauri version
+are aligned; browser/window/About inherit the Tauri version at build time. Current
+READMEs, release roadmap and scope reference the decision. Historical logs retain
+the versions actually tested. No installation identity or project format is changed
+by this version bump. Prior GEOM1/stabilization changes are included in publication;
+their evidence and remaining review limits are preserved.
+
+Publication checks under 0.9.0-beta.1: 1,313 frontend tests (1 existing skip),
+10 WASM guard tests, Svelte/TypeScript (zero diagnostics), lint and Rust formatting
+pass. Serialized core library with cps+profiling: 1,087 pass; focused GEOM1,
+geometry-source and V1 stabilization integration: 33 pass. Production UI and WASM
+rebuilt with the new version; initial input-fingerprint refusal required a retry,
+which succeeded with stable inputs. Existing chunk/dynamic-import warnings remain.
+Seven identified Vite/API preview services stopped. Removed only Cargo debug build
+artifacts from target/debug and /private/tmp/fabcam-cps-runtime/debug (about
+12.3 GiB allocated); source, release outputs and qualification evidence retained.
+
+Local optimized macOS app rebuilt successfully (2m23s, 21.73 MiB). Bundle display
+name is FabCAM, both bundle version fields are 0.9.0-beta.1 and identifier remains
+org.opcenter.ivacam. This build/metadata verification does not replace the pending
+installation/upgrade or runtime qualification on the three required platforms.

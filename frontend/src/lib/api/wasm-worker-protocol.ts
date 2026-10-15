@@ -21,6 +21,8 @@ export type WorkerMethod =
   | 'feedsSpeeds'
   | 'computeHelixRadius'
   | 'cornerRelief'
+  | 'evaluateDrawing'
+  | 'generateDrawing'
   | 'rasterizeStl';
 
 /// Main thread → worker. `id` correlates the eventual response(s);

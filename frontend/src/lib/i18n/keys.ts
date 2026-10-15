@@ -178,6 +178,30 @@ export type MsgKey =
   | "canvas.tab_popover.header"
   | "canvas.tab_popover.height"
   | "canvas.tab_popover.width"
+  | "cleanup.analyze"
+  | "cleanup.apply"
+  | "cleanup.busy"
+  | "cleanup.close"
+  | "cleanup.connector"
+  | "cleanup.contour"
+  | "cleanup.deviation"
+  | "cleanup.edited"
+  | "cleanup.empty"
+  | "cleanup.intro"
+  | "cleanup.legend"
+  | "cleanup.limit"
+  | "cleanup.method"
+  | "cleanup.no_import"
+  | "cleanup.overview"
+  | "cleanup.preview"
+  | "cleanup.preview_label"
+  | "cleanup.reselect"
+  | "cleanup.reset"
+  | "cleanup.simplify"
+  | "cleanup.snap"
+  | "cleanup.stale"
+  | "cleanup.title"
+  | "cleanup.tolerance"
   | "common.apply"
   | "common.cancel"
   | "common.close"
@@ -546,6 +570,7 @@ export type MsgKey =
   | "genbar.time.spindle_warmup"
   | "genbar.time.toolchange"
   | "genbar.time.total"
+  | "help.key.middle_drag"
   | "layers.add"
   | "layers.add.open_file"
   | "layers.add.open_file.title"
@@ -2416,6 +2441,30 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "canvas.tab_popover.header",
   "canvas.tab_popover.height",
   "canvas.tab_popover.width",
+  "cleanup.analyze",
+  "cleanup.apply",
+  "cleanup.busy",
+  "cleanup.close",
+  "cleanup.connector",
+  "cleanup.contour",
+  "cleanup.deviation",
+  "cleanup.edited",
+  "cleanup.empty",
+  "cleanup.intro",
+  "cleanup.legend",
+  "cleanup.limit",
+  "cleanup.method",
+  "cleanup.no_import",
+  "cleanup.overview",
+  "cleanup.preview",
+  "cleanup.preview_label",
+  "cleanup.reselect",
+  "cleanup.reset",
+  "cleanup.simplify",
+  "cleanup.snap",
+  "cleanup.stale",
+  "cleanup.title",
+  "cleanup.tolerance",
   "common.apply",
   "common.cancel",
   "common.close",
@@ -2784,6 +2833,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "genbar.time.spindle_warmup",
   "genbar.time.toolchange",
   "genbar.time.total",
+  "help.key.middle_drag",
   "layers.add",
   "layers.add.open_file",
   "layers.add.open_file.title",
