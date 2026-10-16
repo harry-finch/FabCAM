@@ -1,0 +1,34 @@
+{
+  "format": 1,
+  "product": "FabCAM",
+  "version": "0.9.0-beta.1",
+  "platform": "macos",
+  "declared_build_target": "aarch64-apple-darwin",
+  "software_test_candidate": true,
+  "installation_qualified": false,
+  "runtime_qualified": false,
+  "physical_validation": false,
+  "signature_status": "not certified by this collector",
+  "provenance": {
+    "commit": "a65553b5db5c2cfd8949aa95cbe539698b0fdbbf",
+    "dirty": true,
+    "built_on": "darwin",
+    "collected_at": "2026-10-16T06:34:25.595Z",
+    "wasm": {
+      "version": 1,
+      "input": "0461b9d357b4ae464a20399ecfc283f7d200c07353410c70f468acd43ec8d4bd",
+      "assets": {
+        "ivac_wasm_bg.wasm": "bf3e0aaa2902538066d949886cf8f640cd3e24379d7c3d1893701100f1a2011f",
+        "ivac_wasm.js": "f471da33304389ef0ab89e908d9587a4e258d9270a16a22a7e4b520d4aaacb15",
+        "ivac_wasm.d.ts": "4fcfee02d02283fa0c5d85aa536157a15025d2840c8fbdca91b060a53799c6d0",
+        "ivac_wasm_bg.wasm.d.ts": "d83bb7103ebeb229bed56462567263b8202faed805c761fe6d06390aef1be3d1",
+        "package.json": "2090834d6e041bdc208c328ef8d773eaa1064e7f007e3bba714705c2d3da0432"
+      }
+    }
+  },
+  "artifact": {
+    "file": "ivaCAM_0.9.0-beta.1_aarch64.dmg",
+    "bytes": 10803320,
+    "sha256": "93b3e5eebb740ab874c3dc90e473ceef2bb4641d1687290be16bce87e77b24d7"
+  }
+}

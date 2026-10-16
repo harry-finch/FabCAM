@@ -1,0 +1,10 @@
+{
+  "version": "0.9.0-beta.1",
+  "identifier": "org.opcenter.ivacam",
+  "executable": "ivac-desktop",
+  "display_name": "FabCAM",
+  "binary": "target/release/bundle/macos/ivaCAM.app/Contents/MacOS/ivac-desktop: Mach-O 64-bit executable arm64",
+  "signature_inspection": "Executable=/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/bundle/macos/ivaCAM.app/Contents/MacOS/ivac-desktop\nIdentifier=ivac_desktop-7ad7c924381c752e\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=175608 flags=0x20002(adhoc,linker-signed) hashes=5484+0 location=embedded\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n",
+  "installation_tested": false,
+  "runtime_tested": false
+}

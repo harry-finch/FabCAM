@@ -1,0 +1,75 @@
+name: Desktop test candidates
+
+# Explicit developer/tester artifacts only: no tag, release, signing request or deployment.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  RUSTC_WRAPPER: ""
+  RUSTFLAGS: -D warnings
+
+jobs:
+  candidate:
+    name: ${{ matrix.os }} / ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos
+            runner: macos-15
+            target: aarch64-apple-darwin
+            bundles: app,dmg
+          - os: windows
+            runner: windows-2022
+            target: x86_64-pc-windows-msvc
+            bundles: nsis
+          - os: ubuntu
+            runner: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            bundles: deb
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+      - uses: dtolnay/rust-toolchain@1.88.0
+        with:
+          targets: ${{ matrix.target }},wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Linux build dependencies
+        if: matrix.os == 'ubuntu'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libfreetype6-dev patchelf
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: wasm-pack
+      - name: Frontend dependencies
+        run: pnpm --dir frontend install --frozen-lockfile
+      - name: Build candidate
+        working-directory: crates/ivac-tauri
+        run: npm exec --yes --package=@tauri-apps/cli@2.12.3 -- tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }} -- --locked
+      # Separate steps preserve each native exit code under PowerShell too.
+      - name: Frontend tests
+        run: pnpm --dir frontend test
+      - name: Frontend type checks
+        run: pnpm --dir frontend check
+      - name: Packaging tests
+        run: node --test scripts/collect-desktop-candidate.test.mjs
+      - name: Version consistency
+        run: cargo run --locked -p xtask -- version-check
+      - name: Collect candidate and checksums
+        run: node scripts/collect-desktop-candidate.mjs ${{ matrix.os }} ${{ matrix.target }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FabCAM-candidate-${{ matrix.os }}-${{ matrix.target }}
+          path: dist-test/desktop-candidates/${{ matrix.os }}/
+          if-no-files-found: error
+          retention-days: 14

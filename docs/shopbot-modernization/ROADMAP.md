@@ -1,5 +1,9 @@
 # FabCAM release roadmap
 
+> 2026-10-16: stabilization accepted; desktop preparation authorized and delivered.
+> [Candidate preparation](../releases/DESKTOP_CANDIDATES.md): macOS DMG produced,
+> Windows/Ubuntu manual build workflow ready; platform qualification stays open.
+
 Current development version: **0.9.0-beta.1**, V1 stabilization beta.
 [Version decision and progression](../releases/VERSIONING.md); 1.0 release gates remain open.
 

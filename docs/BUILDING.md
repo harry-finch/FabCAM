@@ -451,3 +451,11 @@ For Tauri builds, launching the bundled app should open a window titled
 If something else trips you up that isn't listed, please open an issue
 with the exact platform, toolchain versions (`rustc -V`, `node -v`,
 `cargo tauri info`) and the failing command.
+
+
+## V1 desktop test candidates
+
+The manual `Desktop test candidates` workflow prepares macOS arm64 DMG, Windows x64
+NSIS and Ubuntu amd64 DEB artifacts without publishing a Release. See the
+[candidate preparation/protocol](releases/DESKTOP_CANDIDATES.md) for exact commands,
+source/checksum manifests and the distinction between builder OS and tested runtime.

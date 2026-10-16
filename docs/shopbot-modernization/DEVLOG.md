@@ -1770,3 +1770,17 @@ Local optimized macOS app rebuilt successfully (2m23s, 21.73 MiB). Bundle displa
 name is FabCAM, both bundle version fields are 0.9.0-beta.1 and identifier remains
 org.opcenter.ivacam. This build/metadata verification does not replace the pending
 installation/upgrade or runtime qualification on the three required platforms.
+
+
+## 2026-10-16 — desktop candidate preparation
+
+User accepted bounded stabilization and authorized macOS/Windows 11/Ubuntu preparation.
+Added manual, read-only-permission candidate workflow with explicit platform targets,
+locked build and checksummed provenance. Fixed retired macOS runner, universal rustup
+and artifact paths, missing-artifact errors and partial-matrix draft assembly in legacy
+release workflow. CLI pinned to npm 2.12.3. Four collector regressions and actionlint pass.
+Local arm64 0.9.0-beta.1 app/DMG built; sandbox hdiutil failure resolved by authorized
+unrestricted rerun, image checksum VALID, ad-hoc signature limitation recorded.
+No CAM changes, platform install/upgrade/runtime claim, commit, remote dispatch or release.
+User Windows/Ubuntu hosts unavailable until Monday 19 October. Parent ivac-2p53v
+remains open; preparation ivac-2p53v.1 delivered. [Results](../releases/desktop-preparation/RESULTS.md).

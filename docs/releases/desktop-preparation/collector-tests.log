@@ -1,0 +1,12 @@
+✔ macos: exact artifact bytes, checksum and unqualified status (3.56775ms)
+✔ windows: exact artifact bytes, checksum and unqualified status (1.831459ms)
+✔ ubuntu: exact artifact bytes, checksum and unqualified status (1.14575ms)
+✔ reject missing, wrong version, wrong target and ambiguous stale installers (0.834041ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60.63775

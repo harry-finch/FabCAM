@@ -1,4 +1,18 @@
-# Status — 2026-10-15
+# Status — 2026-10-16
+
+## Desktop candidates — preparation complete, platform qualification open
+
+2026-10-16 · ivac-2p53v.1 / parent ivac-2p53v.
+User accepted stabilization and authorized preparation for macOS, Windows 11 and Ubuntu.
+[Preparation results](../releases/desktop-preparation/RESULTS.md),
+[build workflow and Monday protocol](../releases/DESKTOP_CANDIDATES.md).
+Local 0.9.0-beta.1 arm64 app/DMG built; disk image checksum and metadata verified.
+Four collector tests, actionlint and version check pass. No clean install/upgrade or
+runtime qualification claimed. Windows NSIS / Ubuntu DEB are not yet produced;
+manual workflow is ready. User explicitly authorized commit, push and manual dispatch on
+2026-10-16, without a tag or Release. CI results will be recorded separately.
+User's Windows/Ubuntu hosts available again Monday 19 October. No reminder scheduled.
+GEOM1 and independent human/physical gates remain open. HARD STOP before release.
 
 ## Current version — 0.9.0-beta.1
 

@@ -45,11 +45,11 @@ jobs:
             target: x86_64-unknown-linux-gnu
             args: ""
           - name: macos
-            runner: macos-13
-            target: universal-apple-darwin
+            runner: macos-15
+            target: aarch64-apple-darwin,x86_64-apple-darwin
             args: --target universal-apple-darwin
           - name: windows
-            runner: windows-latest
+            runner: windows-2022
             target: x86_64-pc-windows-msvc
             args: ""
     steps:
@@ -97,8 +97,6 @@ jobs:
           tool: wasm-pack
 
       # ── tauri-cli ──
-      - name: install tauri-cli
-        run: cargo install tauri-cli --version "^2" --locked
 
       # ── build the bundle ──
       - name: tauri build
@@ -114,7 +112,7 @@ jobs:
           # Windows code signing (optional):
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        run: cargo tauri build ${{ matrix.platform.args }}
+        run: npm exec --yes --package=@tauri-apps/cli@2.12.3 -- tauri build ${{ matrix.platform.args }} -- --locked
 
       # Drop the GStreamer core libs linuxdeploy bundles as WebKit transitive
       # deps (the app uses no media); they shadow the host's GStreamer and
@@ -140,13 +138,16 @@ jobs:
         if: matrix.platform.name != 'windows'
         uses: actions/upload-artifact@v4
         with:
+          if-no-files-found: error
           name: ivaCAM-${{ matrix.platform.name }}
           path: |
             target/release/bundle/deb/*.deb
             target/release/bundle/rpm/*.rpm
             target/release/bundle/appimage/*.AppImage
             target/release/bundle/dmg/*.dmg
+            target/universal-apple-darwin/release/bundle/dmg/*.dmg
             target/release/bundle/macos/*.app.tar.gz
+            target/universal-apple-darwin/release/bundle/macos/*.app.tar.gz
 
       # ── Windows: unsigned upload → SignPath → signed upload ──
       # The unsigned upload is ALWAYS produced: it's the input SignPath
@@ -157,6 +158,7 @@ jobs:
         if: matrix.platform.name == 'windows'
         uses: actions/upload-artifact@v4
         with:
+          if-no-files-found: error
           name: ivaCAM-windows-unsigned
           path: |
             target/release/bundle/msi/*.msi
@@ -193,13 +195,9 @@ jobs:
     name: draft pre-release
     needs: build
     runs-on: ubuntu-latest
-    # !cancelled() + the tag guard: run after the build matrix concludes even
-    # if one platform (e.g. macOS) failed or was unavailable — the others
-    # still ship. NOT always(): always() also fires when the run is *cancelled*,
-    # which once spawned a second draft when a macOS-blocked run was cancelled
-    # mid-flight. !cancelled() ships on partial failure but stays out of the way
-    # on cancellation. The release is a DRAFT pre-release for human review.
-    if: ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') }}
+    # A draft is assembled only when every required platform built successfully.
+    # Manual candidate runs never enter this release job.
+    if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
     permissions:
       contents: write
     steps:
