@@ -10,7 +10,8 @@ Local 0.9.0-beta.1 arm64 app/DMG built; disk image checksum and metadata verifie
 Four collector tests, actionlint and version check pass. No clean install/upgrade or
 runtime qualification claimed. Windows NSIS / Ubuntu DEB are not yet produced;
 manual workflow is ready. User explicitly authorized commit, push and manual dispatch on
-2026-10-16, without a tag or Release. CI results will be recorded separately.
+2026-10-16, without a tag or Release. Preparation published as `5ac4023`; [manual CI run](https://github.com/harry-finch/FabCAM/actions/runs/38863177268)
+is building all three candidates. Final artifact results remain unverified.
 User's Windows/Ubuntu hosts available again Monday 19 October. No reminder scheduled.
 GEOM1 and independent human/physical gates remain open. HARD STOP before release.
 

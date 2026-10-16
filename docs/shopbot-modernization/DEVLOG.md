@@ -1784,3 +1784,10 @@ unrestricted rerun, image checksum VALID, ad-hoc signature limitation recorded.
 No CAM changes, platform install/upgrade/runtime claim, commit, remote dispatch or release.
 User Windows/Ubuntu hosts unavailable until Monday 19 October. Parent ivac-2p53v
 remains open; preparation ivac-2p53v.1 delivered. [Results](../releases/desktop-preparation/RESULTS.md).
+
+### 2026-10-16 — Desktop candidate publication and dispatch
+
+User authorized commit/push and manual build without release. Preparation commit
+`5ac4023` pushed via existing SSH; manual run `38863177268` reached compilation on
+all three runners. Artifacts and installation remain pending; no tag or Release.
+See [dispatch record](../releases/desktop-preparation/RESULTS.md).

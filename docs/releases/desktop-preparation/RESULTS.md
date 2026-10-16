@@ -49,3 +49,20 @@ historical, not relabelled as new platform qualification.
 
 [Build commands and acceptance protocol](../DESKTOP_CANDIDATES.md).
 **HARD STOP before release/next milestone.** Publication and manual CI build are now authorized; runtime qualification follows on Monday.
+
+## Manual CI dispatch — 2026-10-16
+
+User explicitly authorized commit, push and manual build of all three candidates,
+without a tag or Release. Preparation published as
+`5ac4023576d72d450912357887273195faab0a72` on `main`.
+
+[Desktop test candidates run 38863177268](https://github.com/harry-finch/FabCAM/actions/runs/38863177268)
+was dispatched against that exact commit. At this record, all three jobs reached
+**Build candidate** and remain in progress; no CI installer is claimed complete.
+Check the final run conclusion and each artifact manifest/checksum before using it.
+The earlier local DMG evidence remains distinct from these CI builds.
+
+HTTPS OAuth credentials lacked the workflow scope; publication succeeded through
+existing SSH access. No remote configuration, tag or Release was changed/created.
+Installation/runtime qualification remains open, with Windows/Ubuntu hosts expected
+Monday 19 October. HARD STOP before release or another milestone.
