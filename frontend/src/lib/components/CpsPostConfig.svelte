@@ -243,7 +243,50 @@
 
 <style>
   .cps {
-    display: contents;
+    display: grid;
+    gap: var(--ui-space-2);
+    min-width: 0;
+  }
+  label {
+    display: grid;
+    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--ui-space-2);
+    font-size: 0.8rem;
+  }
+  .field {
+    min-width: 0;
+  }
+  input:not([type='checkbox']),
+  select {
+    box-sizing: border-box;
+    min-height: var(--inspector-control-height);
+    max-width: 100%;
+    min-width: 0;
+    padding: var(--ui-space-1) var(--ui-space-2);
+    background: var(--bg-input);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font: inherit;
+  }
+  select,
+  input[type='text'] {
+    width: 100%;
+  }
+  input[type='number'] {
+    width: 96px;
+  }
+  input[type='checkbox'] {
+    accent-color: var(--accent);
+  }
+  .section-title {
+    padding-top: var(--ui-space-2);
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
   .row {
     display: flex;
@@ -264,7 +307,7 @@
   }
   .err {
     margin: 0;
-    color: var(--color-danger, #c33);
+    color: var(--danger);
     font-size: 0.85em;
   }
 </style>

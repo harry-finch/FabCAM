@@ -1,5 +1,7 @@
 # FS1 — Pure recommendation engine MVP
 
+> Historical evidence: current policy-2 corrections and qualification are recorded in [FS audit improvements](FS_AUDIT_IMPROVEMENTS.md). Existing fixtures below describe their original checkpoint.
+
 Date: 2026-10-12. Status: engineering handoff; human approval pending.
 Engineering: `ivac-86b8`; human approval gate: `ivac-406n`.
 User approved FS0 and authorized FS1 (“je valide, passe à

@@ -1,0 +1,53 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling syn v2.0.117
+   Compiling serde_derive v1.0.228
+   Compiling serde v1.0.228
+   Compiling ivac-feeds-speeds v0.9.0-beta.1 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.31s
+     Running unittests src/lib.rs (target/debug/deps/ivac_feeds_speeds-904e12e03817b093)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/approximate.rs (target/debug/deps/approximate-97e8dade1a721dbc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.00s
+
+     Running tests/dataset.rs (target/debug/deps/dataset-bc20a95a4649788b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+     Running tests/lab_presets.rs (target/debug/deps/lab_presets-a09a42ac0a24b381)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/qualification.rs (target/debug/deps/qualification-944f29f7bdbe8619)
+
+running 1 test
+test exact_values_rpm_cap_never_increases_implicit_chipload ... FAILED
+
+failures:
+
+---- exact_values_rpm_cap_never_increases_implicit_chipload stdout ----
+
+thread 'exact_values_rpm_cap_never_increases_implicit_chipload' panicked at crates/ivac-feeds-speeds/tests/qualification.rs:1148:5:
+assertion `left == right` failed
+  left: 2400
+ right: 1200
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    exact_values_rpm_cap_never_increases_implicit_chipload
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 38 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-feeds-speeds --test qualification`

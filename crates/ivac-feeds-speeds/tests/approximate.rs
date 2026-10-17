@@ -266,7 +266,7 @@ fn declared_parent_fallback_uses_taxonomy_graph_and_cannot_accept_invented_prefi
     let mut r = request(&p, 6.0);
     r.material.identity = Some(taxon_identity("wood.plywood.birch"));
     let (_, e) = available(recommend_packs(&[p.clone()], &r).unwrap());
-    assert_eq!(e.records[0].rank[1], 2);
+    assert_eq!(e.records[0].rank.material_cost, 2);
     r.material.identity = Some(taxon_identity("wood.plywood.invented"));
     assert!(matches!(
         recommend_packs(&[p], &r).unwrap().recommendation,
@@ -359,4 +359,90 @@ fn router_class_cannot_become_exact_physical_trial_scope() {
     assert!(validate_source_pack(&p)
         .unwrap_err()
         .contains("individual machine"));
+}
+
+#[test]
+fn invalid_request_and_malformed_pack_trace_do_not_panic() {
+    let mut p = pack();
+    let mut r = request(&p, 6.0);
+    r.tool.diameter_mm = 0.0;
+    assert!(matching_trace_checked(&[p.clone()], &r).unwrap().is_empty());
+    r.tool.diameter_mm = 6.0;
+    p.dataset.profile_set.profiles.clear();
+    assert!(matching_trace_checked(&[p], &r).is_err());
+}
+
+#[test]
+fn interpolation_does_not_inherit_one_anchors_better_doc_specificity() {
+    let mut p = pack();
+    for profile in &mut p.dataset.profile_set.profiles {
+        profile.scope.doc_mm = if profile.scope.diameter_mm.min > 4.0 {
+            Some(Range {
+                min: 0.1,
+                max: 10.0,
+            })
+        } else {
+            None
+        };
+    }
+    let r = request(&p, 4.75);
+    let (_, e) = available(recommend_packs(&[p.clone()], &r).unwrap());
+    assert_ne!(e.summary.match_quality, Some(MatchQuality::Interpolated));
+    p.records.reverse();
+    p.dataset.profile_set.profiles.reverse();
+    let (_, other) = available(recommend_packs(&[p], &r).unwrap());
+    assert_eq!(e, other);
+}
+
+#[test]
+fn adaptation_taxonomy_descendants_match_and_trace_agrees() {
+    let mut p = pack();
+    for origin in &mut p.records {
+        origin.adaptation.as_mut().unwrap().material_taxa = vec!["metal.aluminium".into()];
+    }
+    let mut r = request(&p, 6.0);
+    r.material.identity = Some(taxon_identity("metal.aluminium.6061"));
+    let (_, e) = available(recommend_packs(&[p.clone()], &r).unwrap());
+    assert!(e.records.iter().all(|x| x.rank.material_cost == 2));
+    assert!(matching_trace(&[p.clone()], &r)
+        .unwrap()
+        .iter()
+        .any(|x| x.selected));
+    let mut exact = p.clone();
+    exact.manifest.identity.id = "specific-transfer".into();
+    for origin in &mut exact.records {
+        origin.adaptation.as_mut().unwrap().material_taxa = vec!["metal.aluminium.6061".into()];
+    }
+    let (_, e) = available(recommend_packs(&[p.clone(), exact.clone()], &r).unwrap());
+    assert!(e.records.iter().all(|x| x.rank.material_cost == 1));
+    let (_, reverse) = available(recommend_packs(&[exact, p.clone()], &r).unwrap());
+    assert_eq!(e, reverse);
+    r.material.identity = Some(taxon_identity("wood.softwood"));
+    assert!(matches!(
+        recommend_packs(&[p], &r).unwrap().recommendation,
+        FeedsSpeedsRecommendation::Unavailable { .. }
+    ));
+}
+
+#[test]
+fn tool_classification_index_ignores_absence_but_rejects_conflict() {
+    let mut p = pack();
+    let mut profile = p.dataset.profile_set.profiles[0].clone();
+    profile.identity.id.push_str("-unclassified");
+    let mut record = p.records[0].clone();
+    record.profile = profile.identity.clone();
+    record.source_record_id.push_str("-unclassified");
+    record.tool = None;
+    record.adaptation = None;
+    p.dataset.profile_set.profiles.push(profile);
+    p.records.insert(0, record);
+    validate_source_pack(&p).unwrap();
+    p.records.reverse();
+    validate_source_pack(&p).unwrap();
+    let last = p.records.len() - 1;
+    p.records[last].tool = p.records[0].tool.clone();
+    p.records[last].tool.as_mut().unwrap().coating = Some("conflicting".into());
+    assert!(validate_source_pack(&p)
+        .unwrap_err()
+        .contains("Conflicting classifications"));
 }

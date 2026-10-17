@@ -188,7 +188,10 @@ fn validate_lab(pack: &SourcePack, profile: &Profile, lab: &LabPreset) -> Result
                     "Tested presets require dated successful physical use and exact context".into(),
                 );
             }
-            let tested_at = lab.tested_at.as_deref().expect("validated test date");
+            let tested_at = lab
+                .tested_at
+                .as_deref()
+                .ok_or("Missing physical test date")?;
             if tested_at > &lab.updated_at[..10] {
                 return Err("Physical test date follows the saved revision date".into());
             }
@@ -253,51 +256,58 @@ pub struct MaterialTaxon {
     pub parent: Option<String>,
     pub label: String,
 }
+const MATERIAL_TAXONOMY: &[(&str, Option<&str>, &str)] = &[
+    ("wood", None, "Wood"),
+    ("wood.mdf", Some("wood"), "MDF"),
+    ("wood.plywood", Some("wood"), "Plywood"),
+    (
+        "wood.plywood.poplar",
+        Some("wood.plywood"),
+        "Poplar plywood",
+    ),
+    ("wood.plywood.birch", Some("wood.plywood"), "Birch plywood"),
+    ("wood.hardwood", Some("wood"), "Hardwood"),
+    ("wood.softwood", Some("wood"), "Softwood"),
+    ("plastic", None, "Plastic"),
+    ("plastic.pmma", Some("plastic"), "PMMA"),
+    ("plastic.pmma.cast", Some("plastic.pmma"), "Cast PMMA"),
+    (
+        "plastic.pmma.extruded",
+        Some("plastic.pmma"),
+        "Extruded PMMA",
+    ),
+    ("plastic.pom", Some("plastic"), "POM"),
+    ("plastic.hdpe", Some("plastic"), "HDPE"),
+    ("plastic.polycarbonate", Some("plastic"), "Polycarbonate"),
+    ("plastic.pvc", Some("plastic"), "PVC"),
+    ("metal", None, "Metal"),
+    ("metal.aluminium", Some("metal"), "Aluminium"),
+    (
+        "metal.aluminium.6061",
+        Some("metal.aluminium"),
+        "Aluminium 6061",
+    ),
+    (
+        "metal.aluminium.7075",
+        Some("metal.aluminium"),
+        "Aluminium 7075",
+    ),
+];
+
+pub(crate) fn known_taxon(id: &str) -> bool {
+    MATERIAL_TAXONOMY.iter().any(|t| t.0 == id)
+}
+
 pub fn material_taxonomy() -> Vec<MaterialTaxon> {
-    [
-        ("wood", None, "Wood"),
-        ("wood.mdf", Some("wood"), "MDF"),
-        ("wood.plywood", Some("wood"), "Plywood"),
-        (
-            "wood.plywood.poplar",
-            Some("wood.plywood"),
-            "Poplar plywood",
-        ),
-        ("wood.plywood.birch", Some("wood.plywood"), "Birch plywood"),
-        ("wood.hardwood", Some("wood"), "Hardwood"),
-        ("wood.softwood", Some("wood"), "Softwood"),
-        ("plastic", None, "Plastic"),
-        ("plastic.pmma", Some("plastic"), "PMMA"),
-        ("plastic.pmma.cast", Some("plastic.pmma"), "Cast PMMA"),
-        (
-            "plastic.pmma.extruded",
-            Some("plastic.pmma"),
-            "Extruded PMMA",
-        ),
-        ("plastic.pom", Some("plastic"), "POM"),
-        ("plastic.hdpe", Some("plastic"), "HDPE"),
-        ("plastic.polycarbonate", Some("plastic"), "Polycarbonate"),
-        ("plastic.pvc", Some("plastic"), "PVC"),
-        ("metal", None, "Metal"),
-        ("metal.aluminium", Some("metal"), "Aluminium"),
-        (
-            "metal.aluminium.6061",
-            Some("metal.aluminium"),
-            "Aluminium 6061",
-        ),
-        (
-            "metal.aluminium.7075",
-            Some("metal.aluminium"),
-            "Aluminium 7075",
-        ),
-    ]
-    .into_iter()
-    .map(|(id, parent, label)| MaterialTaxon {
-        id: id.into(),
-        parent: parent.map(str::to_owned),
-        label: label.into(),
-    })
-    .collect()
+    MATERIAL_TAXONOMY
+        .iter()
+        .copied()
+        .map(|(id, parent, label)| MaterialTaxon {
+            id: id.into(),
+            parent: parent.map(str::to_owned),
+            label: label.into(),
+        })
+        .collect()
 }
 pub fn taxon_identity(id: &str) -> Identity {
     Identity {
@@ -306,28 +316,21 @@ pub fn taxon_identity(id: &str) -> Identity {
     }
 }
 pub(crate) fn taxon_matches(parent: &str, identity: &Identity) -> bool {
+    taxon_distance(parent, identity).is_some()
+}
+pub(crate) fn taxon_distance(parent: &str, identity: &Identity) -> Option<u32> {
     if identity.revision != "1" {
-        return false;
+        return None;
     }
-    let taxa = material_taxonomy();
-    let Some(mut taxon) = taxa
-        .iter()
-        .find(|t| identity.id == format!("material/{}", t.id))
-    else {
-        return false;
-    };
+    let id = identity.id.strip_prefix("material/")?;
+    let mut taxon = MATERIAL_TAXONOMY.iter().find(|t| t.0 == id)?;
+    let mut distance = 0;
     loop {
-        if taxon.id == parent {
-            return true;
+        if taxon.0 == parent {
+            return Some(distance);
         }
-        let Some(next) = taxon
-            .parent
-            .as_ref()
-            .and_then(|id| taxa.iter().find(|t| &t.id == id))
-        else {
-            return false;
-        };
-        taxon = next;
+        taxon = MATERIAL_TAXONOMY.iter().find(|t| Some(t.0) == taxon.1)?;
+        distance += 1;
     }
 }
 
@@ -340,18 +343,30 @@ pub fn safe_pack_id(value: &str) -> bool {
             .all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_' || b == b'.')
 }
 pub fn load_source_pack_json(json: &str) -> Result<SourcePack, String> {
+    load_source_pack_json_checked(json).map_err(|e| e.to_string())
+}
+pub fn load_source_pack_json_checked(json: &str) -> Result<SourcePack, SourcePackError> {
     if json.len() > MAX_PACK_BYTES {
-        return Err("Source pack exceeds 2 MiB".into());
+        return Err(SourcePackError::SizeLimit {
+            maximum_bytes: MAX_PACK_BYTES,
+        });
     }
     let pack: SourcePack =
-        serde_json::from_str(json).map_err(|e| format!("Invalid source pack: {e}"))?;
-    validate_source_pack(&pack)?;
+        serde_json::from_str(json).map_err(|e| SourcePackError::InvalidJson {
+            message: e.to_string(),
+        })?;
+    validate_source_pack_checked(&pack)?;
     Ok(pack)
 }
 pub fn validate_source_pack(pack: &SourcePack) -> Result<(), String> {
-    if serde_json::to_vec(pack).map_err(|e| e.to_string())?.len() > MAX_PACK_BYTES {
-        return Err("Source pack exceeds 2 MiB".into());
-    }
+    validate_source_pack_checked(pack).map_err(|e| e.to_string())
+}
+pub fn validate_source_pack_checked(pack: &SourcePack) -> Result<(), SourcePackError> {
+    crate::source_error::check_pack_size(pack)?;
+    validate_dataset(&pack.dataset).map_err(|issues| SourcePackError::InvalidDataset { issues })?;
+    validate_pack_policy(pack).map_err(|message| SourcePackError::InvalidPack { message })
+}
+fn validate_pack_policy(pack: &SourcePack) -> Result<(), String> {
     let m = &pack.manifest;
     if !(1..=PACK_SCHEMA_VERSION).contains(&m.schema_version)
         || !safe_pack_id(&m.identity.id)
@@ -395,8 +410,6 @@ pub fn validate_source_pack(pack: &SourcePack) -> Result<(), String> {
                 .into(),
         );
     }
-    load_dataset_json(&serde_json::to_string(&pack.dataset).map_err(|e| e.to_string())?)
-        .map_err(|e| e.to_string())?;
     if m.schema_version < 2
         && pack
             .records
@@ -405,9 +418,29 @@ pub fn validate_source_pack(pack: &SourcePack) -> Result<(), String> {
     {
         return Err("Local authoring metadata requires source-pack schema 2".into());
     }
+    let profiles: std::collections::BTreeMap<_, _> = pack
+        .dataset
+        .profile_set
+        .profiles
+        .iter()
+        .map(|p| (&p.identity, p))
+        .collect();
+    let mut classifications = std::collections::BTreeMap::new();
+    for record in &pack.records {
+        let profile = profiles
+            .get(&record.profile)
+            .ok_or("Record profile absent from dataset")?;
+        if let (Some(id), Some(classification)) = (&profile.scope.tool, &record.tool) {
+            if classifications
+                .insert(id, classification)
+                .is_some_and(|old| old != classification)
+            {
+                return Err("Conflicting classifications for the same tool identity".into());
+            }
+        }
+    }
     let mut ids = BTreeSet::new();
     let mut records = BTreeSet::new();
-    let taxa = material_taxonomy();
     for r in &pack.records {
         if !ids.insert(&r.profile)
             || !records.insert(&r.source_record_id)
@@ -416,14 +449,10 @@ pub fn validate_source_pack(pack: &SourcePack) -> Result<(), String> {
         {
             return Err("Missing or duplicate record identity/classification".into());
         }
-        let p = pack
-            .dataset
-            .profile_set
-            .profiles
-            .iter()
-            .find(|p| p.identity == r.profile)
+        let p = profiles
+            .get(&r.profile)
             .ok_or("Record profile absent from dataset")?;
-        validate_adaptation(pack, p, r)?;
+        validate_adaptation(pack, p, r, &classifications)?;
         if let Some(lab) = &r.lab {
             validate_lab(pack, p, lab)?;
             for previous in &r.lab_history {
@@ -431,21 +460,15 @@ pub fn validate_source_pack(pack: &SourcePack) -> Result<(), String> {
                     return Err("Lab history changed stable preset identity".into());
                 }
                 validate_lab(pack, &previous.profile, &previous.metadata)?;
-                let mut previous_pack = pack.clone();
-                previous_pack.records.clear();
-                previous_pack.dataset.profile_set.profiles = vec![previous.profile.clone()];
-                load_dataset_json(
-                    &serde_json::to_string(&previous_pack.dataset).map_err(|e| e.to_string())?,
-                )
-                .map_err(|e| e.to_string())?;
+                let mut previous_dataset = pack.dataset.clone();
+                previous_dataset.profile_set.profiles = vec![previous.profile.clone()];
+                validate_dataset(&previous_dataset)
+                    .map_err(|e| DatasetLoadError::Invalid(e).to_string())?;
             }
         } else if !r.lab_history.is_empty() {
             return Err("History requires local lab metadata".into());
         }
-        if r.material_taxon
-            .as_ref()
-            .is_some_and(|id| !taxa.iter().any(|t| &t.id == id))
-        {
+        if r.material_taxon.as_ref().is_some_and(|id| !known_taxon(id)) {
             return Err("Unknown normalized material taxon".into());
         }
         let quantities = normalized_quantities(p);
@@ -571,7 +594,8 @@ pub struct KnowledgeRecord {
     pub profile: Identity,
     pub evidence: Evidence,
     pub local_only: bool,
-    pub rank: Vec<u32>,
+    #[cfg_attr(feature = "schema", schemars(with = "Vec<u32>"))]
+    pub rank: CandidateRank,
     pub normalized: NormalizedQuantities,
     pub origin: RecordOrigin,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -623,8 +647,22 @@ pub fn recommend_packs(
     packs: &[SourcePack],
     request: &FeedsSpeedsRequest,
 ) -> Result<KnowledgeResult, String> {
+    recommend_packs_checked(packs, request).map_err(|e| e.to_string())
+}
+pub fn recommend_packs_checked(
+    packs: &[SourcePack],
+    request: &FeedsSpeedsRequest,
+) -> Result<KnowledgeResult, SourcePackError> {
+    recommend_packs_traced(packs, request, None)
+}
+
+pub(crate) fn recommend_packs_traced(
+    packs: &[SourcePack],
+    request: &FeedsSpeedsRequest,
+    mut trace: Option<&mut Vec<MatchingTrace>>,
+) -> Result<KnowledgeResult, SourcePackError> {
     if packs.len() > 32 {
-        return Err("At most 32 packs may be enabled".into());
+        return Err(SourcePackError::TooManyPacks { maximum: 32 });
     }
     let preflight = Engine::new(ProfileSet {
         schema_version: DOMAIN_SCHEMA_VERSION,
@@ -633,7 +671,7 @@ pub fn recommend_packs(
         material_families: vec![],
         profiles: vec![],
     })
-    .map_err(|e| format!("Invalid request identity: {e:?}"))?
+    .map_err(|issues| SourcePackError::InvalidDataset { issues })?
     .recommend(request);
     if let FeedsSpeedsRecommendation::Unavailable { reason } = preflight {
         if reason != UnavailableReason::MissingCuttingData {
@@ -648,19 +686,19 @@ pub fn recommend_packs(
     let mut candidates = Vec::new();
     let mut refusals = Vec::new();
     for pack in packs {
-        validate_source_pack(pack)?;
+        validate_source_pack_checked(pack)?;
         if !seen.insert(&pack.manifest.identity.id) {
-            return Err("Duplicate source pack ID; enable one version".into());
-        }
-        if pack.manifest.distribution == Distribution::ExternalReference {
-            continue;
+            return Err(SourcePackError::DuplicatePack {
+                id: pack.manifest.identity.id.clone(),
+            });
         }
         for origin in &pack.records {
-            if origin
-                .lab
-                .as_ref()
-                .is_some_and(|lab| lab.state == LabState::Draft || !lab.enabled || lab.deleted)
-            {
+            let eligible = pack.manifest.distribution != Distribution::ExternalReference
+                && !origin
+                    .lab
+                    .as_ref()
+                    .is_some_and(|lab| lab.state == LabState::Draft || !lab.enabled || lab.deleted);
+            if !eligible && trace.is_none() {
                 continue;
             }
             let original = pack
@@ -669,19 +707,24 @@ pub fn recommend_packs(
                 .profiles
                 .iter()
                 .find(|p| p.identity == origin.profile)
-                .expect("validated profile");
+                .ok_or_else(|| SourcePackError::InvalidPack {
+                    message: "Record profile absent from validated dataset".into(),
+                })?;
             let mut p = original.clone();
-            let mut set = pack.dataset.profile_set.clone();
+            let source_set = &pack.dataset.profile_set;
+            let mut set = ProfileSet {
+                schema_version: source_set.schema_version,
+                identity: source_set.identity.clone(),
+                machine_families: source_set.machine_families.clone(),
+                material_families: source_set.material_families.clone(),
+                profiles: Vec::new(),
+            };
             let mut r = request.clone();
             r.dataset = set.identity.clone();
-            if let Some(taxon) = &origin.material_taxon {
-                if r.material
-                    .identity
-                    .as_ref()
-                    .is_some_and(|m| taxon_matches(taxon, m))
-                {
+            if let (Some(taxon), Some(identity)) = (&origin.material_taxon, &r.material.identity) {
+                if taxon_matches(taxon, identity) {
                     p.scope.material = IdentitySelector::Exact {
-                        identity: r.material.identity.clone().expect("matched identity"),
+                        identity: identity.clone(),
                     };
                 }
             }
@@ -693,26 +736,62 @@ pub fn recommend_packs(
                     derivation = Some(detail);
                 }
             }
-            if origin.material_taxon.as_ref().is_some_and(|t| {
+            let taxonomy_mismatch = origin.material_taxon.as_ref().is_some_and(|t| {
                 !r.material
                     .identity
                     .as_ref()
                     .is_some_and(|m| taxon_matches(t, m))
-            }) {
-                refusals.push(ProfileRejection {
-                    profile: p.identity.clone(),
-                    mismatches: vec![ScopeMismatch {
-                        field: "material".into(),
-                        actual: serde_json::to_string(&r.material.identity).unwrap(),
-                        required: serde_json::to_string(&origin.material_taxon).unwrap(),
-                    }],
+            });
+            let mut rejected = derived_rejections(pack, origin, &p, &r, &set);
+            if taxonomy_mismatch {
+                rejected.retain(|m| m.field != "material");
+                rejected.push(ScopeMismatch {
+                    field: "material".into(),
+                    actual: serde_json::to_string(&r.material.identity).map_err(|e| {
+                        SourcePackError::InvalidJson {
+                            message: e.to_string(),
+                        }
+                    })?,
+                    required: serde_json::to_string(&origin.material_taxon).map_err(|e| {
+                        SourcePackError::InvalidJson {
+                            message: e.to_string(),
+                        }
+                    })?,
                 });
-                continue;
             }
             set.profiles = vec![p.clone()];
             let engine =
-                Engine::new(set).map_err(|e| format!("Invalid normalized scope: {e:?}"))?;
-            match engine.recommend(&r) {
+                Engine::new(set).map_err(|issues| SourcePackError::InvalidDataset { issues })?;
+            let result = engine.recommend(&r);
+            if let Some(rows) = trace.as_deref_mut() {
+                rows.push(MatchingTrace {
+                    pack: pack.manifest.identity.clone(),
+                    record_id: origin.source_record_id.clone(),
+                    accepted: eligible
+                        && !taxonomy_mismatch
+                        && matches!(&result, FeedsSpeedsRecommendation::Available { .. }),
+                    selected: false,
+                    relative_diameter_delta: (original.scope.diameter_mm.min
+                        == original.scope.diameter_mm.max)
+                        .then(|| {
+                            (original.scope.diameter_mm.min - request.tool.diameter_mm).abs()
+                                / request.tool.diameter_mm
+                        }),
+                    method: derivation.as_ref().map(|d| d.method.clone()),
+                    rejected_dimensions: rejected.clone(),
+                });
+            }
+            if !eligible {
+                continue;
+            }
+            if taxonomy_mismatch {
+                refusals.push(ProfileRejection {
+                    profile: p.identity.clone(),
+                    mismatches: rejected,
+                });
+                continue;
+            }
+            match result {
                 FeedsSpeedsRecommendation::Available { recommendation } => {
                     // Smaller is preferred. Unknown/nonspecific dimensions explicitly cost specificity.
                     let local = pack.manifest.distribution == Distribution::LocalOnly;
@@ -729,33 +808,50 @@ pub fn recommend_packs(
                     let mut material_cost = origin.material_taxon.as_ref().map_or(
                         selector_cost(&original.scope.material),
                         |taxon| {
-                            r.material.identity.as_ref().map_or(100, |m| {
-                                m.id.trim_start_matches("material/").split('.').count() as u32
-                                    - taxon.split('.').count() as u32
-                            })
+                            r.material
+                                .identity
+                                .as_ref()
+                                .and_then(|m| taxon_distance(taxon, m))
+                                .unwrap_or(100)
                         },
                     );
                     if origin.material_taxon.is_none()
                         && derivation.as_ref().is_some_and(|d| d.material_transfer)
                     {
-                        material_cost = material_cost.max(1);
+                        // Rank the explicitly permitted transfer scope, not an invented source match.
+                        material_cost = origin
+                            .adaptation
+                            .as_ref()
+                            .and_then(|a| {
+                                r.material.identity.as_ref().and_then(|m| {
+                                    a.material_taxa
+                                        .iter()
+                                        .filter_map(|t| taxon_distance(t, m))
+                                        .min()
+                                })
+                            })
+                            .map_or(material_cost.max(1), |distance| distance + 1);
                     }
-                    let rank = vec![
-                        preset,
+                    let rank = CandidateRank {
+                        preset_tier: preset,
                         material_cost,
-                        derivation.as_ref().map_or(0, |d| d.quality as u32 + 1),
-                        derivation.as_ref().map_or(0, |d| d.machine_transfer as u32),
-                        selector_cost(&original.scope.machine),
-                        u32::from(p.scope.tool.is_none()),
-                        u32::from(p.scope.diameter_mm.min != p.scope.diameter_mm.max),
-                        u32::from(p.scope.flute_count.is_none()),
-                        u32::from(p.scope.doc_mm.is_none()),
-                        u32::from(p.scope.entry.is_none()),
-                        crate::matching::tier(&p).into(),
-                        derivation
+                        quality_cost: derivation.as_ref().map_or(0, |d| d.quality.rank_cost()),
+                        machine_transfer: derivation
+                            .as_ref()
+                            .map_or(0, |d| d.machine_transfer as u32),
+                        machine_specificity: selector_cost(&original.scope.machine),
+                        nonspecific_tool: u32::from(p.scope.tool.is_none()),
+                        diameter_range: u32::from(
+                            p.scope.diameter_mm.min != p.scope.diameter_mm.max,
+                        ),
+                        nonspecific_flutes: u32::from(p.scope.flute_count.is_none()),
+                        nonspecific_doc: u32::from(p.scope.doc_mm.is_none()),
+                        nonspecific_entry: u32::from(p.scope.entry.is_none()),
+                        category_tier: crate::matching::tier(&p).into(),
+                        relative_delta_ppm: derivation
                             .as_ref()
                             .map_or(0, |d| (d.relative_delta * 1_000_000.0).round() as u32),
-                    ];
+                    };
                     let record = KnowledgeRecord {
                         pack: pack.manifest.identity.clone(),
                         record_id: origin.source_record_id.clone(),
@@ -770,8 +866,6 @@ pub fn recommend_packs(
                     candidates.push((record, *recommendation));
                 }
                 FeedsSpeedsRecommendation::Unavailable { .. } => {
-                    let rejected =
-                        derived_rejections(pack, origin, &p, &r, &pack.dataset.profile_set);
                     if !rejected.is_empty() {
                         refusals.push(ProfileRejection {
                             profile: p.identity.clone(),
@@ -808,7 +902,7 @@ pub fn recommend_packs(
             .then(a.0.pack.cmp(&b.0.pack))
             .then(a.0.record_id.cmp(&b.0.record_id))
     });
-    let rank = candidates[0].0.rank.clone();
+    let rank = candidates[0].0.rank;
     candidates.retain(|v| v.0.rank == rank);
     let authored_context = |r: &Recommendation| match r.provenance.profile.data {
         CuttingData::ExactValues {
@@ -825,11 +919,17 @@ pub fn recommend_packs(
         } => (rpm, doc_mm, stepover_ratio),
     };
     let comparable = candidates.iter().all(|(_, r)| {
-        authored_context(r) == authored_context(&candidates[0].1)
-            && r.provenance.profile.reductions == candidates[0].1.provenance.profile.reductions
+        ({
+            let (ar, ad, aw) = authored_context(r);
+            let (br, bd, bw) = authored_context(&candidates[0].1);
+            near(ar, br) && near(ad, bd) && near_option(aw, bw)
+        }) && r.provenance.profile.reductions == candidates[0].1.provenance.profile.reductions
             && r.parameters.rpm == candidates[0].1.parameters.rpm
-            && r.parameters.doc_mm == candidates[0].1.parameters.doc_mm
-            && r.parameters.stepover_ratio == candidates[0].1.parameters.stepover_ratio
+            && near(r.parameters.doc_mm, candidates[0].1.parameters.doc_mm)
+            && near_option(
+                r.parameters.stepover_ratio,
+                candidates[0].1.parameters.stepover_ratio,
+            )
             && r.provenance.profile.scope.engagement
                 == candidates[0].1.provenance.profile.scope.engagement
     });
@@ -861,21 +961,23 @@ pub fn recommend_packs(
     let pack = packs
         .iter()
         .find(|p| p.manifest.identity == selected.pack)
-        .expect("candidate pack");
+        .ok_or_else(|| SourcePackError::Recommendation {
+            message: "Missing candidate pack".into(),
+        })?;
     recommendation.provenance.profile = pack
         .dataset
         .profile_set
         .profiles
         .iter()
         .find(|p| p.identity == selected.profile)
-        .expect("candidate profile")
+        .ok_or_else(|| SourcePackError::Recommendation {
+            message: "Missing candidate profile".into(),
+        })?
         .clone();
     recommendation.provenance.derivation = selected.derivation.clone();
     let range = Range {
         min: candidates[0].1.parameters.effective_chipload_mm_tooth,
-        max: candidates
-            .last()
-            .expect("nonempty")
+        max: candidates[candidates.len() - 1]
             .1
             .parameters
             .effective_chipload_mm_tooth,
@@ -897,7 +999,9 @@ pub fn recommend_packs(
             let source_pack = packs
                 .iter()
                 .find(|p| p.manifest.identity == candidate.pack)
-                .expect("candidate source pack");
+                .ok_or_else(|| SourcePackError::Recommendation {
+                    message: "Missing candidate source pack".into(),
+                })?;
             for source in &derivation.source_profiles {
                 if let Some(origin) = source_pack
                     .records
@@ -926,7 +1030,7 @@ pub fn recommend_packs(
             || {
                 if selected.evidence == Evidence::Theoretical {
                     MatchQuality::Theoretical
-                } else if selected.rank[1] > 0 {
+                } else if selected.rank.material_cost > 0 {
                     MatchQuality::Generic
                 } else {
                     MatchQuality::Exact
@@ -944,4 +1048,16 @@ pub fn recommend_packs(
         explanation: Some(explanation),
         scope_rejections: vec![],
     })
+}
+
+// Absolute tolerance in native units; no fuzzy matching of identity, scopes or safety limits.
+fn near(a: f64, b: f64) -> bool {
+    a.is_finite() && b.is_finite() && (a - b).abs() <= 1e-9
+}
+fn near_option(a: Option<f64>, b: Option<f64>) -> bool {
+    match (a, b) {
+        (Some(a), Some(b)) => near(a, b),
+        (None, None) => true,
+        _ => false,
+    }
 }

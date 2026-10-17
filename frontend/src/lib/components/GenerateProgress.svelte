@@ -4,24 +4,11 @@
   // from the project store; the parent (GenerateBar) flips state and feeds
   // events through `client.generateStreaming`.
 
+  import { t } from '../i18n';
   import { project } from '../state/project.svelte';
 
-  let { onCancel }: { onCancel: () => void } = $props();
-
-  let percent = $derived(
-    project.gen.pipelineProgress
-      ? Math.round(
-          ((project.gen.pipelineProgress.opIdx + project.gen.pipelineProgress.opFraction) /
-            Math.max(1, project.gen.pipelineProgress.opTotal)) *
-            100,
-        )
-      : 0,
-  );
-  let label = $derived(
-    project.gen.pipelineProgress
-      ? `${project.gen.pipelineProgress.opIdx + 1} / ${project.gen.pipelineProgress.opTotal} — ${project.gen.pipelineProgress.opName}`
-      : '',
-  );
+  let { onCancel, canCancel = true }: { onCancel: () => void; canCancel?: boolean } = $props();
+  let label = $derived(project.gen.pipelineProgress?.opName ?? '');
   let cancelling = $derived(project.gen.pipelineState === 'cancelling');
   let cachedHint = $derived(
     project.gen.lastGenerateCachedCount > 0
@@ -31,26 +18,19 @@
 </script>
 
 <div class="progress-row" role="status" aria-live="polite">
-  <div
-    class="progress"
-    role="progressbar"
-    aria-valuemin="0"
-    aria-valuemax="100"
-    aria-valuenow={percent}
-    title={label}
-  >
-    <div class="bar-fill" style:width="{percent}%"></div>
+  <div class="progress" role="progressbar" title={label}>
+    <div class="bar-fill"></div>
     <span class="progress-text">
       {#if cancelling}
         Cancelling…
       {:else}
-        {label || 'starting…'}<span class="cached-hint">{cachedHint}</span>
+        {label || 'Generating…'}<span class="cached-hint">{cachedHint}</span>
       {/if}
     </span>
   </div>
-  <button class="cancel" type="button" onclick={onCancel} disabled={cancelling}>
-    {cancelling ? 'Cancelling…' : 'Cancel'}
-  </button>
+  {#if canCancel}<button class="cancel" type="button" onclick={onCancel} disabled={cancelling}>
+      {cancelling ? 'Cancelling…' : 'Cancel'}
+    </button>{:else}<span class="cached-hint">{t('ux7.no_cancel')}</span>{/if}
 </div>
 
 <style>
@@ -74,14 +54,14 @@
   .bar-fill {
     height: 100%;
     background: var(--accent);
-    transition: width 120ms ease-out;
+    width: 100%;
+    opacity: 0.15;
   }
   .progress-text {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    line-height: 1.4rem;
     font-size: 0.72rem;
     color: var(--text-strong);
     pointer-events: none;

@@ -16,9 +16,9 @@ Windows Store sizes directly from the canonical SVG. No font is required.
 The full asset regeneration process and ICNS native extraction limitation are
 documented in [the brand specification](../../../assets/branding/fabcam/README.md).
 
-The display identity is now FabCAM. Compatibility `productName=ivaCAM`,
-`org.opcenter.ivacam` and version 0.5.0 remain; window/macOS display names use
-FabCAM. Native executable/bundle/package
+The public productName and display identity are FabCAM. Compatibility identifier
+`org.opcenter.ivacam`, internal executable and data paths remain unchanged.
+See the REL1-A transition record for prior test installers. Native executable/bundle/package
 icons remain driven by the established `bundle.icon` resources. Android's
 separate launcher-generation script and historical artwork remain untouched;
 this checkpoint targets Windows, macOS and Linux desktop only.

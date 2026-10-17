@@ -5,7 +5,7 @@
 //! 0.5 mm wall clearance so the helix cuts a clean access hole without
 //! grazing the pocket walls.
 
-use crate::cam::vcarve::{medial_axis, VcRegion};
+use crate::cam::vcarve::VcRegion;
 use crate::geometry::Point2;
 
 const WALL_CLEARANCE_MM: f64 = 0.5;
@@ -34,7 +34,10 @@ pub fn inscribed_circle(region: &VcRegion, tool_radius: f64) -> Option<(f64, f64
     // has many vertices at equal max r): walk explicitly and only update
     // on strict improvement.
     let mut best: Option<crate::cam::vcarve::VPoint> = None;
-    for v in medial_axis(region).into_iter().flatten() {
+    for v in crate::cam::geometry_cache::medial_axis_cached(region, None)
+        .into_iter()
+        .flatten()
+    {
         let take = match best {
             Some(b) => v.r > b.r,
             None => true,

@@ -491,7 +491,9 @@ export type MsgKey =
   | "fs391.calculating"
   | "fs391.cutting_speed"
   | "fs391.engagement_distinct"
+  | "fs391.generic_profile_direct_entry"
   | "fs391.known_limits"
+  | "fs391.low_effective_chipload"
   | "fs391.mixed_values"
   | "fs391.modified_values"
   | "fs391.no_reference"
@@ -2170,6 +2172,17 @@ export type MsgKey =
   | "ux6b.sort"
   | "ux6b.tip_angle"
   | "ux6b.tip_diameter"
+  | "ux6c.arc_settings"
+  | "ux6c.fit_before_post"
+  | "ux6c.shopbot_arcs"
+  | "ux7.blocked"
+  | "ux7.cancelled"
+  | "ux7.failed"
+  | "ux7.help"
+  | "ux7.no_cancel"
+  | "ux7.obsolete"
+  | "ux7.running"
+  | "ux7.success"
   | "warn.chamfer_non_vbit"
   | "warn.chamfer_width_clamped_to_reach"
   | "warn.compression_transition_above_cut"
@@ -2754,7 +2767,9 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs391.calculating",
   "fs391.cutting_speed",
   "fs391.engagement_distinct",
+  "fs391.generic_profile_direct_entry",
   "fs391.known_limits",
+  "fs391.low_effective_chipload",
   "fs391.mixed_values",
   "fs391.modified_values",
   "fs391.no_reference",
@@ -4433,6 +4448,17 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ux6b.sort",
   "ux6b.tip_angle",
   "ux6b.tip_diameter",
+  "ux6c.arc_settings",
+  "ux6c.fit_before_post",
+  "ux6c.shopbot_arcs",
+  "ux7.blocked",
+  "ux7.cancelled",
+  "ux7.failed",
+  "ux7.help",
+  "ux7.no_cancel",
+  "ux7.obsolete",
+  "ux7.running",
+  "ux7.success",
   "warn.chamfer_non_vbit",
   "warn.chamfer_width_clamped_to_reach",
   "warn.compression_transition_above_cut",

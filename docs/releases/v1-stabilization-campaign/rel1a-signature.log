@@ -1,0 +1,12 @@
+target/release/bundle/macos/FabCAM.app: valid on disk
+target/release/bundle/macos/FabCAM.app: satisfies its Designated Requirement
+Executable=/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/bundle/macos/FabCAM.app/Contents/MacOS/ivac-desktop
+Identifier=org.opcenter.ivacam
+Format=app bundle with Mach-O thin (arm64)
+CodeDirectory v=20500 size=44084 flags=0x10002(adhoc,runtime) hashes=1371+3 location=embedded
+Signature=adhoc
+Info.plist entries=16
+TeamIdentifier=not set
+Runtime Version=26.2.0
+Sealed Resources version=2 rules=13 files=1
+Internal requirements count=0 size=12

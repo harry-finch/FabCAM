@@ -118,13 +118,8 @@
       />{/if}
   {/if}
   {#if section === 'legacy' || section === 'all'}
-    <details open={section === 'legacy'}>
-      <summary>{t('tools.pass_overrides')}</summary>
-      <div class="holder-row pass-overrides">
-        <span class="holder-label" title={t('tools.pass_overrides.title')}
-          >{t('tools.pass_overrides')}</span
-        >
-      </div>
+    <details>
+      <summary title={t('tools.pass_overrides.title')}>{t('tools.pass_overrides')}</summary>
       <div class="holder-row">
         <label>
           <span>{t('tools.finish.rpm')}</span>
@@ -354,69 +349,69 @@
         </label>
       </fieldset>
     </div>
-    <div class="holder-row pass-overrides">
-      <span class="holder-label" title={t('tools.whirl.title')}>{t('tools.whirl')}</span>
-    </div>
-    <div class="holder-row">
-      <label class="radio">
-        <input
-          type="checkbox"
-          checked={tool.whirl ?? false}
-          onchange={(e) => onUpdateField('whirl', (e.currentTarget as HTMLInputElement).checked)}
-        />
-        <span>{t('tools.whirl.enable')}</span>
-      </label>
-      <label>
-        <span>{t('tools.whirl.extra_width')}</span>
-        <input
-          type="number"
-          step="0.1"
-          min="0"
-          placeholder="0"
-          value={tool.whirlExtraWidthMm ?? ''}
-          disabled={!tool.whirl}
-          title={t('tools.whirl.extra_width.title')}
-          onchange={(e) => {
-            const v = (e.currentTarget as HTMLInputElement).value;
-            onUpdateField('whirlExtraWidthMm', v === '' ? undefined : parseFloat(v));
-          }}
-        />
-      </label>
-    </div>
-    <div class="holder-row">
-      <label>
-        <span>{t('tools.whirl.stride')}</span>
-        <input
-          type="number"
-          step="0.1"
-          min="0.05"
-          placeholder={((tool.whirlExtraWidthMm ?? 0) * 0.5).toFixed(2)}
-          value={tool.whirlStepoverMm ?? ''}
-          disabled={!tool.whirl}
-          title={t('tools.whirl.stride.title')}
-          onchange={(e) => {
-            const v = (e.currentTarget as HTMLInputElement).value;
-            onUpdateField('whirlStepoverMm', v === '' ? undefined : parseFloat(v));
-          }}
-        />
-      </label>
-      <label>
-        <span>{t('tools.whirl.z_wobble')}</span>
-        <input
-          type="number"
-          step="0.05"
-          min="0"
-          placeholder="0"
-          value={tool.whirlOscMm ?? ''}
-          disabled={!tool.whirl}
-          title={t('tools.whirl.z_wobble.title')}
-          onchange={(e) => {
-            const v = (e.currentTarget as HTMLInputElement).value;
-            onUpdateField('whirlOscMm', v === '' ? undefined : parseFloat(v));
-          }}
-        />
-      </label>
-    </div>
+    <details open={tool.whirl === true}>
+      <summary title={t('tools.whirl.title')}>{t('tools.whirl')}</summary>
+      <div class="holder-row">
+        <label class="radio">
+          <input
+            type="checkbox"
+            checked={tool.whirl ?? false}
+            onchange={(e) => onUpdateField('whirl', (e.currentTarget as HTMLInputElement).checked)}
+          />
+          <span>{t('tools.whirl.enable')}</span>
+        </label>
+        <label>
+          <span>{t('tools.whirl.extra_width')}</span>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            placeholder="0"
+            value={tool.whirlExtraWidthMm ?? ''}
+            disabled={!tool.whirl}
+            title={t('tools.whirl.extra_width.title')}
+            onchange={(e) => {
+              const v = (e.currentTarget as HTMLInputElement).value;
+              onUpdateField('whirlExtraWidthMm', v === '' ? undefined : parseFloat(v));
+            }}
+          />
+        </label>
+      </div>
+      <div class="holder-row">
+        <label>
+          <span>{t('tools.whirl.stride')}</span>
+          <input
+            type="number"
+            step="0.1"
+            min="0.05"
+            placeholder={((tool.whirlExtraWidthMm ?? 0) * 0.5).toFixed(2)}
+            value={tool.whirlStepoverMm ?? ''}
+            disabled={!tool.whirl}
+            title={t('tools.whirl.stride.title')}
+            onchange={(e) => {
+              const v = (e.currentTarget as HTMLInputElement).value;
+              onUpdateField('whirlStepoverMm', v === '' ? undefined : parseFloat(v));
+            }}
+          />
+        </label>
+        <label>
+          <span>{t('tools.whirl.z_wobble')}</span>
+          <input
+            type="number"
+            step="0.05"
+            min="0"
+            placeholder="0"
+            value={tool.whirlOscMm ?? ''}
+            disabled={!tool.whirl}
+            title={t('tools.whirl.z_wobble.title')}
+            onchange={(e) => {
+              const v = (e.currentTarget as HTMLInputElement).value;
+              onUpdateField('whirlOscMm', v === '' ? undefined : parseFloat(v));
+            }}
+          />
+        </label>
+      </div>
+    </details>
   {/if}
   {#if section === 'geometry' || section === 'all'}
     {#if attrApplies('flutes', tool.kind)}<div class="holder-row">
@@ -737,6 +732,7 @@
 <style>
   input[type='number'] {
     width: 96px;
+    max-width: 100%;
     box-sizing: border-box;
   }
   input,
@@ -746,7 +742,8 @@
     color: var(--text);
     border: 1px solid var(--border);
     border-radius: 3px;
-    padding: 4px 6px;
+    padding: var(--ui-space-1) var(--ui-space-2);
+    min-height: var(--inspector-control-height);
     font: inherit;
     min-width: 0;
   }
@@ -763,6 +760,18 @@
     flex-direction: column;
     gap: 0.4rem;
   }
+  details {
+    border-top: 1px solid var(--border);
+  }
+  summary {
+    cursor: pointer;
+    padding: var(--ui-space-2) 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+  }
+  details > .holder-row {
+    margin-bottom: var(--ui-space-2);
+  }
   .holder-row {
     display: flex;
     flex-direction: column;
@@ -771,12 +780,12 @@
   }
   .holder-row label {
     display: grid;
-    grid-template-columns: 150px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
     align-items: center;
     gap: 10px;
     font-size: 0.78rem;
     color: var(--text-muted);
-    min-width: 7rem;
+    min-width: 0;
   }
   .holder-row label span {
     text-transform: none;

@@ -1791,3 +1791,147 @@ User authorized commit/push and manual build without release. Preparation commit
 `5ac4023` pushed via existing SSH; manual run `38863177268` reached compilation on
 all three runners. Artifacts and installation remain pending; no tag or Release.
 See [dispatch record](../releases/desktop-preparation/RESULTS.md).
+
+### 2026-10-16 — macOS installed candidate smoke test
+
+CI DMG installed without overwriting an app; existing profile backed up. Native square export matches golden bytes; V-Carve text calculation and exact project save/reopen passed. Distribution signature assessment failed despite successful unquarantined local launch. See [bounded results](../releases/desktop-preparation/MACOS_RUNTIME_RESULTS.md); full platform qualification remains open.
+
+### 2026-10-16 — V1 UX and distribution campaign Phase 0
+
+Audited existing responsive generation, per-operation overcount, stale-output guards, UX6 components and Tauri branding. 31 baseline tests passed. Reproduced invalid app signature and missing ticket; no valid local signing identity. Product-name change affects Windows/Linux installer identity, so stopped before implementation for explicit transition approval. [Audit](../releases/v1-stabilization-campaign/PHASE0_AUDIT.md). No code, commit, push or external signing.
+
+### 2026-10-16 — REL1-A and development ad-hoc signing
+
+Approved public name transition implemented without data/schema changes. FabCAM app/DMG built locally; strict signature now valid with sealed resources. Existing profile and saved project reopen under new name. Prior installed app and CI candidates preserved. 4 collector tests and both workflow lints pass. [Results](../releases/v1-stabilization-campaign/REL1_A.md). Stop for review before UX7; Developer ID/notarization/Gatekeeper/clean-host remain UNQUALIFIED.
+
+## 2026-10-16 — UX7 local implementation, human review pending
+
+- REL1-A explicitly accepted; advanced to UX7 only. Existing async adapters retained.
+- Added request/epoch ownership, monotonic wall-clock timing and terminal outcomes;
+  discard obsolete responses and invalidate previous export identity at each start.
+- Removed operation-count percentage and shared completion timeout; fixed completed
+  operation indexing. Expose actual operation names with indeterminate status.
+- Cancellation controls reflect adapter capabilities; buffered/GEOM1 paths disclose limits.
+- Full frontend suite 1324 PASS / 1 skipped; Svelte/TS 0 errors/warnings. Native V-Carve
+  success/rerun, stale status and failed generation with disabled export observed.
+- See [UX7_RESULTS](../releases/v1-stabilization-campaign/UX7_RESULTS.md) for exact evidence
+  and limits. No kernel/post change, no physical or cross-platform runtime qualification.
+- No commit/push/publication. HARD STOP before UX6-C pending human review.
+
+## 2026-10-16 — UX6-C local implementation, human review pending
+
+UX7 explicitly accepted. Compact CPS controls and Program output disclosures clarify
+ShopBot arc fitting versus linearized output. Process & notes now collapses advanced
+groups and removes the duplicate Pass overrides heading. Field handlers and safety
+guards retained; no CAM/post/schema change. Check 0 errors/warnings; 1324 frontend
+tests pass (1 skipped), Node tests and production build pass. Rendered review at
+1280 and 960 px, keyboard disclosure and draft/revert verification completed.
+[Results and screenshots](../releases/v1-stabilization-campaign/UX6_C_RESULTS.md).
+No new native/platform qualification, commit or publication. HARD STOP for human review.
+
+## 2026-10-16 — Integrated checkpoint E
+
+UX6-C explicitly accepted, including Legacy heading. App-only macOS build integrates
+REL1-A/UX7/UX6-C; strict ad-hoc verification PASS. Native reopen, 18874-move V-Carve
+generation in 0.9 s and both UX6-C panels verified. Full frontend suite passes after
+documented five-line component-budget overrun adjustment. No production logic change,
+installation replacement, credentials, commit or publication.
+[Results and limits](../releases/v1-stabilization-campaign/CHECKPOINT_E_RESULTS.md).
+HARD STOP for human review; distribution and remaining platform gates stay open.
+
+## 2026-10-16 — REL1-B community distribution policy
+
+User chose community GitHub Releases for V1, with valid ad-hoc macOS signing.
+REL1-B1 packaging/identity/SHA-256 and fresh-download clean-install/runtime are V1
+requirements; REL1-B2 Developer ID/notarization/stapling are optional post-V1.
+Documented Apple Open Anyway; no Gatekeeper disabling or quarantine removal.
+Updated scope/roadmaps/build/candidate docs and retained historical evidence.
+Windows/Ubuntu plans unchanged. Documentation only; no build, workflow dispatch,
+credential access, commit, push, release or distribution. HARD STOP before implementation.
+
+## 2026-10-16 — REL1-B1 local packaging checkpoint
+
+Implemented read-only community DMG verification and identity/architecture rejection
+tests, added candidate metadata checksums, removed Apple secret references from the
+macOS release path and selected valid ad-hoc signing. Both workflows verify DMGs
+before upload; draft assembly rechecks macOS transfer hashes. No workflow dispatched.
+Local app/DMG built after sandbox hdiutil permission retry. Mounted strict signature,
+identity, integrity and final candidate checksums PASS. Eight packaging tests and
+actionlint PASS. Clean-install protocol ready; another Mac available, architecture/OS
+requested. Clean-host qualification remains blocking. No installed-baseline replacement,
+credentials, commit, push, publication or transmission.
+[Results](../releases/v1-stabilization-campaign/REL1_B1_RESULTS.md). HARD STOP for review.
+
+## 2026-10-16 — FS audit improvements
+
+Implemented user-requested RPM/feed coupling, chipload/direct-entry diagnostics,
+continuous diameter reduction, typed deterministic rank, compatible interpolation,
+numeric reconciliation, shared trace evaluation, direct dataset validation, static
+taxonomy and additive typed errors. New calculations use fs1-policy-2; saved explicit
+values and CAM/post boundaries preserved. Failing-before RPM regression reproduced;
+107 engine tests, 17 CAM integration tests, frontend suite/typecheck and WASM build pass.
+[Results and limits](feeds-speeds/FS_AUDIT_IMPROVEMENTS.md). No new native DMG or physical
+qualification. No commit/push/publication. HARD STOP for human review.
+
+### FS follow-up audit — four micro-details
+
+Aligned adaptation/trace taxonomy ancestors and transfer ranking, coupled absolute
+plunge downward to final RPM, indexed tool classifications with conflict rejection,
+and diagnosed ExactValues chipload loss at RPM floors. 111 engine tests and 17 CAM
+integration tests pass; frontend check has zero errors/warnings. Full frontend suite
+and production build not repeated for this follow-up. See FS audit report. Saved
+manual values unchanged; no commit/push/publication. HARD STOP for review.
+
+## 2026-10-17 — CAM audit corrections
+
+Corrected FS axial-limit inference, imported object source membership using the
+existing indexed chain API, arc-aware aggregate bounds and area-centroid helper.
+Removed unbounded angle-normalization loops and unused coarse tessellation;
+optimized relief topology checks while retaining initial and final whole-project
+checks. Stufenfase is explicitly milling-only. Rejected the proposed blanket
+90-degree T-bone restriction after disk/ray analysis and extended offset tests.
+1,091 core tests pass in serial; 71 selected integrations pass. Parallel run exposed
+two global cache-length races, tracked as ivac-rt80e. No cache production changes,
+new native package or physical qualification. [Report](CAM_AUDIT_2026_10_17.md).
+HARD STOP for human review; no commit, push or publication.
+
+## 2026-10-17 — CAM follow-up: chaining, witnesses and cache identity
+
+Confirmed input source-ordinal repair was already present. Fixed optional-center
+arc probes, isolated drill-point chaining, reverse prepend complexity, shared-facet
+Halfpipe false corner and arc frame bounds. Inscribed-circle fitting reuses the
+medial-axis cache. Full canonical geometry keys normalize signed zero and resolve
+hash collisions by equality. Pipeline discriminator bumped 47→48; snapshot updated.
+1,098 core tests pass in serial and 71 selected integrations pass. Global-cache
+parallel test-isolation issue remains separately tracked. [Report](CAM_FOLLOWUP_2026_10_17.md).
+No installer rebuild, commit, push, publication or physical qualification. HARD STOP.
+
+## 2026-10-17 — CAM clearance and diagnostic-lifecycle audit
+
+Fixed unchecked selected indices and near-flat arc subdivision; simplified exact
+redundant sweep knots without cumulative tolerance. Added bounded segment-box
+filtering around the unchanged analytical V-Carve proof; kept candidate/work caps.
+Ray DDA visits side cells at exact corner crossings; outside-grid safe fallback
+retained. Scoped trochoidal diagnostics per operation with nested/cancellation cleanup,
+cached tab geometry/lengths, and pruned drop-cutter with actual field maximum and
+original tie ordering. Pipeline version 49. 1,108 serial core + 71 integration
+tests pass. [Results and limits](CAM_CLEARANCE_AUDIT_2026_10_17.md). No native/WASM
+production build or physical qualification; no commit/push/publication. HARD STOP.
+
+
+## 2026-10-17 — Audits and stabilization source publication
+
+User explicitly authorized committing and pushing all pending work. Source version
+advances to 0.9.0-beta.2 per the version policy: CAM audit/follow-up/clearance fixes,
+FS safety/determinism, generation progress/timing, machine/tool UI consistency and
+REL1 packaging preparation are included with their original qualification evidence.
+Existing beta.1 candidate binaries are not rebuilt or relabelled. Human, clean-host
+and physical reviews remain open; no next milestone, CI dispatch, tag or Release.
+
+Publication checks under beta.2: 1,108 serial core tests and 71 selected CAM/CPS/
+GEOM1 integrations pass; Feeds & Speeds suite passes (111 including one doctest).
+Frontend 1,324 pass/1 existing skip plus 10 WASM guard tests; Svelte/TypeScript,
+lint (after one formatting correction), Rustfmt, actionlint, schema regeneration/
+drift and workspace/Tauri version checks pass. Four collector and four macOS
+identity tests pass. Raw historical logs are preserved byte-for-byte. This source
+checkpoint does not claim a new native/WASM build or physical qualification.

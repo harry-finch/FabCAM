@@ -835,15 +835,20 @@ pub struct StufenfaseHole {
 ///
 /// # Panics
 ///
-/// Never panics in practice: `hole.ramp.last().unwrap()` is reached
-/// only after the `hole.ramp.len() < 2` early-continue guard, so the
-/// ramp has at least two points when accessed.
+/// Panics if called directly outside milling mode. The pipeline rejects such
+/// operations with a structured error before reaching this emitter.
 pub fn emit_stufenfase_rim_block<P: PostProcessor>(
     setup: &Setup,
     holes: &[StufenfaseHole],
     post: &mut P,
     last_pos: &mut Point2,
 ) {
+    // Milling-only invariant. The operation driver rejects this before any emission.
+    // Do not add laser/plasma piercing semantics to a mechanical rim chamfer.
+    assert!(
+        matches!(setup.machine.mode, crate::project::MachineMode::Mill),
+        "Stufenfase rim chamfer requires milling mode"
+    );
     if holes.is_empty() {
         return;
     }

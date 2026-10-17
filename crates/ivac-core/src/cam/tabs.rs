@@ -136,12 +136,27 @@ pub fn polyline_at_t(pts: &[Point2], t: f64, closed: bool) -> (Point2, (f64, f64
         let p = pts.first().copied().unwrap_or(Point2::new(0.0, 0.0));
         return (p, (1.0, 0.0));
     }
-    let (_cum, total_open) = polyline_arc_lengths(pts);
-    let total = if closed {
-        total_open + pts.last().unwrap().distance(pts[0])
+    let (lengths, total) = placement_lengths(pts, closed);
+    polyline_at_t_prepared(pts, t, closed, &lengths, total)
+}
+fn placement_lengths(pts: &[Point2], closed: bool) -> (Vec<f64>, f64) {
+    let lengths: Vec<_> = (0..if closed {
+        pts.len()
     } else {
-        total_open
-    };
+        pts.len().saturating_sub(1)
+    })
+        .map(|i| pts[i].distance(pts[(i + 1) % pts.len()]))
+        .collect();
+    let total = lengths.iter().sum();
+    (lengths, total)
+}
+fn polyline_at_t_prepared(
+    pts: &[Point2],
+    t: f64,
+    closed: bool,
+    lengths: &[f64],
+    total: f64,
+) -> (Point2, (f64, f64)) {
     if total < 1e-12 {
         return (pts[0], (1.0, 0.0));
     }
@@ -161,7 +176,7 @@ pub fn polyline_at_t(pts: &[Point2], t: f64, closed: bool) -> (Point2, (f64, f64
     for i in 0..n_segs {
         let a = pts[i];
         let b = pts[(i + 1) % pts.len()];
-        let seg_len = a.distance(b);
+        let seg_len = lengths[i];
         if seg_len < 1e-12 {
             continue;
         }
@@ -216,6 +231,7 @@ pub fn resolve_tab_placements(
     interpolate: usize,
 ) -> HashMap<usize, Vec<TabPoint>> {
     let mut out: HashMap<usize, Vec<TabPoint>> = HashMap::new();
+    let mut prepared = HashMap::new();
     for tp in placements {
         // object_id is 1-based (matches OpSource::Objects.ids).
         if tp.object_id == 0 || (tp.object_id as usize) > objects.len() {
@@ -226,11 +242,15 @@ pub fn resolve_tab_placements(
         if obj.segments.is_empty() {
             continue;
         }
-        let pts = segments_to_points(&obj.segments, interpolate);
+        let (pts, lengths, total) = prepared.entry(obj_idx).or_insert_with(|| {
+            let pts = segments_to_points(&obj.segments, interpolate);
+            let (lengths, total) = placement_lengths(&pts, obj.closed);
+            (pts, lengths, total)
+        });
         if pts.len() < 2 {
             continue;
         }
-        let (p, _) = polyline_at_t(&pts, tp.t.rem_euclid(1.0), obj.closed);
+        let (p, _) = polyline_at_t_prepared(pts, tp.t.rem_euclid(1.0), obj.closed, lengths, *total);
         out.entry(obj_idx).or_default().push(TabPoint {
             x: p.x,
             y: p.y,
@@ -258,6 +278,33 @@ mod tests {
         vec![p(0.0, 0.0), p(10.0, 0.0), p(10.0, 10.0), p(0.0, 10.0)]
     }
 
+    #[test]
+    fn repeated_tabs_preserve_single_placement_results() {
+        let a = p(0.0, 0.0);
+        let b = p(10.0, 0.0);
+        let obj = VcObject::new(
+            vec![
+                crate::Segment::arc(a, b, 1.0, None, "0", 7),
+                crate::Segment::line(b, a, "0", 7),
+            ],
+            true,
+        );
+        let placements: Vec<_> = (0..8)
+            .map(|i| TabPlacement {
+                object_id: 1,
+                t: f64::from(i) / 8.0,
+                width_override_mm: Some(2.0),
+                height_override_mm: None,
+            })
+            .collect();
+        let result = resolve_tab_placements(&placements, std::slice::from_ref(&obj), 6);
+        for (i, tp) in placements.iter().enumerate() {
+            let pts = segments_to_points(&obj.segments, 6);
+            let (expected, _) = polyline_at_t(&pts, tp.t, true);
+            assert_eq!((result[&0][i].x, result[&0][i].y), (expected.x, expected.y));
+            assert_eq!(result[&0][i].width_override_mm, Some(2.0));
+        }
+    }
     #[test]
     fn arc_lengths_accumulate() {
         let (cum, total) = polyline_arc_lengths(&square());

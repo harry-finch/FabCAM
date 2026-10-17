@@ -1,13 +1,25 @@
 # FabCAM release roadmap — approved direction
 
-> Current 2026-10-16 checkpoint: [desktop candidate preparation](DESKTOP_CANDIDATES.md).
+> Source publication — 2026-10-17: user authorized commit/push of all pending
+> changes. Current source version is **0.9.0-beta.2**; existing beta.1 installers
+> and validation records retain their original versions. Earlier publication
+> restrictions are superseded for this source checkpoint only; human/physical
+> review gates remain open. No workflow dispatch, tag or Release.
+
+> Current checkpoint — 2026-10-16: [REL1-B1 local packaging preparation](v1-stabilization-campaign/REL1_B1_RESULTS.md) complete: arm64 community DMG, strict ad-hoc/identity/integrity and SHA-256 PASS; workflows linted, no dispatch. Clean-download/install/runtime on the other Mac NOT TESTED and still V1-blocking. Developer ID/notarization remain optional POST-V1. Windows/Ubuntu Monday plans unchanged. HARD STOP for review; no commit/push/publication or transmission.
+
+> Historical checkpoint — 2026-10-16: Phase 0 and simple beta-installation transition approved. [REL1-A implemented locally](v1-stabilization-campaign/REL1_A.md): FabCAM public package names, stable data identity, strict ad-hoc signature and native reopen PASS on macOS. No publication. Human review gate before UX7, then UX6-C; distribution remains UNQUALIFIED.
+
+> Historical Phase 0 audit — 2026-10-16: UX7 generation timing, UX6-C bounded UI consistency, REL1-A public packaging identity, REL1-B macOS distribution blocker. [Phase 0 audit](v1-stabilization-campaign/PHASE0_AUDIT.md); implementation awaits explicit installer-identity transition decision. No RC/release qualification.
+
+> Historical 2026-10-16 checkpoint: [desktop candidate preparation](DESKTOP_CANDIDATES.md).
 > Stabilization accepted. macOS DMG built; Windows/Ubuntu candidates not yet built.
 > Host availability expected Monday 19 October; installation/runtime gates remain open.
 
 Current development version: **0.9.0-beta.1**, V1 stabilization beta.
 [Version decision and progression](VERSIONING.md); 1.0 release gates remain open.
 
-> Current 2026-10-15 checkpoint: [bounded stabilization corrections](V1_STABILIZATION_RESULTS.md),
+> Historical 2026-10-15 checkpoint: [bounded stabilization corrections](V1_STABILIZATION_RESULTS.md),
 > following explicit user approval. Windows 11 x64 and Ubuntu 26.10 amd64 remain
 > required alongside macOS; actual desktop installation/runtime gates remain open.
 > GEOM1 human review is still pending. HARD STOP before the next checkpoint.
@@ -293,3 +305,13 @@ conditional; no automatic launch of it or WJ research follows this approval.
 
 **HARD STOP — roadmap approved; no next milestone, build campaign, physical trial or
 release started by this documentation update.**
+
+## REL1-B revised release gates — approved 2026-10-16
+
+| Milestone | V1 priority | Acceptance / state |
+| --- | --- | --- |
+| REL1-B1 Community macOS distribution | REQUIRED | Valid ad-hoc FabCAM DMG, verified identity and SHA-256, clean browser-download/install/runtime with documented per-app Open Anyway where needed; local packaging preparation complete; clean-host qualification pending. Packaging, integrity and failed/missing clean-install checks block release. |
+| REL1-B2 Developer ID / notarization / stapling | OPTIONAL POST-V1 | Missing membership, Apple identity or ticket does not block V1. No credentials/services configured now. |
+
+GitHub Release distribution and checksum publication require separate explicit approval.
+Never disable Gatekeeper or remove quarantine. Windows/Ubuntu test plans remain unchanged.

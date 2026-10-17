@@ -179,6 +179,9 @@ fn calculate(
     if r.operation.entry == EntryStrategy::Unknown {
         diagnostics.push(Diagnostic::UnknownEntryStrategy);
     }
+    if r.operation.entry == EntryStrategy::Direct && p.scope.entry.is_none() {
+        diagnostics.push(Diagnostic::GenericProfileDirectEntry);
+    }
     if r.operation.doc_mm.is_none() {
         diagnostics.push(Diagnostic::UnknownDoc);
     }
@@ -278,12 +281,27 @@ fn calculate(
         );
     }
     let rpm = integer(rpm, "rpm")?;
-    // Target data keeps chipload at the final RPM. Exact data preserves its feed.
+    plunge = change(
+        &mut adjustments,
+        "plunge_mm_min",
+        "rpm_reduction_preserves_plunge_per_revolution",
+        plunge,
+        plunge * (f64::from(rpm) / target_rpm).min(1.0),
+        None,
+    );
+    // Exact values never gain implicit chipload when RPM is reduced (including rounding).
     let mut feed = match p.data {
         CuttingData::ChiploadTarget { .. } => {
             f64::from(rpm) * f64::from(r.tool.flute_count) * target_rate
         }
-        CuttingData::ExactValues { .. } => target_rate,
+        CuttingData::ExactValues { .. } => change(
+            &mut adjustments,
+            "feed_mm_min",
+            "rpm_reduction_preserves_chipload",
+            target_rate,
+            target_rate * (f64::from(rpm) / target_rpm).min(1.0),
+            None,
+        ),
     };
     // Detect overflow before a clamp can hide a nonfinite intermediate.
     for (field, value) in [
@@ -298,6 +316,7 @@ fn calculate(
             });
         }
     }
+    let unclamped_feed = feed;
     feed = ceiling(
         feed,
         r.machine.max_feed_mm_min,
@@ -332,6 +351,22 @@ fn calculate(
     let feed = integer(feed, "feed_mm_min")?;
     let plunge = integer(plunge, "plunge_mm_min")?;
     let chipload = f64::from(feed) / (f64::from(rpm) * f64::from(r.tool.flute_count));
+    let rpm_floor_reduces_chipload =
+        matches!(p.data, CuttingData::ExactValues { .. }) && f64::from(rpm) > target_rpm;
+    if rpm_floor_reduces_chipload
+        || r.machine
+            .max_feed_mm_min
+            .is_some_and(|max| f64::from(max) < unclamped_feed)
+    {
+        diagnostics.push(Diagnostic::LowEffectiveChipload {
+            chipload_mm_tooth: chipload,
+            target_chipload_mm_tooth: if rpm_floor_reduces_chipload {
+                target_rate / (target_rpm * f64::from(r.tool.flute_count))
+            } else {
+                unclamped_feed / (f64::from(rpm) * f64::from(r.tool.flute_count))
+            },
+        });
+    }
     let applicability = if adjustments.is_empty() {
         Applicability::WithinDeclaredProfile
     } else {

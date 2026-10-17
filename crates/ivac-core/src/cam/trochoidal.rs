@@ -59,8 +59,40 @@ pub struct TrochoidalIncomplete {
 }
 
 thread_local! {
+    static DIAGNOSTIC_DEPTH: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
     static TROCHOIDAL_INCOMPLETES: std::cell::RefCell<Vec<TrochoidalIncomplete>> =
         const { std::cell::RefCell::new(Vec::new()) };
+}
+
+/// Operation-scoped legacy diagnostic sink. Regions within the same operation
+/// accumulate; cancellation/early return drops the scope and clears leftovers.
+/// Nested scopes restore their parent's diagnostics. The guard cannot cross threads.
+pub(crate) struct DiagnosticScope {
+    parent: Vec<TrochoidalIncomplete>,
+    _thread: std::marker::PhantomData<std::rc::Rc<()>>,
+}
+impl DiagnosticScope {
+    pub(crate) fn begin() -> Self {
+        let nested = DIAGNOSTIC_DEPTH.with(|depth| {
+            let nested = depth.get() > 0;
+            depth.set(depth.get() + 1);
+            nested
+        });
+        let mut parent = take_trochoidal_incompletes();
+        if !nested {
+            parent.clear();
+        }
+        Self {
+            parent,
+            _thread: std::marker::PhantomData,
+        }
+    }
+}
+impl Drop for DiagnosticScope {
+    fn drop(&mut self) {
+        DIAGNOSTIC_DEPTH.with(|depth| depth.set(depth.get() - 1));
+        TROCHOIDAL_INCOMPLETES.with(|sink| *sink.borrow_mut() = std::mem::take(&mut self.parent));
+    }
 }
 
 /// Drain (and clear) any `TrochoidalIncomplete` entries stashed by
@@ -444,6 +476,32 @@ mod tests {
         true
     }
 
+    #[test]
+    fn operation_diagnostics_accumulate_regions_but_never_leak_after_early_return() {
+        let event = TrochoidalIncomplete {
+            centerline_total: 10,
+            bail_index: 2,
+            r_loop: 1.0,
+            engagement_angle_deg: 20.0,
+        };
+        let push = || TROCHOIDAL_INCOMPLETES.with(|sink| sink.borrow_mut().push(event.clone()));
+        push(); // stale legacy call on the worker thread
+        {
+            let _scope = DiagnosticScope::begin();
+            assert!(take_trochoidal_incompletes().is_empty());
+            push();
+            push(); // two regions of one operation
+            {
+                let _nested = DiagnosticScope::begin();
+                push();
+            } // cancelled/early-return nested operation
+            assert_eq!(take_trochoidal_incompletes().len(), 2);
+            push(); // abort before the operation's normal drain
+        }
+        assert!(take_trochoidal_incompletes().is_empty());
+        let _next = DiagnosticScope::begin();
+        assert!(take_trochoidal_incompletes().is_empty());
+    }
     #[test]
     fn disc_indexed_matches_raw() {
         // A wall with a re-entrant notch + an island, so discs at varied

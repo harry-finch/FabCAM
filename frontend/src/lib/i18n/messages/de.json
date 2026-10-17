@@ -1987,5 +1987,18 @@
   "layers.empty_layers.title": "Keine importierten Ebenen mit Geometrie",
   "layers.empty_layers.sub": "Importierte Dateien bleiben oben aufgeführt. Eine Zeichnung liefert neue Geometrie.",
   "layers.documents_count.one": "1 importierte Zeichnung",
-  "layers.segment_count.one": "1 Segment"
+  "layers.segment_count.one": "1 Segment",
+  "ux7.running": "Werkzeugwege werden berechnet…",
+  "ux7.obsolete": "Projekt geändert — Ergebnis veraltet nach",
+  "ux7.success": "Berechnet in",
+  "ux7.cancelled": "Berechnung abgebrochen nach",
+  "ux7.blocked": "Berechnet mit blockierenden Meldungen in",
+  "ux7.failed": "Berechnung fehlgeschlagen nach",
+  "ux7.help": "Verstrichene Berechnungszeit einschließlich Anfragevorbereitung und Ergebnisverarbeitung. Vorschau-Simulation separat; keine geschätzte Bearbeitungszeit.",
+  "ux7.no_cancel": "Abbruch für diesen Berechnungsweg nicht verfügbar",
+  "ux6c.shopbot_arcs": "ShopBot OpenSBP linearisiert unterstützte XY-Bögen mit 0,01 mm. Die Bogenanpassung unten speichert die CAM-Vorgabe; sie aktiviert keine kreisförmigen OpenSBP-Bewegungen.",
+  "ux6c.arc_settings": "Bogenanpassung",
+  "ux6c.fit_before_post": "Bögen vor der Postverarbeitung anpassen",
+  "fs391.low_effective_chipload": "Drehzahl- oder Vorschubgrenzen reduzieren die Spanlast unter den Zielwert. Schnittbedingungen prüfen; dies ist keine materialspezifische Reibungsgrenze.",
+  "fs391.generic_profile_direct_entry": "Dieses allgemeine Profil bestätigt keine direkte Eintaucheignung. Axiale Eintauchfähigkeit des Werkzeugs prüfen."
 }

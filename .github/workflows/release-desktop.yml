@@ -1,7 +1,7 @@
 name: Release desktop bundles
 
 # Triggered on a `v*` tag push (e.g. v0.1.0). Builds Tauri 2 bundles for
-# Linux (.deb / .rpm / AppImage), macOS (.dmg / .app, optionally notarized),
+# Linux (.deb / .rpm / AppImage), macOS (ad-hoc community .dmg / .app, not notarized),
 # and Windows (.msi + NSIS .exe) in parallel, then attaches the artifacts
 # to a GitHub Release.
 #
@@ -47,7 +47,7 @@ jobs:
           - name: macos
             runner: macos-15
             target: aarch64-apple-darwin,x86_64-apple-darwin
-            args: --target universal-apple-darwin
+            args: --target universal-apple-darwin --config tauri.dev-signing.conf.json
           - name: windows
             runner: windows-2022
             target: x86_64-pc-windows-msvc
@@ -102,17 +102,21 @@ jobs:
       - name: tauri build
         working-directory: crates/ivac-tauri
         env:
-          # macOS notarization (set in repo secrets if signing is desired):
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # Community macOS uses ad-hoc signing; no Apple credentials (REL1-B1).
           # Windows code signing (optional):
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: npm exec --yes --package=@tauri-apps/cli@2.12.3 -- tauri build ${{ matrix.platform.args }} -- --locked
+
+      - name: Verify community macOS DMG
+        if: matrix.platform.name == 'macos'
+        shell: bash
+        run: |
+          python3 scripts/verify-macos-community.test.py
+          python3 scripts/verify-macos-community.py target/universal-apple-darwin/release/bundle/dmg/*.dmg --version "$(node -p "require('./crates/ivac-tauri/tauri.conf.json').version")" --arch arm64,x86_64 --output target/universal-apple-darwin/release/bundle/dmg/macos-community-verification.json
+          cd target/universal-apple-darwin/release/bundle/dmg
+          shasum -a 256 *.dmg macos-community-verification.json > SHA256SUMS-macos.txt
+          shasum -a 256 -c SHA256SUMS-macos.txt
 
       # Drop the GStreamer core libs linuxdeploy bundles as WebKit transitive
       # deps (the app uses no media); they shadow the host's GStreamer and
@@ -139,13 +143,15 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: ivaCAM-${{ matrix.platform.name }}
+          name: FabCAM-${{ matrix.platform.name }}
           path: |
             target/release/bundle/deb/*.deb
             target/release/bundle/rpm/*.rpm
             target/release/bundle/appimage/*.AppImage
             target/release/bundle/dmg/*.dmg
             target/universal-apple-darwin/release/bundle/dmg/*.dmg
+            target/universal-apple-darwin/release/bundle/dmg/macos-community-verification.json
+            target/universal-apple-darwin/release/bundle/dmg/SHA256SUMS-macos.txt
             target/release/bundle/macos/*.app.tar.gz
             target/universal-apple-darwin/release/bundle/macos/*.app.tar.gz
 
@@ -159,7 +165,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: ivaCAM-windows-unsigned
+          name: FabCAM-windows-unsigned
           path: |
             target/release/bundle/msi/*.msi
             target/release/bundle/nsis/*-setup.exe
@@ -188,7 +194,7 @@ jobs:
         if: matrix.platform.name == 'windows' && vars.SIGNPATH_ENABLED == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: ivaCAM-windows-signed
+          name: FabCAM-windows-signed
           path: signed/**/*
 
   release:
@@ -214,18 +220,24 @@ jobs:
           # Windows: prefer the SignPath-signed set; fall back to unsigned.
           # Unsigned installers trip SmartScreen — acceptable for a draft
           # pre-release aimed at testers, never for a public stable release.
-          if [ -d artifacts/ivaCAM-windows-signed ]; then
-            win=artifacts/ivaCAM-windows-signed
-          elif [ -d artifacts/ivaCAM-windows-unsigned ]; then
-            win=artifacts/ivaCAM-windows-unsigned
+          if [ -d artifacts/FabCAM-windows-signed ]; then
+            win=artifacts/FabCAM-windows-signed
+          elif [ -d artifacts/FabCAM-windows-unsigned ]; then
+            win=artifacts/FabCAM-windows-unsigned
             echo "::warning::Publishing UNSIGNED Windows installers (SignPath disabled) — draft pre-release only"
           else
             win=""
           fi
 
+          # Verify macOS bytes again after artifact transfer before release assembly.
+          mac_sums=$(find artifacts/FabCAM-macos -name SHA256SUMS-macos.txt -print)
+          test -n "$mac_sums"
+          ( cd "$(dirname "$mac_sums")" && sha256sum -c SHA256SUMS-macos.txt )
+          cp "$(dirname "$mac_sums")/macos-community-verification.json" release/
+
           # Flatten the shippable bundles from whichever platforms built.
           srcs=()
-          for d in artifacts/ivaCAM-linux artifacts/ivaCAM-macos "$win"; do
+          for d in artifacts/FabCAM-linux artifacts/FabCAM-macos "$win"; do
             [ -n "$d" ] && [ -d "$d" ] && srcs+=("$d")
           done
           find "${srcs[@]}" -type f \
@@ -245,4 +257,10 @@ jobs:
           draft: true
           prerelease: true
           generate_release_notes: true
+          body: |
+            macOS community build: ad-hoc signed, not notarized by Apple.
+            Verify SHA256SUMS.txt before installation. If macOS blocks first launch,
+            use System Settings > Privacy & Security > Open Anyway for FabCAM.
+            Do not disable Gatekeeper or remove quarantine attributes.
+            This draft does not establish clean-install or runtime qualification.
           files: release/*

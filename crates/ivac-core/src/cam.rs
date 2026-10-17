@@ -149,18 +149,33 @@ pub fn points_bbox(points: &[Point2]) -> Option<crate::BBox> {
 /// Center of mass of a polygon (treats `points` as polygon vertices in order).
 #[must_use]
 pub fn polygon_centroid(points: &[Point2]) -> Option<Point2> {
-    if points.is_empty() {
+    let origin = *points.first()?;
+    if points.iter().any(|p| !p.x.is_finite() || !p.y.is_finite()) {
         return None;
     }
-    let (mut sx, mut sy) = (0.0, 0.0);
-    for p in points {
-        sx += p.x;
-        sy += p.y;
+    // Translate before cross products to avoid cancellation at large work offsets.
+    let (mut area2, mut sx, mut sy) = (0.0, 0.0, 0.0);
+    for (a, b) in points
+        .iter()
+        .zip(points.iter().cycle().skip(1))
+        .take(points.len())
+    {
+        let (ax, ay, bx, by) = (
+            a.x - origin.x,
+            a.y - origin.y,
+            b.x - origin.x,
+            b.y - origin.y,
+        );
+        let cross = ax * by - bx * ay;
+        area2 += cross;
+        sx += (ax + bx) * cross;
+        sy += (ay + by) * cross;
     }
-    Some(Point2::new(
-        sx / points.len() as f64,
-        sy / points.len() as f64,
-    ))
+    if area2 == 0.0 || !area2.is_finite() {
+        return None;
+    }
+    let center = Point2::new(origin.x + sx / (3.0 * area2), origin.y + sy / (3.0 * area2));
+    (center.x.is_finite() && center.y.is_finite()).then_some(center)
 }
 
 /// Re-exported from [`crate::geometry::is_inside_polygon`] (moved there
@@ -176,11 +191,10 @@ pub fn segment_to_points(seg: &Segment, interpolate: usize) -> Vec<Point2> {
     if seg.bulge.abs() < 1e-12 || seg.kind == SegmentKind::Line {
         return vec![seg.start, seg.end];
     }
-    // Tessellate proportional to sweep, with at least `interpolate` steps.
+    // Preserve the existing high-resolution sampling contract.
     let max_step = (std::f64::consts::TAU / 8.0).max(0.05);
-    let coarse = math::tessellate_arc(seg.start, seg.end, seg.bulge, max_step);
     if interpolate <= 1 {
-        return coarse;
+        return math::tessellate_arc(seg.start, seg.end, seg.bulge, max_step);
     }
     // Uniformly sub-sample the parametric arc for `interpolate * sweep_steps` points.
     let (center, a0, a1, radius) = math::bulge_to_arc(seg.start, seg.end, seg.bulge);
@@ -300,9 +314,10 @@ pub fn objects_bbox(objects: &[VcObject]) -> Option<crate::BBox> {
     let mut bbox = crate::BBox::EMPTY;
     let mut any = false;
     for obj in objects {
-        for s in &obj.segments {
-            bbox.extend_point(s.start);
-            bbox.extend_point(s.end);
+        if !obj.segments.is_empty() {
+            let bounds = crate::BBox::from_segments(&obj.segments);
+            bbox.extend_point(Point2::new(bounds.min_x, bounds.min_y));
+            bbox.extend_point(Point2::new(bounds.max_x, bounds.max_y));
             any = true;
         }
     }
@@ -445,5 +460,42 @@ mod tests {
         for p in &pts {
             assert!((p.x * p.x + p.y * p.y - 1.0).abs() < 1e-3);
         }
+    }
+}
+
+#[cfg(test)]
+mod audit_regressions {
+    use super::*;
+    #[test]
+    fn circle_bounds_include_arc_extrema_and_empty_objects_do_not_expand_them() {
+        let a = Point2::new(12.0, 20.0);
+        let b = Point2::new(8.0, 20.0);
+        let circle = VcObject::new(
+            vec![
+                Segment::arc(a, b, 1.0, None, "0", 7),
+                Segment::arc(b, a, 1.0, None, "0", 7),
+            ],
+            true,
+        );
+        let bbox = objects_bbox(&[circle, VcObject::new(vec![], false)]).unwrap();
+        assert!((bbox.min_y - 18.0).abs() < 1e-12 && (bbox.max_y - 22.0).abs() < 1e-12);
+        assert!(objects_bbox(&[VcObject::new(vec![], false)]).is_none());
+    }
+    #[test]
+    fn area_centroid_is_independent_of_collinear_sampling_and_winding() {
+        let mut points = vec![
+            Point2::new(0.0, 0.0),
+            Point2::new(4.0, 0.0),
+            Point2::new(4.0, 2.0),
+        ];
+        for i in (0..40).rev() {
+            points.push(Point2::new(f64::from(i) / 10.0, 2.0));
+        }
+        for _ in 0..2 {
+            let c = polygon_centroid(&points).unwrap();
+            assert!((c.x - 2.0).abs() < 1e-12 && (c.y - 1.0).abs() < 1e-12);
+            points.reverse();
+        }
+        assert!(polygon_centroid(&[Point2::new(0.0, 0.0), Point2::new(1.0, 1.0)]).is_none());
     }
 }

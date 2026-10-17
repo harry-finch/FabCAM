@@ -27,6 +27,21 @@ pub enum MatchQuality {
     Generic,
     Theoretical,
 }
+impl MatchQuality {
+    /// Explicit policy ordering, independent of enum declaration / serialized names.
+    pub const fn rank_cost(self) -> u32 {
+        match self {
+            Self::Exact => 0,
+            Self::Close => 1,
+            Self::Interpolated => 2,
+            Self::Approximate => 3,
+            Self::Extrapolated => 4,
+            Self::Generic => 5,
+            Self::Theoretical => 6,
+        }
+    }
+}
+
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[cfg_attr(feature = "schema", schemars(rename = "FsDerivation"))]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,6 +65,7 @@ pub(crate) fn validate_adaptation(
     pack: &SourcePack,
     p: &Profile,
     r: &RecordOrigin,
+    classifications: &std::collections::BTreeMap<&Identity, &ToolClassification>,
 ) -> Result<(), String> {
     let Some(a) = &r.adaptation else {
         return Ok(());
@@ -62,7 +78,7 @@ pub(crate) fn validate_adaptation(
         || r.lab.is_some()
         || a.material_taxa
             .iter()
-            .any(|id| !material_taxonomy().iter().any(|t| &t.id == id))
+            .any(|id| !crate::source_pack::known_taxon(id))
     {
         return Err(
             "Adaptation requires schema 3, permitted transformation and ReferenceData policy scope"
@@ -78,16 +94,8 @@ pub(crate) fn validate_adaptation(
         .scope
         .tool
         .as_ref()
-        .and_then(|id| {
-            pack.records.iter().find(|r| {
-                pack.dataset
-                    .profile_set
-                    .profiles
-                    .iter()
-                    .any(|p| p.identity == r.profile && p.scope.tool.as_ref() == Some(id))
-            })
-        })
-        .and_then(|r| r.tool.as_ref());
+        .and_then(|id| classifications.get(id))
+        .copied();
     for id in &a.tools {
         let tool = pack
             .dataset
@@ -95,17 +103,7 @@ pub(crate) fn validate_adaptation(
             .iter()
             .find(|t| &t.identity == id)
             .ok_or("Adaptation tool absent from catalog")?;
-        let classification = pack
-            .records
-            .iter()
-            .find(|r| {
-                pack.dataset
-                    .profile_set
-                    .profiles
-                    .iter()
-                    .any(|p| p.identity == r.profile && p.scope.tool.as_ref() == Some(id))
-            })
-            .and_then(|r| r.tool.as_ref());
+        let classification = classifications.get(id).copied();
         if classification.is_none()
             || classification != original
             || tool.flute_count != p.scope.flute_count.unwrap_or(0)
@@ -168,10 +166,11 @@ pub(crate) fn adapt_profile(
             }
             "material"
                 if origin.adaptation.as_ref().is_some_and(|a| {
-                    r.material
-                        .identity
-                        .as_ref()
-                        .is_some_and(|id| a.material_taxa.iter().any(|t| id == &taxon_identity(t)))
+                    r.material.identity.as_ref().is_some_and(|id| {
+                        a.material_taxa
+                            .iter()
+                            .any(|t| crate::source_pack::taxon_matches(t, id))
+                    })
                 }) =>
             {
                 p.scope.material = IdentitySelector::Exact {
@@ -210,7 +209,9 @@ pub(crate) fn adapt_profile(
     }
     let n = normalized_quantities(source);
     let ratio = (r.tool.diameter_mm / d).min(1.0);
-    let factor = if delta > 0.1 { ratio * ratio } else { ratio };
+    // Continuous bounded policy transition, not a physical calibration model.
+    let transition = ((delta - 0.1) / 0.4).clamp(0.0, 1.0);
+    let factor = ratio.powf(1.0 + transition);
     let (rpm, plunge, original_doc) = match source.data {
         CuttingData::ExactValues {
             rpm,
@@ -227,8 +228,7 @@ pub(crate) fn adapt_profile(
     };
     // Keep source RPM for smaller cutters; cap larger cutter RPM to source cutting speed.
     let rpm = rpm * (d / r.tool.diameter_mm).min(1.0);
-    let doc = (n.doc_ratio? * r.tool.diameter_mm * if delta > 0.1 { ratio } else { 1.0 })
-        .min(original_doc);
+    let doc = (n.doc_ratio? * r.tool.diameter_mm * ratio.powf(transition)).min(original_doc);
     p.data = CuttingData::ChiploadTarget {
         rpm,
         chipload_mm_tooth: n.chipload_mm_tooth? * factor,
@@ -335,6 +335,8 @@ pub(crate) fn add_interpolations(
                 || pa.aggressiveness != pb.aggressiveness
                 || a.origin.tool != b.origin.tool
                 || pa.reductions != pb.reductions
+                || a.origin.adaptation != b.origin.adaptation
+                || !a.rank.same_context(&b.rank)
             {
                 continue;
             }
@@ -399,10 +401,8 @@ pub(crate) fn add_interpolations(
                     detail.chipload_factor = 1.0;
                     detail.doc_factor = 1.0;
                     c.derivation = Some(detail);
-                    c.rank[2] = 2; // after close, before distant/extrapolated candidates
-                    if let Some(last) = c.rank.last_mut() {
-                        *last = 0;
-                    }
+                    c.rank.quality_cost = MatchQuality::Interpolated.rank_cost();
+                    c.rank.relative_delta_ppm = 0;
                     pairs.push((y - x, c, *recommendation));
                 }
             }
@@ -436,90 +436,21 @@ pub fn matching_trace(
     packs: &[SourcePack],
     r: &FeedsSpeedsRequest,
 ) -> Result<Vec<MatchingTrace>, String> {
-    let result = recommend_packs(packs, r)?;
-    let selected = result.explanation.as_ref().map(|e| &e.summary);
+    matching_trace_checked(packs, r).map_err(|e| e.to_string())
+}
+pub fn matching_trace_checked(
+    packs: &[SourcePack],
+    r: &FeedsSpeedsRequest,
+) -> Result<Vec<MatchingTrace>, SourcePackError> {
     let mut trace = Vec::new();
-    for pack in packs {
-        for origin in &pack.records {
-            let original = pack
-                .dataset
-                .profile_set
-                .profiles
+    let result = crate::source_pack::recommend_packs_traced(packs, r, Some(&mut trace))?;
+    if let Some(explanation) = result.explanation {
+        for row in &mut trace {
+            row.selected = explanation
+                .summary
+                .contributors
                 .iter()
-                .find(|p| p.identity == origin.profile)
-                .expect("validated source");
-            let mut p = original.clone();
-            let mut request = r.clone();
-            let mut set = pack.dataset.profile_set.clone();
-            request.dataset = set.identity.clone();
-            if origin.material_taxon.as_ref().is_some_and(|t| {
-                request
-                    .material
-                    .identity
-                    .as_ref()
-                    .is_some_and(|m| crate::source_pack::taxon_matches(t, m))
-            }) {
-                p.scope.material = IdentitySelector::Exact {
-                    identity: request.material.identity.clone().unwrap(),
-                };
-            }
-            let mut detail = None;
-            if !crate::matching::matches(&p, &request, &set) {
-                if let Some((adapted, d)) =
-                    adapt_profile(pack, origin, original, &p, &request, &set)
-                {
-                    p = adapted;
-                    detail = Some(d);
-                }
-            }
-            let mut rejected_dimensions = derived_rejections(pack, origin, &p, &request, &set);
-            let taxonomy_mismatch = origin.material_taxon.as_ref().is_some_and(|t| {
-                !request
-                    .material
-                    .identity
-                    .as_ref()
-                    .is_some_and(|m| crate::source_pack::taxon_matches(t, m))
-            });
-            if taxonomy_mismatch {
-                rejected_dimensions.retain(|m| m.field != "material");
-                rejected_dimensions.push(ScopeMismatch {
-                    field: "material".into(),
-                    actual: serde_json::to_string(&request.material.identity).unwrap(),
-                    required: serde_json::to_string(&origin.material_taxon).unwrap(),
-                });
-            }
-            let eligible = !taxonomy_mismatch
-                && !origin
-                    .lab
-                    .as_ref()
-                    .is_some_and(|l| l.deleted || !l.enabled || l.state == LabState::Draft)
-                && pack.manifest.distribution != Distribution::ExternalReference;
-            set.profiles = vec![p];
-            let accepted = eligible
-                && Engine::new(set).ok().is_some_and(|e| {
-                    matches!(
-                        e.recommend(&request),
-                        FeedsSpeedsRecommendation::Available { .. }
-                    )
-                });
-            trace.push(MatchingTrace {
-                pack: pack.manifest.identity.clone(),
-                record_id: origin.source_record_id.clone(),
-                accepted,
-                selected: selected.is_some_and(|s| {
-                    s.contributors.iter().any(|c| {
-                        c.pack == pack.manifest.identity && c.record_id == origin.source_record_id
-                    })
-                }),
-                relative_diameter_delta: (original.scope.diameter_mm.min
-                    == original.scope.diameter_mm.max)
-                    .then(|| {
-                        (original.scope.diameter_mm.min - r.tool.diameter_mm).abs()
-                            / r.tool.diameter_mm
-                    }),
-                method: detail.map(|d| d.method),
-                rejected_dimensions,
-            });
+                .any(|c| c.pack == row.pack && c.record_id == row.record_id);
         }
     }
     trace.sort_by(|a, b| a.pack.cmp(&b.pack).then(a.record_id.cmp(&b.record_id)));
@@ -558,10 +489,11 @@ pub(crate) fn derived_rejections(
                 .is_some_and(|id| a.machines.contains(id))
         }),
         "material" => !origin.adaptation.as_ref().is_some_and(|a| {
-            r.material
-                .identity
-                .as_ref()
-                .is_some_and(|id| a.material_taxa.iter().any(|t| id == &taxon_identity(t)))
+            r.material.identity.as_ref().is_some_and(|id| {
+                a.material_taxa
+                    .iter()
+                    .any(|t| crate::source_pack::taxon_matches(t, id))
+            })
         }),
         "tool" => !origin.adaptation.as_ref().is_some_and(|a| {
             r.tool
@@ -578,8 +510,8 @@ pub(crate) fn derived_rejections(
     if delta > 0.5 {
         rejected.push(ScopeMismatch {
             field: "diameter_proximity".into(),
-            actual: serde_json::to_string(&format!("{:.2} %", delta * 100.0)).unwrap(),
-            required: serde_json::to_string(&format!("≤50 % · Ø{d} mm source")).unwrap(),
+            actual: format!("\"{:.2} %\"", delta * 100.0),
+            required: format!("\"≤50 % · Ø{d} mm source\""),
         });
     }
     rejected

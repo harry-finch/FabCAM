@@ -31,6 +31,36 @@ impl Knot {
         }
     }
 }
+// Remove only exact affine redundancy. A repeated epsilon merge could accumulate
+// target/envelope drift over thousands of passes; do not spend that error budget.
+fn simplify(knots: &mut Vec<Knot>) {
+    let mut out: Vec<Knot> = Vec::with_capacity(knots.len());
+    for &c in knots.iter() {
+        while out.len() >= 2 {
+            let a = out[out.len() - 2];
+            let b = out[out.len() - 1];
+            let dx = c.x - a.x;
+            let dy = c.y - a.y;
+            let t = if dx.abs() >= dy.abs() {
+                (b.x - a.x) / dx
+            } else {
+                (b.y - a.y) / dy
+            };
+            let p = a.lerp(c, t);
+            if !(0.0..=1.0).contains(&t)
+                || p.x != b.x
+                || p.y != b.y
+                || p.target != b.target
+                || p.cut != b.cut
+            {
+                break;
+            }
+            out.pop();
+        }
+        out.push(c);
+    }
+    *knots = out;
+}
 /// Coordinates are mm, Z is relative to stock top (negative into stock).
 /// Returns one continuous path per chain, beginning at stock top. No hidden
 /// vertical entry, no extrapolated XY ramp, no surface jump between chains.
@@ -126,6 +156,9 @@ pub fn plan(
                 if p.cut < old - DEPTH_EPS {
                     return Err("V-Carve undercut: non-monotone clearing schedule.".into());
                 }
+                if next.len() >= MAX_POINTS {
+                    return Err("V-Carve undercut: sweep knot budget exceeded.".into());
+                }
                 next.push(p);
             }
             traveled += length;
@@ -140,6 +173,7 @@ pub fn plan(
         if complete {
             return Ok(out);
         }
+        simplify(&mut next);
         next.reverse();
         knots = next;
     }
@@ -147,4 +181,45 @@ pub fn plan(
         "V-Carve undercut: entry/pass budget exhausted before the entire target was reached."
             .into(),
     )
+}
+
+#[cfg(test)]
+mod audit_tests {
+    use super::*;
+    #[test]
+    fn simplification_keeps_target_and_cut_breakpoints() {
+        let a = Knot {
+            x: 0.0,
+            y: 0.0,
+            target: 1.0,
+            cut: 0.5,
+        };
+        let c = Knot { x: 2.0, ..a };
+        let b = a.lerp(c, 0.5);
+        let mut straight = vec![a, b, c];
+        simplify(&mut straight);
+        assert_eq!(straight.len(), 2);
+        for kink in [
+            Knot {
+                cut: b.cut + 1e-12,
+                ..b
+            },
+            Knot {
+                target: b.target + 1e-12,
+                ..b
+            },
+            Knot { y: 1e-12, ..b },
+        ] {
+            let mut knots = vec![a, kink, c];
+            simplify(&mut knots);
+            assert_eq!(knots.len(), 3);
+        }
+    }
+    #[test]
+    fn many_passes_remain_bounded_and_reach_target() {
+        let path = plan(&[(0.0, 0.0, -2.0), (100.0, 0.0, -2.0)], 0.01, 2.0).unwrap();
+        assert!(path.len() < 20000, "{}", path.len());
+        assert!((path.last().unwrap().2 + 2.0).abs() <= DEPTH_EPS);
+        assert!(path.iter().all(|p| p.2 >= -2.0 - DEPTH_EPS));
+    }
 }

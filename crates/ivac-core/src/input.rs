@@ -178,35 +178,17 @@ pub fn import_bytes(filename: &str, bytes: &[u8], opts: &ImportOptions) -> Resul
 /// chained object containing `segments[i]` (0 = unchained / point /
 /// degenerate); `object_meta[id - 1]` carries the chain's metadata.
 pub(crate) fn object_index(segments: &[Segment]) -> (Vec<u32>, Vec<ImportedObject>) {
-    use crate::cam::chaining::{classify_containment, segments_to_objects};
-
-    let mut chains = segments_to_objects(segments);
-    classify_containment(&mut chains);
-
+    use crate::cam::chaining::segments_to_objects_indexed;
+    // Chaining already retains exact source ordinals, including reversed arcs.
+    // Never reconstruct provenance from approximate geometric equality.
+    let chains = segments_to_objects_indexed(segments);
     let mut objects = vec![0u32; segments.len()];
     let mut meta = Vec::with_capacity(chains.len());
-    for (chain_idx, chain) in chains.iter().enumerate() {
-        // chain_idx is bounded by chains.len() (file-segment count), well
-        // under u32::MAX; the truncation can't fire in practice.
+    for (chain_idx, (chain, indices)) in chains.iter().enumerate() {
         #[allow(clippy::cast_possible_truncation)]
         let id = chain_idx as u32 + 1;
-        // Map back from chain-segment to imported-segment by endpoint
-        // coincidence; the chaining pass may flip/reorder edges so
-        // direct index identity isn't reliable.
-        for chain_seg in &chain.segments {
-            for (seg_idx, src) in segments.iter().enumerate() {
-                if objects[seg_idx] != 0 {
-                    continue;
-                }
-                let same =
-                    approx_pt(src.start, chain_seg.start) && approx_pt(src.end, chain_seg.end);
-                let reverse =
-                    approx_pt(src.start, chain_seg.end) && approx_pt(src.end, chain_seg.start);
-                if same || reverse {
-                    objects[seg_idx] = id;
-                    break;
-                }
-            }
+        for &index in indices {
+            objects[index] = id;
         }
         meta.push(ImportedObject {
             id,
@@ -217,10 +199,6 @@ pub(crate) fn object_index(segments: &[Segment]) -> (Vec<u32>, Vec<ImportedObjec
         });
     }
     (objects, meta)
-}
-
-fn approx_pt(a: crate::geometry::Point2, b: crate::geometry::Point2) -> bool {
-    (a.x - b.x).abs() < 1e-6 && (a.y - b.y).abs() < 1e-6
 }
 
 /// Build the per-layer summary used by the import response.
@@ -259,4 +237,29 @@ pub(crate) fn register_schemas(map: &mut crate::schema::SchemaMap) {
     crate::schema::insert::<text::RenderTextRequest>(map, "RenderTextRequest");
     crate::schema::insert::<text::RenderTextResponse>(map, "RenderTextResponse");
     crate::schema::insert::<text::RenderTextLayerResponse>(map, "RenderTextLayerResponse");
+}
+
+#[cfg(test)]
+mod audit_tests {
+    use super::*;
+    use crate::geometry::Point2;
+    #[test]
+    fn imported_tags_follow_source_ordinals_for_coincident_curves() {
+        let a = Point2::new(-1.0, 0.0);
+        let b = Point2::new(1.0, 0.0);
+        let segments = vec![
+            Segment::arc(a, b, 1.0, None, "a", 7),
+            Segment::arc(b, a, 1.0, None, "a", 7),
+            Segment::line(a, b, "b", 3),
+        ];
+        let (tags, meta) = object_index(&segments);
+        assert!(tags.iter().all(|id| *id != 0));
+        // Each assigned object's bounds must include the exact source geometry.
+        for (i, s) in segments.iter().enumerate() {
+            let bounds = BBox::from_segments(std::slice::from_ref(s));
+            let object = &meta[(tags[i] - 1) as usize];
+            assert!(bounds.min_y >= object.bbox.min_y - 1e-12);
+            assert!(bounds.max_y <= object.bbox.max_y + 1e-12);
+        }
+    }
 }

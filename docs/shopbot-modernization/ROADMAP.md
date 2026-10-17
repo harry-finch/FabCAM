@@ -1,10 +1,30 @@
 # FabCAM release roadmap
 
+> Source publication — 2026-10-17: user authorized commit/push of all pending
+> changes. Current source version is **0.9.0-beta.2**; existing beta.1 installers
+> and validation records retain their original versions. Earlier publication
+> restrictions are superseded for this source checkpoint only; human/physical
+> review gates remain open. No workflow dispatch, tag or Release.
+
+> Current checkpoint — 2026-10-17: [CAM clearance audit](CAM_CLEARANCE_AUDIT_2026_10_17.md) implemented locally: checked V-Carve inputs, stable flat-arc preparation, exact redundant-knot removal, bounded spatial proof, operation-scoped trochoidal diagnostics, cached tabs and drop-cutter pruning. Pipeline version 49. 1,108 core tests PASS in serial; 71 integration tests PASS. Safety budgets retained; human review pending. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM follow-up](CAM_FOLLOWUP_2026_10_17.md) implemented locally: bulge-based arc probes, isolated drill points, linear prepend accumulation, Halfpipe witness fix, exact geometry-cache keys, cached helix fitting and arc-aware frames. Pipeline version 48. 1,098 core tests PASS in serial; 71 integration tests PASS. Human review pending; existing release gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM audit corrections](CAM_AUDIT_2026_10_17.md) implemented locally: honest plunge limit, exact imported provenance, arc-aware bounds, area centroid, bounded angle normalization, relief optimization and milling-only Stufenfase. 1,091 core tests PASS in serial and 71 integration tests PASS. Parallel cache-test isolation tracked separately (`ivac-rt80e`). Obtuse T-bones retained with analytical evidence. Human review pending; no commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-16: [FS audit improvements](feeds-speeds/FS_AUDIT_IMPROVEMENTS.md) implemented locally: RPM/feed coupling, diagnostics, continuous diameter adaptation and deterministic matching/validation. Follow-up taxonomy/plunge/classification/RPM-floor fixes included: 111 engine + 17 CAM tests and frontend typecheck PASS. Engine policy `fs1-policy-2`; saved values preserved. Software tests/build PASS; human review pending. REL1-B1 clean-host gate and Windows/Ubuntu plans unchanged. No commit/push/publication. HARD STOP.
+
+> Release checkpoint — 2026-10-16: [REL1-B1 local packaging preparation](../releases/v1-stabilization-campaign/REL1_B1_RESULTS.md) complete: arm64 community DMG, strict ad-hoc/identity/integrity and SHA-256 PASS; workflows linted, no dispatch. Clean-download/install/runtime on the other Mac NOT TESTED and still V1-blocking. Developer ID/notarization remain optional POST-V1. Windows/Ubuntu Monday plans unchanged. HARD STOP for review; no commit/push/publication or transmission.
+
+> Historical checkpoint — 2026-10-16: Phase 0 and simple beta-installation transition approved. [REL1-A implemented locally](../releases/v1-stabilization-campaign/REL1_A.md): FabCAM public package names, stable data identity, strict ad-hoc signature and native reopen PASS on macOS. No publication. Human review gate before UX7, then UX6-C; distribution remains UNQUALIFIED.
+
+> Historical Phase 0 audit — 2026-10-16: UX7 generation timing, UX6-C bounded UI consistency, REL1-A public packaging identity, REL1-B macOS distribution blocker. [Phase 0 audit](../releases/v1-stabilization-campaign/PHASE0_AUDIT.md); implementation awaits explicit installer-identity transition decision. No RC/release qualification.
+
 > 2026-10-16: stabilization accepted; desktop preparation authorized and delivered.
 > [Candidate preparation](../releases/DESKTOP_CANDIDATES.md): macOS DMG produced,
 > Windows/Ubuntu manual build workflow ready; platform qualification stays open.
 
-Current development version: **0.9.0-beta.1**, V1 stabilization beta.
+Current development version: **0.9.0-beta.2**, V1 stabilization beta.
 [Version decision and progression](../releases/VERSIONING.md); 1.0 release gates remain open.
 
 > 2026-10-15 continuation: user approved bounded V1 stabilization. See
@@ -519,3 +539,13 @@ Existing selected-object status-bar dimensions partially provide measurement. No
 MEAS1 entry was found in this roadmap; the requested future measurement direction
 is recorded in the A1 plan (distance/point-to-point/radius/angle/length/overlays),
 without creating or implementing another milestone or duplicating selected bounds.
+
+## REL1-B revised release gates — approved 2026-10-16
+
+| Milestone | V1 priority | Acceptance / state |
+| --- | --- | --- |
+| REL1-B1 Community macOS distribution | REQUIRED | Valid ad-hoc FabCAM DMG, verified identity and SHA-256, clean browser-download/install/runtime with documented per-app Open Anyway where needed; local packaging preparation complete; clean-host qualification pending. Packaging, integrity and failed/missing clean-install checks block release. |
+| REL1-B2 Developer ID / notarization / stapling | OPTIONAL POST-V1 | Missing membership, Apple identity or ticket does not block V1. No credentials/services configured now. |
+
+GitHub Release distribution and checksum publication require separate explicit approval.
+Never disable Gatekeeper or remove quarantine. Windows/Ubuntu test plans remain unchanged.

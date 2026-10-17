@@ -637,9 +637,8 @@ mod tests {
             0,
         );
         // Snapshot — bump PIPELINE_VERSION when this legitimately changes.
-        // (Updated when the per-type hand hashers were replaced by serde-JSON
-        //  hashing + PIPELINE_VERSION 46→47.)
-        assert_eq!(key.0, 0x59c3_f268_4afa_757b_u64, "got {:#018x}", key.0);
+        // Updated for PIPELINE_VERSION 48→49: V-Carve preparation/planning and bounded clearance proof.
+        assert_eq!(key.0, 0x65f6_602b_3590_64db_u64, "got {:#018x}", key.0);
     }
 
     #[test]

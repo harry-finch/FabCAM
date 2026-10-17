@@ -2258,5 +2258,18 @@
   "cleanup.deviation": "Maximum deviation",
   "cleanup.no_import": "Import a drawing first",
   "help.key.middle_drag": "middle-drag",
-  "cleanup.overview": "Show whole drawing"
+  "cleanup.overview": "Show whole drawing",
+  "ux7.running": "Generating toolpaths…",
+  "ux7.obsolete": "Project changed — result obsolete after",
+  "ux7.success": "Generated in",
+  "ux7.cancelled": "Generation cancelled after",
+  "ux7.blocked": "Generated with blocking diagnostics in",
+  "ux7.failed": "Generation failed after",
+  "ux7.help": "Wall-clock generation time, including request preparation and result processing. Preview simulation is separate; this is not estimated machining time.",
+  "ux7.no_cancel": "Cancellation unavailable for this path",
+  "ux6c.shopbot_arcs": "ShopBot OpenSBP linearizes supported XY arcs at 0.01 mm. Arc fitting below is stored CAM intent; it does not enable circular OpenSBP moves.",
+  "ux6c.arc_settings": "Arc fitting",
+  "ux6c.fit_before_post": "Fit arcs before postprocessing",
+  "fs391.low_effective_chipload": "RPM or feed limits reduce chipload below the selected target. Review cutting conditions; this is not a material-specific rubbing threshold.",
+  "fs391.generic_profile_direct_entry": "This generic profile does not specify direct plunge suitability. Confirm the cutter supports axial entry."
 }

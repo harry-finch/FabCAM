@@ -72,11 +72,13 @@ pub fn arc_to_bulge(
         center.x + radius * end_angle.cos(),
         center.y + radius * end_angle.sin(),
     );
-    let mut sweep = end_angle - start_angle;
-    while sweep > std::f64::consts::PI {
+    // Signed principal sweep, retaining the sign at exactly +/- PI.
+    let raw = end_angle - start_angle;
+    let mut sweep = raw % std::f64::consts::TAU;
+    if sweep > std::f64::consts::PI {
         sweep -= std::f64::consts::TAU;
     }
-    while sweep < -std::f64::consts::PI {
+    if sweep < -std::f64::consts::PI {
         sweep += std::f64::consts::TAU;
     }
     let bulge = (sweep * 0.25).tan();
@@ -151,14 +153,8 @@ pub fn arc_sweep(center: Point2, start: Point2, end: Point2, ccw: bool) -> f64 {
     use std::f64::consts::TAU;
     let a0 = (start.y - center.y).atan2(start.x - center.x);
     let a1 = (end.y - center.y).atan2(end.x - center.x);
-    let mut sweep = if ccw { a1 - a0 } else { a0 - a1 };
-    while sweep < 0.0 {
-        sweep += TAU;
-    }
-    while sweep > TAU {
-        sweep -= TAU;
-    }
-    sweep
+    let sweep = if ccw { a1 - a0 } else { a0 - a1 };
+    sweep.rem_euclid(TAU)
 }
 
 /// Does the directed arc `[theta_start, theta_start + sweep]`
@@ -170,32 +166,20 @@ pub fn arc_sweep(center: Point2, start: Point2, end: Point2, ccw: bool) -> f64 {
 #[must_use]
 pub fn arc_contains_angle(theta_start: f64, sweep: f64, theta: f64) -> bool {
     let two_pi = std::f64::consts::TAU;
+    if !theta_start.is_finite() || !sweep.is_finite() || !theta.is_finite() {
+        return false;
+    }
     if sweep.abs() >= two_pi - 1e-9 {
         return true;
     }
-    // Walk forward by sweep direction; normalize (theta - theta_start) into
-    // the sweep direction's sign so the comparison reduces to
-    // 0 ≤ delta ≤ |sweep|.
-    let mut delta = theta - theta_start;
-    if sweep >= 0.0 {
-        // CCW: normalize delta into [0, 2π).
-        while delta < -1e-12 {
-            delta += two_pi;
-        }
-        while delta >= two_pi - 1e-12 {
-            delta -= two_pi;
-        }
-        delta <= sweep + 1e-9
-    } else {
-        // CW: normalize delta into (-2π, 0].
-        while delta > 1e-12 {
-            delta -= two_pi;
-        }
-        while delta <= -two_pi + 1e-12 {
-            delta += two_pi;
-        }
-        delta >= sweep - 1e-9
+    // Reduce each angle first, so subtraction cannot overflow for finite inputs.
+    let delta = theta.rem_euclid(two_pi) - theta_start.rem_euclid(two_pi);
+    let mut distance = (if sweep >= 0.0 { delta } else { -delta }).rem_euclid(two_pi);
+    // Retain the existing angular endpoint-roundoff allowance (radians).
+    if distance >= two_pi - 1e-12 {
+        distance = 0.0;
     }
+    distance <= sweep.abs() + 1e-9
 }
 
 #[cfg(test)]
@@ -204,6 +188,25 @@ mod tests {
 
     fn approx(a: f64, b: f64) -> bool {
         (a - b).abs() < 1e-9
+    }
+
+    #[test]
+    fn audit_angles_are_bounded_and_preserve_signed_half_turns() {
+        use std::f64::consts::{PI, TAU};
+        let c = Point2::new(0.0, 0.0);
+        for angle in [PI, -PI, 3.0 * PI, -3.0 * PI] {
+            let (_, _, b) = arc_to_bulge(c, 0.0, angle, 1.0);
+            assert!((b - angle.signum()).abs() < 1e-12);
+        }
+        for angle in [1e300, -1e300, f64::INFINITY, f64::NEG_INFINITY, f64::NAN] {
+            let (_, _, b) = arc_to_bulge(c, 0.0, angle, 1.0);
+            assert!(b.is_finite() || !angle.is_finite());
+            assert!(!arc_contains_angle(angle, f64::NAN, 0.0));
+            assert!(!arc_contains_angle(0.0, TAU, f64::INFINITY));
+        }
+        assert!(arc_contains_angle(0.0, 0.1, -5e-13));
+        assert!(arc_contains_angle(0.0, -0.1, 5e-13));
+        assert!(!arc_contains_angle(0.0, 0.1, -1e-6));
     }
 
     #[test]

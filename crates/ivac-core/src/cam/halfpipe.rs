@@ -38,7 +38,7 @@ use crate::project::HalfpipeProfile;
 ///
 /// `at_corner`: true when `v` sits near a re-entrant boundary
 /// corner (the two nearest boundary footings are on different segments,
-/// subtending an angle < ~170° at `v`). At such points the floor must
+/// subtending an angle < ~150° at `v`). At such points the floor must
 /// match the *corner-arc* radius (= the configured profile R for
 /// `CircularArc`; the cone formula at the user-provided angle for
 /// `VBottom`) — the incircle `r` reflects the slot-narrowing toward
@@ -164,7 +164,7 @@ pub fn polyline_to_z(
 /// subtend at the vertex is sharper than ~150°. At a straight-slot
 /// medial-axis point the angle is ~180° (the two footings are on
 /// opposite-facing edges across the slot); at a re-entrant corner of
-/// internal angle θ the subtended angle equals θ, so any θ < 150° is
+/// internal angle α the subtended angle is π-α. The existing 150° threshold is
 /// a confident corner detection.
 fn is_at_reentrant_corner(v: &VPoint, boundary: &[(Point2, Point2)]) -> bool {
     if boundary.len() < 2 {
@@ -192,7 +192,9 @@ fn is_at_reentrant_corner(v: &VPoint, boundary: &[(Point2, Point2)]) -> bool {
     let (Some((i1, d1, f1)), Some((i2, d2, f2))) = (nearest, second) else {
         return false;
     };
-    if i1 == i2 {
+    // A shared facet endpoint is one witness, not two independent walls.
+    // Relative-to-distance roundoff tolerance; not a physical machining tolerance.
+    if i1 == i2 || f1.distance(f2) <= 1e-9 * d1.max(d2).max(1.0) {
         return false;
     }
     // Both footings must be roughly equidistant — the medial-axis
@@ -240,6 +242,21 @@ mod tests {
 
     /// `CircularArc` profile with R = 5: at r = 0, z = 0; at r = R, z = -R;
     /// at r = R/sqrt(2), z = -R + R/sqrt(2).
+    #[test]
+    fn shared_curve_facet_vertex_never_forces_full_radius_depth() {
+        let vertex = Point2::new(0.0, 2.0);
+        let boundary = [
+            (Point2::new(-1.0, 2.1), vertex),
+            (vertex, Point2::new(1.0, 2.1)),
+            (Point2::new(-5.0, -2.0), Point2::new(5.0, -2.0)),
+        ];
+        let v = vp(0.0, 0.0, 2.0);
+        assert!(!is_at_reentrant_corner(&v, &boundary));
+        let profile = HalfpipeProfile::CircularArc { radius_mm: 5.0 };
+        let (track, _, _) = polyline_to_z(&[v], profile, None, None, Some(&boundary));
+        assert!((track[0].2 + 5.0 - 21.0_f64.sqrt()).abs() < 1e-12);
+        assert!(track[0].2 > -1.0);
+    }
     #[test]
     fn circular_arc_profile_depth_curve() {
         let p = HalfpipeProfile::CircularArc { radius_mm: 5.0 };

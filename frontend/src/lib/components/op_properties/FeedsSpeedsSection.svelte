@@ -674,6 +674,12 @@
                       {diagnostic.kind === 'unknown_limit'
                         ? `${t('fs391.unknown_limit')}: ${diagnostic.field}`
                         : t(`fs391.${diagnostic.kind}`)}
+                      {#if diagnostic.kind === 'low_effective_chipload'}
+                        {displayNumber(diagnostic.chipload_mm_tooth, 5)} / {displayNumber(
+                          diagnostic.target_chipload_mm_tooth,
+                          5,
+                        )} mm/tooth
+                      {/if}
                     </li>{/each}
                 </ul>{/if}
               <dl>

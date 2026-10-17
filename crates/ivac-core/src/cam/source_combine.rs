@@ -64,15 +64,13 @@ pub fn build_frame(
     padding_mm: f64,
     corner_radius_mm: Option<f64>,
 ) -> VcObject {
-    // Endpoint bbox of every segment in the selection. Bulged arcs whose
-    // midpoint extends past the chord are a v1 limitation noted in the
-    // bd issue — endpoints-only is good enough for typical text/plaque
-    // selections.
+    // Include exact cardinal extrema for bulged arcs, skipping empty objects.
     let mut bbox = crate::geometry::BBox::EMPTY;
     for obj in selection {
-        for s in &obj.segments {
-            bbox.extend_point(s.start);
-            bbox.extend_point(s.end);
+        if !obj.segments.is_empty() {
+            let bounds = crate::geometry::BBox::from_segments(&obj.segments);
+            bbox.extend_point(Point2::new(bounds.min_x, bounds.min_y));
+            bbox.extend_point(Point2::new(bounds.max_x, bounds.max_y));
         }
     }
     if !bbox.is_finite() {
@@ -584,6 +582,21 @@ mod tests {
         acc.abs() * 0.5
     }
 
+    #[test]
+    fn frame_padding_encloses_semicircle_extrema() {
+        let a = Point2::new(-2.0, 0.0);
+        let b = Point2::new(2.0, 0.0);
+        let circle = VcObject::new(
+            vec![
+                Segment::arc(a, b, 1.0, None, "0", 7),
+                Segment::arc(b, a, 1.0, None, "0", 7),
+            ],
+            true,
+        );
+        let frame = build_frame(&[&circle], FrameShape::Rectangle, 1.0, None);
+        let bounds = crate::geometry::BBox::from_segments(&frame.segments);
+        assert!((bounds.min_y + 3.0).abs() < 1e-12 && (bounds.max_y - 3.0).abs() < 1e-12);
+    }
     #[test]
     fn auto_emits_outer_with_inner_as_hole() {
         let objs = build_objects(vec![

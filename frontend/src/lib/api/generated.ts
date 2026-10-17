@@ -907,6 +907,16 @@ export interface components {
         } | {
             /** @enum {string} */
             kind: "unknown_doc";
+        } | {
+            /** Format: double */
+            chipload_mm_tooth: number;
+            /** @enum {string} */
+            kind: "low_effective_chipload";
+            /** Format: double */
+            target_chipload_mm_tooth: number;
+        } | {
+            /** @enum {string} */
+            kind: "generic_profile_direct_entry";
         };
         /** @enum {string} */
         FsDistribution: "bundled" | "local_only" | "external_reference";

@@ -250,6 +250,99 @@ impl SegmentNearestGrid {
     }
 }
 
+/// Conservative segment-box broad phase with bounded grid storage and query work.
+/// Pathological long/diagonal edges fall back to a box scan, never omission.
+pub(crate) struct SegmentBoxIndex {
+    bounds: Vec<(Point2, Point2)>,
+    grid: Option<HashMap<(i64, i64), Vec<usize>>>,
+    cell: f64,
+}
+impl SegmentBoxIndex {
+    pub(crate) fn new(edges: &[(Point2, Point2)]) -> Self {
+        let bounds: Vec<_> = edges
+            .iter()
+            .map(|(a, b)| {
+                (
+                    Point2::new(a.x.min(b.x), a.y.min(b.y)),
+                    Point2::new(a.x.max(b.x), a.y.max(b.y)),
+                )
+            })
+            .collect();
+        let mut all = crate::BBox::EMPTY;
+        for &(a, b) in &bounds {
+            all.extend_point(a);
+            all.extend_point(b);
+        }
+        let cell = auto_cell(
+            (all.max_x - all.min_x).max(all.max_y - all.min_y),
+            edges.len().max(1),
+        );
+        let mut grid: HashMap<_, Vec<usize>> = HashMap::new();
+        let mut entries = 0_u64;
+        for (i, &(a, b)) in bounds.iter().enumerate() {
+            let (x0, x1, y0, y1) = (
+                cell_floor(a.x, cell),
+                cell_floor(b.x, cell),
+                cell_floor(a.y, cell),
+                cell_floor(b.y, cell),
+            );
+            entries = entries.saturating_add(
+                (x1.saturating_sub(x0) as u64 + 1).saturating_mul(y1.saturating_sub(y0) as u64 + 1),
+            );
+            if entries > 500_000 {
+                return Self {
+                    bounds,
+                    grid: None,
+                    cell,
+                };
+            }
+            for x in x0..=x1 {
+                for y in y0..=y1 {
+                    grid.entry((x, y)).or_default().push(i);
+                }
+            }
+        }
+        Self {
+            bounds,
+            grid: Some(grid),
+            cell,
+        }
+    }
+    pub(crate) fn candidates(&self, min: Point2, max: Point2, out: &mut Vec<usize>) -> usize {
+        out.clear();
+        let (x0, x1, y0, y1) = (
+            cell_floor(min.x, self.cell),
+            cell_floor(max.x, self.cell),
+            cell_floor(min.y, self.cell),
+            cell_floor(max.y, self.cell),
+        );
+        let cells =
+            (x1.saturating_sub(x0) as u64 + 1).saturating_mul(y1.saturating_sub(y0) as u64 + 1);
+        let mut work = 1_usize;
+        if let Some(grid) = self.grid.as_ref().filter(|_| cells <= 50_000) {
+            work = work.saturating_add(cells as usize);
+            for x in x0..=x1 {
+                for y in y0..=y1 {
+                    if let Some(ids) = grid.get(&(x, y)) {
+                        work = work.saturating_add(ids.len());
+                        out.extend(ids);
+                    }
+                }
+            }
+            out.sort_unstable();
+            out.dedup();
+        } else {
+            work = work.saturating_add(self.bounds.len());
+            out.extend(0..self.bounds.len());
+        }
+        out.retain(|&i| {
+            let (a, b) = self.bounds[i];
+            a.x <= max.x && b.x >= min.x && a.y <= max.y && b.y >= min.y
+        });
+        work
+    }
+}
+
 // ─── ray-vs-segment first-hit grid ──────────────────────────────────────
 
 /// Uniform 2D grid for outward-ray probes against a set of line segments,
@@ -403,7 +496,18 @@ impl SegmentRayGrid {
                 return;
             }
             // Step to the next cell along the ray.
-            if t_max_x < t_max_y {
+            if t_max_x == t_max_y {
+                // Exact corner crossing: include both side cells before the diagonal.
+                for cell in [(cx + step_x, cy), (cx, cy + step_y)] {
+                    if let Some(list) = self.grid.get(&cell) {
+                        out.extend_from_slice(list);
+                    }
+                }
+                cx += step_x;
+                cy += step_y;
+                t_max_x += t_delta_x;
+                t_max_y += t_delta_y;
+            } else if t_max_x < t_max_y {
                 cx += step_x;
                 t_max_x += t_delta_x;
             } else {
@@ -689,6 +793,63 @@ mod tests {
         }
     }
 
+    #[test]
+    fn box_index_matches_overlap_scan_including_storage_fallback() {
+        for n in [12, 800] {
+            let edges: Vec<_> = (0..n)
+                .map(|i| {
+                    (
+                        Point2::new(-100.0, -100.0 + f64::from(i) * 0.01),
+                        Point2::new(100.0, 100.0),
+                    )
+                })
+                .collect();
+            let index = SegmentBoxIndex::new(&edges);
+            if n == 800 {
+                assert!(index.grid.is_none());
+            }
+            for x in [-101.0, -100.0, 0.0, 99.9, 101.0] {
+                let min = Point2::new(x, -1.0);
+                let max = Point2::new(x + 0.1, 1.0);
+                let mut actual = vec![];
+                index.candidates(min, max, &mut actual);
+                let expected: Vec<_> = index
+                    .bounds
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(i, (a, b))| {
+                        (a.x <= max.x && b.x >= min.x && a.y <= max.y && b.y >= min.y).then_some(i)
+                    })
+                    .collect();
+                assert_eq!(actual, expected);
+            }
+        }
+    }
+    #[test]
+    fn ray_corner_and_far_external_probes_match_full_scan() {
+        let segs = vec![
+            (Point2::new(1.0, 1.0001), Point2::new(1.1, 1.0)),
+            (Point2::new(5.0, 4.9999), Point2::new(4.9, 5.0)),
+            (Point2::new(-3.0, 0.0), Point2::new(3.0, 0.0)),
+        ];
+        let grid = SegmentRayGrid::new(&segs, 0.001);
+        let mut candidates = vec![];
+        for origin in [
+            Point2::new(-1e6, -1e6),
+            Point2::new(0.0, 0.0),
+            Point2::new(-10.0, 8.0),
+        ] {
+            for (x, y) in [(1.0_f64, 1.0_f64), (1.0, 0.001), (-1.0, -1.0), (1.0, 0.0)] {
+                let norm = x.hypot(y);
+                let dir = (x / norm, y / norm);
+                grid.collect_candidates(origin, dir, &mut candidates);
+                assert_eq!(
+                    probe_nearest(origin, dir, 0.001, &segs, &candidates),
+                    probe_nearest(origin, dir, 0.001, &segs, &[0, 1, 2])
+                );
+            }
+        }
+    }
     #[test]
     fn nearest_grid_matches_brute_force_exactly() {
         let mut rng = Lcg(0x1234_5678_9abc_def0);

@@ -148,7 +148,8 @@ pub fn cam_request(
             rpm_min: project.machine.spindle_rpm_min,
             rpm_max: project.machine.spindle_rpm_max,
             max_feed_mm_min: project.machine.max_feed_mm_min,
-            max_plunge_mm_min: project.machine.max_feed_mm_min,
+            // XY feed limit is not evidence of an axial plunge limit.
+            max_plunge_mm_min: None,
         },
         material: fs::MaterialSnapshot {
             identity: project.material.clone(),
@@ -928,6 +929,7 @@ mod tests {
             .profile_set
             .identity
             .clone();
+        p.machine.max_feed_mm_min = Some(9000);
         p.operations[0].params.depth_list = vec![-1.0, -2.5, -2.8];
         p.operations[0].params.step = Some(-9.0);
         let r = cam_request(
@@ -938,6 +940,8 @@ mod tests {
         )
         .unwrap();
         assert_eq!(r.operation.doc_mm, Some(1.5));
+        assert_eq!(r.machine.max_plunge_mm_min, None);
+        assert_eq!(r.machine.max_feed_mm_min, Some(9000));
         p.operations[0].params.fs_full_width = false;
         let r = cam_request(&p, &p.operations[0], dataset, fs::Aggressiveness::Prudent).unwrap();
         assert_eq!(r.operation.engagement, fs::Engagement::Unknown);

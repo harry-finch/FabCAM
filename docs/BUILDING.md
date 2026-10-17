@@ -1,9 +1,10 @@
 # Building FabCAM from source
 
-FabCAM is the public product name. The legacy packaging value `productName=ivaCAM`
-and executable/installer filenames remain for installation compatibility. Display
-titles and macOS display metadata use FabCAM; `org.opcenter.ivacam` and app data
-paths are unchanged. See [ADR-0012](shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md).
+FabCAM is the public product and package name. The bundle identifier
+`org.opcenter.ivacam`, internal executable `ivac-desktop` and application-data
+paths remain unchanged. Earlier ivaCAM beta installations are test installs;
+see [REL1-A transition and development signing](releases/v1-stabilization-campaign/REL1_A.md).
+Upstream attribution is retained; this supersedes the packaging-name retention in ADR-0012.
 
 Targeted at users who'd rather not run a prebuilt binary they didn't
 compile themselves. The project is a Cargo workspace plus a Vite frontend;
@@ -52,8 +53,8 @@ xcode-select --install   # CommandLine Tools
 ```
 
 That's it — the frameworks Tauri needs (WebKit, security, etc.) come from
-the system. If you intend to notarize a build for distribution, also
-install `gon` or use `tauri-cli`'s built-in signing flow.
+the system. V1 uses ad-hoc community signing; Developer ID/notarization is
+optional post-V1 work and no Apple credentials are configured for it now.
 
 ### Windows
 
@@ -255,7 +256,7 @@ Outputs land under `target/release/bundle/`:
 | Platform | Artifact                                                   |
 |----------|------------------------------------------------------------|
 | Linux    | `bundle/deb/*.deb`, `bundle/rpm/*.rpm`, `bundle/appimage/*.AppImage` |
-| macOS    | `bundle/dmg/ivaCAM.dmg`, `bundle/macos/ivaCAM.app`   |
+| macOS    | `bundle/dmg/FabCAM_*.dmg`, `bundle/macos/FabCAM.app`   |
 | Windows  | `bundle/msi/ivaCAM.msi`                            |
 
 After bundling the AppImage, run
@@ -445,8 +446,10 @@ For Tauri builds, launching the bundled app should open a window titled
   4.0 ABI. Install `libwebkit2gtk-4.0-dev` and re-run; Tauri 2 falls back.
 - **WebView2 missing on Windows** — install the runtime from Microsoft;
   the bundle won't embed it for you in dev builds.
-- **macOS notarization complaints** — for personal builds, set the
-  `signingIdentity` to `null` in `tauri.conf.json` to skip signing.
+- **macOS first-launch warnings** — retain valid ad-hoc signing; follow the
+  [community distribution plan](releases/v1-stabilization-campaign/REL1_B_PLAN.md)
+  for Apple’s per-app Open Anyway procedure. Never disable Gatekeeper or remove
+  quarantine. Investigate damaged bundles or checksum failures rather than bypassing them.
 
 If something else trips you up that isn't listed, please open an issue
 with the exact platform, toolchain versions (`rustc -V`, `node -v`,
@@ -459,3 +462,33 @@ The manual `Desktop test candidates` workflow prepares macOS arm64 DMG, Windows 
 NSIS and Ubuntu amd64 DEB artifacts without publishing a Release. See the
 [candidate preparation/protocol](releases/DESKTOP_CANDIDATES.md) for exact commands,
 source/checksum manifests and the distinction between builder OS and tested runtime.
+
+### V1 packaging identity and macOS signature audit
+
+See [Phase 0](releases/v1-stabilization-campaign/PHASE0_AUDIT.md) for the productName migration boundary, actual failed signature diagnostics and secure signing/notarization prerequisites. Existing unsigned test builds are preserved; distribution is not qualified.
+
+### REL1-B1 community macOS builds — approved V1 policy
+
+Keep the existing `tauri.dev-signing.conf.json` ad-hoc overlay for development and
+community packaging (`tauri build --config tauri.dev-signing.conf.json --bundles app,dmg -- --locked`
+from crates/ivac-tauri with the documented toolchain). Validate DMG, assembled/installed
+bundle signature and identity; generate SHA-256 after final packaging. Preserve data
+and org.opcenter.ivacam. Clearly label the app “not notarized by Apple”.
+
+[REL1-B1 acceptance and first-launch instructions](releases/v1-stabilization-campaign/REL1_B_PLAN.md)
+require a fresh browser download and clean macOS installation/runtime test. Existing
+local launch does not satisfy this gate. Developer ID/notarization/stapling are optional
+REL1-B2 post-V1 work. No Apple credentials, publication or workflow dispatch authorized
+by this planning update; release artifacts and checksums are published only after approval.
+
+After building a community DMG, verify it before collection:
+
+```sh
+python3 scripts/verify-macos-community.py target/release/bundle/dmg/FabCAM_0.9.0-beta.1_aarch64.dmg --version 0.9.0-beta.1 --arch arm64 --output dist-test/macos-community-verification.json
+```
+
+Use the actual version/path and a new evidence destination. Universal packages require
+`--arch arm64,x86_64`. The verifier needs macOS disk-image mounting permissions and
+never changes quarantine or signs the mounted app. Existing evidence is not overwritten.
+Local structural verification does not qualify clean installation; use the
+[REL1-B1 clean-host protocol](releases/v1-stabilization-campaign/REL1_B1_CLEAN_INSTALL.md).

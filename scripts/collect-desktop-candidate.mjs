@@ -33,10 +33,12 @@ export function collectCandidate({ platform, target, version, bundleDir, outputD
     format: 1, product: 'FabCAM', version, platform, declared_build_target: target,
     software_test_candidate: true, installation_qualified: false, runtime_qualified: false,
     physical_validation: false, signature_status: 'not certified by this collector',
+    ...(platform === 'macos' ? { distribution_model: 'community', apple_notarized: false } : {}),
     provenance, artifact: { file: files[0], bytes: bytes.length, sha256 },
   };
   writeFileSync(join(outputDir, 'candidate.json'), JSON.stringify(manifest, null, 2) + '\n');
-  writeFileSync(join(outputDir, 'SHA256SUMS.txt'), `${sha256}  ${files[0]}\n`);
+  const manifestSha = createHash('sha256').update(readFileSync(join(outputDir, 'candidate.json'))).digest('hex');
+  writeFileSync(join(outputDir, 'SHA256SUMS.txt'), `${sha256}  ${files[0]}\n${manifestSha}  candidate.json\n`);
   return manifest;
 }
 

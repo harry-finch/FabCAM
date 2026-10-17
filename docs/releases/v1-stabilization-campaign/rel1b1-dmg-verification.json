@@ -1,0 +1,19 @@
+{
+  "identity": {
+    "CFBundleIdentifier": "org.opcenter.ivacam",
+    "CFBundleName": "FabCAM",
+    "CFBundleDisplayName": "FabCAM",
+    "CFBundleExecutable": "ivac-desktop",
+    "CFBundleShortVersionString": "0.9.0-beta.1"
+  },
+  "architectures": [
+    "arm64"
+  ],
+  "signature": "ad-hoc; strict verification passed",
+  "binary_sha256": "e9a15f58ace2d7f8bc01703a14eee718299ee273acce310d4c2d7d9c25601141",
+  "artifact": "FabCAM_0.9.0-beta.1_aarch64.dmg",
+  "sha256": "4a3d536f2a816cc04fef6660e3800026e15e7b8b5a562f1d20b9e38193d2d997",
+  "notarization": "not notarized by Apple",
+  "clean_install_qualified": false,
+  "runtime_qualified": false
+}

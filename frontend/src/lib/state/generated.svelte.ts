@@ -70,8 +70,7 @@ export class GeneratedState {
   /// Streaming pipeline lifecycle. Transitions:
   ///   idle → running (beginGenerate)
   ///   running → cancelling (cancelGenerate)
-  ///   running | cancelling → completed (finishGenerate)
-  ///   completed → idle (1 s later, via setTimeout)
+  ///   running | cancelling → idle (finishGenerate); terminal feedback is request-owned
   ///   any → idle (failGenerate, on ProjectState)
   pipelineState = $state<PipelinePhase>('idle');
 
@@ -117,6 +116,7 @@ export class GeneratedState {
   /// can't leak progress / cache counters from the prior run.
   beginGenerate(): void {
     this.remainingVisible = false;
+    this.inputContextKey = null; // A failed/replaced request cannot re-enable a previous export.
     this.generating = true;
     this.pipelineState = 'running';
     this.pipelineProgress = null;
@@ -157,20 +157,14 @@ export class GeneratedState {
         this.pipelineProgress = {
           ...this.pipelineProgress,
           opFraction: 1,
-          opIdx: this.pipelineProgress.opIdx + 1,
         };
       }
     }
   }
 
-  /// Successful pipeline completion. Briefly shows the `completed`
-  /// state so the UI can flash the success indicator before reverting
-  /// to idle.
+  /// Terminal feedback is owned by the request, not a delayed shared timeout.
   finishGenerate(): void {
-    this.pipelineState = 'completed';
-    setTimeout(() => {
-      if (this.pipelineState === 'completed') this.pipelineState = 'idle';
-    }, 1000);
+    this.pipelineState = 'idle';
   }
 
   /// Pipeline aborted by the user (Cancel button or AbortSignal).

@@ -13,8 +13,6 @@
     checkCornerRelief,
   } from '../state/generation-context';
   import { resolveExportExtension } from '../services/gcode-export';
-  // Simplified bar: post-processor + Generate + Download. The full setup
-  // tree lives in SetupPanel and feeds project.setup.
 
   import { defaultClient } from '../api/http';
   import { CancelledError } from '../api/client';
@@ -38,7 +36,9 @@
   import FloatingPanel from './FloatingPanel.svelte';
   import { workspace } from '../state/workspace.svelte';
   import { warningFocus } from '../state/warning-focus.svelte';
-  import { tick } from 'svelte';
+  import { tick, onDestroy } from 'svelte';
+  import { GenerationRuns, type GenerationRun } from '../state/generation-run';
+  import GenerationTiming from './GenerationTiming.svelte';
   import { t } from '../i18n';
   import { cpsSelectionKey, toCpsPostRequest } from './cps-post-form';
   import { warningMessage } from './warning-display';
@@ -55,38 +55,20 @@
   function coercePost(v: string): PostId {
     return v === 'grbl' || v === 'hpgl' || v === 'cps' ? v : 'linuxcnc';
   }
-  // The gcode dialect is now a MACHINE setting (chosen in the Machine
-  // dialog) rather than a toolbar dropdown — a controller speaks one
-  // dialect. Derive from the machine, falling back to the last-used /
-  // persisted choice when the machine doesn't specify one.
   const post = $derived<PostId>(
     coercePost(project.data.machine.gcodeDialect ?? workspace.get().last_post_processor),
   );
-  /// Tracks which post-processor produced the currently cached `project.gen.generated`
-  /// gcode buffer. When the user flips the dropdown to a different dialect, the
-  /// cached text is now wrong-dialect — exporting it via the Download button
-  /// would write LinuxCNC gcode into a .plt (HPGL) file. Clear the cache so the
-  /// user is forced to regen, matching how a machine swap invalidates the run.
+  // Changing dialect or CPS properties invalidates cached machine output.
   let generatedPost: string | null = null;
-  /// Identity of the post that produced the cached gcode: the dialect
-  /// plus, for CPS, the selected script + property values. Switching
-  /// post or tweaking a property must drop stale gcode exactly like a
-  /// dialect switch does.
   const postTag = $derived(
     post === 'cps' ? `cps|${cpsSelectionKey(project.data.machine.cpsPost)}` : post,
   );
   $effect(() => {
-    // Drop the post tag whenever the cached gcode disappears (project
-    // reload, manual clear, machine swap) so the next run re-captures
-    // the current dropdown choice.
     if (project.gen.generated == null) generatedPost = null;
   });
   $effect(() => {
     const current = postTag;
-    // Defer the workspace write off the synchronous effect flush.
-    // Writing $state (workspace.version) inside an effect body aborts
-    // Svelte 5's reactivity scheduler silently — see project.svelte.ts
-    // persistPerProjectState for the full diagnosis.
+    // Defer workspace state writes to avoid re-entering Svelte effect flushing.
     queueMicrotask(() => {
       try {
         workspace.setLastPostProcessor(post);
@@ -95,20 +77,21 @@
       }
     });
     if (generatedPost != null && generatedPost !== current && project.gen.generated != null) {
-      // Dialect changed — drop the cached gcode so Download can't emit
-      // it into a file with the new dialect's extension.
       project.gen.generated = null;
       generatedPost = null;
     }
   });
   let warningPanelOpen = $state(false);
   let abortController: AbortController | null = null;
+  const runs = new GenerationRuns();
+  let timing = $state<GenerationRun | null>(null);
+  let canCancel = $state(false);
+  onDestroy(() => {
+    runs.invalidate();
+    abortController?.abort();
+    project.endGenerate();
+  });
 
-  /// badge in OperationsList). Open the warnings panel, then — after
-  /// the rows render — expand every <details> for that op and scroll
-  /// the first into view. Reads `seq` so repeat clicks on the same op
-  /// re-fire. Clearing `opId` re-runs this once more, no-op'd by the
-  /// early return.
   $effect(() => {
     const opId = warningFocus.opId;
     void warningFocus.seq;
@@ -134,13 +117,12 @@
 
   $effect(() => {
     void project.documentEpoch;
+    runs.invalidate();
+    timing = null;
     abortController?.abort();
     abortController = null;
   });
 
-  // Auto-regenerate on edit. Watch project.data.dirty + the setting;
-  // when both are true and we're not already running, debounce ~1.5s
-  // and fire run(). Cancel prior pending debounce on each new edit.
   let autoTimer: ReturnType<typeof setTimeout> | null = null;
   const AUTO_REGEN_DEBOUNCE_MS = 1500;
   $effect(() => {
@@ -161,8 +143,6 @@
     }
     autoTimer = setTimeout(() => {
       autoTimer = null;
-      // Re-check guards at fire time — the user may have already hit
-      // Generate manually, or pipelineState may have flipped.
       if (
         project.data.settings.autoRegenerate &&
         project.data.dirty &&
@@ -173,9 +153,6 @@
         void run();
       }
     }, AUTO_REGEN_DEBOUNCE_MS);
-    // Cleanup on unmount (not just on re-run): without this a pending
-    // debounce survives teardown and fires run() after the bar is gone,
-    // re-entering the generate pipeline against stale state.
     return () => {
       if (autoTimer) {
         clearTimeout(autoTimer);
@@ -184,26 +161,9 @@
     };
   });
 
-  // Warning aggregation + severity lane is shared with the phone
-  // PhoneWarnings bar via state/warnings-summary.ts — the two copies had
-  // drifted (this desktop one treated a clean Generate as "not run yet").
-  // Surface pipeline-level warnings in the same panel as sim warnings: a
-  // Generate that raises, say, `op_source_empty` or `tool_too_large` flags
-  // the chip, so we render BOTH lists in one panel with a source tag per
-  // row rather than gating the panel on a non-null simDiagnostics.
-  //
-  // Critical-count spans BOTH sim warnings AND pipeline-level warnings
-  // (tool_too_large, op_order_suspect, frame_padding_below_tool_radius,
-  // spindle_speed_clamped_above_max, stock_origin_outside_geometry_bbox, …).
-  // The safety gate must count planning-time pipeline warnings, not just
-  // sim post-mortem ones — otherwise a Pocket whose tool didn't fit emits
-  // zero toolpath, raises `tool_too_large`, and the user's "block on
-  // critical" setting does NOT prevent the broken gcode from shipping.
-  // Both envelope checks are pipeline-side: the work-area half
-  // (`out_of_work_area`) and the STOCK half (`out_of_stock`,
-  // warnings.rs::push_stock_warning), since the core `Project` carries a
-  // resolved stock box. Both ride in on `project.gen.generated.warnings`,
-  // so the frontend does not synthesize either — doing so would double-count.
+  // Export identity follows actual CAM inputs, not the saved-file dirty flag.
+  // Include pipeline warnings as well as simulation warnings: empty/unsafe paths
+  // and stock/work-area violations must retain their existing export guards.
   const generatedStale = $derived(
     project.gen.generated != null &&
       project.gen.inputContextKey !== generationContextKey(project, post),
@@ -263,6 +223,7 @@
 
   async function run() {
     if (
+      project.gen.generating ||
       !checkCornerRelief(project) ||
       !project.documentActive ||
       project.loading ||
@@ -272,8 +233,24 @@
       return;
     const perf = beginGenerationProbe(post);
     const epoch = project.documentEpoch;
-    const ownsDocument = () => project.documentEpoch === epoch;
     const inputContextKey = generationContextKey(project, post);
+    const run = runs.start(epoch, inputContextKey);
+    if (!run) return;
+    timing = run;
+    const ownsDocument = () => runs.owns(run, project.documentEpoch);
+    let outcome: 'success' | 'failed' | 'cancelled' | 'obsolete' | 'blocked' = 'failed';
+    const acceptsResult = () => {
+      if (!ownsDocument()) return false;
+      if (abortController?.signal.aborted) {
+        outcome = 'cancelled';
+        return false;
+      }
+      if (!runs.accepts(run, project.documentEpoch, generationContextKey(project, post))) {
+        outcome = 'obsolete';
+        return false;
+      }
+      return true;
+    };
     perf?.mark('context_ready');
     const origin = { ...project.data.workOffset };
     project.beginGenerate();
@@ -309,9 +286,10 @@
       // small relative to the unbounded-raster case streaming targets).
       perf?.mark('request_sent');
       const twoSided = project.data.stock?.flip != null && client.generateTwoSided != null;
+      canCancel = !twoSided && !project.data.drawing && !!client.generateStreaming;
       if (twoSided) {
         const both = await client.generateTwoSided!(req);
-        if (!ownsDocument()) return;
+        if (!acceptsResult()) return;
         project.setGeneratedTwoSided({
           front: inDrawingFrame(both.front, origin),
           back: both.back ? inDrawingFrame(both.back, origin) : undefined,
@@ -339,18 +317,24 @@
         } else {
           r = await client.generate(req);
         }
-        if (!ownsDocument()) return;
+        if (!acceptsResult()) return;
         perf?.mark('response_received', { moves: r.toolpath.length });
         project.setGenerated(inDrawingFrame(r, origin));
       }
       project.gen.inputContextKey = inputContextKey;
       generatedPost = postTag;
+      outcome =
+        countCriticalPipelineWarnings(project.gen.generated?.warnings ?? []) > 0 ||
+        countCriticalPipelineWarnings(project.gen.generatedBack?.warnings ?? []) > 0
+          ? 'blocked'
+          : 'success';
       project.finishGenerate();
       perf?.bind(project.gen.generatedVersion);
     } catch (e) {
       perf?.mark(e instanceof CancelledError ? 'cancelled' : 'failed');
       if (!ownsDocument()) return;
-      if (e instanceof CancelledError) {
+      if (e instanceof CancelledError || abortController?.signal.aborted) {
+        outcome = 'cancelled';
         // Cancelled by the user — just snap back to idle.
         project.gen.pipelineState = 'idle';
       } else {
@@ -358,6 +342,7 @@
       }
     } finally {
       if (ownsDocument()) {
+        timing = runs.finish(run, project.documentEpoch, outcome);
         project.endGenerate();
         abortController = null;
       }
@@ -454,7 +439,7 @@
 
 <div class="bar">
   {#if project.gen.pipelineState === 'running' || project.gen.pipelineState === 'cancelling'}
-    <GenerateProgress onCancel={cancelRun} />
+    <GenerateProgress onCancel={cancelRun} {canCancel} />
   {:else}
     <button
       onclick={run}
@@ -478,6 +463,12 @@
         {t('genbar.generate.generate')}
       {/if}
     </button>
+  {/if}
+  {#if timing}
+    <GenerationTiming
+      run={timing}
+      stale={timing.outcome !== 'running' && timing.context !== generationContextKey(project, post)}
+    />
   {/if}
   {#if project.gen.generated}
     {#if twoSided}

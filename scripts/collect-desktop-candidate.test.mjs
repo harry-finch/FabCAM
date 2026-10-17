@@ -15,21 +15,24 @@ function fixture(t, platform) {
 }
 for (const platform of Object.keys(targets)) test(`${platform}: exact artifact bytes, checksum and unqualified status`, t=>{
   const args=fixture(t,platform),spec=targets[platform];
-  const name=`ivaCAM_${args.version}_fixture${spec.suffix}`,bytes=Buffer.from('installer test bytes');
+  const name=`FabCAM_${args.version}_fixture${spec.suffix}`,bytes=Buffer.from('installer test bytes');
   writeFileSync(join(args.bundleDir,spec.folder,name),bytes);
   const result=collectCandidate(args);
   assert.deepEqual(readFileSync(join(args.outputDir,name)),bytes);
   assert.equal(result.artifact.sha256,createHash('sha256').update(bytes).digest('hex'));
   assert.equal(result.installation_qualified,false);
   assert.equal(result.runtime_qualified,false);
+  const manifestHash=createHash('sha256').update(readFileSync(join(args.outputDir,'candidate.json'))).digest('hex');
+  assert.equal(readFileSync(join(args.outputDir,'SHA256SUMS.txt'),'utf8'), `${result.artifact.sha256}  ${name}\n${manifestHash}  candidate.json\n`);
+  if(platform==='macos') assert.equal(result.apple_notarized,false);
   assert.throws(()=>collectCandidate(args),/destination must be empty/);
 });
 test('reject missing, wrong version, wrong target and ambiguous stale installers',t=>{
   const args=fixture(t,'macos'),dir=join(args.bundleDir,'dmg');
   assert.throws(()=>collectCandidate(args),/exactly one/);
-  writeFileSync(join(dir,'ivaCAM_0.5.0_arm64.dmg'),'old');
+  writeFileSync(join(dir,'FabCAM_0.5.0_arm64.dmg'),'old');
   assert.throws(()=>collectCandidate(args),/exactly one/);
-  writeFileSync(join(dir,'ivaCAM_0.9.0-beta.1_arm64.dmg'),'new');
+  writeFileSync(join(dir,'FabCAM_0.9.0-beta.1_arm64.dmg'),'new');
   assert.throws(()=>collectCandidate(args),/exactly one/);
   assert.throws(()=>collectCandidate({...args,target:'x86_64-apple-darwin'}),/platform\/target/);
 });

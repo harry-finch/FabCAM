@@ -1,5 +1,7 @@
 # FS3.9 — Bounded normalized matching
 
+> Historical evidence: current policy-2 corrections and qualification are recorded in [FS audit improvements](FS_AUDIT_IMPROVEMENTS.md). Existing fixtures below describe their original checkpoint.
+
 Policy `fs39-normalized-matching-1`. Engineering implementation, human approval
 pending. FS4 remains **DEFERRED / NONBLOCKING**, physical lab access unavailable.
 See [coverage](FS3_9_COVERAGE.md) and [ADR-0011](../adr/ADR-0011-bounded-cutting-reference-adaptation.md).

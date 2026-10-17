@@ -457,7 +457,7 @@ fn fs08_exact_evidence_never_broadens_to_changed_context() {
 }
 
 #[test]
-fn fs08_exact_values_keep_feed_after_rpm_clamp_and_downgrade_applicability() {
+fn fs08_exact_values_keep_chipload_after_rpm_clamp_and_downgrade_applicability() {
     let mut r = request();
     r.operation.kind = OperationKind::FullSlot;
     r.operation.engagement = Engagement::KnownFullWidth;
@@ -466,9 +466,9 @@ fn fs08_exact_values_keep_feed_after_rpm_clamp_and_downgrade_applicability() {
         available(engine(vec![local_preset("validated", Evidence::Validated)]).recommend(&r));
     assert_eq!(
         (result.parameters.rpm, result.parameters.feed_mm_min),
-        (500, 200)
+        (500, 100)
     );
-    assert_eq!(result.parameters.effective_chipload_mm_tooth, 0.2);
+    assert_eq!(result.parameters.effective_chipload_mm_tooth, 0.1);
     assert_eq!(result.source_evidence, Evidence::Validated);
     assert_eq!(result.applicability, Applicability::AdjustedOutsideEvidence);
 }
@@ -1133,4 +1133,157 @@ fn family_provenance_survives_external_dataset_loss_and_member_reordering() {
         vec![id("plywood-software-fixture"), id("second-material")]
     );
     assert!(recommendation.provenance.machine_family.is_none());
+}
+
+#[test]
+fn exact_values_rpm_cap_never_increases_implicit_chipload() {
+    let mut p = profile("rpm-coupling");
+    p.data = CuttingData::ExactValues {
+        rpm: 24000.0,
+        feed_mm_min: 2400.0,
+        plunge_mm_min: 600.0,
+        doc_mm: 1.0,
+        stepover_ratio: None,
+    };
+    let mut r = request();
+    r.machine.rpm_max = Some(12000);
+    r.tool.max_rpm = None;
+    let a = available(engine(vec![p]).recommend(&r));
+    assert_eq!(a.parameters.rpm, 12000);
+    assert_eq!(a.parameters.feed_mm_min, 1200);
+    assert!(a.parameters.effective_chipload_mm_tooth <= 0.05);
+    assert_eq!(a.applicability, Applicability::AdjustedOutsideEvidence);
+}
+
+#[test]
+fn exact_feed_tracks_tool_cap_and_rounding_but_never_increases_at_rpm_floor() {
+    let mut p = profile("exact-rpm");
+    p.data = CuttingData::ExactValues {
+        rpm: 1000.4,
+        feed_mm_min: 1000.0,
+        plunge_mm_min: 50.0,
+        doc_mm: 1.0,
+        stepover_ratio: None,
+    };
+    let mut r = request();
+    r.tool.max_rpm = Some(500);
+    let a = available(engine(vec![p.clone()]).recommend(&r));
+    assert_eq!(a.parameters.feed_mm_min, 499);
+    assert_eq!(a.parameters.plunge_mm_min, 24);
+    assert!(a.parameters.effective_chipload_mm_tooth <= 1000.0 / (1000.4 * 2.0));
+    assert!(a
+        .provenance
+        .adjustments
+        .iter()
+        .any(|a| a.reason == "rpm_reduction_preserves_chipload"));
+    r.tool.max_rpm = None;
+    r.machine.rpm_min = Some(2000);
+    let a = available(engine(vec![p]).recommend(&r));
+    assert_eq!(a.parameters.feed_mm_min, 1000);
+}
+
+#[test]
+fn feed_saturation_reports_target_comparison_without_material_threshold_or_rpm_retuning() {
+    let mut r = request();
+    r.machine.max_feed_mm_min = Some(10);
+    let a = available(engine(vec![profile("limited")]).recommend(&r));
+    assert_eq!(a.parameters.rpm, 1000);
+    assert!(a.diagnostics.contains(&Diagnostic::LowEffectiveChipload {
+        chipload_mm_tooth: 0.005,
+        target_chipload_mm_tooth: 0.1,
+    }));
+    assert!(a
+        .diagnostics
+        .contains(&Diagnostic::GenericProfileDirectEntry));
+    let mut explicit = profile("direct");
+    explicit.scope.entry = Some(EntryStrategy::Direct);
+    let a = available(engine(vec![explicit]).recommend(&r));
+    assert!(!a
+        .diagnostics
+        .contains(&Diagnostic::GenericProfileDirectEntry));
+    r.operation.entry = EntryStrategy::Ramp;
+    r.machine.max_feed_mm_min = None;
+    let a = available(engine(vec![profile("ramp")]).recommend(&r));
+    assert!(!a
+        .diagnostics
+        .contains(&Diagnostic::GenericProfileDirectEntry));
+    assert!(!a
+        .diagnostics
+        .iter()
+        .any(|d| matches!(d, Diagnostic::LowEffectiveChipload { .. })));
+}
+
+#[test]
+fn plunge_scales_down_for_both_data_modes_and_never_up() {
+    for exact_mode in [false, true] {
+        let mut p = profile("plunge-rpm");
+        p.data = if exact_mode {
+            CuttingData::ExactValues {
+                rpm: 24000.0,
+                feed_mm_min: 2400.0,
+                plunge_mm_min: 600.0,
+                doc_mm: 1.0,
+                stepover_ratio: None,
+            }
+        } else {
+            CuttingData::ChiploadTarget {
+                rpm: 24000.0,
+                chipload_mm_tooth: 0.05,
+                plunge_mm_min: 600.0,
+                doc_mm: 1.0,
+                stepover_ratio: None,
+            }
+        };
+        let mut r = request();
+        r.machine.rpm_max = Some(12000);
+        r.tool.max_rpm = None;
+        let a = available(engine(vec![p.clone()]).recommend(&r));
+        assert_eq!(a.parameters.plunge_mm_min, 300);
+        assert!(a
+            .provenance
+            .adjustments
+            .iter()
+            .any(|x| x.reason == "rpm_reduction_preserves_plunge_per_revolution"));
+        r.machine.rpm_max = None;
+        r.tool.max_rpm = Some(12000);
+        assert_eq!(
+            available(engine(vec![p.clone()]).recommend(&r))
+                .parameters
+                .plunge_mm_min,
+            300
+        );
+        r.tool.max_rpm = None;
+        r.machine.rpm_min = Some(30000);
+        assert_eq!(
+            available(engine(vec![p]).recommend(&r))
+                .parameters
+                .plunge_mm_min,
+            600
+        );
+    }
+}
+
+#[test]
+fn exact_rpm_floor_reports_original_chipload_even_with_feed_cap() {
+    let mut p = profile("floor-diagnostic");
+    p.data = CuttingData::ExactValues {
+        rpm: 8000.0,
+        feed_mm_min: 1600.0,
+        plunge_mm_min: 600.0,
+        doc_mm: 1.0,
+        stepover_ratio: None,
+    };
+    let mut r = request();
+    r.machine.rpm_min = Some(10000);
+    r.machine.rpm_max = None;
+    r.tool.max_rpm = None;
+    for cap in [None, Some(1000)] {
+        r.machine.max_feed_mm_min = cap;
+        let a = available(engine(vec![p.clone()]).recommend(&r));
+        assert_eq!(a.parameters.feed_mm_min, cap.unwrap_or(1600));
+        assert!(a.diagnostics.contains(&Diagnostic::LowEffectiveChipload {
+            chipload_mm_tooth: f64::from(cap.unwrap_or(1600)) / 20000.0,
+            target_chipload_mm_tooth: 0.1,
+        }));
+    }
 }

@@ -5,7 +5,27 @@ User accepted the stabilization lot and authorized desktop preparation.
 Windows 11 and Ubuntu workshop hosts become available again **Monday 19 October**,
 according to the user. No scheduled automation or physical machining is implied.
 
-## Deliverables and limits
+## REL1-A update — 2026-10-16
+
+Public productName is now FabCAM. Prior ivaCAM filenames and results below describe
+preserved historical candidates. New local macOS test builds use
+`--config tauri.dev-signing.conf.json` for an assembled-bundle ad-hoc signature.
+The manual candidate workflow applies that overlay only on macOS and strictly
+verifies the bundle before upload. No Developer ID signing or notarization is implied.
+[Transition and qualification](v1-stabilization-campaign/REL1_A.md).
+
+## Approved community distribution policy — REL1-B1
+
+V1 macOS candidates retain valid ad-hoc signing and FabCAM public names. Apple
+Developer ID/notarization/stapling are optional post-V1, not release blockers.
+DMG packaging, identity, SHA-256 verification and successful fresh-download clean-host
+installation/runtime remain mandatory. Publish checksums alongside release artifacts
+only after explicit approval. Document “not notarized by Apple” and standard per-app
+Open Anyway; never disable Gatekeeper or remove quarantine.
+[Full plan and clean-host protocol](v1-stabilization-campaign/REL1_B_PLAN.md).
+Windows/Ubuntu Monday tests and their policies are unchanged.
+
+## Deliverables and limits (historical initial candidates)
 
 | Target | Candidate format | Build environment | Installation/runtime gate |
 | --- | --- | --- | --- |
@@ -135,3 +155,14 @@ This checkpoint prepares candidates; platform installation/upgrade acceptance re
 open under ivac-2p53v. GEOM1 and existing FS/UX/physical reviews remain independent.
 **HARD STOP before release or the next milestone.** User authorized commit/push and manual workflow dispatch on 2026-10-16; no tag or
 Release is authorized. Installation acceptance remains separate.
+
+## REL1-B1 packaging guards (local implementation)
+
+Both macOS workflows now verify the actual DMG via
+`scripts/verify-macos-community.py` before upload: read-only mount, strict ad-hoc
+signature, public/stable identity and exact architecture. Collector SHA256SUMS includes
+candidate.json; candidate workflow adds macOS verification evidence to the checksummed
+set. The release workflow rechecks macOS hashes after transfer and includes verification
+evidence in its final checksums. No workflow dispatched for this change.
+[Checkpoint results](v1-stabilization-campaign/REL1_B1_RESULTS.md) and
+[clean-host record](v1-stabilization-campaign/REL1_B1_CLEAN_INSTALL.md).

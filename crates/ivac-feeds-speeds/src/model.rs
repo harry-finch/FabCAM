@@ -333,11 +333,19 @@ pub enum Applicability {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum Diagnostic {
-    UnknownLimit { field: String },
+    UnknownLimit {
+        field: String,
+    },
     UnknownEngagementFullWidthAssumption,
     NominalEngagementNotMaximum,
     UnknownEntryStrategy,
     UnknownDoc,
+    /// Feed ceiling reduced chipload below the selected target; not a material rubbing threshold.
+    LowEffectiveChipload {
+        chipload_mm_tooth: f64,
+        target_chipload_mm_tooth: f64,
+    },
+    GenericProfileDirectEntry,
 }
 
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]

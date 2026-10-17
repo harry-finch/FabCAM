@@ -1,5 +1,7 @@
 # FabCAM 1.0 — ShopBot Milling scope and acceptance
 
+> Current macOS policy: [REL1-B1 community distribution](v1-stabilization-campaign/REL1_B_PLAN.md) is V1 REQUIRED; valid ad-hoc DMG, checksums and clean-host install/runtime are blocking gates. Developer ID/notarization/stapling are optional REL1-B2 POST-V1. Planning only; no publication authorization.
+
 > Current 2026-10-15 checkpoint: [scope freeze and triage](V1_SCOPE_FREEZE_TRIAGE.md).
 > User selected Windows 11 x64; latest Ubuntu is pinned to 26.10 x64. macOS reference
 > remains arm64/26.5.2. GEOM1 explicitly not yet reviewed. Proposed initial packages:
@@ -219,16 +221,16 @@ Audit sources: [build guide](../BUILDING.md), [Windows guide](../BUILDING_WINDOW
 [signing](../SIGNING.md), [Tauri config](../../crates/ivac-tauri/tauri.conf.json),
 [desktop workflow](../../.github/workflows/release-desktop.yml),
 [identity ADR](../shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md).
-Current development version is **0.9.0-beta.1** ([version decision](VERSIONING.md)).
-Keep productName ivaCAM, identifier org.opcenter.ivacam, FabCAM window/bundle
-branding and existing icons. The version change does not migrate installation or
+Current development version is **0.9.0-beta.2** ([version decision](VERSIONING.md)).
+Approved REL1-A uses productName FabCAM and preserves identifier org.opcenter.ivacam,
+internal names, application data, formats, attribution and existing icons. The version change does not migrate installation or
 persisted identities, qualify installers, or declare the 1.0 horizon achieved.
 
 Reproduce build from a recorded source snapshot/lockfiles/toolchain, confirm native
 CPS enabled and full matching WASM bundle, record artifact hashes and prerequisites.
 The workflow's floating tooling/signing/runner assumptions need an actual successful
-candidate run; YAML alone proves no distributable. Review macOS signing/notarization
-and Windows signing policy for selected distribution. Do not trigger tag workflows now.
+candidate run; YAML alone proves no distributable. Apply REL1-B1 community macOS gates (Apple notarization is not required for V1)
+and retain the existing Windows signing policy. Do not trigger tag workflows now.
 
 Verify user-data directories actually resolved by Tauri app_data_dir, private FS packs,
 workspace/profile/tool storage and browser IndexedDB separately. Test upgrade over

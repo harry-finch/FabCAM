@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: ivaCAM API
-  version: 0.5.0
+  version: 0.9.0-beta.2
   description: |
     JSON contract for ivaCAM core operations.
     Implementation-agnostic: served by the Stage-1 Python FastAPI bridge,
@@ -1789,6 +1789,33 @@ components:
           kind:
             enum:
             - unknown_doc
+            type: string
+        required:
+        - kind
+        type: object
+      - additionalProperties: false
+        description: Feed ceiling reduced chipload below the selected target; not a material rubbing threshold.
+        properties:
+          chipload_mm_tooth:
+            format: double
+            type: number
+          kind:
+            enum:
+            - low_effective_chipload
+            type: string
+          target_chipload_mm_tooth:
+            format: double
+            type: number
+        required:
+        - chipload_mm_tooth
+        - kind
+        - target_chipload_mm_tooth
+        type: object
+      - additionalProperties: false
+        properties:
+          kind:
+            enum:
+            - generic_profile_direct_entry
             type: string
         required:
         - kind

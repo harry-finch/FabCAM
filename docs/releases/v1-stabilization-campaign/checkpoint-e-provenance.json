@@ -1,0 +1,24 @@
+{
+  "head": "4ebd43394829f1fb8372e5f9152143b9dcf3c868",
+  "dirty": true,
+  "version": "0.9.0-beta.1",
+  "bundle_identifier": "org.opcenter.ivacam",
+  "platform": "macOS arm64",
+  "signing": "ad-hoc; distribution UNQUALIFIED",
+  "app_path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/bundle/macos/FabCAM.app",
+  "binary_sha256": "317695bada11ce6bb4ac66ea21dae1255ce6a0ca06155f1809bc7eb012a4bc80",
+  "source_sha256": {
+    "frontend/src/lib/components/ToolLibraryDialog.svelte": "8d467279da9155669bdaa1b2106fac8b45f45222a9bc5f97b7f4870af3ab2ecd",
+    "frontend/src/lib/components/MachineDialog.svelte": "45b3363c39eb9a44a6d85c006fb3498b281613ced907a2cec5a055e4d71e7bd1",
+    "frontend/src/lib/components/CpsPostConfig.svelte": "8bf293cba314b0cf08542de180ba7ae84e56e2c1be7515d738a37401c3872f2a",
+    "frontend/src/lib/components/ToolRowExpandedEditor.svelte": "62aa64980415af74a06521990f48f858d01f744eb1e6d72470900a099fbbc07e",
+    "frontend/src/lib/state/generation-run.ts": "a44fb8a76b5b94385bbf5bf815dac2e0098ec629a72014ccf4186009aa7e3118",
+    "frontend/src/lib/state/generated.svelte.ts": "ce2e009b813521e58ff836e62f01e6ad6fc787a0f2bc4217eaafc5e6e9c1245c",
+    "frontend/src/lib/components/GenerateBar.svelte": "0b715f8ef9707c7c43c2612f28936ea7716549d8a2edc88f8e980ad74e250075",
+    "frontend/src/lib/components/GenerateProgress.svelte": "af78e72606ba864e41fc38507afff07ba8940aaca631c292bf9a98a9b8d45289",
+    "frontend/src/lib/components/GenerationTiming.svelte": "6832aa15b69ff0518c30406556208b7296e974ffedb3d363640cb9618a3a17a9",
+    "crates/ivac-tauri/tauri.conf.json": "08de6219cb1ba17ed3e2bd71a2cc8ed68d337bb0b83f9e1ecd5baea6cd70e760",
+    "crates/ivac-tauri/tauri.dev-signing.conf.json": "917b01849fc932923d1f399dfd8f3ae5489b4ef33f2ffcfa8eb75cdf9ef89f61"
+  },
+  "fixture_sha256": "1f61600141b6a82b0463d1a28529ef2f2e2263c0be761f264dba58f1f0e159ca"
+}

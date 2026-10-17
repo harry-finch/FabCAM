@@ -937,7 +937,15 @@
     font-size: 0.75rem;
   }
   details {
-    margin: 16px 0;
+    margin: var(--ui-space-3) 0;
+    border-top: 1px solid var(--border);
+  }
+  details > summary {
+    cursor: pointer;
+    padding: var(--ui-space-2) 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 400;
   }
 
   footer {

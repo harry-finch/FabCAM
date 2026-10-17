@@ -17,7 +17,7 @@
 //!
 //! ## Hashing discipline
 //!
-//! Same conventions as [`crate::pipeline_cache`]: f64 → bits, sort maps
+//! Full equality keys: f64 → canonical bits (+0 and -0 share a key), sort maps
 //! before iterating, hand-written impls because [`Point2`] carries
 //! f64. Each cache folds [`crate::version::PIPELINE_VERSION`]
 //! into the key so any algorithm change invalidates every entry.
@@ -29,12 +29,10 @@
 //! common authoring loop where the user oscillates between a handful
 //! of recently-edited ops.
 
-use std::hash::{Hash, Hasher};
 use std::num::NonZeroUsize;
 use std::sync::{Mutex, MutexGuard, OnceLock};
 
 use lru::LruCache;
-use seahash::SeaHasher;
 
 use crate::cam::vcarve::{medial_axis_cancellable, VPoint, VcRegion};
 use crate::cancel::CancelToken;
@@ -53,39 +51,48 @@ const ALG_POCKET_CASCADE_WITH_ISLANDS: u8 = 2;
 /// for itself.
 const CAPACITY: usize = 64;
 
-// ── hash helpers ─────────────────────────────────────────────────────
-
-fn hash_f64<H: Hasher>(v: f64, h: &mut H) {
-    h.write_u64(v.to_bits());
-}
-
-fn hash_point<H: Hasher>(p: Point2, h: &mut H) {
-    hash_f64(p.x, h);
-    hash_f64(p.y, h);
-}
-
-fn hash_ring<H: Hasher>(ring: &[Point2], h: &mut H) {
-    h.write_usize(ring.len());
-    for p in ring {
-        hash_point(*p, h);
+// Full canonical keys: the LRU's hash table resolves collisions by exact equality.
+// Retain ring lengths/order, all coordinates, algorithm version and optional delta.
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+struct GeometryKey(Vec<u64>);
+fn canonical_bits(v: f64) -> u64 {
+    if v == 0.0 {
+        0
+    } else {
+        v.to_bits()
     }
 }
-
-fn hash_vc_region<H: Hasher>(region: &VcRegion, h: &mut H) {
-    hash_ring(&region.outer, h);
-    h.write_usize(region.holes.len());
-    for hole in &region.holes {
-        hash_ring(hole, h);
+fn geometry_key(
+    algorithm: u8,
+    outer: &[Point2],
+    holes: &[Vec<Point2>],
+    delta: Option<f64>,
+) -> GeometryKey {
+    let mut words = vec![
+        u64::from(PIPELINE_VERSION),
+        u64::from(algorithm),
+        holes.len() as u64,
+    ];
+    for ring in std::iter::once(outer).chain(holes.iter().map(Vec::as_slice)) {
+        words.push(ring.len() as u64);
+        for p in ring {
+            words.extend([canonical_bits(p.x), canonical_bits(p.y)]);
+        }
     }
+    if let Some(delta) = delta {
+        words.push(canonical_bits(delta));
+    }
+    GeometryKey(words)
 }
 
 // ── medial axis ──────────────────────────────────────────────────────
 
 type MedialAxisOutput = Vec<Vec<VPoint>>;
 
-static MEDIAL_AXIS_CACHE: OnceLock<Mutex<LruCache<u64, MedialAxisOutput>>> = OnceLock::new();
+static MEDIAL_AXIS_CACHE: OnceLock<Mutex<LruCache<GeometryKey, MedialAxisOutput>>> =
+    OnceLock::new();
 
-fn medial_axis_lock() -> MutexGuard<'static, LruCache<u64, MedialAxisOutput>> {
+fn medial_axis_lock() -> MutexGuard<'static, LruCache<GeometryKey, MedialAxisOutput>> {
     MEDIAL_AXIS_CACHE
         .get_or_init(|| {
             Mutex::new(LruCache::new(
@@ -107,11 +114,7 @@ fn medial_axis_lock() -> MutexGuard<'static, LruCache<u64, MedialAxisOutput>> {
 /// itself).
 pub fn medial_axis_cached(region: &VcRegion, cancel: Option<&CancelToken>) -> MedialAxisOutput {
     crate::profile_scope!("medial.cache_lookup");
-    let mut h = SeaHasher::new();
-    PIPELINE_VERSION.hash(&mut h);
-    h.write_u8(ALG_MEDIAL_AXIS);
-    hash_vc_region(region, &mut h);
-    let key = h.finish();
+    let key = geometry_key(ALG_MEDIAL_AXIS, &region.outer, &region.holes, None);
     if let Some(v) = medial_axis_lock().get(&key).cloned() {
         return v;
     }
@@ -126,9 +129,10 @@ pub fn medial_axis_cached(region: &VcRegion, cancel: Option<&CancelToken>) -> Me
 
 type PocketCascadeOutput = Vec<Vec<Point2>>;
 
-static POCKET_CASCADE_CACHE: OnceLock<Mutex<LruCache<u64, PocketCascadeOutput>>> = OnceLock::new();
+static POCKET_CASCADE_CACHE: OnceLock<Mutex<LruCache<GeometryKey, PocketCascadeOutput>>> =
+    OnceLock::new();
 
-fn pocket_cascade_lock() -> MutexGuard<'static, LruCache<u64, PocketCascadeOutput>> {
+fn pocket_cascade_lock() -> MutexGuard<'static, LruCache<GeometryKey, PocketCascadeOutput>> {
     POCKET_CASCADE_CACHE
         .get_or_init(|| {
             Mutex::new(LruCache::new(
@@ -149,16 +153,12 @@ pub fn pocket_cascade_with_islands_cached(
     islands: &[Vec<Point2>],
     delta: f64,
 ) -> PocketCascadeOutput {
-    let mut h = SeaHasher::new();
-    PIPELINE_VERSION.hash(&mut h);
-    h.write_u8(ALG_POCKET_CASCADE_WITH_ISLANDS);
-    hash_ring(boundary, &mut h);
-    h.write_usize(islands.len());
-    for island in islands {
-        hash_ring(island, &mut h);
-    }
-    hash_f64(delta, &mut h);
-    let key = h.finish();
+    let key = geometry_key(
+        ALG_POCKET_CASCADE_WITH_ISLANDS,
+        boundary,
+        islands,
+        Some(delta),
+    );
     if let Some(v) = pocket_cascade_lock().get(&key).cloned() {
         return v;
     }
@@ -221,6 +221,50 @@ mod tests {
         }
     }
 
+    #[test]
+    fn cached_medial_axis_matches_uncached_on_cold_and_warm_calls() {
+        let _g = lock_caches();
+        let region = square_region(13.0);
+        let reference = crate::cam::vcarve::medial_axis(&region);
+        assert_eq!(medial_axis_cached(&region, None), reference);
+        assert_eq!(medial_axis_cached(&region, None), reference);
+        let with_island = VcRegion {
+            outer: region.outer,
+            holes: vec![square(2.0)],
+        };
+        assert_eq!(
+            medial_axis_cached(&with_island, None),
+            crate::cam::vcarve::medial_axis(&with_island)
+        );
+    }
+    #[test]
+    fn canonical_keys_resolve_forced_collisions_and_signed_zero() {
+        use std::hash::{BuildHasherDefault, Hasher};
+        #[derive(Default)]
+        struct ConstantHasher;
+        impl Hasher for ConstantHasher {
+            fn finish(&self) -> u64 {
+                0
+            }
+            fn write(&mut self, _: &[u8]) {}
+        }
+        let positive = geometry_key(ALG_MEDIAL_AXIS, &[Point2::new(0.0, 1.0)], &[], None);
+        let negative = geometry_key(ALG_MEDIAL_AXIS, &[Point2::new(-0.0, 1.0)], &[], None);
+        assert_eq!(positive, negative);
+        let other = geometry_key(ALG_MEDIAL_AXIS, &[Point2::new(0.0, 2.0)], &[], None);
+        let mut cache = LruCache::with_hasher(
+            NonZeroUsize::new(2).unwrap(),
+            BuildHasherDefault::<ConstantHasher>::default(),
+        );
+        cache.put(positive.clone(), 1);
+        cache.put(other.clone(), 2);
+        assert_eq!(cache.get(&negative), Some(&1));
+        assert_eq!(cache.get(&other), Some(&2));
+        assert_ne!(
+            geometry_key(ALG_POCKET_CASCADE_WITH_ISLANDS, &[], &[], Some(1.0)),
+            geometry_key(ALG_POCKET_CASCADE_WITH_ISLANDS, &[], &[], Some(2.0))
+        );
+    }
     #[test]
     fn medial_axis_cached_same_region_hits_cache() {
         let _g = lock_caches();

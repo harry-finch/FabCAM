@@ -582,26 +582,33 @@
         <input type="checkbox" bind:checked={draft.comments} />
         {t('machine.emit_comments')}
       </label>
-      <label class="check" title={t('machine.emit_arcs.title')}>
-        <input type="checkbox" bind:checked={draft.arcs} />
-        {t('machine.emit_arcs')}
-      </label>
-      <label class:disabled={!draft.arcs} title={t('machine.arc_tol.title')}>
-        {t('machine.arc_tol')}
-        <span class="field"
-          ><input
-            type="number"
-            min="0"
-            step="0.001"
-            disabled={!draft.arcs}
-            value={draft.arcFitToleranceMm ?? 0.01}
-            oninput={(e) => {
-              const v = (e.target as HTMLInputElement).valueAsNumber;
-              draft.arcFitToleranceMm = isFinite(v) && v >= 0 ? v : undefined;
-            }}
-          /><span class="unit">mm</span></span
+      {#if isShopBot}<p class="help">{t('ux6c.shopbot_arcs')}</p>{/if}
+      <details class="field-group">
+        <summary>{t('ux6c.arc_settings')}</summary>
+        <label
+          class="check"
+          title={isShopBot ? t('ux6c.shopbot_arcs') : t('machine.emit_arcs.title')}
         >
-      </label>
+          <input type="checkbox" bind:checked={draft.arcs} />
+          {isShopBot ? t('ux6c.fit_before_post') : t('machine.emit_arcs')}
+        </label>
+        <label class:disabled={!draft.arcs} title={t('machine.arc_tol.title')}>
+          {t('machine.arc_tol')}
+          <span class="field"
+            ><input
+              type="number"
+              min="0"
+              step="0.001"
+              disabled={!draft.arcs}
+              value={draft.arcFitToleranceMm ?? 0.01}
+              oninput={(e) => {
+                const v = (e.target as HTMLInputElement).valueAsNumber;
+                draft.arcFitToleranceMm = isFinite(v) && v >= 0 ? v : undefined;
+              }}
+            /><span class="unit">mm</span></span
+          >
+        </label>
+      </details>
       <label title={t('machine.toolchange.title')}>
         {t('machine.toolchange')}
         <select bind:value={draft.toolchangeStrategy}>
@@ -618,11 +625,6 @@
             >{isShopBot ? t('ux6.ignore_unsupported') : t('machine.toolchange.ignore')}</option
           >
         </select>
-      </label>
-      <!-- Optional-stop M1 alternative to M0 at program pauses. -->
-      <label class="check" title={t('machine.optional_stop.title')}>
-        <input type="checkbox" bind:checked={draft.optionalStop} />
-        {t('machine.optional_stop')}
       </label>
       <!-- z9zh: GRBL dynamic-power laser mode (M4). -->
       <details
@@ -660,6 +662,11 @@
           Decimal separator, line numbers and templates configure built-in output. CPS posts use
           their own properties above; stored values are preserved.
         </p>
+        <!-- Optional-stop M1 alternative to M0 at program pauses. -->
+        <label class="check" title={t('machine.optional_stop.title')}>
+          <input type="checkbox" bind:checked={draft.optionalStop} />
+          {t('machine.optional_stop')}
+        </label>
         <label title={t('machine.decimal_sep.title')}>
           {t('machine.decimal_sep')}
           <span class="field">
@@ -1016,7 +1023,8 @@
 <style>
   .field-group {
     display: grid;
-    gap: 8px;
+    gap: var(--ui-space-2);
+    border-top: 1px solid var(--border);
     font-size: 0.8rem;
   }
   .field-group summary {
@@ -1024,7 +1032,7 @@
     padding: 6px 0;
   }
   .field-group label {
-    margin-top: 8px;
+    margin-top: var(--ui-space-2);
   }
   .help {
     margin: 4px 0;
@@ -1034,7 +1042,7 @@
   }
   .conflict {
     padding: 8px 12px;
-    color: var(--warning);
+    color: var(--warn);
     font-size: 0.8rem;
   }
   .grid {

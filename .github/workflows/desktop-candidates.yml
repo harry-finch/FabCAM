@@ -23,14 +23,17 @@ jobs:
             runner: macos-15
             target: aarch64-apple-darwin
             bundles: app,dmg
+            config: --config tauri.dev-signing.conf.json
           - os: windows
             runner: windows-2022
             target: x86_64-pc-windows-msvc
             bundles: nsis
+            config: ""
           - os: ubuntu
             runner: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
             bundles: deb
+            config: ""
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -55,7 +58,16 @@ jobs:
         run: pnpm --dir frontend install --frozen-lockfile
       - name: Build candidate
         working-directory: crates/ivac-tauri
-        run: npm exec --yes --package=@tauri-apps/cli@2.12.3 -- tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }} -- --locked
+        run: npm exec --yes --package=@tauri-apps/cli@2.12.3 -- tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }} ${{ matrix.config }} -- --locked
+      - name: Verify macOS development bundle signature
+        if: matrix.os == 'macos'
+        run: codesign --verify --deep --strict --verbose=2 "target/${{ matrix.target }}/release/bundle/macos/FabCAM.app"
+      - name: Verify community DMG integrity and identity
+        if: matrix.os == 'macos'
+        shell: bash
+        run: |
+          python3 scripts/verify-macos-community.test.py
+          python3 scripts/verify-macos-community.py target/${{ matrix.target }}/release/bundle/dmg/*.dmg --version "$(node -p "require('./crates/ivac-tauri/tauri.conf.json').version")" --output dist-test/macos-community-verification.json
       # Separate steps preserve each native exit code under PowerShell too.
       - name: Frontend tests
         run: pnpm --dir frontend test
@@ -67,6 +79,14 @@ jobs:
         run: cargo run --locked -p xtask -- version-check
       - name: Collect candidate and checksums
         run: node scripts/collect-desktop-candidate.mjs ${{ matrix.os }} ${{ matrix.target }}
+      - name: Include macOS verification evidence
+        if: matrix.os == 'macos'
+        shell: bash
+        run: |
+          cp dist-test/macos-community-verification.json dist-test/desktop-candidates/macos/
+          cd dist-test/desktop-candidates/macos
+          shasum -a 256 macos-community-verification.json >> SHA256SUMS.txt
+          shasum -a 256 -c SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
           name: FabCAM-candidate-${{ matrix.os }}-${{ matrix.target }}

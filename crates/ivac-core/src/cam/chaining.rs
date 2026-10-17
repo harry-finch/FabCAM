@@ -12,7 +12,7 @@
 use std::collections::HashMap;
 
 use crate::cam::{is_inside_polygon, segment_to_points, segments_to_points, VcObject};
-use crate::geometry::{Point2, Segment};
+use crate::geometry::{Point2, Segment, SegmentKind};
 
 /// Minimum endpoint-distance below which two segment endpoints are
 /// treated as the same vertex. A flat 1e-3 mm tolerance is too
@@ -99,8 +99,18 @@ fn walk_chains<const INDEXED: bool>(
     // DXF goes from 25 M probes to ~10 k.
     let mut grid = build_endpoint_index(segments, cell_size);
 
-    while let Some(seed) = next_unused(&taken) {
+    for seed in 0..segments.len() {
+        if taken[seed] {
+            continue;
+        }
         taken[seed] = true;
+        if segments[seed].kind == SegmentKind::Point {
+            emit(
+                VcObject::new(vec![segments[seed].clone()], false),
+                if INDEXED { vec![seed] } else { Vec::new() },
+            );
+            continue;
+        }
         consume_endpoints(&mut grid, seed, &segments[seed], cell_size);
         let mut chain = vec![segments[seed].clone()];
         let mut indices = if INDEXED { vec![seed] } else { Vec::new() };
@@ -122,8 +132,10 @@ fn walk_chains<const INDEXED: bool>(
                 indices.push(next_idx);
             }
         }
+        let mut upstream = Vec::new();
+        let mut upstream_indices = Vec::new();
+        let mut head = chain.first().unwrap().start;
         loop {
-            let head = chain.first().unwrap().start;
             let Some(prev_idx) = find_neighbor(segments, &taken, &grid, head, fuzzy, cell_size)
             else {
                 break;
@@ -135,9 +147,20 @@ fn walk_chains<const INDEXED: bool>(
                 std::mem::swap(&mut s.start, &mut s.end);
                 s.bulge = -s.bulge;
             }
-            chain.insert(0, s);
+            head = s.start;
+            upstream.push(s);
             if INDEXED {
-                indices.insert(0, prev_idx);
+                upstream_indices.push(prev_idx);
+            }
+        }
+        if !upstream.is_empty() {
+            upstream.reverse();
+            upstream.extend(chain);
+            chain = upstream;
+            if INDEXED {
+                upstream_indices.reverse();
+                upstream_indices.extend(indices);
+                indices = upstream_indices;
             }
         }
         let closed = chain
@@ -169,6 +192,9 @@ fn cell_of(p: Point2, cell_size: f64) -> (i64, i64) {
 fn build_endpoint_index(segments: &[Segment], cell_size: f64) -> EndpointGrid {
     let mut grid: EndpointGrid = HashMap::with_capacity(segments.len() * 2);
     for (i, s) in segments.iter().enumerate() {
+        if s.kind == SegmentKind::Point {
+            continue;
+        }
         grid.entry(cell_of(s.start, cell_size)).or_default().push(i);
         let end_cell = cell_of(s.end, cell_size);
         if end_cell != cell_of(s.start, cell_size) {
@@ -294,24 +320,11 @@ fn sample_point(obj: &VcObject) -> Point2 {
             // The chord midpoint of a 180° arc collapses to the centre,
             // which lands inside another tangent-circle's interior at
             // the touch-point edge case.
-            if let Some(c) = s.center {
-                let r = s.start.distance(c);
-                let a0 = (s.start.y - c.y).atan2(s.start.x - c.x);
-                let a1 = (s.end.y - c.y).atan2(s.end.x - c.x);
-                let mut sweep = a1 - a0;
-                if s.bulge > 0.0 && sweep < 0.0 {
-                    sweep += std::f64::consts::TAU;
-                }
-                if s.bulge < 0.0 && sweep > 0.0 {
-                    sweep -= std::f64::consts::TAU;
-                }
-                let mid_a = a0 + sweep * 0.5;
+            let (c, a0, _, r) = crate::math::bulge_to_arc(s.start, s.end, s.bulge);
+            if s.bulge.abs() > 1e-12 && r.is_finite() && r > 0.0 {
+                let mid_a = a0 + 2.0 * s.bulge.atan();
                 Point2::new(c.x + r * mid_a.cos(), c.y + r * mid_a.sin())
             } else {
-                // No centre stashed → chord midpoint fallback. This is
-                // worse than the arc midpoint but matches the legacy
-                // behaviour for entities that lost their centre during
-                // a transform.
                 Point2::new((s.start.x + s.end.x) * 0.5, (s.start.y + s.end.y) * 0.5)
             }
         }
@@ -325,10 +338,6 @@ fn sample_point(obj: &VcObject) -> Point2 {
             Point2::new((a.x + b.x) * 0.5, (a.y + b.y) * 0.5)
         }
     }
-}
-
-fn next_unused(taken: &[bool]) -> Option<usize> {
-    taken.iter().position(|t| !t)
 }
 
 fn find_neighbor(
@@ -378,6 +387,71 @@ mod tests {
         Point2::new(x, y)
     }
 
+    #[test]
+    fn arc_probe_uses_bulge_without_cached_center() {
+        for bulge in [-1.0, 1.0] {
+            let arc = Segment::arc(
+                Point2::new(-1.0, 0.0),
+                Point2::new(1.0, 0.0),
+                bulge,
+                None,
+                "0",
+                7,
+            );
+            let probe = sample_point(&VcObject::new(vec![arc.clone()], false));
+            assert!((probe.x).abs() < 1e-12);
+            assert!((probe.y + bulge).abs() < 1e-12);
+            let mut stale = arc;
+            stale.center = Some(Point2::new(100.0, 100.0));
+            assert_eq!(probe, sample_point(&VcObject::new(vec![stale], false)));
+        }
+    }
+    #[test]
+    fn drill_points_remain_separate_even_at_contour_endpoints() {
+        let a = Point2::new(0.0, 0.0);
+        let b = Point2::new(10.0, 0.0);
+        for point_first in [false, true] {
+            let mut segments = vec![
+                Segment::line(a, b, "0", 7),
+                Segment::point(a, "0", 7),
+                Segment::point(a, "0", 7),
+            ];
+            if point_first {
+                segments.reverse();
+            }
+            let objects = segments_to_objects_indexed(&segments);
+            assert_eq!(objects.len(), 3);
+            for (object, indices) in objects {
+                assert!(!object.closed);
+                assert_eq!(indices.len(), 1);
+                assert_eq!(object.segments[0], segments[indices[0]]);
+            }
+        }
+    }
+    #[test]
+    fn backward_walk_preserves_ordinals_for_long_open_polyline() {
+        let segments: Vec<_> = (0..5000)
+            .rev()
+            .map(|i| {
+                Segment::line(
+                    Point2::new(f64::from(i), 0.0),
+                    Point2::new(f64::from(i + 1), 0.0),
+                    "0",
+                    7,
+                )
+            })
+            .collect();
+        let objects = segments_to_objects_indexed(&segments);
+        assert_eq!(objects.len(), 1);
+        let (object, indices) = &objects[0];
+        assert!(!object.closed);
+        assert_eq!(indices, &(0..5000).rev().collect::<Vec<_>>());
+        assert_eq!(object.segments[0].start, Point2::new(0.0, 0.0));
+        assert_eq!(
+            object.segments.last().unwrap().end,
+            Point2::new(5000.0, 0.0)
+        );
+    }
     #[test]
     fn closed_square_chains_correctly() {
         let segs = vec![

@@ -1,6 +1,6 @@
 # FabCAM
 
-Current development version: **0.9.0-beta.1** — V1 stabilization beta; desktop installation and workshop qualification remain pending. See the [version policy and release status](docs/releases/VERSIONING.md).
+Current development version: **0.9.0-beta.2** — V1 stabilization beta; desktop installation and workshop qualification remain pending. See the [version policy and release status](docs/releases/VERSIONING.md).
 
 **English** | [Deutsch](README_de.md)
 

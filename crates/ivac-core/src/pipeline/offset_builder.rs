@@ -80,6 +80,7 @@ pub(super) fn build_op_offsets(
     warnings: &mut Vec<PipelineWarning>,
     cancel: Option<&CancelToken>,
 ) -> Result<(Vec<PolylineOffset>, usize), PipelineError> {
+    let _trochoidal_scope = crate::cam::trochoidal::DiagnosticScope::begin();
     if cancelled(cancel) {
         return Err(PipelineError::Cancelled);
     }

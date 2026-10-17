@@ -43,7 +43,7 @@ const BUDGETS: Record<string, number> = {
   'App.svelte': 2200, // 2155 — ivac-3xwn.1
   'lib/state/project.svelte.ts': 775, // 762 — generate/pipeline lifecycle extracted to project-generate-ops.ts
   // Large but stable / separately tracked components.
-  'lib/components/ToolLibraryDialog.svelte': 1020, // pre-GEOM1 accepted Availability polish: 1017 lines
+  'lib/components/ToolLibraryDialog.svelte': 1030, // UX6-C accepted disclosure typography CSS: 1025 lines
   // // 969 — u9iy: collapsed-row cells → ToolRowSummary
   'lib/components/Scene3D.svelte': 1450, // 1404 — held via scene3d/* builders
   'lib/components/MachineDialog.svelte': 1300, // 1239

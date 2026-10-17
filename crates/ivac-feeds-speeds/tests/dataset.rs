@@ -176,7 +176,7 @@ fn external_reference_never_becomes_locally_validated_after_clamp() {
     let mut r = request(d.document(), 0);
     r.machine.rpm_max = Some(16000);
     let a = available(d.engine(), &r);
-    assert_eq!(a.parameters.feed_mm_min, 1620);
+    assert_eq!(a.parameters.feed_mm_min, 1524); // floor(1620 * 16000 / 17000)
     assert_eq!(a.parameters.rpm, 16000);
     assert_eq!(a.source_evidence, Evidence::ReferenceData);
     assert_eq!(a.applicability, Applicability::AdjustedOutsideEvidence);
@@ -312,4 +312,17 @@ fn missing_data_explains_actual_scope_without_relaxing_matching() {
         loaded.engine().scope_rejections(&r),
         loaded.engine().scope_rejections(&r)
     );
+}
+
+#[test]
+fn in_memory_validation_matches_json_validation_without_mutating_document() {
+    let loaded = load_dataset_json(DATA).unwrap();
+    let mut doc = loaded.document().clone();
+    let r = request(&doc, 0);
+    assert_eq!(
+        validate_dataset(&doc).unwrap().recommend(&r),
+        loaded.engine().recommend(&r)
+    );
+    doc.tools[0].diameter_mm = f64::NAN;
+    assert!(validate_dataset(&doc).is_err());
 }

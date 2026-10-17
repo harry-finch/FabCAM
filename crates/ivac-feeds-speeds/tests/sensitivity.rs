@@ -68,7 +68,7 @@ fn availability_boundaries_are_explicit_on_both_sides() {
 }
 
 #[test]
-fn ten_percent_small_tool_transition_is_measured_not_assumed_continuous() {
+fn ten_percent_small_tool_transition_is_continuous_with_integer_feed_rounding() {
     let boundary = 3.175 / 1.1;
     let low = result(boundary - 0.000001);
     let high = result(boundary + 0.000001);
@@ -91,11 +91,11 @@ fn ten_percent_small_tool_transition_is_measured_not_assumed_continuous() {
     else {
         panic!("expected available boundary");
     };
-    // Characterizes the current q² -> q policy; a future policy revision must review this explicitly.
+    // Policy 2 removes the step; integer feed output may still differ by one mm/min.
     assert_eq!(low.parameters.rpm, high.parameters.rpm);
     let ratio = high.parameters.feed_mm_min as f64 / low.parameters.feed_mm_min as f64;
-    assert!((1.09..1.11).contains(&ratio));
-    assert!(high.parameters.doc_mm / low.parameters.doc_mm > 1.09);
+    assert!((ratio - 1.0).abs() < 0.002);
+    assert!((high.parameters.doc_mm / low.parameters.doc_mm - 1.0).abs() < 0.00001);
 }
 
 #[test]

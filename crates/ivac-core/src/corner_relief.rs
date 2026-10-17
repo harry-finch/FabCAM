@@ -85,11 +85,13 @@ fn pline(s: &[Segment]) -> Polyline<f64> {
     p
 }
 fn simple(s: &[Segment]) -> bool {
-    if s.len() < 2 || !pline(s).area().is_finite() || pline(s).area().abs() < EPS * EPS {
+    let p = pline(s);
+    let area = p.area();
+    if s.len() < 2 || !area.is_finite() || area.abs() < EPS * EPS {
         return false;
     }
     let mut hit = false;
-    pline(s).visit_self_intersects(&mut |_| {
+    p.visit_self_intersects(&mut |_| {
         hit = true;
     });
     !hit
@@ -240,21 +242,38 @@ fn splice(s: &[Segment], cuts: &BTreeMap<usize, Cut>) -> Result<Vec<Segment>, St
     }
     Ok(out)
 }
-fn topology(before: &BTreeMap<u32, Vec<Segment>>, after: &BTreeMap<u32, Vec<Segment>>) -> bool {
+fn topology(before: &BTreeMap<u32, Polyline<f64>>, after: &BTreeMap<u32, Polyline<f64>>) -> bool {
     let ids: Vec<_> = before.keys().copied().collect();
     for (i, a) in ids.iter().enumerate() {
         for b in &ids[i + 1..] {
-            let old = pline(&before[a]).contains(&pline(&before[b]));
+            let old = before[a].contains(&before[b]);
             if matches!(
                 old,
                 PlineContainsResult::Intersected | PlineContainsResult::InvalidInput
-            ) || old != pline(&after[a]).contains(&pline(&after[b]))
+            ) || old != after[a].contains(&after[b])
             {
                 return false;
             }
         }
     }
     true
+}
+fn changed_topology(
+    before: &BTreeMap<u32, Polyline<f64>>,
+    id: u32,
+    replacement: &Polyline<f64>,
+) -> bool {
+    before
+        .iter()
+        .filter(|(other, _)| **other != id)
+        .all(|(&other, p)| {
+            // Match the ordered-pair orientation used by the complete topology check.
+            if id < other {
+                before[&id].contains(p) == replacement.contains(p)
+            } else {
+                p.contains(&before[&id]) == p.contains(replacement)
+            }
+        })
 }
 /// Preview is pure and atomic. On failure no modified geometry is returned.
 #[must_use]
@@ -297,6 +316,9 @@ pub fn preview(req: &CornerReliefRequest) -> CornerReliefResponse {
     if selected.contains(&0) || selected.iter().any(|id| !contours.contains_key(id)) {
         return fail(result, "Select assigned closed contours");
     }
+    let polylines: BTreeMap<_, _> = contours.iter().map(|(&id, s)| (id, pline(s))).collect();
+    // Validate all original pairs once; candidates need only compare their changed contour.
+    let baseline_valid = topology(&polylines, &polylines);
     let mut valid: BTreeMap<CornerRef, Cut> = BTreeMap::new();
     for id in &selected {
         let s = &contours[id];
@@ -308,9 +330,7 @@ pub fn preview(req: &CornerReliefRequest) -> CornerReliefResponse {
             let built =
                 cut(s, i, req.tool_diameter_mm / 2., req.mode, req.removal_side).and_then(|c| {
                     let replaced = splice(s, &BTreeMap::from([(i, c.clone())]))?;
-                    let mut after = contours.clone();
-                    after.insert(*id, replaced);
-                    if !topology(&contours, &after) {
+                    if !baseline_valid || !changed_topology(&polylines, *id, &pline(&replaced)) {
                         return Err("Relief intersects or changes another contour/island".into());
                     }
                     Ok(c)
@@ -356,7 +376,8 @@ pub fn preview(req: &CornerReliefRequest) -> CornerReliefResponse {
             Err(e) => return fail(result, &e),
         }
     }
-    if !topology(&contours, &after) {
+    let after_polylines = after.iter().map(|(&id, s)| (id, pline(s))).collect();
+    if !baseline_valid || !topology(&polylines, &after_polylines) {
         return fail(result, "Selected reliefs collide with another contour");
     }
     // Keep unmodified source ordering and object tag cardinality; only replace
@@ -411,6 +432,19 @@ mod tests {
         polygon(&[(0., 0.), (40., 0.), (40., 40.), (0., 40.)])
     }
     #[test]
+    fn obtuse_tbone_disk_does_not_cross_the_opposite_forward_edge() {
+        // |t*w-r*u|²-r² = t²-2*r*t*cos(angle). For an obtuse
+        // angle this is positive for every t>0: only the vertex touches.
+        for angle in [90.1_f64, 110., 120., 135., 160.] {
+            let cosine = angle.to_radians().cos();
+            for radius in [1.0, 3.0, 6.35] {
+                for t in [1e-6, 0.1, 1.0, 10.0] {
+                    assert!(t * t - 2.0 * radius * t * cosine > 0.0);
+                }
+            }
+        }
+    }
+    #[test]
     fn right_angle_exact_disk_and_shared_corner() {
         for mode in [
             ReliefMode::Dogbone,
@@ -444,7 +478,7 @@ mod tests {
     }
     #[test]
     fn nonorthogonal_corners_are_exact_and_reachable_by_normal_offset() {
-        for angle in [30_f64, 60., 89., 90., 110., 135., 160.] {
+        for angle in [30_f64, 60., 89., 90., 90.1, 110., 120., 135., 160.] {
             for mode in [
                 ReliefMode::Dogbone,
                 ReliefMode::TboneIncoming,

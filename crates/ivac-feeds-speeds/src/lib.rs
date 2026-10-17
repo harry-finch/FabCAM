@@ -15,6 +15,10 @@
 //! }
 //! ```
 
+mod source_error;
+pub use source_error::SourcePackError;
+mod rank;
+pub use rank::CandidateRank;
 mod adaptation;
 pub use adaptation::*;
 mod dataset;
@@ -26,8 +30,8 @@ mod validation;
 pub use source_pack::*;
 
 pub use dataset::{
-    load_dataset_json, CatalogEntry, DatasetDocument, DatasetLoadError, LoadedDataset,
-    ToolDefinition, DATASET_FORMAT_VERSION,
+    load_dataset_json, validate_dataset, CatalogEntry, DatasetDocument, DatasetLoadError,
+    LoadedDataset, ToolDefinition, DATASET_FORMAT_VERSION,
 };
 pub use engine::Engine;
 pub use model::*;
@@ -35,4 +39,4 @@ pub use model::*;
 /// Domain contract revision, separate from dataset and application versions.
 pub const DOMAIN_SCHEMA_VERSION: u32 = 1;
 /// Explicit policy version so algorithm changes remain visible in provenance.
-pub const ENGINE_VERSION: &str = concat!(env!("CARGO_PKG_VERSION"), "/fs1-policy-1");
+pub const ENGINE_VERSION: &str = concat!(env!("CARGO_PKG_VERSION"), "/fs1-policy-2");

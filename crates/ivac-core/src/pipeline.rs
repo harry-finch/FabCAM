@@ -303,6 +303,8 @@ pub struct PipelineStats {
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("operation #{0}: Stufenfase rim chamfer requires milling mode")]
+    NonMillingChamfer(u32),
     #[error("drawing: {0}")]
     Drawing(String),
     #[error("operation #{0}: V-Carve: {1}")]
@@ -351,6 +353,9 @@ impl PipelineError {
     pub fn to_structured(&self, project: Option<&Project>) -> Option<crate::Error> {
         use crate::errors::{AutoFix, Error as Structured, ErrorCode};
         match self {
+            PipelineError::NonMillingChamfer(id) => Some(Structured::misconfigured(format!(
+                "operation #{id}: Stufenfase rim chamfer requires milling mode"
+            ))),
             PipelineError::Cancelled => None,
             PipelineError::Drawing(message) => Some(Structured::misconfigured(message.clone()).with_hint("Review edited drawing and source bindings; no output generated.")),
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),

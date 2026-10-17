@@ -39,6 +39,11 @@ pub(super) fn run_drill<P: PostProcessor>(
     last_pos: &mut Point2,
     warnings: &mut Vec<PipelineWarning>,
 ) -> Result<bool, PipelineError> {
+    if op.drill_chamfer_after_width_mm().is_some_and(|w| w > 0.0)
+        && setup.machine.mode != crate::project::MachineMode::Mill
+    {
+        return Err(PipelineError::NonMillingChamfer(op.id));
+    }
     // Optional spot/centerdrill pre-pass BEFORE the main drill block.
     // Twist drills walk on hard / polished stock — the spot dimple
     // locks the chisel edge so the main bit drops on-nominal. The
@@ -1174,6 +1179,26 @@ mod tests {
             material: None,
             fs_context: None,
         };
+        for mode in [
+            crate::project::MachineMode::Laser,
+            crate::project::MachineMode::Plasma,
+        ] {
+            let mut nonmill = project.clone();
+            nonmill.machine.mode = mode;
+            let error = run_pipeline(
+                PipelineRequest {
+                    project: nonmill,
+                    post_processor: Some(PostProcessorKind::Linuxcnc),
+                    cps_post: None,
+                },
+                |_, _, _| {},
+            )
+            .unwrap_err();
+            assert!(
+                matches!(error, crate::pipeline::PipelineError::NonMillingChamfer(1)),
+                "{error:?}"
+            );
+        }
         let resp = run_pipeline(
             PipelineRequest {
                 project,

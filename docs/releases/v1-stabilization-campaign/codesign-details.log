@@ -1,0 +1,23 @@
+Executable=/Applications/ivaCAM.app/Contents/MacOS/ivac-desktop
+Identifier=ivac_desktop-8cd0616a777a7185
+Format=app bundle with Mach-O thin (arm64)
+CodeDirectory v=20400 size=175608 flags=0x20002(adhoc,linker-signed) hashes=5484+0 location=embedded
+VersionPlatform=1
+VersionMin=720896
+VersionSDK=984320
+Hash type=sha256 size=32
+CandidateCDHash sha256=e728db268f1cd45fc77dd361e013c74cbf840ee7
+CandidateCDHashFull sha256=e728db268f1cd45fc77dd361e013c74cbf840ee7749de54a083733c793a0fc00
+Hash choices=sha256
+CMSDigest=e728db268f1cd45fc77dd361e013c74cbf840ee7749de54a083733c793a0fc00
+CMSDigestType=2
+Executable Segment base=0
+Executable Segment limit=21577728
+Executable Segment flags=0x1
+Page size=4096
+CDHash=e728db268f1cd45fc77dd361e013c74cbf840ee7
+Signature=adhoc
+Info.plist=not bound
+TeamIdentifier=not set
+Sealed Resources=none
+Internal requirements=none

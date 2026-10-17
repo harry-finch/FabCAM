@@ -1,5 +1,7 @@
 # FS3.9 — Diameter sensitivity measurements
 
+> Historical evidence: current policy-2 corrections and qualification are recorded in [FS audit improvements](FS_AUDIT_IMPROVEMENTS.md). Existing fixtures below describe their original checkpoint.
+
 Software characterization only; source pack `sienci-router-reference` revision `2026-10-13.1`, policy `fs39-normalized-matching-1`. No machining validation.
 
 11997 samples: three modes × three scenarios, 1–14 mm at 0.01 mm plus source anchors and ±0.000001 mm around relative 10/25/50% boundaries.

@@ -181,17 +181,28 @@ pub fn drop_cutter(
     corner_radius_mm: f64,
 ) -> SurfaceField {
     assert!(tool_radius_mm > 0.0, "tool radius must be > 0");
-    let kernel = tip_kernel(tool_radius_mm, corner_radius_mm, field.cell);
+    let mut kernel: Vec<_> = tip_kernel(tool_radius_mm, corner_radius_mm, field.cell)
+        .into_iter()
+        .enumerate()
+        .collect();
+    kernel.sort_by(|a, b| a.1 .2.total_cmp(&b.1 .2));
+    let z_max = field.z.iter().copied().fold(SURFACE_TOP_Z, f32::max);
     let cols = field.cols as i64;
     let rows = field.rows as i64;
     let mut out = vec![SURFACE_TOP_Z; field.z.len()];
     for iy in 0..rows {
         for ix in 0..cols {
             let mut best = f32::NEG_INFINITY;
-            for &(dx, dy, off) in &kernel {
+            let mut best_index = usize::MAX;
+            for &(index, (dx, dy, off)) in &kernel {
+                // Strict comparison and original tie order preserve signed zero.
+                if z_max - off < best {
+                    break;
+                }
                 let cand = target_signed(field, ix + dx as i64, iy + dy as i64) - off;
-                if cand > best {
+                if cand > best || (cand == best && index < best_index) {
                     best = cand;
+                    best_index = index;
                 }
             }
             out[(iy * cols + ix) as usize] = best;
@@ -306,6 +317,49 @@ mod tests {
     }
 
     /// Flat surface in, scallop 0.1 mm on a 3 mm-radius ball.
+    #[test]
+    fn pruned_drop_is_bit_identical_to_unsorted_full_kernel() {
+        for corner in [0.0, 0.7, 2.0] {
+            for pattern in 0..4 {
+                let z = (0..81)
+                    .map(|i| match pattern {
+                        0 => -2.0,
+                        1 => {
+                            if i % 2 == 0 {
+                                -0.0
+                            } else {
+                                0.0
+                            }
+                        }
+                        2 => (i % 11) as f32 * 0.2 - 1.0,
+                        _ => {
+                            if i == 40 {
+                                4.0
+                            } else {
+                                -5.0
+                            }
+                        }
+                    })
+                    .collect();
+                let field = SurfaceField::new(Point2::new(0.0, 0.0), 0.5, 9, 9, z);
+                let actual = drop_cutter(&field, 2.0, corner);
+                let kernel = tip_kernel(2.0, corner, field.cell);
+                for y in 0..9 {
+                    for x in 0..9 {
+                        let mut best = f32::NEG_INFINITY;
+                        for &(dx, dy, off) in &kernel {
+                            let value =
+                                target_signed(&field, x + i64::from(dx), y + i64::from(dy)) - off;
+                            if value > best {
+                                best = value;
+                            }
+                        }
+                        assert_eq!(actual.z[(y * 9 + x) as usize].to_bits(), best.to_bits());
+                    }
+                }
+            }
+        }
+    }
     #[test]
     fn stepover_from_scallop_matches_formula_and_clamps() {
         // s = 2*sqrt(2*3*0.1 - 0.1^2) = 2*sqrt(0.59).

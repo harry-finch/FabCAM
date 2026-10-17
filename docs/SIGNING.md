@@ -1,5 +1,7 @@
 # Windows code signing via SignPath Foundation
 
+> macOS V1 uses [REL1-B1 community distribution](releases/v1-stabilization-campaign/REL1_B_PLAN.md): valid ad-hoc signing, checksums and clean-install qualification. Developer ID/notarization are optional post-V1. The Windows policy below is unchanged.
+
 > **Status: planned, not yet set up.** This is a TODO / runbook for a
 > future release — nothing here is active yet. ivaCAM does **not**
 > currently sign its Windows installers; testers will hit a SmartScreen

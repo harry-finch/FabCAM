@@ -133,7 +133,7 @@ fn generic_material_fallback_and_exact_preference() {
     let exact = synthetic("exact", 1000.0, Some("plastic.pmma.cast"));
     let (v, e) = available(recommend_packs(&[generic.clone()], &r).unwrap());
     assert_eq!(v.parameters.feed_mm_min, 800);
-    assert_eq!(e.records[0].rank[1], 2);
+    assert_eq!(e.records[0].rank.material_cost, 2);
     let (v, e) = available(recommend_packs(&[generic, exact], &r).unwrap());
     assert_eq!(v.parameters.feed_mm_min, 1000);
     assert_eq!(e.summary.selected_pack.id, "exact");
@@ -305,4 +305,64 @@ fn source_chipload_is_distinguished_from_derived_chipload() {
     assert_eq!(q.chipload_mm_tooth, Some(0.08));
     assert!(!q.chipload_derived);
     assert!(q.radial_engagement_derived);
+}
+
+#[test]
+fn floating_point_roundoff_does_not_create_false_ambiguity_but_real_doc_difference_does() {
+    let mut a = synthetic("roundoff-a", 1000.0, None);
+    let mut b = synthetic("roundoff-b", 1000.0, None);
+    for (pack, doc) in [(&mut a, 0.3), (&mut b, 0.1 + 0.2)] {
+        for profile in &mut pack.dataset.profile_set.profiles {
+            profile.scope.doc_mm = None;
+            if let CuttingData::ExactValues { doc_mm, .. } = &mut profile.data {
+                *doc_mm = doc;
+            }
+        }
+    }
+    let r = request(&a);
+    available(recommend_packs(&[a.clone(), b.clone()], &r).unwrap());
+    for profile in &mut b.dataset.profile_set.profiles {
+        if let CuttingData::ExactValues { doc_mm, .. } = &mut profile.data {
+            *doc_mm = 0.30001;
+        }
+    }
+    assert!(matches!(
+        recommend_packs(&[a, b], &r).unwrap().recommendation,
+        FeedsSpeedsRecommendation::Unavailable {
+            reason: UnavailableReason::AmbiguousProfiles { .. }
+        }
+    ));
+}
+
+#[test]
+fn typed_errors_preserve_legacy_api_and_rank_array_contract() {
+    assert!(matches!(
+        load_source_pack_json_checked("{"),
+        Err(SourcePackError::InvalidJson { .. })
+    ));
+    let mut p = pack();
+    p.dataset.tools[0].flute_count = 0;
+    assert!(matches!(
+        validate_source_pack_checked(&p),
+        Err(SourcePackError::InvalidDataset { .. })
+    ));
+    let p = pack();
+    let (_, e) = available(recommend_packs_checked(&[p.clone()], &request(&p)).unwrap());
+    let rank = e.records[0].rank;
+    let json = serde_json::to_value(rank).unwrap();
+    assert_eq!(json.as_array().unwrap().len(), 12);
+    assert_eq!(serde_json::from_value::<CandidateRank>(json).unwrap(), rank);
+    assert!(serde_json::from_str::<CandidateRank>("[0,1]").is_err());
+    let qualities = [
+        MatchQuality::Exact,
+        MatchQuality::Close,
+        MatchQuality::Interpolated,
+        MatchQuality::Approximate,
+        MatchQuality::Extrapolated,
+        MatchQuality::Generic,
+        MatchQuality::Theoretical,
+    ];
+    assert!(qualities
+        .windows(2)
+        .all(|q| q[0].rank_cost() < q[1].rank_cost()));
 }

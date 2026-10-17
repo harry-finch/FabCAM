@@ -1,0 +1,15 @@
+{
+  "head": "4ebd43394829f1fb8372e5f9152143b9dcf3c868",
+  "dirty": true,
+  "version": "0.9.0-beta.1",
+  "platform": "macOS arm64",
+  "signing": "development ad-hoc, not distribution qualified",
+  "binary_sha256": "cede3b26b7016c1d27b42769a834af511c0337f981f02d3f9dff7705fb03d5c2",
+  "source_sha256": {
+    "frontend/src/lib/components/GenerateBar.svelte": "0b715f8ef9707c7c43c2612f28936ea7716549d8a2edc88f8e980ad74e250075",
+    "frontend/src/lib/components/GenerateProgress.svelte": "af78e72606ba864e41fc38507afff07ba8940aaca631c292bf9a98a9b8d45289",
+    "frontend/src/lib/components/GenerationTiming.svelte": "6832aa15b69ff0518c30406556208b7296e974ffedb3d363640cb9618a3a17a9",
+    "frontend/src/lib/state/generated.svelte.ts": "ce2e009b813521e58ff836e62f01e6ad6fc787a0f2bc4217eaafc5e6e9c1245c",
+    "frontend/src/lib/state/generation-run.ts": "a44fb8a76b5b94385bbf5bf815dac2e0098ec629a72014ccf4186009aa7e3118"
+  }
+}

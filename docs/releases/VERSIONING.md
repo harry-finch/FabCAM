@@ -1,12 +1,21 @@
 # FabCAM version policy
 
-## Current: 0.9.0-beta.1 — 2026-10-15
+## Current: 0.9.0-beta.2 — 2026-10-17
+
+Source publication of CAM clearance/chaining/cache fixes, Feeds & Speeds audit
+corrections, generation timing, UI consistency and packaging preparation advances
+the beta counter. Previously built beta.1 candidates and their checksums remain
+historical artifacts; they do not contain these later source fixes. No installer
+rebuild, workflow dispatch, tag or binary release is implied by this publication.
+Open human, clean-host and physical acceptance gates remain unchanged.
+
+## Previous: 0.9.0-beta.1 — 2026-10-15
 
 The user requested an assessment and version update after the V1 scope freeze and
 bounded stabilization. The inherited 0.5.0 no longer represents the implemented
 ShopBot milling workflow, CAM/FS/UX work, GEOM1 and stabilization fixes.
 
-**0.9.0-beta.1** identifies the current development snapshot: the bounded V1
+**0.9.0-beta.1** identified the first stabilization snapshot: the bounded V1
 software scope is substantially implemented and undergoing integrated stabilization.
 The number is a maturity decision, not a percentage complete or a qualification
 claim. No intermediate 0.6–0.8 releases are implied.

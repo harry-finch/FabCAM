@@ -1,4 +1,30 @@
-# Status — 2026-10-16
+# Status — 2026-10-17
+
+> Source publication — 2026-10-17: user authorized commit/push of all pending
+> changes. Current source version is **0.9.0-beta.2**; existing beta.1 installers
+> and validation records retain their original versions. Earlier publication
+> restrictions are superseded for this source checkpoint only; human/physical
+> review gates remain open. No workflow dispatch, tag or Release.
+
+> Current checkpoint — 2026-10-17: [CAM clearance audit](CAM_CLEARANCE_AUDIT_2026_10_17.md) implemented locally: checked V-Carve inputs, stable flat-arc preparation, exact redundant-knot removal, bounded spatial proof, operation-scoped trochoidal diagnostics, cached tabs and drop-cutter pruning. Pipeline version 49. 1,108 core tests PASS in serial; 71 integration tests PASS. Safety budgets retained; human review pending. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM follow-up](CAM_FOLLOWUP_2026_10_17.md) implemented locally: bulge-based arc probes, isolated drill points, linear prepend accumulation, Halfpipe witness fix, exact geometry-cache keys, cached helix fitting and arc-aware frames. Pipeline version 48. 1,098 core tests PASS in serial; 71 integration tests PASS. Human review pending; existing release gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM audit corrections](CAM_AUDIT_2026_10_17.md) implemented locally: honest plunge limit, exact imported provenance, arc-aware bounds, area centroid, bounded angle normalization, relief optimization and milling-only Stufenfase. 1,091 core tests PASS in serial and 71 integration tests PASS. Parallel cache-test isolation tracked separately (`ivac-rt80e`). Obtuse T-bones retained with analytical evidence. Human review pending; no commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-16: [FS audit improvements](feeds-speeds/FS_AUDIT_IMPROVEMENTS.md) implemented locally: RPM/feed coupling, diagnostics, continuous diameter adaptation and deterministic matching/validation. Follow-up taxonomy/plunge/classification/RPM-floor fixes included: 111 engine + 17 CAM tests and frontend typecheck PASS. Engine policy `fs1-policy-2`; saved values preserved. Software tests/build PASS; human review pending. REL1-B1 clean-host gate and Windows/Ubuntu plans unchanged. No commit/push/publication. HARD STOP.
+
+> Release checkpoint — 2026-10-16: [REL1-B1 local packaging preparation](../releases/v1-stabilization-campaign/REL1_B1_RESULTS.md) complete: arm64 community DMG, strict ad-hoc/identity/integrity and SHA-256 PASS; workflows linted, no dispatch. Clean-download/install/runtime on the other Mac NOT TESTED and still V1-blocking. Developer ID/notarization remain optional POST-V1. Windows/Ubuntu Monday plans unchanged. HARD STOP for review; no commit/push/publication or transmission.
+
+> Historical checkpoint — 2026-10-16: Phase 0 and simple beta-installation transition approved. [REL1-A implemented locally](../releases/v1-stabilization-campaign/REL1_A.md): FabCAM public package names, stable data identity, strict ad-hoc signature and native reopen PASS on macOS. No publication. Human review gate before UX7, then UX6-C; distribution remains UNQUALIFIED.
+
+## Historical Phase 0 audit — identity decision subsequently approved
+
+[Audit and independent plan](../releases/v1-stabilization-campaign/PHASE0_AUDIT.md): UX7 / UX6-C / REL1-A / REL1-B. 31 baseline lifecycle tests pass. Progress overcount confirmed; no code changed. Global productName affects installer identity; approval required before rename. macOS signature failure reproduced, no valid local signing identity, no stapled ticket. HARD STOP at Stage A; no commit/push/notarization/release.
+
+## macOS native candidate — 2026-10-16
+
+Installed CI candidate 5ac4023 in Applications; native launch, square generation/3D/OpenSBP golden parity, V-Carve text and save/reopen passed on the existing profile. [Report](../releases/desktop-preparation/MACOS_RUNTIME_RESULTS.md). Signature assessment fails; clean-install/Gatekeeper/upgrade and the wider runtime matrix remain open. Windows/Ubuntu host checks Monday 19 October. No release; HARD STOP.
 
 ## Desktop candidates — preparation complete, platform qualification open
 
@@ -15,7 +41,7 @@ is building all three candidates. Final artifact results remain unverified.
 User's Windows/Ubuntu hosts available again Monday 19 October. No reminder scheduled.
 GEOM1 and independent human/physical gates remain open. HARD STOP before release.
 
-## Current version — 0.9.0-beta.1
+## Historical version checkpoint — 0.9.0-beta.1
 
 User authorized version assessment, documentation/UI alignment and publication of
 all pending work on 2026-10-15. [Version policy](../releases/VERSIONING.md): bounded

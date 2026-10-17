@@ -82,6 +82,12 @@ impl LoadedDataset {
 /// invalid engineering data before exposing an engine. No best-effort partial load.
 pub fn load_dataset_json(json: &str) -> Result<LoadedDataset, DatasetLoadError> {
     let document: DatasetDocument = serde_json::from_str(json).map_err(DatasetLoadError::Json)?;
+    let engine = validate_dataset(&document).map_err(DatasetLoadError::Invalid)?;
+    Ok(LoadedDataset { document, engine })
+}
+
+/// Validate an in-memory document without a JSON round trip.
+pub fn validate_dataset(document: &DatasetDocument) -> Result<Engine, Vec<ValidationIssue>> {
     let mut issues = crate::validation::set_issues(&document.profile_set);
     let mut issue = |field: String, message: &str| {
         issues.push(ValidationIssue {
@@ -231,8 +237,7 @@ pub fn load_dataset_json(json: &str) -> Result<LoadedDataset, DatasetLoadError> 
         }
     }
     if !issues.is_empty() {
-        return Err(DatasetLoadError::Invalid(issues));
+        return Err(issues);
     }
-    let engine = Engine::new(document.profile_set.clone()).map_err(DatasetLoadError::Invalid)?;
-    Ok(LoadedDataset { document, engine })
+    Engine::new(document.profile_set.clone())
 }
