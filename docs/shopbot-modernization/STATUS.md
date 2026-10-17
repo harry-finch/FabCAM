@@ -1,12 +1,24 @@
 # Status — 2026-10-17
 
-> Source publication — 2026-10-17: user authorized commit/push of all pending
+> Source publication authorization — 2026-10-17: user explicitly authorized committing and pushing all pending work, including audit lots 4–8, their evidence, the AUDIT3 roadmap plan and cleanup references. This supersedes publication holds for this source checkpoint only. Public version remains **0.9.0-beta.2**, pipeline 54. Human/physical/platform gates remain open; no tag, Release or workflow dispatch.
+
+> Current checkpoint — 2026-10-17: [Pocket/CPS audit, lot 8](POCKET_CPS_AUDIT_2026_10_17.md) implemented locally: qualified Boolean holding tabs with explicit refusal for changed contours, effective CPS tool geometry/frame preview, analytic Arc-chain drills and corner-aware uniform auto-tab phase. Open-stroke island loss not reproduced; finish RPM already reaches an explicit unsupported-record refusal. Pipeline 54. 1,157 serial core tests PASS; 87 integration cases reported PASS (86 executed; optional FANUC absent); frontend 1,324 PASS/1 skip plus 10 guard tests, check/lint/Clippy PASS. Software only; human review **ivac-v103z OPEN**. No package, commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [Pipeline guards audit, lot 7](PIPELINE_GUARDS_AUDIT_2026_10_17.md) implemented locally: conservative fixture travel including ID-zero ambiguity, explicit unchanged-feed RPM diagnostics, arc/surface two-sided bounds and restricted native dowels/heightfields, exact compact remaining-material keys. Bundled ShopBot MS subset confirmed rather than widened. Pipeline 53. 1,145 serial core tests PASS; 87 integration cases reported PASS (86 executed; optional FANUC absent); frontend 1,324 PASS/1 skip, check/lint/Clippy PASS. Software only; human review **ivac-rnf0l OPEN**. No package, commit/push/publication. HARD STOP.
+
+> Historical source publication — 2026-10-17: user authorized commit/push of all pending
 > changes. Current source version is **0.9.0-beta.2**; existing beta.1 installers
 > and validation records retain their original versions. Earlier publication
 > restrictions are superseded for this source checkpoint only; human/physical
 > review gates remain open. No workflow dispatch, tag or Release.
 
-> Current checkpoint — 2026-10-17: [CAM clearance audit](CAM_CLEARANCE_AUDIT_2026_10_17.md) implemented locally: checked V-Carve inputs, stable flat-arc preparation, exact redundant-knot removal, bounded spatial proof, operation-scoped trochoidal diagnostics, cached tabs and drop-cutter pruning. Pipeline version 49. 1,108 core tests PASS in serial; 71 integration tests PASS. Safety budgets retained; human review pending. No commit/push/publication. HARD STOP.
+> Previous checkpoint — 2026-10-17: [Input audit, sixth lot](INPUT_AUDIT_2026_10_17.md) implemented locally: HATCH metadata/layers, bounded invalid NURBS degree handling, affine DXF curves, 0.01 mm SVG flattening, implicit/relative/closed SVG font paths and bounded HATCH parsing. Pipeline 52. 1,138 core tests PASS serial; 84 integration tests reported PASS (optional FANUC absent). Separate block-HATCH follow-up `ivac-aoany` remains open. Software only; human review pending. No commit/push/package/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [Drawing audit, fifth lot](DRAWING_AUDIT_2026_10_17.md) implemented locally: line/arc topology, per-step simplification containment including drill points, exact closure diagnostics, snap-collapse refusal and indexed layer selection. Transform order confirmed unchanged. Pipeline 51. 1,123 core tests PASS serial; 84 integration tests reported PASS (optional FANUC absent); 11 frontend transform tests PASS. Software only; human review pending. No commit/push/package/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM offsets audit, fourth lot](CAM_OFFSETS_AUDIT_2026_10_17.md) implemented locally: geometric raster erosion, arc-aware winding, island context, interval-tested bridges, precise rounded offsets, checked waterline topology and projected entries. Pipeline 50. 1,123 core tests PASS in serial; 71 integration tests reported PASS (optional FANUC oracle absent). Human review pending; software only. No commit/push/package/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM clearance audit](CAM_CLEARANCE_AUDIT_2026_10_17.md) implemented locally: checked V-Carve inputs, stable flat-arc preparation, exact redundant-knot removal, bounded spatial proof, operation-scoped trochoidal diagnostics, cached tabs and drop-cutter pruning. Pipeline version 49. 1,108 core tests PASS in serial; 71 integration tests PASS. Safety budgets retained; human review pending. No commit/push/publication. HARD STOP.
 
 > Previous checkpoint — 2026-10-17: [CAM follow-up](CAM_FOLLOWUP_2026_10_17.md) implemented locally: bulge-based arc probes, isolated drill points, linear prepend accumulation, Halfpipe witness fix, exact geometry-cache keys, cached helix fitting and arc-aware frames. Pipeline version 48. 1,098 core tests PASS in serial; 71 integration tests PASS. Human review pending; existing release gates unchanged. No commit/push/publication. HARD STOP.
 
@@ -17,6 +29,12 @@
 > Release checkpoint — 2026-10-16: [REL1-B1 local packaging preparation](../releases/v1-stabilization-campaign/REL1_B1_RESULTS.md) complete: arm64 community DMG, strict ad-hoc/identity/integrity and SHA-256 PASS; workflows linted, no dispatch. Clean-download/install/runtime on the other Mac NOT TESTED and still V1-blocking. Developer ID/notarization remain optional POST-V1. Windows/Ubuntu Monday plans unchanged. HARD STOP for review; no commit/push/publication or transmission.
 
 > Historical checkpoint — 2026-10-16: Phase 0 and simple beta-installation transition approved. [REL1-A implemented locally](../releases/v1-stabilization-campaign/REL1_A.md): FabCAM public package names, stable data identity, strict ad-hoc signature and native reopen PASS on macOS. No publication. Human review gate before UX7, then UX6-C; distribution remains UNQUALIFIED.
+
+AUDIT3 Git history/defect-provenance retrospective is **PLANNED — NOT STARTED**
+([plan](../releases/AUDIT3_PLAN.md)): after explicit acceptance of validated/frozen
+V1, before main V1.5 ProtoMAX implementation. Not a V1 blocker; current audit,
+installer and human/physical gates remain unchanged. No archaeology or issue/tag/
+release/publication action authorized by this documentation-only request.
 
 ## Historical Phase 0 audit — identity decision subsequently approved
 
@@ -592,7 +610,7 @@ own project when switching page URLs; no user project file was rewritten.
 - Previous committed/pushed software: **96e41ec4e8a3b593579079cbb6c051e070cd03ea**
   (FS3.7/FS3.8), explicitly published by user authorization on 2026-10-12.
 - M4 baseline: e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1; M0–M4 names retained.
-- Current historical native delivery: ../ivaCAM-M4-r2/ivaCAM.app. No FS3.8 native
+- Current historical native delivery: ../archives/M4/ivaCAM-M4-r2/ivaCAM.app. No FS3.8 native
   bundle or physical trial is claimed. target/debug cleaned by prior user request;
   release/WASM packages retained.
 - M4 operator-reported Preview/air-cut/MDF exterior-square and VCarve comparison

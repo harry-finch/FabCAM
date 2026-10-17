@@ -26,7 +26,7 @@ it as an automatic spindle-control program.
 
 Built release frontend and CPS-enabled Tauri macOS arm64 bundle, version 0.5.0,
 with Rust 1.88.0, Node 24.21.0, pnpm 10.34.6 and Tauri CLI 2.12.1. Delivery is
-`/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4`; BUILD.json identifies the
+`/Users/mugen/Documents/01_Projets/FabCAM/archives/M4/ivaCAM-M4`; BUILD.json identifies the
 M3 source base plus uncommitted M4 preparation and artifact hashes. Local ad-hoc
 signing repaired the initial bundle signature; strict verification passes.
 No notarization, installer or Windows/Linux build produced.

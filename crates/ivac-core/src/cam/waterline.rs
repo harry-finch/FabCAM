@@ -33,9 +33,9 @@
 //! flat top/bottom face, is ambiguous (the plane grazes rather than cuts). Real
 //! roughing never needs a level exactly at such a Z, so [`z_levels`] steps
 //! *strictly between* the top and the floor; a caller slicing arbitrary Z can
-//! nudge by a hair to avoid coincidence. Any chain that fails to close (a
-//! non-manifold mesh, or such a grazing plane) is dropped rather than emitted as
-//! a bogus open contour.
+//! nudge by a hair to avoid coincidence. Production uses checked slicing:
+//! an open chain or ambiguous junction rejects the whole operation. No subset
+//! of loops is emitted after a topology error.
 
 // f32 mesh coordinates widen to f64 for the slice math; the quantized stitch
 // key rounds f64 mm to integer µm. Both are intentional and bounded.
@@ -43,7 +43,7 @@
 
 use std::collections::HashMap;
 
-use crate::cam::offsets::{inflate_islands_by_tool_radius, pocket_zigzag};
+use crate::cam::offsets::pocket_zigzag_inset;
 use crate::geometry::{point_in_polygon, Point2, Segment};
 
 /// A closed cross-section contour at a slice height: an ordered ring of XY
@@ -53,7 +53,7 @@ use crate::geometry::{point_in_polygon, Point2, Segment};
 pub type Loop = Vec<Point2>;
 
 /// Stitch-match resolution: 1 µm expressed as the reciprocal in mm. Crossing
-/// points closer than this collapse to one vertex — far below any CNC
+/// points in the same rounded cell collapse to one vertex — far below any CNC
 /// tolerance, far above the f64 noise the canonical-order interpolation leaves.
 const MICRON: f64 = 1e3;
 
@@ -142,14 +142,17 @@ fn triangle_crossing(tri: &[[f32; 3]; 3], z: f64) -> Option<(Point2, Point2)> {
 /// endpoint adjacency. Each crossing point sits on a shared mesh edge and so is
 /// an endpoint of exactly two segments (degree 2) in a clean manifold slice, so
 /// the walk follows one chain at a time. Open chains (a dead end — non-manifold
-/// input or a grazing plane) are discarded.
-fn stitch_segments(segs: &[(Point2, Point2)]) -> Vec<Loop> {
+/// input or a grazing plane) invalidate the whole slice.
+fn stitch_segments(segs: &[(Point2, Point2)]) -> Result<Vec<Loop>, String> {
     let mut adj: HashMap<QKey, Vec<usize>> = HashMap::new();
     for (i, &(a, b)) in segs.iter().enumerate() {
         adj.entry(qkey(a)).or_default().push(i);
         adj.entry(qkey(b)).or_default().push(i);
     }
 
+    if adj.values().any(|edges| edges.len() != 2) {
+        return Err("Open or ambiguous slice junction at the 0.001 mm stitch grid; repair the mesh or change the slice levels".into());
+    }
     let mut used = vec![false; segs.len()];
     let mut loops: Vec<Loop> = Vec::new();
 
@@ -184,11 +187,12 @@ fn stitch_segments(segs: &[(Point2, Point2)]) -> Vec<Loop> {
         }
 
         // A valid contour is closed and has real area (≥ 3 distinct vertices).
-        if closed && ring.len() >= 3 {
-            loops.push(ring);
+        if !closed || ring.len() < 3 {
+            return Err("Degenerate or unclosed waterline slice".into());
         }
+        loops.push(ring);
     }
-    loops
+    Ok(loops)
 }
 
 /// Slice a triangle mesh with the horizontal plane `Z = z` into closed XY
@@ -201,6 +205,16 @@ fn stitch_segments(segs: &[(Point2, Point2)]) -> Vec<Loop> {
 /// yields an empty `Vec`. See the module docs for the degenerate cases.
 #[must_use]
 pub fn slice_mesh_at_z(tris: &[[[f32; 3]; 3]], z: f64) -> Vec<Loop> {
+    slice_mesh_at_z_checked(tris, z).unwrap_or_default()
+}
+
+/// Checked production slicer: ambiguous/open junctions invalidate the operation,
+/// including all otherwise valid loops. The Vec compatibility wrapper is for
+/// geometry inspection; manufacturing callers must propagate this error.
+pub fn slice_mesh_at_z_checked(tris: &[[[f32; 3]; 3]], z: f64) -> Result<Vec<Loop>, String> {
+    if !z.is_finite() || tris.iter().flatten().flatten().any(|v| !v.is_finite()) {
+        return Err("Non-finite waterline mesh or slice height".into());
+    }
     let mut segs: Vec<(Point2, Point2)> = Vec::new();
     for tri in tris {
         if let Some(s) = triangle_crossing(tri, z) {
@@ -283,30 +297,46 @@ fn loop_inside(inner: &[Point2], outer: &[Point2]) -> bool {
 #[must_use]
 pub fn nest_loops(loops: &[Loop]) -> Vec<LevelRegion> {
     let n = loops.len();
-    // depth[i] = how many other loops contain loop i.
-    // parent[i] = the innermost such container (max depth), or None at top level.
-    let mut depth = vec![0usize; n];
-    let mut parent: Vec<Option<usize>> = vec![None; n];
-    for i in 0..n {
-        depth[i] = (0..n)
-            .filter(|&j| j != i && loop_inside(&loops[i], &loops[j]))
-            .count();
-    }
-    // Second pass: parent = the container with the greatest depth (innermost).
-    for i in 0..n {
-        let mut best: Option<usize> = None;
-        let mut best_depth = 0usize;
-        for j in 0..n {
-            if i == j || !loop_inside(&loops[i], &loops[j]) {
-                continue;
-            }
-            if best.is_none() || depth[j] >= best_depth {
-                best = Some(j);
-                best_depth = depth[j];
-            }
-        }
-        parent[i] = best;
-    }
+    let bounds: Vec<_> = loops
+        .iter()
+        .map(|ring| {
+            ring.iter().fold(
+                (
+                    f64::INFINITY,
+                    f64::INFINITY,
+                    f64::NEG_INFINITY,
+                    f64::NEG_INFINITY,
+                ),
+                |(x0, y0, x1, y1), p| (x0.min(p.x), y0.min(p.y), x1.max(p.x), y1.max(p.y)),
+            )
+        })
+        .collect();
+    let areas: Vec<_> = loops.iter().map(|r| loop_signed_area(r).abs()).collect();
+    let containers: Vec<Vec<usize>> = (0..n)
+        .map(|i| {
+            (0..n)
+                .filter(|&j| {
+                    let a = bounds[i];
+                    let b = bounds[j];
+                    areas[i] < areas[j]
+                        && a.0 >= b.0
+                        && a.1 >= b.1
+                        && a.2 <= b.2
+                        && a.3 <= b.3
+                        && loop_inside(&loops[i], &loops[j])
+                })
+                .collect()
+        })
+        .collect();
+    let depth: Vec<_> = containers.iter().map(Vec::len).collect();
+    let parent: Vec<_> = containers
+        .iter()
+        .map(|cs| {
+            cs.iter()
+                .copied()
+                .min_by(|&a, &b| areas[a].total_cmp(&areas[b]))
+        })
+        .collect();
 
     // Each even-depth loop is a solid region; its holes are the loops whose
     // immediate parent is it (necessarily one level deeper, i.e. odd depth).
@@ -330,7 +360,7 @@ pub fn nest_loops(loops: &[Loop]) -> Vec<LevelRegion> {
 /// Area-clear the solid cross-section at one Z level: [`nest_loops`] the sliced
 /// contours into regions, then raster-fill each region's boundary with its
 /// holes left standing. This is the "rough each contour as a pocket" step of
-/// waterline roughing, delegating to the same [`pocket_zigzag`] the 2.5D Pocket
+/// waterline roughing, delegating to the same [`crate::cam::offsets::pocket_zigzag`] the 2.5D Pocket
 /// op uses (the boundary is inset and the holes inflated by the tool radius, so
 /// the cutter centerline keeps its clearance).
 ///
@@ -343,12 +373,12 @@ pub fn clear_level(loops: &[Loop], tool_diameter: f64, stride: f64) -> Vec<Vec<S
     let tool_r = tool_diameter * 0.5;
     let mut chains = Vec::new();
     for region in nest_loops(loops) {
-        let islands = inflate_islands_by_tool_radius(&region.holes, tool_r);
-        chains.extend(pocket_zigzag(
+        chains.extend(pocket_zigzag_inset(
             &region.boundary,
-            &islands,
+            &region.holes,
             stride,
-            tool_diameter,
+            tool_r,
+            0.0,
         ));
     }
     chains
@@ -365,7 +395,7 @@ pub struct RoughChain {
     pub path: Vec<Point2>,
 }
 
-/// Flatten a connected chain of [`pocket_zigzag`] line segments into its vertex
+/// Flatten a connected chain of [`crate::cam::offsets::pocket_zigzag`] line segments into its vertex
 /// polyline. Successive segments share endpoints (`seg[i].end == seg[i+1].start`),
 /// so the polyline is the first start followed by every segment end.
 fn chain_to_polyline(chain: &[Segment]) -> Vec<Point2> {
@@ -405,9 +435,33 @@ pub fn waterline_rough(
     bottom_z: f64,
     z_step: f64,
 ) -> Vec<RoughChain> {
+    waterline_rough_checked(tris, tool_diameter, stride, top_z, bottom_z, z_step)
+        .unwrap_or_default()
+}
+
+/// Production entry point: no partial toolpath on an invalid slice.
+pub fn waterline_rough_checked(
+    tris: &[[[f32; 3]; 3]],
+    tool_diameter: f64,
+    stride: f64,
+    top_z: f64,
+    bottom_z: f64,
+    z_step: f64,
+) -> Result<Vec<RoughChain>, String> {
+    if [tool_diameter, stride, top_z, bottom_z, z_step]
+        .iter()
+        .any(|v| !v.is_finite())
+        || tool_diameter <= 0.0
+        || stride < 1e-6
+        || z_step <= 0.0
+    {
+        return Err(
+            "Waterline requires finite heights, positive tool diameter, stride and step".into(),
+        );
+    }
     let mut out = Vec::new();
     for z in z_levels(top_z, bottom_z, z_step) {
-        let loops = slice_mesh_at_z(tris, z);
+        let loops = slice_mesh_at_z_checked(tris, z).map_err(|e| format!("Z={z:.6} mm: {e}"))?;
         for chain in clear_level(&loops, tool_diameter, stride) {
             out.push(RoughChain {
                 z,
@@ -415,7 +469,7 @@ pub fn waterline_rough(
             });
         }
     }
-    out
+    Ok(out)
 }
 
 #[cfg(test)]
@@ -759,5 +813,45 @@ mod tests {
         // Rough a span well below the prism: no level slices it.
         let chains = waterline_rough(&tris, 2.0, 2.0, 10.0, 0.0, 3.0);
         assert!(chains.is_empty());
+    }
+}
+
+#[cfg(test)]
+mod audit_tests {
+    use super::*;
+    #[test]
+    fn audit_stitch_rejects_open_and_ambiguous_junctions() {
+        let p = |x, y| Point2::new(x, y);
+        let a = p(0., 0.);
+        let b = p(2., 0.);
+        let c = p(1., 2.);
+        assert!(stitch_segments(&[(a, b), (b, c), (c, a)]).is_ok());
+        assert!(stitch_segments(&[(a, b), (b, c)]).is_err());
+        assert!(stitch_segments(&[
+            (a, b),
+            (b, c),
+            (c, a),
+            (a, p(-2., 0.)),
+            (p(-2., 0.), p(-1., 2.)),
+            (p(-1., 2.), a)
+        ])
+        .is_err());
+    }
+    #[test]
+    fn audit_nesting_prefilters_disjoint_and_equal_area_loops() {
+        let rings: Vec<_> = (0..500)
+            .map(|i| {
+                let x = i as f64 * 4.;
+                vec![
+                    Point2::new(x, 0.),
+                    Point2::new(x + 2., 0.),
+                    Point2::new(x + 2., 2.),
+                    Point2::new(x, 2.),
+                ]
+            })
+            .collect();
+        let nested = nest_loops(&rings);
+        assert_eq!(nested.len(), 500);
+        assert!(nested.iter().all(|r| r.holes.is_empty()));
     }
 }

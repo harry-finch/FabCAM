@@ -184,7 +184,7 @@ impl TessCache {
 }
 
 /// Clipper2 internal precision (decimal digits). `4` ≈ 1e-4 mm grid.
-const CLIPPER_PRECISION: i32 = 4;
+pub(crate) const CLIPPER_PRECISION: i32 = 4;
 
 /// Combine the user's source selection into machined regions.
 ///

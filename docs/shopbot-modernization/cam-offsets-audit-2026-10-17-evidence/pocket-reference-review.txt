@@ -1,0 +1,5 @@
+Old: 855934 bytes / 31733 lines. New: 860470 bytes / 31901 lines (+0.53% lines).
+Both have 16 emitted offset blocks: outer wall, island wall and 14 cascade rings.
+Change: round-join sagitta 0.25 -> 0.001mm, 0.0011mm conservative erosion padding at round-capable contours, island wall CW context.
+Existing independently decoded SVG and DXF checks PASS before updating golden: clearance >=2.9798mm including post tolerance, depth passes -2/-4/-5mm, >1000 floor samples within 3.0002mm of emitted floor cuts.
+No postprocessor change. GEOM1 rectangular SBP reference unchanged.

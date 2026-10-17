@@ -38,7 +38,7 @@ pub(super) fn build_region_previews(project: &Project, objects: &[VcObject]) -> 
                 .tools
                 .iter()
                 .find(|t| t.id == op.tool_id)
-                .map_or(0.0, |t| t.diameter * 0.5);
+                .map_or(0.0, |t| t.effective_diameter() * 0.5);
             if let Some((local_objects, ordered)) =
                 synthesize_pocket_outside_objects(op, objects, tool_radius)
             {

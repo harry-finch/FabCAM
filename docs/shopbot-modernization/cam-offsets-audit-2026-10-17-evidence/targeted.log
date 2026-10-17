@@ -1,0 +1,32 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.33s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 24 tests
+test cam::audit_regressions::area_centroid_is_independent_of_collinear_sampling_and_winding ... ok
+test cam::audit_regressions::circle_bounds_include_arc_extrema_and_empty_objects_do_not_expand_them ... ok
+test cam::offsets::audit_tests::audit_approach_projects_onto_long_side ... ok
+test cam::offsets::audit_tests::audit_approach_splits_arcs_without_changing_shape_or_tabs ... ok
+test cam::offsets::audit_tests::audit_bridge_rejects_subsample_notch ... ok
+test cam::offsets::audit_tests::audit_bridge_through_island_vertices_between_samples_is_rejected ... ok
+test cam::offsets::audit_tests::audit_cw_pocket_boundary_context_is_normalized ... ok
+test cam::offsets::audit_tests::audit_island_wall_has_outer_context ... ok
+test cam::offsets::audit_tests::audit_offset_island_chords_keep_clearance ... ok
+test cam::offsets::audit_tests::audit_pocket_wall_directions_m3_m4_climb_conventional ... ok
+test cam::offsets::audit_tests::audit_two_arc_winding_all_spindle_directions ... ok
+test cam::offsets::audit_tests::audit_waterline_circle_clearance ... ok
+test cam::offsets::audit_tests::audit_waterline_nested_holes_and_split_domains_stay_clear ... ok
+test cam::offsets::audit_tests::audit_zigzag_additional_clearance_is_geometric_and_rotation_invariant ... ok
+test cam::vcarve_plan::audit_tests::many_passes_remain_bounded_and_reach_target ... ok
+test cam::vcarve_plan::audit_tests::simplification_keeps_target_and_cut_breakpoints ... ok
+test cam::vcarve_validate::audit_tests::broad_phase_agrees_with_all_edge_analytical_proof ... ok
+test cam::vcarve_validate::audit_tests::distant_edges_do_not_consume_the_analytical_pair_budget ... ok
+test cam::vcarve_validate::audit_tests::prepared_checks_indices_and_nearly_flat_large_radius_arcs ... ok
+test cam::waterline::audit_tests::audit_nesting_prefilters_disjoint_and_equal_area_loops ... ok
+test cam::waterline::audit_tests::audit_stitch_rejects_open_and_ambiguous_junctions ... ok
+test input::audit_tests::imported_tags_follow_source_ordinals_for_coincident_curves ... ok
+test math::tests::audit_angles_are_bounded_and_preserve_signed_half_turns ... ok
+test pipeline::tests::audit_waterline_open_slice_is_an_error_without_output ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 1099 filtered out; finished in 0.05s
+

@@ -27,7 +27,7 @@ pub fn flatten(
     weights: &[f64],
     samples: usize,
 ) -> Vec<(f64, f64)> {
-    if cps.len() < 2 || degree == 0 {
+    if cps.len() < 2 || degree == 0 || degree >= cps.len() {
         return cps.iter().map(|p| (p.0, p.1)).collect();
     }
     let n = cps.len();
@@ -195,5 +195,21 @@ mod tests {
             pts[pts.len() / 2].0,
             with_ones[with_ones.len() / 2].0
         ));
+    }
+}
+
+#[cfg(test)]
+mod audit_six {
+    use super::*;
+    #[test]
+    fn invalid_degree_is_bounded() {
+        let cp = [(0., 0., 1.), (10., 10., 1.)];
+        for degree in [2, 3, usize::MAX] {
+            assert_eq!(
+                flatten(degree, &[], &cp, &[], 16),
+                vec![(0., 0.), (10., 10.)]
+            );
+        }
+        assert_eq!(flatten(3, &[0.; 6], &cp, &[], 16).len(), 2);
     }
 }

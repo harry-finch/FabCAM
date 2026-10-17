@@ -1,0 +1,16 @@
+    Blocking waiting for file lock on build directory
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `release` profile [optimized] target(s) in 6m 11s
+     Running unittests src/lib.rs (target/release/deps/ivac_core-b10e7b65bd06c33c)
+
+running 7 tests
+test pipeline::remaining::tests::lot7_binary_key_preserves_geometry_topology_and_output_attribution ... ok
+test pipeline::setup_resolver::tests::lot7_rpm_clamp_preserves_manual_feeds_but_explains_chipload_factor ... ok
+test pipeline::shopbot_resolution::tests::lot7_owned_post_can_switch_between_cut_and_plunge_feeds ... ok
+test pipeline::two_sided_emit::tests::lot7_dowels_refuse_bad_layout_or_invented_tools ... ok
+test pipeline::two_sided_emit::tests::lot7_registration_keeps_real_drill_geometry_and_rates ... ok
+test pipeline::warnings::tests::lot7_two_sided_footprints_include_arc_crests_and_planar_surfaces ... ok
+test pipeline::work_origin::lot7_tests::lot7_unowned_rapids_check_nominal_and_larger_effective_envelopes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 1138 filtered out; finished in 0.00s
+

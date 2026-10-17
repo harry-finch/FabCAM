@@ -344,10 +344,44 @@ fn circle_islands_and_disconnected_regions_are_explicit() {
                     .map(|r| format!("{} moves", r.toolpath.len()))
                     .unwrap_or_else(|e| e.to_string())
             );
+            assert!(r.is_ok(), "reference case={case} medial={medial}: {r:?}");
+            // Pipeline 50 fixes the old 0.25 mm island-join overcut. Qualify
+            // the newly supported perimeter fixture against raw geometry,
+            // including interpolated XYZ points (90° sharp bit: radius=-Z).
             if case == 1 && !medial {
-                assert!(r.as_ref().unwrap_err().to_string().contains("overcut"));
-            } else {
-                assert!(r.is_ok(), "reference case={case} medial={medial}: {r:?}");
+                let response = r.as_ref().unwrap();
+                for segment in response
+                    .toolpath
+                    .iter()
+                    .filter(|s| s.from.z <= 0. && s.to.z <= 0.)
+                {
+                    for j in 0..=100 {
+                        let t = j as f64 / 100.;
+                        let x = segment.from.x + t * (segment.to.x - segment.from.x);
+                        let y = segment.from.y + t * (segment.to.y - segment.from.y);
+                        let z = segment.from.z + t * (segment.to.z - segment.from.z);
+                        let outer = x.min(y).min(20. - x).min(20. - y);
+                        let island = (7. - x)
+                            .max(0.)
+                            .max(x - 13.)
+                            .hypot((7. - y).max(0.).max(y - 13.));
+                        assert!(
+                            -z <= outer.min(island) + 0.0002,
+                            "island perimeter overcut at {x},{y},{z}"
+                        );
+                    }
+                }
+                for around_island in [false, true] {
+                    assert!(
+                        response
+                            .toolpath
+                            .iter()
+                            .any(|s| (s.to.z + 1.).abs() < 0.0001
+                                && ((s.to.x > 5. && s.to.x < 15. && s.to.y > 5. && s.to.y < 15.)
+                                    == around_island)),
+                        "both perimeter loops must reach the target depth"
+                    );
+                }
             }
             if let Ok(r) = r {
                 assert!(!r.toolpath.is_empty());
@@ -377,8 +411,13 @@ fn shopbot(project: Project) -> Result<PipelineResponse, PipelineError> {
 #[test]
 fn a4_decoded_output_preview_generic_parity_and_persistence() {
     use ivac_core::gcode::preview::MoveKind;
-    for medial in [false, true] {
+    for (medial, island) in [(false, false), (true, false), (false, true)] {
         let mut p = rectangle_project(medial);
+        if island {
+            p.segments = ring(&[(0., 0.), (20., 0.), (20., 20.), (0., 20.)]);
+            p.segments
+                .extend(ring(&[(7., 7.), (13., 7.), (13., 13.), (7., 13.)]));
+        }
         p.work_offset.x_mm = 5.;
         p.work_offset.y_mm = 7.;
         let restored: Project = serde_json::from_str(&serde_json::to_string(&p).unwrap()).unwrap();

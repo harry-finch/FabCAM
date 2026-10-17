@@ -120,7 +120,9 @@ fn bundled_grbl_snapshot() {
     assert!(response.gcode.contains("M30"));
     // Canned cycles expand for GRBL: pecks appear as plain G0/G1.
     assert!(!response.gcode.contains("G83"));
-    assert_digest("cps_grbl", &response.gcode, 0x111f_30f3_1bf8_9c56);
+    // Pipeline 50: two-arc profile now respects winding; only its G2/G3
+    // directions change versus the prior zero-area circle handling.
+    assert_digest("cps_grbl", &response.gcode, 0x8a33_59e1_1295_e3c3);
 }
 
 #[test]

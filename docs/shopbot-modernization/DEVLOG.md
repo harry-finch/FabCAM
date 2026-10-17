@@ -1935,3 +1935,156 @@ lint (after one formatting correction), Rustfmt, actionlint, schema regeneration
 drift and workspace/Tauri version checks pass. Four collector and four macOS
 identity tests pass. Raw historical logs are preserved byte-for-byte. This source
 checkpoint does not claim a new native/WASM build or physical qualification.
+
+
+## 2026-10-17 — Parent workspace cleanup and M4 archival
+
+User explicitly approved removal of the obsolete parent skills-pack README/TREE,
+empty docs tree, unused pnpm store, extracted/archive FS skill installers, Finder
+metadata and duplicate square STL (identical tracked fixture retained). Deleted
+rebuildable target/debug artifacts (about 4.5 GiB); release outputs remain. Moved
+all three M4 delivery directories to ../archives/M4/ and updated delivery references.
+Historical DEVLOG paths describe the original delivery location; the current archive
+location supersedes them. All archived app/project/program/provenance bytes were
+verified unchanged; only two archive documentation files received path updates.
+Archives remain outside this Git repository and require separate backup. Parent
+.agents and the active ivacam repository remain. No CAM/code/qualification change.
+
+
+## 2026-10-17 — CAM offsets independent audit, fourth lot (ivac-likhm)
+
+Confirmed five failing reference fixtures before correction. Implemented true
+2D raster erosion for Waterline/additional pocket inset, arc-aware winding
+and normalized pocket wall roles, interval-based bridge checks, precise and
+conservatively padded rounded offsets, bounds/area nesting prefilters, explicit
+Waterline topology errors, and projected/split approach entries. Pipeline 50
+invalidates old caches. Public project formats and postprocessor guards retained.
+
+Validation: 1,123 core tests PASS serial; 71 integration tests reported PASS
+(optional absent FANUC oracle returns early); fmt/diff checks PASS. Fifteen new
+regressions. GRBL two-arc G2/G3 changes reviewed against the old area formula;
+ShopBot pocket golden updated after independent decoded safety/coverage checks.
+V-Carve perimeter island now passes unchanged production clearance proof and
+extended independent XYZ/depth/OpenSBP-preview/persistence qualification.
+
+[Report and evidence](CAM_OFFSETS_AUDIT_2026_10_17.md). No native/WASM build or
+physical qualification. Existing release gates unchanged. No commit, push,
+publication or next milestone; HARD STOP for human review.
+
+
+## 2026-10-17 — Drawing independent audit, fifth lot (ivac-g74he)
+
+Reproduced adjacent-curve rejection, unrelated curves blocking simplification
+and tiny-gap diagnostics rounded to zero. Added analytical library line/arc
+intersection checks, per-step containment proofs protecting drill points and
+open-chain swept slivers, explicit edge-boundary ambiguity, snap-collapse refusal,
+and allocation-free borrowed layer-name matching with indexed contour selection.
+Exact closure/continuity and modified-edge protection remain intentional;
+`closed` now also requires exact internal continuity. Transformation order was
+already consistent and is tested, not changed. Reported unwrap panic not reproduced.
+
+Pipeline 51 invalidates old caches. Thirteen new audit integrations pass,
+including authoritative drawing generation for an intact circle. Full serial
+core: 1,123 PASS; integrations: 84 reported PASS (optional FANUC oracle absent);
+frontend transform suite: 11 PASS. fmt/diff checks PASS. No machining golden
+changes in this lot. [Results and limits](DRAWING_AUDIT_2026_10_17.md).
+
+Software-only qualification; existing installer/platform/physical gates remain.
+No commit, push, package rebuild or publication. HARD STOP for human review.
+
+## 2026-10-17 — Sixth input audit (`ivac-9rv3y`)
+
+[Report and evidence](INPUT_AUDIT_2026_10_17.md). Reproduced all six findings
+with seven initially failing regressions. Corrected recovered HATCH indexing
+and resolved layer/color selection, invalid-degree NURBS bounds with explicit
+DXF fallback warning, full affine DXF curve geometry, bounded finite-chord SVG
+flattening, SVG-font repeated/relative/Z commands, malformed tokens and HATCH
+pair/angle handling. Fifteen regressions added. Pipeline 51→52; no machining
+golden updates in this lot. 1,138 core PASS serial, 84 integration reported PASS
+(optional FANUC absent), formatting/whitespace PASS. Block-aware HATCH recovery
+tracked separately as `ivac-aoany`. Prior local changes preserved. Software only;
+no commit/push/package/publication. HARD STOP pending human review.
+
+## 2026-10-17 — AUDIT3 post-V1 forensic retrospective roadmap addition
+
+Documentation only, explicitly no issue creation/tracking mutation. Added AUDIT3 plan,
+engineering/release roadmap and dependency-graph references, V1.5 sequencing note,
+status/navigation pointers. Existing release/audit IDs and evidence retained. Trigger
+is validated V1 plus explicit human acceptance/frozen reference; current beta is not
+that endpoint. Post-acceptance audit precedes main V1.5 campaign without blocking V1
+or interrupting authorized feasibility. Proposed three-engineering-day cap awaits
+launch confirmation; expiry reports gaps rather than automatically delaying ProtoMAX.
+
+Plan requires deduplicated confirmed Argon/Astra inventory, mutually exclusive
+Inherited/Introduced/Exposed/Undetermined evidence rules, origin versus exposure,
+confidence, corrected/unresolved distinction and explicit statistical denominators.
+Selective distributions are not overall defect rates. Deliver technical/executive,
+chart/table, engineering-evolution and unpublished public-summary records with proper
+upstream/GPL attribution. Future critical regressions are separate authorized triage,
+not silent V1 scope/evidence changes. Documentation/upstream-workflow/architecture/
+validation skills applied; no Git archaeology, code changes, commits/tags/issues/
+releases, push or publication. HARD STOP pending approval of the updated roadmap.
+
+Documentation validation: added links/whitespace and retained historical content
+checked; baseline source/config/data hashes unchanged. No software tests/build,
+historical reproduction or provenance/statistical result claimed by this task.
+
+
+## 2026-10-17 — Pipeline guards audit, seventh lot
+
+Reviewed the independent MS/fixtures/RPM/two-sided/dowel/remaining-cache report.
+Confirmed the owned ShopBot post switches equal-axis MS by IR scalar feed; retained
+its closed decoder subset and added distinct cutting/plunge-rate regression.
+Fixed unowned and ambiguous-zero-ID fixture scanning with conservative tool bounds,
+explicit RPM/feed chipload diagnostics without rewriting manual rates, arc-aware
+and planar two-sided extents/depth, and exact binary remaining-material keys.
+Native dowels require valid layout and an existing matching drill with explicit
+rates; unqualified two-sided heightfield/back-surface transforms refuse output.
+Pipeline 53 and its cache-key snapshot are recorded with the audited reason.
+
+Final 1,145 serial core tests PASS; 87 integration cases reported PASS (86 execute;
+optional FANUC absent). Frontend 1,324 PASS/1 existing skip plus 10 guard tests,
+check/lint/Clippy/format PASS. Initial snapshot/param-allowlist failure logs retained.
+[Report and evidence](PIPELINE_GUARDS_AUDIT_2026_10_17.md). Engineering ivac-qe2e2
+complete; human review ivac-rnf0l open. Incoming lots 4–6 and cleanup changes are
+preserved. No native/WASM production rebuild, physical qualification, commit,
+push, publication or next milestone. HARD STOP for review.
+
+
+## 2026-10-17 — Pocket/CPS audit, eighth lot
+
+Verified the independent audit against the current implementation. Reproduced
+combined-Pocket holding-tab loss before changes. Preserve original attribution
+and qualify complete source-contour retention through continuous Boolean-boundary
+coverage; attach reachable tabs or refuse explicitly. Changed/intersected holding
+contours remain unsupported. Native final-path regression checks bridge height.
+Aligned CPS diameter/BallNose radius and frame preview with effective tool wear,
+recognized connected single-turn analytic Arc circles, included arc extrema in
+drill references and refused concave references whose bbox center is outside.
+Automatic tabs choose a uniform corner-safe phase when available; impossible
+layouts retain holding intent and emit a localized warning.
+
+Open-stroke Auto-island loss was not reproduced across three pocket strategies.
+Finish RPM already reaches the CPS recorder; the bundled ShopBot post explicitly
+refuses the unsupported spindleSpeed record. No speculative capability expansion.
+Pipeline 53→54 and audited cache-key snapshot updated; public beta.2 unchanged.
+
+Twelve regressions added. Final 1,157 serial core tests PASS; 87 integration cases
+reported PASS (86 execute; optional FANUC absent). Frontend 1,324 PASS/1 existing
+skip plus 10 guard tests; check/lint/Clippy/format PASS. Initial red tests, snapshot
+transition and height-witness diagnostic retained with final logs/source hashes.
+[Report and evidence](POCKET_CPS_AUDIT_2026_10_17.md). Engineering ivac-lbpxs
+complete; human review ivac-v103z open. Incoming lots 4–7 and cleanup preserved.
+No native/WASM production rebuild, physical qualification, commit, push, tag or
+release. HARD STOP for review.
+
+
+## 2026-10-17 — Authorized source publication of pending audit work
+
+User explicitly requested commit and push of all pending changes. Publication
+includes audit lots 4–8, regression fixtures, raw evidence, the unstarted AUDIT3
+roadmap plan and cleanup references. Lot 8 final checks cover the combined source
+tree: 1,157 serial core tests and frontend 1,324 tests PASS; integrations and
+quality gates PASS as recorded above. Public beta.2 remains unchanged. Human,
+physical and platform review gates remain open. No tag, Release or manual CI
+dispatch is included. Earlier no-publication notes describe historical checkpoints.

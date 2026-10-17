@@ -187,7 +187,6 @@ fn check(case: &str) {
         .warnings
         .iter()
         .any(|w| w.message.contains("manual spindle")));
-    golden(case, &a.gcode);
     for text in [&a.gcode, &dxf.gcode] {
         let moves = parse(text);
         let cut: Vec<_> = moves.iter().filter(|m| !m.rapid && m.to[2] < 0.).collect();
@@ -331,6 +330,8 @@ fn check(case: &str) {
             assert!(text[..second].ends_with("RPM. Wait until ready before OK.\nPAUSE\n"));
         }
     }
+    // Validate decoded geometry/coverage before accepting a reference update.
+    golden(case, &a.gcode);
 }
 #[test]
 fn square_profile() {

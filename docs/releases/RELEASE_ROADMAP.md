@@ -205,6 +205,8 @@ flowchart TD
   D --> E
   E --> F[RC regression, docs and human go/no-go]
   F --> R[Separately authorized V1.0 publication]
+  F --> H[AUDIT3: time-boxed post-V1-acceptance retrospective]
+  H --> Y
   A -. bounded parallel research .-> W[ProtoMAX Feasibility and Output Contract]
   W --> X[Human WJ architecture and scope approval]
   R --> Y[Focused V1.5 implementation]
@@ -214,7 +216,8 @@ flowchart TD
   Z --> Q[V1.5 RC, ShopBot non-regression and human approval]
 ```
 
-Release-blocking dependencies are solid arrows. Research need not wait for V1
+Solid arrows show prerequisites; AUDIT3 arrows only sequence the post-acceptance
+retrospective before main V1.5 implementation and do not block V1 release. Research need not wait for V1
 publication, but implementation effort stays behind V1 stabilization. Workshop
 failures return to a bounded fix and affected requalification before RC approval.
 No arbitrary calendar dates; operator access and output evidence are real dependencies.
@@ -315,3 +318,26 @@ release started by this documentation update.**
 
 GitHub Release distribution and checksum publication require separate explicit approval.
 Never disable Gatekeeper or remove quarantine. Windows/Ubuntu test plans remain unchanged.
+
+## AUDIT3 — post-V1 Git history and defect-provenance retrospective
+
+**PLANNED — NOT STARTED · POST-V1 APPROVED RELEASE checkpoint, not a V1 blocker.**
+After explicit human acceptance of validated FabCAM 1.0, use its frozen accepted
+commit/tag and retained evidence for [AUDIT3](AUDIT3_PLAN.md), before main V1.5
+implementation. Existing release/audit identifiers and gates are preserved; current
+0.9.0-beta.2 is not the approved V1 historical endpoint. V1.5 ProtoMAX stays the
+next product-development priority; authorized early feasibility is not interrupted.
+
+Time box proposed at three engineering days, confirmed at launch. Evidence gaps
+remain visible at expiry; extension requires human scheduling approval. Consolidate
+Argon/Astra confirmed defects, deduplicate root causes and classify provenance with
+historical/test support and confidence. Separate root cause from exposure, counts
+from unresolved suggestions, and audit distribution from overall project defect rate.
+Technical report, executive summary, charts/tables, engineering retrospective and
+unpublished factual public draft require human review and accurate upstream/GPL credit.
+
+Dependencies: accepted V1 reference/approval/evidence, accessible upstream/fork history
+and finding/fix/test records. Newly identified critical regressions are separately
+triaged/tracked only when authorized, without silently reopening V1 scope. No audit,
+Git history investigation, issue/tag/release creation or publication in this roadmap
+update. **HARD STOP — awaiting human approval of this addition.**

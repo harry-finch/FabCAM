@@ -316,7 +316,11 @@ impl Drawing {
             contours.push(contour.id);
             closed.push(
                 contour.edges.first().unwrap().geometry.start
-                    == contour.edges.last().unwrap().geometry.end,
+                    == contour.edges.last().unwrap().geometry.end
+                    && contour
+                        .edges
+                        .windows(2)
+                        .all(|w| w[0].geometry.end == w[1].geometry.start),
             );
             for edge in &contour.edges {
                 let mut s = edge.geometry.clone();
@@ -387,20 +391,21 @@ impl Evaluated {
                     .collect()
             }
             Binding::All => Ok((0..self.contours.len()).collect()),
-            Binding::Layers { names } => Ok(self
-                .contours
-                .iter()
-                .enumerate()
-                .filter_map(|(i, id)| {
-                    self.membership
-                        .iter()
-                        .enumerate()
-                        .any(|(j, c)| {
-                            c == id && names.contains(&self.segments[j].layer.to_string())
-                        })
-                        .then_some(i)
-                })
-                .collect()),
+            Binding::Layers { names } => {
+                let layers: BTreeSet<&str> = names.iter().map(String::as_str).collect();
+                let selected: BTreeSet<_> = self
+                    .segments
+                    .iter()
+                    .zip(&self.membership)
+                    .filter_map(|(s, id)| layers.contains(s.layer.as_ref()).then_some(*id))
+                    .collect();
+                Ok(self
+                    .contours
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(i, id)| selected.contains(id).then_some(i))
+                    .collect())
+            }
         }
     }
 }

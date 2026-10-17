@@ -134,6 +134,9 @@ pub fn pocket_zigzag_angled(
 /// Generate a zigzag (raster) pocket fill within `boundary`, splitting
 /// each scanline stroke at every `island` crossing so raised features
 /// are left uncut.
+/// `boundary` and `islands` must already bound the safe center domain.
+/// `tool_diameter` is legacy scan-axis trimming, NOT cutter compensation.
+/// Production callers use `pocket_zigzag_inset` and pass zero here.
 ///
 /// Prior to this fix the function ignored islands entirely and
 /// the cutter ploughed straight through any island that fell across a
@@ -340,57 +343,40 @@ pub fn pocket_zigzag(
     chains
 }
 
+/// Raster a geometrically eroded center domain, preserving split components
+/// and holes returned by Clipper. `inset` is additional clearance in mm;
+/// callers supply either raw geometry or an already compensated center domain.
+pub fn pocket_zigzag_inset(
+    boundary: &[Point2],
+    holes: &[Vec<Point2>],
+    stride: f64,
+    inset: f64,
+    angle_deg: f64,
+) -> Vec<Vec<Segment>> {
+    if inset <= 0.0 {
+        return pocket_zigzag_angled(boundary, holes, stride, 0.0, angle_deg);
+    }
+    let rings = super::boundary_offset_inward(boundary, holes, inset);
+    let holes: Vec<_> = rings
+        .iter()
+        .filter(|r| super::signed_area(r) < 0.0)
+        .cloned()
+        .collect();
+    rings
+        .iter()
+        .filter(|r| super::signed_area(r) > 0.0)
+        .flat_map(|r| pocket_zigzag_angled(r, &holes, stride, 0.0, angle_deg))
+        .collect()
+}
+
 /// True iff the open segment (a, b) crosses the boundary of ANY of the
 /// polygons (or has its midpoint inside one). Used by the islands-aware
 /// zigzag to detect cross-row bridges that would gouge a raised island.
 fn segment_crosses_any_polygon(a: Point2, b: Point2, polys: &[Vec<Point2>]) -> bool {
-    for poly in polys {
-        if poly.len() < 3 {
-            continue;
-        }
-        // Sample the open segment; if any interior sample lies inside
-        // the polygon, the bridge crosses it.
-        let samples = 8;
-        for i in 1..samples {
-            let t = f64::from(i) / f64::from(samples);
-            let px = a.x + (b.x - a.x) * t;
-            let py = a.y + (b.y - a.y) * t;
-            if point_in_polygon(poly, px, py) {
-                return true;
-            }
-        }
-        // Edge-to-edge intersection: a bridge can clip a corner of the
-        // island even when no sample lands inside (skinny island).
-        if segment_intersects_polygon_edges(a, b, poly) {
-            return true;
-        }
-    }
-    false
-}
-
-fn segment_intersects_polygon_edges(a: Point2, b: Point2, poly: &[Point2]) -> bool {
-    let n = poly.len();
-    for i in 0..n {
-        let c = poly[i];
-        let d = poly[(i + 1) % n];
-        if segments_intersect(a, b, c, d) {
-            return true;
-        }
-    }
-    false
-}
-
-fn segments_intersect(p1: Point2, p2: Point2, p3: Point2, p4: Point2) -> bool {
-    let d1 = orient(p3, p4, p1);
-    let d2 = orient(p3, p4, p2);
-    let d3 = orient(p1, p2, p3);
-    let d4 = orient(p1, p2, p4);
-    if ((d1 > 0.0 && d2 < 0.0) || (d1 < 0.0 && d2 > 0.0))
-        && ((d3 > 0.0 && d4 < 0.0) || (d3 < 0.0 && d4 > 0.0))
-    {
-        return true;
-    }
-    false
+    polys
+        .iter()
+        .filter(|p| p.len() >= 3)
+        .any(|p| !bridge_on_polygon_side(a, b, p, false))
 }
 
 fn orient(a: Point2, b: Point2, c: Point2) -> f64 {
@@ -600,7 +586,12 @@ pub fn pocket_for_object(
         raw_allowance
     };
     let rough_delta = tool_radius.abs() + allowance;
-    let boundary = parallel_offset_inward(obj, rough_delta);
+    let mut boundary = parallel_offset_inward(obj, rough_delta);
+    for wall in &mut boundary {
+        if super::offset_signed_area(wall) < 0.0 {
+            super::reverse_offset(wall);
+        }
+    }
     if boundary.is_empty() {
         return out;
     }
@@ -657,16 +648,11 @@ pub fn pocket_for_object(
                 // becomes a separate PolylineOffset so the gcode emitter
                 // lifts to clearance and re-plunges between sub-chains
                 // — instead of cutting straight through the island.
-                // When nocontour=true there's no wall ring laid down,
-                // so pocket_zigzag's self-inset by tool_r would leave a
-                // tool_radius-wide ribbon of uncut stock along every wall
-                // (the boundary `pts` is already inset by tool_r — a
-                // second inset stacks). Pass tool_diameter=0 in that case
-                // so the outermost stroke reaches the inset edge. When
-                // there IS a wall ring, the self-inset is needed: the
-                // ring already touches the inset edge and the raster
-                // strokes should sit a tool_r inboard so they don't
-                // overlap the wall.
+                // The first boundary is already cutter-compensated. With a
+                // wall pass, erode that center domain by another tool radius
+                // in ALL directions (including holes); without it, fill up
+                // to the existing safe boundary. Scan-axis trimming is not
+                // geometric cutter compensation.
                 let zigzag_tool_d = if nocontour { 0.0 } else { tool_radius * 2.0 };
                 // Previously this wrapper clamped step to 0.1 mm
                 // before handing to pocket_zigzag, defeating fine-finish
@@ -675,7 +661,8 @@ pub fn pocket_for_object(
                 // a ZigzagStrideDegenerate event only when the stride is
                 // truly non-finite or below the FP working precision —
                 // the pipeline drains that into a user-visible warning.
-                let chains = pocket_zigzag_angled(&pts, islands, step, zigzag_tool_d, angle_deg);
+                let chains =
+                    pocket_zigzag_inset(&pts, islands, step, zigzag_tool_d * 0.5, angle_deg);
                 for strokes in chains {
                     if strokes.is_empty() {
                         continue;
@@ -860,6 +847,10 @@ pub fn pocket_for_object(
         // outer-wall rule above).
         let wall_is_finish = allowance <= 1e-9 && !has_dual_tool_finish;
         for island in islands {
+            let mut island = island.clone();
+            if super::signed_area(&island) > 0.0 {
+                island.reverse();
+            }
             if island.len() < 3 {
                 continue;
             }
@@ -902,6 +893,9 @@ pub fn pocket_for_object(
         let finish_boundary = parallel_offset_inward(obj, finish_r);
         for o in &finish_boundary {
             let mut wall = o.clone();
+            if super::offset_signed_area(&wall) < 0.0 {
+                super::reverse_offset(&mut wall);
+            }
             wall.is_finish = true;
             out.push(wall);
         }
@@ -1046,29 +1040,59 @@ pub(crate) fn stitch_rings_to_polyline(
     Some(out)
 }
 
-/// Sample along the bridge segment (a, b) and verify every interior
-/// sample lies inside the polygon. The endpoint a typically sits
-/// exactly on `polygon` (it's the ring start vertex from a cascade
-/// ring), so we skip it under the half-open ray-cast convention by
-/// sampling at strictly interior parameters t ∈ (0, 1). 8 samples is
-/// enough to catch a bridge crossing through a re-entrant corner of a
-/// reasonable pocket; the failure mode this guards against is a
-/// straight line that exits and re-enters the polygon, which spans a
-/// finite arc inside the gap.
+/// Check every interval between polygon-edge events, including vertex hits
+/// and collinear edges. Fixed point samples can miss arbitrarily thin notches.
+/// Boundary contact is allowed within 1e-9 mm numerical incidence tolerance.
 pub(crate) fn bridge_stays_inside_polygon(a: Point2, b: Point2, polygon: &[Point2]) -> bool {
+    bridge_on_polygon_side(a, b, polygon, true)
+}
+
+fn bridge_on_polygon_side(a: Point2, b: Point2, polygon: &[Point2], want_inside: bool) -> bool {
     if polygon.len() < 3 {
-        return true;
+        return false;
     }
-    let samples = 8;
-    for i in 1..samples {
-        let t = f64::from(i) / f64::from(samples);
-        let px = a.x + (b.x - a.x) * t;
-        let py = a.y + (b.y - a.y) * t;
-        if !point_in_polygon(polygon, px, py) {
-            return false;
+    let dx = b.x - a.x;
+    let dy = b.y - a.y;
+    let len2 = dx * dx + dy * dy;
+    let mut cuts = vec![0.0, 1.0];
+    for i in 0..polygon.len() {
+        let c = polygon[i];
+        let d = polygon[(i + 1) % polygon.len()];
+        let ex = d.x - c.x;
+        let ey = d.y - c.y;
+        let det = dx * ey - dy * ex;
+        if det != 0.0 {
+            let t = ((c.x - a.x) * ey - (c.y - a.y) * ex) / det;
+            let u = ((c.x - a.x) * dy - (c.y - a.y) * dx) / det;
+            if (0.0..=1.0).contains(&t) && (0.0..=1.0).contains(&u) {
+                cuts.push(t);
+            }
+        } else if len2 > 0.0 && orient(a, b, c).abs() <= 1e-9 * len2.sqrt() {
+            for q in [c, d] {
+                cuts.push((((q.x - a.x) * dx + (q.y - a.y) * dy) / len2).clamp(0.0, 1.0));
+            }
         }
     }
-    true
+    cuts.sort_by(f64::total_cmp);
+    cuts.dedup();
+    cuts.windows(2).all(|w| {
+        let t = (w[0] + w[1]) * 0.5;
+        let q = Point2::new(a.x + t * dx, a.y + t * dy);
+        (point_in_polygon(polygon, q.x, q.y) == want_inside)
+            || (0..polygon.len()).any(|i| {
+                let c = polygon[i];
+                let d = polygon[(i + 1) % polygon.len()];
+                let ex = d.x - c.x;
+                let ey = d.y - c.y;
+                let l2 = ex * ex + ey * ey;
+                let u = if l2 > 0.0 {
+                    (((q.x - c.x) * ex + (q.y - c.y) * ey) / l2).clamp(0.0, 1.0)
+                } else {
+                    0.0
+                };
+                q.distance(Point2::new(c.x + u * ex, c.y + u * ey)) <= 1e-9
+            })
+    })
 }
 
 /// True iff the open segment (a, b) crosses the interior of ANY
@@ -1076,27 +1100,7 @@ pub(crate) fn bridge_stays_inside_polygon(a: Point2, b: Point2, polygon: &[Point
 /// island polygon, or the segment intersects an island edge. Endpoints
 /// are excluded (they may legitimately sit on an inflated island ring).
 pub(crate) fn bridge_crosses_any_island(a: Point2, b: Point2, islands: &[Vec<Point2>]) -> bool {
-    if islands.is_empty() {
-        return false;
-    }
-    for isl in islands {
-        if isl.len() < 3 {
-            continue;
-        }
-        let samples = 8;
-        for i in 1..samples {
-            let t = f64::from(i) / f64::from(samples);
-            let px = a.x + (b.x - a.x) * t;
-            let py = a.y + (b.y - a.y) * t;
-            if point_in_polygon(isl, px, py) {
-                return true;
-            }
-        }
-        if segment_intersects_polygon_edges(a, b, isl) {
-            return true;
-        }
-    }
-    false
+    segment_crosses_any_polygon(a, b, islands)
 }
 
 // ─── conversions ────────────────────────────────────────────────────────────

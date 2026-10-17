@@ -7996,3 +7996,77 @@ mod cps_seam {
         assert_eq!(props["safe"], CpsParamValue::Text("G28".into()));
     }
 }
+
+#[test]
+fn audit_waterline_open_slice_is_an_error_without_output() {
+    use crate::geometry::Point2;
+    use crate::project::{ReliefGrid, ReliefSource};
+
+    // A sloping grid crosses the source border: slice contours are open.
+    // The entire generation must fail instead of silently omitting them.
+    let n = 9u32;
+    let center = 4.0_f32;
+    let depth = 6.0_f32;
+    let mut z = Vec::new();
+    for _iy in 0..n {
+        for ix in 0..n {
+            let edge = ix as f32;
+            z.push(-depth * (edge / center));
+        }
+    }
+    let source = ReliefSource {
+        id: 5,
+        name: "basin.stl".into(),
+        origin: Point2::new(0.0, 0.0),
+        cell: 2.0,
+        cols: n,
+        rows: n,
+        grid: ReliefGrid::Heightgrid { z },
+    };
+    let mut tool = endmill(1, 3.0);
+    tool.flute_length_mm = Some(20.0);
+    let op = Op {
+        id: 1,
+        name: "Waterline".into(),
+        enabled: true,
+        kind: OpKind::WaterlineRough {
+            source_id: 5,
+            z_step_mm: 2.0,
+            stepover_mm: 1.5,
+            // Default floor (0) ⇒ rough the full model depth.
+            floor_z_mm: 0.0,
+        },
+        tool_id: 1,
+        finish_tool_id: None,
+        source: OpSource::All,
+        params: OpParams::mill_default(),
+        group: None,
+        pin_order: false,
+        side: crate::project::WorkpieceSide::Front,
+    };
+    let project = Project {
+        segments: Vec::new(),
+        machine: MachineConfig::default(),
+        tools: vec![tool],
+        operations: vec![op],
+        fixtures: Vec::default(),
+        text_layers: Vec::new(),
+        work_offset: crate::project::WorkOffset::default(),
+        stock: None,
+        relief_sources: vec![source],
+        group_ops_by_tool: false,
+        material: None,
+        fs_context: None,
+    };
+    let err = run_pipeline(
+        PipelineRequest {
+            project,
+            post_processor: Some(PostProcessorKind::Linuxcnc),
+            cps_post: None,
+        },
+        |_, _, _| {},
+    )
+    .unwrap_err();
+    assert!(matches!(err, PipelineError::Waterline(1, _)), "{err:?}");
+    assert!(err.to_structured(None).is_some());
+}

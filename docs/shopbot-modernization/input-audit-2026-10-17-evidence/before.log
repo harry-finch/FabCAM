@@ -1,0 +1,70 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.82s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 7 tests
+test input::nurbs::audit_six::invalid_degree_is_bounded ... FAILED
+test input::svg_font::audit_six::implicit_and_closed_paths ... FAILED
+test input::svg_font::audit_six::repeated_arcs ... FAILED
+test input::hatch::audit_six::malformed_pair_preserves_alignment ... FAILED
+test input::dxf_in::audit_six::hatch_metadata_is_complete ... FAILED
+test input::dxf_in::audit_six::mirrored_arc_follows_affine_endpoints ... FAILED
+test input::svg_in::audit_six::straight_cubic_is_one_chord ... FAILED
+
+failures:
+
+---- input::nurbs::audit_six::invalid_degree_is_bounded stdout ----
+
+thread 'input::nurbs::audit_six::invalid_degree_is_bounded' panicked at crates/ivac-core/src/input/nurbs.rs:131:20:
+attempt to subtract with overflow
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- input::svg_font::audit_six::implicit_and_closed_paths stdout ----
+
+thread 'input::svg_font::audit_six::implicit_and_closed_paths' panicked at crates/ivac-core/src/input/svg_font.rs:720:62:
+called `Result::unwrap()` on an `Err` value: Error { kind: Misconfigured, code: None, params: {}, message: "SVG font: stray number at path token 3 in `M0 0 10 0 10 10z m20 0 l5 0 0 5 z`", recovery_hint: Some("Pick a different font for this text layer."), auto_fix: None, span: None }
+
+---- input::svg_font::audit_six::repeated_arcs stdout ----
+
+thread 'input::svg_font::audit_six::repeated_arcs' panicked at crates/ivac-core/src/input/svg_font.rs:724:30:
+assertion failed: parse_path_d("M0 0 A5 5 0 0 1 10 0 5 5 0 0 1 20 0", 0.1).is_ok()
+
+---- input::hatch::audit_six::malformed_pair_preserves_alignment stdout ----
+
+thread 'input::hatch::audit_six::malformed_pair_preserves_alignment' panicked at crates/ivac-core/src/input/hatch.rs:455:2:
+assertion `left == right` failed
+  left: [(10, "0"), (8, "10")]
+ right: [(0, "HATCH"), (8, "10")]
+
+---- input::dxf_in::audit_six::hatch_metadata_is_complete stdout ----
+
+thread 'input::dxf_in::audit_six::hatch_metadata_is_complete' panicked at crates/ivac-core/src/input/dxf_in.rs:989:36:
+assertion `left == right` failed
+  left: 0
+ right: 4
+
+---- input::dxf_in::audit_six::mirrored_arc_follows_affine_endpoints stdout ----
+
+thread 'input::dxf_in::audit_six::mirrored_arc_follows_affine_endpoints' panicked at crates/ivac-core/src/input/dxf_in.rs:1000:2:
+assertion failed: out.segments[0].start.distance(Point2::new(-10., 0.)) < 1e-9
+
+---- input::svg_in::audit_six::straight_cubic_is_one_chord stdout ----
+
+thread 'input::svg_in::audit_six::straight_cubic_is_one_chord' panicked at crates/ivac-core/src/input/svg_in.rs:354:81:
+assertion `left == right` failed
+  left: 512
+ right: 1
+
+
+failures:
+    input::dxf_in::audit_six::hatch_metadata_is_complete
+    input::dxf_in::audit_six::mirrored_arc_follows_affine_endpoints
+    input::hatch::audit_six::malformed_pair_preserves_alignment
+    input::nurbs::audit_six::invalid_degree_is_bounded
+    input::svg_font::audit_six::implicit_and_closed_paths
+    input::svg_font::audit_six::repeated_arcs
+    input::svg_in::audit_six::straight_cubic_is_one_chord
+
+test result: FAILED. 0 passed; 7 failed; 0 ignored; 0 measured; 1123 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

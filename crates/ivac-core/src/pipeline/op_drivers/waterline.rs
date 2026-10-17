@@ -20,7 +20,7 @@
 #![allow(clippy::cast_possible_truncation)]
 
 use crate::cam::setup::Setup;
-use crate::cam::waterline::waterline_rough;
+use crate::cam::waterline::waterline_rough_checked;
 use crate::gcode::{emit_vcarve_block, PostProcessor};
 use crate::geometry::Point2;
 use crate::pipeline::warnings::push_tool_fit_kind_warnings;
@@ -217,7 +217,8 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
     }
 
     let tris = heightgrid_skin(source, z);
-    let chains = waterline_rough(&tris, tool_diameter, stride, top_z, bottom_z, *z_step_mm);
+    let chains = waterline_rough_checked(&tris, tool_diameter, stride, top_z, bottom_z, *z_step_mm)
+        .map_err(|message| PipelineError::Waterline(op.id, message))?;
     if chains.is_empty() {
         return Ok(());
     }

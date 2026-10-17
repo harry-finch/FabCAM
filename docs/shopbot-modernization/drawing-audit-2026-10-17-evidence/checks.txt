@@ -1,0 +1,8 @@
+Core: 1123 PASS serial, 84.35s.
+Integration: 84 reported PASS = CPS 4 + new drawing audit 13 + GEOM1 23 + geometry sources 7 + ShopBot 27 + V-Carve 10.
+Optional upstream FANUC reference absent: its test returns early; no oracle execution claimed.
+Frontend file-transform: 11 PASS.
+Formatting and git diff --check: PASS.
+Before fix: 3 expected failures / 2 passes in first five regression fixtures.
+Hash log intentionally records pipeline-version snapshot invalidation before updating the expected value. Final core suite passes the updated version 51 regression.
+No commit/push/package/publication; software-only evidence.

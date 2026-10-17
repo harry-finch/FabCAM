@@ -127,16 +127,26 @@ pub(super) fn fixture_warnings(
         })
         .collect();
     for s in path {
-        let Some(op) = project.operations.iter().find(|op| op.id == s.op_id) else {
-            continue;
-        };
+        let op = project
+            .operations
+            .iter()
+            .find(|op| s.op_id != 0 && op.id == s.op_id);
         // With dual tools, op_id alone cannot identify the active bit. Check
         // both declared tools conservatively, rather than omit the finish bit.
-        for tool in project
-            .tools
-            .iter()
-            .filter(|t| t.id == op.tool_id || Some(t.id) == op.finish_tool_id)
-        {
+        for tool in project.tools.iter().filter(|t| {
+            op.map_or_else(
+                // Program/header/footer movements lack reliable active-tool
+                // provenance. Cover every enabled operation's possible tool,
+                // including dual-tool finish, rather than guess list order.
+                || {
+                    project
+                        .operations
+                        .iter()
+                        .any(|o| o.enabled && (t.id == o.tool_id || Some(t.id) == o.finish_tool_id))
+                },
+                |o| t.id == o.tool_id || Some(t.id) == o.finish_tool_id,
+            )
+        }) {
             let holder = HolderProfile::from_tool(tool);
             if holder.is_none() && unknown.insert((s.op_id, tool.id)) {
                 warnings.push(super::PipelineWarning::for_op(s.op_id,"fixture_clearance_unknown",
@@ -145,7 +155,7 @@ pub(super) fn fixture_warnings(
             }
             for hit in check_segment_against_fixtures(
                 s,
-                tool.diameter * 0.5,
+                tool.diameter.max(tool.effective_diameter()) * 0.5,
                 holder.as_ref(),
                 if holder.is_some() {
                     &project.fixtures
@@ -219,4 +229,75 @@ fn simple_polygon(vertices: &[(f64, f64)]) -> bool {
         }
     }
     area.abs() > 1e-9
+}
+
+#[cfg(test)]
+mod lot7_tests {
+    use super::*;
+    use crate::gcode::preview::{MoveKind, Pose3, ToolpathSegment};
+    use crate::pipeline::test_helpers::{endmill, profile_op, project_with};
+    use crate::project::{Fixture, FixtureKind, ToolOffset};
+    #[test]
+    fn lot7_unowned_rapids_check_nominal_and_larger_effective_envelopes() {
+        let op = profile_op(1, 1, ToolOffset::Outside);
+        let mut project = project_with(vec![op], vec![endmill(1, 2.)]);
+        project.fixtures.push(Fixture {
+            id: 7,
+            name: "clamp".into(),
+            kind: FixtureKind::Box {
+                width: 0.2,
+                depth: 0.2,
+            },
+            origin: (0., 0.),
+            z_bottom: 0.,
+            z_top: 20.,
+            color: 0,
+        });
+        let mut segment = ToolpathSegment {
+            from: Pose3 {
+                x: -5.,
+                y: 1.05,
+                z: 5.,
+            },
+            to: Pose3 {
+                x: 5.,
+                y: 1.05,
+                z: 5.,
+            },
+            kind: MoveKind::Rapid,
+            gcode_line: 1,
+            op_id: 0,
+            arc: None,
+        };
+        for wear in [1., -1.] {
+            project.tools[0].wear_offset_mm = wear;
+            if wear < 0. {
+                segment.from.y = 1.4;
+                segment.to.y = 1.4;
+            }
+            let mut warnings = Vec::new();
+            fixture_warnings(&project, &[segment.clone()], &mut warnings);
+            assert!(warnings
+                .iter()
+                .any(|w| w.kind == "fixture_path_collision" && w.op_id == Some(0)));
+        }
+        // Zero is also a program-motion sentinel: even if an authored op has
+        // ID zero, it must not hide another possible tool on a header/footer.
+        project.operations[0].id = 0;
+        project.tools[0].wear_offset_mm = 0.;
+        project
+            .operations
+            .push(profile_op(2, 2, ToolOffset::Outside));
+        project.tools.push(endmill(2, 4.));
+        segment.from.y = 1.8;
+        segment.to.y = 1.8;
+        let mut warnings = Vec::new();
+        fixture_warnings(&project, &[segment.clone()], &mut warnings);
+        assert!(warnings.iter().any(|w| w.kind == "fixture_path_collision"));
+        segment.from.y = 50.;
+        segment.to.y = 50.;
+        let mut warnings = Vec::new();
+        fixture_warnings(&project, &[segment], &mut warnings);
+        assert!(!warnings.iter().any(|w| w.kind == "fixture_path_collision"));
+    }
 }

@@ -1,0 +1,7 @@
+Core: 1123 passed (serial), 84.19s.
+Integration: CPS 4 + GEOM1 23 + sources 7 + ShopBot 27 + V-Carve 10 = 71 reported passed.
+FANUC optional upstream file absent: its test returns early; no FANUC oracle execution claimed.
+15 new audit tests. Final targeted filter: 24 passed including 9 earlier audit tests.
+Formatting: cargo fmt -p ivac-core -- --check PASS.
+Whitespace: git diff --check PASS.
+No installer, physical machine or clean-host qualification in this lot.

@@ -14,8 +14,8 @@
 //! * `<font-face units-per-em="…" ascent="…" descent="…" cap-height="…"
 //!    x-height="…" font-family="…" />` carries the metrics.
 //! * `<glyph unicode="&#xNN;" d="…" />` carries the per-glyph path
-//!   (absolute `M` / `L` / `A` only — these fonts use no relative
-//!   commands and no Bezier curves).
+//!   (`M` / `L` / `A` / `Z`, absolute or relative, with repeated tuples;
+//!   Bezier commands remain unsupported).
 //! * Per-glyph `horiz-adv-x` is honored when present.
 //! * `unicode="&#xNN;"` numeric character references AND literal
 //!   characters (`unicode="A"`) are both accepted.
@@ -216,23 +216,33 @@ fn parse_unicode_attr(attrs: &str) -> Option<char> {
 /// fail loudly during font-load instead of silently producing wrong
 /// strokes.
 fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
-    let tokens = tokenize_path(d);
+    let tokens = tokenize_path(d)?;
     let mut subpaths: Vec<Vec<Point2>> = Vec::new();
     let mut current: Vec<Point2> = Vec::new();
     let mut cursor = Point2::new(0.0, 0.0);
     let mut i = 0;
+    let mut last_cmd = None;
+    let mut subpath_start = cursor;
     while i < tokens.len() {
         let cmd = match tokens[i] {
-            Token::Cmd(c) => c,
-            Token::Num(_) => {
-                return Err(Error::misconfigured(format!(
-                    "SVG font: stray number at path token {i} in `{d}`"
-                ))
-                .with_hint("Pick a different font for this text layer."));
+            Token::Cmd(c) => {
+                i += 1;
+                c
             }
+            Token::Num(_) => last_cmd
+                .ok_or_else(|| Error::misconfigured("SVG font: number without path command"))?,
         };
-        i += 1;
-        match cmd {
+        last_cmd = Some(cmd);
+        let relative = cmd.is_ascii_lowercase();
+        let origin = if relative {
+            cursor
+        } else {
+            Point2::new(0.0, 0.0)
+        };
+        if current.is_empty() && !matches!(cmd, 'M' | 'm') {
+            return Err(Error::misconfigured("SVG font: path must begin with M/m"));
+        }
+        match cmd.to_ascii_uppercase() {
             'M' => {
                 // New subpath.
                 if !current.is_empty() {
@@ -240,13 +250,15 @@ fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
                 }
                 let x = next_num(&tokens, &mut i, d)?;
                 let y = next_num(&tokens, &mut i, d)?;
-                cursor = Point2::new(x, y);
+                cursor = Point2::new(origin.x + x, origin.y + y);
                 current.push(cursor);
+                subpath_start = cursor;
+                last_cmd = Some(if relative { 'l' } else { 'L' });
             }
             'L' => {
                 let x = next_num(&tokens, &mut i, d)?;
                 let y = next_num(&tokens, &mut i, d)?;
-                cursor = Point2::new(x, y);
+                cursor = Point2::new(origin.x + x, origin.y + y);
                 current.push(cursor);
             }
             'A' => {
@@ -257,7 +269,7 @@ fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
                 let sweep = next_flag(&tokens, &mut i, d)?;
                 let end_x = next_num(&tokens, &mut i, d)?;
                 let end_y = next_num(&tokens, &mut i, d)?;
-                let end = Point2::new(end_x, end_y);
+                let end = Point2::new(origin.x + end_x, origin.y + end_y);
                 tessellate_arc(
                     cursor,
                     end,
@@ -271,11 +283,20 @@ fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
                 );
                 cursor = end;
             }
+            'Z' => {
+                if cursor != subpath_start {
+                    current.push(subpath_start);
+                }
+                cursor = subpath_start;
+                last_cmd = None;
+            }
             other => {
                 return Err(Error::misconfigured(format!(
                     "SVG font: unsupported path command `{other}` in `{d}`"
                 ))
-                .with_hint("Only M / L / A are supported by this loader."));
+                .with_hint(
+                    "Only M / L / A / Z (absolute or relative) are supported by this loader.",
+                ));
             }
         }
     }
@@ -291,7 +312,7 @@ enum Token {
     Num(f64),
 }
 
-fn tokenize_path(d: &str) -> Vec<Token> {
+fn tokenize_path(d: &str) -> Result<Vec<Token>> {
     let mut out = Vec::new();
     let bytes = d.as_bytes();
     let mut i = 0;
@@ -330,17 +351,17 @@ fn tokenize_path(d: &str) -> Vec<Token> {
                     i += 1;
                 }
             }
-            if let Ok(s) = std::str::from_utf8(&bytes[start..i]) {
-                if let Ok(v) = s.parse::<f64>() {
-                    out.push(Token::Num(v));
-                }
-            }
+            let value = d[start..i]
+                .parse::<f64>()
+                .ok()
+                .filter(|v| v.is_finite())
+                .ok_or_else(|| Error::misconfigured("SVG font: malformed or non-finite number"))?;
+            out.push(Token::Num(value));
             continue;
         }
-        // Unknown — skip a byte so we don't loop forever.
-        i += 1;
+        return Err(Error::misconfigured("SVG font: invalid path character"));
     }
-    out
+    Ok(out)
 }
 
 fn next_num(tokens: &[Token], i: &mut usize, d: &str) -> Result<f64> {
@@ -357,7 +378,11 @@ fn next_num(tokens: &[Token], i: &mut usize, d: &str) -> Result<f64> {
 
 fn next_flag(tokens: &[Token], i: &mut usize, d: &str) -> Result<bool> {
     let v = next_num(tokens, i, d)?;
-    Ok(v.abs() > 0.5)
+    match v {
+        0.0 => Ok(false),
+        1.0 => Ok(true),
+        _ => Err(Error::misconfigured("SVG font: arc flag must be 0 or 1")),
+    }
 }
 
 /// Convert an SVG endpoint-form arc (`A rx ry x-rot large-arc sweep x
@@ -710,5 +735,34 @@ mod tests {
         let bytes = b"not svg bytes\n";
         let err = parse(bytes).expect_err("should reject");
         assert!(format!("{err:?}").contains("font-face") || format!("{err:?}").contains("SVG"));
+    }
+}
+
+#[cfg(test)]
+mod audit_six {
+    use super::*;
+    #[test]
+    fn implicit_and_closed_paths() {
+        let p = parse_path_d("M0 0 10 0 10 10z m20 0 l5 0 0 5 z", 0.1).unwrap();
+        assert_eq!(p.len(), 2);
+        assert_eq!(p[0].first(), p[0].last());
+        assert_eq!(p[1][0], Point2::new(20., 0.));
+        assert_eq!(p[1][2], Point2::new(25., 5.));
+    }
+    #[test]
+    fn repeated_arcs() {
+        assert!(parse_path_d("M0 0 A5 5 0 0 1 10 0 5 5 0 0 1 20 0", 0.1).is_ok());
+    }
+    #[test]
+    fn malformed_path_does_not_silently_drop_tokens() {
+        for d in [
+            "M0 0 L1e 2",
+            "M0 0 L1@ 2",
+            "M0 0 L1e999 2",
+            "M0 0z 1 2",
+            "M0 0 A5 5 0 2 1 10 0",
+        ] {
+            assert!(parse_path_d(d, 0.1).is_err(), "{d}");
+        }
     }
 }

@@ -9,7 +9,7 @@
 //!
 //! Tessellation: cubic and quadratic curves are flattened by adaptive
 //! de Casteljau subdivision until the chordal error is below
-//! `ImportOptions::arc_max_step_or_default()`.
+//! 0.01 mm in transformed coordinates (separate from angular DXF steps).
 
 // # CAM/sim pedantic-lint exemptions
 // usvg traversal walks bounded path-segment indices. Bézier de Casteljau
@@ -28,6 +28,8 @@ use crate::errors::{Error, Result};
 use crate::geometry::{Point2, Segment};
 use crate::input::{summarize_layers, ImportOptions, ImportOutput};
 use crate::BBox;
+
+const BEZIER_FLATNESS_MM: f64 = 0.01;
 
 const SVG_LAYER: &str = "svg";
 const SVG_COLOR: i32 = 7;
@@ -67,13 +69,18 @@ pub fn import_svg_bytes(
     let mut ctx = SvgCtx {
         segments: Vec::new(),
         unit_scale,
-        chord_step: opts.arc_max_step_or_default(),
+        tolerance_failed: false,
         // SVG y axis points down; CAM expects y up. Flip on import using
         // the document height so output sits in [0, h].
         flip_y: tree.size().height(),
         layer_arc: std::sync::Arc::from(SVG_LAYER),
     };
     walk(tree.root(), &mut ctx);
+    if ctx.tolerance_failed {
+        return Err(Error::bad_input(
+            "SVG curve exceeds the 0.01 mm subdivision budget or contains non-finite coordinates",
+        ));
+    }
 
     let segments = ctx.segments;
     let bbox = BBox::from_segments(&segments);
@@ -96,7 +103,7 @@ pub fn import_svg_bytes(
 struct SvgCtx {
     segments: Vec<Segment>,
     unit_scale: f64,
-    chord_step: f64,
+    tolerance_failed: bool,
     flip_y: f32,
     /// Pre-interned once at construction so every `Segment::line`
     /// below shares this `Arc` instead of allocating per call.
@@ -176,24 +183,34 @@ fn emit_path(path: &usvg::Path, ctx: &mut SvgCtx) {
 }
 
 fn push_line(ctx: &mut SvgCtx, from: Point2, to: Point2) {
-    if from.distance(to) < 1e-6 {
+    if ![from.x, from.y, to.x, to.y].iter().all(|v| v.is_finite()) {
+        ctx.tolerance_failed = true;
+        return;
+    }
+    if from == to {
         return;
     }
     ctx.segments
         .push(Segment::line(from, to, ctx.layer_arc.clone(), SVG_COLOR));
 }
 
-/// Adaptive de Casteljau quadratic flattener. Subdivides until either the
-/// chord length is below `chord_step` or recursion limit is hit.
+/// Control hull distance to the finite chord bounds the whole Bézier.
+/// Exceeding the recursion budget rejects the import, never loosens tolerance.
 fn flatten_quad(ctx: &mut SvgCtx, p0: Point2, p1: Point2, p2: Point2) {
     flatten_quad_rec(ctx, p0, p1, p2, 0);
 }
 
 fn flatten_quad_rec(ctx: &mut SvgCtx, p0: Point2, p1: Point2, p2: Point2, depth: u8) {
-    let chord = p0.distance(p2);
+    if ctx.tolerance_failed {
+        return;
+    }
     let max_dev = perp_distance(p1, p0, p2);
-    if depth >= 16 || (chord <= ctx.chord_step && max_dev < ctx.chord_step * 0.25) {
+    if max_dev.is_finite() && max_dev <= BEZIER_FLATNESS_MM {
         push_line(ctx, p0, p2);
+        return;
+    }
+    if depth >= 20 || !max_dev.is_finite() {
+        ctx.tolerance_failed = true;
         return;
     }
     let q0 = midpoint(p0, p1);
@@ -208,10 +225,16 @@ fn flatten_cubic(ctx: &mut SvgCtx, p0: Point2, p1: Point2, p2: Point2, p3: Point
 }
 
 fn flatten_cubic_rec(ctx: &mut SvgCtx, p0: Point2, p1: Point2, p2: Point2, p3: Point2, depth: u8) {
-    let chord = p0.distance(p3);
+    if ctx.tolerance_failed {
+        return;
+    }
     let max_dev = perp_distance(p1, p0, p3).max(perp_distance(p2, p0, p3));
-    if depth >= 16 || (chord <= ctx.chord_step && max_dev < ctx.chord_step * 0.25) {
+    if max_dev.is_finite() && max_dev <= BEZIER_FLATNESS_MM {
         push_line(ctx, p0, p3);
+        return;
+    }
+    if depth >= 20 || !max_dev.is_finite() {
+        ctx.tolerance_failed = true;
         return;
     }
     let p01 = midpoint(p0, p1);
@@ -228,15 +251,16 @@ fn midpoint(a: Point2, b: Point2) -> Point2 {
     Point2::new((a.x + b.x) * 0.5, (a.y + b.y) * 0.5)
 }
 
-/// Perpendicular distance from `p` to the line through `a` and `b`.
+/// Distance to a finite chord: collinear backtracking must also subdivide.
 fn perp_distance(p: Point2, a: Point2, b: Point2) -> f64 {
     let dx = b.x - a.x;
     let dy = b.y - a.y;
-    let len = (dx * dx + dy * dy).sqrt();
-    if len < 1e-12 {
+    let len2 = dx * dx + dy * dy;
+    if len2 == 0.0 {
         return p.distance(a);
     }
-    ((p.x - a.x) * dy - (p.y - a.y) * dx).abs() / len
+    let t = (((p.x - a.x) * dx + (p.y - a.y) * dy) / len2).clamp(0.0, 1.0);
+    p.distance(Point2::new(a.x + t * dx, a.y + t * dy))
 }
 
 #[cfg(test)]
@@ -343,5 +367,80 @@ mod tests {
         // just check the X is 50.
         assert!((s.start.x - 50.0).abs() < 0.01);
         assert!((s.end.x - 50.0).abs() < 0.01);
+    }
+}
+
+#[cfg(test)]
+mod audit_six {
+    use super::*;
+    #[test]
+    fn straight_cubic_is_one_chord() {
+        let s=br"<svg xmlns='http://www.w3.org/2000/svg' width='400' height='100'><path d='M0 10 C100 10 200 10 300 10' fill='none' stroke='black'/></svg>";
+        let out = import_svg_bytes("a.svg".into(), s, &ImportOptions::default()).unwrap();
+        assert_eq!(out.segments.len(), 1);
+    }
+    fn context() -> SvgCtx {
+        SvgCtx {
+            segments: vec![],
+            unit_scale: 1.,
+            tolerance_failed: false,
+            flip_y: 0.,
+            layer_arc: "svg".into(),
+        }
+    }
+    #[test]
+    fn cubic_curve_and_backtracking_respect_finite_chord_budget() {
+        for cps in [
+            [
+                Point2::new(0., 0.),
+                Point2::new(0., 1.),
+                Point2::new(1., 1.),
+                Point2::new(1., 0.),
+            ],
+            [
+                Point2::new(0., 0.),
+                Point2::new(10., 0.),
+                Point2::new(-10., 0.),
+                Point2::new(1., 0.),
+            ],
+        ] {
+            let mut ctx = context();
+            flatten_cubic(&mut ctx, cps[0], cps[1], cps[2], cps[3]);
+            assert!(!ctx.tolerance_failed);
+            assert!(ctx.segments.len() > 1);
+            for i in 0..=1000 {
+                let t = i as f64 / 1000.;
+                let u = 1. - t;
+                let p = Point2::new(
+                    u * u * u * cps[0].x
+                        + 3. * u * u * t * cps[1].x
+                        + 3. * u * t * t * cps[2].x
+                        + t * t * t * cps[3].x,
+                    u * u * u * cps[0].y
+                        + 3. * u * u * t * cps[1].y
+                        + 3. * u * t * t * cps[2].y
+                        + t * t * t * cps[3].y,
+                );
+                let d = ctx
+                    .segments
+                    .iter()
+                    .map(|s| perp_distance(p, s.start, s.end))
+                    .fold(f64::INFINITY, f64::min);
+                assert!(d <= BEZIER_FLATNESS_MM + 1e-10, "{d}");
+            }
+        }
+    }
+    #[test]
+    fn unresolved_flatness_fails_instead_of_relaxing_budget() {
+        let mut ctx = context();
+        flatten_quad_rec(
+            &mut ctx,
+            Point2::new(0., 0.),
+            Point2::new(1., 1.),
+            Point2::new(2., 0.),
+            20,
+        );
+        assert!(ctx.tolerance_failed);
+        assert!(ctx.segments.is_empty());
     }
 }

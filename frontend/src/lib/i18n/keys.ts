@@ -2240,6 +2240,7 @@ export type MsgKey =
   | "warn.stufenfase_no_toolchange"
   | "warn.stufenfase_non_circle_skipped"
   | "warn.surfacing_edge_overtravel"
+  | "warn.tabs_corner_clearance_unavailable"
   | "warn.tabs_count_clamped_short_contour"
   | "warn.tabs_with_trochoidal_unsupported"
   | "warn.thread_dz_less_than_pitch"
@@ -4516,6 +4517,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "warn.stufenfase_no_toolchange",
   "warn.stufenfase_non_circle_skipped",
   "warn.surfacing_edge_overtravel",
+  "warn.tabs_corner_clearance_unavailable",
   "warn.tabs_count_clamped_short_contour",
   "warn.tabs_with_trochoidal_unsupported",
   "warn.thread_dz_less_than_pitch",

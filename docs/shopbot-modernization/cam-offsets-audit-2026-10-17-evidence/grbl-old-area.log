@@ -1,0 +1,110 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.13s
+     Running tests/cps_posts.rs (target/debug/deps/cps_posts-04ea1552f7d89023)
+
+running 1 test
+=== UPDATE DIGEST [cps_grbl] = 0x111f30f31bf89c56 ===
+(ivaCAM)
+G21
+G90 G94 G17
+(Profile outer)
+G0 Z0.
+(tool 1: flat end mill D=6.)
+S18000 M3
+X0. Y0.
+Z0.
+(OP 1)
+(object=0 level=0 pocket=0 segments=8 finish)
+G4 P1
+Y-3.
+G1 Z-1.5 F200
+G2 X-3. Y0. J3. F1200
+G1 Y40.
+G2 X0. Y43. I3.
+G1 X60.
+G2 X63. Y40. J-3.
+G1 Y0.
+G2 X60. Y-3. I-3.
+G1 X0.
+Z-3. F200
+G2 X-3. Y0. J3. F1200
+G1 Y40.
+G2 X0. Y43. I3.
+G1 X60.
+G2 X63. Y40. J-3.
+G1 Y0.
+G2 X60. Y-3. I-3.
+G1 X0.
+G0 Z0.
+(object=1 level=0 pocket=0 segments=2 finish)
+G4 P1
+X85.5 Y20.
+G1 Z-1.5 F200
+G3 X74.5 I-5.5 F1200
+X85.5 I5.5
+G1 Z-3. F200
+G2 X74.5 I-5.5 F1200
+X85.5 I5.5
+G0 Z0.
+(Drill pattern)
+Z0.
+M5
+(tool 2: drill D=5.)
+M0
+S18000 M3
+X85.5 Y20.
+Z0.
+(OP 2)
+G4 P1
+(drill object=1 x=80.0000 y=20.0000 z=-9.5022)
+X80. Z0.5
+G1 Z-2.5 F200
+G0 Z0.5
+Z-2.
+G1 Z-2.5 F200
+Z-5.5
+G0 Z0.5
+Z-5.
+G1 Z-5.5 F200
+Z-8.5
+G0 Z0.5
+Z-8.
+G1 Z-8.5 F200
+Z-9.502
+G0 Z0.5
+(drill object=0 x=30.0000 y=20.0000 z=-9.5022)
+Z0.
+X30. Z0.5
+G1 Z-2.5 F200
+G0 Z0.5
+Z-2.
+G1 Z-2.5 F200
+Z-5.5
+G0 Z0.5
+Z-5.
+G1 Z-5.5 F200
+Z-8.5
+G0 Z0.5
+Z-8.
+G1 Z-8.5 F200
+Z-9.502
+G0 Z0.5
+Z0.
+M5
+M9
+M30
+
+
+thread 'bundled_grbl_snapshot' panicked at crates/ivac-core/tests/cps_posts.rs:104:9:
+IVAC_UPDATE_SNAPSHOTS set — paste the digest and rerun without it.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test bundled_grbl_snapshot ... FAILED
+
+failures:
+
+failures:
+    bundled_grbl_snapshot
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.24s
+
+error: test failed, to rerun pass `-p ivac-core --test cps_posts`

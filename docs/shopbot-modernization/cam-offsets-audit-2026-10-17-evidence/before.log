@@ -1,0 +1,268 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling autocfg v1.5.0
+   Compiling cfg-if v1.0.4
+   Compiling serde_core v1.0.228
+   Compiling serde v1.0.228
+   Compiling libc v0.2.186
+   Compiling equivalent v1.0.2
+   Compiling itoa v1.0.18
+   Compiling stable_deref_trait v1.2.1
+   Compiling zerocopy v0.8.48
+   Compiling hashbrown v0.17.0
+   Compiling siphasher v1.0.3
+   Compiling zmij v1.0.21
+   Compiling once_cell v1.21.4
+   Compiling num-traits v0.2.19
+   Compiling memchr v2.8.0
+   Compiling paste v1.0.15
+   Compiling smallvec v1.15.1
+   Compiling phf_shared v0.13.1
+   Compiling serde_json v1.0.149
+   Compiling allocator-api2 v0.2.21
+   Compiling foldhash v0.2.0
+   Compiling fastrand v2.4.1
+   Compiling phf_generator v0.13.1
+   Compiling hashbrown v0.16.1
+   Compiling num-integer v0.1.46
+   Compiling fast-float2 v0.2.3
+   Compiling rustc-hash v2.1.2
+   Compiling either v1.15.0
+   Compiling cow-utils v0.1.3
+   Compiling getrandom v0.3.4
+   Compiling static_assertions v1.1.0
+   Compiling ryu-js v1.0.3
+   Compiling litemap v0.8.2
+   Compiling winnow v1.0.2
+   Compiling writeable v0.6.3
+   Compiling syn v2.0.117
+   Compiling indexmap v2.14.0
+   Compiling toml_datetime v1.1.1+spec-1.1.0
+   Compiling toml_parser v1.1.2+spec-1.1.0
+   Compiling icu_properties_data v2.0.1
+   Compiling thin-vec v0.2.19
+   Compiling arrayvec v0.7.6
+   Compiling toml_edit v0.25.11+spec-1.1.0
+   Compiling indexmap v1.9.3
+   Compiling memoffset v0.9.1
+   Compiling icu_normalizer_data v2.0.0
+   Compiling crossbeam-utils v0.8.21
+   Compiling futures-core v0.3.32
+   Compiling pin-project-lite v0.2.17
+   Compiling rustversion v1.0.22
+   Compiling parking_lot_core v0.9.12
+   Compiling synstructure v0.13.2
+   Compiling boa_string v0.21.1
+   Compiling serde_derive_internals v0.29.1
+   Compiling serde_derive v1.0.228
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling zerovec-derive v0.11.3
+   Compiling displaydoc v0.2.5
+   Compiling bytemuck_derive v1.11.0
+   Compiling zerocopy-derive v0.8.48
+   Compiling boa_macros v0.21.1
+   Compiling zerofrom v0.1.7
+   Compiling phf_macros v0.13.1
+   Compiling rand_core v0.9.5
+   Compiling equator-macro v0.4.2
+   Compiling pin-project-internal v1.1.13
+   Compiling phf v0.13.1
+   Compiling bytemuck v1.25.0
+   Compiling proc-macro-crate v3.5.0
+   Compiling futures-io v0.3.32
+   Compiling schemars v0.8.22
+   Compiling powerfmt v0.2.0
+   Compiling hashbrown v0.12.3
+   Compiling bitflags v2.11.1
+   Compiling yoke v0.8.2
+   Compiling parking v2.2.1
+   Compiling xml-rs v0.8.28
+   Compiling thiserror v2.0.18
+   Compiling boa_gc v0.21.1
+   Compiling portable-atomic v1.14.0
+   Compiling scopeguard v1.2.0
+   Compiling crc32fast v1.5.0
+   Compiling num-conv v0.2.1
+   Compiling time-core v0.1.8
+   Compiling time-macros v0.2.27
+   Compiling futures-lite v2.6.1
+   Compiling lock_api v0.4.14
+   Compiling xmltree v0.9.0
+   Compiling deranged v0.5.8
+   Compiling num_enum_derive v0.7.6
+   Compiling pin-project v1.1.13
+   Compiling equator v0.4.2
+   Compiling num-bigint v0.4.6
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling boa_interner v0.21.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling boa_ast v0.21.1
+   Compiling half v2.7.1
+   Compiling rand_chacha v0.9.0
+   Compiling schemars_derive v0.8.22
+   Compiling dynify-macros v0.1.2
+   Compiling thiserror-impl v2.0.18
+   Compiling num_threads v0.1.7
+   Compiling itertools v0.14.0
+   Compiling regress v0.10.5
+   Compiling float-cmp v0.9.0
+   Compiling plotters-backend v0.3.7
+   Compiling fixedbitset v0.5.7
+   Compiling anstyle v1.0.14
+   Compiling utf16_iter v1.0.5
+   Compiling ciborium-io v0.2.2
+   Compiling regex-syntax v0.8.10
+   Compiling core-foundation-sys v0.8.7
+   Compiling clap_lex v1.1.0
+   Compiling adler2 v2.0.1
+   Compiling hashbrown v0.14.5
+   Compiling dyn-clone v1.0.20
+   Compiling write16 v1.0.0
+   Compiling simd-adler32 v0.3.9
+   Compiling miniz_oxide v0.8.9
+   Compiling clap_builder v4.6.0
+   Compiling dashmap v6.2.1
+   Compiling iana-time-zone v0.1.65
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling futures-concurrency v7.7.1
+   Compiling icu_locale_core v2.2.0
+   Compiling icu_collections v2.0.0
+   Compiling ciborium-ll v0.2.2
+   Compiling regex-automata v0.4.14
+   Compiling dynify v0.1.2
+   Compiling plotters-svg v0.3.7
+   Compiling aligned-vec v0.6.4
+   Compiling strict-num v0.1.1
+   Compiling time v0.3.47
+   Compiling num_enum v0.7.6
+   Compiling icu_provider v2.2.0
+   Compiling rand v0.9.5
+   Compiling icu_properties v2.0.2
+   Compiling icu_normalizer v2.0.1
+   Compiling num-rational v0.4.2
+   Compiling dxf v0.6.1
+   Compiling intrusive-collections v0.9.7
+   Compiling font-types v0.9.0
+   Compiling tracing-attributes v0.1.31
+   Compiling futures-channel v0.3.32
+   Compiling kurbo v0.11.3
+   Compiling boa_parser v0.21.1
+   Compiling small_btree v0.1.0
+   Compiling getrandom v0.2.17
+   Compiling itertools v0.10.5
+   Compiling num-iter v0.1.45
+   Compiling num-complex v0.4.6
+   Compiling num-traits v0.1.43
+   Compiling tracing-core v0.1.36
+   Compiling byteorder-lite v0.1.0
+   Compiling arrayref v0.3.9
+   Compiling tap v1.0.1
+   Compiling log v0.4.29
+   Compiling same-file v1.0.6
+   Compiling cast v0.3.0
+   Compiling tag_ptr v0.1.0
+   Compiling svgtypes v0.15.3
+   Compiling num v0.4.3
+   Compiling walkdir v2.5.0
+   Compiling simplecss v0.2.2
+   Compiling image v0.25.5
+   Compiling tiny-skia-path v0.11.4
+   Compiling enum_primitive v0.1.1
+   Compiling uuid v1.10.0
+   Compiling tracing v0.1.44
+   Compiling read-fonts v0.34.0
+   Compiling flate2 v1.1.9
+   Compiling regex v1.12.3
+   Compiling criterion-plot v0.5.0
+   Compiling clap v4.6.1
+   Compiling plotters v0.3.7
+   Compiling ciborium v0.2.2
+   Compiling chrono v0.4.44
+   Compiling tinytemplate v1.2.1
+   Compiling is-terminal v0.4.17
+   Compiling static_aabb2d_index v2.0.0
+   Compiling encoding_rs v0.8.35
+   Compiling pico-args v0.5.0
+   Compiling anes v0.1.6
+   Compiling boa_engine v0.21.1
+   Compiling oorandom v11.1.5
+   Compiling imagesize v0.13.0
+   Compiling xmlwriter v0.1.0
+   Compiling base64 v0.22.1
+   Compiling maybe_parallel_iterator v0.12.0
+   Compiling data-url v0.3.2
+   Compiling roxmltree v0.20.0
+   Compiling byteorder v1.5.0
+   Compiling criterion v0.5.1
+   Compiling voronator v0.2.1
+   Compiling cavalier_contours v0.7.0
+   Compiling ivac-feeds-speeds v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+   Compiling usvg v0.45.1
+   Compiling clipper2-rust v1.0.3
+   Compiling lru v0.18.2
+   Compiling seahash v4.1.0
+   Compiling skrifa v0.36.0
+   Compiling ivac-cps v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 36.66s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 14 tests
+test cam::audit_regressions::area_centroid_is_independent_of_collinear_sampling_and_winding ... ok
+test cam::audit_regressions::circle_bounds_include_arc_extrema_and_empty_objects_do_not_expand_them ... ok
+test cam::offsets::audit_tests::audit_approach_projects_onto_long_side ... FAILED
+test cam::offsets::audit_tests::audit_bridge_rejects_subsample_notch ... FAILED
+test cam::offsets::audit_tests::audit_island_wall_has_outer_context ... FAILED
+test cam::offsets::audit_tests::audit_two_arc_winding_all_spindle_directions ... FAILED
+test cam::offsets::audit_tests::audit_waterline_circle_clearance ... FAILED
+test cam::vcarve_plan::audit_tests::many_passes_remain_bounded_and_reach_target ... ok
+test cam::vcarve_plan::audit_tests::simplification_keeps_target_and_cut_breakpoints ... ok
+test cam::vcarve_validate::audit_tests::broad_phase_agrees_with_all_edge_analytical_proof ... ok
+test cam::vcarve_validate::audit_tests::distant_edges_do_not_consume_the_analytical_pair_budget ... ok
+test cam::vcarve_validate::audit_tests::prepared_checks_indices_and_nearly_flat_large_radius_arcs ... ok
+test input::audit_tests::imported_tags_follow_source_ordinals_for_coincident_curves ... ok
+test math::tests::audit_angles_are_bounded_and_preserve_signed_half_turns ... ok
+
+failures:
+
+---- cam::offsets::audit_tests::audit_approach_projects_onto_long_side stdout ----
+
+thread 'cam::offsets::audit_tests::audit_approach_projects_onto_long_side' panicked at crates/ivac-core/src/cam/offsets/audit_tests.rs:39:2:
+assertion failed: offsets[0].segments[0].start.distance(p(100., 3.)) < 1e-9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- cam::offsets::audit_tests::audit_bridge_rejects_subsample_notch stdout ----
+
+thread 'cam::offsets::audit_tests::audit_bridge_rejects_subsample_notch' panicked at crates/ivac-core/src/cam/offsets/audit_tests.rs:22:2:
+assertion failed: !bridge_stays_inside_polygon(p(0., 10.), p(40., 10.), &poly)
+
+---- cam::offsets::audit_tests::audit_island_wall_has_outer_context stdout ----
+
+thread 'cam::offsets::audit_tests::audit_island_wall_has_outer_context' panicked at crates/ivac-core/src/cam/offsets/audit_tests.rs:32:2:
+assertion failed: islands.iter().all(|o| offset_signed_area(o) < 0.)
+
+---- cam::offsets::audit_tests::audit_two_arc_winding_all_spindle_directions stdout ----
+
+thread 'cam::offsets::audit_tests::audit_two_arc_winding_all_spindle_directions' panicked at crates/ivac-core/src/cam/offsets/audit_tests.rs:16:2:
+assertion failed: (offset_signed_area(&offset).abs() - std::f64::consts::PI * 81.).abs() < 1e-8
+
+---- cam::offsets::audit_tests::audit_waterline_circle_clearance stdout ----
+
+thread 'cam::offsets::audit_tests::audit_waterline_circle_clearance' panicked at crates/ivac-core/src/cam/offsets/audit_tests.rs:47:62:
+Point2 { x: -4.13872999354426, y: -7.0 }
+
+
+failures:
+    cam::offsets::audit_tests::audit_approach_projects_onto_long_side
+    cam::offsets::audit_tests::audit_bridge_rejects_subsample_notch
+    cam::offsets::audit_tests::audit_island_wall_has_outer_context
+    cam::offsets::audit_tests::audit_two_arc_winding_all_spindle_directions
+    cam::offsets::audit_tests::audit_waterline_circle_clearance
+
+test result: FAILED. 9 passed; 5 failed; 0 ignored; 0 measured; 1099 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

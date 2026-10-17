@@ -26,6 +26,8 @@ const KNOWN_WARN_PARAMS = new Set([
   'carve_width',
   'changes',
   'clamped',
+  // setup_resolver.rs: unchanged-feed chipload ratio after an RPM ceiling.
+  'chipload_factor',
   'cols',
   'count',
   'cut_depth',

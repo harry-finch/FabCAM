@@ -162,30 +162,9 @@ fn memoized_regions(
     cache: Option<&crate::pipeline_cache::PipelineCache>,
 ) -> Vec<RegionPreview> {
     let key = cache.and_then(|_| {
-        // serde JSON maps nonfinite floats to null: never use that as identity.
-        let finite = targets
-            .iter()
-            .flat_map(|r| r.outer.iter().chain(r.holes.iter().flatten()))
-            .all(|p| p.x.is_finite() && p.y.is_finite())
-            && moves.iter().all(|m| {
-                [m.from.x, m.from.y, m.from.z, m.to.x, m.to.y, m.to.z]
-                    .iter()
-                    .all(|v| v.is_finite())
-            });
-        if !finite || !radius.is_finite() || !depth.is_finite() {
-            return None;
-        }
         crate::profile_measure!(
             "preview.remaining_key",
-            serde_json::to_vec(&(
-                crate::pipeline_cache::PIPELINE_VERSION,
-                targets,
-                moves,
-                radius,
-                depth
-            ))
-            .ok()
-            .filter(|k| k.len() <= 8 * 1024 * 1024)
+            remaining_key(targets, moves, radius, depth)
         )
     });
     if let Some(regions) = key.as_ref().and_then(|k| cache?.remaining_memo.get(k)) {
@@ -198,6 +177,78 @@ fn memoized_regions(
         cache.remaining_memo.put(key, &result);
     }
     result
+}
+
+// Exact binary identity, not a digest: metadata (op/line IDs, feed and strings)
+// is absent because the planar kernel reads only target topology and XYZ cuts.
+// Ring lengths preserve outer/hole boundaries; full IEEE bits prevent collisions.
+fn remaining_key(
+    targets: &[RegionPreview],
+    moves: &[&ToolpathSegment],
+    radius: f64,
+    depth: f64,
+) -> Option<Vec<u8>> {
+    const MAX_KEY_BYTES: usize = 8 * 1024 * 1024;
+    if !radius.is_finite() || !depth.is_finite() {
+        return None;
+    }
+    let relevant = |m: &&ToolpathSegment| {
+        m.kind != MoveKind::Rapid
+            && (m.from.z <= depth + DEPTH_EPS_MM || m.to.z <= depth + DEPTH_EPS_MM)
+    };
+    let mut words = 4usize.checked_add(
+        moves
+            .iter()
+            .filter(|m| relevant(m))
+            .count()
+            .checked_mul(6)?,
+    )?;
+    for r in targets {
+        words = words.checked_add(2)?;
+        for ring in std::iter::once(&r.outer).chain(r.holes.iter()) {
+            words = words
+                .checked_add(1)?
+                .checked_add(ring.len().checked_mul(2)?)?;
+            if ring.iter().any(|p| !p.x.is_finite() || !p.y.is_finite()) {
+                return None;
+            }
+        }
+    }
+    // Preserve the old nonfinite bypass even for moves excluded by the kernel.
+    if moves.iter().any(|m| {
+        [m.from.x, m.from.y, m.from.z, m.to.x, m.to.y, m.to.z]
+            .iter()
+            .any(|n| !n.is_finite())
+    }) {
+        return None;
+    }
+    let bytes = words.checked_mul(8)?;
+    if bytes > MAX_KEY_BYTES {
+        return None;
+    }
+    let mut key = Vec::with_capacity(bytes);
+    let mut word = |n: u64| key.extend_from_slice(&n.to_le_bytes());
+    word(u64::from(crate::pipeline_cache::PIPELINE_VERSION));
+    word(radius.to_bits());
+    word(depth.to_bits());
+    word(targets.len() as u64);
+    for r in targets {
+        word(u64::from(r.op_id)); // output attribution is observable
+        word(r.holes.len() as u64);
+        for ring in std::iter::once(&r.outer).chain(r.holes.iter()) {
+            word(ring.len() as u64);
+            for p in ring {
+                word(p.x.to_bits());
+                word(p.y.to_bits());
+            }
+        }
+    }
+    for m in moves.iter().filter(|m| relevant(m)) {
+        for n in [m.from.x, m.from.y, m.from.z, m.to.x, m.to.y, m.to.z] {
+            word(n.to_bits());
+        }
+    }
+    Some(key)
 }
 
 fn ring_path(points: &[Point2], positive: bool) -> PathD {
@@ -515,5 +566,46 @@ mod tests {
                 expected
             );
         }
+    }
+    #[test]
+    fn lot7_binary_key_preserves_geometry_topology_and_output_attribution() {
+        let mut target = RegionPreview {
+            op_id: 1,
+            outer: square(0., 10.),
+            holes: vec![],
+        };
+        let mut m = movement([0., 5., -2.], [10., 5., -2.], MoveKind::Cut);
+        let a = remaining_key(&[target.clone()], &[&m], 1., -2.).unwrap();
+        let json = serde_json::to_vec(&(
+            crate::pipeline_cache::PIPELINE_VERSION,
+            &[target.clone()],
+            &[&m],
+            1.,
+            -2.,
+        ))
+        .unwrap();
+        assert!(a.len() < json.len());
+        m.op_id = 99;
+        m.gcode_line = 400;
+        assert_eq!(
+            Some(a.clone()),
+            remaining_key(&[target.clone()], &[&m], 1., -2.)
+        );
+        m.to.x = 9.;
+        assert_ne!(
+            Some(a.clone()),
+            remaining_key(&[target.clone()], &[&m], 1., -2.)
+        );
+        m.to.x = 10.;
+        target.op_id = 2;
+        assert_ne!(
+            Some(a.clone()),
+            remaining_key(&[target.clone()], &[&m], 1., -2.)
+        );
+        target.op_id = 1;
+        target.holes.push(square(3., 4.));
+        assert_ne!(Some(a), remaining_key(&[target], &[&m], 1., -2.));
+        m.to.z = f64::NAN;
+        assert!(remaining_key(&[], &[&m], 1., -2.).is_none());
     }
 }

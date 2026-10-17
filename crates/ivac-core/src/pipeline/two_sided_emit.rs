@@ -134,11 +134,26 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
     {
         return Err(PipelineError::WorkOrigin("two-sided CPS output or translated XY registration is not qualified; use a single-sided job or an unshifted native setup".into()));
     }
+    // These drivers read independent origins/heightfields, not mirrored segments.
+    // Refuse until their back-face transform has a qualified adapter.
+    if req.project.operations.iter().any(|op| {
+        op.enabled
+            && op.side == WorkpieceSide::Back
+            && matches!(
+                op.kind,
+                OpKind::PlanarSurface { .. }
+                    | OpKind::ReliefMill { .. }
+                    | OpKind::WaterlineRough { .. }
+            )
+    }) {
+        return Err(PipelineError::Fixture("back-face surfacing/heightfield transforms are not qualified; no two-sided programs emitted".into()));
+    }
     let stock = stock.clone();
     let dowels = stock.flip.as_ref().and_then(|f| f.dowels.clone());
     let dowel_centres = dowels
         .as_ref()
         .map(|d| dowel_centres(&stock, axis, d))
+        .transpose()?
         .unwrap_or_default();
 
     // (1) Correctness gate on the UNSPLIT project: opposing-overlap detection
@@ -161,7 +176,7 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
         .retain(|o| o.side == WorkpieceSide::Front);
     if !dowel_centres.is_empty() {
         if let Some(d) = dowels.as_ref() {
-            inject_dowel_op(&mut front_project, &stock, &dowel_centres, d);
+            inject_dowel_op(&mut front_project, &stock, &dowel_centres, d)?;
         }
     }
     let mut front = run_pipeline(
@@ -204,9 +219,40 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
 /// same point on the back after the flip. Holes are spread evenly toward the
 /// two ends of that line, inset `margin_mm` from the edges so they clear a
 /// centred part.
-fn dowel_centres(stock: &StockConfig, axis: FlipAxis, cfg: &DowelPinConfig) -> Vec<Point2> {
-    let count = cfg.count.max(1);
-    let margin = cfg.margin_mm.max(0.0);
+fn dowel_centres(
+    stock: &StockConfig,
+    axis: FlipAxis,
+    cfg: &DowelPinConfig,
+) -> Result<Vec<Point2>, PipelineError> {
+    let span = match axis {
+        FlipAxis::X => stock.width_mm,
+        FlipAxis::Y => stock.height_mm,
+    };
+    let across = match axis {
+        FlipAxis::X => stock.height_mm,
+        FlipAxis::Y => stock.width_mm,
+    };
+    let radius = cfg.diameter_mm * 0.5;
+    if !(2..=1024).contains(&cfg.count)
+        || ![
+            span,
+            across,
+            cfg.diameter_mm,
+            cfg.margin_mm,
+            stock.origin[0],
+            stock.origin[1],
+        ]
+        .iter()
+        .all(|v| v.is_finite())
+        || cfg.diameter_mm <= 0.
+        || cfg.margin_mm < radius
+        || across < cfg.diameter_mm
+        || span - 2.0 * cfg.margin_mm < cfg.diameter_mm * f64::from(cfg.count - 1)
+    {
+        return Err(PipelineError::Fixture("dowel registration requires 2..1024 distinct nonoverlapping holes contained in stock; review count, diameter and margin".into()));
+    }
+    let count = cfg.count;
+    let margin = cfg.margin_mm;
     let (ox, oy) = (stock.origin[0], stock.origin[1]);
     let cx = ox + stock.width_mm / 2.0;
     let cy = oy + stock.height_mm / 2.0;
@@ -217,34 +263,65 @@ fn dowel_centres(stock: &StockConfig, axis: FlipAxis, cfg: &DowelPinConfig) -> V
         FlipAxis::X => (ox + margin, ox + stock.width_mm - margin),
         FlipAxis::Y => (oy + margin, oy + stock.height_mm - margin),
     };
-    (0..count)
+    let centres: Vec<_> = (0..count)
         .map(|i| {
-            let t = if count == 1 {
-                0.5
-            } else {
-                f64::from(i) / f64::from(count - 1)
-            };
+            let t = f64::from(i) / f64::from(count - 1);
             let along = lo + t * (hi - lo);
             match axis {
                 FlipAxis::X => Point2::new(along, cy),
                 FlipAxis::Y => Point2::new(cx, along),
             }
         })
-        .collect()
+        .collect();
+    if centres.iter().any(|p| !p.x.is_finite() || !p.y.is_finite())
+        || centres
+            .windows(2)
+            .any(|p| (p[1].x - p[0].x).hypot(p[1].y - p[0].y) < cfg.diameter_mm)
+    {
+        return Err(PipelineError::Fixture(
+            "dowel centres lose finite/distinct spacing at these stock coordinates".into(),
+        ));
+    }
+    Ok(centres)
 }
 
 /// Inject a dowel-drill op (targeting a synthetic point-geometry layer) as the
 /// FIRST op of the front program, so the registration holes are drilled before
 /// anything else moves. The holes go through the stock (+0.5 mm) so a pin can
-/// pass through into the fixture. The drill tool is cloned from an existing
-/// project tool (inheriting sensible feeds/speeds) with its kind/diameter
-/// overridden.
+/// pass through into the fixture. An unambiguous existing matching drill is
+/// required; physical tip geometry and authored drilling rates are never invented.
 fn inject_dowel_op(
     project: &mut Project,
     stock: &StockConfig,
     centres: &[Point2],
     cfg: &DowelPinConfig,
-) {
+) -> Result<(), PipelineError> {
+    let candidates: Vec<_> = project
+        .tools
+        .iter()
+        .filter(|t| {
+            t.kind == ToolKind::Drill
+                && t.effective_diameter() == cfg.diameter_mm
+                && t.tip_angle_deg.is_finite()
+                && t.tip_angle_deg > 0.
+                && t.tip_angle_deg <= 180.
+                && t.speed_drill.is_some_and(|v| v > 0)
+                && t.feed_rate_drill.is_some_and(|v| v > 0)
+                && t.plunge_rate_drill.is_some_and(|v| v > 0)
+        })
+        .collect();
+    if candidates.len() != 1 {
+        return Err(PipelineError::Fixture("dowels require one matching declared Drill with explicit drilling RPM/feed/plunge and valid tip geometry".into()));
+    }
+    let tool_id = candidates[0].id;
+    let op_id = project
+        .operations
+        .iter()
+        .map(|o| o.id)
+        .max()
+        .unwrap_or(0)
+        .checked_add(1)
+        .ok_or_else(|| PipelineError::Fixture("dowel operation ID exhausted".into()))?;
     // Point geometry for each hole, on the synthetic dowel layer.
     let layer: Arc<str> = Arc::from(DOWEL_LAYER);
     for c in centres {
@@ -259,19 +336,6 @@ fn inject_dowel_op(
         });
     }
 
-    // A drill tool: clone any existing tool for its feeds, override the bit.
-    let tool_id = project.tools.iter().map(|t| t.id).max().unwrap_or(0) + 1;
-    if let Some(template) = project.tools.first() {
-        let mut tool = template.clone();
-        tool.id = tool_id;
-        tool.name = format!("{:.1}mm dowel drill", cfg.diameter_mm);
-        tool.kind = ToolKind::Drill;
-        tool.diameter = cfg.diameter_mm;
-        tool.tip_diameter = None;
-        project.tools.push(tool);
-    }
-
-    let op_id = project.operations.iter().map(|o| o.id).max().unwrap_or(0) + 1;
     let mut params = crate::project::OpParams::mill_default();
     params.start_depth = 0.0;
     // Through the stock into the fixture so the pin passes fully.
@@ -304,6 +368,7 @@ fn inject_dowel_op(
         side: WorkpieceSide::Front,
     };
     project.operations.insert(0, dowel_op);
+    Ok(())
 }
 
 /// Front-program header comment block.
@@ -421,7 +486,14 @@ mod tests {
     }
 
     fn two_sided(w: f64, h: f64, ops: Vec<Op>) -> Project {
-        let mut project = crate::pipeline::test_helpers::project_with(ops, vec![endmill(1, 3.0)]);
+        let mut drill = endmill(2, 4.0);
+        drill.kind = ToolKind::Drill;
+        drill.tip_angle_deg = 118.0;
+        drill.speed_drill = Some(3000);
+        drill.feed_rate_drill = Some(200);
+        drill.plunge_rate_drill = Some(100);
+        let mut project =
+            crate::pipeline::test_helpers::project_with(ops, vec![endmill(1, 3.0), drill]);
         project.stock = Some(flip_stock(w, h));
         project
     }
@@ -600,5 +672,75 @@ mod tests {
                 .any(|w| w.kind == "two_sided_overlap"),
             "the whole-project overlap warning must ride on the front program"
         );
+    }
+    #[test]
+    fn lot7_dowels_refuse_bad_layout_or_invented_tools() {
+        let stock = flip_stock(20., 40.);
+        let mut cfg = stock.flip.as_ref().unwrap().dowels.clone().unwrap();
+        assert_eq!(dowel_centres(&stock, FlipAxis::X, &cfg).unwrap().len(), 2);
+        for count in [0, 1, 1025] {
+            cfg.count = count;
+            assert!(dowel_centres(&stock, FlipAxis::X, &cfg).is_err());
+        }
+        cfg.count = 2;
+        for margin in [0., 10., 11., f64::NAN] {
+            cfg.margin_mm = margin;
+            assert!(dowel_centres(&stock, FlipAxis::X, &cfg).is_err());
+        }
+        cfg.margin_mm = 2.;
+        let mut project = two_sided(
+            20.,
+            40.,
+            vec![
+                pocket(1, WorkpieceSide::Front, -3.),
+                pocket(2, WorkpieceSide::Back, -3.),
+            ],
+        );
+        project.tools.retain(|t| t.kind != ToolKind::Drill);
+        let before = project.segments.len();
+        assert!(inject_dowel_op(&mut project, &stock, &[Point2::new(2., 20.)], &cfg).is_err());
+        assert_eq!(before, project.segments.len());
+    }
+    #[test]
+    fn lot7_registration_keeps_real_drill_geometry_and_rates() {
+        let mut p = two_sided(
+            20.,
+            40.,
+            vec![
+                pocket(1, WorkpieceSide::Front, -3.),
+                pocket(2, WorkpieceSide::Back, -3.),
+            ],
+        );
+        let stock = p.stock.clone().unwrap();
+        let cfg = stock.flip.as_ref().unwrap().dowels.as_ref().unwrap();
+        let centres = dowel_centres(&stock, FlipAxis::X, cfg).unwrap();
+        inject_dowel_op(&mut p, &stock, &centres, cfg).unwrap();
+        assert_eq!(p.tools.len(), 2);
+        assert_eq!(p.operations[0].tool_id, 2);
+        assert_eq!(p.tools[1].tip_angle_deg, 118.);
+        assert_eq!(p.tools[1].speed_drill, Some(3000));
+        let mut huge = stock.clone();
+        huge.origin = [1e308, 0.];
+        assert!(dowel_centres(&huge, FlipAxis::X, cfg).is_err());
+        let mut back = pocket(2, WorkpieceSide::Back, -3.);
+        back.kind = OpKind::PlanarSurface {
+            surface: crate::cam::planar_surface::PlanarSurfaceParams {
+                origin: [0., 0.],
+                width_mm: 20.,
+                height_mm: 40.,
+                margin_mm: 0.,
+                overtravel_mm: 0.,
+                stepover_mm: 1.,
+                direction: crate::cam::surface_mill::ScanDirection::AlongX,
+            },
+        };
+        assert!(matches!(
+            run2(two_sided(
+                20.,
+                40.,
+                vec![pocket(1, WorkpieceSide::Front, -3.), back]
+            )),
+            Err(PipelineError::Fixture(_))
+        ));
     }
 }

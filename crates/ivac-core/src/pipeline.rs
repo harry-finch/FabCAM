@@ -309,6 +309,8 @@ pub enum PipelineError {
     Drawing(String),
     #[error("operation #{0}: V-Carve: {1}")]
     VCarve(u32, String),
+    #[error("operation #{0}: invalid waterline geometry: {1}")]
+    Waterline(u32, String),
     #[error("operation #{0}: invalid planar surfacing: {1}")]
     PlanarSurface(u32, String),
     #[error("work origin: {0}")]
@@ -359,6 +361,7 @@ impl PipelineError {
             PipelineError::Cancelled => None,
             PipelineError::Drawing(message) => Some(Structured::misconfigured(message.clone()).with_hint("Review edited drawing and source bindings; no output generated.")),
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
+            PipelineError::Waterline(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Repair open or ambiguous mesh slices, or change the slice levels. No output generated.")),
             PipelineError::PlanarSurface(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review surfacing zone, flat cutter, depth and work area.")),
             PipelineError::AppliedCutting(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Apply or edit complete cutting rates for the current tool roles.")),
             PipelineError::Fixture(message) => Some(Structured::misconfigured(message.clone())),
@@ -3570,3 +3573,6 @@ fn resolve_edited_objects(
     }
     Ok(objects)
 }
+
+#[cfg(test)]
+mod lot8_tests;

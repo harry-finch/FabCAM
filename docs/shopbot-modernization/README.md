@@ -5,6 +5,8 @@
 - [FabCAM 1.0 / 1.5 / 2.0+ roadmap and approval decisions](../releases/RELEASE_ROADMAP.md)
 - [V1 ShopBot scope and acceptance matrix](../releases/FABCAM_V1_SCOPE.md)
 - [V1.5 ProtoMAX feasibility and acceptance matrix](../releases/FABCAM_V1_5_SCOPE.md)
+- [AUDIT3 post-V1 Git history/defect provenance plan](../releases/AUDIT3_PLAN.md):
+  PLANNED after explicit V1 acceptance, before main V1.5 implementation; not a V1 blocker.
 
 Roadmap approved 2026-10-15 with macOS, Windows and Linux required for V1.
 Existing engineering/physical evidence and independent human gates remain unchanged.

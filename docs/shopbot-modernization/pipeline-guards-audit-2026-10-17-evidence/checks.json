@@ -1,0 +1,25 @@
+{
+  "base_commit": "73dca6ea162917f6c1f9e94c61feed322a21a88f",
+  "source_context": "Combined uncommitted working tree, including prior lots 4-6 and workspace cleanup. Not a clean published revision.",
+  "pipeline_version": 53,
+  "core_serial_passed": 1145,
+  "integration_reported_passed": 87,
+  "integration_checks_executed": 86,
+  "optional_oracle": "FANUC absent: test returns early",
+  "frontend_passed": 1324,
+  "frontend_skipped": 1,
+  "wasm_guard_tests_passed": 10,
+  "source_sha256": {
+    "crates/ivac-core/src/pipeline/remaining.rs": "664c64465b25d8a077f66c531ee28c349765749460d8c57e8eef2606dcb2ac6f",
+    "crates/ivac-core/src/pipeline/setup_resolver.rs": "2308fde06d69c3fce2656d8e26ccb5a1da20479a8df46ef3df2e45819b4db898",
+    "crates/ivac-core/src/pipeline/shopbot_resolution.rs": "aafb83cb055dd69fd7ded79908430ef58a2d2b7833ba2bb3395f297c6bbd329e",
+    "crates/ivac-core/src/pipeline/two_sided_emit.rs": "fffbc4722a891e263f74eca909e99e1de5abf78a4bec56afea9aa4dbf8696e0a",
+    "crates/ivac-core/src/pipeline/warnings.rs": "b02220a17d846c4c213bd46b500a482842c69dffb636a2b60e0a3b4cddfd7bf5",
+    "crates/ivac-core/src/pipeline/work_origin.rs": "ae0c4919f8ebdea50f3fb8978095dcc08582e56a7055677a1e397c6fc58105b2",
+    "crates/ivac-core/src/version.rs": "e8e5408957d08e1977cc2230b83772a82bf1172c243321a18683152c703620d5",
+    "crates/ivac-core/src/pipeline_cache.rs": "765c2c2d9aa2db0ea9d60d0f0c8c80ee3cd4ce85e5cf06dc59489935b09ab68e",
+    "frontend/src/lib/components/warning-display.test.ts": "5a22f7f62235fd81a28adb7a17b4635961907fc14f7b28e48cb1e22c60b76171",
+    "frontend/src/lib/i18n/messages/en.json": "76c83d2de2049033be77c0de2f4051da6ef7e078eabcfc899fece8d67bd735ac",
+    "frontend/src/lib/i18n/messages/de.json": "fe97c01d63f9ec57a200cdce20053dc507593fccb348dd5da24d0bc1e846aa07"
+  }
+}

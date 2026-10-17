@@ -589,17 +589,60 @@ pub(super) fn two_sided_guard(
     if !has_back || thickness <= 1e-6 {
         return Ok(());
     }
+    if project.operations.iter().any(|op| {
+        op.enabled
+            && matches!(
+                op.kind,
+                OpKind::ReliefMill { .. } | OpKind::WaterlineRough { .. }
+            )
+    }) {
+        return Err(PipelineError::Fixture(
+            "two-sided heightfield footprint/depth analysis is not qualified".into(),
+        ));
+    }
 
     let extents: Vec<SideExtent> = project
         .operations
         .iter()
         .filter(|o| o.enabled && !o.is_program_only())
         .filter_map(|op| {
-            let mut footprint = BBox::EMPTY;
-            for s in resolve_op_segment_refs(op, &project.segments, objects) {
-                footprint.extend_point(s.start);
-                footprint.extend_point(s.end);
-            }
+            // Both sides are authored in the same design frame here. Mirroring
+            // Back a second time would compare different physical locations.
+            let radius = project
+                .tools
+                .iter()
+                .filter(|t| t.id == op.tool_id || Some(t.id) == op.finish_tool_id)
+                .map(|t| t.diameter.max(t.effective_diameter()) * 0.5)
+                .fold(0.0, f64::max);
+            let mut footprint = if let OpKind::PlanarSurface { surface } = &op.kind {
+                BBox {
+                    min_x: surface.origin[0],
+                    min_y: surface.origin[1],
+                    max_x: surface.origin[0] + surface.width_mm,
+                    max_y: surface.origin[1] + surface.height_mm,
+                }
+            } else {
+                let segments: Vec<_> = resolve_op_segment_refs(op, &project.segments, objects)
+                    .into_iter()
+                    .cloned()
+                    .collect();
+                if segments.is_empty() {
+                    return None;
+                }
+                BBox::from_segments(&segments)
+            };
+            // Conservative swept bound: outside compensation may shift the
+            // center one radius, and the cutter reaches one more radius.
+            let extra = if let OpKind::PlanarSurface { surface } = &op.kind {
+                surface.margin_mm.max(0.0) + surface.overtravel_mm.max(0.0)
+            } else {
+                op.params.stock_to_leave_mm.abs()
+            };
+            let padding = 2.0 * radius + extra;
+            footprint.min_x -= padding;
+            footprint.min_y -= padding;
+            footprint.max_x += padding;
+            footprint.max_y += padding;
             // Ops with no resolvable source geometry (selection drifted to a
             // now-gone object) contribute no footprint — skip them.
             if !footprint.is_finite() {
@@ -656,7 +699,9 @@ pub(super) fn two_sided_guard(
 /// only — see the module note on [`crate::cam::two_sided`].
 fn op_removal_mm(op: &Op) -> f64 {
     let p = &op.params;
-    (p.start_depth - p.depth).max(0.0) + p.through_depth.max(0.0)
+    // Reach below the face, not just the incremental removal from start_depth.
+    let depth = p.depth_list.iter().copied().fold(p.depth, f64::min);
+    (-depth).max(0.0) + p.through_depth.max(0.0)
 }
 
 /// Whether an op leaves holding tabs (bridges). Tabs are emitted for any
@@ -2198,5 +2243,65 @@ mod tests {
                 .all(|w| w.kind != "stock_origin_outside_geometry_bbox"),
             "no WCS warning expected, got {warnings:?}"
         );
+    }
+    #[test]
+    fn lot7_two_sided_footprints_include_arc_crests_and_planar_surfaces() {
+        use crate::geometry::{Point2, Segment, SegmentKind};
+        use crate::pipeline::test_helpers::{
+            closed_square_offset, endmill, pocket_op, project_with_segments,
+        };
+        use crate::project::{OpSource, SourceCombine, StockConfig, WorkpieceSide};
+        let source = |name: &str| OpSource::Layers {
+            layers: vec![name.into()],
+            combine: SourceCombine::default(),
+        };
+        let mut front = pocket_op(1, 1, source("front"));
+        front.params.depth = -6.;
+        let mut back = pocket_op(2, 1, source("back"));
+        back.params.depth = -6.;
+        back.side = WorkpieceSide::Back;
+        let mut a = Segment::line(Point2::new(30., 20.), Point2::new(10., 20.), "front", 7);
+        a.kind = SegmentKind::Arc;
+        a.bulge = 1.;
+        let mut b = a.clone();
+        b.start = a.end;
+        b.end = a.start;
+        let mut segments = vec![a, b];
+        let mut square = closed_square_offset(2., 19., 28.);
+        for s in &mut square {
+            s.layer = "back".into();
+        }
+        segments.extend(square);
+        let mut p = project_with_segments(segments, vec![front, back], vec![endmill(1, 0.1)]);
+        p.stock = Some(StockConfig {
+            origin: [0., 0.],
+            width_mm: 40.,
+            height_mm: 40.,
+            thickness_mm: 10.,
+            top_z_mm: 0.,
+            flip: None,
+        });
+        let mut objects = crate::cam::chaining::segments_to_objects(&p.segments);
+        crate::cam::chaining::classify_containment(&mut objects);
+        let mut ws = Vec::new();
+        two_sided_guard(&p, &objects, &mut ws).unwrap();
+        assert!(ws.iter().any(|w| w.kind == "two_sided_overlap"));
+        p.operations[0].kind = OpKind::PlanarSurface {
+            surface: crate::cam::planar_surface::PlanarSurfaceParams {
+                origin: [0., 0.],
+                width_mm: 40.,
+                height_mm: 40.,
+                margin_mm: 0.,
+                overtravel_mm: 0.,
+                stepover_mm: 0.1,
+                direction: crate::cam::surface_mill::ScanDirection::AlongX,
+            },
+        };
+        p.operations[0].params.start_depth = -5.;
+        p.operations[0].params.depth = -10.;
+        assert!(matches!(
+            two_sided_guard(&p, &objects, &mut Vec::new()),
+            Err(PipelineError::TwoSidedThrough { op_id: 1, .. })
+        ));
     }
 }

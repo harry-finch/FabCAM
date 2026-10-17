@@ -1,0 +1,32 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.40s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 3 tests
+test pipeline::lot8_tests::lot8_disjoint_union_keeps_secondary_object_tabs ... FAILED
+test pipeline::lot8_tests::lot8_frame_preserves_manual_holding_tab ... FAILED
+test pipeline::lot8_tests::lot8_open_inner_stroke_does_not_change_annular_pocket_or_preview ... ok
+
+failures:
+
+---- pipeline::lot8_tests::lot8_disjoint_union_keeps_secondary_object_tabs stdout ----
+
+thread 'pipeline::lot8_tests::lot8_disjoint_union_keeps_secondary_object_tabs' panicked at crates/ivac-core/src/pipeline/lot8_tests.rs:63:5:
+assertion failed: result.iter().flat_map(|o|
+            &o.tabs).any(|t| (t.x - 50.).abs() < 1e-4 && t.y.abs() < 3.)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- pipeline::lot8_tests::lot8_frame_preserves_manual_holding_tab stdout ----
+
+thread 'pipeline::lot8_tests::lot8_frame_preserves_manual_holding_tab' panicked at crates/ivac-core/src/pipeline/lot8_tests.rs:48:5:
+assertion failed: result.iter().flat_map(|o|
+            &o.tabs).any(|t| (t.x - 10.).abs() < 1e-4 && t.y.abs() < 3.)
+
+
+failures:
+    pipeline::lot8_tests::lot8_disjoint_union_keeps_secondary_object_tabs
+    pipeline::lot8_tests::lot8_frame_preserves_manual_holding_tab
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 1145 filtered out; finished in 1.03s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

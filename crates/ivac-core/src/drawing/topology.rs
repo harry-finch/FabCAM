@@ -60,6 +60,21 @@ pub fn validate(d: &Drawing) -> Result<(), String> {
         return Err("Topology analysis budget exceeded (2000 segments); no repair accepted".into());
     }
     for s in &e.segments {
+        if matches!(s.kind, SegmentKind::Arc | SegmentKind::Circle) {
+            let v = cavalier_contours::polyline::PlineVertex::new(s.start.x, s.start.y, s.bulge);
+            if s.start == s.end || s.bulge == 0.0 || v.bulge_is_zero() {
+                return Err("Degenerate or near-flat curve intersection is not qualified".into());
+            }
+            let (center, radius, _, _) = crate::math::bulge_to_arc(s.start, s.end, s.bulge);
+            if !center.x.is_finite()
+                || !center.y.is_finite()
+                || !(radius * radius).is_finite()
+                || s.center
+                    .is_some_and(|c| c.distance(center) > CURVE_INCIDENCE_MM)
+            {
+                return Err("Inconsistent or numerically unbounded curve geometry".into());
+            }
+        }
         if s.kind != SegmentKind::Line {
             continue;
         }
@@ -93,10 +108,14 @@ pub fn validate(d: &Drawing) -> Result<(), String> {
             if a.kind == SegmentKind::Point || b.kind == SegmentKind::Point {
                 continue;
             }
+            let same = e.membership[i] == e.membership[j];
+            let adjacent = same
+                && (i.abs_diff(j) == 1
+                    || (e.membership[..i.min(j)].last() != Some(&e.membership[i])
+                        && e.membership.get(i.max(j) + 1) != Some(&e.membership[i])));
             if a.kind != SegmentKind::Line || b.kind != SegmentKind::Line {
-                // Preserve untouched curves, but do not claim a line/arc
-                // intersection proof where their exact bounds overlap.
-                return Err("Overlapping curve bounds: repair topology not analyzed".into());
+                validate_curve_pair(a, b, adjacent)?;
+                continue;
             }
             let o1 = orient(a.start, a.end, b.start)?;
             let o2 = orient(a.start, a.end, b.end)?;
@@ -113,15 +132,6 @@ pub fn validate(d: &Drawing) -> Result<(), String> {
             let shared = [a.start, a.end]
                 .iter()
                 .any(|p| *p == b.start || *p == b.end);
-            let same = e.membership[i] == e.membership[j];
-            let members: Vec<_> = e
-                .membership
-                .iter()
-                .enumerate()
-                .filter_map(|(k, id)| (*id == e.membership[i]).then_some(k))
-                .collect();
-            let adjacent = i.abs_diff(j) == 1
-                || (members.first() == Some(&i.min(j)) && members.last() == Some(&i.max(j)));
             if same && shared && adjacent {
                 // Two straight segments sharing only their end are allowed;
                 // collinear backtracking/overlap is not.
@@ -142,53 +152,125 @@ pub fn validate(d: &Drawing) -> Result<(), String> {
     Ok(())
 }
 
+/// Numerical intersection/endpoint incidence tolerance in drawing mm, not a
+/// user repair tolerance. Does not weld endpoints or change exact closure.
+const CURVE_INCIDENCE_MM: f64 = 1e-9;
+fn validate_curve_pair(
+    a: &crate::Segment,
+    b: &crate::Segment,
+    adjacent: bool,
+) -> Result<(), String> {
+    use cavalier_contours::polyline::{pline_seg_intr, PlineSegIntr, PlineVertex};
+    let vertex = |s: &crate::Segment| PlineVertex::new(s.start.x, s.start.y, s.bulge);
+    for s in [a, b] {
+        if s.kind != SegmentKind::Line
+            && (s.start == s.end || s.bulge == 0. || vertex(s).bulge_is_zero())
+        {
+            return Err("Degenerate or near-flat curve intersection is not qualified".into());
+        }
+    }
+    let intr = pline_seg_intr(
+        vertex(a),
+        PlineVertex::new(a.end.x, a.end.y, 0.),
+        vertex(b),
+        PlineVertex::new(b.end.x, b.end.y, 0.),
+        CURVE_INCIDENCE_MM,
+    );
+    let endpoint = |q: cavalier_contours::core::math::Vector2<f64>| {
+        let q = Point2::new(q.x, q.y);
+        adjacent
+            && [a.start, a.end]
+                .iter()
+                .any(|p| p.distance(q) <= CURVE_INCIDENCE_MM)
+            && [b.start, b.end]
+                .iter()
+                .any(|p| p.distance(q) <= CURVE_INCIDENCE_MM)
+    };
+    let safe = match intr {
+        PlineSegIntr::NoIntersect => true,
+        PlineSegIntr::OneIntersect { point } | PlineSegIntr::TangentIntersect { point } => {
+            endpoint(point)
+        }
+        PlineSegIntr::TwoIntersects { point1, point2 } => endpoint(point1) && endpoint(point2),
+        PlineSegIntr::OverlappingArcs { .. } | PlineSegIntr::OverlappingLines { .. } => false,
+    };
+    if safe {
+        Ok(())
+    } else {
+        Err("Crossing, overlap or touching curves require explicit review".into())
+    }
+}
+
 /// Independent point-in-polygon parity witnesses protect entire small islands
 /// that could fit in the sliver removed by a simplification without crossing it.
 pub fn preserve_containment(before: &Drawing, after: &Drawing) -> Result<(), String> {
     fn inside(p: Point2, edges: &[crate::geometry::Segment]) -> Result<bool, String> {
         let mut result = false;
         for e in edges {
-            if (e.start.y > p.y) != (e.end.y > p.y) {
-                let side = orient(e.start, e.end, p)?;
-                if (side > 0) == (e.end.y > e.start.y) {
-                    result = !result;
-                }
+            let side = orient(e.start, e.end, p)?;
+            // Only the finite edge is ambiguous, not its infinite support line.
+            if side == 0 && on(e.start, e.end, p) {
+                return Err("Point lies directly on contour edge; containment ambiguous".into());
+            }
+            if (e.start.y > p.y) != (e.end.y > p.y) && (side > 0) == (e.end.y > e.start.y) {
+                result = !result;
             }
         }
         Ok(result)
     }
     let a = before.evaluate()?;
     let b = after.evaluate()?;
-    if a.segments.iter().any(|s| s.kind != SegmentKind::Line) {
-        return Err("Simplification containment with curves/points is not analyzed".into());
+    if a.contours != b.contours {
+        return Err("Simplification cannot change contour identities".into());
     }
-    if a.contours != b.contours || a.closed != b.closed {
-        return Err("Simplification cannot change contour topology".into());
-    }
-    for (i, id) in a.contours.iter().enumerate() {
-        if !a.closed[i] {
+    for id in &a.contours {
+        let edges = |e: &super::Evaluated| {
+            e.segments
+                .iter()
+                .zip(&e.membership)
+                .filter_map(|(s, c)| (c == id).then_some(s.clone()))
+                .collect::<Vec<_>>()
+        };
+        let mut old = edges(&a);
+        let mut new = edges(&b);
+        if old == new {
             continue;
         }
-        let old: Vec<_> = a
+        if old.iter().chain(&new).any(|s| s.kind != SegmentKind::Line) {
+            return Err("Simplification of curved contours is not analyzed".into());
+        }
+        // An open chain gets a virtual closing chord for this proof only.
+        // Its endpoints do not move during simplification. This protects the
+        // swept sliver (including drill points) even for microscopic gaps,
+        // without declaring the drawing closed or modifying its geometry.
+        for ring in [&mut old, &mut new] {
+            let first = ring.first().ok_or("Empty simplification contour")?.start;
+            let last = ring.last().ok_or("Empty simplification contour")?.end;
+            if first != last {
+                ring.push(crate::Segment::line(last, first, "proof", 7));
+            }
+        }
+        // All surviving witnesses, including points and arc endpoints; final
+        // topology validation also rejects crossing any other curve/line.
+        for ((p, owner), (q, next_owner)) in a
             .segments
             .iter()
             .zip(&a.membership)
-            .filter_map(|(s, c)| (c == id).then_some(s.clone()))
-            .collect();
-        let new: Vec<_> = b
-            .segments
-            .iter()
-            .zip(&b.membership)
-            .filter_map(|(s, c)| (c == id).then_some(s.clone()))
-            .collect();
-        for other in &a.contours {
-            if other == id {
-                continue;
+            .filter(|(_, owner)| *owner != id)
+            .zip(
+                b.segments
+                    .iter()
+                    .zip(&b.membership)
+                    .filter(|(_, owner)| *owner != id),
+            )
+        {
+            if owner != next_owner || p != q {
+                return Err("Unrelated geometry changed during simplification proof".into());
             }
-            let p = a.segments[a.membership.iter().position(|c| c == other).unwrap()].start;
-            let q = b.segments[b.membership.iter().position(|c| c == other).unwrap()].start;
-            if inside(p, &old)? != inside(q, &new)? {
-                return Err("Simplification would change contour containment".into());
+            for (p, q) in [(p.start, q.start), (p.end, q.end)] {
+                if inside(p, &old)? != inside(q, &new)? {
+                    return Err("Simplification would change contour containment".into());
+                }
             }
         }
     }

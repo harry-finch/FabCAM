@@ -94,7 +94,24 @@ pub fn import_dxf_bytes(
         );
         if n > 0 {
             // BBox + per-layer counts need a refresh.
+            let colors: BTreeMap<_, _> = drawing
+                .layers()
+                .map(|l| (l.name.clone(), color_to_aci(&l.color, 7)))
+                .collect();
+            for segment in &mut hatch_segments {
+                if !(1..=255).contains(&segment.color) {
+                    segment.color = *colors.get(segment.layer.as_ref()).unwrap_or(&7);
+                }
+                if opts.color_layers {
+                    segment.layer = format!("{}-c{}", segment.layer, segment.color).into();
+                }
+            }
+            hatch_segments.retain(|s| {
+                opts.select_layers.is_empty()
+                    || opts.select_layers.iter().any(|l| l == s.layer.as_ref())
+            });
             out.segments.extend(hatch_segments);
+            (out.objects, out.object_meta) = super::object_index(&out.segments);
             out.bbox = crate::geometry::BBox::from_segments(&out.segments);
             out.layers = super::summarize_layers(
                 &out.segments,
@@ -154,6 +171,7 @@ pub fn import_drawing(
         layer_colors: &layer_colors,
         select: select_set.as_ref(),
         cam_setup: String::new(),
+        curve_error: false,
         text_entities: Vec::new(),
         layer_intern: crate::input::intern::LayerIntern::new(),
     };
@@ -176,6 +194,11 @@ pub fn import_drawing(
         ctx.add_entity(entity, &blocks, &Transform2D::identity(), 0);
     }
 
+    if ctx.curve_error {
+        return Err(Error::bad_input(
+            "DXF curve cannot meet the 0.01 mm import budget or contains non-finite geometry",
+        ));
+    }
     let cam_setup_len = ctx.cam_setup.len();
     let segments = std::mem::take(&mut ctx.segments);
     let text_entities = std::mem::take(&mut ctx.text_entities);
@@ -243,6 +266,7 @@ struct ImportCtx<'a> {
     layer_colors: &'a BTreeMap<String, i32>,
     select: Option<&'a std::collections::HashSet<&'a str>>,
     cam_setup: String,
+    curve_error: bool,
     /// TEXT / MTEXT metadata captured during import. Emitted to
     /// `ImportOutput.text_entities` so the frontend can turn each into
     /// an editable `TextLayer` instead of consuming pre-rendered glyphs.
@@ -427,38 +451,46 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
-        let center_world = xform.apply(circle.center.x, circle.center.y);
-        let center = self.scale(center_world);
-        let radius = circle.radius * self.unit_scale * xform.uniform_scale_factor();
-        if radius < MIN_DIST {
+        if ![circle.center.x, circle.center.y, circle.radius]
+            .iter()
+            .all(|v| v.is_finite())
+            || circle.radius <= 0.0
+        {
+            self.curve_error = true;
             return;
         }
-        // Encode as a CIRCLE (start == end at angle 0, bulge 1 on a half).
-        // For the renderer/CAM we expand to two semicircles to keep our
-        // single-segment-with-bulge invariant simple.
-        let p_right = Point2::new(center.x + radius, center.y);
-        let p_left = Point2::new(center.x - radius, center.y);
-        // Two CCW semicircles via bulge=1.
-        let half1 = Segment {
-            kind: crate::geometry::SegmentKind::Circle,
-            start: p_right,
-            end: p_left,
-            bulge: 1.0,
-            center: Some(center),
-            layer: layer.clone(),
-            color,
-        };
-        let half2 = Segment {
-            kind: crate::geometry::SegmentKind::Circle,
-            start: p_left,
-            end: p_right,
-            bulge: 1.0,
-            center: Some(center),
-            layer: layer.clone(),
-            color,
-        };
-        self.segments.push(half1);
-        self.segments.push(half2);
+        let c = Point2::new(circle.center.x, circle.center.y);
+        if !xform.is_similarity() {
+            self.emit_parametric(
+                c,
+                Point2::new(circle.radius, 0.0),
+                Point2::new(0.0, circle.radius),
+                0.0,
+                std::f64::consts::TAU,
+                layer,
+                color,
+                xform,
+            );
+            return;
+        }
+        let center = self.scale(xform.apply(c.x, c.y));
+        let right = self.scale(xform.apply(c.x + circle.radius, c.y));
+        let left = self.scale(xform.apply(c.x - circle.radius, c.y));
+        if right.distance(center) < MIN_DIST {
+            return;
+        }
+        let bulge = xform.orientation();
+        for (start, end) in [(right, left), (left, right)] {
+            self.segments.push(Segment {
+                kind: crate::geometry::SegmentKind::Circle,
+                start,
+                end,
+                bulge,
+                center: Some(center),
+                layer: layer.clone(),
+                color,
+            });
+        }
     }
 
     fn emit_arc(
@@ -468,42 +500,66 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
-        let center_world = xform.apply(arc.center.x, arc.center.y);
-        let center = self.scale(center_world);
-        let radius = arc.radius * self.unit_scale * xform.uniform_scale_factor();
-        if radius < MIN_DIST {
+        if ![
+            arc.center.x,
+            arc.center.y,
+            arc.radius,
+            arc.start_angle,
+            arc.end_angle,
+        ]
+        .iter()
+        .all(|v| v.is_finite())
+            || arc.radius <= 0.0
+        {
+            self.curve_error = true;
             return;
         }
-        let mut a0 = arc.start_angle.to_radians() + xform.rotation;
-        let mut a1 = arc.end_angle.to_radians() + xform.rotation;
-        // Keep CCW orientation; if equal -> full circle.
-        if (a1 - a0).abs() < 1e-12 {
-            a1 = a0 + std::f64::consts::TAU;
+        let a0 = arc.start_angle.rem_euclid(360.0).to_radians();
+        let a1 = arc.end_angle.rem_euclid(360.0).to_radians();
+        let mut total = (a1 - a0).rem_euclid(std::f64::consts::TAU);
+        if total == 0.0 {
+            total = std::f64::consts::TAU;
         }
-        // Normalize so a1 > a0 (DXF arcs are always CCW from start to end).
-        while a1 < a0 {
-            a1 += std::f64::consts::TAU;
+        let c = Point2::new(arc.center.x, arc.center.y);
+        if !xform.is_similarity() {
+            self.emit_parametric(
+                c,
+                Point2::new(arc.radius, 0.0),
+                Point2::new(0.0, arc.radius),
+                a0,
+                total,
+                layer,
+                color,
+                xform,
+            );
+            return;
         }
-        // Subdivide at most every 45° to keep bulge precision good.
-        let step = self.opts.arc_max_step_or_default();
-        let total = a1 - a0;
-        let n = ((total / step).ceil() as usize).max(1);
+        let center = self.scale(xform.apply(c.x, c.y));
+        let step = self
+            .opts
+            .arc_max_step_or_default()
+            .min(std::f64::consts::PI);
+        let n = ((total / step).ceil() as usize).clamp(1, 65536);
         let per = total / n as f64;
-        let mut t = a0;
-        for _ in 0..n {
-            let next = t + per;
-            let (s, e, bulge) = math::arc_to_bulge(center, t, next, radius);
+        let point = |a: f64| {
+            self.scale(xform.apply(c.x + arc.radius * a.cos(), c.y + arc.radius * a.sin()))
+        };
+        let pts: Vec<_> = (0..=n).map(|i| point(a0 + per * i as f64)).collect();
+        for i in 0..n {
+            let end = if i + 1 == n && total == std::f64::consts::TAU {
+                pts[0]
+            } else {
+                pts[i + 1]
+            };
             self.segments.push(Segment::arc(
-                s,
-                e,
-                bulge,
+                pts[i],
+                end,
+                (per / 4.0).tan() * xform.orientation(),
                 Some(center),
                 layer.clone(),
                 color,
             ));
-            t = next;
         }
-        let _ = (xform, &mut a0); // silence unused warning patterns
     }
 
     fn emit_ellipse(
@@ -513,38 +569,120 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
-        // Parametric flattening: r(t) = center + cos(t)*major + sin(t)*minor,
-        // t in [start, end].
-        let center_world = xform.apply(e.center.x, e.center.y);
-        let center = self.scale(center_world);
-        // Major axis vector in world space (scaled).
-        let mx = e.major_axis.x * self.unit_scale;
-        let my = e.major_axis.y * self.unit_scale;
-        // Apply xform rotation only (no translation) to the axis vector.
-        let (cos_r, sin_r) = (xform.rotation.cos(), xform.rotation.sin());
-        let mxp = mx * cos_r - my * sin_r;
-        let myp = mx * sin_r + my * cos_r;
-        let major_len = (mxp * mxp + myp * myp).sqrt();
-        if major_len < MIN_DIST {
+        let mut sweep = (e.end_parameter - e.start_parameter).rem_euclid(std::f64::consts::TAU);
+        if sweep == 0.0 {
+            sweep = std::f64::consts::TAU;
+        }
+        self.emit_parametric(
+            Point2::new(e.center.x, e.center.y),
+            Point2::new(e.major_axis.x, e.major_axis.y),
+            Point2::new(
+                -e.major_axis.y * e.minor_axis_ratio,
+                e.major_axis.x * e.minor_axis_ratio,
+            ),
+            e.start_parameter,
+            sweep,
+            layer,
+            color,
+            xform,
+        );
+    }
+
+    /// Linear interpolation error <= max|p''| * step²/8, measured after
+    /// the full affine transform and unit conversion. Budget: 0.01 mm.
+    #[allow(clippy::too_many_arguments)]
+    fn emit_parametric(
+        &mut self,
+        center: Point2,
+        major: Point2,
+        minor: Point2,
+        start: f64,
+        sweep: f64,
+        layer: &std::sync::Arc<str>,
+        color: i32,
+        xform: &Transform2D,
+    ) {
+        let c = self.scale(xform.apply(center.x, center.y));
+        let u = self.scale(xform.vector(major));
+        let v = self.scale(xform.vector(minor));
+        let bound = u.x.hypot(u.y) + v.x.hypot(v.y);
+        let count = (sweep.abs() / (8.0 * 0.01 / bound).sqrt()).ceil().max(1.0);
+        if ![c.x, c.y, u.x, u.y, v.x, v.y, start, sweep, count]
+            .iter()
+            .all(|x| x.is_finite())
+            || count > 65536.0
+        {
+            self.curve_error = true;
             return;
         }
-        let minor_len = major_len * e.minor_axis_ratio;
-        let phi = myp.atan2(mxp); // axis orientation
-        let t0 = e.start_parameter;
-        let t1 = if (e.end_parameter - e.start_parameter).abs() < 1e-12 {
-            e.start_parameter + std::f64::consts::TAU
-        } else {
-            e.end_parameter
+        let n = count as usize;
+        let point = |t: f64| {
+            Point2::new(
+                c.x + u.x * t.cos() + v.x * t.sin(),
+                c.y + u.y * t.cos() + v.y * t.sin(),
+            )
         };
-        let step = self.opts.arc_max_step_or_default();
-        let total = t1 - t0;
-        let n = ((total.abs() / step).ceil() as usize).max(8);
-        let mut prev = ellipse_point(center, major_len, minor_len, phi, t0);
+        let first = point(start);
+        let mut prev = first;
         for i in 1..=n {
-            let t = t0 + total * i as f64 / n as f64;
-            let p = ellipse_point(center, major_len, minor_len, phi, t);
-            self.push_line(prev, p, layer, color);
-            prev = p;
+            let end = if i == n && sweep.abs() == std::f64::consts::TAU {
+                first
+            } else {
+                point(start + sweep * i as f64 / n as f64)
+            };
+            // Do not discard short chords: doing so opens a valid boundary.
+            if prev != end {
+                self.segments
+                    .push(Segment::line(prev, end, layer.clone(), color));
+            }
+            prev = end;
+        }
+    }
+
+    fn emit_poly_edge(
+        &mut self,
+        s: Point2,
+        e: Point2,
+        bulge: f64,
+        layer: &std::sync::Arc<str>,
+        color: i32,
+        xform: &Transform2D,
+    ) {
+        if bulge.abs() <= 1e-12 {
+            self.push_line(
+                self.scale(xform.apply(s.x, s.y)),
+                self.scale(xform.apply(e.x, e.y)),
+                layer,
+                color,
+            );
+        } else if xform.is_similarity() {
+            self.push_arc_segments(
+                self.scale(xform.apply(s.x, s.y)),
+                self.scale(xform.apply(e.x, e.y)),
+                bulge * xform.orientation(),
+                None,
+                layer,
+                color,
+            );
+        } else {
+            let (c, a0, _, radius) = math::bulge_to_arc(s, e, bulge);
+            let before = self.segments.len();
+            self.emit_parametric(
+                c,
+                Point2::new(radius, 0.0),
+                Point2::new(0.0, radius),
+                a0,
+                4.0 * bulge.atan(),
+                layer,
+                color,
+                xform,
+            );
+            // Keep original transformed endpoints exactly to retain chaining.
+            if self.segments.len() > before {
+                self.segments[before].start = self.scale(xform.apply(s.x, s.y));
+                let end = self.scale(xform.apply(e.x, e.y));
+                self.segments.last_mut().unwrap().end = end;
+            }
         }
     }
 
@@ -563,17 +701,13 @@ impl ImportCtx<'_> {
         let pts: Vec<(Point2, f64)> = poly
             .vertices
             .iter()
-            .map(|v| (self.scale(xform.apply(v.x, v.y)), v.bulge))
+            .map(|v| (Point2::new(v.x, v.y), v.bulge))
             .collect();
         let last = if closed { n } else { n - 1 };
         for i in 0..last {
             let (s, bulge) = pts[i];
             let (e, _) = pts[(i + 1) % n];
-            if bulge.abs() > 1e-12 {
-                self.push_arc_segments(s, e, bulge, None, layer, color);
-            } else {
-                self.push_line(s, e, layer, color);
-            }
+            self.emit_poly_edge(s, e, bulge, layer, color, xform);
         }
     }
 
@@ -592,17 +726,13 @@ impl ImportCtx<'_> {
         let closed = poly.is_closed();
         let pts: Vec<(Point2, f64)> = vertices
             .iter()
-            .map(|v| (self.scale(xform.apply(v.location.x, v.location.y)), v.bulge))
+            .map(|v| (Point2::new(v.location.x, v.location.y), v.bulge))
             .collect();
         let last = if closed { n } else { n - 1 };
         for i in 0..last {
             let (s, bulge) = pts[i];
             let (e, _) = pts[(i + 1) % n];
-            if bulge.abs() > 1e-12 {
-                self.push_arc_segments(s, e, bulge, None, layer, color);
-            } else {
-                self.push_line(s, e, layer, color);
-            }
+            self.emit_poly_edge(s, e, bulge, layer, color, xform);
         }
     }
 
@@ -716,6 +846,9 @@ impl ImportCtx<'_> {
         xform: &Transform2D,
     ) {
         let degree = spline.degree_of_curve as usize;
+        if degree == 0 || degree >= spline.control_points.len() {
+            self.warnings.push(format!("SPLINE on layer '{layer}': invalid degree {degree}; control polygon imported, not the spline"));
+        }
         let knots: Vec<f64> = spline.knot_values.clone();
         let cps: Vec<(f64, f64, f64)> = spline
             .control_points
@@ -740,20 +873,6 @@ impl ImportCtx<'_> {
     fn scale(&self, p: Point2) -> Point2 {
         Point2::new(p.x * self.unit_scale, p.y * self.unit_scale)
     }
-}
-
-fn ellipse_point(center: Point2, major: f64, minor: f64, phi: f64, t: f64) -> Point2 {
-    // Position on an ellipse with semi-axes (major, minor) rotated by `phi`.
-    let cos_t = t.cos();
-    let sin_t = t.sin();
-    let x = major * cos_t;
-    let y = minor * sin_t;
-    let cos_p = phi.cos();
-    let sin_p = phi.sin();
-    Point2::new(
-        center.x + x * cos_p - y * sin_p,
-        center.y + x * sin_p + y * cos_p,
-    )
 }
 
 fn entity_type_name(t: &EntityType) -> &'static str {
@@ -858,17 +977,27 @@ impl Transform2D {
         }
     }
 
+    fn vector(&self, p: Point2) -> Point2 {
+        Point2::new(self.a * p.x + self.b * p.y, self.c * p.x + self.d * p.y)
+    }
+    fn orientation(&self) -> f64 {
+        if self.a * self.d - self.b * self.c < 0.0 {
+            -1.0
+        } else {
+            1.0
+        }
+    }
+    fn is_similarity(&self) -> bool {
+        let x = self.a * self.a + self.c * self.c;
+        let y = self.b * self.b + self.d * self.d;
+        let scale = x.max(y);
+        scale.is_finite()
+            && scale > 0.0
+            && (x - y).abs() <= 1e-12 * scale
+            && (self.a * self.b + self.c * self.d).abs() <= 1e-12 * scale
+    }
     fn uniform_scale_factor(&self) -> f64 {
-        // Effective isotropic scale (sqrt of det). Used to scale circle/arc
-        // radii through INSERT transforms.
-        //
-        // This collapses both axis scales to their geometric mean, so a
-        // CIRCLE/ARC inside an INSERT with a non-uniform block scale (sx != sy)
-        // comes out circular at the mean radius rather than as the true
-        // ellipse. Deliberate approximation — the bulge encoding can't
-        // represent an ellipse, and non-uniformly-scaled circular features are
-        // rare in CAM DXFs. ELLIPSE entities are unaffected (they carry
-        // independent axes and are flattened exactly).
+        // Legacy editable TEXT size approximation; curves use the full matrix.
         (self.a * self.d - self.b * self.c).abs().sqrt()
     }
 }
@@ -977,5 +1106,204 @@ mod tests {
             "message={}",
             err.message
         );
+    }
+}
+
+#[cfg(test)]
+mod audit_six {
+    use super::*;
+    #[test]
+    fn hatch_metadata_is_complete() {
+        let s=b"0\nSECTION\n2\nENTITIES\n0\nHATCH\n8\nTEST\n91\n1\n92\n2\n72\n0\n73\n1\n93\n4\n10\n0\n20\n0\n10\n10\n20\n0\n10\n10\n20\n10\n10\n0\n20\n10\n97\n0\n0\nENDSEC\n0\nEOF\n";
+        let out = import_dxf_bytes("h.dxf".into(), s, &ImportOptions::default()).unwrap();
+        assert_eq!(out.segments.len(), 4);
+        assert_eq!(out.objects.len(), 4);
+        assert_eq!(out.object_meta.len(), 1);
+        let opts = ImportOptions {
+            color_layers: true,
+            select_layers: vec!["TEST-c7".into()],
+            ..Default::default()
+        };
+        let colored = import_dxf_bytes("h.dxf".into(), s, &opts).unwrap();
+        assert_eq!(colored.segments.len(), 4);
+        assert!(colored
+            .segments
+            .iter()
+            .all(|s| s.layer.as_ref() == "TEST-c7" && s.color == 7));
+        let opts = ImportOptions {
+            select_layers: vec!["OTHER".into()],
+            ..Default::default()
+        };
+        assert!(import_dxf_bytes("h.dxf".into(), s, &opts)
+            .unwrap()
+            .segments
+            .is_empty());
+    }
+    #[test]
+    fn mirrored_arc_follows_affine_endpoints() {
+        let mut d = Drawing::new();
+        let mut block = dxf::Block::default();
+        block.name = "B".into();
+        block.entities.push(Entity::new(EntityType::Arc(Arc {
+            center: dxf::Point::new(0., 0., 0.),
+            radius: 10.,
+            start_angle: 0.,
+            end_angle: 90.,
+            ..Default::default()
+        })));
+        d.add_block(block);
+        d.add_entity(Entity::new(EntityType::Insert(dxf::entities::Insert {
+            name: "B".into(),
+            x_scale_factor: -1.,
+            y_scale_factor: 1.,
+            ..Default::default()
+        })));
+        let out = import_drawing(&d, "a".into(), &ImportOptions::default()).unwrap();
+        assert!(out.segments[0].start.distance(Point2::new(-10., 0.)) < 1e-9);
+        assert!(out.segments.iter().all(|s| s.bulge < 0.));
+    }
+    fn transformed(entity: EntityType, xf: Transform2D) -> ImportOutput {
+        let opts = ImportOptions::default();
+        let mut warnings = vec![];
+        let colors = BTreeMap::new();
+        let mut ctx = ImportCtx {
+            opts: &opts,
+            unit_scale: 1.0,
+            warnings: &mut warnings,
+            segments: vec![],
+            layer_colors: &colors,
+            select: None,
+            cam_setup: String::new(),
+            curve_error: false,
+            text_entities: vec![],
+            layer_intern: crate::input::intern::LayerIntern::new(),
+        };
+        ctx.add_entity(&Entity::new(entity), &HashMap::new(), &xf, 0);
+        assert!(!ctx.curve_error);
+        let segments = ctx.segments;
+        let (objects, object_meta) = super::super::object_index(&segments);
+        ImportOutput {
+            filename: String::new(),
+            format: "dxf".into(),
+            bbox: BBox::from_segments(&segments),
+            layers: vec![],
+            unit_scale: 1.0,
+            warnings,
+            segments,
+            objects,
+            object_meta,
+            text_entities: vec![],
+        }
+    }
+    fn chord_distance(p: Point2, s: &Segment) -> f64 {
+        let dx = s.end.x - s.start.x;
+        let dy = s.end.y - s.start.y;
+        let t =
+            (((p.x - s.start.x) * dx + (p.y - s.start.y) * dy) / (dx * dx + dy * dy)).clamp(0., 1.);
+        p.distance(Point2::new(s.start.x + t * dx, s.start.y + t * dy))
+    }
+    #[test]
+    fn nested_nonuniform_circle_and_ellipse_follow_full_matrix() {
+        let xf = Transform2D::insert(13., -7., -2., 1., 0.4)
+            .compose(&Transform2D::insert(2., 3., 1., 3., 0.7));
+        for (major, minor, entity) in [
+            (
+                Point2::new(10., 0.),
+                Point2::new(0., 10.),
+                EntityType::Circle(Circle {
+                    radius: 10.,
+                    ..Default::default()
+                }),
+            ),
+            (
+                Point2::new(8., 6.),
+                Point2::new(-3., 4.),
+                EntityType::Ellipse(Ellipse {
+                    major_axis: dxf::Vector::new(8., 6., 0.),
+                    minor_axis_ratio: 0.5,
+                    start_parameter: 0.,
+                    end_parameter: std::f64::consts::TAU,
+                    ..Default::default()
+                }),
+            ),
+        ] {
+            let out = transformed(entity, xf);
+            assert!(out.segments.len() > 8);
+            assert_eq!(out.segments[0].start, out.segments.last().unwrap().end);
+            assert!(out.segments.iter().all(|s| s.bulge == 0.));
+            for i in 0..=2000 {
+                let t = std::f64::consts::TAU * i as f64 / 2000.;
+                let p = xf.apply(
+                    major.x * t.cos() + minor.x * t.sin(),
+                    major.y * t.cos() + minor.y * t.sin(),
+                );
+                let dist = out
+                    .segments
+                    .iter()
+                    .map(|s| chord_distance(p, s))
+                    .fold(f64::INFINITY, f64::min);
+                assert!(dist <= 0.01000001, "error {dist}");
+            }
+        }
+    }
+    #[test]
+    fn mirrored_and_stretched_polyline_bulges() {
+        for sx in [-1., -2.] {
+            let p = LwPolyline {
+                vertices: vec![
+                    dxf::LwPolylineVertex {
+                        x: 0.,
+                        y: 0.,
+                        bulge: 1.,
+                        ..Default::default()
+                    },
+                    dxf::LwPolylineVertex {
+                        x: 0.,
+                        y: 10.,
+                        ..Default::default()
+                    },
+                ],
+                ..Default::default()
+            };
+            let out = transformed(
+                EntityType::LwPolyline(p),
+                Transform2D::insert(0., 0., sx, 1., 0.),
+            );
+            assert!(out
+                .segments
+                .iter()
+                .all(|s| s.start.x <= 1e-9 && s.end.x <= 1e-9));
+            assert_eq!(out.segments[0].start, Point2::new(0., 0.));
+            assert_eq!(out.segments.last().unwrap().end, Point2::new(0., 10.));
+            if sx == -1. {
+                assert!(out.segments.iter().all(|s| s.bulge < 0.));
+            } else {
+                assert!(out.segments.iter().all(|s| s.bulge == 0.));
+            }
+        }
+    }
+    #[test]
+    fn invalid_spline_has_visible_fallback_diagnostic() {
+        let mut d = Drawing::new();
+        d.add_entity(Entity::new(EntityType::Spline(Spline {
+            degree_of_curve: 3,
+            control_points: vec![dxf::Point::new(0., 0., 0.), dxf::Point::new(10., 10., 0.)],
+            ..Default::default()
+        })));
+        let out = import_drawing(&d, "s.dxf".into(), &ImportOptions::default()).unwrap();
+        assert_eq!(out.segments.len(), 1);
+        assert!(out.warnings.iter().any(|w| w.contains("control polygon")));
+    }
+    #[test]
+    fn impossible_curve_budget_refuses_drawing() {
+        let mut d = Drawing::new();
+        d.add_entity(Entity::new(EntityType::Ellipse(Ellipse {
+            major_axis: dxf::Vector::new(1e20, 0., 0.),
+            minor_axis_ratio: 0.5,
+            start_parameter: 0.,
+            end_parameter: std::f64::consts::TAU,
+            ..Default::default()
+        })));
+        assert!(import_drawing(&d, "huge.dxf".into(), &ImportOptions::default()).is_err());
     }
 }

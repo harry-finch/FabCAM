@@ -16,7 +16,7 @@
 //! Spline / ellipse boundary edges and binary DXF are out of scope —
 //! they emit a warning and skip.
 
-use std::f64::consts::PI;
+use std::f64::consts::TAU;
 
 use crate::geometry::{Point2, Segment};
 
@@ -60,7 +60,7 @@ fn parse_hatch(
     warnings: &mut Vec<String>,
 ) -> usize {
     let mut layer = HATCH_LAYER_FALLBACK.to_string();
-    let mut color = HATCH_COLOR_FALLBACK;
+    let mut color = 256; // BYLAYER, resolved by the DXF importer.
     let mut paths_seen = 0;
     let mut i = 0;
 
@@ -294,27 +294,45 @@ fn emit_edge(
         2 => {
             let center = Point2::new(sx * unit_scale, sy * unit_scale);
             let r = radius * unit_scale;
-            let a0 = start_ang_deg.to_radians();
-            let a1 = end_ang_deg.to_radians();
-            let s = Point2::new(center.x + r * a0.cos(), center.y + r * a0.sin());
-            let e = Point2::new(center.x + r * a1.cos(), center.y + r * a1.sin());
-            // Bulge = tan(included_angle / 4); sign carries direction.
-            let mut sweep = a1 - a0;
-            if !is_ccw {
-                sweep = -sweep;
+            if ![sx, sy, r, start_ang_deg, end_ang_deg]
+                .iter()
+                .all(|v| v.is_finite())
+                || r <= 0.0
+            {
+                warnings.push(format!(
+                    "HATCH on layer '{layer}': invalid circular edge skipped"
+                ));
+                return;
             }
-            // Normalise to (0, 2π).
-            while sweep <= 0.0 {
-                sweep += 2.0 * PI;
+            let a0 = start_ang_deg.rem_euclid(360.0).to_radians();
+            let a1 = end_ang_deg.rem_euclid(360.0).to_radians();
+            let direction = if is_ccw { 1.0 } else { -1.0 };
+            let mut sweep = ((a1 - a0) * direction).rem_euclid(TAU);
+            if sweep == 0.0 {
+                sweep = TAU;
             }
-            while sweep > 2.0 * PI {
-                sweep -= 2.0 * PI;
+            // Full circles cannot be encoded as one coincident-endpoint bulge.
+            let n = if sweep > std::f64::consts::PI { 2 } else { 1 };
+            let per = direction * sweep / f64::from(n);
+            let point = |a: f64| Point2::new(center.x + r * a.cos(), center.y + r * a.sin());
+            let first = point(a0);
+            let mut prev = first;
+            for i in 1..=n {
+                let end = if i == n && sweep == TAU {
+                    first
+                } else {
+                    point(a0 + per * f64::from(i))
+                };
+                out.push(Segment::arc(
+                    prev,
+                    end,
+                    (per / 4.0).tan(),
+                    Some(center),
+                    layer,
+                    color,
+                ));
+                prev = end;
             }
-            let mut bulge = (sweep / 4.0).tan();
-            if !is_ccw {
-                bulge = -bulge;
-            }
-            out.push(Segment::arc(s, e, bulge, Some(center), layer, color));
         }
         3 | 4 => {
             warnings.push(format!(
@@ -336,11 +354,11 @@ fn pairs_from_text(text: &str) -> Vec<(i32, String)> {
     let mut out = Vec::new();
     let mut iter = text.lines();
     while let Some(code_line) = iter.next() {
-        let Ok(code) = code_line.trim().parse::<i32>() else {
-            continue;
-        };
         let Some(val_line) = iter.next() else {
             break;
+        };
+        let Ok(code) = code_line.trim().parse::<i32>() else {
+            continue;
         };
         out.push((code, val_line.trim_end_matches('\r').trim().to_string()));
     }
@@ -445,5 +463,55 @@ mod tests {
         extract_hatch_boundaries(&text, 25.4, &mut out, &mut warns);
         assert!(!out.is_empty());
         assert!((out[0].end.x - 25.4).abs() < 1e-6);
+    }
+}
+
+#[cfg(test)]
+mod audit_six {
+    use super::*;
+    #[test]
+    fn malformed_pair_preserves_alignment() {
+        assert_eq!(
+            pairs_from_text("bad\n10\n0\nHATCH\n8\n10\n"),
+            vec![(0, "HATCH".into()), (8, "10".into())]
+        );
+    }
+    #[test]
+    fn full_circle_and_extreme_angles_are_bounded() {
+        for (a, b) in [(0., 360.), (1e300, -1e300)] {
+            for ccw in [true, false] {
+                let mut out = vec![];
+                let mut warns = vec![];
+                emit_edge(
+                    2, 0., 0., 0., 0., 10., a, b, ccw, 1., "0", 7, &mut out, &mut warns,
+                );
+                assert!(!out.is_empty() && out.len() <= 2);
+                assert!(out.iter().all(|s| s.bulge.is_finite() && s.start != s.end));
+                if a == 0. {
+                    assert_eq!(out.len(), 2);
+                    assert_eq!(out[0].start, out[1].end);
+                }
+            }
+        }
+        let mut out = vec![];
+        let mut warns = vec![];
+        emit_edge(
+            2,
+            0.,
+            0.,
+            0.,
+            0.,
+            10.,
+            f64::INFINITY,
+            0.,
+            true,
+            1.,
+            "0",
+            7,
+            &mut out,
+            &mut warns,
+        );
+        assert!(out.is_empty());
+        assert!(!warns.is_empty());
     }
 }

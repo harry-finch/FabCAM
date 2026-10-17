@@ -6,7 +6,13 @@
 > restrictions are superseded for this source checkpoint only; human/physical
 > review gates remain open. No workflow dispatch, tag or Release.
 
-> Current checkpoint — 2026-10-17: [CAM clearance audit](CAM_CLEARANCE_AUDIT_2026_10_17.md) implemented locally: checked V-Carve inputs, stable flat-arc preparation, exact redundant-knot removal, bounded spatial proof, operation-scoped trochoidal diagnostics, cached tabs and drop-cutter pruning. Pipeline version 49. 1,108 core tests PASS in serial; 71 integration tests PASS. Safety budgets retained; human review pending. No commit/push/publication. HARD STOP.
+> Current checkpoint — 2026-10-17: [Input audit, sixth lot](INPUT_AUDIT_2026_10_17.md) implemented locally: HATCH metadata/layers, bounded invalid NURBS degree handling, affine DXF curves, 0.01 mm SVG flattening, implicit/relative/closed SVG font paths and bounded HATCH parsing. Pipeline 52. 1,138 core tests PASS serial; 84 integration tests reported PASS (optional FANUC absent). Separate block-HATCH follow-up `ivac-aoany` remains open. Software only; human review pending. No commit/push/package/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [Drawing audit, fifth lot](DRAWING_AUDIT_2026_10_17.md) implemented locally: line/arc topology, per-step simplification containment including drill points, exact closure diagnostics, snap-collapse refusal and indexed layer selection. Transform order confirmed unchanged. Pipeline 51. 1,123 core tests PASS serial; 84 integration tests reported PASS (optional FANUC absent); 11 frontend transform tests PASS. Software only; human review pending. No commit/push/package/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM offsets audit, fourth lot](CAM_OFFSETS_AUDIT_2026_10_17.md) implemented locally: geometric raster erosion, arc-aware winding, island context, interval-tested bridges, precise rounded offsets, checked waterline topology and projected entries. Pipeline 50. 1,123 core tests PASS in serial; 71 integration tests reported PASS (optional FANUC oracle absent). Human review pending; software only. No commit/push/package/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-17: [CAM clearance audit](CAM_CLEARANCE_AUDIT_2026_10_17.md) implemented locally: checked V-Carve inputs, stable flat-arc preparation, exact redundant-knot removal, bounded spatial proof, operation-scoped trochoidal diagnostics, cached tabs and drop-cutter pruning. Pipeline version 49. 1,108 core tests PASS in serial; 71 integration tests PASS. Safety budgets retained; human review pending. No commit/push/publication. HARD STOP.
 
 > Previous checkpoint — 2026-10-17: [CAM follow-up](CAM_FOLLOWUP_2026_10_17.md) implemented locally: bulge-based arc probes, isolated drill points, linear prepend accumulation, Halfpipe witness fix, exact geometry-cache keys, cached helix fitting and arc-aware frames. Pipeline version 48. 1,098 core tests PASS in serial; 71 integration tests PASS. Human review pending; existing release gates unchanged. No commit/push/publication. HARD STOP.
 
@@ -549,3 +555,28 @@ without creating or implementing another milestone or duplicating selected bound
 
 GitHub Release distribution and checksum publication require separate explicit approval.
 Never disable Gatekeeper or remove quarantine. Windows/Ubuntu test plans remain unchanged.
+
+## AUDIT3 — ivaCAM → FabCAM: Git History & Defect Provenance Retrospective
+
+**PLANNED — NOT STARTED · POST-V1 APPROVED RELEASE checkpoint.**
+FabCAM 1.0 validated/explicitly accepted → bounded AUDIT3 → main FabCAM 1.5
+ProtoMAX implementation campaign. **Not a V1 release blocker**; no current gate,
+audit identifier or qualification evidence is changed. V1.5 remains the next
+product-development priority; previously authorized feasibility research stays separate.
+
+[Plan, mutually exclusive provenance rules and acceptance](../releases/AUDIT3_PLAN.md).
+Dependencies: human V1 acceptance, frozen accepted V1 commit/tag, preserved release
+and qualification evidence, verified upstream/fork ancestry at future audit launch,
+available Argon/Astra findings, correction commits and regressions. Proposed cap
+three engineering days, to confirm at launch; deliver explicit gaps rather than
+silently extend. Critical newly discovered regressions need separate authorized triage,
+not automatic V1 scope reopening.
+
+Deliver traceable technical report, executive summary, deduplicated defect tables/
+charts, engineering evolution and unpublished factual public-summary draft. Counts/
+percentages need explicit populations; selective audit distributions are not either
+project's overall defect rate. Keep Inherited/Introduced/Exposed/Undetermined separate,
+with behavioral evidence/confidence and upstream/GPL attribution. No Git archaeology,
+production edits, commits/tags/issues/releases, push or publication now.
+
+**HARD STOP — awaiting human approval of the updated roadmap.**

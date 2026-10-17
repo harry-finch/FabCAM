@@ -86,7 +86,7 @@ fn snap_to_offset(offset: &PolylineOffset, tab: TabPoint, max_distance: f64) -> 
     best.map(|(p, _)| p)
 }
 
-fn closest_point_on_segment(seg: &Segment, tab: TabPoint) -> TabPoint {
+pub(super) fn closest_point_on_segment(seg: &Segment, tab: TabPoint) -> TabPoint {
     // Curved offset tabs must attach to the arc, not its chord. Chord
     // projection can discard a valid placement or move it off the cutter path.
     if matches!(seg.kind, SegmentKind::Arc | SegmentKind::Circle) {

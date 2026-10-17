@@ -1,0 +1,24 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.89s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 1 test
+test pipeline_cache::tests::stable_hash_regression ... FAILED
+
+failures:
+
+---- pipeline_cache::tests::stable_hash_regression stdout ----
+
+thread 'pipeline_cache::tests::stable_hash_regression' panicked at crates/ivac-core/src/pipeline_cache.rs:641:9:
+assertion `left == right` failed: got 0xaf92c62b07133d83
+  left: 12651392191341739395
+ right: 14670484020347459487
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    pipeline_cache::tests::stable_hash_regression
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1122 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

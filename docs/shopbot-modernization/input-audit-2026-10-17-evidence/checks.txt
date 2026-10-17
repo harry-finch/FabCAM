@@ -1,0 +1,3 @@
+cargo fmt -p ivac-core -- --check: PASS (exit 0)
+git diff --check: PASS (exit 0)
+No commit, push, package build, publication or physical validation.

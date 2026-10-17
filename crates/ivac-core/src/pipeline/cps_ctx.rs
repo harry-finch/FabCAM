@@ -269,7 +269,7 @@ fn cps_tool_info(entry: Option<&ToolEntry>, fallback_id: u32, rpm: u32) -> CpsTo
         };
     };
     let corner_radius = match t.kind {
-        ToolKind::BallNose => t.diameter / 2.0,
+        ToolKind::BallNose => t.effective_diameter() / 2.0,
         ToolKind::BullNose => t.corner_radius_mm.unwrap_or(0.0).max(0.0),
         _ => 0.0,
     };
@@ -281,7 +281,7 @@ fn cps_tool_info(entry: Option<&ToolEntry>, fallback_id: u32, rpm: u32) -> CpsTo
         number: t.id,
         description: t.name.clone(),
         kind: t.kind,
-        diameter: t.diameter,
+        diameter: t.effective_diameter(),
         corner_radius,
         taper_angle,
         flutes: u32::from(t.flutes),
@@ -324,5 +324,21 @@ fn op_strategy_slug(kind: &OpKind) -> &'static str {
         // Program-only kinds never build a section; anything new lands
         // here until it gets a dedicated slug.
         _ => "milling",
+    }
+}
+
+#[cfg(test)]
+mod lot8_tests {
+    use super::*;
+    #[test]
+    fn lot8_cps_reports_the_same_effective_diameter_as_path_compensation() {
+        let mut tool = crate::pipeline::test_helpers::endmill(1, 6.);
+        tool.kind = ToolKind::BallNose;
+        tool.wear_offset_mm = 0.2;
+        let info = cps_tool_info(Some(&tool), 1, 12000);
+        assert!((info.diameter - 5.8).abs() < 1e-12);
+        assert!((info.corner_radius - 2.9).abs() < 1e-12);
+        assert_eq!(info.spindle_rpm, 12000);
+        assert!((tool.diameter - 6.).abs() < 1e-12);
     }
 }

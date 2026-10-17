@@ -23,21 +23,15 @@ use clipper2_rust::{inflate_paths_d, EndType, JoinType, PathD, PathsD, Point as 
 /// which silently flips the inward/outward sign for CW-encoded
 /// circles and gives wrong-side profile offsets.
 ///
-/// **Precondition:** the bow term `½r²(θ − sinθ)` is the *minor*
-/// circular-segment area, exact only for included angles θ ≤ 180°
-/// (`|bulge| ≤ 1`). For a major arc (`|bulge| > 1`, θ > 180°) the true
-/// enclosed region is the complement (circle minus minor segment), so the
-/// magnitude is under-counted here — and a contour dominated by one major
-/// arc could in principle flip the winding sign. In practice every arc
-/// reaching this function comes from the DXF importer, which keeps
-/// CIRCLE/ARC segments ≤ 180° (circles split into two semicircles, arcs
-/// subdivided at ≤ 45°), so the precondition holds. Callers that
-/// synthesize arbitrary major-arc segments must pre-split them rather than
-/// trust this magnitude.
 #[must_use]
 pub fn object_signed_area(obj: &VcObject) -> f64 {
+    segments_signed_area(&obj.segments)
+}
+
+/// Exact chord + circular-segment area, including two-arc circles and major arcs.
+pub(super) fn segments_signed_area(segments: &[Segment]) -> f64 {
     let mut sum = 0.0;
-    for seg in &obj.segments {
+    for seg in segments {
         // Chord shoelace contribution.
         sum += seg.start.x * seg.end.y - seg.end.x * seg.start.y;
         // Arc bow correction. Only meaningful when bulge != 0 — Line
@@ -371,6 +365,26 @@ pub fn over_inflate_islands_for_high_overlap(
     inflate_islands_by_delta(islands, extra)
 }
 
+/// Round-join sagitta in mm; Clipper precision 4 has a 0.0001 mm grid.
+/// Erosion includes both budgets so chord interiors stay on the safe side.
+const OFFSET_JOIN_SAGITTA_MM: f64 = 0.001;
+const OFFSET_EROSION_PAD_MM: f64 = OFFSET_JOIN_SAGITTA_MM + 0.0001;
+
+// Convex outer polygons erode to sharp corners and have no round-join chord
+// error. Only holes or reflex vertices need sagitta padding; do not move
+// straight-wall rectangular reference paths or increase their stepover.
+fn erosion_delta(paths: &PathsD, delta: f64) -> f64 {
+    let rounded = paths.iter().any(|r| {
+        (0..r.len()).any(|i| {
+            let a = r[i];
+            let b = r[(i + 1) % r.len()];
+            let c = r[(i + 2) % r.len()];
+            (b.x - a.x) * (c.y - b.y) - (b.y - a.y) * (c.x - b.x) < 0.0
+        })
+    });
+    delta + if rounded { OFFSET_EROSION_PAD_MM } else { 0.0 }
+}
+
 /// Single-step inward offset of a boundary + holes by `delta`.
 /// Unlike [`pocket_cascade_with_islands`], stops after ONE inflate so
 /// callers that only want the level-0 ring (V-Carve perimeter mode)
@@ -388,12 +402,12 @@ pub fn boundary_offset_inward(
     let paths = build_paths(boundary, holes);
     let next = inflate_paths_d(
         &paths,
-        -delta,
+        -erosion_delta(&paths, delta),
         JoinType::Round,
         EndType::Polygon,
         2.0,
         4,
-        0.25,
+        OFFSET_JOIN_SAGITTA_MM,
     );
     let mut rings = Vec::with_capacity(next.len());
     for ring in &next {
@@ -426,12 +440,12 @@ pub fn pocket_cascade_with_islands(
         // the chord error for round joins, in input units.
         let next = inflate_paths_d(
             &current,
-            -delta,
+            -erosion_delta(&current, delta),
             JoinType::Round,
             EndType::Polygon,
             2.0,
             4,
-            0.25,
+            OFFSET_JOIN_SAGITTA_MM,
         );
         if next.is_empty() || next.iter().all(|r| r.len() < 3) {
             break;
@@ -585,16 +599,10 @@ fn pline_to_segments(pl: &Polyline<f64>, layer: &str, color: i32) -> Vec<Segment
 /// exact-fit value both route to the drill substitution.
 #[must_use]
 pub fn small_circle_drill(obj: &VcObject, tool_radius: f64) -> Option<PolylineOffset> {
-    use crate::geometry::SegmentKind;
-    if !obj.closed || obj.segments.is_empty() {
+    let (center, radius) = analytic_circle_geometry(obj)?;
+    if !tool_radius.is_finite() || tool_radius <= 0. {
         return None;
     }
-    let kinds_circle_only = obj.segments.iter().all(|s| s.kind == SegmentKind::Circle);
-    if !kinds_circle_only {
-        return None;
-    }
-    let center = obj.segments[0].center?;
-    let radius = obj.segments[0].start.distance(center);
     if radius > tool_radius * 1.001 {
         return None;
     }
@@ -609,6 +617,63 @@ pub fn small_circle_drill(obj: &VcObject, tool_radius: f64) -> Option<PolylineOf
         tabs: Vec::new(),
         is_finish: false,
     })
+}
+
+/// Qualify a complete, single-winding analytic circle, including DXF Arc
+/// chains. Common centre/radius alone is insufficient (a reversed half-loop
+/// or multiple revolutions is not a circle boundary). Tolerances below cover
+/// floating arithmetic only, not physical fit or polygon-to-circle inference.
+fn analytic_circle_geometry(obj: &VcObject) -> Option<(Point2, f64)> {
+    use crate::geometry::SegmentKind;
+    if !obj.closed || obj.segments.is_empty() {
+        return None;
+    }
+    let first = &obj.segments[0];
+    let (center, _, _, radius) = crate::math::bulge_to_arc(first.start, first.end, first.bulge);
+    if ![center.x, center.y, radius].iter().all(|v| v.is_finite()) || radius <= 0. {
+        return None;
+    }
+    let scale = obj
+        .segments
+        .iter()
+        .flat_map(|s| [s.start.x, s.start.y, s.end.x, s.end.y])
+        .map(f64::abs)
+        .fold(radius.max(1.), f64::max);
+    let roundoff_mm = 64. * f64::EPSILON * scale;
+    let sign = first.bulge.signum();
+    let mut total = 0.;
+    for (i, s) in obj.segments.iter().enumerate() {
+        if !matches!(s.kind, SegmentKind::Circle | SegmentKind::Arc)
+            || !s.bulge.is_finite()
+            || s.bulge == 0.
+            || s.bulge.signum() != sign
+            || ![s.start.x, s.start.y, s.end.x, s.end.y]
+                .iter()
+                .all(|v| v.is_finite())
+        {
+            return None;
+        }
+        let (c, _, _, r) = crate::math::bulge_to_arc(s.start, s.end, s.bulge);
+        if ![c.x, c.y, r].iter().all(|v| v.is_finite())
+            || center.distance(c) > roundoff_mm
+            || (r - radius).abs() > roundoff_mm
+            || s.end
+                .distance(obj.segments[(i + 1) % obj.segments.len()].start)
+                > roundoff_mm
+        {
+            return None;
+        }
+        if let Some(cached) = s.center {
+            if ![cached.x, cached.y].iter().all(|v| v.is_finite())
+                || cached.distance(c) > roundoff_mm
+            {
+                return None;
+            }
+        }
+        total += 4. * s.bulge.atan();
+    }
+    let angle_roundoff = 64. * f64::EPSILON * obj.segments.len() as f64 * std::f64::consts::TAU;
+    ((total.abs() - std::f64::consts::TAU).abs() <= angle_roundoff).then_some((center, radius))
 }
 
 /// Apply overcut to every closed offset whose source object exists in

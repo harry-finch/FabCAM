@@ -168,4 +168,17 @@ mod tests {
             assert!(resolved_preview(text).is_err());
         }
     }
+    #[test]
+    fn lot7_owned_post_can_switch_between_cut_and_plunge_feeds() {
+        let (p, _) = resolved_preview(
+            "JZ,5\nJ2,0,0\nMS,1.6667,1.6667\nM3,0,0,-1\nMS,13.3333,13.3333\nM3,10,0,-1\n",
+        )
+        .unwrap();
+        assert_eq!(p.segments[0].kind, MoveKind::Plunge);
+        assert!((p.feeds_mm_min[0] - 100.002).abs() < 1e-9);
+        assert!((p.feeds_mm_min[1] - 799.998).abs() < 1e-9);
+        // A mixed-axis or modal MS is outside this owned post's output subset.
+        assert!(resolved_preview("MS,2,3\n").is_err());
+        assert!(resolved_preview("MS,,3\n").is_err());
+    }
 }

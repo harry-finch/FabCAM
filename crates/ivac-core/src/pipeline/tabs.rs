@@ -58,12 +58,9 @@ pub(super) fn build_op_tabs_by_object(
     let Some(contour) = op.contour_params() else {
         return HashMap::new();
     };
-    // Closed-contour auto-tabs are phase-shifted by
-    // `tab_width / 2 + epsilon` (computed per object below) so the
-    // first tab lands mid-segment instead of on the start vertex; the
-    // factor of `0.5 / count` we add by default ALSO keeps tabs off
-    // corners on simple n-gons. Combined with the perimeter-aware
-    // clamp below, the auto layout is always corner-safe.
+    // Uniform auto-tabs get one phase that clears every source-polyline
+    // corner when feasible. Preserve count/spacing and warn if no phase
+    // exists; manual placements remain authoritative.
     let tab_width = contour.tabs.width.max(0.0);
     let mut out: HashMap<usize, Vec<TabPoint>> = match contour.tab_mode {
         TabPlacementMode::Off => return HashMap::new(),
@@ -138,8 +135,19 @@ pub(super) fn build_op_tabs_by_object(
             // endpoints; skip there. epsilon=1e-6 of perimeter keeps a
             // zero-tab-width op landing identically to legacy.
             if obj.closed && perimeter > 1e-9 && tab_width > 1e-9 {
-                let shift_arc = tab_width * 0.5 + 1e-6;
-                let shift_t = (shift_arc / perimeter).min(0.49);
+                let shift_arc = (tab_width * 0.5 + 1e-6).min(perimeter * 0.49);
+                let phase = crate::cam::tabs::corner_safe_tab_phase(
+                    &pts,
+                    effective_count,
+                    tab_width,
+                    shift_arc,
+                );
+                if phase.is_none() {
+                    warnings.push(PipelineWarning::for_op(op.id,"tabs_corner_clearance_unavailable",
+                        format!("op '{}' object #{}: no uniform auto-tab phase clears all source corners; tabs retained, review manual placement",op.name,idx+1))
+                        .with_param("op_name",op.name.as_str()).with_param("object_index",idx+1));
+                }
+                let shift_t = phase.unwrap_or(shift_arc) / perimeter;
                 for t in &mut auto_ts {
                     *t = (*t + shift_t).rem_euclid(1.0);
                 }

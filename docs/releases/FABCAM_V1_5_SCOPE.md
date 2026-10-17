@@ -126,3 +126,12 @@ software/output checks → target-software evidence → physical trials → cand
 installation/docs + ShopBot non-regression → human V1.5 go/no-go → separately authorized
 publication. No speculative date, no FabSBP dependency, no automatic nesting requirement,
 no full GEOM2/3 dependency and no direct machine-control integration.
+
+## Post-V1 sequencing — AUDIT3 planning addition
+
+[AUDIT3 retrospective](AUDIT3_PLAN.md) is planned immediately after explicit acceptance
+of validated V1, before the main V1.5 implementation campaign. It is not a V1 release
+blocker or additional ProtoMAX functional capability. Frozen V1 reference/evidence,
+a bounded time box and explicit gaps preserve V1.5 as the next product-development
+priority; previously authorized early feasibility may still proceed. No current
+scope/acceptance evidence or implementation authorization changes here.

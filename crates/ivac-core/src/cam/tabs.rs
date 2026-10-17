@@ -261,6 +261,104 @@ pub fn resolve_tab_placements(
     out
 }
 
+/// Pick one phase for uniformly spaced automatic tabs, preserving their count
+/// and mutual spacing while clearing every non-collinear source-polyline corner.
+/// None means that no uniform phase is available; callers must surface that
+/// limitation rather than silently discard the requested holding intent.
+pub(crate) fn corner_safe_tab_phase(
+    pts: &[Point2],
+    count: u32,
+    width_mm: f64,
+    preferred_mm: f64,
+) -> Option<f64> {
+    if count == 0 || !width_mm.is_finite() || width_mm < 0. {
+        return None;
+    }
+    let mut vertices = pts.to_vec();
+    vertices.dedup();
+    if vertices.len() > 1 && vertices.first() == vertices.last() {
+        vertices.pop();
+    }
+    if vertices.len() < 3 {
+        return None;
+    }
+    let (cum, open) = polyline_arc_lengths(&vertices);
+    let perimeter = open + vertices.last()?.distance(vertices[0]);
+    if !perimeter.is_finite() || perimeter <= 0. {
+        return None;
+    }
+    let spacing = perimeter / f64::from(count);
+    // Placement clearance in drawing mm, preserving the existing 1e-6 phase
+    // epsilon. The EPS band below is arithmetic roundoff, not machining error.
+    let clearance = width_mm * 0.5 + 1e-6;
+    let roundoff = 64. * f64::EPSILON * perimeter.max(1.);
+    if 2. * clearance >= spacing {
+        return None;
+    }
+    let mut corners = Vec::new();
+    for i in 0..vertices.len() {
+        let a = vertices[(i + vertices.len() - 1) % vertices.len()];
+        let b = vertices[i];
+        let c = vertices[(i + 1) % vertices.len()];
+        let ulen = a.distance(b);
+        let vlen = b.distance(c);
+        if !ulen.is_finite() || !vlen.is_finite() || ulen == 0. || vlen == 0. {
+            return None;
+        }
+        let u = [(b.x - a.x) / ulen, (b.y - a.y) / ulen];
+        let v = [(c.x - b.x) / vlen, (c.y - b.y) / vlen];
+        if (u[0] * v[1] - u[1] * v[0]).abs() > 64. * f64::EPSILON || u[0] * v[0] + u[1] * v[1] <= 0.
+        {
+            corners.push(cum[i].rem_euclid(spacing));
+        }
+    }
+    let preferred = preferred_mm.rem_euclid(spacing);
+    let distance = |a: f64, b: f64| {
+        let d = (a - b).abs();
+        d.min(spacing - d)
+    };
+    if corners
+        .iter()
+        .all(|c| distance(*c, preferred) >= clearance - roundoff)
+    {
+        return Some(preferred);
+    }
+    let mut forbidden = Vec::new();
+    for c in corners {
+        let lo = c - clearance;
+        let hi = c + clearance;
+        if lo < 0. {
+            forbidden.push((0., hi));
+            forbidden.push((spacing + lo, spacing));
+        } else if hi > spacing {
+            forbidden.push((lo, spacing));
+            forbidden.push((0., hi - spacing));
+        } else {
+            forbidden.push((lo, hi));
+        }
+    }
+    forbidden.sort_by(|a, b| a.0.total_cmp(&b.0));
+    let mut end = 0.;
+    let mut best: Option<(f64, f64)> = None;
+    let mut consider = |lo: f64, hi: f64| {
+        if hi - lo > roundoff {
+            let phase = lo * 0.5 + hi * 0.5;
+            let d = distance(phase, preferred);
+            if best.map_or(true, |(_, old)| d < old) {
+                best = Some((phase, d));
+            }
+        }
+    };
+    for (lo, hi) in forbidden {
+        if lo > end {
+            consider(end, lo);
+        }
+        end = end.max(hi);
+    }
+    consider(end, spacing);
+    best.map(|(phase, _)| phase)
+}
+
 #[cfg(test)]
 // Cumulative arc-length on a unit square: each side is exactly 10.0 →
 // running sum is bit-exact.

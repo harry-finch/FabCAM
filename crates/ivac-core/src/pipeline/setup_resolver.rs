@@ -39,13 +39,14 @@ fn clamp_spindle_rpm(
                 op.id,
                 "spindle_speed_clamped_above_max",
                 format!(
-                    "op '{}' ({:?} pass): tool RPM {} exceeds machine spindle_rpm_max {}; clamped to {}.",
-                    op.name, pass, rpm, max, max
+                    "op '{}' ({:?} pass): tool RPM {} exceeds machine spindle_rpm_max {}; clamped to {}. Feeds are unchanged; at unchanged feed, material per revolution increases by a factor {:.3}; review milling chipload.",
+                    op.name, pass, rpm, max, max, f64::from(rpm) / f64::from(max)
                 ),
             )
             .with_param("op_name", op.name.as_str())
             .with_param("pass", format!("{pass:?}"))
             .with_param("rpm", rpm)
+            .with_param("chipload_factor", format!("{:.3}", f64::from(rpm) / f64::from(max)))
             .with_param("limit", max));
             clamped = max;
         }
@@ -336,15 +337,8 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         // Clamp the FINAL feed (after op override) to the machine
         // ceiling so even a fat-fingered override can't emit an
         // out-of-range F-word. Plunge + cut, rough + finish.
-        rate_v: clamp_feed(
-            rough_plunge,
-            "plunge",
-            &project.machine,
-            op,
-            main_pass,
-            warnings,
-        ),
-        rate_h: clamp_feed(rough_feed, "cut", &project.machine, op, main_pass, warnings),
+        rate_v: clamp_feed(rough_plunge, "plunge", &machine, op, main_pass, warnings),
+        rate_h: clamp_feed(rough_feed, "cut", &machine, op, main_pass, warnings),
         speed_finish: finish_speed,
         rate_v_finish: clamp_feed(
             finish_plunge,
@@ -1444,5 +1438,25 @@ mod tests {
             resp.gcode
         );
         assert!(resp.gcode.contains("F1500"), "expected clamped F1500");
+    }
+    #[test]
+    fn lot7_rpm_clamp_preserves_manual_feeds_but_explains_chipload_factor() {
+        use crate::pipeline::test_helpers::{endmill, profile_op, project_with};
+        let op = profile_op(1, 1, crate::project::ToolOffset::Outside);
+        let mut tool = endmill(1, 6.);
+        tool.speed = 24_000;
+        let mut project = project_with(vec![op.clone()], vec![tool]);
+        project.machine.spindle_rpm_max = Some(12_000);
+        let mut warnings = Vec::new();
+        let setup = synthesize_op_setup(&op, &project, &mut warnings).unwrap();
+        assert_eq!(setup.tool.speed, 12_000);
+        assert_eq!(setup.tool.rate_h, 800);
+        assert_eq!(setup.tool.rate_v, 100);
+        let warning = warnings
+            .iter()
+            .find(|w| w.kind == "spindle_speed_clamped_above_max")
+            .unwrap();
+        assert_eq!(warning.params["chipload_factor"], "2.000");
+        assert!(warning.message.contains("Feeds are unchanged"));
     }
 }

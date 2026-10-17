@@ -1,0 +1,20 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.08s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 12 tests
+test pipeline::cps_ctx::lot8_tests::lot8_cps_reports_the_same_effective_diameter_as_path_compensation ... ok
+test pipeline::lot8_tests::lot8_analytic_arc_circle_is_not_a_lens_or_multiple_winding ... ok
+test pipeline::lot8_tests::lot8_boolean_erased_holding_contour_refuses_instead_of_retargeting ... ok
+test pipeline::lot8_tests::lot8_disjoint_union_keeps_secondary_object_tabs ... ok
+test pipeline::lot8_tests::lot8_drill_arc_bounds_are_centered_and_concave_outside_reference_refuses ... ok
+test pipeline::lot8_tests::lot8_frame_preserves_manual_holding_tab ... ok
+test pipeline::lot8_tests::lot8_frame_preview_uses_effective_radius_like_the_path_builder ... ok
+test pipeline::lot8_tests::lot8_frame_tab_survives_final_resolved_native_cut_height ... ok
+test pipeline::lot8_tests::lot8_impossible_auto_corner_phase_warns_without_erasing_tabs_or_manual_intent ... ok
+test pipeline::lot8_tests::lot8_open_inner_stroke_does_not_change_annular_pocket_or_preview ... ok
+test pipeline::lot8_tests::lot8_same_tool_finish_rpm_change_is_refused_not_silently_ignored_by_shopbot ... ok
+test pipeline::lot8_tests::lot8_uniform_tab_phase_avoids_every_rectangle_corner_without_changing_spacing ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 1145 filtered out; finished in 1.34s
+

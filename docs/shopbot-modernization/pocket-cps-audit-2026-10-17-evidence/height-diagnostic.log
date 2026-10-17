@@ -1,0 +1,20 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.67s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 1 test
+crossing samples [ToolpathSegment { from: Pose3 { x: 40.0, y: 16.9967, z: -2.0 }, to: Pose3 { x: 20.0, y: 16.9967, z: -2.0 }, kind: Cut, gcode_line: 4994, op_id: 1, arc: None }, ToolpathSegment { from: Pose3 { x: 40.0, y: 16.9967, z: -4.0 }, to: Pose3 { x: 20.0, y: 16.9967, z: -4.0 }, kind: Cut, gcode_line: 5352, op_id: 1, arc: None }, ToolpathSegment { from: Pose3 { x: 40.0, y: 17.9978, z: -2.0 }, to: Pose3 { x: 20.0, y: 17.9978, z: -2.0 }, kind: Cut, gcode_line: 5558, op_id: 1, arc: None }, ToolpathSegment { from: Pose3 { x: 32.0, y: 17.9978, z: -3.0 }, to: Pose3 { x: 28.0, y: 17.9978, z: -3.0 }, kind: Cut, gcode_line: 5759, op_id: 1, arc: None }, ToolpathSegment { from: Pose3 { x: 40.0, y: 18.9989, z: -2.0 }, to: Pose3 { x: 20.0, y: 18.9989, z: -2.0 }, kind: Cut, gcode_line: 5850, op_id: 1, arc: None }, ToolpathSegment { from: Pose3 { x: 32.0, y: 18.9989, z: -3.0 }, to: Pose3 { x: 28.0, y: 18.9989, z: -3.0 }, kind: Cut, gcode_line: 5931, op_id: 1, arc: None }]
+
+thread 'pipeline::lot8_tests::lot8_frame_tab_survives_final_resolved_native_cut_height' panicked at crates/ivac-core/src/pipeline/lot8_tests.rs:250:5:
+no emitted cut crossed the holding bridge
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test pipeline::lot8_tests::lot8_frame_tab_survives_final_resolved_native_cut_height ... FAILED
+
+failures:
+
+failures:
+    pipeline::lot8_tests::lot8_frame_tab_survives_final_resolved_native_cut_height
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1154 filtered out; finished in 0.14s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

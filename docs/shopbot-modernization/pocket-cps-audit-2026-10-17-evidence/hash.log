@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 1 test
+test pipeline_cache::tests::stable_hash_regression ... FAILED
+
+failures:
+
+---- pipeline_cache::tests::stable_hash_regression stdout ----
+
+thread 'pipeline_cache::tests::stable_hash_regression' panicked at crates/ivac-core/src/pipeline_cache.rs:641:9:
+assertion `left == right` failed: got 0xc88f44608ba47db1
+  left: 14451844910705573297
+ right: 7071069711518927550
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    pipeline_cache::tests::stable_hash_regression
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1156 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

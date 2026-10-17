@@ -134,7 +134,8 @@ impl Drawing {
                     out.push(Finding {
                         contour: c.id,
                         message: format!(
-                            "Endpoint gap {gap:.9} mm{}",
+                            "Endpoint gap {} mm{} — endpoints remain distinct until explicitly repaired",
+                            if gap < 1e-9 { format!("{gap:.3e}") } else { format!("{gap:.9}") },
                             if i + 1 == c.edges.len() {
                                 " (open contour)"
                             } else {
@@ -298,13 +299,14 @@ impl Drawing {
                     return Err("Only one simplification per contour per batch is qualified".into());
                 }
             }
+            let before_step = matches!(repair, Repair::Simplify { .. }).then(|| next.clone());
             next.apply_repair(repair)?;
+            if let Some(before_step) = before_step {
+                super::topology::preserve_containment(&before_step, &next)?;
+            }
         }
         next.validate()?;
         super::topology::validate(&next)?;
-        if !simplified.is_empty() {
-            super::topology::preserve_containment(self, &next)?;
-        }
         next.evaluate()?;
         Ok((
             next.clone(),
@@ -392,6 +394,9 @@ impl Drawing {
                 self.join_distance(*contour, a, b, *tolerance_mm)?;
                 if a == b {
                     return Err("Endpoints already coincide".into());
+                }
+                if !connector && self.contours[ci].edges[i].geometry.start == b {
+                    return Err("Snapping this gap would collapse the edge; use a connector or review the micro-edge".into());
                 }
                 // Competing endpoint candidates are not resolved by nearest-distance guessing.
                 let others = self

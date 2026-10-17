@@ -51,20 +51,18 @@ use super::{
 /// a point and isn't a small circle (i.e. an arbitrary closed shape).
 /// Kept private to this module — the drill emitter is the only caller.
 fn object_bbox_center(obj: &VcObject) -> Option<Point2> {
-    let mut min_x = f64::INFINITY;
-    let mut max_x = f64::NEG_INFINITY;
-    let mut min_y = f64::INFINITY;
-    let mut max_y = f64::NEG_INFINITY;
-    for s in &obj.segments {
-        min_x = min_x.min(s.start.x).min(s.end.x);
-        max_x = max_x.max(s.start.x).max(s.end.x);
-        min_y = min_y.min(s.start.y).min(s.end.y);
-        max_y = max_y.max(s.start.y).max(s.end.y);
-    }
-    if !min_x.is_finite() {
+    if obj.segments.is_empty()
+        || obj.segments.iter().any(|s| {
+            ![s.start.x, s.start.y, s.end.x, s.end.y]
+                .iter()
+                .all(|v| v.is_finite())
+        })
+    {
         return None;
     }
-    Some(Point2::new((min_x + max_x) * 0.5, (min_y + max_y) * 0.5))
+    let b = crate::geometry::BBox::from_segments(&obj.segments);
+    let p = Point2::new(b.min_x * 0.5 + b.max_x * 0.5, b.min_y * 0.5 + b.max_y * 0.5);
+    (p.x.is_finite() && p.y.is_finite()).then_some(p)
 }
 
 // The offset-cascade pass per op covers Profile / Pocket / Drill /
@@ -357,8 +355,10 @@ pub(super) fn build_op_offsets(
             // user wrote it and returns the corresponding object indices.
             let selected = ordered_selection(effective_op, objects);
             let regions = combine_source_regions(objects, &selected, combine);
+            let region_tabs =
+                combined_region_tabs(effective_op, &regions, &selected, objects, &tabs_by_object)?;
             let pocket_emit = pocket_emit_for(strategy, effective_op);
-            for region in &regions {
+            for (region_no, region) in regions.iter().enumerate() {
                 if cancelled(cancel) {
                     return Err(PipelineError::Cancelled);
                 }
@@ -379,6 +379,7 @@ pub(super) fn build_op_offsets(
                 // pocket emitters see a Minkowski-sum boundary that
                 // keeps the centerline a tool_r away from the raw wall.
                 let inflated_holes = inflate_islands_by_tool_radius(&region.holes, radius);
+                let start = offsets.len();
                 for mut o in pocket_for_object(
                     &synthetic,
                     radius,
@@ -396,10 +397,21 @@ pub(super) fn build_op_offsets(
                     o.source_object_idx = region.source_idx;
                     offsets.push(o);
                 }
+                // Preserve display/source attribution, but attach holding intent
+                // using the actual combined boundary, not its first contributor.
+                for tab in &region_tabs[region_no] {
+                    let group = &mut offsets[start..];
+                    let before: usize = group.iter().map(|o| o.tabs.len()).sum();
+                    let map = HashMap::from([(region.source_idx, vec![*tab])]);
+                    attach_tabs_to_offsets(group, &map, setup.tool.diameter * 1.5);
+                    if group.iter().map(|o| o.tabs.len()).sum::<usize>() == before {
+                        return Err(PipelineError::Drawing(format!("op '{}': a combined-pocket tab has no reachable cutter path; revise holding placement", effective_op.name)));
+                    }
+                }
             }
             finalize_offsets(
                 &mut offsets,
-                &tabs_by_object,
+                &HashMap::new(),
                 effective_op,
                 objects,
                 setup,
@@ -612,6 +624,10 @@ pub(super) fn build_op_offsets(
                     offsets.push(drill);
                 } else if obj.closed {
                     if let Some(center) = object_bbox_center(obj) {
+                        let boundary = segments_to_points(&obj.segments, 6);
+                        if !crate::geometry::point_in_polygon(&boundary, center.x, center.y) {
+                            return Err(PipelineError::Drawing(format!("op '{}': the closed contour's drill reference lies outside its interior; select an explicit drilling point", effective_op.name)));
+                        }
                         let pt = Segment::point(center, obj.layer.clone(), obj.color);
                         offsets.push(PolylineOffset {
                             segments: vec![pt],
@@ -722,6 +738,126 @@ pub(super) fn build_op_offsets(
 /// warnings. Both the early-return pocket-combine path and the main
 /// per-object path finish here, so the sequence lives in one place.
 #[allow(clippy::too_many_arguments)]
+/// Map selected holding intent to exactly one retained Boolean boundary. The
+/// allowance is the Boolean engine's quantization grid (drawing mm), not cutter
+/// reach, flattening tolerance or a physical machining tolerance.
+fn combined_region_tabs(
+    op: &Op,
+    regions: &[crate::cam::source_combine::CombinedRegion],
+    selected: &[usize],
+    objects: &[VcObject],
+    tabs: &HashMap<usize, Vec<TabPoint>>,
+) -> Result<Vec<Vec<TabPoint>>, PipelineError> {
+    let mut mapped = vec![Vec::new(); regions.len()];
+    let grid_mm = 10.0_f64.powi(-crate::cam::source_combine::CLIPPER_PRECISION);
+    let mut work_left = 1_000_000usize; // bounded segment-pair proof budget
+    for &index in selected {
+        let Some(source_tabs) = tabs.get(&index).filter(|t| !t.is_empty()) else {
+            continue;
+        };
+        let source = segments_to_points(&objects[index].segments, 6);
+        let mut retained = vec![false; regions.len()];
+        for (ridx, region) in regions.iter().enumerate() {
+            for ring in std::iter::once(&region.boundary).chain(region.holes.iter()) {
+                let Some(whole_ring) = ring_retained(&source, ring, grid_mm, &mut work_left) else {
+                    return Err(PipelineError::Drawing(format!("op '{}': combined-tab boundary proof exceeds its work budget; use separate holding operations", op.name)));
+                };
+                retained[ridx] |= whole_ring;
+            }
+        }
+        // Retaining only the centre is not enough: Boolean clipping might
+        // erase part of the tab width. Until a local-span lineage adapter is
+        // qualified, require the whole source contour to survive unchanged.
+        for tab in source_tabs {
+            let point = Point2::new(tab.x, tab.y);
+            let mut owner = None;
+            for (ridx, region) in regions.iter().enumerate() {
+                if !retained[ridx] {
+                    continue;
+                }
+                let on_boundary = std::iter::once(&region.boundary)
+                    .chain(region.holes.iter())
+                    .any(|ring| {
+                        let (_, snap) = crate::cam::tabs::polyline_project(ring, point, true);
+                        ring.len() >= 3 && point.distance(snap) <= grid_mm
+                    });
+                if on_boundary && owner.replace(ridx).is_some() {
+                    return Err(PipelineError::Drawing(format!("op '{}': ambiguous tab after Boolean combination; revise holding placement", op.name)));
+                }
+            }
+            let Some(owner) = owner else {
+                return Err(PipelineError::Drawing(format!("op '{}': Boolean combination removed or changed a selected tab boundary; revise holding placement", op.name)));
+            };
+            mapped[owner].push(*tab);
+        }
+    }
+    Ok(mapped)
+}
+
+/// Continuous coverage proof for each source edge by collinear retained-ring
+/// intervals, within Boolean quantization. Vertex/midpoint sampling alone can
+/// miss an erased short span between samples.
+fn ring_retained(source: &[Point2], ring: &[Point2], grid: f64, work: &mut usize) -> Option<bool> {
+    if source.len() < 3 || ring.len() < 3 {
+        return Some(false);
+    }
+    *work = work.checked_sub(source.len().checked_mul(ring.len())?)?;
+    let mut nonzero = false;
+    for (a, b) in source
+        .iter()
+        .zip(source.iter().cycle().skip(1))
+        .take(source.len())
+    {
+        let len = a.distance(*b);
+        if len == 0. {
+            continue;
+        }
+        if !len.is_finite() {
+            return Some(false);
+        }
+        nonzero = true;
+        let u = [(b.x - a.x) / len, (b.y - a.y) / len];
+        let mut intervals = Vec::new();
+        for (c, d) in ring
+            .iter()
+            .zip(ring.iter().cycle().skip(1))
+            .take(ring.len())
+        {
+            let project = |p: &Point2| {
+                let delta = [p.x - a.x, p.y - a.y];
+                (
+                    delta[0] * u[0] + delta[1] * u[1],
+                    (delta[0] * u[1] - delta[1] * u[0]).abs(),
+                )
+            };
+            let (ct, cn) = project(c);
+            let (dt, dn) = project(d);
+            if ct.is_finite() && dt.is_finite() && cn <= grid && dn <= grid {
+                let lo = ct.min(dt).max(0.);
+                let hi = ct.max(dt).min(len);
+                if hi > lo {
+                    intervals.push((lo, hi));
+                }
+            }
+        }
+        if intervals.is_empty() {
+            return Some(false);
+        }
+        intervals.sort_by(|a, b| a.0.total_cmp(&b.0));
+        let mut covered = 0.0_f64;
+        for (lo, hi) in intervals {
+            if lo > covered + grid {
+                break;
+            }
+            covered = covered.max(hi);
+        }
+        if covered < len - grid {
+            return Some(false);
+        }
+    }
+    Some(nonzero)
+}
+
 fn finalize_offsets(
     offsets: &mut [PolylineOffset],
     tabs_by_object: &HashMap<usize, Vec<TabPoint>>,

@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-17",
+  "head": "73dca6ea162917f6c1f9e94c61feed322a21a88f",
+  "source_context": "Combined uncommitted working tree: prior lots 4\u20137 and cleanup preserved; these hashes identify the tested sources, not a clean commit.",
+  "pipeline_version": 54,
+  "pipeline_key": "0xc88f44608ba47db1",
+  "public_version": "0.9.0-beta.2",
+  "tests": {
+    "core": {
+      "passed": 1157,
+      "failed": 0,
+      "serial": true
+    },
+    "lot8_regressions": 12,
+    "integrations": {
+      "reported_pass": 87,
+      "executed": 86,
+      "optional_fanuc_oracle": "absent; test returns early"
+    },
+    "frontend": {
+      "passed": 1324,
+      "skipped": 1,
+      "wasm_guard_passed": 10
+    },
+    "frontend_check": "PASS: 0 errors, 0 warnings",
+    "frontend_lint": "PASS",
+    "clippy": "PASS",
+    "rustfmt": "PASS"
+  },
+  "commands": [
+    "RUSTC_WRAPPER= cargo test --offline -p ivac-core --features cps --lib -- --test-threads=1",
+    "RUSTC_WRAPPER= cargo test --offline -p ivac-core --features cps --test geom1_contract --test geometry_source_ux --test vcarve_qualification --test shopbot_m2_post --test cps_posts --test drawing_audit --test v1_stabilization",
+    "RUSTC_WRAPPER= cargo clippy --offline -p ivac-core --features cps --lib -- -D warnings"
+  ],
+  "source_sha256": {
+    "crates/ivac-core/src/cam/offsets/parallel.rs": "bb6733625a0bbdd74ff2ae4275e91a13b296d3cb5b0bfb8a04100e49795a9502",
+    "crates/ivac-core/src/cam/source_combine.rs": "4cf4aa86639622c3fbd6796d86179820488321bb0a55e5e9387758e9d20bce3b",
+    "crates/ivac-core/src/cam/tabs.rs": "dcf2df5b66f30615a03beee035846af07b07f7c42cac28db875074c20620401e",
+    "crates/ivac-core/src/pipeline/cps_ctx.rs": "5de7da369f46e815c3d65161b421baf3fbaed0ed20117f536c503eda74547def",
+    "crates/ivac-core/src/pipeline/offset_builder.rs": "8dc842ad6361122491ca920b05fe5a9f09bf35632b6734bb106f82eb9135a51f",
+    "crates/ivac-core/src/pipeline/regions.rs": "377f2ae8da769e208c7d1bc4039c7fc966bbb6ed6c3d358671bf2582e0d91c37",
+    "crates/ivac-core/src/pipeline/tabs.rs": "94d5bf288cf4c999c7de63a90f368ebfda41c1505ba015e085d03acfffc72547",
+    "crates/ivac-core/src/pipeline/lot8_tests.rs": "9d063c16de38135707b2d82dd66a0243f24ffa62048a88e189e0f2e6e30bc65e",
+    "crates/ivac-core/src/pipeline.rs": "7a1bb967d422ae57500740823d46a49605fab53449528838def9b1a5699c7dfb",
+    "crates/ivac-core/src/version.rs": "b162351cd476eeb749e3c8753b2a1346116de8047fd4d68a29386fc9961ffbe0",
+    "crates/ivac-core/src/pipeline_cache.rs": "02358c0ad4fce085504d95dd4d4396432a2cbd328777a101bef7480e32b547a0",
+    "frontend/src/lib/i18n/messages/en.json": "721fec67c074c6d839235d05c6869922c3f69ca7a7ee72509b398890006a4a89",
+    "frontend/src/lib/i18n/messages/de.json": "318ee04bb10ee5f622324ed6be01c95c33e4dda08723fe042de6293215d6520f",
+    "frontend/src/lib/i18n/keys.ts": "9b022aa5e023ebcf63bf59ca029636b216873003200fdf9687ff861ec56996f9"
+  },
+  "log_sha256": {
+    "before.log": "791a0d99a509c78e2cc1a89f018a84bb736b7b687fecedffa47cdb24ba2a2d04",
+    "clippy-final.log": "e969043a4dd61c3363213cdee36fc230a754b1a8a518550127b5487e4ddfedae",
+    "core.log": "7cfc10fd9cc173c2134bbdd113b50e424e08f39b18c943efb4ba71fd3eff98ff",
+    "front-check.log": "cd7b82b438d15dde0ee4fccc9167f84434fd4c8040117480b758b08920438435",
+    "front-lint.log": "27db8120787d818efa12af0c97d73f156b2ee2cc178a19e247a77222062a2fe9",
+    "front.log": "7f1bea28dfc135512e7aebd99541c4c9d527cbc43974469cb87adbcc0c208653",
+    "hash.log": "23542c0040dee79c7d92e98d9291b0083233c4948cf0871a8a1fd1ff67b9829e",
+    "height-diagnostic.log": "d42d1cba7e18335384625345b3c1e6924c453552c19d1754b997a36c2f50b5b9",
+    "i18n.log": "78ddfed793d38c859f6b4c7956abd5a9d272d596f5482261d64f5a5ec28999eb",
+    "integration.log": "06a843998e6252ebe47d3fe91d9478e6b66383498a991c8c0d48314c8c600fb0",
+    "qualified-focused.log": "3dde1f8367e4f844bca20db111cfb18c8711f9b64e7e18e2206e10789ba7854d"
+  },
+  "engineering_issue": "ivac-lbpxs",
+  "human_review_issue": "ivac-v103z OPEN",
+  "limitations": [
+    "Software verification only; no physical qualification",
+    "No native/WASM production rebuild or installer",
+    "No commit, push, tag or release"
+  ]
+}

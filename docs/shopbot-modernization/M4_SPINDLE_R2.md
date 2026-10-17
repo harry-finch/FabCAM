@@ -14,7 +14,7 @@ No generic CAM algorithms, schema or shared spindle/tool-change model changed. S
 
 ## Delivery and remaining human gates
 
-New delivery `/Users/mugen/Documents/01_Projets/FabCAM/ivaCAM-M4-r2`; old app and r1 SBP are retained unchanged. No commit/push is authorized by this correction alone. No FS/governance/roadmap/AGENTS or 3D-display work is included.
+New delivery `/Users/mugen/Documents/01_Projets/FabCAM/archives/M4/ivaCAM-M4-r2`; old app and r1 SBP are retained unchanged. No commit/push is authorized by this correction alone. No FS/governance/roadmap/AGENTS or 3D-display work is included.
 
 Repeat exact-file text review and controller Preview for r2, then supervised non-contact test with a documented air origin that keeps negative depths clear of stock and obstacles. Unlike r1, this revision starts the spindle automatically: operator prepares tool, zero, interlocks, exclusion area and suitable test arrangement before launching. Confirm actual start, requested RPM and stop after retract. Preview alone cannot exercise the physical outputs. Restore and verify surface Z before material cut. Only after successful revised tests: MDF cut, pre-agreed tolerance measurements, equivalent VCarve comparison. M4 is not complete.
 

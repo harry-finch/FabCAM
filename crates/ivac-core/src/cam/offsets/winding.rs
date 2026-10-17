@@ -78,7 +78,7 @@ pub fn enforce_winding(
     }
 }
 
-/// Any closed offset whose nearest segment-start lands more than
+/// Any closed offset whose nearest contour point lands more than
 /// [`APPROACH_POINT_WARN_MM`] from the user-picked approach point gets
 /// rotated anyway (preserving the prior behaviour), but the distance is
 /// recorded in this thread-local so the per-op driver can surface a
@@ -109,14 +109,14 @@ pub(super) fn take_approach_point_far_rotations() -> Vec<ApproachPointFarRotatio
 /// shape after picking the approach point).
 pub const APPROACH_POINT_WARN_MM: f64 = 10.0;
 
-/// Rotate each CLOSED offset's segment list so the first segment's
-/// start is closest to `ap` (the user-picked entry XY / approach point). Open
+/// Project `ap` onto each CLOSED offset, split the selected line/arc when
+/// necessary and rotate it so entry starts at that projected point. Open
 /// offsets (zigzag / spiral / trochoidal strokes) are left alone —
 /// their winding has no rotational symmetry to exploit. The cutter's
 /// plunge / lead-in then happens at the user-picked entry XY.
 ///
 /// When the chosen `ap` ends up farther than
-/// [`APPROACH_POINT_WARN_MM`] from EVERY closed offset's nearest vertex
+/// [`APPROACH_POINT_WARN_MM`] from EVERY closed offset's nearest contour point
 /// the rotation still falls back to the nearest start, but a record is
 /// stashed in the thread-local drained by
 /// [`take_approach_point_far_rotations`]. The pipeline turns that into
@@ -128,14 +128,45 @@ pub fn rotate_offsets_to_approach_point(offsets: &mut [PolylineOffset], ap: (f64
         if !offset.closed || offset.segments.len() < 2 {
             continue;
         }
-        let mut best: Option<(usize, f64)> = None;
+        let mut best: Option<(usize, f64, Point2)> = None;
         for (i, seg) in offset.segments.iter().enumerate() {
-            let d = seg.start.distance(ap_pt);
-            if best.map_or(true, |(_, bd)| d < bd) {
-                best = Some((i, d));
+            let projected = super::tabs::closest_point_on_segment(
+                seg,
+                super::TabPoint {
+                    x: ap.0,
+                    y: ap.1,
+                    width_override_mm: None,
+                    height_override_mm: None,
+                },
+            );
+            let q = Point2::new(projected.x, projected.y);
+            let d = q.distance(ap_pt);
+            if best.map_or(true, |(_, bd, _)| d < bd) {
+                best = Some((i, d, q));
             }
         }
-        if let Some((i, d)) = best {
+        if let Some((mut i, d, q)) = best {
+            let seg = offset.segments[i].clone();
+            if q.distance(seg.end) <= 1e-9 {
+                i = (i + 1) % offset.segments.len();
+            } else if q.distance(seg.start) > 1e-9 {
+                let mut first = seg.clone();
+                let mut second = seg.clone();
+                first.end = q;
+                second.start = q;
+                if seg.bulge != 0.0 {
+                    let center = crate::math::bulge_to_arc(seg.start, seg.end, seg.bulge).0;
+                    let angle = crate::math::arc_sweep(center, seg.start, q, seg.bulge > 0.0);
+                    first.bulge = (angle * seg.bulge.signum() / 4.0).tan();
+                    second.bulge =
+                        ((4.0 * seg.bulge.atan() - angle * seg.bulge.signum()) / 4.0).tan();
+                    first.center = Some(center);
+                    second.center = Some(center);
+                }
+                offset.segments[i] = first;
+                offset.segments.insert(i + 1, second);
+                i += 1;
+            }
             if d < min_d_overall {
                 min_d_overall = d;
             }

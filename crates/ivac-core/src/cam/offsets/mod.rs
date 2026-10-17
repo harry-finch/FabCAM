@@ -124,16 +124,9 @@ fn signed_area(pts: &[Point2]) -> f64 {
     sum * 0.5
 }
 
-/// Signed area of an offset's segment chain, computed from the start
-/// vertex of each segment. Arcs aren't sampled at midpoints — the chord
-/// approximation is enough for sign-of-area, which is all this is used
-/// for (winding direction).
+/// Arc-aware signed area, including closed contours with only two arcs.
 fn offset_signed_area(offset: &PolylineOffset) -> f64 {
-    if offset.segments.len() < 3 {
-        return 0.0;
-    }
-    let pts: Vec<Point2> = offset.segments.iter().map(|s| s.start).collect();
-    signed_area(&pts)
+    parallel::segments_signed_area(&offset.segments)
 }
 
 /// Reverse a closed offset's traversal direction in place. The order of
@@ -1694,3 +1687,6 @@ mod tests {
         }
     }
 }
+
+#[cfg(test)]
+mod audit_tests;

@@ -1,0 +1,54 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.29s
+     Running tests/cps_posts.rs (target/debug/deps/cps_posts-04ea1552f7d89023)
+
+running 4 tests
+test fanuc_refs_snapshot ... ok
+test two_sided_cps_refuses_unqualified_output ... ok
+test bundled_grbl_geometry_parity ... ok
+test bundled_grbl_snapshot ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/geom1_contract.rs (target/debug/deps/geom1_contract-a8125e300d0c86be)
+
+running 23 tests
+test distance_thresholds_are_visible_mm_independent_of_rotation_translation_mirror ... ok
+test identical_imports_have_distinct_identity_and_exact_provenance ... ok
+test evaluated_coordinates_use_frozen_pivot_and_similarity_transform ... ok
+test deletion_does_not_retarget_to_the_next_import ... ok
+test direct_ambiguous_join_refuses_without_relying_on_ui_analysis ... ok
+test merge_requires_review_even_if_both_parents_were_selected ... ok
+test reversed_chaining_retains_source_ordinals ... ok
+test invalid_revision_identity_transform_and_unresolved_binding_refuse ... ok
+test crossing_result_is_refused_even_within_join_tolerance ... ok
+test exact_duplicate_closed_paths_can_be_removed_but_not_rebound ... ok
+test gap_preview_is_nonmutating_and_matches_inclusive_visible_tolerance ... ok
+test simplification_has_continuous_bound_and_protects_already_modified_edges ... ok
+test split_does_not_automatically_select_children ... ok
+test snap_and_connector_are_distinct_and_join_requires_binding_review ... ok
+test simplification_refuses_contained_island_in_removed_sliver ... ok
+test unique_modification_preserves_binding_and_original ... ok
+test zero_line_removal_preserves_intentional_point ... ok
+test legacy_conversion_proves_membership_and_preserves_unrelated_import ... ok
+test edited_sources_fail_explicitly_for_empty_or_synthetic_or_fuzzy_ambiguous_scope ... ok
+test deleting_an_earlier_import_cannot_redirect_an_unrelated_operation ... ok
+test scaled_gap_repairs_preserve_independent_import_and_pivot ... ok
+test edited_generation_uses_authoritative_geometry_and_refuses_old_request_shape ... ok
+test ui_saved_repair_matches_generated_decoded_program_and_resolved_preview ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-d54a5be4b2c3b5b4)
+
+running 7 tests
+test separate_contours_does_not_preserve_nested_holes ... ok
+test shared_auto_kernel_uses_selected_nesting_depth_not_svg_fill_rules ... ok
+test difference_preserves_explicit_operand_order ... ok
+test all_region_modes_ignore_open_contours_and_missing_indices ... ok
+test xor_preserves_parity_after_empty_intermediate ... ok
+test svg_named_groups_remain_one_synthetic_layer ... ok
+test dxf_named_layers_and_import_layer_filter_are_preserved ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
