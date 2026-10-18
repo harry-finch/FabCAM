@@ -1,0 +1,20 @@
+{
+  "source_commit": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+  "native_app": "macOS arm64 beta.3",
+  "actual_observations": [
+    "Native launch: PASS",
+    "Demonstration saved project open: PASS",
+    "Generate Pocket/Profile: PASS, displayed1.9s (single observation, not benchmark)",
+    "2D/3D/solid preview and program/warning panels: displayed",
+    "Native Save dialog exported OpenSBP successfully",
+    "Temporary operations undone; initial two operations restored"
+  ],
+  "displayed_moves": 32030,
+  "displayed_offsets": 18,
+  "warnings": "One bundled ShopBot manual-spindle/hardware-qualification warning retained",
+  "program_file": "references/DEMONSTRATION-LOGICIELLE-beta3.sbp",
+  "program_bytes": 868607,
+  "program_lines": 32204,
+  "program_sha256": "084ecd35015cae1f818d7d8bc25c34c649e1ff41828af258c39c131779bba2b3",
+  "limitations": "No machine execution; no clean browser-download/install proof or Windows/Ubuntu runtime acceptance; remaining-material analysis for this demo explicitly exceeds its bounded budget."
+}

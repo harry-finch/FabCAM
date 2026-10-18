@@ -1,0 +1,35 @@
+[
+  {
+    "platform": "macos",
+    "artifact": "applications/macos/FabCAM_0.9.0-beta.3_aarch64.dmg",
+    "sha256": "f02edfc1e9b3e8c8b2034feca7576b5c9ab559ef1c041dca94b3f77dd4b4376f",
+    "bytes": 11009193,
+    "commit": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+    "dirty": false,
+    "checksum_manifest": "PASS",
+    "installation_qualified": false,
+    "runtime_qualified": false
+  },
+  {
+    "platform": "ubuntu",
+    "artifact": "applications/ubuntu/FabCAM_0.9.0-beta.3_amd64.deb",
+    "sha256": "c2e45db9a6f025d07230a1ee0d6e48949976752f58ef8cd77ea075428e5ff31e",
+    "bytes": 12654376,
+    "commit": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+    "dirty": false,
+    "checksum_manifest": "PASS",
+    "installation_qualified": false,
+    "runtime_qualified": false
+  },
+  {
+    "platform": "windows",
+    "artifact": "applications/windows/FabCAM_0.9.0-beta.3_x64-setup.exe",
+    "sha256": "0290b83325e2fe2e53e8084fe1987fb0190add82ba52f05a8babac2a2877febb",
+    "bytes": 9520477,
+    "commit": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+    "dirty": false,
+    "checksum_manifest": "PASS",
+    "installation_qualified": false,
+    "runtime_qualified": false
+  }
+]

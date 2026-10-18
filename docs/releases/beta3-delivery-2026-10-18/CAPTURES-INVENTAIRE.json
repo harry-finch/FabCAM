@@ -1,0 +1,498 @@
+[
+  {
+    "file": "01-projet-dessin-2d.jpg",
+    "label": "Projet ouvert, dessin 2D et opérations Pocket/Profile",
+    "sha256": "ad0c78ca74d5ee9572004feea1ba17bdbff6c2c5fcdecd8178e0a9dabd13c493",
+    "bytes": 741227,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "02-projet-parcours-3d.jpg",
+    "label": "Parcours générés et aperçu 3D natif",
+    "sha256": "48031f0be6b1f37ea730667a9fa7d7d3514367bac3f44b2d96ccba7bdd5983f3",
+    "bytes": 1061390,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "03-simulation-stock-3d.jpg",
+    "label": "Simulation du brut en mode solide",
+    "sha256": "0a57597104275996aaec7e04243cadb17090a1153779faa14338760f5ad55fb3",
+    "bytes": 537242,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "04-programme-opensbp.jpg",
+    "label": "Programme OpenSBP associé au parcours généré",
+    "sha256": "1fab397e3a5820de58e71d9f8784290ffe5ac11029a87bb030b9ef04ad262baf",
+    "bytes": 603126,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "05-avertissements.jpg",
+    "label": "Avertissements du travail généré",
+    "sha256": "438245d1518ec62566733c459d59aa8b534679be3cb8fd71f26cc576585e7c7a",
+    "bytes": 480067,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "06-temps-generation.jpg",
+    "label": "Temps de génération affiché dans la barre de résultat",
+    "sha256": "9fa062a867f57a32aa108b7ff6693d4ddfeb5484db4cfbc1409fe8f036ff8f87",
+    "bytes": 544831,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "07-brut-origines-brides.jpg",
+    "label": "Configuration du brut, des origines et des brides",
+    "sha256": "d7bf4286df7e6291a756575127657974e90d3ca3a85b6603abfe5aec6136ca14",
+    "bytes": 834290,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "08-brides-zones-interdites.jpg",
+    "label": "Panneau des brides et zones interdites du projet",
+    "sha256": "7893a6eaeb9615a3d5baef7256a98f183e79bcb98a1e95973c105cb1e435ea6f",
+    "bytes": 864146,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "09-dessins-calques.jpg",
+    "label": "Dessin importé et gestion des calques",
+    "sha256": "3f109879ddc019465c5b7d3c843952eadd23d0c53174ab357f937b3b62dd08d3",
+    "bytes": 779834,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "10-transformation-dessin.jpg",
+    "label": "Transformation du fichier importé",
+    "sha256": "da5c18afd7cc63e73202b8115bbcc9acddcae6e54f22b6dfdc3260d2ff4265b4",
+    "bytes": 797788,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "11-nettoyage-geometrie.jpg",
+    "label": "Analyse et nettoyage de la géométrie importée",
+    "sha256": "9d61a95fe480ab4219bb014b7998af507a54a603286d13c10f309cd82b2a201d",
+    "bytes": 852988,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "12-analyse-geometrie.jpg",
+    "label": "Résultat de l’analyse du dessin importé",
+    "sha256": "097fa2b6cbf2c1905ee3b9cd61fe6d7d1a222d03f05a2a7e89ff324d27c58892",
+    "bytes": 852399,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "13-ajout-texte.jpg",
+    "label": "Dialogue d’ajout de texte au projet ouvert",
+    "sha256": "e38d29ba4ce5348b9a3bdc0e3553542c8c6cb4937e9f9945fb5d80040388382f",
+    "bytes": 578000,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "14-ajout-operation.jpg",
+    "label": "Palette de création d’opérations",
+    "sha256": "730ccab1a14fea6c975a8c1de2d4fd031d737c4e977ec42b789af39418ccf2ce",
+    "bytes": 808271,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "15-operation-poche.jpg",
+    "label": "Paramètres de l’opération Pocket avec îlot",
+    "sha256": "0a882af5771a3eda7cc044270db68a6710fb3cda0d31e13ed363451a23b247b1",
+    "bytes": 865169,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "16-attaches-operation.jpg",
+    "label": "Convention de largeur et paramètres des attaches",
+    "sha256": "243726192774ce646940e31408c72941a9f1dea8d8123dead9689451a70a9e58",
+    "bytes": 859662,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "17-avances-vitesses.jpg",
+    "label": "Assistant d’avances et vitesses pour l’opération active",
+    "sha256": "38ff52162462068f7648f15d37fa720ff7cf7de300b506a2a80a7fd8e90f78b4",
+    "bytes": 572209,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "18-operation-contour.jpg",
+    "label": "Inspecteur de l’opération de contour extérieur",
+    "sha256": "c86e3a19505e02981621ec24a0ce3656bf4a836d9eb4ec1fb61f493b19161a86",
+    "bytes": 855266,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "19-profondeurs-entrees-leads.jpg",
+    "label": "Profondeurs, entrée et paramètres du contour",
+    "sha256": "e0b0e01359eb06b0d569c60960daf8e4968250ab878d42c4b235e89e2651a282",
+    "bytes": 856738,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "20-modeles-operations.jpg",
+    "label": "Bibliothèque de modèles d’opérations",
+    "sha256": "7122ae1a88874be75d55ff057b82dbf9a7b2863c974f9828a0f4dfd88d5208a3",
+    "bytes": 577888,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "21-machine-general.jpg",
+    "label": "Espace Machine, configuration générale du projet",
+    "sha256": "62299fd0a7e06731dd74058abd4bda1fa2a5a6cd8322b350ad79cc335b35c624",
+    "bytes": 384190,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "22-machine-sortie-programme.jpg",
+    "label": "Machine : post-processeur et sortie du programme",
+    "sha256": "5520ff3e8b75754abd8b876f0c2f9b9436654fb404a3e35e0a60a4e08c1da7ce",
+    "bytes": 454971,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "23-machine-outils.jpg",
+    "label": "Outils disponibles sur la machine du projet",
+    "sha256": "c826525e29456a39a435a6be0223b119c90edf0f0c6c10b6a151676fe7dbda48",
+    "bytes": 279547,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "24-machine-avance.jpg",
+    "label": "Paramètres avancés de la machine",
+    "sha256": "4212c48eefdec4e4964e715900da0dff55e6ce1faec0a751de6cdfe7e732ae66",
+    "bytes": 338841,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "25-bibliotheque-outils.jpg",
+    "label": "Bibliothèque d’outils du poste avec le projet conservé",
+    "sha256": "d7404474ccff6886e1835d4afc27cf1bae3fe0636d07c7170f81ede909174866",
+    "bytes": 323556,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "26-outil-montage.jpg",
+    "label": "Outil : montage, corps et porte-outil",
+    "sha256": "10b24a589c6ffb82dd1f67b465aeb86b8ac191640ee3e7b8d6b4975c695212f6",
+    "bytes": 323052,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "27-outil-disponibilite.jpg",
+    "label": "Outil : disponibilité et compatibilité machine",
+    "sha256": "74732d67280270bc369b93f185ff9feb6dbf48d3eda349e0ff5ff8f8f7a93569",
+    "bytes": 406830,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "28-outil-process-notes.jpg",
+    "label": "Outil : processus, notes et valeurs historiques",
+    "sha256": "64f70580c3b140176f37923fc070b00ef56a02721baa146b1c2f14f8874abd8c",
+    "bytes": 351898,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "29-calibration-outil.jpg",
+    "label": "Dialogue de calibration de l’usure de l’outil",
+    "sha256": "b161438a2d98b09d174f4f6af287635f9e9080e6b9e7bf4845826d6b346cca40",
+    "bytes": 329225,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "30-reglages-apparence.jpg",
+    "label": "Réglages : apparence et thème",
+    "sha256": "4808bee3a9713f1bbf958b9c17675642789b7ca5572cbbf48ec414a8f52d3bb6",
+    "bytes": 206779,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "31-reglages-vue.jpg",
+    "label": "Réglages : vue et grille",
+    "sha256": "dc4811204ebd7603fd035ea5e6957217a37e2c37805624e5528692e952632648",
+    "bytes": 195503,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "32-reglages-apercu-coupe.jpg",
+    "label": "Réglages : aperçu de coupe et simulation",
+    "sha256": "8784ca699c983f94b543f620775328c95f06f3e984ace862c2dd4c8853f51192",
+    "bytes": 294804,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "33-reglages-performance.jpg",
+    "label": "Réglages : performances, cache et reprise de simulation",
+    "sha256": "2f74d64ae4642d612b20a6ac6689b9259ebbb85cc5e622c2f4029df78d117bad",
+    "bytes": 347420,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "34-reglages-securite-simulation.jpg",
+    "label": "Réglages : contrôles de sécurité de simulation",
+    "sha256": "271454790b0f01a0bc8ccdc4e8c14507437a1f5ae076a98640cca344c591475b",
+    "bytes": 234538,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "35-reglages-avances-vitesses.jpg",
+    "label": "Réglages de l’assistant d’avances et vitesses",
+    "sha256": "9de31d55965bf6811c05e02c7baac19dbd7443a1c79de396304626234ce85e50",
+    "bytes": 253706,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "36-reglages-fichiers-sources.jpg",
+    "label": "Réglages des fichiers sources et de leur surveillance",
+    "sha256": "6fc4da2250462f1b6ca9fccc4625f43196a1d733aad2081052c88b3fe8cf972d",
+    "bytes": 225861,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "37-reglages-accrochage.jpg",
+    "label": "Réglages de l’accrochage et des repères géométriques",
+    "sha256": "93902e09fd2e8cd498638a7662e5c5763e5a7d07462201a3ffdfd588a4e2292c",
+    "bytes": 219517,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "38-aide-raccourcis.jpg",
+    "label": "Page Aide et raccourcis avec le projet conservé",
+    "sha256": "0b7259e4395b31005f510e8d008be5baa59ffcaa9814cbafec2af5c24bc13628",
+    "bytes": 385704,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "39-a-propos-version-licences.jpg",
+    "label": "À propos : version beta.3, commit, licences et attribution",
+    "sha256": "f39b46adc7c8a40042a9a12a4712c46823471345d4a44234de2d88cea10b3c7d",
+    "bytes": 355008,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "40-details-build.jpg",
+    "label": "À propos : détails du build natif beta.3",
+    "sha256": "0bb0d511d597767e9eccdaaf6a68225164f550b1ac61f88a6a22c4059a94d220",
+    "bytes": 381157,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "41-bibliotheques-tierces.jpg",
+    "label": "Attribution et bibliothèques tierces",
+    "sha256": "d8b432c4d174a55e44e1d34803a16bb6aecbd57969ab4c45e318c7f1b7467cb1",
+    "bytes": 588774,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "42-rapport-atelier.jpg",
+    "label": "Rapport de travail imprimable : opérations, outils et temps",
+    "sha256": "a2f43b6040fc7225de36692c031a02de01317592095ba7e770260679e8b46227",
+    "bytes": 566730,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "43-palette-commandes.jpg",
+    "label": "Palette de commandes du projet ouvert",
+    "sha256": "5cc72a39a6c72c196a31e4e057de1c5783da16a69fc279b92046fb2499abfabc",
+    "bytes": 530829,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "44-analyse-matiere-restante.jpg",
+    "label": "Détails de l’analyse de matière restante",
+    "sha256": "dc65a8c06f978a9c82033f593b7e57202193465cb7894c7bf673a2db4b336c94",
+    "bytes": 707168,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "45-preparation-angles-dogbones.jpg",
+    "label": "Préparation des angles et dogbones sur le contour sélectionné",
+    "sha256": "6da8414fb055aa0d5681cce1bba885990e11f3e38f6093451fdd72ad0e5753e9",
+    "bytes": 855119,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "46-inspecteur-percage.jpg",
+    "label": "Inspecteur Drill : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "438a42aae56b211cb3d4132bea723526a862885f2cff001f12360d90a288a58c",
+    "bytes": 878071,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "47-inspecteur-poche-exterieure.jpg",
+    "label": "Inspecteur Pocket Outside : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "f605c8274adc89e57b8005f53567a3a10dce49b970c8819dbcf2027e2f2e442c",
+    "bytes": 878691,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "48-inspecteur-filetage.jpg",
+    "label": "Inspecteur Thread : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "99ea994b482620783d4bd3ae4fc01ff4b348246cc269f52e67406fca04816056",
+    "bytes": 874939,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "49-inspecteur-chanfrein.jpg",
+    "label": "Inspecteur Chamfer : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "faf3d2be54128d101cb52869e0e7623f6fe7a5d9b43501274799123c9c9da5c3",
+    "bytes": 885578,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "50-inspecteur-gravure.jpg",
+    "label": "Inspecteur Engrave : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "f3343c9c638546da2469a350a4b333b86b6bd8169ce34bca30fb0cc413ef7ba8",
+    "bytes": 875648,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "51-inspecteur-rainure-t.jpg",
+    "label": "Inspecteur T-Slot : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "2baa1cff7a119e5f583e4eae4e38a1c6f1c7d595a52e28af6cc03c3420cec926",
+    "bytes": 885392,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "52-inspecteur-queue-aronde.jpg",
+    "label": "Inspecteur Dovetail : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "aa647908fb85a258f74f6d4a3ceb5fbbc559e72eaf774c287da35eaff864d97d",
+    "bytes": 886134,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "53-inspecteur-vcarve.jpg",
+    "label": "Inspecteur V-Carve : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "2ec5c6d83722eeb6894ebaf6ae8739dfc30c6d35ee43c20a7a4c0bedbb9be62a",
+    "bytes": 895227,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "54-inspecteur-surfacage.jpg",
+    "label": "Inspecteur Planar surfacing : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "e9aa75f7756d8f3c55360c17b4a3df7ad196e7ad1c1f1378c3a3dbbe42fcb909",
+    "bytes": 886656,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "55-inspecteur-relief-3d.jpg",
+    "label": "Inspecteur Relief (3D) : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "5af6984e5760ff447f0caf5f8e47947cbe41c5691958e661a9efa3e2ca4b2d9b",
+    "bytes": 868369,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "56-inspecteur-waterline-3d.jpg",
+    "label": "Inspecteur Waterline (3D) : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "7e6c581a0f1a288fe27191c00bc468d42fabe1aa29d651d89d40140bcb840096",
+    "bytes": 856475,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "57-inspecteur-pause.jpg",
+    "label": "Inspecteur Pause : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "0197f0de07a43a92e6e026be71a8d7c544729676ad0174fd8e822aa96caa2c29",
+    "bytes": 819804,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "58-inspecteur-origine-machine.jpg",
+    "label": "Inspecteur Homing : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "27d501c1a42e6b405c52669b5e961fc66c2ab44b09024790dc793f0f6d4e7223",
+    "bytes": 822624,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "59-inspecteur-palpage.jpg",
+    "label": "Inspecteur Probe : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "c4d7acfd4ef8f9095d22e33e9f0be24514465a7ba3e5e79579bac70519f42ab4",
+    "bytes": 819237,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "60-inspecteur-repere.jpg",
+    "label": "Inspecteur Marker : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "9930440b542d11ea6b782fd8d3348ab5397e4a6aac58d14531e4589fe6c232b0",
+    "bytes": 811981,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "61-inspecteur-inclusion-programme.jpg",
+    "label": "Inspecteur G-code include : ajout temporaire dans le projet de démonstration, sans génération de programme",
+    "sha256": "ba6449aeb367bc714f862f2bf1965b9d2a1acbb578c7318b9aad88beabeb5847",
+    "bytes": 874676,
+    "width": 3024,
+    "height": 1898
+  },
+  {
+    "file": "62-projet-final-simulation.jpg",
+    "label": "Vue finale du projet et simulation 3D avec les deux opérations initiales",
+    "sha256": "d86a53caa29faaa2e7f1c80bc954ce7d583cb75dd38c6f3dc5446b7a41d9486e",
+    "bytes": 512295,
+    "width": 3024,
+    "height": 1898
+  }
+]

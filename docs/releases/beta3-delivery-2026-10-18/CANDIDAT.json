@@ -1,0 +1,11 @@
+{
+  "version": "0.9.0-beta.3",
+  "pipeline": 61,
+  "source_commit": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+  "run_id": 39125180897,
+  "run_url": "https://github.com/harry-finch/FabCAM/actions/runs/39125180897",
+  "status": "ALL THREE BUILDS PASS; all installer checksums/provenance verified",
+  "human_approval": "Delivered milestones accepted 2026-10-18; manual records remain actual observations",
+  "macos_app": "FabCAM.app",
+  "manual_test_results": "blank, not silently marked PASS"
+}

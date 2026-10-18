@@ -1,0 +1,482 @@
+{
+  "source_commit": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+  "scope": "CLI imports only; not native UI or machine acceptance",
+  "accepted": 36,
+  "expected_refusals": 1,
+  "results": [
+    {
+      "file": "dessins/reference/circle_d50.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 35.0,
+        "min_y": 35.0,
+        "max_x": 85.0,
+        "max_y": 85.0
+      },
+      "sha256": "b40d15d6c53f8f1a944ba8c85607c9085909a56acf30b74fa57432cb4fbc6bca"
+    },
+    {
+      "file": "dessins/reference/circle_d50.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 35.0,
+        "min_y": 35.0,
+        "max_x": 85.0,
+        "max_y": 85.0
+      },
+      "sha256": "4ab73276a2334c121e2545ac2c528942d63a50799fbae95d2e89c51ee57710c6"
+    },
+    {
+      "file": "dessins/reference/concave_L_shape.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 110.0
+      },
+      "sha256": "c8e368754b14d12ce259c7f193aaf9b80183a01e73bdd3431e6c9f041bcc5926"
+    },
+    {
+      "file": "dessins/reference/concave_L_shape.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 110.0
+      },
+      "sha256": "10365402cdec4978c93cfa34a10ff9008eefe6f79a76ef63b44dc26d96b5343f"
+    },
+    {
+      "file": "dessins/reference/multiple_closed_contours.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 40.0
+      },
+      "sha256": "8ea80321027708e2db3e31cf0b42093923cbedaf9c4b3e61f5199e565ce4325e"
+    },
+    {
+      "file": "dessins/reference/multiple_closed_contours.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 40.0
+      },
+      "sha256": "2ffe3cc0747b391946ac4c85a897808680d797b38c7069a632d49511823b753d"
+    },
+    {
+      "file": "dessins/reference/open_polyline.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 60.0,
+        "max_y": 40.0
+      },
+      "sha256": "1f158d918f68e05bddfaaff9c61f39223848a1e8a21455e946a8fe2a5eec8ee2"
+    },
+    {
+      "file": "dessins/reference/open_polyline.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 60.0,
+        "max_y": 40.0
+      },
+      "sha256": "5f8a5b5c5d9cc636df5499bef797600b9b81962f0d88eefaa574a9e99a9b8309"
+    },
+    {
+      "file": "dessins/reference/rectangle_100x50.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 60.0
+      },
+      "sha256": "f88b5d99e12f4fb3a3a4bfe1e7d93b0e9ed1ee79eb02aaa9dcd54be133b8490c"
+    },
+    {
+      "file": "dessins/reference/rectangle_100x50.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 60.0
+      },
+      "sha256": "c82b00e544e23f1de3343fe4f3f27664f4e500dabab04c5366dc9cdefbf30982"
+    },
+    {
+      "file": "dessins/reference/rectangle_with_hole.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 60.0
+      },
+      "sha256": "4de6e0facc8848f903f9da9b34ab29ea197e2bd5255a3cd9a567a91abd989235"
+    },
+    {
+      "file": "dessins/reference/rectangle_with_hole.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 60.0
+      },
+      "sha256": "34ca5e83eb45911f5fd7ddf1ea9541b500edea57bad7e32a28bf2c2c73bd63f5"
+    },
+    {
+      "file": "dessins/reference/rectangle_with_island.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 110.0
+      },
+      "sha256": "50cdaffb3d83d3f79f446448040c5aead7a575970be12867c929e5d6129abbf9"
+    },
+    {
+      "file": "dessins/reference/rectangle_with_island.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 110.0
+      },
+      "sha256": "26df51e8ecd958b73c61e954b1144bed600506a2ed72d3b3fc335ea210e99e64"
+    },
+    {
+      "file": "dessins/reference/square_100.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 110.0
+      },
+      "sha256": "4b2b6552ba5d3981bdfabea36356d650d2a421a45ff0c3304eae1aff1dc20d94"
+    },
+    {
+      "file": "dessins/reference/square_100.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 110.0,
+        "max_y": 110.0
+      },
+      "sha256": "18fbb7b874d6b1286551f94f6b6fab767d1ac4e6057d239728852d331db8410b"
+    },
+    {
+      "file": "dessins/regressions/01-poche-imbrication-3.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 3,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 60.0,
+        "max_y": 60.0
+      },
+      "sha256": "109932d8aeb72fd9adc5901c3e31307f13239324d4aac115172b27c633d96118"
+    },
+    {
+      "file": "dessins/regressions/01-poche-imbrication-3.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 3,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 60.0,
+        "max_y": 60.0
+      },
+      "sha256": "0bc7624b840f4bf94220cd76eb36e73100d2aa751c845a817aed3f14e4f9c413"
+    },
+    {
+      "file": "dessins/regressions/02-xor-trois-identiques.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 50.0,
+        "max_y": 50.0
+      },
+      "sha256": "75d8b469a34a39f91bf62817911f0959a1922b45e76e2660fc20638c2d4c44ab"
+    },
+    {
+      "file": "dessins/regressions/02-xor-trois-identiques.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 50.0,
+        "max_y": 50.0
+      },
+      "sha256": "465668ce6004d27bf1bedd705b0f872228619f9aa26c67b2234531e2f7d2e592"
+    },
+    {
+      "file": "dessins/regressions/03-percage-quatre-points.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 4,
+      "bbox": {
+        "min_x": 20.0,
+        "min_y": 20.0,
+        "max_x": 60.0,
+        "max_y": 60.0
+      },
+      "sha256": "4a0724ca67228b170a871bed5949ab7616ba2eb8773940cdb99fac63d049f25d"
+    },
+    {
+      "file": "dessins/regressions/04-attaches-rectangle-30x20.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 30.0,
+        "max_y": 20.0
+      },
+      "sha256": "bdce758e22978695134882e67cab0e77e7a8f7818368acb95e37cdd92f5a0745"
+    },
+    {
+      "file": "dessins/regressions/04-attaches-rectangle-30x20.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 30.0,
+        "max_y": 20.0
+      },
+      "sha256": "58ac71605af29ac6f1b339560f83ffbef75c6f9f81f7e7613a74a6680b85039f"
+    },
+    {
+      "file": "dessins/regressions/05-union-disjointe-attaches.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 60.0,
+        "max_y": 20.0
+      },
+      "sha256": "13bfb541096ee69b401317d723b5445a87cec8ad18555bafe7d0a5bb7eedea23"
+    },
+    {
+      "file": "dessins/regressions/05-union-disjointe-attaches.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 60.0,
+        "max_y": 20.0
+      },
+      "sha256": "a5d6dce741faa6745a34107d190fef3e172f946e3a0e498a9b4954556824226a"
+    },
+    {
+      "file": "dessins/regressions/06-union-intersection-attaches-refus.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 30.0,
+        "max_y": 20.0
+      },
+      "sha256": "c2a3a679268fc6e476295a4ac4a31e2191ea588d55a69e004ed16eab842aeb89"
+    },
+    {
+      "file": "dessins/regressions/06-union-intersection-attaches-refus.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 2,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 30.0,
+        "max_y": 20.0
+      },
+      "sha256": "64431b9f1fa9e852dd38a2763403e9059b7aed61154c8033b0661178adeb13b5"
+    },
+    {
+      "file": "dessins/regressions/07-poche-cercle-et-trait.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 3,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 40.0,
+        "max_y": 40.0
+      },
+      "sha256": "6164c996353510c4b780369bb9fa675e8a03521d5dc116855c070eca9f95cc36"
+    },
+    {
+      "file": "dessins/regressions/07-poche-cercle-et-trait.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 3,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 40.0,
+        "max_y": 40.0
+      },
+      "sha256": "ef6780c9bdda5ca75b914f4e0c30411808e37add1e4f998e0f843da67cf77cb5"
+    },
+    {
+      "file": "dessins/regressions/08-reference-percage-concave-refus.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 10.0,
+        "max_y": 10.0
+      },
+      "sha256": "43b2d52cfb588c93220070060c87ff9fba64b0696dcf9800e7560ab067db45a0"
+    },
+    {
+      "file": "dessins/regressions/08-reference-percage-concave-refus.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 10.0,
+        "max_y": 10.0
+      },
+      "sha256": "b92fcd18abaa4eb79141dd179e629fa2e96875c281b1df17a7fa821367a8c12f"
+    },
+    {
+      "file": "dessins/regressions/09-geometrie-gap-0p05.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 50.0,
+        "max_y": 50.0
+      },
+      "sha256": "99e3205cb684836a14a11de391002038486fd0575c199fc5bc11183138ef2b27"
+    },
+    {
+      "file": "dessins/regressions/09-geometrie-gap-0p05.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 10.0,
+        "min_y": 10.0,
+        "max_x": 50.0,
+        "max_y": 50.0
+      },
+      "sha256": "cf1414b4fc0458f816629887b92c9aa13b5504223281b1b13e49c57fb264df7b"
+    },
+    {
+      "file": "dessins/regressions/10-cercle-arc-rayon2.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 8.0,
+        "min_y": 18.0,
+        "max_x": 12.0,
+        "max_y": 22.000000000000004
+      },
+      "sha256": "39d1993b1b255294b275e044013e974886d3fae24a19948d938398cbd75cd635"
+    },
+    {
+      "file": "dessins/regressions/10-cercle-arc-rayon2.svg",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 8.0,
+        "min_y": 18.0,
+        "max_x": 12.0,
+        "max_y": 22.0
+      },
+      "sha256": "bc90fa3932fe46cd80d9efdde447c9b41ac12f47253e91f372fb608c045ecad5"
+    },
+    {
+      "file": "dessins/regressions/11-HATCH-dans-BLOCK-refus.dxf",
+      "expected": "refused",
+      "actual": "refused",
+      "diagnostic": "Error: import ../Validation-V1-beta3-2026-10-18/dessins/regressions/11-HATCH-dans-BLOCK-refus.dxf\n\nCaused by:\n    DXF HATCH inside BLOCK definitions is not supported. (hint: Explode block instances in your CAD tool and export their HATCH boundaries as top-level geometry before importing.)"
+    },
+    {
+      "file": "dessins/regressions/12-HATCH-top-level-10x10.dxf",
+      "expected": "import accepted",
+      "actual": "import accepted",
+      "objects": 1,
+      "bbox": {
+        "min_x": 0.0,
+        "min_y": 0.0,
+        "max_x": 10.0,
+        "max_y": 10.0
+      },
+      "sha256": "181912ac79df8f3aec19cdab142cdb3f79e13137a859a62dcef8f46811679277"
+    }
+  ]
+}

@@ -2360,3 +2360,23 @@ beta.3, pipeline61 unchanged. User authorizes all pending source commit/push,
 three new candidate builds, refreshed test kit and root native screenshots.
 [Decision and delivery record](../releases/ACCEPTANCE_CANDIDATES_2026_10_18.md).
 Historical reports, installers and evidence preserved; no tag or Release.
+
+
+## 2026-10-18 — Beta.3 candidates and native UI capture delivery
+
+Published accepted source as db5bde5, then dispatched desktop-candidates39125180897.
+All three jobs succeeded; downloaded beta.3 macOS arm64 DMG/Windows x64 NSIS/
+Ubuntu amd64 DEB and checked clean source SHA and all original checksums. DMG
+integrity and copied app strict signature/architecture PASS. No installed baseline
+replaced. Native app beta.3(db5bde5) opened the saved demo, generated32030moves/
+18offsets, displayed2D/3D/solid/program/warnings and exported a local OpenSBP
+reference using the native Save dialog.1.9s displayed is not a benchmark.
+
+Root beta.3 kit:37SVG/DXF with36accepted/1expected-refused import outcomes,
+6projects and29checks per OS plus separate operator protocol. Root screenshot
+folder:62original native JPEGs covering main areas, subsections, dialogs and all18
+operation inspectors, with gallery/context/hash inventories. Temporary operations
+undone; no unsupported output generated. Manual CSV/physical/clean-host results
+not fabricated. [Final record](../releases/beta3-delivery-2026-10-18/README.md).
+Source push required existing SSH because HTTPS OAuth lacks workflow scope;
+remotes preserved. Final documentation handoff committed separately. No tag/Release.

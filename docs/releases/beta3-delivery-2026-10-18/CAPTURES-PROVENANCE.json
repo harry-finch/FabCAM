@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-18",
+  "version": "0.9.0-beta.3",
+  "pipeline": 61,
+  "source_commit": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+  "ci_run": 39125180897,
+  "capture_method": "Actual native macOS app window through cua_repl; original JPEG bytes, no compositing or image edits",
+  "project": "projet-demonstration.ivac-project.json",
+  "project_sha256": "96ac0ffdad3e9184d02e14afedcdcd01fab9e0d34f786287588dcbb4e151f657",
+  "count": 62,
+  "scope": "Six main desktop areas, four Machine sections, four Tool library sections, eight Settings sections, context dialogs and all18 operation types via their inspectors; not every dropdown value or mobile layout.",
+  "temporary_operations": "46–61 are temporary unconfigured inspector examples, undone after capture; no successful machine output claimed for them. Original two-operation project restored.",
+  "qualification": "Native launch/open/generate/preview/export smoke only. No clean-install, Windows/Ubuntu runtime, physical or complete geometry certification."
+}

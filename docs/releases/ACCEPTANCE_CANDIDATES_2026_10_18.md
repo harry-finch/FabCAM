@@ -38,4 +38,12 @@ Validation-V1-2a3fe56 kit and its original results.
   saved demonstration project, inventory and source/package provenance.
 - Source/docs/tests committed and pushed; delivery results appended after builds.
 
-Builds, screenshot execution and final delivery results: in progress.
+## Final delivery
+
+[Delivery record](beta3-delivery-2026-10-18/README.md): all three beta.3 builds at
+db5bde5 PASS, installers collected and hashes/source verified. Native macOS app
+strict signature/arm64 identity PASS; app open/generate/preview/export smoke PASS.
+Root kit contains37drawings,6projects and29per-platform test cases;62native
+captures with offline gallery and inventories. Temporary unconfigured inspector
+examples were undone. No clean-host, Windows/Ubuntu runtime or machine results
+are invented; manual records remain to execute. No tag or Release.
