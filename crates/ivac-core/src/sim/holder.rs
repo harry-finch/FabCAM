@@ -21,6 +21,60 @@ pub struct HolderProfile {
 }
 
 impl HolderProfile {
+    /// Publication checks use only declared dimensions, never simulation defaults.
+    /// The boolean describes completeness of the declared cutter/shank/holder.
+    #[must_use]
+    pub fn declared_fixture_envelope(tool: &ToolEntry) -> (Option<Self>, bool) {
+        let positive = |v: f64| v.is_finite() && v > 0.;
+        let Some(flute) = tool.flute_length_mm.filter(|v| positive(*v)) else {
+            return (None, false);
+        };
+        let radius = form_profile_max_radius(tool)
+            .unwrap_or_else(|| tool.diameter.max(tool.effective_diameter()) * 0.5);
+        let cutter = Self {
+            points: vec![(0., radius), (flute, radius)],
+        };
+        if !tool
+            .stickout_length_mm
+            .is_some_and(|v| v.is_finite() && v >= 0.)
+            || !tool.shank_diameter_mm.is_some_and(positive)
+        {
+            return (Some(cutter), false);
+        }
+        let holder_valid = match tool.holder {
+            Some(HolderShape::Cylinder {
+                diameter_mm,
+                length_mm,
+            }) => [diameter_mm, length_mm].into_iter().all(positive),
+            Some(HolderShape::Cone {
+                bottom_diameter_mm,
+                top_diameter_mm,
+                length_mm,
+            }) => [bottom_diameter_mm, top_diameter_mm, length_mm]
+                .into_iter()
+                .all(positive),
+            Some(HolderShape::Stepped {
+                cylinder_diameter_mm,
+                cylinder_length_mm,
+                cone_top_diameter_mm,
+                cone_length_mm,
+            }) => [
+                cylinder_diameter_mm,
+                cylinder_length_mm,
+                cone_top_diameter_mm,
+                cone_length_mm,
+            ]
+            .into_iter()
+            .all(positive),
+            None => false,
+        };
+        let mut declared = tool.clone();
+        if !holder_valid {
+            declared.holder = None;
+        }
+        (Self::from_tool(&declared).or(Some(cutter)), holder_valid)
+    }
+
     // WHY: T-slot cutters need an extra narrow neck segment
     // between the head (the flutes) and the shank/holder above. The
     // neck is the part that sits *inside* the cut slot while the head
@@ -55,8 +109,8 @@ impl HolderProfile {
         // touches — otherwise the cells the sweep just lowered get
         // flagged as walls the holder is colliding with (false-positive
         // HolderCollision warnings on form cutters).
-        let cutting_r =
-            form_profile_max_radius(tool).unwrap_or_else(|| (tool.diameter * 0.5).max(0.0));
+        let cutting_r = form_profile_max_radius(tool)
+            .unwrap_or_else(|| (tool.effective_diameter() * 0.5).max(0.0));
         // Drills with no `flute_length_mm` set would otherwise leave the
         // shank starting at z=0 above the tip — so any wall above the
         // tip plane within the shank radius would alarm as a collision.
@@ -74,7 +128,7 @@ impl HolderProfile {
         };
         let shank_r = tool
             .shank_diameter_mm
-            .map_or(cutting_r, |d| d * 0.5)
+            .map_or(tool.diameter * 0.5, |d| d * 0.5)
             .max(0.0);
 
         // Sample list anchored at the tip: bottom of flutes, top of
@@ -283,7 +337,7 @@ fn form_profile_max_radius(tool: &ToolEntry) -> Option<f64> {
     if !matches!(tool.kind, ToolKind::FormProfile) {
         return None;
     }
-    let base_r = (tool.diameter * 0.5).max(0.0);
+    let base_r = (tool.effective_diameter() * 0.5).max(0.0);
     let tip_r = tool.tip_diameter.map_or(base_r, |d| (d * 0.5).max(0.0));
     // When a real profile is entered, the widest sample radius is
     // the footprint the holder check must clear (the same value
@@ -534,5 +588,16 @@ mod tests {
         );
         let p_em = HolderProfile::from_tool(&endmill).expect("holder set");
         assert!((p_em.cutting_radius() - 3.0).abs() < 1e-9);
+    }
+    #[test]
+    fn audit_13_14_effective_cut_radius_retains_nominal_shank() {
+        for wear in [-0.4, 0.4] {
+            let mut tool = tool_with(None, Some(6.), Some(10.));
+            tool.wear_offset_mm = wear;
+            let holder = HolderProfile::from_tool(&tool).unwrap();
+            let cutter = crate::sim::heightmap::ToolProfile::from_tool(&tool);
+            assert!((holder.cutting_radius() - f64::from(cutter.radius())).abs() < 1e-6);
+            assert!((holder.samples().last().unwrap().1 - 3.).abs() < 1e-6);
+        }
     }
 }

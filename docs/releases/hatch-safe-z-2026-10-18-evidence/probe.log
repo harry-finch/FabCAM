@@ -1,0 +1,4 @@
+    Blocking waiting for file lock on build directory
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.97s
+     Running `target/debug/examples/consolidation_probe`

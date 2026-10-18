@@ -154,3 +154,32 @@ jobs:
         with:
           tool: cargo-deny
       - run: cargo deny check bans licenses sources advisories
+
+  test1:
+    name: TEST1 bounded properties (software only)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@1.88.0
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - run: pnpm --dir frontend install --frozen-lockfile
+      - name: Build worker outside property budget
+        run: python3 scripts/test1/build.py > /tmp/test1-binary
+      - name: Native deterministic cases with external watchdog
+        run: python3 scripts/test1/run.py --binary "$(cat /tmp/test1-binary)" --output test1-evidence --cases 32 --budget 120 --frontend
+      - name: Request lifecycle and export freshness
+        if: always()
+        run: pnpm --dir frontend exec vitest run src/lib/state/test1-lifecycle.test.ts src/lib/state/generation-run.test.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test1-software-evidence
+          path: test1-evidence
+          if-no-files-found: error

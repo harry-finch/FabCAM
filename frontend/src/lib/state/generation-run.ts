@@ -51,3 +51,17 @@ export class GenerationRuns {
 export function elapsedSeconds(run: GenerationRun, now: number): string {
   return (Math.max(0, (run.endedAt ?? now) - run.startedAt) / 1000).toFixed(1);
 }
+
+/** Export freshness, rechecked after asynchronous dialogs. Identity is intentional. */
+export function generationExportIsCurrent(
+  blocked: boolean,
+  generatedContext: string | null,
+  currentContext: string,
+  idle: boolean,
+  currentResult: unknown,
+  capturedResult: unknown,
+): boolean {
+  return (
+    !blocked && generatedContext === currentContext && idle && currentResult === capturedResult
+  );
+}

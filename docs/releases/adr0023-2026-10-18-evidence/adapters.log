@@ -1,0 +1,64 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-wasm v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm)
+   Compiling ivac-server v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.35s
+     Running unittests src/main.rs (target/debug/deps/ivac_server-7e14c355be04e2af)
+
+running 18 tests
+test tests::bad_request_helper_synthesizes_structured_error ... ok
+test tests::internal_helper_synthesizes_structured_error ... ok
+test tests::pipeline_cancelled_maps_to_408_with_structured_body ... ok
+test tests::pipeline_unknown_tool_promotes_auto_fix_into_http_body ... ok
+test tests::http_error_response_carries_full_structured_shape ... ok
+test tests::relief_stl_rejects_malformed_stl_with_400 ... ok
+test tests::relief_stl_rasterizes_a_flat_quad_to_a_surface_field ... ok
+test tests::generate_gcode_stream_rejects_hpgl_with_400 ... ok
+test tests::relief_stl_returns_204_for_a_footprintless_mesh ... ok
+test tests::status_for_kind_matches_legacy_mapping ... ok
+test tests::fixtures_refuse_direct_stream_before_success_status ... ok
+test tests::generate_rejects_cps_path_source ... ok
+test tests::safe_z_refusal_is_structured_and_stream_has_no_program ... ok
+test tests::generate_gcode_stream_matches_the_buffered_program ... ok
+test tests::generate_gcode_stream_serves_grbl_too ... ok
+test tests::audit_15_16_import_memory_and_format_validation ... ok
+test tests::buffered_collision_returns_error_with_preview_without_program ... ok
+test tests::posts_routes_list_inspect_and_guard ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.56s
+
+     Running unittests src/lib.rs (target/debug/deps/ivac_wasm-64b808e7646d1afa)
+
+running 24 tests
+test sim::tests::data_ptr_and_len_consistent_with_cols_rows ... ok
+test sim::tests::advance_with_no_cuts_returns_empty_aabb ... ok
+test sim::tests::clear_toolpath_drops_warning_cache ... ok
+test sim::tests::deviation_flags_gouge_under_plunge_and_reststock_around_it ... ok
+test sim::tests::advance_clears_previous_dirty_so_aabb_reflects_only_this_call ... ok
+test sim::tests::deviation_recompute_in_matches_full_over_the_dirty_aabb ... ok
+test sim::tests::audit_15_16_reset_then_changed_tool_rechecks_cached_warnings ... ok
+test sim::tests::advance_endmill_plunge_lowers_cells_and_returns_dirty_aabb ... ok
+test sim::tests::checkpoint_same_index_overwrites ... ok
+test sim::tests::deviation_unions_multiple_targets_deepest_wins ... ok
+test sim::tests::new_initializes_heightmap_to_top_z ... ok
+test sim::tests::nearest_checkpoint_picks_largest_at_or_below_target ... ok
+test sim::tests::partial_advance_cut_only_touches_swept_chunk ... ok
+test sim::tests::partial_advance_plunge_grows_as_t_advances ... ok
+test sim::tests::partial_advance_emits_rapid_warning_only_on_first_slice ... ok
+test sim::tests::checkpoint_restore_then_replay_matches_full_replay ... ok
+test sim::tests::reset_restores_top_z_and_no_dirty ... ok
+test sim::tests::re_sweep_replays_cached_diagnostics_identically ... ok
+test sim::tests::checkpoint_restore_round_trips_undercut_sidecar ... ok
+test sim::tests::three_axis_advance_keeps_sidecar_empty ... ok
+test sim::tests::restore_checkpoint_marks_whole_grid_dirty ... ok
+test sim::tests::form_tool_advance_populates_undercut_sidecar ... ok
+test test1_bridge::native_bridge_preserves_non_executable_collision_diagnostic ... ok
+test test1_bridge::shared_profile_and_vcarve_requests_replay_through_native_bridge ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
+
+   Doc-tests ivac_wasm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

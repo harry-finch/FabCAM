@@ -23,6 +23,42 @@ use crate::geometry::{Point2, Segment};
 const HATCH_LAYER_FALLBACK: &str = "HATCH";
 const HATCH_COLOR_FALLBACK: i32 = 7;
 
+/// Raw recovery cannot expand block instances. Reject the complete drawing,
+/// including unused definitions, rather than return misplaced or missing edges.
+pub(super) fn has_block_hatch(text: &str) -> bool {
+    let mut in_blocks = false;
+    let mut in_block = false;
+    let mut section_name = false;
+    let mut lines = text.lines();
+    while let (Some(code), Some(value)) = (lines.next(), lines.next()) {
+        let Ok(code) = code.trim().parse::<i32>() else {
+            continue;
+        };
+        let value = value.trim();
+        if section_name {
+            in_blocks = code == 2 && value.eq_ignore_ascii_case("BLOCKS");
+            section_name = false;
+        }
+        if code != 0 {
+            continue;
+        }
+        if value.eq_ignore_ascii_case("HATCH") && (in_blocks || in_block) {
+            return true;
+        }
+        if value.eq_ignore_ascii_case("SECTION") {
+            section_name = true;
+        } else if value.eq_ignore_ascii_case("BLOCK") {
+            in_block = true;
+        } else if value.eq_ignore_ascii_case("ENDBLK") {
+            in_block = false;
+        } else if value.eq_ignore_ascii_case("ENDSEC") {
+            in_blocks = false;
+            in_block = false;
+        }
+    }
+    false
+}
+
 /// Walk `text` (raw DXF text mode) and append any HATCH boundary segments
 /// found into `out`. Layer warnings go into `warnings`. Returns the count
 /// of HATCH entities consumed (so the caller can emit a summary warning).

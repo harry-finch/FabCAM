@@ -73,6 +73,12 @@ pub fn import_dxf_bytes(
     bytes: &[u8],
     opts: &ImportOptions,
 ) -> crate::Result<ImportOutput> {
+    // DXF group keywords are ASCII even when names use a legacy encoding.
+    // Do this before expansion/recovery, so no partial drawing can escape.
+    if super::hatch::has_block_hatch(&String::from_utf8_lossy(bytes)) {
+        return Err(Error::bad_input("DXF HATCH inside BLOCK definitions is not supported.")
+            .with_hint("Explode block instances in your CAD tool and export their HATCH boundaries as top-level geometry before importing."));
+    }
     let drawing = Drawing::load(&mut std::io::Cursor::new(bytes)).map_err(|e| {
         let mut err = Error::bad_input(format!("dxf parse: {e}"))
             .with_hint("File is not a valid DXF — try re-exporting from your CAD tool.");

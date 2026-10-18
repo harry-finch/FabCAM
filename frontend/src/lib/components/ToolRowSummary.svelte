@@ -130,7 +130,11 @@
   min="1"
   max="179"
   value={tool.tipAngleDeg ?? ''}
-  placeholder={fieldApplies('tipAngleDeg', tool.kind) ? '60' : t('tools.field.na')}
+  placeholder={fieldApplies('tipAngleDeg', tool.kind)
+    ? tool.kind === 'drill'
+      ? '118'
+      : '60'
+    : t('tools.field.na')}
   disabled={!fieldApplies('tipAngleDeg', tool.kind)}
   title={fieldApplies('tipAngleDeg', tool.kind)
     ? t('tools.row.tip_angle.title')

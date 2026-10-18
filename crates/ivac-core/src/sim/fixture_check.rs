@@ -48,11 +48,12 @@ pub enum FixtureCheck {
 // above the flutes must use `holder.max_radius()`, not just the cutting
 // radius — a wide ER nut close to a clamp must still be tested.
 #[must_use]
-pub fn check_segment_against_fixtures(
+fn check_linear_segment_against_fixtures(
     segment: &ToolpathSegment,
     tool_radius: f64,
     holder: Option<&HolderProfile>,
     fixtures: &[Fixture],
+    margin: f64,
 ) -> Vec<FixtureCheck> {
     if fixtures.is_empty() || tool_radius <= 0.0 {
         return Vec::new();
@@ -77,25 +78,14 @@ pub fn check_segment_against_fixtures(
             out.push(FixtureCheck::Clear);
             continue;
         }
-        // XY inflation: cells *at* the cutting tip Z use the cutting
-        // radius; cells above the flutes (where the holder lives) need
-        // the holder's max radius. As a conservative bound that lets a
-        // single XY test cover both bands, use whichever inflation
-        // applies inside the fixture's height window.
-        let xy_r = if f.z_bottom > seg_z_max {
-            body_radius
-        } else {
-            // Fixture band reaches at or below the tip — the tip itself
-            // could hit it, so the cutting radius governs. (If the
-            // fixture extends both below and above the flutes we still
-            // need the holder radius for the upper part, so take the
-            // max.)
-            if f.z_top > seg_z_max {
-                tool_radius.max(body_radius)
-            } else {
-                tool_radius
-            }
-        };
+        // Bound the complete body for the whole move, not only its highest
+        // tip pose. On a sloped move a fixture below seg_z_max can still
+        // intersect the holder near the lower endpoint. The independent Z
+        // interval and maximum-radius capsule are conservative: they may
+        // warn for empty space within that bound, but cannot discard that
+        // lower-pose holder collision. This is not an exact time-correlated
+        // swept-solid intersection or automatic path avoidance.
+        let xy_r = body_radius + margin;
         let collides = match &f.kind {
             FixtureKind::Box { width, depth } => {
                 stadium_hits_box(segment, xy_r, f.origin, *width, *depth)
@@ -119,6 +109,57 @@ pub fn check_segment_against_fixtures(
         }
     }
     out
+}
+
+/// Analytic arcs are enclosed by short chord capsules. The extra 0.001 mm
+/// radius bounds sagitta, preventing false negatives; contacts inside this
+/// numerical boundary remain conservatively reported.
+#[must_use]
+pub fn check_segment_against_fixtures(
+    segment: &ToolpathSegment,
+    tool_radius: f64,
+    holder: Option<&HolderProfile>,
+    fixtures: &[Fixture],
+) -> Vec<FixtureCheck> {
+    if fixtures.is_empty() {
+        return Vec::new();
+    }
+    let Some(arc) = segment.arc else {
+        return check_linear_segment_against_fixtures(segment, tool_radius, holder, fixtures, 0.);
+    };
+    let Some((cx, cy, r, start, sweep)) =
+        crate::sim::sweep::arc_span(&segment.from, &segment.to, arc)
+    else {
+        return check_linear_segment_against_fixtures(segment, tool_radius, holder, fixtures, 0.);
+    };
+    let margin = 0.001;
+    // Stable for large radii: avoid cancellation in acos(1 - epsilon).
+    let angle = 4. * (margin / (2. * r)).min(1.).sqrt().asin();
+    let count = (sweep.abs() / angle).ceil().max(1.) as usize;
+    let mut result = vec![FixtureCheck::Clear; fixtures.len()];
+    for i in 0..count {
+        let mut chord = segment.clone();
+        chord.arc = None;
+        let point = |t: f64| crate::gcode::preview::Pose3 {
+            x: cx + r * (start + sweep * t).cos(),
+            y: cy + r * (start + sweep * t).sin(),
+            z: segment.from.z + (segment.to.z - segment.from.z) * t,
+        };
+        chord.from = point(i as f64 / count as f64);
+        chord.to = point((i + 1) as f64 / count as f64);
+        for (out, hit) in result.iter_mut().zip(check_linear_segment_against_fixtures(
+            &chord,
+            tool_radius,
+            holder,
+            fixtures,
+            margin,
+        )) {
+            if matches!(hit, FixtureCheck::Collision { .. }) {
+                *out = hit;
+            }
+        }
+    }
+    result
 }
 
 /// Closest point on the segment to `(px, py)` in XY. Standard
@@ -646,5 +687,66 @@ mod tests {
         let fix = box_fixture(11, (0.0, 0.0), 5.0, 5.0, 0.0, 30.0);
         let res = check_segment_against_fixtures(&s, 3.0, None, &[fix]);
         assert!(matches!(res[0], FixtureCheck::Clear));
+    }
+}
+
+#[cfg(test)]
+mod audit_13_14 {
+    use super::*;
+    use crate::gcode::preview::{ArcXY, MoveKind, Pose3};
+    #[test]
+    fn curved_path_hits_arc_obstacle_not_chord_obstacle() {
+        for ccw in [false, true] {
+            let y = if ccw { 10. } else { -10. };
+            let segment = ToolpathSegment {
+                from: Pose3 {
+                    x: 10.,
+                    y: 0.,
+                    z: -1.,
+                },
+                to: Pose3 {
+                    x: -10.,
+                    y: 0.,
+                    z: -1.,
+                },
+                arc: Some(ArcXY {
+                    cx: 0.,
+                    cy: 0.,
+                    ccw,
+                }),
+                kind: MoveKind::Arc,
+                gcode_line: 1,
+                op_id: 1,
+            };
+            for kind in [
+                FixtureKind::Cylinder { radius: 0.1 },
+                FixtureKind::Box {
+                    width: 0.2,
+                    depth: 0.2,
+                },
+                FixtureKind::Polygon {
+                    vertices: vec![(-0.1, -0.1), (0.1, -0.1), (0.1, 0.1), (-0.1, 0.1)],
+                },
+            ] {
+                let mut fixture = Fixture {
+                    id: 1,
+                    name: "test".into(),
+                    kind,
+                    origin: (0., y),
+                    z_bottom: -2.,
+                    z_top: 0.,
+                    color: 0,
+                };
+                assert!(matches!(
+                    check_segment_against_fixtures(&segment, 0.1, None, &[fixture.clone()])[0],
+                    FixtureCheck::Collision { .. }
+                ));
+                fixture.origin = (0., 0.);
+                assert_eq!(
+                    check_segment_against_fixtures(&segment, 0.1, None, &[fixture]),
+                    vec![FixtureCheck::Clear]
+                );
+            }
+        }
     }
 }

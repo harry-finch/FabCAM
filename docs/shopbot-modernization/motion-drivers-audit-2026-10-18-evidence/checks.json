@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-18",
+  "baseline_commit": "2a3fe5632b4d77ab03d899bcb0a07db54a8b9f7b",
+  "public_version": "0.9.0-beta.2",
+  "pipeline_version": 55,
+  "core": {
+    "passed": 1174,
+    "new_regressions": 17,
+    "serial": true
+  },
+  "integration": {
+    "reported_passed": 87,
+    "executed": 86,
+    "optional_fanuc": "absent; early return, not qualified"
+  },
+  "clippy": "PASS -D warnings",
+  "format": "PASS",
+  "diff_check": "PASS",
+  "human_review": "ivac-7y9ft OPEN",
+  "cancellation_latency": "UNQUALIFIED; ivac-42ylx",
+  "hardware_installation_release": "NOT QUALIFIED BY THIS LOT",
+  "source_sha256": {
+    "crates/ivac-core/src/cam/offsets/mod.rs": "73ef3562dce539197a802db0f713e6faeba4f850546932470c1ec1834a445037",
+    "crates/ivac-core/src/cam/offsets/parallel.rs": "8c909d3401a9dda24c91b7b02f0ea3fca6cd610fb9350ca2a1bf2fd8e2b17191",
+    "crates/ivac-core/src/cam/offsets/tabs.rs": "c13e1fab136dce6a462ac0362d17647e44063380707da1cfada9753ef8257a0e",
+    "crates/ivac-core/src/cam/surface_mill.rs": "fa1676745c8f973a68bc5aa41aefc2d2049d63c83f9c7cb3ea0002140d1c2c43",
+    "crates/ivac-core/src/cam/waterline.rs": "3c4fca8c29509372e67a9df1a2ff372e778e0c52beafb871ec67ee590c4c9f21",
+    "crates/ivac-core/src/gcode.rs": "a50372ce5d56c5382f88ffbec4f16c9f40b6d4acec3afb7939a7c291900d9156",
+    "crates/ivac-core/src/gcode/arc_fit.rs": "7fab8035ccee38a34b49f841f2cef75fac70dc1b9545dedac22a170da2db4ceb",
+    "crates/ivac-core/src/gcode/cps_recorder.rs": "8bdfc80297c756b57e45426816710ea3d6c794446a590878c2d2fa93616c8fce",
+    "crates/ivac-core/src/gcode/emit.rs": "6d24321894ef6664a9f24b10297673183761173ee2e1c36c3aea979907e51820",
+    "crates/ivac-core/src/gcode/entry.rs": "cfe8439ff409a677b6286c76026e7d7dcda7844afc0339af152403d33b6bfec7",
+    "crates/ivac-core/src/gcode/leads.rs": "e2819428a1cb915e3be854670799f3e58cb75e8a095e63cd292ee8c9a617e223",
+    "crates/ivac-core/src/gcode/linuxcnc.rs": "1ec0381f394c4dba66e9f25563d575f98404909d2ebb66102d14c83fac4be545",
+    "crates/ivac-core/src/gcode/order.rs": "721d0455687457d1f12f40b5bf215dcdf5ec6622ec68be37513aa196e3989941",
+    "crates/ivac-core/src/gcode/tabs.rs": "87fb7d2419b7eab8bc058ba1c42c9c480cb93b557a51ec23127835fa1407a0c9",
+    "crates/ivac-core/src/pipeline.rs": "57d1fd3122fbc584c501107d5545d553a38778e1dee494e3cd561de78871a4a7",
+    "crates/ivac-core/src/pipeline/cps_ctx.rs": "81af3e6888087deb7bbb5aa41dd43f4a65beab659240fe4ac731eb1ff6df7d1d",
+    "crates/ivac-core/src/pipeline/op_drivers/drill.rs": "cf7fb7382919d3153669f7cbfb8b49af37673ae09702b232630fab6b4c47b556",
+    "crates/ivac-core/src/pipeline/op_drivers/dual_tool.rs": "ce5d2b0cee249a307565b58c1db1d3d0eb92d2889bdd84ceb5742ab24e6209b1",
+    "crates/ivac-core/src/pipeline/op_drivers/surface_mill.rs": "3f06544949ec32625c95ef6afc670834432e8f1c0c26d9d8761acf6f695b957b",
+    "crates/ivac-core/src/pipeline/op_drivers/thread.rs": "1e5b2996aba2dc26051593f88f632cb65a2be4c844c85992623925012e99529c",
+    "crates/ivac-core/src/pipeline/op_drivers/waterline.rs": "94481645a8f2dd0681a91d6dd5087e8015ba29fa904f5a9bf05ef90f8b270217",
+    "crates/ivac-core/src/pipeline/tests.rs": "f2cea799946de5ca895e5f1c75a9a82fabd722445d8a2a5d44de4432ec542a4e",
+    "crates/ivac-core/src/pipeline_cache.rs": "d70c9072993304dce4c0189e7e8869fbcbf9e1fd4f2c1a54f8cbc2bd14668942",
+    "crates/ivac-core/src/version.rs": "aa8a8d29e4c37a5d8ba8a05f3eeeb773a0cf0c00b4bd336ce4edefbc10aa7a8a",
+    "crates/ivac-core/tests/cps_posts.rs": "0e15b2516b89f8d0c48616b526395fbd95419a2ce70ad51bf440371d9f32e31e",
+    "tests/fixtures/shopbot-m2/circle.sbp": "8d50aee971dc17c481ce27a71fd19ea88ba2eb774bb4c8e27724977dd7073a59",
+    "tests/fixtures/shopbot-m2/multiple.sbp": "75afc14c75639e26ec7c0f9458bbc19c1e8fd03a2fa89e1a6d8666a5789ea7da"
+  },
+  "evidence_sha256": {
+    "baseline-counterexamples.log": "d2e4420a18a1348e0acd7b770f054137660d75fe59a12dff4fb450900719373d",
+    "cache-version-review.log": "77b632e902f8de3f5069c79be2cc00c150cbae346bff91782c5df3a02ea203e3",
+    "circle-reference-review.log": "3b309e2bb4d41b451588f6aa1f7e586c00d11e1164466e5e572b2942389a85d6",
+    "clippy.log": "ca2890f93961a95ed139bd472caabdd3254bfe04f17edb80f91df9c8740bd941",
+    "core.log": "10b9fa7dddba2e496c6596b7f763d6597b2b2408e05884318ea052215595a367",
+    "curved-tabs-fixed.log": "4bcc35a035c10f0f69b93d9291534d50f18f06603c2e70b890b7eda5777b52fb",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "golden-review.json": "cf1f3ff93168b37da98c8c4e1591167c7f99c3aaa13519392f523b0c82ddcf82",
+    "integration.log": "940f68d4f775e40d001dd12951ef1a4471da68338ec6e6cf3a9077f945250e1e",
+    "multiple-reference-review.log": "96ca0d0e2e69f2906e43f93987909d81800bd4b47c9b63ff9fb95ad98fafe31c"
+  },
+  "commands": [
+    "RUSTC_WRAPPER= cargo test --offline -p ivac-core --features cps --lib -- --test-threads=1",
+    "RUSTC_WRAPPER= cargo test --offline -p ivac-core --features cps --test geom1_contract --test geometry_source_ux --test vcarve_qualification --test shopbot_m2_post --test cps_posts --test drawing_audit --test v1_stabilization",
+    "RUSTC_WRAPPER= cargo clippy --offline -p ivac-core --features cps --lib -- -D warnings",
+    "cargo fmt -p ivac-core --check",
+    "git diff --check"
+  ]
+}

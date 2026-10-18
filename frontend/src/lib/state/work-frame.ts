@@ -4,7 +4,9 @@ import type { WorkOffset } from './project-types';
 // Programs and core diagnostics use work coordinates. The drawing workspace,
 // stock and fixtures retain authored drawing coordinates. Re-express the same
 // emitted path for rendering/simulation; never change the program text.
-export function inDrawingFrame(r: GenerateResponse, origin: WorkOffset): GenerateResponse {
+export function inDrawingFrame<
+  T extends Pick<GenerateResponse, 'toolpath' | 'regions' | 'remaining_material'>,
+>(r: T, origin: WorkOffset): T {
   const { x_mm: x, y_mm: y } = origin;
   if (!x && !y) return r;
   const point = <T extends { x: number; y: number }>(p: T): T => ({ ...p, x: p.x + x, y: p.y + y });

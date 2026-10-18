@@ -101,3 +101,19 @@ instances and CAM binding explicit. No WJ implementation started by this plan.
 Common-line cutting is separate future work, excluded from initial NEST1/2: shared
 edges need kerf/topology/order/leads/part-separation/hold-down/output qualification.
 Multi-sheet/remnants can be a later NEST2 phase without full inventory management.
+
+## Native OMX release decision — 2026-10-18
+
+The earlier M0 assessment is historical, not an optional-output product policy.
+V1.5 now must replace OMAX LAYOUT for normal preparation: FabCAM native OMX → actual
+installed MAKE → ProtoMAX. [OMX1](../releases/OMX1_PLAN.md) refines existing feasibility;
+actual structure/semantics remain unverified, real files are to be user-provided.
+LAYOUT may generate offline references, but DXF-to-LAYOUT cannot satisfy V1.5.
+If native OMX is infeasible, stop for explicit product decision. No format guessed now.
+
+[WJ1–WJ4](../releases/FABCAM_V1_5_SCOPE.md) qualify explicit waterjet model, responsibility
+for quality/kerf/pierce/leads, XY holding bridges/order and actual MAKE/physical behavior.
+Do not duplicate MAKE calculations or milling Z/RPM/ToolEntry semantics. Generic geometry
+and diagnostics can be reused, with independent neighboring-region/clearance/retention
+and source/output proof. Existing GEOM/NEST/common-line exclusions and ShopBot protection
+remain; no ProtoMAX functionality, sample generation or physical action implemented here.

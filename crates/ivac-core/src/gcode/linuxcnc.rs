@@ -670,9 +670,11 @@ impl PostProcessor for Post {
     fn probe_toward_z(&mut self, distance_mm: f64, feed_mm_min: u32) {
         // Probing-feed move; controller halts at the trigger.
         // Distance is a length (mm) — fmt_len applies the inch
-        // scale. Feed stays integer mm/min, matching the Probe op.
+        // scale; feedrate applies the same unit/profile formatting to F.
         let d = self.fmt_len(distance_mm);
-        self.write(format!("G38.2 Z{d} F{feed_mm_min}"));
+        self.feedrate(feed_mm_min);
+        self.write(format!("G38.2 Z{d}"));
+        self.state.last_rate = None;
         // The head stops at an unknown trigger Z — flush the position
         // cache so the next move re-emits X/Y/Z explicitly.
         self.state.last_x = None;

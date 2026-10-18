@@ -8,7 +8,7 @@
 use crate::cam::setup::Setup;
 use crate::cam::VcObject;
 use crate::gcode::{emit_vcarve_block, PostProcessor};
-use crate::geometry::{Point2, SegmentKind};
+use crate::geometry::Point2;
 use crate::pipeline::warnings::push_tool_fit_kind_warnings;
 use crate::pipeline::{cancelled, op_includes_object, CancelToken, PipelineError, PipelineWarning};
 use crate::project::{Op, OpKind, Project};
@@ -31,31 +31,8 @@ pub(in crate::pipeline) fn thread_would_emit(op: &Op, objects: &[VcObject]) -> b
         if !op_includes_object(op, obj, idx) {
             continue;
         }
-        if !obj.closed {
-            continue;
-        }
-        let Some(first) = obj.segments.first() else {
-            continue;
-        };
-        match first.kind {
-            SegmentKind::Circle => {
-                if first.center.is_some() {
-                    return true;
-                }
-            }
-            SegmentKind::Arc => {
-                let Some(c) = first.center else { continue };
-                let all_same_center = obj.segments.iter().all(|s| {
-                    matches!(s.kind, SegmentKind::Arc | SegmentKind::Circle)
-                        && s.center.is_some_and(|sc| {
-                            (sc.x - c.x).abs() < 1e-4 && (sc.y - c.y).abs() < 1e-4
-                        })
-                });
-                if all_same_center {
-                    return true;
-                }
-            }
-            _ => {}
+        if crate::cam::offsets::analytic_circle_geometry(obj).is_some() {
+            return true;
         }
     }
     false
@@ -165,6 +142,7 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
     let n_passes = radial_passes.max(1);
     let mut polylines: Vec<Vec<(f64, f64, f64)>> = Vec::new();
     let mut emitted = 0usize;
+    let mut tightest: Option<f64> = None;
     for (idx, obj) in objects.iter().enumerate() {
         if cancelled(cancel) {
             return Err(PipelineError::Cancelled);
@@ -175,34 +153,8 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
         if !obj.closed {
             continue;
         }
-        // Accept any closed loop that is geometrically a circle:
-        //   * A single Circle segment (the importer's preferred form).
-        //   * A chain of Arc segments that all share the same center —
-        //     what `chaining::segments_to_objects` produces for a
-        //     DXF/SVG circle split into multiple arcs.
-        let Some(first) = obj.segments.first() else {
+        let Some((center, bore_radius)) = crate::cam::offsets::analytic_circle_geometry(obj) else {
             continue;
-        };
-        let (center, bore_radius) = match first.kind {
-            SegmentKind::Circle => {
-                let Some(c) = first.center else { continue };
-                (c, first.start.distance(c))
-            }
-            SegmentKind::Arc => {
-                let Some(c) = first.center else { continue };
-                let radius = first.start.distance(c);
-                let all_same_center = obj.segments.iter().all(|s| {
-                    matches!(s.kind, SegmentKind::Arc | SegmentKind::Circle)
-                        && s.center.is_some_and(|sc| {
-                            (sc.x - c.x).abs() < 1e-4 && (sc.y - c.y).abs() < 1e-4
-                        })
-                });
-                if !all_same_center {
-                    continue;
-                }
-                (c, radius)
-            }
-            _ => continue,
         };
         // Guard against zero / near-zero bore radius. The
         // previous code only checked `helix_radius <= 0.05` which
@@ -248,7 +200,7 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
         } else {
             bore_radius + tool_radius - thread_depth
         };
-        if helix_radius <= 0.05 {
+        if helix_radius <= 0.05 || (internal && tool_radius >= bore_radius) {
             warnings.push(
                 PipelineWarning::for_op(
                     op.id,
@@ -386,6 +338,7 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
                 );
                 let mut combined = leadin;
                 combined.extend(path);
+                tightest = Some(tightest.map_or(pass_radius, |r| r.min(pass_radius)));
                 polylines.push(combined);
                 emitted += 1;
             }
@@ -413,45 +366,10 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
     // 2× the commanded feed, doubling chipload on the tooth. The fix
     // is to REDUCE the commanded feed by helix_r / (helix_r + tool_r)
     // so the outer edge moves at the user's requested rate. The
-    // compensation factor uses the deepest (= full-engagement) helix
-    // radius across passes since that's the tightest case. For
-    // external threads the convention flips: the cutter is on the
-    // OUTSIDE of the stud, so the outer edge (on the air side) doesn't
-    // engage stock, but the INSIDE edge does — same math, since the
-    // inside edge sits at helix_r - tool_r. We still divide by
-    // (helix_r + tool_r) (outermost cutting radius) for both cases —
-    // the conservative bound.
-    //
-    // Find the smallest helix radius we emitted; that's the tightest
-    // case across passes. Skip compensation when not internal (the
-    // outer-edge speedup on an external thread is the other way
-    // around — see thread.rs module docs — and not a chipload risk).
+    // compensation factor uses the smallest radius actually emitted across
+    // the selected bores and radial passes. External threads do not receive
+    // this internal-bore correction (their engaged edge is on the inside).
     if internal {
-        let mut tightest: Option<f64> = None;
-        // Re-derive tightest helix radius without re-walking objects.
-        // For internal threads, the tightest engagement is at the
-        // FINAL pass (frac = 1.0) → bore_r - tool_r + thread_depth
-        // (includes the radial bite past the bore wall).
-        for obj in objects {
-            if !obj.closed {
-                continue;
-            }
-            let Some(first) = obj.segments.first() else {
-                continue;
-            };
-            let bore_r = match first.kind {
-                crate::geometry::SegmentKind::Circle | crate::geometry::SegmentKind::Arc => {
-                    first.center.map(|c| first.start.distance(c))
-                }
-                _ => None,
-            };
-            if let Some(br) = bore_r {
-                let r = br - tool_radius + thread_depth;
-                if r > 0.05 {
-                    tightest = Some(tightest.map_or(r, |t| t.min(r)));
-                }
-            }
-        }
         if let Some(helix_r) = tightest {
             let outer = helix_r + tool_radius;
             if outer > 1e-9 {
@@ -526,7 +444,10 @@ fn thread_lead_in(
     // helix's first waypoint is at that same angle / `top_z`, so the
     // join is smooth.
     let start_theta = start_angle_rad - dir * LEAD_IN_SWEEP_RAD;
-    let mut out = Vec::with_capacity(LEAD_IN_STEPS + 1);
+    let mut out = Vec::with_capacity(LEAD_IN_STEPS + 2);
+    if internal {
+        out.push((center.x, center.y, top_z));
+    }
     for i in 0..LEAD_IN_STEPS {
         // i ranges 0..LEAD_IN_STEPS; skip the final endpoint so the
         // helix's first waypoint isn't duplicated.
@@ -1306,5 +1227,73 @@ mod tests {
             "lo4j: expected tool_kind_mismatch warning for Thread + Drill tool; got: {:?}",
             resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
         );
+    }
+}
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+
+    #[test]
+    fn internal_thread_enters_on_bore_axis() {
+        let c = Point2::new(20., 30.);
+        let p = thread_lead_in(
+            c,
+            1.1,
+            1.5,
+            -3.,
+            0.,
+            true,
+            true,
+            crate::project::tool::SpindleDirection::Cw,
+        );
+        assert_eq!(p[0], (20., 30., -3.));
+    }
+    #[test]
+    fn unselected_small_bore_does_not_reduce_thread_feed() {
+        use crate::pipeline::test_helpers::{
+            closed_circle, endmill, profile_op, project_with_segments,
+        };
+        use crate::project::{OpSource, ToolOffset};
+        let mut op = profile_op(1, 1, ToolOffset::On);
+        op.kind = OpKind::Thread {
+            pitch_mm: 1.,
+            internal: true,
+            climb: true,
+            radial_passes: 3,
+            start_angle_rad: 0.,
+            thread_depth_mm: Some(0.5),
+        };
+        op.source = OpSource::Layers {
+            layers: vec!["target".into()],
+            combine: Default::default(),
+        };
+        let mut segs = closed_circle(Point2::new(10., 10.), 8.);
+        for s in &mut segs {
+            s.layer = "target".into();
+        }
+        let mut project = project_with_segments(segs, vec![op.clone()], vec![endmill(1, 2.)]);
+        let setup = crate::pipeline::synthesize_op_setup(&op, &project, &mut vec![]).unwrap();
+        let run = |p: &Project| {
+            let objects = crate::cam::chaining::segments_to_objects(&p.segments);
+            let mut post = crate::gcode::linuxcnc::Post::new();
+            run_thread_op(
+                &op,
+                p,
+                &objects,
+                &setup,
+                &mut post,
+                &mut Point2::new(0., 0.),
+                &mut vec![],
+                None,
+            )
+            .unwrap();
+            post.finish()
+        };
+        let before = run(&project);
+        project
+            .segments
+            .extend(closed_circle(Point2::new(40., 40.), 1.2));
+        assert_eq!(before, run(&project));
     }
 }

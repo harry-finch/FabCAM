@@ -1,5 +1,9 @@
 # FabCAM 1.0 — ShopBot Milling scope and acceptance
 
+> 2026-10-18 follow-up: contracts approved; [targeted HATCH/known-stock SAFE-Z fixes](HATCH_SAFE_Z_RESULTS_2026_10_18.md) implemented locally on pipeline59, human gate ivac-th8y2. Full SAFE-Z fixture/transition qualification remains ivac-j09eh; TEST1 not started. Earlier observations below describe pipeline58.
+
+> 2026-10-18 consolidation: current [results and contracts](POST_AUDIT_CHECKPOINT_2026_10_18.md) supersede stale risk rows. HATCH BLOCK/INSERT (ivac-aoany) and stock/rapid SAFE-Z (ivac-jnom4) are reproduced blockers; corrections not yet implemented.
+
 > Current macOS policy: [REL1-B1 community distribution](v1-stabilization-campaign/REL1_B_PLAN.md) is V1 REQUIRED; valid ad-hoc DMG, checksums and clean-host install/runtime are blocking gates. Developer ID/notarization/stapling are optional REL1-B2 POST-V1. Planning only; no publication authorization.
 
 > Current 2026-10-15 checkpoint: [scope freeze and triage](V1_SCOPE_FREEZE_TRIAGE.md).
@@ -33,9 +37,9 @@ visible and fail before export. No blanket Engrave/V-bit post authorization.
 | Operation | V1 disposition and bounded software scope | Qualification / remaining boundary |
 | --- | --- | --- |
 | Profile | Required: inside/outside/on-line compensation, passes, ordinary closed contours; supported climb/conventional direction | [M1](../shopbot-modernization/M1_QUALIFICATION.md), [UX1](../shopbot-modernization/ux/UX1_QUALIFICATION.md), [CAM3](../shopbot-modernization/CAM3_QUALIFICATION.md). Open contours only in qualified on-line cases; no arbitrary tab/lead topology claim. |
-| Pocket | Required: ordinary bounded regions, qualified concavity/island/stepover/allowance cases | M1/UX1. Deep nested Auto and XOR remain suspect; triage before declaring these combinations supported. No all-algorithm/all-topology blanket claim. |
+| Pocket | Required: ordinary bounded regions, qualified concavity/island/stepover/allowance cases | M1/UX1. Bounded nested Auto/XOR corrections qualified in V1 stabilization and rechecked on pipeline58; arbitrary topology remains outside that evidence. No all-algorithm/all-topology blanket claim. |
 | Drill / peck | Required: positioning, depth schedule, peck/retract semantics of existing qualified cycle expansion | M1 and [M2](../shopbot-modernization/M2_QUALIFICATION.md); physical positioning/depth trial required. No unqualified advanced controller cycles. |
-| Tabs / leads | Required limited ordinary Profile use: Direct entry, square/circle matrix, Rectangle/Ramp tabs, Off/Straight/Arc leads, both directions | CAM3 48-combination software matrix; curved rectangular tabs PARTIAL (excess arc stock), no universal holding-strength claim. Ordinary straight-span tab workflow prioritized physically. |
+| Tabs / leads | Required limited ordinary Profile use: Direct entry, square/circle matrix, Rectangle/Ramp tabs, Off/Straight/Arc leads, both directions | CAM3 48-combination software matrix; local curved tab splitting and versioned physical widths qualified by audits09–12, no universal holding-strength claim. Ordinary straight-span tab workflow prioritized physically. |
 | Entries | Required existing Direct and explicitly supported Ramp cases | UX1/CAM3; Ramp with tabs/leads, Helix and short-entry fallback remain refused where unsupported. Never silently substitute strategy. |
 | Spoilboard surfacing (UX3) | Conditional included/limited: explicit rectangular X/Y raster, flat cutter, declared margins/overtravel, safe retract between rows | [UX3](../shopbot-modernization/UX3_QUALIFICATION.md): coverage/software parity; no physical flatness/clearance qualification. Not general surface machining. |
 | Dogbones / T-bones (CAD1) | Conditional included/limited: explicit compatible corners, cutter-sized geometric edit, preview/history | [CAD1](../shopbot-modernization/CAD1_QUALIFICATION.md); tool/side/source guards retained. GEOM1+relief and authored-marker conflicts remain refused. No post-specific geometric patches. |
@@ -58,6 +62,10 @@ Blocker “Yes” means release evidence missing or unresolved in a required wor
 
 | Workflow/capability | Current status | V1 requirement | Evidence | Missing work | Release blocker |
 | --- | --- | --- | --- | --- | --- |
+| TEST1 bounded property suite | PLANNED — not implemented | Required bounded A/B/C/D subset | [Property contracts/acceptance](TEST1_PLAN.md) | Approve/implement deterministic CI properties, minimized regressions and combined final-tree evidence | Yes for bounded subset; expanded fuzzing not V1 |
+| SAFE-Z clearance/Z-reference | PLANNED targeted assessment | Required safety assessment | [ShopBot additions](SHOPBOT_WORKSHOP_ADDITIONS.md) | Common-frame coordinate/decoded-output/guard cases; preserve unsupported Z refusal | Yes for supported-scope safety evidence |
+| UX8 setup sheet | PLANNED | High value / strongly recommended, bounded | [Intent-view acceptance](SHOPBOT_WORKSHOP_ADDITIONS.md) | Current program identity/data/envelope, unknowns, print/display review | Conditional inclusion; no disproportionate delay |
+| TAB-SAFE / OP-ORDER | PLANNED comparative assessment | Conditional for V1 | [Holding/order scope](SHOPBOT_WORKSHOP_ADDITIONS.md) | Reproduce entry/detachment risk under actual supported contract | Confirmed unsafe supported case blocks; preferences alone do not |
 | Import SVG/DXF | Bounded software tests | Required | [M1](../shopbot-modernization/M1_QUALIFICATION.md), [GEOM1 audit](../shopbot-modernization/GEOM1_AUDIT.md) | RC real-file units, layer/curve/point cases, invalid input messaging | Yes: integrated acceptance |
 | Geometry preparation | GEOM1 implemented/software-qualified; human gate open | Required bounded subset | [GEOM1 results](../shopbot-modernization/GEOM1_RESULTS.md) | Human UX, integrated edited-project workflow; no broad healing expansion | Yes: ivac-e2jnb |
 | Stock / work origin / fixtures | Single-sided XY software-qualified | Required | [UX2](../shopbot-modernization/ux/UX2_QUALIFICATION.md), [ADR-0008](../shopbot-modernization/adr/ADR-0008-work-origin-frames.md) | Actual setup correspondence, RC stale/critical checks | Yes |
@@ -65,12 +73,12 @@ Blocker “Yes” means release evidence missing or unresolved in a required wor
 | Physical tools / assignment | UX6-B accepted; identity defect ticket still open | Required | [UX6-B](../shopbot-modernization/ux/UX6_B_RESULTS.md) | Reproduce same-ID shortcut, verify saved copies and changes | Yes until identity disposition |
 | Operation creation / templates | UX4/4.1/UX5 accepted | Required creation; templates retained optional | [UX4.1](../shopbot-modernization/UX4_1_QUALIFICATION.md), [UX5](../shopbot-modernization/UX5_QUALIFICATION.md) | Native keyboard/labels/focus, correct source/tool rebinding | Yes if essential flow fails |
 | Profile | Bounded software + historical M4 physical square | Required limited matrix | M1/UX1/CAM3/M4 | Current candidate physical dimensions/depth and direction | Yes |
-| Pocket | Software bounded; nested-region risk open; no current physical trial | Required limited matrix | M1/UX1; ivac-dli7, ivac-j2po | Resolve/exclude affected combinations; island/depth trial | Yes |
+| Pocket | Software bounded; nested-region corrections rechecked; no current physical trial | Required limited matrix | M1/UX1; ivac-dli7, ivac-j2po | Retain bounded corrected combinations; island/depth physical trial | Yes |
 | Drill / peck | Software-qualified; current physical trial absent | Required | M1/M2 | Position/depth/retract trial | Yes |
 | Surfacing | Software-qualified, continuation accepted | Conditional included/limited | [UX3](../shopbot-modernization/UX3_QUALIFICATION.md) | Flat cutter/overtravel/coverage physical case if workshop claim | Conditional |
 | Tabs / leads / entries | Bounded software matrix, curved tab limits | Required ordinary Profile subset | CAM3/UX1 | Holding material, lead clearance, supported entry trials | Yes for subset; not all combinations |
 | Dogbones | Software-qualified, continuation accepted | Conditional included/limited | CAD1 | Fit/geometry physical sample if workshop claim | Conditional |
-| V-Carve | Bounded software/UX accepted, full-area coverage partial, physical absent | Conditional included/limited | [V-Carve](../shopbot-modernization/VCARVE_QUALIFICATION.md), [final UX](../shopbot-modernization/VCARVE_FINAL_UX.md) | Text-only reopen; selected groove/spine trial if workshop claim | Conditional; broad V-carving not a blocker |
+| V-Carve | Bounded software/UX accepted, full-area coverage partial, physical absent | Conditional included/limited | [V-Carve](../shopbot-modernization/VCARVE_QUALIFICATION.md), [final UX](../shopbot-modernization/VCARVE_FINAL_UX.md) | Text reopen fixed; selected groove/spine physical trial if workshop claim | Conditional; broad V-carving not a blocker |
 | Feeds & Speeds | Implemented through FS3.9.1; independent reviews open; FS4 deferred | Required bounded provenance/manual workflow | [FS3.9](../shopbot-modernization/feeds-speeds/FS3_9_QUALIFICATION.md), [FS3.8](../shopbot-modernization/feeds-speeds/FS3_8_QUALIFICATION.md) | Policy/UX/licensing approval and selected physical settings | Yes for claims used in release |
 | Preview | Final ShopBot execution path authoritative; material view approximate | Required | [ADR-0007](../shopbot-modernization/adr/ADR-0007-shopbot-resolved-preview.md), V-Carve A4 | RC independent decoded parity incl edited geometry and origins | Yes |
 | Warnings / readiness | Critical/stale guards implemented | Required | UX1/UX2/GEOM1 | Invalid configuration, collision, source/tool edit, canceled generation export tests | Yes |
@@ -82,6 +90,16 @@ Blocker “Yes” means release evidence missing or unresolved in a required wor
 | Physical validation | Only bounded M4 r2 historical operator evidence | Required current campaign | [M4](../shopbot-modernization/M4_VALIDATION.md) | V1 Workshop Validation below; actual measurements | Yes |
 | Human acceptance | Several independent gates open; release scope new | Required | [gate register](RELEASE_ROADMAP.md#existing-human-gates) | Relevant reviews, RC go/no-go | Yes |
 
+## ShopBot workshop-readiness additions — planned 2026-10-18
+
+[Scope, audit requirements and acceptance](SHOPBOT_WORKSHOP_ADDITIONS.md): SAFE-Z
+is a V1 REQUIRED assessment of supported Z/rapid/output frames and guards; do not
+assume spoilboard zero is supported or compare unmatched coordinate values. Confirmed
+unsafe supported behavior must be corrected/requalified or fail closed, not merely relabeled.
+UX8 printable setup intent is HIGH VALUE/strongly recommended with bounded delivery;
+TAB-SAFE and OP-ORDER remain conditional evidence-driven V1 work. Neither tab style
+nor authored operation order changes automatically. Existing TEST1/critical path stays.
+
 ## Required-work triage
 
 Tracker priority is not final release severity. These are audit findings, not fixes
@@ -89,21 +107,37 @@ or proof that old tickets still reproduce after intervening work.
 
 | Issue | Release impact / required disposition |
 | --- | --- |
-| ivac-hs9i same-ID tool shortcut | Potential wrong physical tool editing/identity. Reproduce first; supported assignment cannot silently target another copy. Block until disproved/fixed. |
-| ivac-dli7 deep nested Pocket Auto | Potential preview/emitted-region mismatch. Block this scope until independent geometric oracle confirms it or an explicit effective refusal excludes it. Documentation alone cannot cure silently wrong output. |
-| ivac-j2po XOR early empty result | Known three-contour parity limitation. Same rule; simpler combinations do not qualify arbitrary XOR. |
+| ivac-hs9i same-ID tool shortcut | CLOSED: project-backed draft correction and human workflow evidence recorded; frontend regression rechecked. |
+| ivac-dli7 deep nested Pocket Auto | CLOSED: bounded selected-ancestor parity correction; current integration re-passes. No arbitrary-topology claim. |
+| ivac-j2po XOR early empty result | CLOSED: fold continues after empty intermediate; 2/3/4 operand regression passes. |
 | ivac-2zll rough/finish RPM change | Existing fail-closed spindleSpeed rejection; workflow defect, not proven unsafe output. Preserve separate saved values; qualify support or clearly refuse/exclude mixed RPM. Do not overwrite values to pass. |
-| ivac-vt6e text-only reopen | Reported empty 2D/misleading warning despite generated output. Reproduce on current desktop; blocks advertised text engraving if user cannot inspect sources. |
-| ivac-5g51 partial WASM freshness | Candidate package must prove complete matching WASM assets; repair guard if it can ship mismatched artifacts. Packaging integrity gate. |
+| ivac-vt6e text-only reopen | CLOSED: content fit/text diagnostics corrected and save/reopen reviewed previously; new-candidate runtime still required. |
+| ivac-5g51 partial WASM freshness | CLOSED guard correction; 10 Node package-state tests re-pass. Fresh candidate still must prove matching assets. |
 | ivac-57kp curved tab spans, ivac-vcp7 residual extensions | Explicit bounded limits; deferrable unless needed by chosen matrix. |
-| ivac-u1ko Z origin, ivac-jtkj two-sided, ivac-13go old test expectation | Nonzero numeric Z/two-sided remain unsupported. Preserve refusal; reconcile stale test ticket against cancellation report before changing anything. |
+| ivac-u1ko Z origin, ivac-jtkj two-sided, ivac-13go old test expectation | Numeric Z/two-sided remain refused; stale test ticket ivac-13go CLOSED, refusal regression passes. |
 | ivac-nh6q / ivac-q1nz1 cancellation | Review measured latency; no successful/partial output on cancel mandatory. Faster cancellation conditional. GEOM1 buffered route separately unqualified for latency. |
-| ivac-htc8 cache test race | Serial historical regression policy known; establish repeatable release evidence, not a machining defect by itself. |
-| ivac-snqn productName migration | Preserve stable identity unless separately qualified migration necessary. Branding rename not required to make release useful. |
+| ivac-htc8 cache test race | Duplicate CLOSED into ivac-rt80e; serial baseline passes, cache-test isolation unresolved. |
+| ivac-snqn productName migration | REL1-A FabCAM public rename accepted; simple beta transition documented, preserved bundle/data identity. Cross-platform data-preservation test remains. |
 
 Other low-priority LOD/cache auditing/source isolation/UI refinements are TECHNICAL
 DEBT / DEFECT, assessed if reproduced on the release matrix. Android, tracing,
 generators and extra tool families are post-V1.5 enhancements, not V1 blockers.
+
+## TEST1 bounded V1 requirement and conditional consolidation
+
+[TEST1](TEST1_PLAN.md) is a new **V1 REQUIRED, PLANNED** engineering qualification
+subset: geometry/source identity, operation-specific protected regions, cache equivalence
+and decoded OpenSBP/constraint/export consistency. Written domains/oracles/seeds/
+comparison policies and CI time/case budgets require human approval before coding.
+Retain minimal failures as permanent regressions and integrated final-tree evidence.
+Expanded fuzzing is POST-V1; no exact DexelField associativity assumption.
+
+[GEOM-CORE](POST_AUDIT_CONSOLIDATION.md) is conditional before V1 only for duplicated
+primitives already causing confirmed defects or demonstrable remaining supported-workflow
+risk. Preserve distinct closure/proximity/connectivity/containment semantics and numerical/
+source/output/serialization contracts. No broad unification or new manufacturing scope
+required for release. Current packages must be rebuilt/requalified after relevant source
+changes; property tests do not replace platform installs or physical ShopBot validation.
 
 ## Coordinates, output and persistence gates
 
@@ -253,6 +287,8 @@ inputs, keyboard focus and explicit warning versus blocking state.
 
 | Gate | Evidence required to accept | Current release state |
 | --- | --- | --- |
+| SAFE-Z supported-frame safety | Independent coordinate/decoded OpenSBP clearance and unsupported-Z/fixture/export checks | PLANNED — required assessment; existing refusal retained |
+| TEST1 bounded property qualification | Approved A/B/C/D contracts, seeded bounded CI, minimized regressions and local replay; integrated evidence on final source; no unsupported universal invariants | PLANNED — required before V1 acceptance |
 | Operation matrix and end-to-end workflow | Qualified scoped imports, geometry, operations, decoded output/preview and refusals | Pending integrated candidate |
 | Coordinates and safeguards | Correct origins/depths, no unsafe supported output, critical/stale export blocked | Pending integrated candidate |
 | Persistence | Project/tool/profile/FS manual values and v1–v7 compatibility | Pending native candidate |

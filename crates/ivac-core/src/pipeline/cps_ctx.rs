@@ -66,6 +66,8 @@ pub struct SectionCtx {
 #[derive(Debug, Clone)]
 pub struct SectionToolCtx {
     pub tool: CpsToolInfo,
+    pub rate_h: u32,
+    pub rate_v: u32,
 }
 
 /// Tool description in post-facing terms (mm / radians / rpm).
@@ -238,6 +240,7 @@ pub(crate) fn build_section_tool_ctx(
     new_tool: Option<&ToolEntry>,
     new_tool_id: u32,
     target_speed: Option<u32>,
+    rates: Option<(u32, u32)>,
 ) -> SectionToolCtx {
     let rpm = super::setup_resolver::clamp_rpm_silent(
         target_speed
@@ -245,7 +248,11 @@ pub(crate) fn build_section_tool_ctx(
             .unwrap_or(0),
         machine,
     );
+    let (rate_h, rate_v) =
+        rates.unwrap_or_else(|| new_tool.map_or((0, 0), |t| (t.feed_rate, t.plunge_rate)));
     SectionToolCtx {
+        rate_h,
+        rate_v,
         tool: cps_tool_info(new_tool, new_tool_id, rpm),
     }
 }

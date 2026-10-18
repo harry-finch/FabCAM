@@ -978,7 +978,7 @@
   "ops.tabs.ramp_angle.label": "Ramp angle",
   "ops.tabs.type.label": "Type",
   "ops.tabs.type.ramp": "ramp",
-  "ops.tabs.type.ramp.help": "Triangular ramp tab: cutter ramps up to tab Z, then back down — no constant-Z section. Easier to clean off than rectangles.",
+  "ops.tabs.type.ramp.help": "Ramped tab: gradual approach and departure. Material-width mode keeps a flat bridge at tab height; legacy mode keeps its original triangular shape.",
   "ops.tabs.type.rectangle": "rectangle",
   "ops.tabs.type.rectangle.help": "Rectangular tab: cutter steps up to tab Z, walks the tab span at constant height, steps back down. Standard hold-down.",
   "ops.tabs.width.help": "Width of each bridge along the cut path. Default 10 mm.",
@@ -1790,7 +1790,7 @@
   "ux2.fixture.vertices": "Local vertices · x, y mm per line",
   "ux2.fixture.remove": "Remove fixture",
   "ux2.fixture.invalid": "Use finite coordinates, positive dimensions, top above bottom, and a simple polygon with at least three vertices.",
-  "warn.fixture_path_collision": "Operation {op_id}: cutter/tool path may intersect fixture “{fixture_name}”. No automatic avoidance. Without body geometry, height coverage is conservative; wider shank/holder clearance remains unknown.",
+  "warn.fixture_path_collision": "Operation {op_id}: the declared cutter/body envelope intersects fixture “{fixture_name}”. Program blocked; inspect the preview, move the fixture or change the path, then regenerate.",
   "ux2.zero_marker": "Work zero",
   "ux2.two_sided": "Two-sided CPS output and translated XY registration are not qualified. The requested setup is kept; generation blocks if a back operation is present.",
   "ux2.zero_z": "Reset unsupported work-origin Z to zero",
@@ -1798,7 +1798,6 @@
   "ux21.collision": "Collision detected",
   "ux21.reason": "{name} intersects the resolved toolpath.",
   "ux21.blocked": "Export is blocked.",
-  "ux21.override": "Export blocking is disabled in Settings.",
   "ux21.show": "Show collision",
   "cam4.title": "Remaining material",
   "cam4.operation": "Analysis operation",
@@ -2272,5 +2271,8 @@
   "ux6c.arc_settings": "Arc fitting",
   "ux6c.fit_before_post": "Fit arcs before postprocessing",
   "fs391.low_effective_chipload": "RPM or feed limits reduce chipload below the selected target. Review cutting conditions; this is not a material-specific rubbing threshold.",
-  "fs391.generic_profile_direct_entry": "This generic profile does not specify direct plunge suitability. Confirm the cutter supports axial entry."
+  "fs391.generic_profile_direct_entry": "This generic profile does not specify direct plunge suitability. Confirm the cutter supports axial entry.",
+  "ops.tabs.legacy_width": "Legacy tabs: width describes the tool-centre zone, not the remaining material.",
+  "ops.tabs.convert_width": "Convert to material width (changes toolpath)",
+  "ops.tabs.material_width": "Material width: cutter radius is included. Verify the regenerated preview."
 }

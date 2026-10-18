@@ -64,7 +64,7 @@ pub struct ArcXY {
     pub ccw: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema, PartialEq)]
 pub struct ToolpathSegment {
     pub from: Pose3,
     pub to: Pose3,
@@ -184,6 +184,8 @@ pub fn interpret_with_index(gcode: &str) -> (Vec<ToolpathSegment>, GcodeIndex) {
 /// that state in one struct lets both the batch [`interpret_with_index`] and
 /// the streaming tee drive it without duplicating the machine.
 struct Interpreter {
+    cycle_depth: Option<f64>,
+    cycle_retract: Option<f64>,
     state: Pose3,
     active_code: u8,
     active_op: u32,
@@ -196,6 +198,8 @@ struct Interpreter {
 impl Default for Interpreter {
     fn default() -> Self {
         Self {
+            cycle_depth: None,
+            cycle_retract: None,
             state: Pose3 {
                 x: 0.0,
                 y: 0.0,
@@ -247,6 +251,8 @@ impl Interpreter {
             let mut y = state.y;
             let mut z = state.z;
             let mut had_z = false;
+            let mut had_xy = false;
+            let mut cycle_word = false;
             // I / J / R for G2 / G3. I/J = center offset from arc start in
             // X/Y; R = radius (alternative form). Without these the arc is
             // implicitly treated as a chord — which the wireframe + sim
@@ -271,16 +277,28 @@ impl Interpreter {
             // and DON'T advance `state`. The next absolute move re-establishes
             // the WCS position (the post re-emits X/Y/Z after a G53 / G38).
             let mut non_cutting_ctrl_move = false;
-            for tok in line.split_whitespace() {
-                let (head, val_str) = tok.split_at(1);
-                let val: f64 = val_str.parse().unwrap_or(0.0);
+            for (head, val_str) in ascii_words(&line) {
+                let Ok(val) = val_str.replace(',', ".").parse::<f64>() else {
+                    continue;
+                };
+                if !val.is_finite() {
+                    continue;
+                }
                 match head {
                     "G" | "g" => {
-                        if val_str == "53" || val_str.starts_with("38") {
+                        if val == 53.0
+                            || (38.0..39.0).contains(&val)
+                            || (43.0..44.0).contains(&val)
+                            || (92.0..93.0).contains(&val)
+                        {
                             non_cutting_ctrl_move = true;
                         } else if let Ok(n) = val_str.parse::<u8>() {
                             if (0..=3).contains(&n) {
                                 active_code = n;
+                            } else if n == 80 {
+                                active_code = 80;
+                                self.cycle_depth = None;
+                                self.cycle_retract = None;
                             } else if n == 20 {
                                 unit_scale = 25.4;
                             } else if n == 21 {
@@ -295,11 +313,18 @@ impl Interpreter {
                                 // (10, 10, -3), drawing a diagonal
                                 // segment THROUGH the workpiece).
                                 active_code = n;
+                                cycle_word = true;
                             }
                         }
                     }
-                    "X" | "x" => x = val * unit_scale,
-                    "Y" | "y" => y = val * unit_scale,
+                    "X" | "x" => {
+                        x = val * unit_scale;
+                        had_xy = true;
+                    }
+                    "Y" | "y" => {
+                        y = val * unit_scale;
+                        had_xy = true;
+                    }
                     "Z" | "z" => {
                         z = val * unit_scale;
                         had_z = true;
@@ -329,9 +354,21 @@ impl Interpreter {
             // can rapid back up to fast_z via the post's emitted `G0 Z<fast_z>`
             // before the following G81.
             if matches!(active_code, 73 | 81 | 82 | 83) {
-                let r_z = r_val.unwrap_or(state.z);
+                if had_z {
+                    self.cycle_depth = Some(z);
+                }
+                if let Some(r) = r_val {
+                    self.cycle_retract = Some(r);
+                }
+                if !cycle_word && !had_xy && !had_z {
+                    break 'line;
+                }
+                let Some(depth) = self.cycle_depth else {
+                    break 'line;
+                };
+                let r_z = self.cycle_retract.unwrap_or(state.z);
                 let mid_xy = Pose3 { x, y, z: state.z };
-                let bottom = Pose3 { x, y, z };
+                let bottom = Pose3 { x, y, z: depth };
                 let retracted = Pose3 { x, y, z: r_z };
                 let from = state;
                 let mut push = |from: Pose3, to: Pose3, kind: MoveKind| {
@@ -357,11 +394,9 @@ impl Interpreter {
                 push(mid_xy, bottom, MoveKind::Plunge);
                 push(bottom, retracted, MoveKind::Retract);
                 state = retracted;
-                // Reset active_code so a subsequent non-canned-cycle line
-                // (e.g. a plain `G0 Z10` between holes) isn't misclassified.
-                // The post explicitly re-emits the G code on every line, so
-                // we don't need to keep G81 modal in the interpreter.
-                active_code = 0;
+                break 'line;
+            }
+            if active_code == 80 {
                 break 'line;
             }
             let from = state;
@@ -713,6 +748,34 @@ fn parse_op_marker(raw: &str) -> Option<u32> {
         .trim();
     let first_token = rest.split_whitespace().next()?;
     first_token.parse::<u32>().ok()
+}
+
+// Read standard single-letter words without relying on whitespace or UTF-8
+// byte slicing. Multi-letter custom axes are unsupported, never coerced to zero.
+pub(crate) fn ascii_words(line: &str) -> Vec<(&str, &str)> {
+    let bytes = line.as_bytes();
+    let mut words = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        if !bytes[i].is_ascii_alphabetic() {
+            i += 1;
+            continue;
+        }
+        let start = i;
+        while i < bytes.len() && bytes[i].is_ascii_alphabetic() {
+            i += 1;
+        }
+        let end = i;
+        while i < bytes.len()
+            && (bytes[i].is_ascii_digit() || matches!(bytes[i], b'.' | b',' | b'+' | b'-'))
+        {
+            i += 1;
+        }
+        if end == start + 1 && i > end {
+            words.push((&line[start..end], &line[end..i]));
+        }
+    }
+    words
 }
 
 fn strip_comment(line: &str) -> String {
@@ -1180,5 +1243,30 @@ mod tests {
         assert_eq!(tp.len(), batch_tp.len());
         assert_eq!(idx.lines_to_segment, batch_idx.lines_to_segment);
         assert_eq!(idx.segments_to_line, batch_idx.segments_to_line);
+    }
+}
+
+#[cfg(test)]
+mod audit_11_12 {
+    use super::*;
+    #[test]
+    fn modal_drill_reuses_depth_and_retract_until_g80() {
+        let moves = interpret("G0Z5\nG81X10Y10Z-3R2\nX20\nF100\nG80\nX30\nG0Z5\n");
+        let bottoms: Vec<_> = moves.iter().filter(|m| m.to.z == -3.).collect();
+        assert_eq!(bottoms.len(), 2);
+        assert_eq!(bottoms[1].to.x, 20.);
+        assert!(!moves.iter().any(|m| m.to.x == 30.));
+    }
+    #[test]
+    fn compact_words_inline_comments_and_unicode() {
+        let moves = interpret("G0X10Y20\nG1X12(note)Y22\n°5\n");
+        assert_eq!(moves.last().unwrap().to.x, 12.);
+        assert_eq!(moves.last().unwrap().to.y, 22.);
+    }
+    #[test]
+    fn malformed_axis_does_not_become_zero() {
+        let moves = interpret("G0 X10 Y20\nG1 Xbad Y25\n");
+        assert_eq!(moves.last().unwrap().to.x, 10.);
+        assert_eq!(moves.last().unwrap().to.y, 25.);
     }
 }

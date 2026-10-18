@@ -1,3 +1,4 @@
+import { generationExportIsCurrent } from '../state/generation-run';
 import { cornerReliefGenerationError } from '../state/generation-context';
 import { commitDocumentLoad } from '../state/document-load';
 import { notificationError, notificationText } from '../api/error-notification';
@@ -728,17 +729,21 @@ export async function exportGeneratedGcode(
   const gen = side === 'back' ? project.gen.generatedBack : project.gen.generated;
   if (!gen) return;
   const isCurrent = () =>
-    !cornerReliefGenerationError(project) &&
-    project.gen.inputContextKey === generationContextKey(project, postProcessor) &&
-    project.gen.pipelineState === 'idle' &&
-    (side === 'back' ? project.gen.generatedBack : project.gen.generated) === gen;
+    generationExportIsCurrent(
+      !!cornerReliefGenerationError(project),
+      project.gen.inputContextKey,
+      generationContextKey(project, postProcessor),
+      project.gen.pipelineState === 'idle',
+      side === 'back' ? project.gen.generatedBack : project.gen.generated,
+      gen,
+    );
   if (!isCurrent()) {
     project.setError(t('ux1.export.stale'));
     return;
   }
   const fixtureCollisions =
     gen.warnings?.filter((w) => w.kind === 'fixture_path_collision').length ?? 0;
-  if (project.data.settings.blockOnCriticalSimWarnings && fixtureCollisions > 0) {
+  if (!gen.gcode.trim() || fixtureCollisions > 0) {
     project.setError(t('genbar.error.block_critical', { count: fixtureCollisions }));
     return;
   }

@@ -1,5 +1,7 @@
 export interface ExportStatus {
   stale: boolean;
+  fixture?: number;
+  backFixture?: number;
   critical: number;
   backCritical: number;
   workArea: number;
@@ -10,6 +12,8 @@ export function exportSafetyProblem(
   side: 'front' | 'back',
   settings: { blockOnCriticalSimWarnings: boolean; blockOnWorkAreaViolation: boolean },
 ) {
+  const fixture = (side === 'back' ? status.backFixture : status.fixture) ?? 0;
+  if (fixture > 0) return { key: 'genbar.error.block_critical' as const, count: fixture };
   const critical = side === 'back' ? status.backCritical : status.critical;
   const area = side === 'back' ? status.backWorkArea : status.workArea;
   if (settings.blockOnCriticalSimWarnings && critical > 0)

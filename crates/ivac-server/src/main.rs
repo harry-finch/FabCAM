@@ -4,7 +4,6 @@
 use std::collections::HashMap;
 use std::convert::Infallible;
 use std::net::SocketAddr;
-use std::path::PathBuf;
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
@@ -253,13 +252,23 @@ async fn import(
         })
         .unwrap_or_else(|| "dxf".into());
 
-    // Persist to tempfile to use the path-based importer.
-    let tmp = tempfile_path(&suffix);
-    tokio::fs::write(&tmp, &bytes).await?;
-    let opts = ivac_core::ImportOptions::default();
-    let result = tokio::task::spawn_blocking(move || ivac_core::input::import_path(&tmp, &opts))
-        .await
-        .map_err(|e| AppError::internal(e.to_string()))??;
+    let suffix = suffix.trim().to_ascii_lowercase();
+    if !matches!(suffix.as_str(), "dxf" | "svg") {
+        return Err(AppError::bad_request("Supported import formats: DXF, SVG."));
+    }
+    // The format is a validated hint, never part of a filesystem path.
+    let import_name = format!("upload.{suffix}");
+    let result = tokio::task::spawn_blocking(move || {
+        let mut result = ivac_core::input::import_bytes(
+            &import_name,
+            &bytes,
+            &ivac_core::ImportOptions::default(),
+        )?;
+        result.filename = filename;
+        Ok::<_, ivac_core::Error>(result)
+    })
+    .await
+    .map_err(|e| AppError::internal(e.to_string()))??;
 
     let resp = ImportResponse {
         filename: &result.filename,
@@ -296,7 +305,9 @@ async fn generate(
     Json(req): Json<GenerateRequest>,
 ) -> Result<Json<GenerateResponse>, AppError> {
     reject_cps_path(&req)?;
-    run_pipeline(req, |_phase, _fraction, _msg| {})
+    tokio::task::spawn_blocking(move || run_pipeline(req, |_phase, _fraction, _msg| {}))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
         .map_err(AppError::from)
 }
@@ -383,7 +394,9 @@ async fn generate_two_sided(
     Json(req): Json<GenerateRequest>,
 ) -> Result<Json<TwoSidedResponse>, AppError> {
     reject_cps_path(&req)?;
-    run_pipeline_two_sided(req, |_phase, _fraction, _msg| {})
+    tokio::task::spawn_blocking(move || run_pipeline_two_sided(req, |_phase, _fraction, _msg| {}))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
         .map_err(AppError::from)
 }
@@ -432,6 +445,10 @@ async fn generate_gcode_stream(
     State(_state): State<Arc<AppState>>,
     Json(req): Json<GenerateRequest>,
 ) -> Result<Response, AppError> {
+    reject_cps_path(&req)?;
+    ivac_core::pipeline::validate_direct_output(&req.project).map_err(AppError::from)?;
+    // Do not commit a successful HTTP status for a known-invalid clearance.
+    ivac_core::pipeline::validate_clearance(&req.project).map_err(AppError::from)?;
     // Reject the one deterministic, cheap-to-detect failure up front so the
     // caller gets a real 4xx instead of an aborted stream.
     if req.post_processor.unwrap_or_default() == PostProcessorKind::Hpgl {
@@ -556,7 +573,8 @@ async fn relief_stl_handler(mut multipart: Multipart) -> Result<Response, AppErr
 async fn generate_stream(
     State(state): State<Arc<AppState>>,
     Json(req): Json<GenerateRequest>,
-) -> Sse<impl Stream<Item = Result<SseEvent, Infallible>>> {
+) -> Result<Sse<impl Stream<Item = Result<SseEvent, Infallible>>>, AppError> {
+    reject_cps_path(&req)?;
     let (tx, rx) = tokio::sync::mpsc::channel::<SseEvent>(64);
     let token_id = next_token_id();
     let cancel = CancelToken::new();
@@ -622,7 +640,7 @@ async fn generate_stream(
     });
 
     let stream = ReceiverStream::new(rx).map(Ok);
-    Sse::new(stream).keep_alive(KeepAlive::new().interval(Duration::from_secs(15)))
+    Ok(Sse::new(stream).keep_alive(KeepAlive::new().interval(Duration::from_secs(15))))
 }
 
 async fn generate_cancel(
@@ -748,23 +766,6 @@ impl From<axum::extract::multipart::MultipartError> for AppError {
     }
 }
 
-fn tempfile_path(suffix: &str) -> PathBuf {
-    let mut name = format!("ivac-{}.{}", uuid_like(), suffix);
-    name.retain(|c| !c.is_whitespace());
-    std::env::temp_dir().join(name)
-}
-
-fn uuid_like() -> String {
-    // No external uuid dep; this is good enough for unique tempfiles.
-    use std::time::{SystemTime, UNIX_EPOCH};
-    let nanos = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map(|d| d.as_nanos())
-        .unwrap_or(0);
-    let pid = std::process::id();
-    format!("{nanos:x}-{pid:x}")
-}
-
 async fn feeds_speeds_handler(
     Json(req): Json<ivac_core::feeds_speeds::FsCamRequest>,
 ) -> Result<Json<ivac_core::feeds_speeds::FsCamResponse>, AppError> {
@@ -782,6 +783,26 @@ async fn corner_relief_handler(
         .await
         .map_err(|e| AppError::internal(e.to_string()))?;
     Ok(Json(resp))
+}
+
+async fn drawing_handler(
+    Json(req): Json<ivac_core::drawing::api::DrawingRequest>,
+) -> Result<Json<ivac_core::drawing::api::DrawingResponse>, AppError> {
+    tokio::task::spawn_blocking(move || ivac_core::drawing::api::evaluate(req))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
+        .map(Json)
+        .map_err(AppError::bad_request)
+}
+async fn generate_drawing_handler(
+    Json(req): Json<ivac_core::drawing::api::DrawingGenerationRequest>,
+) -> Result<Json<PipelineResponse>, AppError> {
+    reject_cps_path(&req.machining)?;
+    tokio::task::spawn_blocking(move || ivac_core::pipeline::generate_drawing(req))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
+        .map(Json)
+        .map_err(AppError::from)
 }
 
 #[cfg(test)]
@@ -895,6 +916,10 @@ mod tests {
         use tower::ServiceExt;
         let app = Router::new()
             .route("/generate", post(generate))
+            .route("/generate/two-sided", post(generate_two_sided))
+            .route("/drawing/generate", post(generate_drawing_handler))
+            .route("/generate/stream", post(generate_stream))
+            .route("/generate/gcode", post(generate_gcode_stream))
             .with_state(Arc::new(AppState::default()));
         let mut req = a_request(PostProcessorKind::Cps);
         req.cps_post = Some(ivac_core::pipeline::CpsPostSelection {
@@ -903,11 +928,62 @@ mod tests {
             },
             properties: std::collections::BTreeMap::default(),
         });
-        let resp = app
-            .oneshot(post_json("/generate", &serde_json::to_value(&req).unwrap()))
-            .await
-            .unwrap();
-        assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
+        for route in [
+            "/generate",
+            "/generate/stream",
+            "/generate/gcode",
+            "/generate/two-sided",
+            "/drawing/generate",
+        ] {
+            let payload = if route == "/drawing/generate" {
+                serde_json::json!({"version": 1, "drawing": ivac_core::drawing::Drawing::from_sources(vec![]).unwrap(), "bindings": [], "machining": &req})
+            } else {
+                serde_json::to_value(&req).unwrap()
+            };
+            let resp = app
+                .clone()
+                .oneshot(post_json(route, &payload))
+                .await
+                .unwrap();
+            assert_eq!(resp.status(), StatusCode::BAD_REQUEST, "{route}");
+            assert!(body_json(resp).await["message"]
+                .as_str()
+                .unwrap()
+                .contains("CLI-only"));
+        }
+    }
+
+    #[tokio::test]
+    async fn audit_15_16_import_memory_and_format_validation() {
+        use tower::ServiceExt;
+        let app = Router::new()
+            .route("/import", post(import))
+            .with_state(Arc::new(AppState::default()));
+        for (format, expected) in [
+            ("svg", StatusCode::OK),
+            ("../svg", StatusCode::BAD_REQUEST),
+            ("foo/bar", StatusCode::BAD_REQUEST),
+        ] {
+            let payload = format!("--audit\r\nContent-Disposition: form-data; name=\"format\"\r\n\r\n{format}\r\n--audit\r\nContent-Disposition: form-data; name=\"file\"; filename=\"source.dxf\"\r\nContent-Type: image/svg+xml\r\n\r\n<svg xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0 0 L10 10\"/></svg>\r\n--audit--\r\n");
+            let response = app
+                .clone()
+                .oneshot(
+                    Request::builder()
+                        .method("POST")
+                        .uri("/import")
+                        .header("content-type", "multipart/form-data; boundary=audit")
+                        .body(Body::from(payload))
+                        .unwrap(),
+                )
+                .await
+                .unwrap();
+            assert_eq!(response.status(), expected, "{format}");
+            if expected == StatusCode::OK {
+                let body = body_json(response).await;
+                assert_eq!(body["filename"], "source.dxf");
+                assert!(!body["segments"].as_array().unwrap().is_empty());
+            }
+        }
     }
 
     fn post_json(uri: &str, body: &serde_json::Value) -> Request<Body> {
@@ -917,6 +993,34 @@ mod tests {
             .header("content-type", "application/json")
             .body(Body::from(serde_json::to_vec(body).unwrap()))
             .unwrap()
+    }
+
+    #[tokio::test]
+    async fn safe_z_refusal_is_structured_and_stream_has_no_program() {
+        use tower::ServiceExt;
+        let app = Router::new()
+            .route("/generate", post(generate))
+            .route("/generate/gcode", post(generate_gcode_stream))
+            .with_state(Arc::new(AppState::default()));
+        let mut req = a_request(PostProcessorKind::Linuxcnc);
+        req.project.stock = Some(ivac_core::project::StockConfig {
+            top_z_mm: 18.,
+            width_mm: 100.,
+            height_mm: 100.,
+            thickness_mm: 18.,
+            ..Default::default()
+        });
+        for route in ["/generate", "/generate/gcode"] {
+            let response = app
+                .clone()
+                .oneshot(post_json(route, &serde_json::to_value(&req).unwrap()))
+                .await
+                .unwrap();
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
+            let body = body_json(response).await;
+            assert!(body.to_string().contains("clearance"), "{body}");
+            assert!(body.get("gcode").is_none());
+        }
     }
 
     #[test]
@@ -1097,6 +1201,73 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn buffered_collision_returns_error_with_preview_without_program() {
+        let mut req: PipelineRequest = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/test1/profile.request.json"
+        ))
+        .unwrap();
+        req.post_processor = Some(PostProcessorKind::Linuxcnc);
+        req.cps_post = None;
+        req.project.fixtures.push(ivac_core::project::Fixture {
+            id: 1,
+            name: "clamp".into(),
+            origin: (0., 0.),
+            z_bottom: -100.,
+            z_top: 100.,
+            color: 0,
+            kind: ivac_core::project::FixtureKind::Box {
+                width: 1000.,
+                depth: 1000.,
+            },
+        });
+        let app = Router::new()
+            .route("/generate", post(generate))
+            .with_state(Arc::new(AppState::default()));
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .method("POST")
+                    .uri("/generate")
+                    .header("content-type", "application/json")
+                    .body(Body::from(serde_json::to_vec(&req).unwrap()))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert!(response.status().is_client_error());
+        let bytes = to_bytes(response.into_body(), usize::MAX).await.unwrap();
+        let error: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+        assert!(!error["diagnostic_preview"]["toolpath"]
+            .as_array()
+            .unwrap()
+            .is_empty());
+        assert!(error.get("gcode").is_none());
+        assert!(error["diagnostic_preview"].get("gcode").is_none());
+    }
+
+    #[tokio::test]
+    async fn fixtures_refuse_direct_stream_before_success_status() {
+        let mut req = a_request(PostProcessorKind::Linuxcnc);
+        req.project.fixtures.push(ivac_core::project::Fixture {
+            id: 1,
+            name: "clamp".into(),
+            origin: (0., 0.),
+            z_bottom: 0.,
+            z_top: 10.,
+            color: 0,
+            kind: ivac_core::project::FixtureKind::Cylinder { radius: 2. },
+        });
+        let response = post_generate_gcode(&req).await;
+        assert!(response.status().is_client_error());
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+        let error: serde_json::Value = serde_json::from_slice(&body).unwrap();
+        assert!(error["message"].as_str().unwrap().contains("buffered"));
+        assert!(error.get("gcode").is_none());
+    }
+
+    #[tokio::test]
     async fn generate_gcode_stream_matches_the_buffered_program() {
         let req = a_request(PostProcessorKind::Linuxcnc);
         // Oracle: the buffered route's `finish()` and the streaming sink's
@@ -1141,24 +1312,4 @@ mod tests {
         assert_eq!(parsed.kind, ErrorKind::Unsupported);
         assert!(parsed.recovery_hint.is_some());
     }
-}
-
-async fn drawing_handler(
-    Json(req): Json<ivac_core::drawing::api::DrawingRequest>,
-) -> Result<Json<ivac_core::drawing::api::DrawingResponse>, AppError> {
-    tokio::task::spawn_blocking(move || ivac_core::drawing::api::evaluate(req))
-        .await
-        .map_err(|e| AppError::internal(e.to_string()))?
-        .map(Json)
-        .map_err(AppError::bad_request)
-}
-async fn generate_drawing_handler(
-    Json(req): Json<ivac_core::drawing::api::DrawingGenerationRequest>,
-) -> Result<Json<PipelineResponse>, AppError> {
-    reject_cps_path(&req.machining)?;
-    tokio::task::spawn_blocking(move || ivac_core::pipeline::generate_drawing(req))
-        .await
-        .map_err(|e| AppError::internal(e.to_string()))?
-        .map(Json)
-        .map_err(AppError::from)
 }

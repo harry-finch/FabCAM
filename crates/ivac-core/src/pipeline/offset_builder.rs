@@ -1557,6 +1557,7 @@ mod tests {
         };
         let contour = crate::project::ContourParams {
             tabs: TabsConfig {
+                width_mode: crate::project::TabWidthMode::LegacyCenter,
                 active: true,
                 width: 10.0,
                 height: 1.0,

@@ -245,6 +245,7 @@ fn snapshot_profile_rectangle_tabs_and_helix_entry() {
     };
     let mut contour = ContourParams::default();
     contour.tabs = TabsConfig {
+        width_mode: ivac_core::project::TabWidthMode::LegacyCenter,
         active: true,
         width: 4.0,
         height: 1.0,
@@ -318,6 +319,7 @@ fn snapshot_profile_ramp_tabs() {
     params.fast_move_z = 5.0;
     let mut contour = ContourParams::default();
     contour.tabs = TabsConfig {
+        width_mode: ivac_core::project::TabWidthMode::LegacyCenter,
         active: true,
         width: 4.0,
         height: 1.0,

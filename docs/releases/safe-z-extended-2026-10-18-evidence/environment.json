@@ -1,0 +1,8 @@
+{
+  "head": "2a3fe5632b4d77ab03d899bcb0a07db54a8b9f7b",
+  "dirty": true,
+  "pipeline": 60,
+  "version": "0.9.0-beta.2",
+  "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+  "scope": "software only; global SAFE-Z and publication policy remain unqualified"
+}

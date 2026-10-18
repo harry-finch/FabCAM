@@ -1,8 +1,36 @@
-# Status — 2026-10-17
+# Status — 2026-10-18
+
+> User approval and candidate campaign — 2026-10-18: all delivered pending milestones accepted explicitly; [decision and delivery record](../releases/ACCEPTANCE_CANDIDATES_2026_10_18.md). Source advances to **0.9.0-beta.3**, pipeline61, with commit/push and fresh macOS/Windows/Ubuntu builds authorized. Refreshed root validation kit and native app screen captures requested. Prior review OPEN headers are historical; unperformed platform/physical measurements are not fabricated. No tag/Release. Delivery in progress.
+
+> Current checkpoint — 2026-10-18: [Final SAFE-Z / TEST1 consolidation](../releases/FINAL_CONSOLIDATION_2026_10_18.md), pipeline61. Fresh29 focused checks PASS; preserved20,167-move budget failure reproduced. Source/evidence integrity checked; no production change. Human review **ivac-l6ouh OPEN**; ADR UX review ivac-8371y separate. Resource/cancellation reserves conditional; platform/physical gates unchanged. Next after approval: matching candidates with separate commit/push/workflow authorization. No commit/push/build/publication. **HARD STOP**.
+
+Earlier checkpoint notices below are historical snapshots; their OPEN/not-started wording is superseded by the current report and tracker.
+
+> Current checkpoint — 2026-10-18: [ADR-0023 publication guard](../releases/ADR0023_PUBLICATION_GUARD_RESULTS_2026_10_18.md), pipeline61. Mandatory collision refusal with inspection-only preview, pre-byte fixture-stream refusal and explicit incomplete-body diagnostics implemented. Human review **ivac-8371y OPEN**. Previous ivac-6cske accepted. Full SAFE-Z/TEST1 and platform/physical gates remain open. No commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [SAFE-Z extended findings and targeted fixes](../releases/SAFE_Z_EXTENDED_RESULTS_2026_10_18.md), pipeline60. Sloped holder collision detection and unsupported ShopBot home parking corrected. TEST1 bounded256/256 and regressions PASS. Full SAFE-Z/TEST1 remains OPEN: collision publication parity and incomplete-body status require [ADR-0023 approval](adr/ADR-0023-milling-program-publication-guard.md). Human review **ivac-6cske OPEN**; TEST1 bounded review ivac-930yx accepted. No commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [TEST1 bounded harness](../releases/TEST1_RESULTS_2026_10_18.md) implemented; **256/256 bounded cases PASS in26.38s**, human review **ivac-930yx OPEN**. Larger-domain move-budget failures preserved (ivac-53ky9); no threshold relaxation. Core1204, frontend1360+10, HATCH/SAFE-Z14, V-Carve10, Halfpipe16, native WASM23 PASS. TEST1 overall remains OPEN for full D2/SAFE-Z (ivac-j09eh); remote CI/browser/platform/physical gates unchanged. Previous HATCH/SAFE-Z review ivac-th8y2 accepted. No commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [Targeted HATCH + known-stock SAFE-Z corrections](../releases/HATCH_SAFE_Z_RESULTS_2026_10_18.md), pipeline59, local software review **ivac-th8y2 OPEN**. Block HATCH imports now refuse explicitly; invalid stock clearance refuses before cached/streamed output, with structured HTTP error. Source/save compatibility and existing post guards retained. Full fixture/transition SAFE-Z qualification remains ivac-j09eh. TEST1 not started. Existing installers pipeline54; no commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [Post-audit consolidation and TEST1/SAFE-Z contracts](../releases/POST_AUDIT_CHECKPOINT_2026_10_18.md) complete, human review **ivac-af5v1 OPEN**. Pipeline58 combined tests PASS with documented optional FANUC skips. Two reproduced blockers: HATCH BLOCK/INSERT placement (ivac-aoany) and stock-top/rapid clearance (ivac-jnom4). Diagnostic example only; no production algorithm changes. Approve bounded corrections and contracts before implementation. Existing packages pipeline54; platform/physical and separate UX gates unchanged. No commit/push/publication. **HARD STOP**.
+
+> Audit acceptance — 2026-10-18: user explicitly accepted audit lots 15–16 and preceding lots. Audit human-review gates ivac-2aow8, ivac-97zve, ivac-80ewz, ivac-7y9ft, ivac-rnf0l and ivac-v103z are CLOSED. Historical checkpoint notes below retain their original status. This accepts bounded software corrections, not platform/runtime, physical, separate GEOM1/FS UX or V1 release qualification. Source pipeline58; existing installers pipeline54. Next: reconcile remaining correctness risks and establish the combined baseline, then approve bounded TEST1 contracts and SAFE-Z assessment. No new implementation, commit, push or publication authorized by this acceptance. [Remaining V1 gates](../releases/V1_REMAINING_2026_10_18.md).
+
+> Previous checkpoint — 2026-10-18: [Transport, CPS and desktop audits 15–16](TRANSPORT_DESKTOP_AUDIT_2026_10_18.md) implemented locally. HTTP path guards, disk-free imports, blocking-worker dispatch, CPS EOF/source mapping/output buffer, structured drawing errors and resilient source watching corrected. Sorbonne revision allegation not reproduced (16-digit validation already enforced); WASM cache covered by lot13–14. Pipeline58; 1,202 core, 15 HTTP, 12 native Tauri, 22 WASM tests PASS; CPS 40 executed + 6 optional FANUC absent, Node/V8 39 PASS; integration 40 executed + 1 optional FANUC absent; Clippy/fmt PASS. Human review **ivac-2aow8 OPEN**. Existing installers pipeline54; physical/platform gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-18: [Simulation and pipeline cache audits 13–14](SIMULATION_CACHE_AUDIT_2026_10_18.md) implemented locally. Finite form-tool arc removal, arc-aware collision checks, STL sample registration, effective cutter radius, diagnostic/operation cache context, streaming guards and timing corrected. Pipeline57; **1,202 serial core tests PASS**, 15 focused profiling tests PASS; **101 integration cases reported PASS (100 executed; optional FANUC absent)**; Clippy/fmt/WASM compilation PASS. Human review **ivac-97zve OPEN**. Existing installers remain pipeline54; physical/platform gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-18: [Holding, preview and contract audits 11–12](HOLDING_PREVIEW_CONTRACT_AUDIT_2026_10_18.md) implemented locally. Versioned material-width tabs with explicit undoable conversion; legacy projects preserved. Arc splitting, preview/token parsing, drill-angle fallback, strict strategies and schema conflicts corrected. Pipeline56; 1,188 serial core tests PASS; 92 integration cases reported PASS (91 executed; optional FANUC absent); 1,328 frontend tests PASS, 1 skipped; typecheck/lint/Clippy/fmt PASS. Browser conversion/Undo reviewed. Human review **ivac-80ewz OPEN**; drag knife explicitly deferred to VINYL **ivac-wgovg OPEN**. Existing installers remain pipeline54; physical/platform gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-18: [Motion and driver audits 09–10](MOTION_DRIVERS_AUDIT_2026_10_18.md) implemented locally: entry/plunge feeds, cell-centred waterline skin, selected-bore thread entries/feeds, analytic chamfers, directed open passes/tabs/exits, arc-aware entry geometry, CPS tool feeds, continuous chord fit error, distant-start ordering and inch probing. Integration also exposed and fixed rectangular-tab punctures at arc seams. Pipeline55; 1,174 serial core tests PASS; 87 integration cases reported PASS (86 executed; optional FANUC absent); Clippy/fmt PASS. Cancellation propagation added, ≤200 ms p95 qualification OPEN (`ivac-42ylx`). Human review **ivac-7y9ft OPEN**. Existing desktop candidates remain pipeline54. Software only; no commit/push/package/publication. HARD STOP.
+
+> Candidate validation campaign — 2026-10-17: user requested three builds and a root test kit. [Run39053047404](https://github.com/harry-finch/FabCAM/actions/runs/39053047404) launched at source `2a3fe56` (beta.2, pipeline54), macOS arm64 / Windows x64 / Ubuntu amd64. [Exact protocol and kit](../releases/v1-validation-2026-10-17/README.md): 35 SVG/DXF imports verified, 25 software checks per platform, 4 human reviews and 7 physical-campaign records. All three builds PASS; DMG/NSIS/DEB collected with matching clean source SHA and verified checksums, plus verified FabCAM.app at kit root. Manual result records remain NOT TESTED; no runtime or physical acceptance claimed. No tag/Release.
 
 > Source publication authorization — 2026-10-17: user explicitly authorized committing and pushing all pending work, including audit lots 4–8, their evidence, the AUDIT3 roadmap plan and cleanup references. This supersedes publication holds for this source checkpoint only. Public version remains **0.9.0-beta.2**, pipeline 54. Human/physical/platform gates remain open; no tag, Release or workflow dispatch.
 
-> Current checkpoint — 2026-10-17: [Pocket/CPS audit, lot 8](POCKET_CPS_AUDIT_2026_10_17.md) implemented locally: qualified Boolean holding tabs with explicit refusal for changed contours, effective CPS tool geometry/frame preview, analytic Arc-chain drills and corner-aware uniform auto-tab phase. Open-stroke island loss not reproduced; finish RPM already reaches an explicit unsupported-record refusal. Pipeline 54. 1,157 serial core tests PASS; 87 integration cases reported PASS (86 executed; optional FANUC absent); frontend 1,324 PASS/1 skip plus 10 guard tests, check/lint/Clippy PASS. Software only; human review **ivac-v103z OPEN**. No package, commit/push/publication. HARD STOP.
+> Previous checkpoint — 2026-10-17: [Pocket/CPS audit, lot 8](POCKET_CPS_AUDIT_2026_10_17.md) implemented locally: qualified Boolean holding tabs with explicit refusal for changed contours, effective CPS tool geometry/frame preview, analytic Arc-chain drills and corner-aware uniform auto-tab phase. Open-stroke island loss not reproduced; finish RPM already reaches an explicit unsupported-record refusal. Pipeline 54. 1,157 serial core tests PASS; 87 integration cases reported PASS (86 executed; optional FANUC absent); frontend 1,324 PASS/1 skip plus 10 guard tests, check/lint/Clippy PASS. Software only; human review **ivac-v103z OPEN**. No package, commit/push/publication. HARD STOP.
 
 > Previous checkpoint — 2026-10-17: [Pipeline guards audit, lot 7](PIPELINE_GUARDS_AUDIT_2026_10_17.md) implemented locally: conservative fixture travel including ID-zero ambiguity, explicit unchanged-feed RPM diagnostics, arc/surface two-sided bounds and restricted native dowels/heightfields, exact compact remaining-material keys. Bundled ShopBot MS subset confirmed rather than widened. Pipeline 53. 1,145 serial core tests PASS; 87 integration cases reported PASS (86 executed; optional FANUC absent); frontend 1,324 PASS/1 skip, check/lint/Clippy PASS. Software only; human review **ivac-rnf0l OPEN**. No package, commit/push/publication. HARD STOP.
 
@@ -35,6 +63,26 @@ AUDIT3 Git history/defect-provenance retrospective is **PLANNED — NOT STARTED*
 V1, before main V1.5 ProtoMAX implementation. Not a V1 blocker; current audit,
 installer and human/physical gates remain unchanged. No archaeology or issue/tag/
 release/publication action authorized by this documentation-only request.
+
+Post-audit consolidation is **IMPLEMENTED, awaiting bounded human acceptance** (ivac-l6ouh): [TEST1 bounded V1 requirement](../releases/TEST1_PLAN.md)
+and [release-bounded backlog](../releases/POST_AUDIT_CONSOLIDATION.md). TEST1 bounded evidence and final Z01–Z08 matrix are available; pre-V1 GEOM-CORE only for
+confirmed defects/demonstrated risks. Broader diagnostics/types/parallelism/calibration
+remain later. Existing platform/physical gates and AUDIT3→ProtoMAX sequence retained;
+no review closed or implementation launched by this roadmap update.
+
+Release refinement is **PLANNED**, no implementation: [ShopBot SAFE-Z/UX8/TAB-SAFE/OP-ORDER](../releases/SHOPBOT_WORKSHOP_ADDITIONS.md),
+[OMX1](../releases/OMX1_PLAN.md), [WJ1–WJ4](../releases/FABCAM_V1_5_SCOPE.md),
+[REST1/HELIX1/VCARVE2](../releases/ADVANCED_CAM_PLAN.md). V1.5 now requires native
+OMX to MAKE without LAYOUT preparation; format/compatibility remain unverified.
+Current audit reviews/TEST1 and platform/physical gates, package identities and
+AUDIT3 placement unchanged. No writer/research, machine test or next work starts now.
+
+ARCH-MACH is **PLANNED**, V1.5 architectural preparation before production native
+OMX writer design: [contract/initial inventory](../releases/ARCH_MACH_PLAN.md),
+[developer workflow](../development/ADDING_A_MACHINE.md). No V1 gate added absent
+real supported-ShopBot risk; current audit reviews and TEST1/release priorities stay.
+Initial docs do not validate machine support; ProtoMAX practical qualification remains
+future. No new adapter, skill installation or machine investigation started here.
 
 ## Historical Phase 0 audit — identity decision subsequently approved
 

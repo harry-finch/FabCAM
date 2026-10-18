@@ -1,12 +1,36 @@
 # FabCAM release roadmap
 
+> Current checkpoint — 2026-10-18: [Final SAFE-Z / TEST1 consolidation](../releases/FINAL_CONSOLIDATION_2026_10_18.md), pipeline61. Fresh29 focused checks PASS; preserved20,167-move budget failure reproduced. Source/evidence integrity checked; no production change. Human review **ivac-l6ouh OPEN**; ADR UX review ivac-8371y separate. Resource/cancellation reserves conditional; platform/physical gates unchanged. Next after approval: matching candidates with separate commit/push/workflow authorization. No commit/push/build/publication. **HARD STOP**.
+
+Earlier checkpoint notices below are historical snapshots; their OPEN/not-started wording is superseded by the current report and tracker.
+
+> Current checkpoint — 2026-10-18: [ADR-0023 publication guard](../releases/ADR0023_PUBLICATION_GUARD_RESULTS_2026_10_18.md), pipeline61. Mandatory collision refusal with inspection-only preview, pre-byte fixture-stream refusal and explicit incomplete-body diagnostics implemented. Human review **ivac-8371y OPEN**. Previous ivac-6cske accepted. Full SAFE-Z/TEST1 and platform/physical gates remain open. No commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [SAFE-Z extended findings and targeted fixes](../releases/SAFE_Z_EXTENDED_RESULTS_2026_10_18.md), pipeline60. Sloped holder collision detection and unsupported ShopBot home parking corrected. TEST1 bounded256/256 and regressions PASS. Full SAFE-Z/TEST1 remains OPEN: collision publication parity and incomplete-body status require [ADR-0023 approval](adr/ADR-0023-milling-program-publication-guard.md). Human review **ivac-6cske OPEN**; TEST1 bounded review ivac-930yx accepted. No commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [TEST1 bounded harness](../releases/TEST1_RESULTS_2026_10_18.md) implemented; **256/256 bounded cases PASS in26.38s**, human review **ivac-930yx OPEN**. Larger-domain move-budget failures preserved (ivac-53ky9); no threshold relaxation. Core1204, frontend1360+10, HATCH/SAFE-Z14, V-Carve10, Halfpipe16, native WASM23 PASS. TEST1 overall remains OPEN for full D2/SAFE-Z (ivac-j09eh); remote CI/browser/platform/physical gates unchanged. Previous HATCH/SAFE-Z review ivac-th8y2 accepted. No commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [Targeted HATCH + known-stock SAFE-Z corrections](../releases/HATCH_SAFE_Z_RESULTS_2026_10_18.md), pipeline59, local software review **ivac-th8y2 OPEN**. Block HATCH imports now refuse explicitly; invalid stock clearance refuses before cached/streamed output, with structured HTTP error. Source/save compatibility and existing post guards retained. Full fixture/transition SAFE-Z qualification remains ivac-j09eh. TEST1 not started. Existing installers pipeline54; no commit/push/publication. **HARD STOP**.
+
+> Previous checkpoint — 2026-10-18: [Post-audit consolidation and TEST1/SAFE-Z contracts](../releases/POST_AUDIT_CHECKPOINT_2026_10_18.md) complete, human review **ivac-af5v1 OPEN**. Pipeline58 combined tests PASS with documented optional FANUC skips. Two reproduced blockers: HATCH BLOCK/INSERT placement (ivac-aoany) and stock-top/rapid clearance (ivac-jnom4). Diagnostic example only; no production algorithm changes. Approve bounded corrections and contracts before implementation. Existing packages pipeline54; platform/physical and separate UX gates unchanged. No commit/push/publication. **HARD STOP**.
+
+> Audit acceptance — 2026-10-18: user explicitly accepted audit lots 15–16 and preceding lots. Audit human-review gates ivac-2aow8, ivac-97zve, ivac-80ewz, ivac-7y9ft, ivac-rnf0l and ivac-v103z are CLOSED. Historical checkpoint notes below retain their original status. This accepts bounded software corrections, not platform/runtime, physical, separate GEOM1/FS UX or V1 release qualification. Source pipeline58; existing installers pipeline54. Next: reconcile remaining correctness risks and establish the combined baseline, then approve bounded TEST1 contracts and SAFE-Z assessment. No new implementation, commit, push or publication authorized by this acceptance. [Remaining V1 gates](../releases/V1_REMAINING_2026_10_18.md).
+
+> Previous checkpoint — 2026-10-18: [Transport, CPS and desktop audits 15–16](TRANSPORT_DESKTOP_AUDIT_2026_10_18.md) implemented locally. HTTP path guards, disk-free imports, blocking-worker dispatch, CPS EOF/source mapping/output buffer, structured drawing errors and resilient source watching corrected. Sorbonne revision allegation not reproduced (16-digit validation already enforced); WASM cache covered by lot13–14. Pipeline58; 1,202 core, 15 HTTP, 12 native Tauri, 22 WASM tests PASS; CPS 40 executed + 6 optional FANUC absent, Node/V8 39 PASS; integration 40 executed + 1 optional FANUC absent; Clippy/fmt PASS. Human review **ivac-2aow8 OPEN**. Existing installers pipeline54; physical/platform gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-18: [Simulation and pipeline cache audits 13–14](SIMULATION_CACHE_AUDIT_2026_10_18.md) implemented locally. Finite form-tool arc removal, arc-aware collision checks, STL sample registration, effective cutter radius, diagnostic/operation cache context, streaming guards and timing corrected. Pipeline57; **1,202 serial core tests PASS**, 15 focused profiling tests PASS; **101 integration cases reported PASS (100 executed; optional FANUC absent)**; Clippy/fmt/WASM compilation PASS. Human review **ivac-97zve OPEN**. Existing installers remain pipeline54; physical/platform gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-18: [Holding, preview and contract audits 11–12](HOLDING_PREVIEW_CONTRACT_AUDIT_2026_10_18.md) implemented locally. Versioned material-width tabs with explicit undoable conversion; legacy projects preserved. Arc splitting, preview/token parsing, drill-angle fallback, strict strategies and schema conflicts corrected. Pipeline56; 1,188 serial core tests PASS; 92 integration cases reported PASS (91 executed; optional FANUC absent); 1,328 frontend tests PASS, 1 skipped; typecheck/lint/Clippy/fmt PASS. Browser conversion/Undo reviewed. Human review **ivac-80ewz OPEN**; drag knife explicitly deferred to VINYL **ivac-wgovg OPEN**. Existing installers remain pipeline54; physical/platform gates unchanged. No commit/push/publication. HARD STOP.
+
+> Previous checkpoint — 2026-10-18: [Motion and driver audits 09–10](MOTION_DRIVERS_AUDIT_2026_10_18.md) implemented locally: entry/plunge feeds, cell-centred waterline skin, selected-bore thread entries/feeds, analytic chamfers, directed open passes/tabs/exits, arc-aware entry geometry, CPS tool feeds, continuous chord fit error, distant-start ordering and inch probing. Integration also exposed and fixed rectangular-tab punctures at arc seams. Pipeline55; 1,174 serial core tests PASS; 87 integration cases reported PASS (86 executed; optional FANUC absent); Clippy/fmt PASS. Cancellation propagation added, ≤200 ms p95 qualification OPEN (`ivac-42ylx`). Human review **ivac-7y9ft OPEN**. Existing desktop candidates remain pipeline54. Software only; no commit/push/package/publication. HARD STOP.
+
 > Source publication — 2026-10-17: user authorized commit/push of all pending
 > changes. Current source version is **0.9.0-beta.2**; existing beta.1 installers
 > and validation records retain their original versions. Earlier publication
 > restrictions are superseded for this source checkpoint only; human/physical
 > review gates remain open. No workflow dispatch, tag or Release.
 
-> Current checkpoint — 2026-10-17: [Input audit, sixth lot](INPUT_AUDIT_2026_10_17.md) implemented locally: HATCH metadata/layers, bounded invalid NURBS degree handling, affine DXF curves, 0.01 mm SVG flattening, implicit/relative/closed SVG font paths and bounded HATCH parsing. Pipeline 52. 1,138 core tests PASS serial; 84 integration tests reported PASS (optional FANUC absent). Separate block-HATCH follow-up `ivac-aoany` remains open. Software only; human review pending. No commit/push/package/publication. HARD STOP.
+> Previous checkpoint — 2026-10-17: [Input audit, sixth lot](INPUT_AUDIT_2026_10_17.md) implemented locally: HATCH metadata/layers, bounded invalid NURBS degree handling, affine DXF curves, 0.01 mm SVG flattening, implicit/relative/closed SVG font paths and bounded HATCH parsing. Pipeline 52. 1,138 core tests PASS serial; 84 integration tests reported PASS (optional FANUC absent). Separate block-HATCH follow-up `ivac-aoany` remains open. Software only; human review pending. No commit/push/package/publication. HARD STOP.
 
 > Previous checkpoint — 2026-10-17: [Drawing audit, fifth lot](DRAWING_AUDIT_2026_10_17.md) implemented locally: line/arc topology, per-step simplification containment including drill points, exact closure diagnostics, snap-collapse refusal and indexed layer selection. Transform order confirmed unchanged. Pipeline 51. 1,123 core tests PASS serial; 84 integration tests reported PASS (optional FANUC absent); 11 frontend transform tests PASS. Software only; human review pending. No commit/push/package/publication. HARD STOP.
 
@@ -43,7 +67,7 @@ No functionality, CAM/post behavior, serialization, hardware tests or release ch
 | Horizon | Objective / required path | Current blockers and exclusions |
 | --- | --- | --- |
 | **FabCAM 1.0 — ShopBot Milling** | Reliable single-sided import → geometry preparation → machine/tools → supported operations → preview/warnings → OpenSBP. Retain bounded qualified capabilities; stabilize, install, workshop-validate, then human RC approval. | GEOM1 human gate, correctness triage, current macOS/Windows/Linux installation qualification, release-level physical evidence and user docs. No full CAD, nesting, two-sided, arbitrary-region V-carving or FabSBP dependency. |
-| **FabCAM 1.5 — ProtoMAX Waterjet** | Confirm actual output/target-software contract, then explicit bounded waterjet process, shared geometry, output/preview qualification and separate workshop trials. | Output contract unverified; process/export/physical qualification absent. Early feasibility research may run in parallel after authorization. No automatic nesting or direct machine control. |
+| **FabCAM 1.5 — Native ProtoMAX OMX** | SVG/DXF → FabCAM waterjet preparation → native OMX → MAKE → ProtoMAX; replace LAYOUT in normal preparation, then qualify software/output and physical behavior. | OMX contract/compatibility unverified; OMX1 early lawful-reference research may overlap V1 after authorization. No DXF-for-LAYOUT fallback, nesting or direct control. |
 | **FabCAM 2.0+ — Advanced Manufacturing** | Preserve GEOM2/3, NEST1/2, two-sided registration, advanced V-Carve/inlays/rest machining and other processes as scoped future work. | Separate architecture/software/physical gates; no near-term commitment to all features. Existing useful functions remain. |
 
 **Progress:** accepted bounded milling/UX6/PERF1 foundations; GEOM1 implemented in
@@ -186,7 +210,7 @@ priorities, dependencies and verified evidence limits. WJ and VINYL remain defer
 | Later milling — V-carve qualification | Dedicated V-carve geometric/output/preview qualification, beyond existing partial evidence | Active Phase A audit; [findings and architecture decision](VCARVE_AUDIT.md), ivac-2eh7; production implementation pending bounded pass/entry planning approval |
 | Future CAM — Two-Sided Machining & Registration | Explicit drawing/stock/A/B/registration frames, physical X/Y flip, alignment-pin preparation, shared side operations, independent programs/setup instructions; independent geometry, lifecycle, final-output and physical registration qualification | **PLANNED — NOT IMPLEMENTED / NOT QUALIFIED** as a new qualified capability; after active V-Carve and preserved work; [plan](TWO_SIDED_PLAN.md); reuse open ivac-jtkj; inherited/native code is not ShopBot readiness |
 | Later advanced V-carving — V-Carve Inlays | Shared-design female/male pair, depth-dependent V-bit/flat-tip geometry, explicit engagement/fit/glue parameters, pair/section preview and separate output; prerequisite V-Carve scope and independent software/physical fit validation | **PLANNED — NOT IMPLEMENTED / NOT QUALIFIED** as a complete paired capability; after qualified V-Carve foundation and earlier scheduled work; [plan](VCARVE_INLAYS_PLAN.md); historical ivac-rt1.7/inset shortcut is not fit qualification |
-| Rest Machining | Smaller-cutter cleanup operation built on reliable remaining-material analysis | Later advanced capability; excluded from CAM4 V1; not designed/implemented |
+| REST1 — True 2D Rest Machining | Refines existing smaller-cutter cleanup plan; actual residual/depth/engagement/accessibility and safe entry/order proof | **PLANNED V2+ HIGH PRIORITY**; [advanced CAM scope](../releases/ADVANCED_CAM_PLAN.md); CAM4 diagnostics are not machining qualification |
 
 UX1 is software-qualified and its human gate was approved by the user's instruction
 to continue. CAM2/UX2 engineering ivac-69ak is complete and accepted for the requested UX2.1
@@ -580,3 +604,65 @@ with behavioral evidence/confidence and upstream/GPL attribution. No Git archaeo
 production edits, commits/tags/issues/releases, push or publication now.
 
 **HARD STOP — awaiting human approval of the updated roadmap.**
+
+## Post-audit engineering consolidation — release-bounded plan
+
+**All additions PLANNED, no implementation authorized.** [Detailed backlog and gates](../releases/POST_AUDIT_CONSOLIDATION.md).
+
+| Milestone | Release priority / boundary |
+| --- | --- |
+| TEST1 — Property-Based Geometry & CAM Qualification | **V1 REQUIRED**, strictly bounded A geometry/identity, B operation-specific clearance/intent, C cache equivalence, D machine-output consistency. [Contracts, CI/local policy and acceptance](../releases/TEST1_PLAN.md). Expanded fuzzing POST-V1 |
+| GEOM-CORE — Canonical Geometry Primitives | **V1 CONDITIONAL / POST-V1 CONSOLIDATION**; pre-V1 only confirmed-defect/demonstrated-risk primitives; no broad semantic unification |
+| CAM-DIAG — Explicit Diagnostic Contexts | **POST-V1**; advance for remaining demonstrated defect or approved parallelism, preserving scoped lifecycle/caller compatibility |
+| TOOL-TYPES — Explicit Tool Diameter Semantics | **POST-V1** unless release-critical defect; nominal/effective/body/holder/kerf contracts require compatibility audit |
+| PERF2 — Selective Parallel Computation | **V2+ / PERFORMANCE-DRIVEN**; real workloads, determinism/cancel/diagnostic/memory/native-WASM proof; no unmeasured 4–8× claim |
+| TIME2 — ShopBot Runtime Calibration | **POST-V1**, potentially V1.5 if practical; actual measured dataset/consumer audit, no accuracy promise or delay of initial physical qualification |
+
+Critical path: current audit-correction reviews → unresolved-risk triage → combined
+final-source integrated regressions → bounded TEST1 → only release-critical geometry
+consolidation/rechecks → rebuilt packages/platform gates → planned ShopBot workshop
+qualification → explicit V1 acceptance. AUDIT3 retains time-boxed post-V1 placement;
+ProtoMAX remains next product development, without blanket refactoring prerequisites.
+No production/dependency/golden/serialization/output/hardware changes or publication.
+
+## Release refinement — ShopBot safety, native OMX and advanced CAM
+
+2026-10-18 · **PLANNED — NOT IMPLEMENTED / NOT QUALIFIED** for new capability scopes.
+
+| Milestone | Release requirement / bounded purpose |
+| --- | --- |
+| SAFE-Z | V1 REQUIRED assessment of supported Z/stock/work/rapid/output/fixture frames and guards; no new Z convention |
+| UX8 — ShopBot Setup Sheet | V1 HIGH VALUE / strongly recommended: bounded printable/display intent, actual resolved output envelope, explicit unknown physical state |
+| TAB-SAFE | V1 CONDITIONAL comparison; unsafe supported entry becomes blocker, no automatic tab-default change |
+| OP-ORDER | V1 CONDITIONAL / V1.5 REQUIRED assessment of actual holding/through-cut dependencies; no silent reorder |
+| OMX1 — Native Format Research & Output Contract | V1.5 CRITICAL early refinement of existing feasibility gate; real lawful user OMX references and installed MAKE evidence, human gate before writer architecture |
+| WJ1 — Native Waterjet Operation Model | V1.5 REQUIRED explicit process/quality/cut/traverse/kerf/entry intent and MAKE ownership |
+| WJ2 — Pierce, Leads, Kerf and Collision Qualification | V1.5 REQUIRED protected-neighbor/quality/kerf/pierce matrix, no invented rules |
+| WJ3 — Waterjet Holding Tabs and Cut Sequencing | V1.5 REQUIRED bounded XY gaps/cut-traverse-repierce/holding and dependencies, distinct from milling Z tabs |
+| WJ4 — ProtoMAX Physical Qualification | V1.5 RELEASE GATE: native file/MAKE/intent and authorized dimensional machine tests, ShopBot non-regression |
+| HELIX1 — Helical Bore | V2+ HIGH PRIORITY complete bore/central residual/pitch/entry/finish and output proof; no existing Helix guard enabled |
+| VCARVE2 — Flat-Bottom V-Carve | V2+ complete bounded-depth clearing/V-bit boundary/optional roughing/residual proof, distinct from paired inlays |
+
+REST1 refines the existing Rest Machining entry above. [ShopBot specifications](../releases/SHOPBOT_WORKSHOP_ADDITIONS.md),
+[OMX1 plan](../releases/OMX1_PLAN.md), [WJ scope/matrix](../releases/FABCAM_V1_5_SCOPE.md),
+[V2+ contracts](../releases/ADVANCED_CAM_PLAN.md). V1.5 **must replace LAYOUT** in normal
+preparation: native OMX → installed MAKE → ProtoMAX. LAYOUT references are offline
+research only. Infeasible direct OMX is a blocker/product decision, not silent fallback.
+Current audits/TEST1/package/physical gates and post-V1 AUDIT3 remain; no release dates,
+new algorithms, schema/post/artifact modifications or implementation starts here.
+
+## ARCH-MACH — Machine & Process Extensibility Contract
+
+**PLANNED — V1.5 architectural foundation / first practical validation, not a V1 blocker**
+absent a demonstrated supported-ShopBot defect. [Plan/source inventory](../releases/ARCH_MACH_PLAN.md).
+ARCH-MACH planning → verified OMX1 contract and human writer architecture approval →
+bounded ProtoMAX process/adapter → qualification → V1.5. Keep native OMX→MAKE without
+LAYOUT, accepted V1/AUDIT3 and existing release/test/physical gates.
+
+New machine within supported process: qualified capabilities/profile/output adapter/
+validator/fixtures/docs, normally no core geometry rewrite. New process may need new
+operations/semantics/UI. Initial [developer guide](../development/ADDING_A_MACHINE.md)
+and [specification template](../development/MACHINE_INTEGRATION_TEMPLATE.md) are documentation,
+not implemented extensibility or machine support. Proposed local machine-integration
+skill is not created. Post-V1.5 WAZER/vinyl cases stress-test boundaries only; no protocol
+or vendor-permission assumptions. No generic plugin, new adapter/schema or runtime work.

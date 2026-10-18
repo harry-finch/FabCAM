@@ -11,7 +11,7 @@
 
 use crate::cam::setup::Setup;
 use crate::cam::surface::SurfaceField;
-use crate::cam::surface_mill::{surface_mill, SurfaceMillParams};
+use crate::cam::surface_mill::{surface_mill_cancellable, SurfaceMillParams};
 use crate::gcode::{emit_vcarve_block, PostProcessor};
 use crate::geometry::Point2;
 use crate::pipeline::warnings::push_tool_fit_kind_warnings;
@@ -41,7 +41,7 @@ pub(in crate::pipeline) fn run_relief_op<P: PostProcessor>(
     post: &mut P,
     last_pos: &mut Point2,
     warnings: &mut Vec<PipelineWarning>,
-    _cancel: Option<&CancelToken>,
+    cancel: Option<&CancelToken>,
 ) -> Result<(), PipelineError> {
     let OpKind::ReliefMill {
         source_id,
@@ -177,7 +177,8 @@ pub(in crate::pipeline) fn run_relief_op<P: PostProcessor>(
         z_top_mm: z_top,
     };
 
-    let polylines = surface_mill(&field, &params);
+    let polylines =
+        surface_mill_cancellable(&field, &params, cancel).ok_or(PipelineError::Cancelled)?;
     if polylines.is_empty() {
         return Ok(());
     }

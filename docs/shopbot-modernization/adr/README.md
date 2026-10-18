@@ -50,3 +50,9 @@ is superseded by named tracks in ROADMAP.
 - [ADR-0017 — V-Carve continuous planner](ADR-0017-vcarve-continuous-planner.md): approved architecture, bounded software implementation; human review pending.
 
 - [ADR-0021 — Edited drawing contract](ADR-0021-edited-drawing-contract.md): GEOM1 approved architecture with mandatory refinements; stable bindings, Rust evaluation and guarded v7, bounded implementation under final software review.
+
+- [ADR-0022 — Versioned holding-tab width](ADR-0022-versioned-tab-width.md):
+  user-approved explicit conversion; legacy saved motion retained, physical
+  material width for new Profile/Pocket operations; software review pending.
+
+- [ADR-0023 — milling program publication guard](ADR-0023-milling-program-publication-guard.md): PROPOSED, human approval required; common fixture-collision rejection, explicit model completeness and bounded direct-stream policy.

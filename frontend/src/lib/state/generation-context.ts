@@ -82,3 +82,8 @@ export function checkCornerRelief(p: ProjectState): boolean {
   if (problem) p.setError(problem);
   return !problem;
 }
+
+/** Canonical dialect identity shared by desktop and narrow-screen diagnostics. */
+export function coerceGenerationPost(value: string): 'linuxcnc' | 'grbl' | 'hpgl' | 'cps' {
+  return value === 'grbl' || value === 'hpgl' || value === 'cps' ? value : 'linuxcnc';
+}

@@ -1,0 +1,78 @@
+   Compiling syn v2.0.117
+   Compiling num-integer v0.1.46
+   Compiling arrayvec v0.7.6
+   Compiling kurbo v0.11.3
+   Compiling num-bigint v0.4.6
+   Compiling num-iter v0.1.45
+   Compiling svgtypes v0.15.3
+   Compiling num-rational v0.4.2
+   Compiling num v0.4.3
+   Compiling serde_derive_internals v0.29.1
+   Compiling serde_derive v1.0.228
+   Compiling bytemuck_derive v1.11.0
+   Compiling zerocopy-derive v0.8.48
+   Compiling tracing-attributes v0.1.31
+   Compiling thiserror-impl v2.0.18
+   Compiling schemars_derive v0.8.22
+   Compiling bytemuck v1.25.0
+   Compiling thiserror v2.0.18
+   Compiling tracing v0.1.44
+   Compiling zerocopy v0.8.48
+   Compiling serde v1.0.228
+   Compiling font-types v0.9.0
+   Compiling image v0.25.5
+   Compiling tiny-skia-path v0.11.4
+   Compiling read-fonts v0.34.0
+   Compiling usvg v0.45.1
+   Compiling indexmap v1.9.3
+   Compiling chrono v0.4.44
+   Compiling tinytemplate v1.2.1
+   Compiling uuid v1.10.0
+   Compiling schemars v0.8.22
+   Compiling dxf v0.6.1
+   Compiling ivac-feeds-speeds v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+   Compiling skrifa v0.36.0
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 18.18s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-51f8f1f46c7827be)
+
+running 3 tests
+test sim::timing::audit_13_14::inch_feed_and_decimal_comma_are_mm_per_min ... FAILED
+test sim::timing::audit_13_14::dwell_includes_modal_cycles_and_compact_decimal_comma ... FAILED
+test sim::sweep::audit_13_14::curved_form_cutter_preserves_overhang_full_and_partial ... FAILED
+
+failures:
+
+---- sim::timing::audit_13_14::inch_feed_and_decimal_comma_are_mm_per_min stdout ----
+
+thread 'sim::timing::audit_13_14::inch_feed_and_decimal_comma_are_mm_per_min' panicked at crates/ivac-core/src/sim/timing.rs:1247:9:
+assertion `left == right` failed
+  left: Some(31.0)
+ right: Some(31.5)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- sim::timing::audit_13_14::dwell_includes_modal_cycles_and_compact_decimal_comma stdout ----
+
+thread 'sim::timing::audit_13_14::dwell_includes_modal_cycles_and_compact_decimal_comma' panicked at crates/ivac-core/src/sim/timing.rs:1254:9:
+assertion `left == right` failed
+  left: 0.0
+ right: 2.5
+
+---- sim::sweep::audit_13_14::curved_form_cutter_preserves_overhang_full_and_partial stdout ----
+
+thread 'sim::sweep::audit_13_14::curved_form_cutter_preserves_overhang_full_and_partial' panicked at crates/ivac-core/src/sim/sweep.rs:3414:13:
+arc removed the overhang
+
+
+failures:
+    sim::sweep::audit_13_14::curved_form_cutter_preserves_overhang_full_and_partial
+    sim::timing::audit_13_14::dwell_includes_modal_cycles_and_compact_decimal_comma
+    sim::timing::audit_13_14::inch_feed_and_decimal_comma_are_mm_per_min
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 1163 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

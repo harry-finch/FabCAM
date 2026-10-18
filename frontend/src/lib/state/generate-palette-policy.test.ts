@@ -26,3 +26,12 @@ it('honours existing explicit safety preferences', () =>
       blockOnWorkAreaViolation: false,
     }),
   ).toBeUndefined());
+
+it.each(['front', 'back'] as const)('fixture refusal cannot be disabled on %s', (side) => {
+  expect(
+    exportSafetyProblem({ ...clean, fixture: 1, backFixture: 2 }, side, {
+      blockOnCriticalSimWarnings: false,
+      blockOnWorkAreaViolation: false,
+    }),
+  ).toEqual({ key: 'genbar.error.block_critical', count: side === 'front' ? 1 : 2 });
+});

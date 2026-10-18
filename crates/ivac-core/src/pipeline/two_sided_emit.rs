@@ -205,7 +205,14 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
             cps_post: req.cps_post.clone(),
         },
         &progress,
-    )?;
+    )
+    .map_err(|error| match error {
+        PipelineError::FixtureCollision(mut preview) => {
+            preview.side = Some(WorkpieceSide::Back);
+            PipelineError::FixtureCollision(preview)
+        }
+        other => other,
+    })?;
     back.gcode = prepend_lines(&back.gcode, &back_header(axis, &stock, &dowel_centres));
 
     Ok(TwoSidedResponse {

@@ -312,8 +312,8 @@ pub fn sweep_chord_carve_dexel(
     }
     // Analytic arc (bd ivac-58nl.4): carve the exact sub-arc footprint. For a
     // non-form tool the arc carve is top-down monotone-min into the dense top
-    // — byte-identical to the interval path below (the sidecar stays untouched
-    // for arcs, which are ball/endmill finishing moves, never form cutters).
+    // — byte-identical to the interval path below. Form tools preserve finite
+    // interval ceilings on arcs as well as lines.
     if let Some(arc) = segment.arc {
         return sweep_arc_chord_carve(field, &segment.from, &segment.to, arc, profile);
     }
@@ -476,8 +476,8 @@ pub fn sweep_chord_carve_partial_dexel(
         return 0;
     }
     // Analytic arc (bd ivac-58nl.4): carve the sub-arc slice `[t_start, t_end]`
-    // — see `sweep_chord_carve_partial`. Top-down into the dense top, so for
-    // the non-form tools arcs use this is byte-identical to the interval path.
+    // — see `sweep_chord_carve_partial`. CarveTarget preserves finite form-tool
+    // intervals; ordinary cutters retain top-down semantics.
     if let Some(arc) = segment.arc {
         return sweep_arc_carve_windowed(
             field,
@@ -586,6 +586,10 @@ pub(super) trait CarveTarget {
     /// Lower cell `(ix, iy)` to `surface_z` (monotone: only when below the
     /// current top). Pre-clamped to the cell rectangle by the caller.
     fn carve_top_down(&mut self, ix: u32, iy: u32, surface_z: f32);
+    fn carve_profile(&mut self, ix: u32, iy: u32, r: f32, pz: f32, dz: f32, profile: &ToolProfile) {
+        let _ = (r, profile);
+        self.carve_top_down(ix, iy, pz + dz);
+    }
 }
 
 impl CarveTarget for Heightmap {
@@ -604,6 +608,20 @@ impl CarveTarget for Heightmap {
 }
 
 impl CarveTarget for DexelField {
+    fn carve_profile(
+        &mut self,
+        ix: u32,
+        iy: u32,
+        r: f32,
+        pz: f32,
+        _dz: f32,
+        profile: &ToolProfile,
+    ) {
+        if let Some((lo, hi)) = profile.eval_interval(r) {
+            self.carve_cell(ix, iy, pz + lo, pz + hi);
+        }
+    }
+
     #[inline]
     fn carve_layout(&self) -> HeightmapLayout {
         HeightmapLayout {
@@ -917,7 +935,7 @@ pub use crate::gcode::preview::ArcXY;
 /// in the requested direction, otherwise bring the raw angle difference into
 /// the correct half-plane). Returns `None` for a degenerate arc (start on the
 /// center, or a vanishing sweep).
-fn arc_span(from: &Pose3, to: &Pose3, arc: ArcXY) -> Option<(f64, f64, f64, f64, f64)> {
+pub(super) fn arc_span(from: &Pose3, to: &Pose3, arc: ArcXY) -> Option<(f64, f64, f64, f64, f64)> {
     use std::f64::consts::TAU;
     let (cx, cy) = (arc.cx, arc.cy);
     let radius = (from.x - cx).hypot(from.y - cy);
@@ -1063,7 +1081,7 @@ pub(super) fn for_each_swept_cell_arc_windowed<F>(
                 continue;
             }
             if flat_bottom {
-                body(ix, iy, 0.0, cutter_pz, 0.0);
+                body(ix, iy, r as f32, cutter_pz, 0.0);
             } else {
                 let rf = r as f32;
                 let Some(dzp) = profile.eval(rf) else {
@@ -1109,10 +1127,9 @@ fn sweep_arc_carve_windowed<T: CarveTarget>(
         profile,
         t_lo,
         t_hi,
-        |ix, iy, _r, cutter_pz, dz| {
+        |ix, iy, r, cutter_pz, dz| {
             let clamped_pz = depth_floor_z.map_or(cutter_pz, |floor| cutter_pz.max(floor));
-            let surface_z = clamped_pz as f32 + dz;
-            target.carve_top_down(ix, iy, surface_z);
+            target.carve_profile(ix, iy, r, clamped_pz as f32, dz, profile);
             touched += 1;
         },
     );
@@ -1376,10 +1393,11 @@ pub fn sweep_range_cancellable(
 /// deterministic and monotone, so re-sweeping `[0, i)` reproduces the same
 /// walls segment `i` was first checked against) but NOT across a fixture
 /// edit or a new toolpath — callers must [`SegmentWarningCache::clear`]
-/// then.
+/// then. Tool/holder/fixture/layout and segment fingerprints additionally reject
+/// stale entries; arbitrary edits to preceding stock material still require clear.
 #[derive(Debug, Default)]
 pub struct SegmentWarningCache {
-    by_segment: std::collections::HashMap<usize, Vec<SimWarning>>,
+    by_segment: std::collections::HashMap<usize, (u64, Vec<SimWarning>)>,
 }
 
 impl SegmentWarningCache {
@@ -1425,12 +1443,18 @@ pub fn sweep_range_cached(
     diagnostics: &mut SimDiagnostics,
     cache: &mut SegmentWarningCache,
 ) -> u32 {
+    let context = warning_context(heightmap, profile, fixtures, holder);
     let lo = from_idx.min(segments.len());
     let hi = to_idx.min(segments.len());
     let mut total = 0u32;
     for (offset, seg) in segments[lo..hi].iter().enumerate() {
         let idx = lo + offset;
-        if let Some(cached) = cache.by_segment.get(&idx) {
+        let key = seahash::hash(format!("{context}:{seg:?}").as_bytes());
+        if let Some((_, cached)) = cache
+            .by_segment
+            .get(&idx)
+            .filter(|(stored, _)| *stored == key)
+        {
             // Cache hit: replay this segment's warnings (cheap clone) and
             // carve only — skip the holder/fixture/rapid recompute.
             for w in cached {
@@ -1443,7 +1467,7 @@ pub fn sweep_range_cached(
             let before = diagnostics.warnings.len();
             total += sweep_segment(heightmap, seg, profile, idx, fixtures, holder, diagnostics);
             let produced = diagnostics.warnings[before..].to_vec();
-            cache.by_segment.insert(idx, produced);
+            cache.by_segment.insert(idx, (key, produced));
         }
     }
     total
@@ -1596,12 +1620,18 @@ pub fn sweep_range_cached_dexel(
     diagnostics: &mut SimDiagnostics,
     cache: &mut SegmentWarningCache,
 ) -> u32 {
+    let context = warning_context(field, profile, fixtures, holder);
     let lo = from_idx.min(segments.len());
     let hi = to_idx.min(segments.len());
     let mut total = 0u32;
     for (offset, seg) in segments[lo..hi].iter().enumerate() {
         let idx = lo + offset;
-        if let Some(cached) = cache.by_segment.get(&idx) {
+        let key = seahash::hash(format!("{context}:{seg:?}").as_bytes());
+        if let Some((_, cached)) = cache
+            .by_segment
+            .get(&idx)
+            .filter(|(stored, _)| *stored == key)
+        {
             for w in cached {
                 diagnostics.push(w.clone());
             }
@@ -1610,7 +1640,7 @@ pub fn sweep_range_cached_dexel(
             let before = diagnostics.warnings.len();
             total += sweep_segment_dexel(field, seg, profile, idx, fixtures, holder, diagnostics);
             let produced = diagnostics.warnings[before..].to_vec();
-            cache.by_segment.insert(idx, produced);
+            cache.by_segment.insert(idx, (key, produced));
         }
     }
     total
@@ -3397,5 +3427,141 @@ mod tests {
             max < 1e-4,
             "arc partial split diverged from the full carve by {max} mm"
         );
+    }
+}
+
+#[cfg(test)]
+mod audit_13_14 {
+    use super::*;
+    #[test]
+    fn curved_form_cutter_preserves_overhang_full_and_partial() {
+        let profile = ToolProfile::FormProfile {
+            segments: vec![(0., 8.), (4., 8.), (4., 2.), (12., 2.)],
+        };
+        let segment = ToolpathSegment {
+            from: Pose3 {
+                x: 30.,
+                y: 20.,
+                z: -5.,
+            },
+            to: Pose3 {
+                x: 20.,
+                y: 30.,
+                z: -5.,
+            },
+            kind: MoveKind::Arc,
+            arc: Some(ArcXY {
+                cx: 20.,
+                cy: 20.,
+                ccw: true,
+            }),
+            gcode_line: 1,
+            op_id: 1,
+        };
+        for partial in [false, true] {
+            let mut field =
+                DexelField::new(crate::geometry::Point2::new(0., 0.), 1., 40, 40, 0., -20.);
+            if partial {
+                sweep_chord_carve_partial_dexel(&mut field, &segment, &profile, 0., 0.5);
+                sweep_chord_carve_partial_dexel(&mut field, &segment, &profile, 0.5, 1.);
+            } else {
+                sweep_chord_carve_dexel(&mut field, &segment, &profile);
+            }
+            assert!(field.undercut_columns() > 0, "arc removed the overhang");
+            assert_eq!(field.top_at(34, 24), 0.);
+        }
+    }
+}
+
+/// Diagnostic walk following the same analytic XY footprint as carving.
+pub(super) fn for_each_motion_cell<F: FnMut(u32, u32, f32, f64, f32)>(
+    layout: &HeightmapLayout,
+    segment: &ToolpathSegment,
+    profile: &ToolProfile,
+    body: F,
+) {
+    if let Some(arc) = segment.arc {
+        for_each_swept_cell_arc_windowed(
+            layout,
+            &segment.from,
+            &segment.to,
+            arc,
+            profile,
+            0.,
+            1.,
+            body,
+        );
+    } else {
+        for_each_swept_cell(layout, segment, profile, body);
+    }
+}
+
+fn warning_context<S: SurfaceField>(
+    field: &S,
+    profile: &ToolProfile,
+    fixtures: &[Fixture],
+    holder: Option<&HolderProfile>,
+) -> u64 {
+    seahash::hash(
+        format!(
+            "{:?}:{:?}:{}:{}:{:?}:{profile:?}:{holder:?}:{fixtures:?}",
+            field.origin(),
+            field.cell().to_bits(),
+            field.cols(),
+            field.rows(),
+            field.surface_top_z().to_bits()
+        )
+        .as_bytes(),
+    )
+}
+
+#[cfg(test)]
+mod audit_13_14_cache {
+    use super::*;
+    #[test]
+    fn warning_cache_rechecks_changed_tool_at_same_index() {
+        let segment = ToolpathSegment {
+            from: Pose3 {
+                x: 5.,
+                y: 5.,
+                z: -1.,
+            },
+            to: Pose3 {
+                x: 5.,
+                y: 5.,
+                z: -1.,
+            },
+            arc: None,
+            kind: MoveKind::Rapid,
+            gcode_line: 1,
+            op_id: 1,
+        };
+        let mut cache = SegmentWarningCache::new();
+        let mut field = Heightmap::new(crate::geometry::Point2::new(0., 0.), 1., 10, 10, 0.);
+        let mut diagnostics = SimDiagnostics::new();
+        sweep_range_cached(
+            &mut field,
+            &[segment.clone()],
+            0,
+            1,
+            &ToolProfile::Endmill { r: 0.1 },
+            &[],
+            None,
+            &mut diagnostics,
+            &mut cache,
+        );
+        assert!(diagnostics.warnings.is_empty());
+        sweep_range_cached(
+            &mut field,
+            &[segment],
+            0,
+            1,
+            &ToolProfile::Endmill { r: 2. },
+            &[],
+            None,
+            &mut diagnostics,
+            &mut cache,
+        );
+        assert!(!diagnostics.warnings.is_empty());
     }
 }

@@ -313,6 +313,8 @@ pub fn format_axis_value(format: &str, value: f64) -> String {
         let padding: String = std::iter::repeat(ch).take(pad).collect();
         body = if left_align {
             format!("{body}{padding}")
+        } else if zero_pad && (body.starts_with('-') || body.starts_with('+')) {
+            format!("{}{padding}{}", &body[..1], &body[1..])
         } else {
             format!("{padding}{body}")
         };
@@ -413,7 +415,7 @@ impl TokenCtx {
 /// blank the line; CAM-review surfaces them.
 #[must_use]
 pub fn substitute(template: &str, ctx: &TokenCtx) -> String {
-    let mut out = template.to_string();
+    let mut out = String::with_capacity(template.len());
     let unit = match ctx.unit {
         UnitSystem::Mm => "mm",
         UnitSystem::Inch => "in",
@@ -431,30 +433,22 @@ pub fn substitute(template: &str, ctx: &TokenCtx) -> String {
         ("<project>", ctx.project_name.clone()),
         ("<nl>", "\n".to_string()),
     ];
-    for (token, value) in pairs {
-        // Case-insensitive replace.
-        let mut buf = String::with_capacity(out.len());
-        let token_lower = token.to_ascii_lowercase();
-        let mut rest = out.as_str();
-        loop {
-            let pos = rest
-                .char_indices()
-                .find(|(i, _)| {
-                    let end = i + token.len();
-                    end <= rest.len() && rest[*i..end].to_ascii_lowercase() == token_lower
-                })
-                .map(|(i, _)| i);
-            if let Some(i) = pos {
-                buf.push_str(&rest[..i]);
-                buf.push_str(&value);
-                rest = &rest[i + token.len()..];
-            } else {
-                buf.push_str(rest);
-                break;
-            }
+    let mut rest = template;
+    while let Some(i) = rest.find('<') {
+        out.push_str(&rest[..i]);
+        rest = &rest[i..];
+        if let Some((token, value)) = pairs.iter().find(|(token, _)| {
+            rest.get(..token.len())
+                .is_some_and(|prefix| prefix.eq_ignore_ascii_case(token))
+        }) {
+            out.push_str(value);
+            rest = &rest[token.len()..];
+        } else {
+            out.push('<');
+            rest = &rest[1..];
         }
-        out = buf;
     }
+    out.push_str(rest);
     out
 }
 
@@ -463,8 +457,7 @@ pub fn substitute(template: &str, ctx: &TokenCtx) -> String {
 /// one line at a time (line numbering / comment passes assume that).
 ///
 /// Each split line is scanned for `<token>`-shaped placeholders
-/// that the substitution pass didn't recognize (i.e. survived
-/// untouched). Lines carrying an unknown token are skipped (with a
+/// in the original template (before substituting user data). Lines carrying an unknown token are skipped (with a
 /// `(WARN: unknown token …)` comment inserted in their place) so the
 /// output never carries a literal `<typo>` straight to the
 /// controller — operators tend to notice the warn-comment in
@@ -472,12 +465,15 @@ pub fn substitute(template: &str, ctx: &TokenCtx) -> String {
 /// when an unknown command shows up at runtime.
 #[must_use]
 pub fn template_lines(template: &str, ctx: &TokenCtx) -> Vec<String> {
-    substitute(template, ctx)
+    template
         .split('\n')
         .flat_map(|line| {
             let unknown = find_unknown_tokens(line);
             if unknown.is_empty() {
-                vec![line.to_string()]
+                substitute(line, ctx)
+                    .split('\n')
+                    .map(str::to_string)
+                    .collect()
             } else {
                 // Emit one warning comment per affected line, then
                 // skip the line itself. The comment uses the
@@ -854,5 +850,28 @@ mod tests {
         let json = r#"{"name":"X","format":"%.3f","scale":1.0}"#;
         let af: AxisFormat = serde_json::from_str(json).unwrap();
         assert!(af.enabled);
+    }
+}
+
+#[cfg(test)]
+mod audit_11_12 {
+    use super::*;
+    #[test]
+    fn zero_padding_preserves_sign_position() {
+        assert_eq!(format_axis_value("%06.2f", -1.5), "-01.50");
+        assert_eq!(format_axis_value("%+06.2f", 1.5), "+01.50");
+    }
+    #[test]
+    fn values_are_not_templates_and_unicode_is_safe() {
+        let ctx = TokenCtx {
+            tool_name: "Fraise <f>".into(),
+            op_name: "Gravure <logo>".into(),
+            ..Default::default()
+        };
+        assert_eq!(substitute("ééé <n>", &ctx), "ééé Fraise <f>");
+        assert_eq!(
+            template_lines("(Op: <op>)<nl>(<n>)", &ctx),
+            ["(Op: Gravure <logo>)", "(Fraise <f>)"]
+        );
     }
 }

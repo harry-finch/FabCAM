@@ -126,16 +126,9 @@ fn last_segment_end_tangent(seg: &Segment) -> Option<(f64, f64)> {
     }
 }
 
-/// Chord-polygon signed area of a closed-ish offset polyline. Positive
-/// = CCW, negative = CW. Bulge is ignored — the sign is dominated by
-/// the chord winding except in pathological >180° arcs that the offset
-/// pass would not produce.
+/// Signed area includes the circular segment bounded by each arc.
 fn polyline_signed_area(segments: &[Segment]) -> f64 {
-    let mut a = 0.0;
-    for s in segments {
-        a += s.start.x * s.end.y - s.end.x * s.start.y;
-    }
-    a * 0.5
+    crate::cam::offsets::segments_signed_area(segments)
 }
 
 /// Decide which side of the tangent is FREE SPACE (no stock), so the

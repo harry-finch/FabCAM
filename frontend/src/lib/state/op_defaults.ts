@@ -175,6 +175,7 @@ export function buildOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
             : 'outside',
         pocketStrategy: kind === 'pocket' ? 'cascade' : null,
         ...(kind === 'drill' ? { drillCycle: { kind: 'simple', dwellSec: 0 } as DrillCycle } : {}),
+        ...(kind === 'profile' || kind === 'pocket' ? { tabWidthMode: 'material_v1' } : {}),
         cutDirection: 'conventional',
         finishCutDirection: 'conventional',
         plunge: { kind: 'direct' },

@@ -1,0 +1,173 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-server v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.75s
+     Running unittests src/lib.rs (target/debug/deps/ivac_cps-b4b4635be251022e)
+
+running 9 tests
+test ir::tests::five_d_tags ... ok
+test ir::tests::wire_shape_is_camel_case_and_kind_tagged ... ok
+test meta::tests::wire_shape ... ok
+test ir::tests::round_trip ... ok
+test ir::tests::version_gate_rejects_mismatch ... ok
+test run::audit_15_16::positions_do_not_rewrite_polyline_text ... ok
+test engine::cancellation_tests::host_probe_reads_live_atomic_and_default_stays_false ... ok
+test run::audit_15_16::unfinished_script_points_to_user_eof ... ok
+test library::tests::bundled_posts_inspect_cleanly ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running tests/cancellation.rs (target/debug/deps/cancellation-9f1da4ebbdef6a85)
+
+running 2 tests
+test pre_cancelled_returns_no_output_and_never_parses_script ... ok
+test uncancelled_output_matches_legacy_and_error_text_cannot_forge_cancel ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s
+
+     Running tests/constants_consistency.rs (target/debug/deps/constants_consistency-e7099692284e3531)
+
+running 1 test
+test recorder_codes_match_prelude_constants ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/differential.rs (target/debug/deps/differential-4ec1522bf6310b74)
+
+running 3 tests
+test format_matrix_matches_v8 ... ok
+fresh format_expected.json
+fresh scenarios_expected.json
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (3.742041ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (1.222ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (0.958667ms)
+✔ abcFormat: scale DEG converts radians to degrees (0.978791ms)
+✔ oFormat: width 4 zeropad (program numbers) (1.894834ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (1.001541ms)
+✔ clamping applies after rounding (0.970542ms)
+✔ trimLeadZero renders FANUC-style bare fractions (1.47475ms)
+✔ forceSign marks positives, never zero (0.939083ms)
+✔ getResultingValue/areDifferent compare on the output grid (0.965416ms)
+✔ differential fixtures are fresh (committed == recomputed) (7.43575ms)
+✔ every Euler convention round-trips a rotation matrix (9.186375ms)
+✔ Euler extraction handles the gimbal-lock singularity (1.083625ms)
+✔ rotation factories agree with axis-angle (1.027917ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (7.114875ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (7.505334ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (4.896042ms)
+✔ unreachable orientation throws (1.667625ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.03275ms)
+✔ remapToABC takes the shortest path from the current angles (0.848625ms)
+✔ getPreferredABC honors a positive axis preference (0.838167ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (1.776541ms)
+✔ isABCSupported reflects axis ranges (0.801334ms)
+✔ multi-axis feed: inverse time and DPM (0.833709ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (3.764959ms)
+✔ reset forces the next output; force outputs every time (1.072583ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (0.972291ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (0.913ms)
+✔ modal carries the format's address letter and getCurrent (2.551417ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (1.248917ms)
+✔ createOutputVariable: control + incremental type (1.026417ms)
+✔ ModalGroup enforces per-group exclusivity (1.642125ms)
+✔ formatWords flattens arguments objects and nested arrays (3.924834ms)
+✔ writeWords drops empty lines entirely (1.918209ms)
+✔ writeWords2 outputs only when args 2+ produce text (1.206375ms)
+✔ word separator and EOL are honored (0.943167ms)
+✔ redirection captures words; close returns to normal output (1.857875ms)
+✔ nested redirection pops innermost first (0.923667ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (1.124417ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.960834
+test node_harness_agrees ... ok
+test scenarios_match_v8 ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
+
+     Running tests/golden_fanuc.rs (target/debug/deps/golden_fanuc-baf7d3b0e12c74f9)
+
+running 12 tests
+test ir_version_gate ... ok
+test inspect_post_returns_fanuc_property_sheet ... ok
+test fixture_a_two_sections_toolchange ... ok
+test fanuc_machine_paths_run_on_three_axis ... ok
+test fixture_c_use_radius_override ... ok
+test fixture_b_canned_cycles ... ok
+test fixture_c_full_circle_and_helix ... ok
+test syntax_error_maps_to_parse_with_line ... ok
+test runaway_script_hits_budget ... ok
+test validate_throw_maps_to_runtime_error ... ok
+test error_call_halts_with_partial_output ... ok
+test five_d_records_dispatch_with_solved_abc ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/shopbot_guards.rs (target/debug/deps/shopbot_guards-63f63eabaf3e9270)
+
+running 7 tests
+test lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test positive_output_and_comment_injection ... ok
+test planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test scaffold_work_plane_and_tools_fail_closed ... ok
+test vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test unsupported_records_fail_before_export ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.98s
+
+     Running tests/spike.rs (target/debug/deps/spike-06589768a993fffc)
+
+running 10 tests
+test json_round_trip ... ok
+test substr_annex_b ... ok
+test native_function_sink ... ok
+test named_source_errors_carry_line_info ... ok
+test minimal_post_end_to_end ... ok
+test define_property_accessors ... ok
+test script_can_overwrite_host_global ... ok
+test boa_new_after_prototype_assignment_bug ... ok
+test arguments_object_semantics ... ok
+test regexp_literal_and_constructor ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/symbol_audit.rs (target/debug/deps/symbol_audit-aa2464c342f68907)
+
+running 2 tests
+test undeclared_but_used_symbols_are_defined ... ok
+test every_declared_symbol_is_defined ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running unittests src/main.rs (target/debug/deps/ivac_server-e41d8df10398cdd8)
+
+running 15 tests
+test tests::pipeline_cancelled_maps_to_408_with_structured_body ... ok
+test tests::bad_request_helper_synthesizes_structured_error ... ok
+test tests::internal_helper_synthesizes_structured_error ... ok
+test tests::pipeline_unknown_tool_promotes_auto_fix_into_http_body ... ok
+test tests::relief_stl_rejects_malformed_stl_with_400 ... ok
+test tests::status_for_kind_matches_legacy_mapping ... ok
+test tests::relief_stl_returns_204_for_a_footprintless_mesh ... ok
+test tests::http_error_response_carries_full_structured_shape ... ok
+test tests::relief_stl_rasterizes_a_flat_quad_to_a_surface_field ... ok
+test tests::generate_gcode_stream_rejects_hpgl_with_400 ... ok
+test tests::generate_gcode_stream_serves_grbl_too ... ok
+test tests::generate_gcode_stream_matches_the_buffered_program ... ok
+test tests::audit_15_16_import_memory_and_format_validation ... ok
+test tests::generate_rejects_cps_path_source ... ok
+test tests::posts_routes_list_inspect_and_guard ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.34s
+
+   Doc-tests ivac_cps
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

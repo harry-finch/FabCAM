@@ -143,7 +143,7 @@ use entry::{
     emit_helix_entry, emit_helix_pass, emit_ramp_pass, is_closed_path, plan_helix_entry, HelixEntry,
 };
 use leads::{lead_in_geometry, lead_out_geometry, LeadGeometry};
-use order::{end_pos, order_offsets};
+use order::order_offsets;
 use tabs::emit_path_with_tabs;
 use walk::{emit_cut_path, reverse_chain};
 // `fit_line_runs` is also reachable from the offset pipeline,
@@ -758,20 +758,9 @@ pub fn emit_vcarve_block<P: PostProcessor>(
             cut_tool_on(post, setup, setup.tool.speed);
         }
         post.feedrate(setup.tool.rate_v);
-        // The pre-polyline plunge must never dive BELOW the
-        // polyline's own first Z. Medial-axis chains begin with an angled
-        // lead-in ramp anchored at z=0 (the stock surface — see
-        // vcarve_emit::ratchet_emit), so a vertical G1 to a negative
-        // `start_depth` (multi-pass / staged carve) would crash the V-bit
-        // straight into uncut stock before the ramp ever runs — the same
-        // failure mode fixed at the per-chain entry. Clamp the plunge
-        // to `max(start_depth, entry_z)`: it stops at the polyline's own
-        // entry plane and lets the ramp (or the ring's own descent) carry
-        // the cutter into material laterally. For the default V-carve case
-        // (`start_depth = 0`, ramp entry `z = 0`) this is a no-op, so
-        // existing output is byte-for-byte unchanged.
-        let plunge_z = setup.mill.start_depth.max(entry_z);
-        post.linear(None, None, Some(plunge_z));
+        // XY is already at the first waypoint: the entire axial descent
+        // to its entry plane belongs to the plunge feed, never the cut feed.
+        post.linear(None, None, Some(entry_z));
         // Laser-mode V-carve needs a pierce dwell at the cut
         // plane so the beam burns through stock before lateral motion
         // begins. This mirrors the ordering used by emit_offset:
@@ -780,7 +769,7 @@ pub fn emit_vcarve_block<P: PostProcessor>(
             post.dwell(setup.tool.pierce_sec);
         }
         post.feedrate(setup.tool.rate_h);
-        for &(x, y, z) in poly {
+        for &(x, y, z) in &poly[1..] {
             post.linear(Some(x), Some(y), Some(z));
         }
         let (lx, ly, _) = *poly.last().unwrap();
@@ -3894,6 +3883,146 @@ mod tests {
             last_x = nx;
             last_y = ny;
             last_z = nz;
+        }
+    }
+}
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+    use crate::geometry::Segment;
+
+    #[test]
+    fn deep_xyz_entry_uses_plunge_feed() {
+        let mut setup = Setup::default();
+        setup.tool.rate_v = 100;
+        setup.tool.rate_h = 2000;
+        let mut post = linuxcnc::Post::new();
+        let mut last = Point2::new(0., 0.);
+        emit_vcarve_block(
+            &setup,
+            &[vec![(3., 4., -6.), (5., 4., -6.)]],
+            &mut post,
+            &mut last,
+        );
+        let g = post.finish();
+        let mut rate = 0;
+        for line in g.lines() {
+            if let Some(s) = line.strip_prefix('F') {
+                rate = s.parse::<u32>().unwrap();
+            }
+            if line.starts_with("G1") && line.contains("Z-6") {
+                assert_eq!(rate, 100, "{g}");
+                break;
+            }
+        }
+    }
+    #[test]
+    fn two_arc_circle_is_closed_and_has_correct_winding() {
+        let c = Point2::new(0., 0.);
+        let a = Point2::new(10., 0.);
+        let b = Point2::new(-10., 0.);
+        let s = vec![
+            Segment::arc(a, b, 1., Some(c), "0", 7),
+            Segment::arc(b, a, 1., Some(c), "0", 7),
+        ];
+        assert!(is_closed_path(&s));
+        assert!(plan_helix_entry(&s, 2., 1., 5.).is_some());
+    }
+    #[test]
+    fn probe_inch_feed_and_modal_restore() {
+        let mut p = linuxcnc::Post::new();
+        p.configure('.', None, UnitSystem::Inch);
+        p.feedrate(254);
+        p.probe_toward_z(-25.4, 127);
+        p.feedrate(254);
+        let g = p.finish();
+        assert!(!g.contains("F127"), "{g}");
+        assert!(g.contains("F5"), "{g}");
+        assert_eq!(g.lines().filter(|l| l.starts_with("F10")).count(), 2, "{g}");
+    }
+    #[test]
+    fn open_multipass_tabs_ramps_and_exit_never_cut_diagonals() {
+        use crate::cam::offsets::{PolylineOffset, TabPoint};
+        use crate::project::{LeadKind, PlungeStrategy};
+        for passes in [1, 2, 3] {
+            for tabs in [false, true] {
+                for ramp in [false, true] {
+                    let mut setup = Setup::default();
+                    setup.mill.depth = -(passes as f64);
+                    setup.mill.step = -1.;
+                    setup.tool.rate_h = 1000;
+                    setup.tool.rate_h_finish = 1000;
+                    setup.tool.rate_v = 100;
+                    setup.leads.r#in = LeadKind::Straight;
+                    setup.leads.in_length = 2.;
+                    setup.leads.out = LeadKind::Straight;
+                    setup.leads.out_length = 2.;
+                    setup.tabs.active = tabs;
+                    setup.tabs.height = 0.5;
+                    setup.tabs.width = 2.;
+                    if ramp {
+                        setup.mill.plunge = PlungeStrategy::Ramp { angle_deg: 5. };
+                    }
+                    let off = PolylineOffset {
+                        segments: vec![
+                            Segment::line(Point2::new(0., 0.), Point2::new(20., 0.), "0", 7),
+                            Segment::line(Point2::new(20., 0.), Point2::new(20., 20.), "0", 7),
+                        ],
+                        closed: false,
+                        level: 0,
+                        is_pocket: 0,
+                        layer: "0".into(),
+                        color: 7,
+                        source_object_idx: 0,
+                        is_finish: false,
+                        tabs: if tabs {
+                            vec![TabPoint {
+                                x: 20.,
+                                y: 10.,
+                                width_override_mm: None,
+                                height_override_mm: None,
+                            }]
+                        } else {
+                            vec![]
+                        },
+                    };
+                    let mut post = linuxcnc::Post::new();
+                    let mut last = Point2::new(0., 0.);
+                    emit::emit_offset(&setup, &off, &mut post, &mut last);
+                    let moves = preview::interpret(&post.finish());
+                    for m in moves
+                        .iter()
+                        .filter(|m| m.kind != preview::MoveKind::Rapid && m.to.z < 0.)
+                    {
+                        assert!(
+                            (m.to.x - m.from.x).abs() < 1e-6 || (m.to.y - m.from.y).abs() < 1e-6,
+                            "diagonal pass={passes} tabs={tabs} ramp={ramp}: {m:?}"
+                        );
+                    }
+                    let end = moves.last().unwrap().to;
+                    assert!((end.x - last.x).hypot(end.y - last.y) < 1e-6);
+                }
+            }
+        }
+    }
+    #[test]
+    fn ccw_circle_outside_lead_is_outside_material() {
+        let c = Point2::new(0., 0.);
+        let a = Point2::new(10., 0.);
+        let b = Point2::new(-10., 0.);
+        let s = vec![
+            Segment::arc(a, b, 1., Some(c), "0", 7),
+            Segment::arc(b, a, 1., Some(c), "0", 7),
+        ];
+        let mut setup = Setup::default();
+        setup.mill.offset = crate::project::ToolOffset::Outside;
+        setup.leads.r#in = crate::project::LeadKind::Straight;
+        setup.leads.in_length = 2.;
+        if let LeadGeometry::Straight { from } = lead_in_geometry(&setup, &s) {
+            assert!(from.distance(c) > 10.);
+        } else {
+            panic!("expected lead");
         }
     }
 }

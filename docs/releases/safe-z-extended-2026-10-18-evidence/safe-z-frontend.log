@@ -1,0 +1,13 @@
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ✓ src/lib/state/fixture-collisions.test.ts (2 tests) 1ms
+ ✓ src/lib/state/generate-palette-policy.test.ts (4 tests) 1ms
+ ✓ src/lib/state/generation-run.test.ts (9 tests) 3ms
+ ✓ src/lib/state/test1-lifecycle.test.ts (32 tests) 4ms
+
+ Test Files  4 passed (4)
+      Tests  47 passed (47)
+   Start at  10:45:01
+   Duration  199ms (transform 76ms, setup 0ms, collect 114ms, tests 9ms, environment 0ms, prepare 162ms)
+

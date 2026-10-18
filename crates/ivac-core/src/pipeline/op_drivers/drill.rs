@@ -15,7 +15,7 @@ use crate::cam::offsets::PolylineOffset;
 use crate::cam::setup::Setup;
 use crate::cam::VcObject;
 use crate::gcode::{emit_drill_block, emit_stufenfase_rim_block, PostProcessor, StufenfaseHole};
-use crate::geometry::{Point2, SegmentKind};
+use crate::geometry::Point2;
 use crate::pipeline::setup_resolver::{resolve_peck_step, synthesize_op_setup};
 use crate::pipeline::{
     emit_toolchange_envelope, op_includes_object, synthesize_finish_setup, PipelineError,
@@ -168,6 +168,7 @@ fn emit_spot_pre_pass<P: PostProcessor>(
             // Spot pre-pass runs at the spot tool's library speed — no
             // finish-pass override here.
             None,
+            Some((spot_setup.tool.rate_h, spot_setup.tool.rate_v)),
         );
     }
     post.raw(&format!("; OP {} spot", op.id));
@@ -198,6 +199,7 @@ fn emit_spot_pre_pass<P: PostProcessor>(
             false,
             // Returning to the main drill tool's own speed.
             None,
+            Some((main_setup.tool.rate_h, main_setup.tool.rate_v)),
         );
     }
     Ok(())
@@ -248,7 +250,7 @@ fn emit_stufenfase<P: PostProcessor>(
     let sol = crate::cam::chamfer::chamfer_depth_capped(
         width_mm,
         cutter.tip_angle_deg,
-        cutter.diameter,
+        cutter.effective_diameter(),
         tip_diameter_mm,
     );
     if sol.clamped_to_reach {
@@ -261,7 +263,7 @@ fn emit_stufenfase<P: PostProcessor>(
                 width_mm,
                 cutter.name,
                 sol.width_cap_mm,
-                cutter.diameter,
+                cutter.effective_diameter(),
                 tip_diameter_mm,
                 sol.effective_width_mm,
             ),
@@ -270,7 +272,7 @@ fn emit_stufenfase<P: PostProcessor>(
         .with_param("width", format!("{width_mm:.3}"))
         .with_param("tool_name", cutter.name.as_str())
         .with_param("width_cap", format!("{:.3}", sol.width_cap_mm))
-        .with_param("diameter", format!("{:.3}", cutter.diameter))
+        .with_param("diameter", format!("{:.3}", cutter.effective_diameter()))
         .with_param("tip", format!("{tip_diameter_mm:.3}"))
         .with_param("effective_width", format!("{:.3}", sol.effective_width_mm)));
     }
@@ -288,22 +290,10 @@ fn emit_stufenfase<P: PostProcessor>(
         if !obj.closed {
             continue;
         }
-        let Some(first) = obj.segments.first() else {
-            continue;
-        };
-        if !matches!(first.kind, SegmentKind::Circle) {
-            // Stufenfase only chamfers true Circle objects today.
-            // Closed contours that are arcs / lines / polygons get
-            // dropped without complaint, leaving the user wondering why
-            // their square holes got no rim chamfer. Warn explicitly so
-            // the silent skip becomes visible.
+        let Some((center, r)) = crate::cam::offsets::analytic_circle_geometry(obj) else {
             non_circle_skipped += 1;
             continue;
-        }
-        let Some(center) = first.center else {
-            continue;
         };
-        let r = first.start.distance(center);
         if r < 0.05 {
             continue;
         }
@@ -321,10 +311,13 @@ fn emit_stufenfase<P: PostProcessor>(
         // pre-fix 64-chord G1 polyline. Only the ramp's varying-Z piece
         // still needs polyline samples — at LEAD_RAMP_STEPS the chord
         // error stays well under 1 % of `r` for any realistic chamfer.
-        const LEAD_IN_ANGLE_DEG: f64 = 10.0;
+        let lead_angle_deg = cutter
+            .vcarve_lead_in_angle_deg
+            .unwrap_or(10.0)
+            .clamp(0.5, 45.0);
         const LEAD_RAMP_STEPS: usize = 12;
         let circumference = std::f64::consts::TAU * r;
-        let needed_arc = chamfer_z.abs() / LEAD_IN_ANGLE_DEG.to_radians().tan();
+        let needed_arc = chamfer_z.abs() / lead_angle_deg.to_radians().tan();
         let lead_arc = needed_arc.min(circumference);
         let lead_angle = lead_arc / r; // radians swept by the ramp
                                        // Lead-in resolution: enough samples to chord-tessellate the
@@ -362,7 +355,7 @@ fn emit_stufenfase<P: PostProcessor>(
             op.id,
             "stufenfase_non_circle_skipped",
             format!(
-                "drill op '{}': stufenfase rim chamfer only fires on closed Circle objects; {non_circle_skipped} closed contour(s) (arc-chains, polygons, etc.) were skipped without a chamfer.",
+                "drill op '{}': stufenfase rim chamfer only fires on closed analytic circles; {non_circle_skipped} closed contour(s) (noncircular or invalid chains) were skipped without a chamfer.",
                 op.name
             ),
         )
@@ -407,6 +400,7 @@ fn emit_stufenfase<P: PostProcessor>(
                 // RPM — spin up to it directly to avoid a transient M3 at
                 // the rough speed.
                 Some(finish_setup.tool.speed),
+                Some((finish_setup.tool.rate_h, finish_setup.tool.rate_v)),
             );
             chamfer_setup = finish_setup;
             swapped = true;
@@ -1523,5 +1517,64 @@ mod tests {
             "drill without spot_first should not emit a spot block:\n{}",
             resp.gcode
         );
+    }
+}
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+
+    #[test]
+    fn arc_chain_chamfer_honors_wear_and_lead_angle() {
+        use crate::pipeline::test_helpers::{closed_circle, drill_op, project_with_segments, vbit};
+        let mut tool = vbit();
+        tool.tip_angle_deg = 90.;
+        tool.tip_diameter = Some(0.);
+        tool.diameter = 4.;
+        tool.wear_offset_mm = 2.;
+        let mut op = drill_op(1, tool.id, DrillCycle::Simple { dwell_sec: 0. });
+        op.kind = OpKind::Drill {
+            cycle: DrillCycle::Simple { dwell_sec: 0. },
+            chamfer_after_width_mm: Some(3.),
+            pattern: None,
+            spot_first: None,
+        };
+        let mut segs = closed_circle(Point2::new(10., 10.), 4.);
+        for s in &mut segs {
+            s.kind = crate::geometry::SegmentKind::Arc;
+            s.center = None;
+        }
+        let mut project = project_with_segments(segs, vec![op.clone()], vec![tool]);
+        let objects = crate::cam::chaining::segments_to_objects(&project.segments);
+        let run = |p: &Project| {
+            let setup = crate::pipeline::synthesize_op_setup(&op, p, &mut vec![]).unwrap();
+            let mut post = crate::gcode::linuxcnc::Post::new();
+            let mut warnings = vec![];
+            emit_stufenfase(
+                &op,
+                p,
+                &objects,
+                &setup,
+                3.,
+                &mut post,
+                &mut Point2::new(0., 0.),
+                &mut warnings,
+            )
+            .unwrap();
+            assert!(!warnings
+                .iter()
+                .any(|w| w.kind == "stufenfase_non_circle_skipped"));
+            let paths = crate::gcode::preview::interpret(&post.finish());
+            let min = paths.iter().map(|m| m.to.z).fold(0., f64::min);
+            assert!(
+                (min + 1.).abs() < 1e-4,
+                "effective cone radius is 1 mm: {min}"
+            );
+            post.finish()
+        };
+        project.tools[0].vcarve_lead_in_angle_deg = Some(5.);
+        let shallow = run(&project);
+        project.tools[0].vcarve_lead_in_angle_deg = Some(20.);
+        assert_ne!(shallow, run(&project));
     }
 }

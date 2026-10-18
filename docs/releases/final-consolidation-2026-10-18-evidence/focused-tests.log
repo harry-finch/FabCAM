@@ -1,0 +1,43 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `release` profile [optimized] target(s) in 38.41s
+     Running tests/hatch_safe_z.rs (target/release/deps/hatch_safe_z-5891207d272a34d8)
+
+running 14 tests
+test custom_identity_z_rounding_must_not_erase_clearance ... ok
+test finite_and_disabled_and_unknown_stock_contracts ... ok
+test generic_parking_and_stream_preview_retain_safe_air_traversals ... ok
+test hatch_block_is_refused_instead_of_imported_at_definition_coordinates ... ok
+test header_only_job_cannot_bypass_stock_guard ... ok
+test inch_serialization_guard_and_shared_process_boundary ... ok
+test invalid_clearance_stream_writes_no_bytes ... ok
+test known_stock_refuses_clearance_at_or_below_top ... ok
+test shopbot_decoded_lateral_rapids_stay_above_stock_with_two_clearances ... ok
+test shopbot_invalid_stock_clearance_and_existing_z_origin_refuse ... ok
+test shopbot_parking_stays_explicitly_unsupported ... ok
+test stock_edit_is_revalidated_even_after_successful_cached_generation ... ok
+test supported_pocket_and_drill_keep_air_clearance ... ok
+test top_level_hatch_stays_supported_but_unused_block_is_also_refused ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/safe_z_extended.rs (target/release/deps/safe_z_extended-c911da0fb5c23955)
+
+running 15 tests
+test constant_height_holder_crossing_and_output_uncertainty_band ... ok
+test distant_or_above_body_fixtures_remain_clear ... ok
+test oracle::accepts_tangent ... ok
+test oracle::decoder_preserves_unknown_initial_axes_and_rejects_unknown_motion ... ok
+test oracle::detects_interior_collision ... ok
+test oracle::variable_radius_and_crossing_entry_are_checked ... ok
+test pipeline_checks::characterize_partial_body_metadata_is_not_complete_clearance_evidence ... ok
+test pipeline_checks::collisions_refuse_output_preserve_preview_and_streams_emit_zero_bytes ... ok
+test pipeline_checks::declared_complete_holder_blocks_where_unknown_body_only_warns ... ok
+test pipeline_checks::declared_flute_is_checked_even_when_holder_is_unknown ... ok
+test pipeline_checks::decoded_two_tool_transitions_clear_stock_but_initial_pose_stays_unknown ... ok
+test pipeline_checks::fixture_frame_translation_and_cache_mutation_preserve_warning_semantics ... ok
+test pipeline_checks::progress_stream_collision_never_signals_done_and_cancel_never_publishes ... ok
+test pipeline_checks::shopbot_unqualified_machine_stations_and_parking_stay_refused ... ok
+test sloped_rapid_cannot_hide_holder_collision_below_high_endpoint ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+

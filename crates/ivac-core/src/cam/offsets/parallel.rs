@@ -29,7 +29,7 @@ pub fn object_signed_area(obj: &VcObject) -> f64 {
 }
 
 /// Exact chord + circular-segment area, including two-arc circles and major arcs.
-pub(super) fn segments_signed_area(segments: &[Segment]) -> f64 {
+pub(crate) fn segments_signed_area(segments: &[Segment]) -> f64 {
     let mut sum = 0.0;
     for seg in segments {
         // Chord shoelace contribution.
@@ -623,7 +623,7 @@ pub fn small_circle_drill(obj: &VcObject, tool_radius: f64) -> Option<PolylineOf
 /// chains. Common centre/radius alone is insufficient (a reversed half-loop
 /// or multiple revolutions is not a circle boundary). Tolerances below cover
 /// floating arithmetic only, not physical fit or polygon-to-circle inference.
-fn analytic_circle_geometry(obj: &VcObject) -> Option<(Point2, f64)> {
+pub(crate) fn analytic_circle_geometry(obj: &VcObject) -> Option<(Point2, f64)> {
     use crate::geometry::SegmentKind;
     if !obj.closed || obj.segments.is_empty() {
         return None;

@@ -8,6 +8,8 @@
   /// list. Generate is routed through `generateBus` (the same signal the
   /// pull-to-refresh gesture uses), which the still-mounted GenerateBar
   /// honours.
+  import { generationContextKey, coerceGenerationPost } from '../state/generation-context';
+  import { workspace } from '../state/workspace.svelte';
   import { project } from '../state/project.svelte';
   import { t } from '../i18n';
   import { warningMessage } from './warning-display';
@@ -33,7 +35,15 @@
         (project.gen.generated as { warnings?: PipelineWarning[] } | null)?.warnings ?? [],
       hasGenerated: project.gen.generated != null,
       hasSimDiagnostics: project.gen.simDiagnostics != null,
-      dirty: project.data.dirty,
+      dirty:
+        project.gen.generated != null &&
+        project.gen.inputContextKey !==
+          generationContextKey(
+            project,
+            coerceGenerationPost(
+              project.data.machine.gcodeDialect ?? workspace.get().last_post_processor,
+            ),
+          ),
     }),
   );
   const simWarnings = $derived(summary.sim);

@@ -1329,6 +1329,19 @@ mod tests {
     /// / `set_fixtures` route through the same `warning_cache.clear()`; they
     /// take a `JsValue` so they're exercised in the browser, not here.)
     #[test]
+    fn audit_15_16_reset_then_changed_tool_rechecks_cached_warnings() {
+        let mut sim = new_sim(0., 0., 20., 20., 1., 0.);
+        let mut segment = plunge(5., 5., -1., -1.);
+        segment.kind = MoveKind::Rapid;
+        let segments = vec![segment];
+        sim.advance_inner(&segments, &endmill(0.2), 0, 1);
+        assert!(sim.last_diagnostics.warnings.is_empty());
+        sim.reset();
+        sim.advance_inner(&segments, &endmill(4.), 0, 1);
+        assert!(!sim.last_diagnostics.warnings.is_empty());
+    }
+
+    #[test]
     fn clear_toolpath_drops_warning_cache() {
         let mut sim = new_sim(0.0, 0.0, 40.0, 40.0, 1.0, 0.0);
         let segs = vec![plunge(10.0, 10.0, 0.0, -1.0)];

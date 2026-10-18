@@ -1,0 +1,16 @@
+{
+  "version": "0.9.0-beta.3",
+  "pipeline": 61,
+  "fresh_checks": {
+    "core_cps_profiling_serial_passed": 1204,
+    "frontend_passed": 1367,
+    "frontend_skipped": 1,
+    "wasm_package_state_passed": 10,
+    "check": "PASS: 0 errors/warnings",
+    "lint": "PASS",
+    "version_schema_codegen": "PASS"
+  },
+  "production_source_reference_before_version_bump": "940/940 source/build/test files match final consolidation manifest",
+  "historical_evidence": "Preserved audit, SAFE-Z, TEST1 and adapter evidence; not relabelled as rerun tests",
+  "manual_platform_and_physical": "Not executed by these commands"
+}

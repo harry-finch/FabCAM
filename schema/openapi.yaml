@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: ivaCAM API
-  version: 0.9.0-beta.2
+  version: 0.9.0-beta.3
   description: |
     JSON contract for ivaCAM core operations.
     Implementation-agnostic: served by the Stage-1 Python FastAPI bridge,
@@ -926,6 +926,25 @@ components:
       - materials
       - profile_set
       - tools
+      type: object
+    DiagnosticPreview:
+      description: Rejected path for inspection only. Deliberately contains no executable text.
+      properties:
+        side:
+          anyOf:
+          - $ref: '#/components/schemas/WorkpieceSide'
+          - type: 'null'
+        toolpath:
+          items:
+            $ref: '#/components/schemas/ToolpathSegment'
+          type: array
+        warnings:
+          items:
+            $ref: '#/components/schemas/PipelineWarning'
+          type: array
+      required:
+      - toolpath
+      - warnings
       type: object
     DowelPinConfig:
       description: Auto-placed dowel-pin registration for a two-sided job. The front program drills `count` holes of `diameter_mm`, inset `margin_mm` from the stock edge and placed symmetrically about the flip axis so the same holes line up once the stock is flipped. Exact positions are derived in a later phase; this struct is only the operator-facing knobs.
@@ -6170,6 +6189,11 @@ components:
       - rectangle
       - ramp
       type: string
+    TabWidthMode:
+      enum:
+      - legacy_center
+      - material_v1
+      type: string
     TabsConfig:
       properties:
         active:
@@ -6187,6 +6211,10 @@ components:
         width:
           format: double
           type: number
+        width_mode:
+          allOf:
+          - $ref: '#/components/schemas/TabWidthMode'
+          description: Missing in saved projects means the historical centre-path zone.
       required:
       - active
       - height
@@ -7089,6 +7117,11 @@ components:
           - $ref: '#/components/schemas/ErrorCode'
           - type: 'null'
           description: Stable localization key for the message + hint. `None` means the frontend falls back to the English `message`/`recovery_hint`.
+        diagnostic_preview:
+          anyOf:
+          - $ref: '#/components/schemas/DiagnosticPreview'
+          - type: 'null'
+          description: Inspection-only path from a refused generation; never executable output.
         kind:
           $ref: '#/components/schemas/ErrorKind'
         message:

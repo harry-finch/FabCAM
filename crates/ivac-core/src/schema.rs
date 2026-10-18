@@ -99,7 +99,11 @@ pub(crate) fn insert<T: schemars::JsonSchema>(map: &mut SchemaMap, name: &str) {
         obj.remove("title");
         if let Some(Value::Object(inner)) = obj.remove("definitions") {
             for (k, vv) in inner {
-                map.entry(k).or_insert(vv);
+                if let Some(previous) = map.get(&k) {
+                    assert_eq!(previous, &vv, "schema definition conflict on `{k}`");
+                } else {
+                    map.insert(k, vv);
+                }
             }
         }
     }
@@ -266,5 +270,27 @@ mod tests {
             }
             _ => {}
         }
+    }
+}
+
+#[cfg(test)]
+mod audit_11_12 {
+    use super::*;
+    #[allow(dead_code)]
+    #[derive(JsonSchema)]
+    struct Outer {
+        item: Nested,
+    }
+    #[allow(dead_code)]
+    #[derive(JsonSchema)]
+    struct Nested {
+        value: f64,
+    }
+    #[test]
+    #[should_panic(expected = "schema definition conflict")]
+    fn nested_conflicting_definition_is_not_silently_reused() {
+        let mut map = SchemaMap::new();
+        map.insert("Nested".into(), json!({"type":"string"}));
+        insert::<Outer>(&mut map, "Outer");
     }
 }

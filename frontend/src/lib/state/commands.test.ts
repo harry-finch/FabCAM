@@ -813,3 +813,17 @@ describe('updateReliefSourceCommand (rt1.12 j7b4)', () => {
     ).toBeUndefined();
   });
 });
+
+it('tab width conversion is explicit, persistent and reversible', async () => {
+  const { History } = await import('./history');
+  const t = blankTarget();
+  t.operations = [sampleOp(1)];
+  const before = JSON.stringify(t.operations);
+  const h = new History();
+  h.exec(updateOperationCommand(1, { tabWidthMode: 'material_v1' }), t);
+  expect(JSON.parse(JSON.stringify(t.operations))[0].tabWidthMode).toBe('material_v1');
+  h.undo(t);
+  expect(JSON.stringify(t.operations)).toBe(before);
+  h.redo(t);
+  expect((t.operations[0] as ProfileOp).tabWidthMode).toBe('material_v1');
+});

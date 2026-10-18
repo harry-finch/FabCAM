@@ -1,0 +1,12 @@
+{
+  "case": {
+    "complexity": 1,
+    "index": 6,
+    "property": "B1",
+    "scale": 1.0,
+    "seed": 4925316778106641894
+  },
+  "result": {
+    "Err": "move_budget:actual=20167"
+  }
+}

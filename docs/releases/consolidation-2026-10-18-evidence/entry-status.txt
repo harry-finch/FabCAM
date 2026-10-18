@@ -1,0 +1,98 @@
+ M crates/ivac-core/src/cam/offsets/mod.rs
+ M crates/ivac-core/src/cam/offsets/parallel.rs
+ M crates/ivac-core/src/cam/offsets/tabs.rs
+ M crates/ivac-core/src/cam/surface_mill.rs
+ M crates/ivac-core/src/cam/waterline.rs
+ M crates/ivac-core/src/gcode.rs
+ M crates/ivac-core/src/gcode/arc_fit.rs
+ M crates/ivac-core/src/gcode/cps_recorder.rs
+ M crates/ivac-core/src/gcode/emit.rs
+ M crates/ivac-core/src/gcode/entry.rs
+ M crates/ivac-core/src/gcode/leads.rs
+ M crates/ivac-core/src/gcode/linuxcnc.rs
+ M crates/ivac-core/src/gcode/order.rs
+ M crates/ivac-core/src/gcode/post_profile.rs
+ M crates/ivac-core/src/gcode/preview.rs
+ M crates/ivac-core/src/gcode/tabs.rs
+ M crates/ivac-core/src/pipeline.rs
+ M crates/ivac-core/src/pipeline/cps_ctx.rs
+ M crates/ivac-core/src/pipeline/offset_builder.rs
+ M crates/ivac-core/src/pipeline/op_drivers/drill.rs
+ M crates/ivac-core/src/pipeline/op_drivers/dual_tool.rs
+ M crates/ivac-core/src/pipeline/op_drivers/surface_mill.rs
+ M crates/ivac-core/src/pipeline/op_drivers/thread.rs
+ M crates/ivac-core/src/pipeline/op_drivers/waterline.rs
+ M crates/ivac-core/src/pipeline/setup_resolver.rs
+ M crates/ivac-core/src/pipeline/tests.rs
+ M crates/ivac-core/src/pipeline_cache.rs
+ M crates/ivac-core/src/profiling.rs
+ M crates/ivac-core/src/project/op.rs
+ M crates/ivac-core/src/project/params.rs
+ M crates/ivac-core/src/project/tool.rs
+ M crates/ivac-core/src/schema.rs
+ M crates/ivac-core/src/sim/fixture_check.rs
+ M crates/ivac-core/src/sim/holder.rs
+ M crates/ivac-core/src/sim/holder_check.rs
+ M crates/ivac-core/src/sim/rapid_check.rs
+ M crates/ivac-core/src/sim/stl.rs
+ M crates/ivac-core/src/sim/sweep.rs
+ M crates/ivac-core/src/sim/timing.rs
+ M crates/ivac-core/src/version.rs
+ M crates/ivac-core/tests/cps_posts.rs
+ M crates/ivac-core/tests/shopbot_m2_post.rs
+ M crates/ivac-core/tests/snapshots_drill_tabs_whirl.rs
+ M crates/ivac-cps/src/engine.rs
+ M crates/ivac-cps/src/run.rs
+ M crates/ivac-server/src/main.rs
+ M crates/ivac-tauri/src/commands.rs
+ M crates/ivac-tauri/src/lib.rs
+ M crates/ivac-tauri/src/source_packs.rs
+ M crates/ivac-tauri/src/watcher.rs
+ M crates/ivac-wasm/src/sim.rs
+ M docs/CONTRIBUTING.md
+ M docs/releases/FABCAM_V1_5_SCOPE.md
+ M docs/releases/FABCAM_V1_SCOPE.md
+ M docs/releases/RELEASE_ROADMAP.md
+ M docs/shopbot-modernization/ARCHITECTURE.md
+ M docs/shopbot-modernization/DEVLOG.md
+ M docs/shopbot-modernization/FUTURE_PROCESSES.md
+ M docs/shopbot-modernization/README.md
+ M docs/shopbot-modernization/ROADMAP.md
+ M docs/shopbot-modernization/STATUS.md
+ M docs/shopbot-modernization/adr/README.md
+ M frontend/src/lib/api/build-project.test.ts
+ M frontend/src/lib/api/build-project.ts
+ M frontend/src/lib/api/generated.ts
+ M frontend/src/lib/components/ToolRowSummary.svelte
+ M frontend/src/lib/components/op_properties/TabsSection.svelte
+ M frontend/src/lib/i18n/keys.ts
+ M frontend/src/lib/i18n/messages/de.json
+ M frontend/src/lib/i18n/messages/en.json
+ M frontend/src/lib/state/commands.test.ts
+ M frontend/src/lib/state/op_defaults.test.ts
+ M frontend/src/lib/state/op_defaults.ts
+ M frontend/src/lib/state/op_types.ts
+ M frontend/src/lib/state/operation-templates.ts
+ M schema/openapi.yaml
+ M tests/fixtures/shopbot-m2/circle.sbp
+ M tests/fixtures/shopbot-m2/multiple.sbp
+?? crates/ivac-core/src/gcode/tabs/
+?? crates/ivac-core/src/pipeline/audit_13_14.rs
+?? docs/development/
+?? docs/releases/ADVANCED_CAM_PLAN.md
+?? docs/releases/ARCH_MACH_PLAN.md
+?? docs/releases/OMX1_PLAN.md
+?? docs/releases/POST_AUDIT_CONSOLIDATION.md
+?? docs/releases/SHOPBOT_WORKSHOP_ADDITIONS.md
+?? docs/releases/TEST1_PLAN.md
+?? docs/releases/V1_REMAINING_2026_10_18.md
+?? docs/releases/v1-validation-2026-10-17/
+?? docs/shopbot-modernization/HOLDING_PREVIEW_CONTRACT_AUDIT_2026_10_18.md
+?? docs/shopbot-modernization/MOTION_DRIVERS_AUDIT_2026_10_18.md
+?? docs/shopbot-modernization/SIMULATION_CACHE_AUDIT_2026_10_18.md
+?? docs/shopbot-modernization/TRANSPORT_DESKTOP_AUDIT_2026_10_18.md
+?? docs/shopbot-modernization/adr/ADR-0022-versioned-tab-width.md
+?? docs/shopbot-modernization/holding-preview-audit-2026-10-18-evidence/
+?? docs/shopbot-modernization/motion-drivers-audit-2026-10-18-evidence/
+?? docs/shopbot-modernization/simulation-cache-audit-2026-10-18-evidence/
+?? docs/shopbot-modernization/transport-desktop-audit-2026-10-18-evidence/

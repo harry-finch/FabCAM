@@ -1,0 +1,18 @@
+   Compiling indexmap v2.14.0
+   Compiling unsafe-libyaml v0.2.11
+   Compiling ryu v1.0.23
+   Compiling toml_edit v0.25.11+spec-1.1.0
+   Compiling boa_interner v0.21.1
+   Compiling serde_yaml v0.9.34+deprecated
+   Compiling boa_ast v0.21.1
+   Compiling proc-macro-crate v3.5.0
+   Compiling num_enum_derive v0.7.6
+   Compiling num_enum v0.7.6
+   Compiling boa_parser v0.21.1
+   Compiling boa_engine v0.21.1
+   Compiling ivac-cps v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling xtask v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/xtask)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 12.85s
+     Running `target/debug/xtask schema`
+regenerated /Users/mugen/Documents/01_Projets/FabCAM/ivacam/schema/openapi.yaml

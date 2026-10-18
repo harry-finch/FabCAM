@@ -91,6 +91,10 @@ pub(super) fn run_dual_tool_or_single<P: PostProcessor>(
         // the envelope up to that directly so the post doesn't emit a
         // transient M3 at the rough speed first.
         Some(finish_setup.tool.speed),
+        Some((
+            finish_setup.tool.rate_h_finish,
+            finish_setup.tool.rate_v_finish,
+        )),
     );
     if !finish_offsets.is_empty() {
         emit_polylines_block(&finish_setup, &finish_offsets, post, last_pos);

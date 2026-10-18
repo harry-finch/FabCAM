@@ -1690,3 +1690,7 @@ mod tests {
 
 #[cfg(test)]
 mod audit_tests;
+
+pub(crate) use parallel::{analytic_circle_geometry, segments_signed_area};
+
+pub(crate) use tabs::closest_point_on_segment;

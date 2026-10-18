@@ -146,10 +146,23 @@ fn target_signed(field: &SurfaceField, ix: i64, iy: i64) -> f32 {
 /// Precomputed tip footprint: `(dx, dy, offset)` for every cell whose
 /// center lies within `R` of the axis, using the bull-nose / ball-nose tip
 /// profile ([`tip_drop_offset`]).
+#[cfg(test)]
 fn tip_kernel(radius_mm: f64, corner_radius_mm: f64, cell: f64) -> Vec<(i32, i32, f32)> {
+    tip_kernel_cancellable(radius_mm, corner_radius_mm, cell, None).expect("no token")
+}
+
+fn tip_kernel_cancellable(
+    radius_mm: f64,
+    corner_radius_mm: f64,
+    cell: f64,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Option<Vec<(i32, i32, f32)>> {
     let kr = (radius_mm / cell).ceil() as i32;
     let mut k = Vec::with_capacity(((2 * kr + 1) * (2 * kr + 1)) as usize);
     for dy in -kr..=kr {
+        if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+            return None;
+        }
         for dx in -kr..=kr {
             let dmm = (((dx as f64) * cell).powi(2) + ((dy as f64) * cell).powi(2)).sqrt();
             if dmm <= radius_mm {
@@ -161,7 +174,7 @@ fn tip_kernel(radius_mm: f64, corner_radius_mm: f64, cell: f64) -> Vec<(i32, i32
             }
         }
     }
-    k
+    Some(k)
 }
 
 /// Compute the "dropped" field: tip Z at every cell such that a tool of
@@ -180,21 +193,46 @@ pub fn drop_cutter(
     tool_radius_mm: f64,
     corner_radius_mm: f64,
 ) -> SurfaceField {
+    drop_cutter_cancellable(field, tool_radius_mm, corner_radius_mm, None)
+        .expect("no cancellation token")
+}
+
+pub fn drop_cutter_cancellable(
+    field: &SurfaceField,
+    tool_radius_mm: f64,
+    corner_radius_mm: f64,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Option<SurfaceField> {
+    if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+        return None;
+    }
     assert!(tool_radius_mm > 0.0, "tool radius must be > 0");
-    let mut kernel: Vec<_> = tip_kernel(tool_radius_mm, corner_radius_mm, field.cell)
-        .into_iter()
-        .enumerate()
-        .collect();
+    let mut kernel: Vec<_> =
+        tip_kernel_cancellable(tool_radius_mm, corner_radius_mm, field.cell, cancel)?
+            .into_iter()
+            .enumerate()
+            .collect();
     kernel.sort_by(|a, b| a.1 .2.total_cmp(&b.1 .2));
     let z_max = field.z.iter().copied().fold(SURFACE_TOP_Z, f32::max);
     let cols = field.cols as i64;
     let rows = field.rows as i64;
     let mut out = vec![SURFACE_TOP_Z; field.z.len()];
     for iy in 0..rows {
+        if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+            return None;
+        }
         for ix in 0..cols {
+            if ix % 64 == 0 && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+                return None;
+            }
             let mut best = f32::NEG_INFINITY;
             let mut best_index = usize::MAX;
-            for &(index, (dx, dy, off)) in &kernel {
+            for (poll_index, &(index, (dx, dy, off))) in kernel.iter().enumerate() {
+                if poll_index % 1024 == 0
+                    && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled)
+                {
+                    return None;
+                }
                 // Strict comparison and original tie order preserve signed zero.
                 if z_max - off < best {
                     break;
@@ -208,7 +246,13 @@ pub fn drop_cutter(
             out[(iy * cols + ix) as usize] = best;
         }
     }
-    SurfaceField::new(field.origin, field.cell, field.cols, field.rows, out)
+    Some(SurfaceField::new(
+        field.origin,
+        field.cell,
+        field.cols,
+        field.rows,
+        out,
+    ))
 }
 
 /// Effective stepover: explicit override (if positive) else the scallop
@@ -261,8 +305,21 @@ fn axis_positions(lo: f64, hi: f64, step: f64) -> Vec<f64> {
 /// Panics if `params.tool_radius_mm <= 0`.
 #[must_use]
 pub fn surface_mill(field: &SurfaceField, params: &SurfaceMillParams) -> Vec<Vec<(f64, f64, f64)>> {
+    surface_mill_cancellable(field, params, None).expect("no cancellation token")
+}
+
+pub fn surface_mill_cancellable(
+    field: &SurfaceField,
+    params: &SurfaceMillParams,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Option<Vec<Vec<(f64, f64, f64)>>> {
     assert!(params.tool_radius_mm > 0.0, "tool radius must be > 0");
-    let dropped = drop_cutter(field, params.tool_radius_mm, params.corner_radius_mm);
+    let dropped = drop_cutter_cancellable(
+        field,
+        params.tool_radius_mm,
+        params.corner_radius_mm,
+        cancel,
+    )?;
     let step = effective_stepover(field, params);
     let along = params.along_step_mm.max(field.cell * 0.25).max(1e-3);
 
@@ -279,6 +336,9 @@ pub fn surface_mill(field: &SurfaceField, params: &SurfaceMillParams) -> Vec<Vec
     match params.direction {
         ScanDirection::AlongX => {
             for (k, &y) in axis_positions(y0, y1, step).iter().enumerate() {
+                if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+                    return None;
+                }
                 let mut xs = axis_positions(x0, x1, along);
                 if k % 2 == 1 {
                     xs.reverse();
@@ -292,6 +352,9 @@ pub fn surface_mill(field: &SurfaceField, params: &SurfaceMillParams) -> Vec<Vec
         }
         ScanDirection::AlongY => {
             for (k, &x) in axis_positions(x0, x1, step).iter().enumerate() {
+                if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+                    return None;
+                }
                 let mut ys = axis_positions(y0, y1, along);
                 if k % 2 == 1 {
                     ys.reverse();
@@ -304,7 +367,7 @@ pub fn surface_mill(field: &SurfaceField, params: &SurfaceMillParams) -> Vec<Vec
             }
         }
     }
-    polylines
+    Some(polylines)
 }
 
 #[cfg(test)]
@@ -605,5 +668,18 @@ mod tests {
         let l0 = &lines[0];
         approx(l0[0].0, l0[l0.len() - 1].0, 1e-9);
         assert!((l0[0].1 - l0[l0.len() - 1].1).abs() > 1.0);
+    }
+}
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+
+    #[test]
+    fn cancelled_drop_returns_no_partial_field() {
+        let f = SurfaceField::new(crate::geometry::Point2::new(0., 0.), 1., 2, 2, vec![-1.; 4]);
+        let token = crate::cancel::CancelToken::new();
+        token.cancel();
+        assert!(drop_cutter_cancellable(&f, 1., 1., Some(&token)).is_none());
     }
 }

@@ -1,0 +1,4 @@
+
+thread 'test1_case' panicked at crates/ivac-core/tests/test1_properties.rs:512:5:
+move_budget:actual=20167
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

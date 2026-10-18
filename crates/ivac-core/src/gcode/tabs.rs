@@ -11,6 +11,9 @@ use super::PostProcessor;
 use crate::geometry::{Point2, Segment, SegmentKind};
 use crate::math;
 
+// Current generic IR chord error (0.01 mm) plus coordinate rounding.
+pub(super) const RETENTION_MARGIN_MM: f64 = 0.0101;
+
 /// Emit the cut path with tab interruptions. For each LINE segment that
 /// crosses a tab's `tab_radius` neighborhood, the cut is split: cut up to
 /// the entry, lift Z to `tabs_z`, traverse to the exit, drop back to
@@ -22,6 +25,7 @@ use crate::math;
 #[allow(clippy::too_many_arguments)]
 pub(super) fn emit_path_with_tabs<P: PostProcessor>(
     segments: &[Segment],
+    material_tool_radius: Option<f64>,
     tabs: &[crate::cam::offsets::TabPoint],
     tabs_z: f64,
     cut_z: f64,
@@ -35,6 +39,21 @@ pub(super) fn emit_path_with_tabs<P: PostProcessor>(
     rate_h: u32,
     post: &mut P,
 ) {
+    if let Some(tool_radius) = material_tool_radius {
+        physical::emit(
+            segments,
+            tabs,
+            tabs_z,
+            cut_z,
+            tab_radius * 2.,
+            tool_radius,
+            ramp_angle_deg,
+            rate_v,
+            rate_h,
+            post,
+        );
+        return;
+    }
     for seg in segments {
         match seg.kind {
             SegmentKind::Line => {
@@ -107,9 +126,17 @@ pub(super) fn emit_path_with_tabs<P: PostProcessor>(
                     } else {
                         post.arc_cw(Some(seg.end.x), Some(seg.end.y), None, Some(i), Some(j));
                     }
-                    // Drop at plunge feed, restore cut feed.
+                    // An arc boundary may lie inside a tab shared with the
+                    // next segment. Never puncture that bridge at the seam.
+                    let end_floor = tabs
+                        .iter()
+                        .filter(|t| {
+                            (t.x - seg.end.x).hypot(t.y - seg.end.y)
+                                <= t.radius(fallback_width) + 1e-9
+                        })
+                        .fold(cut_z, |z, t| z.max(cut_z + t.lift(fallback_lift)));
                     post.feedrate(rate_v);
-                    post.linear(None, None, Some(cut_z));
+                    post.linear(None, None, Some(end_floor));
                     post.feedrate(rate_h);
                 }
             }
@@ -405,3 +432,50 @@ fn emit_arc_chord_with_tabs<P: PostProcessor>(
         post.linear(Some(point.x), Some(point.y), Some(tab_z(point)));
     }
 }
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+    #[test]
+    fn rectangle_tab_crossing_arc_seam_is_not_punctured() {
+        use crate::cam::offsets::TabPoint;
+        let a = Point2::new(10., 0.);
+        let b = Point2::new(-10., 0.);
+        let c = Point2::new(0., 0.);
+        let segments = [
+            Segment::arc(a, b, 1., Some(c), "0", 7),
+            Segment::arc(b, a, 1., Some(c), "0", 7),
+        ];
+        let mut post = crate::gcode::linuxcnc::Post::new();
+        post.move_to(Some(a.x), Some(a.y), Some(-5.));
+        emit_path_with_tabs(
+            &segments,
+            None,
+            &[TabPoint {
+                x: b.x,
+                y: b.y,
+                width_override_mm: None,
+                height_override_mm: None,
+            }],
+            -4.,
+            -5.,
+            2.,
+            None,
+            100,
+            1000,
+            &mut post,
+        );
+        let moves = crate::gcode::preview::interpret(&post.finish());
+        assert!(moves
+            .iter()
+            .any(|m| (m.to.x - b.x).hypot(m.to.y - b.y) < 1e-6));
+        for m in moves
+            .iter()
+            .filter(|m| (m.to.x - b.x).hypot(m.to.y - b.y) < 1e-6)
+        {
+            assert!(m.to.z >= -4.000001, "tab seam plunged through: {m:?}");
+        }
+    }
+}
+
+mod physical;

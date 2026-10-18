@@ -1,0 +1,72 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.36s
+     Running tests/hatch_safe_z.rs (target/debug/deps/hatch_safe_z-e0f640f5586459bd)
+
+running 14 tests
+test custom_identity_z_rounding_must_not_erase_clearance ... ok
+test finite_and_disabled_and_unknown_stock_contracts ... ok
+test generic_parking_and_stream_preview_retain_safe_air_traversals ... ok
+test hatch_block_is_refused_instead_of_imported_at_definition_coordinates ... ok
+test header_only_job_cannot_bypass_stock_guard ... ok
+test inch_serialization_guard_and_shared_process_boundary ... ok
+test invalid_clearance_stream_writes_no_bytes ... ok
+test known_stock_refuses_clearance_at_or_below_top ... ok
+test shopbot_decoded_lateral_rapids_stay_above_stock_with_two_clearances ... ok
+test shopbot_invalid_stock_clearance_and_existing_z_origin_refuse ... ok
+test shopbot_parking_stays_explicitly_unsupported ... ok
+test stock_edit_is_revalidated_even_after_successful_cached_generation ... ok
+test supported_pocket_and_drill_keep_air_clearance ... ok
+test top_level_hatch_stays_supported_but_unused_block_is_also_refused ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.02s
+
+     Running tests/safe_z_extended.rs (target/debug/deps/safe_z_extended-a01bb99c0086ab98)
+
+running 11 tests
+test constant_height_holder_crossing_and_output_uncertainty_band ... ok
+test distant_or_above_body_fixtures_remain_clear ... ok
+test oracle::accepts_tangent ... ok
+test oracle::decoder_preserves_unknown_initial_axes_and_rejects_unknown_motion ... ok
+test oracle::detects_interior_collision ... ok
+test oracle::variable_radius_and_crossing_entry_are_checked ... ok
+test pipeline_checks::characterize_collision_warning_and_streaming_policy_not_safety_acceptance ... ok
+test pipeline_checks::decoded_two_tool_transitions_clear_stock_but_initial_pose_stays_unknown ... ok
+test pipeline_checks::fixture_frame_translation_and_cache_mutation_preserve_warning_semantics ... ok
+test pipeline_checks::shopbot_unqualified_machine_stations_and_parking_stay_refused ... ok
+test sloped_rapid_cannot_hide_holder_collision_below_high_endpoint ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s
+
+     Running tests/shopbot_m2_post.rs (target/debug/deps/shopbot_m2_post-f11db9a6a419972a)
+
+running 27 tests
+test cam3_curved_tabs_preserve_center_and_compensated_radius ... ok
+test cam3_direct_entry_tab_lead_direction_matrix_has_output_preview_parity ... ok
+test cam3_tab_at_entry_cannot_be_plunged_through ... ok
+test cam3_tab_width_and_absolute_height_override_preserve_material ... ok
+test cam4_pocket_residual_tracks_emitted_path_and_work_origin ... ok
+test circular_profile ... ok
+test island_pocket ... ok
+test m3_unverified_clearance_refuses_sbp_export ... ok
+test m4_lab_spindle_runs_real_cam_and_preserves_manual_default ... ok
+test multiple_operations ... ok
+test peck_drilling ... ok
+test square_profile ... ok
+test unsupported_machine_policies_fail ... ok
+test ux1_circular_ramp_chords_obey_post_tolerance_and_direction ... ok
+test ux1_curved_ramp_exports_instead_of_rejecting_varying_z_arc ... ok
+test ux1_direct_tabs_and_leads_remain_explicit_supported_choices ... ok
+test ux1_explicit_geometry_and_stock_translation_preserves_entry_preview ... ok
+test ux1_final_preview_matches_emitted_xyz_lines_for_profile_and_pocket ... ok
+test ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct ... ok
+test ux1_pocket_islands_and_open_profile_helix_never_gain_silent_machine_fallback ... ok
+test ux1_ramps_qualify_simple_curved_concave_open_and_island_sources ... ok
+test ux1_unqualified_entry_and_origin_combinations_fail_explicitly ... ok
+test ux2_fixture_collision_and_pocket_regions_stay_in_the_same_work_frame ... ok
+test ux2_invalid_origin_and_obstacle_geometry_fail_before_output ... ok
+test ux2_polar_drill_center_and_explicit_approach_translate_with_the_drawing ... ok
+test ux2_unqualified_two_sided_shopbot_scaffold_blocks_before_invalid_output ... ok
+test ux2_work_zero_translates_actual_output_without_changing_intent_or_depths ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 197.63s
+

@@ -1,0 +1,196 @@
+{
+  "project": {
+    "segments": [
+      {
+        "type": "LINE",
+        "start": {
+          "x": 10.0,
+          "y": 10.0
+        },
+        "end": {
+          "x": 50.0,
+          "y": 10.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      },
+      {
+        "type": "LINE",
+        "start": {
+          "x": 50.0,
+          "y": 10.0
+        },
+        "end": {
+          "x": 50.0,
+          "y": 40.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      },
+      {
+        "type": "LINE",
+        "start": {
+          "x": 50.0,
+          "y": 40.0
+        },
+        "end": {
+          "x": 10.0,
+          "y": 40.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      },
+      {
+        "type": "LINE",
+        "start": {
+          "x": 10.0,
+          "y": 40.0
+        },
+        "end": {
+          "x": 10.0,
+          "y": 10.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      },
+      {
+        "type": "LINE",
+        "start": {
+          "x": 20.0,
+          "y": 18.0
+        },
+        "end": {
+          "x": 24.0,
+          "y": 18.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      },
+      {
+        "type": "LINE",
+        "start": {
+          "x": 24.0,
+          "y": 18.0
+        },
+        "end": {
+          "x": 24.0,
+          "y": 22.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      },
+      {
+        "type": "LINE",
+        "start": {
+          "x": 24.0,
+          "y": 22.0
+        },
+        "end": {
+          "x": 20.0,
+          "y": 22.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      },
+      {
+        "type": "LINE",
+        "start": {
+          "x": 20.0,
+          "y": 22.0
+        },
+        "end": {
+          "x": 20.0,
+          "y": 18.0
+        },
+        "bulge": 0.0,
+        "layer": "0",
+        "color": 7
+      }
+    ],
+    "machine": {
+      "unit": "mm",
+      "mode": "mill",
+      "comments": true,
+      "arcs": true,
+      "tool_change": "manual_m0_pause"
+    },
+    "tools": [
+      {
+        "id": 1,
+        "name": "2mm endmill",
+        "kind": "endmill",
+        "diameter": 2.0,
+        "tip_angle_deg": 60.0,
+        "flutes": 2,
+        "speed": 18000,
+        "plunge_rate": 200,
+        "feed_rate": 1200,
+        "coolant": "off"
+      }
+    ],
+    "operations": [
+      {
+        "id": 1,
+        "name": "TEST1 SOFTWARE ONLY",
+        "enabled": true,
+        "kind": {
+          "type": "pocket",
+          "strategy": "cascade",
+          "contour": {
+            "tabs": {
+              "active": false,
+              "width": 10.0,
+              "height": 1.0,
+              "tab_type": "rectangle"
+            },
+            "leads": {
+              "in": "off",
+              "out": "off",
+              "in_lenght": 5.0,
+              "out_lenght": 5.0
+            }
+          },
+          "pocket": {
+            "xy_overlap": 0.5,
+            "pocket_islands": true,
+            "pocket_nocontour": false
+          }
+        },
+        "tool_id": 1,
+        "source": {
+          "kind": "all"
+        },
+        "params": {
+          "depth": -0.5,
+          "start_depth": 0.0,
+          "step": -0.25,
+          "fast_move_z": 5.0,
+          "objectorder": "nearest"
+        }
+      }
+    ],
+    "stock": {
+      "origin": [
+        0.0,
+        0.0
+      ],
+      "width_mm": 100.0,
+      "height_mm": 100.0,
+      "thickness_mm": 18.0
+    }
+  },
+  "post_processor": "cps",
+  "cps_post": {
+    "source": {
+      "kind": "bundled",
+      "id": "shopbot"
+    }
+  }
+}

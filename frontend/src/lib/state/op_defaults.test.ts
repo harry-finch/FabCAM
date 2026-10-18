@@ -170,3 +170,9 @@ describe('buildOpEntry — geometry kinds', () => {
     expect(buildOpEntry('profile', ctx({ selectionIds: [] }))).not.toHaveProperty('sourceObjects');
   });
 });
+
+it('new milling contours use material-width tabs explicitly', () => {
+  for (const kind of ['profile', 'pocket'] as const) {
+    expect(buildOpEntry(kind, ctx())).toMatchObject({ tabWidthMode: 'material_v1' });
+  }
+});

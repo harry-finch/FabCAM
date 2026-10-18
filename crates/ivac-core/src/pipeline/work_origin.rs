@@ -107,26 +107,31 @@ pub(super) fn fixture_warnings(
     path: &[crate::gcode::preview::ToolpathSegment],
     warnings: &mut Vec<super::PipelineWarning>,
 ) {
+    fixture_warnings_cancellable(project, path, warnings, None);
+}
+
+pub(super) fn fixture_warnings_cancellable(
+    project: &Project,
+    path: &[crate::gcode::preview::ToolpathSegment],
+    warnings: &mut Vec<super::PipelineWarning>,
+    cancel: Option<&super::CancelToken>,
+) {
     use crate::sim::fixture_check::{check_segment_against_fixtures, FixtureCheck};
     use crate::sim::holder::HolderProfile;
     if project.fixtures.is_empty() {
         return;
     }
+    let uses_tool = |o: &crate::project::Op, id: u32| {
+        id == o.tool_id
+            || Some(id) == o.finish_tool_id
+            || matches!(&o.kind, OpKind::Drill { spot_first: Some(spot), .. } if spot.spot_tool_id == id)
+    };
     let mut seen = std::collections::BTreeSet::new();
     let mut unknown = std::collections::BTreeSet::new();
-    // Without a declared body/holder length, do not certify a clamp above
-    // the cutting tip as clear. Conservatively test its XY footprint at any
-    // height above the tip; this can warn rather than invent tool dimensions.
-    let footprints: Vec<_> = project
-        .fixtures
-        .iter()
-        .cloned()
-        .map(|mut f| {
-            f.z_bottom = f64::MIN;
-            f
-        })
-        .collect();
     for s in path {
+        if super::cancelled(cancel) {
+            return;
+        }
         let op = project
             .operations
             .iter()
@@ -142,13 +147,13 @@ pub(super) fn fixture_warnings(
                     project
                         .operations
                         .iter()
-                        .any(|o| o.enabled && (t.id == o.tool_id || Some(t.id) == o.finish_tool_id))
+                        .any(|o| o.enabled && uses_tool(o, t.id))
                 },
-                |o| t.id == o.tool_id || Some(t.id) == o.finish_tool_id,
+                |o| uses_tool(o, t.id),
             )
         }) {
-            let holder = HolderProfile::from_tool(tool);
-            if holder.is_none() && unknown.insert((s.op_id, tool.id)) {
+            let (holder, complete) = HolderProfile::declared_fixture_envelope(tool);
+            if !complete && unknown.insert((s.op_id, tool.id)) {
                 warnings.push(super::PipelineWarning::for_op(s.op_id,"fixture_clearance_unknown",
                     format!("operation {}: cutter footprint checked, but complete body/holder clearance is unknown for '{}'",s.op_id,tool.name))
                     .with_param("op_id",s.op_id.to_string()).with_param("tool_name",tool.name.as_str()));
@@ -157,11 +162,7 @@ pub(super) fn fixture_warnings(
                 s,
                 tool.diameter.max(tool.effective_diameter()) * 0.5,
                 holder.as_ref(),
-                if holder.is_some() {
-                    &project.fixtures
-                } else {
-                    &footprints
-                },
+                &project.fixtures,
             ) {
                 if let FixtureCheck::Collision { fixture_id, .. } = hit {
                     if seen.insert((s.op_id, fixture_id)) {

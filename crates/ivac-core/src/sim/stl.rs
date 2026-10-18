@@ -175,7 +175,11 @@ fn push_shell_tris(
 
     // Sample point in world coordinates (cell-center-as-grid-vertex).
     let pos = |c: usize, r: usize, z: f32| -> [f32; 3] {
-        [ox + c as f32 * cell, oy + r as f32 * cell, z]
+        [
+            ox + (c as f32 + 0.5) * cell,
+            oy + (r as f32 + 0.5) * cell,
+            z,
+        ]
     };
     let h = |c: usize, r: usize| -> f32 { data[r * cols + c] };
 
@@ -1479,5 +1483,16 @@ mod tests {
         let ascii = "solid s vertex 0 0 0 vertex 1 0";
         let err = parse_stl(ascii.as_bytes()).unwrap_err();
         assert!(matches!(err, StlError::Truncated(_)), "got {err:?}");
+    }
+}
+
+#[cfg(test)]
+mod audit_13_14 {
+    use super::*;
+    #[test]
+    fn shell_samples_use_cell_centres() {
+        let mut tris = Vec::new();
+        push_shell_tris(&mut tris, 2, 2, 1., 10., 20., &[0., 0., 0., -2.], -5.);
+        assert!(tris.iter().flatten().any(|p| *p == [11.5, 21.5, -2.]));
     }
 }

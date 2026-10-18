@@ -1,0 +1,12 @@
+   Compiling wasm-bindgen-macro-support v0.2.120
+    Checking uuid v1.10.0
+    Checking ivac-cps v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+    Checking dxf v0.6.1
+   Compiling wasm-bindgen-macro v0.2.120
+    Checking ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Checking wasm-bindgen v0.2.120
+    Checking js-sys v0.3.97
+    Checking console_error_panic_hook v0.1.7
+    Checking serde-wasm-bindgen v0.6.5
+    Checking ivac-wasm v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.63s

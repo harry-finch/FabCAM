@@ -4662,6 +4662,7 @@ fn rectangle_tab_drop_uses_plunge_feedrate() {
     params.fast_move_z = 5.0;
     let contour = crate::project::ContourParams {
         tabs: crate::project::TabsConfig {
+            width_mode: crate::project::TabWidthMode::LegacyCenter,
             active: true,
             width: 5.0,
             height: 1.0,
@@ -5857,7 +5858,7 @@ fn post_change_z_probe_chains_g38_after_manual_change() {
     let op2 = must_find(&g, "; OP 2");
     let between = &g[op1..op2];
     let m0 = must_find(between, "\nM0");
-    let probe = must_find(between, "G38.2 Z-5 F100");
+    let probe = must_find(between, "F100\nG38.2 Z-5");
     let pin = must_find(between, "G92 Z2");
     assert!(
         m0 < probe && probe < pin,
@@ -5916,7 +5917,7 @@ fn post_change_z_fixed_sensor_probes_at_machine_position() {
     // tool across the table at the low approach Z.
     let over = must_find(between, "G53 G0 X200 Y10");
     let approach = must_find(between, "G53 G0 Z30");
-    let probe = must_find(between, "G38.2 Z-40 F80");
+    let probe = must_find(between, "F80\nG38.2 Z-40");
     let apply = must_find(between, "G43.1 Z[#5063 - #<_ivac_tlref>]");
     assert!(
         over < approach && approach < probe && probe < apply,
@@ -5948,7 +5949,7 @@ fn post_change_z_fixed_sensor_reference_tool_gets_touchoff_prompt() {
     // offset, but to record the baseline trigger later tools are
     // differenced against (bare Z[#5063] was wrong by the full
     // sensor-to-stock height).
-    let probe = must_find(between, "G38.2 Z-40 F80");
+    let probe = must_find(between, "F80\nG38.2 Z-40");
     let store = must_find(between, "#<_ivac_tlref> = #5063");
     assert!(
         probe < store,
@@ -5980,7 +5981,7 @@ fn post_change_z_fixed_sensor_first_tool_records_baseline_by_default() {
     let first = &g[..op2];
     let store = must_find(first, "#<_ivac_tlref> = #5063");
     assert!(
-        must_find(first, "G38.2 Z-40 F80") < store,
+        must_find(first, "F80\nG38.2 Z-40") < store,
         "first-tool baseline: probe then store:\n{first}"
     );
     // …and tool 2 differences against it.

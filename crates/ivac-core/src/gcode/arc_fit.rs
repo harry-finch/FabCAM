@@ -245,12 +245,10 @@ fn circumcircle(a: Point2, b: Point2, c: Point2) -> Option<(Point2, f64)> {
     Some((Point2::new(ux, uy), r))
 }
 
-/// Worst chord-vs-arc deviation across the run. The polyline samples lie
-/// ON the fitted circle by construction (we use circumcircle through 3 of
-/// them), so checking radial distance of the SAMPLES is meaningless — the
-/// real question is "do the CHORDS between samples deviate from the arc
-/// by more than `tolerance`?". The chord-arc gap is the sagitta of each
-/// chord: `radius - sqrt(radius² - (chord_len / 2)²)`.
+/// Worst radial deviation over every finite input chord, including vertices
+/// not on the fitted circle. Radial extrema occur at endpoints or at the
+/// closest point to the centre, so vertex error and chord sag cannot hide
+/// each other. Angular ordering is validated separately by the fit caller.
 fn max_deviation(points: &[Point2], center: Point2, radius: f64) -> f64 {
     // First: any sample that's not actually on the circle (e.g. mid
     // witnesses we added later) blows the fit.
@@ -261,19 +259,19 @@ fn max_deviation(points: &[Point2], center: Point2, radius: f64) -> f64 {
             max = d;
         }
     }
-    // Then: per-chord sagitta. A long chord between two points on the
-    // circle bulges away from the arc by sagitta; if that exceeds
-    // tolerance the polyline doesn't approximate the arc.
+    // Radial distance along a finite chord reaches its minimum at the
+    // projection of the centre. Endpoint error and nominal sagitta cannot
+    // be checked independently: their sum may exceed the allowed error.
     for w in points.windows(2) {
-        let chord = w[0].distance(w[1]);
-        let half = chord * 0.5;
-        if half >= radius {
-            return f64::INFINITY;
+        let dx = w[1].x - w[0].x;
+        let dy = w[1].y - w[0].y;
+        let l2 = dx * dx + dy * dy;
+        if l2 == 0.0 {
+            continue;
         }
-        let sag = radius - (radius * radius - half * half).sqrt();
-        if sag > max {
-            max = sag;
-        }
+        let t = (((center.x - w[0].x) * dx + (center.y - w[0].y) * dy) / l2).clamp(0.0, 1.0);
+        let closest = Point2::new(w[0].x + t * dx, w[0].y + t * dy);
+        max = max.max((closest.distance(center) - radius).abs());
     }
     max
 }
@@ -563,5 +561,33 @@ mod tests {
             ),
             FitOutput::Lines(_) => panic!("semicircle should still fit as arcs"),
         }
+    }
+}
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+
+    #[test]
+    fn shifted_chord_error_includes_inward_offset_plus_sag() {
+        let c = Point2::new(0., 0.);
+        let a = 0.1_f64;
+        let pts = [
+            Point2::new(9.96 * a.cos(), -9.96 * a.sin()),
+            Point2::new(9.96 * a.cos(), 9.96 * a.sin()),
+        ];
+        let error = max_deviation(&pts, c, 10.);
+        assert!((error - (10. - 9.96 * a.cos())).abs() < 1e-12);
+        assert!(error > 0.05);
+    }
+    #[test]
+    fn coarse_cocircular_vertices_do_not_authorize_changing_facets() {
+        let p: Vec<_> = (0..10)
+            .map(|i| {
+                let a = (i as f64 * 10.).to_radians();
+                Point2::new(50. * a.cos(), 50. * a.sin())
+            })
+            .collect();
+        assert!(matches!(fit_arc_run(&p, 0.05), FitOutput::Lines(_)));
     }
 }

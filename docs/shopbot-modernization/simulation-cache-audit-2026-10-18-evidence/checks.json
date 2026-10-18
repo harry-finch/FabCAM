@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-18",
+  "issue": "ivac-3mbco",
+  "review": "ivac-97zve",
+  "head": "2a3fe5632b4d77ab03d899bcb0a07db54a8b9f7b",
+  "incoming": "Uncommitted audit09-12 pipeline56 preserved",
+  "pipeline_version": 57,
+  "public_version": "0.9.0-beta.2",
+  "qualification": "software only; no installers, machine or platform qualification",
+  "results": {
+    "baseline-counterexamples": "3 failures before correction",
+    "core": "1202 passed serial",
+    "focused-profiling": "15 passed",
+    "integration": "101 reported passed / 100 executed; optional FANUC oracle absent",
+    "clippy": "PASS",
+    "wasm-check": "PASS (host compile, not browser runtime)",
+    "fmt": "PASS",
+    "diff-check": "PASS",
+    "version-transition-failure": "Expected pipeline56 snapshot mismatch after pipeline57 bump, updated to 0x402c7fab34a72ae7; final suite passes"
+  },
+  "commands": {
+    "core": "RUSTC_WRAPPER='' cargo test --offline -p ivac-core --features cps --lib -- --test-threads=1",
+    "focused-profiling": "RUSTC_WRAPPER='' cargo test --offline -p ivac-core --features cps,profiling --lib audit_13_14 -- --test-threads=1",
+    "integration": "RUSTC_WRAPPER='' cargo test --offline -p ivac-core --features cps --test cps_posts --test shopbot_m2_post --test snapshots_drill_tabs_whirl --test vcarve_qualification --test cad1_qualification --test v1_stabilization --test geom1_contract --test drawing_audit --test geometry_source_ux --test volume_validation --test waterline_acceptance",
+    "clippy": "RUSTC_WRAPPER='' cargo clippy --offline -p ivac-core --features cps --lib -- -D warnings",
+    "wasm-check": "RUSTC_WRAPPER='' cargo check --offline -p ivac-wasm",
+    "fmt": "cargo fmt -p ivac-core -- --check",
+    "diff-check": "git diff --check"
+  },
+  "source_sha256": {
+    "crates/ivac-core/src/pipeline.rs": "893a2215d3c8f5788dbaec3e4921e2ab38ad297b0ec3b5098ca0807d61f1a3cd",
+    "crates/ivac-core/src/pipeline/audit_13_14.rs": "c10657c8170edeabc582e7ac87d316c7d8ff25cdabc890a8cc664ad018dbed6d",
+    "crates/ivac-core/src/pipeline_cache.rs": "2c6710500cfa9c4b65fb52c33241ce40ebb340e174d1435245dbb940ad67cf01",
+    "crates/ivac-core/src/gcode/preview.rs": "49be8d27f11c84497c66f8602b1c5413bc9da08bdab085ec57d807eea0fc03b5",
+    "crates/ivac-core/src/profiling.rs": "489d2e0d53b57c655c20d0dbe3bf99fcd131a86e6abe5cdd517d4ab1442b8ad2",
+    "crates/ivac-core/src/version.rs": "898f33a3cf40775777bb45efba72649eb4633b73e29fad19f1a75dadf09fa619",
+    "crates/ivac-core/src/sim/sweep.rs": "2328eb9c83ef366509c0bb5d556de800fd34b5432c30d70870b0f3601a152119",
+    "crates/ivac-core/src/sim/holder.rs": "e71754ab02acdb208294e1fa4fbe94d327239760de2a5b949727bfd3a1ec73be",
+    "crates/ivac-core/src/sim/holder_check.rs": "6f995b78f5bbfa3ba80a4da151b60b9de99913c73ab406a1a5458b87298c4780",
+    "crates/ivac-core/src/sim/rapid_check.rs": "4dceb5a80e8aa9df97272ec417b76ec49693c70c33424180e51837868c2c51db",
+    "crates/ivac-core/src/sim/fixture_check.rs": "ecde03a808c1bf9fd108d943be10b23aa1fcdd6c8227cde5221c095fdee25e25",
+    "crates/ivac-core/src/sim/stl.rs": "4df52d4640b7570f8fd5b30d889c8a8e229e8105abbbb20abd121bc65ce21a11",
+    "crates/ivac-core/src/sim/timing.rs": "d8c560361fd384a3352ae10b2e22094c65effe61ec9f749afe218130723177a2"
+  },
+  "audit_sha256": {
+    "audit-argon_FabCAM_13.md": "697553b02076b1fce887111fff48c999301052968cb41ced1de89d63e3b16cbe",
+    "audit-argon_FabCAM_14.md": "1d50442d13dc31c58fef8066343ddd6606abd5befcebbfc7a005e4746382adbe"
+  },
+  "logs_sha256": {
+    "core.log": "156299898fba78b1367bc38e694a911cd1faff54086bc668faa7a16435b787b2",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "clippy.log": "37ddf062a5580d3ea4a07e2372354c1912cd9a64c5781fa3c73b25bcf1650b00",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wasm-check.log": "9c3e2725d5d59a4857e7d28ec5b7eeefa2acfc1c0c8510d67f354506387d23e8",
+    "version-transition-failure.log": "4b9b9c9bfc512a5fd3c89e0babb69b4228972df87a29fc259827a19118300112",
+    "integration.log": "153fe734c583d3e5b7d2c93cd861715cd2d8a7021fe68886aff423bc0462b98c",
+    "baseline-counterexamples.log": "9116bb7668c3dafedf2cda98a8273d963ecfe10aa18e6a0842e2d06864f78df6",
+    "focused-profiling.log": "dbf3f942fafcfca6fbbe41b99d4f1baf7693f6538ad114302bada808ad4606cd"
+  },
+  "limitations": [
+    "Warning cache requires unchanged removal prefix / explicit clear after field edits",
+    "Planar arc fixtures tested; arbitrary continuous helical holder collision unqualified",
+    "Smooth STL cell-centre registration only, not new watertightness qualification",
+    "Conservative full-object operation invalidation, no performance SLA",
+    "Existing desktop candidates pipeline54 unchanged"
+  ]
+}

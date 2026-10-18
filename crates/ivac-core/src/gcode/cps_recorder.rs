@@ -350,11 +350,33 @@ impl PostProcessor for CpsRecorder {
             // No open section (nothing recorded yet) — nothing to split.
             return;
         };
+        let comment_only = prev
+            .records
+            .iter()
+            .all(|r| matches!(r, ir::Record::Comment { .. }));
         let id = prev.id;
         let strategy = prev.strategy.clone();
         let work_offset = prev.work_offset;
-        let parameters = prev.parameters.clone();
+        let mut parameters = prev.parameters.clone();
+        for (name, rate) in [
+            ("operation:tool_feedCutting", ctx.rate_h),
+            ("operation:tool_feedPlunge", ctx.rate_v),
+            ("operation:tool_feedEntry", ctx.rate_h),
+            ("operation:tool_feedExit", ctx.rate_h),
+        ] {
+            parameters.retain(|p| p.name != name);
+            parameters.push(ir::Parameter {
+                name: name.into(),
+                value: ir::ParamValue::Number(f64::from(rate)),
+            });
+        }
+        self.section_rate_v = ctx.rate_v;
         self.close_section();
+        if comment_only {
+            // Before any machine event, a spot pre-pass replaces the placeholder
+            // tool rather than creating a spurious empty toolchange section.
+            self.pending.extend(self.sections.pop().unwrap().records);
+        }
         self.open_section(id, strategy, &ctx.tool, work_offset, parameters);
     }
 
@@ -1222,6 +1244,8 @@ mod tests {
         rec.linear(Some(5.0), Some(5.0), Some(-1.0));
         rec.mid_section_toolchange(&SectionToolCtx {
             tool: tool(9, ToolKind::VBit, 24000),
+            rate_h: 450,
+            rate_v: 80,
         });
         rec.linear(Some(6.0), Some(6.0), Some(-0.5));
         rec.end_section();
@@ -1420,5 +1444,51 @@ mod tests {
                 ..
             }
         ));
+    }
+    #[test]
+    fn audit_09_10_mid_swap_updates_all_feeds_and_plunge_classification() {
+        let mut rec = CpsRecorder::new();
+        begin(&mut rec);
+        rec.begin_section(&section_ctx(1, tool(1, ToolKind::Endmill, 18000)));
+        rec.linear(Some(1.), Some(2.), Some(0.));
+        rec.mid_section_toolchange(&SectionToolCtx {
+            tool: tool(2, ToolKind::Endmill, 18000),
+            rate_h: 450,
+            rate_v: 80,
+        });
+        rec.feedrate(80);
+        rec.linear(None, None, Some(-1.));
+        let p = rec.into_program();
+        let sec = &p.sections[1];
+        for (name, want) in [
+            ("operation:tool_feedCutting", 450.),
+            ("operation:tool_feedEntry", 450.),
+            ("operation:tool_feedExit", 450.),
+            ("operation:tool_feedPlunge", 80.),
+        ] {
+            assert!(sec
+                .parameters
+                .iter()
+                .any(|p| p.name == name && matches!(p.value,ir::ParamValue::Number(v) if v==want)));
+        }
+        assert!(sec.records.iter().any(
+            |r| matches!(r,ir::Record::Linear{movement,..} if *movement==codes::MOVEMENT_PLUNGE)
+        ));
+    }
+    #[test]
+    fn audit_09_10_comment_only_section_is_replaced_by_spot_tool() {
+        let mut rec = CpsRecorder::new();
+        begin(&mut rec);
+        rec.begin_section(&section_ctx(1, tool(1, ToolKind::Endmill, 18000)));
+        rec.comment("spot pre-pass");
+        rec.mid_section_toolchange(&SectionToolCtx {
+            tool: tool(2, ToolKind::Drill, 12000),
+            rate_h: 400,
+            rate_v: 80,
+        });
+        rec.linear(Some(0.), Some(0.), Some(-1.));
+        let p = rec.into_program();
+        assert_eq!(p.sections.len(), 1);
+        assert_eq!(p.sections[0].tool.number, 2);
     }
 }

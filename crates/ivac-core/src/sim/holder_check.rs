@@ -101,122 +101,30 @@ pub fn check_segment_holder_against_walls<S: SurfaceField>(
 
     let origin = field.origin();
     let cell = field.cell();
-    let inv_cell = 1.0 / cell;
-    let max_col = field.cols().saturating_sub(1);
-    let max_row = field.rows().saturating_sub(1);
-
-    // AABB of the segment in XY, inflated by the holder's max radius.
-    let min_x = from.x.min(to.x) - max_r;
-    let max_x = from.x.max(to.x) + max_r;
-    let min_y = from.y.min(to.y) - max_r;
-    let max_y = from.y.max(to.y) + max_r;
-
-    let fx0 = (min_x - origin.x) * inv_cell;
-    let fy0 = (min_y - origin.y) * inv_cell;
-    let fx1 = (max_x - origin.x) * inv_cell;
-    let fy1 = (max_y - origin.y) * inv_cell;
-    if fx1 < 0.0 || fy1 < 0.0 {
-        return HolderCheck::Clear;
-    }
-    if fx0 > field.cols() as f64 || fy0 > field.rows() as f64 {
-        return HolderCheck::Clear;
-    }
-    let ix0 = fx0.floor().max(0.0) as u32;
-    let iy0 = fy0.floor().max(0.0) as u32;
-    let ix1 = (fx1.floor().max(0.0) as u32).min(max_col);
-    let iy1 = (fy1.floor().max(0.0) as u32).min(max_row);
-    if ix0 > ix1 || iy0 > iy1 {
-        return HolderCheck::Clear;
-    }
-
-    let dx = to.x - from.x;
-    let dy = to.y - from.y;
-    let len_sq = dx * dx + dy * dy;
-    let pure_plunge = len_sq < 1e-12;
-    let plunge_z = from.z.min(to.z);
-    let max_r_sq = max_r * max_r;
-    // Cells inside the cutter's own sweep (r <= cutting_radius)
-    // are about to be removed by the flutes themselves — material there
-    // is NOT a shank/holder collision. Treat them as part of the cutter
-    // envelope, not the wall.
-    let cutting_r = holder.cutting_radius();
-    let cutting_r_sq = cutting_r * cutting_r;
-
-    // Collect EVERY offending cell, not just the worst-excess one.
-    // The previous code kept a single (max-required) tuple — mid-range
-    // collisions were silently dropped, and the UI had no way to surface
-    // the breadth of the obstacle. We push all offenders here and let
-    // the caller decide how to render them.
-    let mut offenders: Vec<HolderCollisionCell> = Vec::new();
-
-    // Clip each row to the holder envelope's stadium
-    // x-extent (radius = max_r) instead of walking the full AABB width.
-    // Shares the helper the material sweep uses; the per-cell
-    // `r_sq > max_r_sq` test below stays the correctness gate, so the
-    // row range only has to be a superset.
     let layout = crate::sim::sweep::HeightmapLayout::of_surface(field);
-    for iy in iy0..=iy1 {
-        let cy = origin.y + (iy as f64 + 0.5) * cell;
-        let Some((rx0, rx1)) = crate::sim::sweep::swept_row_cell_range(
-            &layout,
-            from,
-            to,
-            max_r,
-            max_r_sq,
-            pure_plunge,
-            cy,
-            ix0,
-            ix1,
-        ) else {
-            continue;
+    // A radial footprint profile supplies actual radius on both lines and arcs;
+    // its dz is ignored because holder height has its own envelope.
+    let footprint = crate::sim::heightmap::ToolProfile::BallNose { r: max_r as f32 };
+    let mut offenders = Vec::new();
+    crate::sim::sweep::for_each_motion_cell(&layout, segment, &footprint, |ix, iy, r, pz, _| {
+        let r = f64::from(r);
+        if r <= holder.cutting_radius() {
+            return;
+        }
+        let Some(lower) = holder.lowest_z_for_radius(r) else {
+            return;
         };
-        for ix in rx0..=rx1 {
-            let cx = origin.x + (ix as f64 + 0.5) * cell;
-            let (r_sq, cutter_pz) = if pure_plunge {
-                let ex = cx - from.x;
-                let ey = cy - from.y;
-                (ex * ex + ey * ey, plunge_z)
-            } else {
-                let t = (((cx - from.x) * dx + (cy - from.y) * dy) / len_sq).clamp(0.0, 1.0);
-                let px = from.x + t * dx;
-                let py = from.y + t * dy;
-                let ex = cx - px;
-                let ey = cy - py;
-                (ex * ex + ey * ey, from.z + (to.z - from.z) * t)
-            };
-            if r_sq > max_r_sq {
-                continue;
-            }
-            // Skip cells inside the cutter envelope — the flutes
-            // sweep them clean, so any "wall" reading there belongs to
-            // the cutter's own work, not to a holder collision.
-            if r_sq <= cutting_r_sq {
-                continue;
-            }
-            let r = r_sq.sqrt();
-            // Lowest height above the tip at which the envelope grows
-            // past `r`. None when `r > max_radius`, but we already
-            // filtered that case via `max_r_sq`.
-            let Some(holder_lower_z) = holder.lowest_z_for_radius(r) else {
-                continue;
-            };
-            let cell_z = field.surface_z(ix, iy);
-            let wall_height = cell_z as f64 - cutter_pz;
-            // Wall has to actually exist above the tip for the holder to
-            // care; if `wall_height <= holder_lower_z` the holder is
-            // already wider than the wall at that height — clear.
-            if wall_height <= holder_lower_z {
-                continue;
-            }
-            let required = (wall_height - holder_lower_z) as f32;
+        let wall = field.surface_z(ix, iy);
+        let excess = f64::from(wall) - pz - lower;
+        if excess > 0. {
             offenders.push(HolderCollisionCell {
-                cell_x: origin.x + (ix as f64 + 0.5) * cell,
-                cell_y: origin.y + (iy as f64 + 0.5) * cell,
-                wall_z: cell_z,
-                required_clearance_mm: required,
+                cell_x: origin.x + (f64::from(ix) + 0.5) * cell,
+                cell_y: origin.y + (f64::from(iy) + 0.5) * cell,
+                wall_z: wall,
+                required_clearance_mm: excess as f32,
             });
         }
-    }
+    });
 
     if offenders.is_empty() {
         return HolderCheck::Clear;
@@ -321,6 +229,37 @@ mod tests {
             op_id: 0,
             arc: None,
         }
+    }
+
+    #[test]
+    fn audit_13_14_holder_follows_arc_not_chord() {
+        use crate::gcode::preview::ArcXY;
+        let holder = HolderProfile::from_tool(&tool(1., Some(1.), Some(6.), None)).unwrap();
+        let mut arc = seg((30., 20., -5.), (10., 20., -5.));
+        arc.kind = MoveKind::Arc;
+        arc.arc = Some(ArcXY {
+            cx: 20.,
+            cy: 20.,
+            ccw: true,
+        });
+        // Keep exactly one wall sample, 2.55 mm from the arc, far from its chord.
+        let mut field = Heightmap::new(Point2::new(0., 0.), 1., 40, 40, 0.);
+        for y in 0..40 {
+            for x in 0..40 {
+                if (x, y) != (20, 32) {
+                    field.lower_at(x, y, -20.);
+                }
+            }
+        }
+        assert!(matches!(
+            check_segment_holder_against_walls(&field, &arc, &holder),
+            HolderCheck::Collision { .. }
+        ));
+        arc.arc = None;
+        assert_eq!(
+            check_segment_holder_against_walls(&field, &arc, &holder),
+            HolderCheck::Clear
+        );
     }
 
     /// Drop a 30 mm-deep pocket into the heightmap by lowering all cells

@@ -1,0 +1,22 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.99s
+     Running tests/hatch_safe_z.rs (target/debug/deps/hatch_safe_z-a5b381308470fa22)
+
+running 14 tests
+test invalid_clearance_stream_writes_no_bytes ... ok
+test header_only_job_cannot_bypass_stock_guard ... ok
+test shopbot_invalid_stock_clearance_and_existing_z_origin_refuse ... ok
+test known_stock_refuses_clearance_at_or_below_top ... ok
+test hatch_block_is_refused_instead_of_imported_at_definition_coordinates ... ok
+test custom_identity_z_rounding_must_not_erase_clearance ... ok
+test finite_and_disabled_and_unknown_stock_contracts ... ok
+test generic_parking_and_stream_preview_retain_safe_air_traversals ... ok
+test top_level_hatch_stays_supported_but_unused_block_is_also_refused ... ok
+test stock_edit_is_revalidated_even_after_successful_cached_generation ... ok
+test inch_serialization_guard_and_shared_process_boundary ... ok
+test shopbot_parking_stays_explicitly_unsupported ... ok
+test supported_pocket_and_drill_keep_air_clearance ... ok
+test shopbot_decoded_lateral_rapids_stay_above_stock_with_two_clearances ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+

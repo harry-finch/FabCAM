@@ -1,0 +1,23 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.20s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-0029f6b56c90b67a)
+
+running 15 tests
+test pipeline::audit_13_14::cache_key_tracks_spot_tool_entry_position_state_and_topology ... ok
+test pipeline::audit_13_14::grouped_tool_counts_and_spot_round_trip ... ok
+test pipeline::audit_13_14::included_compact_motion_and_unsupported_decimal_modes_are_distinct ... ok
+test pipeline::audit_13_14::streaming_fixture_warnings_match_buffered ... ok
+test pipeline::audit_13_14::streaming_rejects_two_sided_through_before_writing ... ok
+test pipeline::audit_13_14::timing_respects_override_and_counts_emitted_warmup_once ... ok
+test profiling::audit_13_14::error_and_unwind_drop_spans_before_reset ... ok
+test sim::fixture_check::audit_13_14::curved_path_hits_arc_obstacle_not_chord_obstacle ... ok
+test sim::holder::tests::audit_13_14_effective_cut_radius_retains_nominal_shank ... ok
+test sim::holder_check::tests::audit_13_14_holder_follows_arc_not_chord ... ok
+test sim::stl::audit_13_14::shell_samples_use_cell_centres ... ok
+test sim::sweep::audit_13_14::curved_form_cutter_preserves_overhang_full_and_partial ... ok
+test sim::sweep::audit_13_14_cache::warning_cache_rechecks_changed_tool_at_same_index ... ok
+test sim::timing::audit_13_14::dwell_includes_modal_cycles_and_compact_decimal_comma ... ok
+test sim::timing::audit_13_14::inch_feed_and_decimal_comma_are_mm_per_min ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 1189 filtered out; finished in 0.01s
+

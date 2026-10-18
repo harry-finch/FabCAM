@@ -11,7 +11,7 @@
 use super::face_mill_overlay::WhirlState;
 use super::{
     arc_length, build_z_schedule, cut_tool_off, cut_tool_on, cut_tool_pierce, emit_cut_path,
-    emit_helix_entry, emit_helix_pass, emit_path_with_tabs, emit_ramp_pass, end_pos, fit_line_runs,
+    emit_helix_entry, emit_helix_pass, emit_path_with_tabs, emit_ramp_pass, fit_line_runs,
     is_closed_path, lead_in_geometry, lead_out_geometry, plan_helix_entry, reverse_chain,
     HelixEntry, LeadGeometry, PostProcessor,
 };
@@ -248,7 +248,7 @@ pub(super) fn emit_offset<P: PostProcessor>(
         }
     }
 
-    multi_pass(
+    let at_end = multi_pass(
         setup,
         &offset.segments,
         &offset.tabs,
@@ -259,10 +259,20 @@ pub(super) fn emit_offset<P: PostProcessor>(
 
     // Lead-out happens at the FINAL pass depth — it's a real cutting
     // motion that rolls the cutter off the contour into free space.
-    let lead_out = lead_out_geometry(setup, &offset.segments);
+    let reversed;
+    let exit_segments = if at_end {
+        &offset.segments
+    } else {
+        reversed = reverse_chain(&offset.segments);
+        &reversed
+    };
+    let exit_pos = exit_segments.last().map_or(start, |s| s.end);
+    let lead_out = lead_out_geometry(setup, exit_segments);
+    let mut final_pos = exit_pos;
     match lead_out {
         LeadGeometry::Straight { from: to } => {
-            let segment = Segment::line(end_pos(offset), to, "lead", 0);
+            final_pos = to;
+            let segment = Segment::line(exit_pos, to, "lead", 0);
             if !emit_tabbed_lead_out(setup, offset, &segment, use_rate_v, use_rate_h, post) {
                 post.linear(Some(to.x), Some(to.y), None);
             }
@@ -272,9 +282,10 @@ pub(super) fn emit_offset<P: PostProcessor>(
             center,
             ccw,
         } => {
+            final_pos = to;
             // Arc starts at the cutter's current XY (= end_pos) and
             // ends at `to`. I/J = center - end_pos.
-            let end_pt = end_pos(offset);
+            let end_pt = exit_pos;
             let i = center.x - end_pt.x;
             let j = center.y - end_pt.y;
             let mut segment = Segment::line(end_pt, to, "lead", 0);
@@ -305,7 +316,7 @@ pub(super) fn emit_offset<P: PostProcessor>(
     // rapid feed.
     post.move_to(None, None, Some(setup.mill.fast_move_z));
 
-    *last_pos = offset.segments.last().map_or(start, |s| s.end);
+    *last_pos = final_pos;
 }
 
 // Leads are cutting moves: they must preserve the same holding tabs as the
@@ -328,6 +339,7 @@ fn emit_tabbed_lead_out<P: PostProcessor>(
     };
     emit_path_with_tabs(
         std::slice::from_ref(segment),
+        material_tab_radius(setup),
         &offset.tabs,
         floor + setup.tabs.height.abs(),
         floor,
@@ -418,7 +430,7 @@ fn multi_pass<P: PostProcessor>(
     is_finish: bool,
     straight_lead: bool,
     post: &mut P,
-) {
+) -> bool {
     use crate::project::{PlungeStrategy, TabType};
     // Finish-set rates: swap in the tool's _finish overrides
     // when this offset is the wall-defining ring of a Pocket. Falls
@@ -443,7 +455,7 @@ fn multi_pass<P: PostProcessor>(
         || setup.machine.mode == MachineMode::Plasma
     {
         emit_single_pass(setup, segments, rate_v, rate_h, straight_lead, post);
-        return;
+        return true;
     }
     // Build the Z schedule. depth_list (when non-empty) wins as an
     // explicit list; otherwise use step + finish_step + through_depth
@@ -552,7 +564,7 @@ fn multi_pass<P: PostProcessor>(
     let mut whirl_state = WhirlState::default();
     // Walk the depth schedule. When empty (degenerate) bail.
     if z_schedule.is_empty() {
-        return;
+        return true;
     }
     // Arc-fit the contour ONCE up front and reuse across every Z pass —
     // the fit depends only on the (Z-independent) XY geometry, so re-running
@@ -576,6 +588,7 @@ fn multi_pass<P: PostProcessor>(
             &fitted_forward
         }
     };
+    let mut at_end = false;
     for (pass_idx, &z) in z_schedule.iter().enumerate() {
         // Per-tab heights describe residual material above the FINAL floor,
         // not an extra lift above each intermediate pass. Resolve only tabs
@@ -602,7 +615,7 @@ fn multi_pass<P: PostProcessor>(
         // (`helix = helix_mode && closed_path`,
         // `helix_entry = plan_helix_entry(...closed paths only...)`),
         // so they always see the original `segments`.
-        let reverse_this_pass = !closed_path && pass_idx % 2 == 1;
+        let reverse_this_pass = !closed_path && at_end;
         let pass_segments_owned: Vec<Segment>;
         let pass_segments: &[Segment] = if reverse_this_pass {
             pass_segments_owned = reverse_chain(segments);
@@ -722,7 +735,15 @@ fn multi_pass<P: PostProcessor>(
                 pass_tabs
                     .iter()
                     .filter(|tab| {
-                        (tab.x - start.x).hypot(tab.y - start.y) <= tab.radius(tab_radius * 2.0)
+                        (tab.x - start.x).hypot(tab.y - start.y)
+                            <= tab.radius(tab_radius * 2.0)
+                                + material_tab_radius(setup).map_or(0., |radius| {
+                                    radius
+                                        + super::tabs::RETENTION_MARGIN_MM
+                                        + tab_ramp_angle_deg.map_or(0., |angle| {
+                                            tab.lift((tabs_z - z).abs()) / angle.to_radians().tan()
+                                        })
+                                })
                     })
                     .fold(z, |floor, tab| floor.max(z + tab.lift((tabs_z - z).abs())))
             } else {
@@ -742,12 +763,9 @@ fn multi_pass<P: PostProcessor>(
                 }
             }
             if pass_uses_tabs {
-                // Tabs are a closed-path feature; open paths don't
-                // generate tab points so this branch isn't reached on
-                // the open-cascade fix path. Forward `segments` to
-                // keep the tabs walker's positioning math intact.
                 emit_path_with_tabs(
-                    segments,
+                    pass_segments,
+                    material_tab_radius(setup),
                     &pass_tabs,
                     tabs_z,
                     z,
@@ -771,6 +789,7 @@ fn multi_pass<P: PostProcessor>(
                 );
             }
         }
+        at_end = closed_path || !reverse_this_pass;
         prev_z = Some(z);
         ramp_from = z;
     }
@@ -800,7 +819,7 @@ fn multi_pass<P: PostProcessor>(
         // Cleanup walks reversed when the last pass ended away from the
         // contour start (open path, odd pass count) — reuse the matching
         // precomputed fit instead of re-fitting.
-        let cleanup_reversed = !closed_path && z_schedule.len() % 2 == 1;
+        let cleanup_reversed = !closed_path && at_end;
         emit_cut_path(
             fitted_for(cleanup_reversed),
             setup,
@@ -811,5 +830,12 @@ fn multi_pass<P: PostProcessor>(
             &mut whirl_state,
             post,
         );
+        at_end = closed_path || !cleanup_reversed;
     }
+    at_end
+}
+
+fn material_tab_radius(setup: &Setup) -> Option<f64> {
+    (setup.tabs.width_mode == crate::project::TabWidthMode::MaterialV1)
+        .then_some(setup.tool.diameter * 0.5)
 }

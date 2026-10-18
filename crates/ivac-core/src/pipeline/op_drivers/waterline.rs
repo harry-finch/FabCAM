@@ -20,7 +20,7 @@
 #![allow(clippy::cast_possible_truncation)]
 
 use crate::cam::setup::Setup;
-use crate::cam::waterline::waterline_rough_checked;
+use crate::cam::waterline::waterline_rough_cancellable;
 use crate::gcode::{emit_vcarve_block, PostProcessor};
 use crate::geometry::Point2;
 use crate::pipeline::warnings::push_tool_fit_kind_warnings;
@@ -44,7 +44,7 @@ pub(in crate::pipeline) fn waterline_would_emit(op: &Op, project: &Project) -> b
 
 /// Reconstruct a triangle-mesh skin from a row-major height grid: two
 /// triangles per cell quad over the `cols × rows` lattice, each vertex placed
-/// at its world XY (`origin + index * cell`) and grid Z. Slicing this skin at a
+/// at its world XY (`origin + (index + 0.5) * cell`) and grid Z. Slicing this skin at a
 /// level reproduces the marching-squares iso-contour of the height field — the
 /// solid outline the waterline core then area-clears.
 #[allow(clippy::many_single_char_names)] // z/a/b/c/d are cell-quad corner values
@@ -56,8 +56,8 @@ fn heightgrid_skin(source: &ReliefSource, z: &[f32]) -> Vec<[[f32; 3]; 3]> {
     let oy = source.origin.y;
     let vert = |ix: u32, iy: u32| -> [f32; 3] {
         [
-            (ox + f64::from(ix) * cell) as f32,
-            (oy + f64::from(iy) * cell) as f32,
+            (ox + (f64::from(ix) + 0.5) * cell) as f32,
+            (oy + (f64::from(iy) + 0.5) * cell) as f32,
             z[(iy as usize) * (cols as usize) + (ix as usize)],
         ]
     };
@@ -88,7 +88,7 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
     post: &mut P,
     last_pos: &mut Point2,
     warnings: &mut Vec<PipelineWarning>,
-    _cancel: Option<&CancelToken>,
+    cancel: Option<&CancelToken>,
 ) -> Result<(), PipelineError> {
     let OpKind::WaterlineRough {
         source_id,
@@ -217,8 +217,22 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
     }
 
     let tris = heightgrid_skin(source, z);
-    let chains = waterline_rough_checked(&tris, tool_diameter, stride, top_z, bottom_z, *z_step_mm)
-        .map_err(|message| PipelineError::Waterline(op.id, message))?;
+    let chains = waterline_rough_cancellable(
+        &tris,
+        tool_diameter,
+        stride,
+        top_z,
+        bottom_z,
+        *z_step_mm,
+        cancel,
+    )
+    .map_err(|message| {
+        if crate::pipeline::cancelled(cancel) {
+            PipelineError::Cancelled
+        } else {
+            PipelineError::Waterline(op.id, message)
+        }
+    })?;
     if chains.is_empty() {
         return Ok(());
     }
@@ -236,4 +250,27 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
     }
     emit_vcarve_block(setup, &polylines, post, last_pos);
     Ok(())
+}
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+
+    #[test]
+    fn skin_vertices_use_cell_centres() {
+        let src = ReliefSource {
+            id: 1,
+            name: String::new(),
+            origin: Point2::new(10., 20.),
+            cell: 2.,
+            cols: 2,
+            rows: 2,
+            grid: ReliefGrid::Heightgrid {
+                z: vec![-1., -2., -3., -4.],
+            },
+        };
+        let tris = heightgrid_skin(&src, &[-1., -2., -3., -4.]);
+        assert_eq!(tris[0][0], [11., 21., -1.]);
+        assert_eq!(tris[0][2], [13., 23., -4.]);
+    }
 }

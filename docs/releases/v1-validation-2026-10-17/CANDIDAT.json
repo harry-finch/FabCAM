@@ -1,0 +1,16 @@
+{
+  "source_commit": "2a3fe5632b4d77ab03d899bcb0a07db54a8b9f7b",
+  "version": "0.9.0-beta.2",
+  "pipeline": 54,
+  "workflow_run": 39053047404,
+  "workflow_url": "https://github.com/harry-finch/FabCAM/actions/runs/39053047404",
+  "status": "ALL THREE BUILDS SUCCEEDED; installers downloaded and checksums/provenance verified",
+  "platforms": [
+    "macos arm64 DMG",
+    "windows x64 NSIS",
+    "ubuntu amd64 DEB"
+  ],
+  "fixtures": "Reference corpus copied unchanged; new analytic regression drawings are validation inputs, not executed validation evidence.",
+  "copied_macos_app": "FabCAM.app",
+  "installation_runtime_physical_acceptance": "NOT TESTED"
+}

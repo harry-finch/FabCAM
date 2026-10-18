@@ -1,0 +1,36 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.10s
+     Running tests/hatch_safe_z.rs (target/debug/deps/hatch_safe_z-a5b381308470fa22)
+
+running 3 tests
+test hatch_block_is_refused_instead_of_imported_at_definition_coordinates ... FAILED
+test invalid_clearance_stream_writes_no_bytes ... FAILED
+test known_stock_refuses_clearance_at_or_below_top ... FAILED
+
+failures:
+
+---- hatch_block_is_refused_instead_of_imported_at_definition_coordinates stdout ----
+
+thread 'hatch_block_is_refused_instead_of_imported_at_definition_coordinates' panicked at crates/ivac-core/tests/hatch_safe_z.rs:26:5:
+misplaced BLOCK HATCH must not be a successful drawing
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- invalid_clearance_stream_writes_no_bytes stdout ----
+
+thread 'invalid_clearance_stream_writes_no_bytes' panicked at crates/ivac-core/tests/hatch_safe_z.rs:54:5:
+invalid clearance must fail before streaming
+
+---- known_stock_refuses_clearance_at_or_below_top stdout ----
+
+thread 'known_stock_refuses_clearance_at_or_below_top' panicked at crates/ivac-core/tests/hatch_safe_z.rs:38:13:
+top18/clearance-5 must refuse
+
+
+failures:
+    hatch_block_is_refused_instead_of_imported_at_definition_coordinates
+    invalid_clearance_stream_writes_no_bytes
+    known_stock_refuses_clearance_at_or_below_top
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p ivac-core --test hatch_safe_z`

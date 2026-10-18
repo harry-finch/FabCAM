@@ -25,11 +25,9 @@
     <CircleX size={16} aria-hidden="true" />
     <strong>{t('ux21.collision')}</strong>
     <span>{t('ux21.reason', { name: collisions.map((c) => c.name).join(', ') })}</span>
-    <span
-      >{t(
-        project.data.settings.blockOnCriticalSimWarnings ? 'ux21.blocked' : 'ux21.override',
-      )}</span
-    >
+    {#if project.gen.generated?.warnings?.some((w) => w.kind === 'fixture_path_collision')}
+      <span>{t('ux21.blocked')}</span>
+    {/if}
     <button type="button" onclick={show} title={t('ux21.show')}>
       <ScanSearch size={14} aria-hidden="true" />{t('ux21.show')}
     </button>

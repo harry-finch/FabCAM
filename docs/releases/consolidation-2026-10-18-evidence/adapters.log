@@ -1,0 +1,464 @@
+   Compiling syn v2.0.117
+   Compiling getrandom v0.2.17
+   Compiling synstructure v0.13.2
+   Compiling serde_derive_internals v0.29.1
+   Compiling wasm-bindgen-macro-support v0.2.120
+   Compiling serde_derive v1.0.228
+   Compiling zerovec-derive v0.11.3
+   Compiling zerocopy-derive v0.8.48
+   Compiling displaydoc v0.2.5
+   Compiling bytemuck_derive v1.11.0
+   Compiling tracing-attributes v0.1.31
+   Compiling phf_macros v0.13.1
+   Compiling zerofrom-derive v0.1.7
+   Compiling schemars_derive v0.8.22
+   Compiling yoke-derive v0.8.2
+   Compiling boa_macros v0.21.1
+   Compiling phf v0.13.1
+   Compiling zerofrom v0.1.7
+   Compiling bytemuck v1.25.0
+   Compiling tracing v0.1.44
+   Compiling zerocopy v0.8.48
+   Compiling equator-macro v0.4.2
+   Compiling pin-project-internal v1.1.13
+   Compiling num_enum_derive v0.7.6
+   Compiling equator v0.4.2
+   Compiling boa_gc v0.21.1
+   Compiling yoke v0.8.2
+   Compiling thiserror-impl v2.0.18
+   Compiling pin-project v1.1.13
+   Compiling serde v1.0.228
+   Compiling dynify-macros v0.1.2
+   Compiling num_enum v0.7.6
+   Compiling dynify v0.1.2
+   Compiling thiserror v2.0.18
+   Compiling futures-macro v0.3.32
+   Compiling futures-util v0.3.32
+   Compiling aligned-vec v0.6.4
+   Compiling tokio-macros v2.7.0
+   Compiling tokio v1.52.2
+   Compiling boa_interner v0.21.1
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling rand v0.9.5
+   Compiling futures-concurrency v7.7.1
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling indexmap v1.9.3
+   Compiling num-bigint v0.4.6
+   Compiling schemars v0.8.22
+   Compiling ciborium v0.2.2
+   Compiling boa_ast v0.21.1
+   Compiling tinytemplate v1.2.1
+   Compiling num-rational v0.4.2
+   Compiling criterion v0.5.1
+   Compiling font-types v0.9.0
+   Compiling wasm-bindgen-macro v0.2.120
+   Compiling read-fonts v0.34.0
+   Compiling wasm-bindgen v0.2.120
+   Compiling num v0.4.3
+   Compiling uuid v1.10.0
+   Compiling chrono v0.4.44
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling tiny-skia-path v0.11.4
+   Compiling icu_locale_core v2.2.0
+   Compiling icu_collections v2.0.0
+   Compiling image v0.25.5
+   Compiling usvg v0.45.1
+   Compiling async-trait v0.1.89
+   Compiling multer v3.1.0
+   Compiling icu_provider v2.2.0
+   Compiling ivac-feeds-speeds v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+   Compiling icu_properties v2.0.2
+   Compiling icu_normalizer v2.0.1
+   Compiling dxf v0.6.1
+   Compiling js-sys v0.3.97
+   Compiling console_error_panic_hook v0.1.7
+   Compiling hyper v1.9.0
+   Compiling axum-core v0.4.5
+   Compiling boa_parser v0.21.1
+   Compiling hyper-util v0.1.20
+   Compiling tower v0.5.3
+   Compiling tokio-util v0.7.18
+   Compiling futures-executor v0.3.32
+   Compiling serde_urlencoded v0.7.1
+   Compiling axum-macros v0.4.2
+   Compiling tokio-stream v0.1.18
+   Compiling futures v0.3.32
+   Compiling tower-http v0.6.8
+   Compiling skrifa v0.36.0
+   Compiling tracing-subscriber v0.3.23
+   Compiling boa_engine v0.21.1
+   Compiling axum v0.7.9
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling ivac-cps v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-wasm v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm)
+   Compiling ivac-server v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 29.17s
+     Running unittests src/lib.rs (target/debug/deps/ivac_cps-560ba7ade217968d)
+
+running 9 tests
+test ir::tests::five_d_tags ... ok
+test ir::tests::wire_shape_is_camel_case_and_kind_tagged ... ok
+test meta::tests::wire_shape ... ok
+test ir::tests::round_trip ... ok
+test ir::tests::version_gate_rejects_mismatch ... ok
+test run::audit_15_16::positions_do_not_rewrite_polyline_text ... ok
+test engine::cancellation_tests::host_probe_reads_live_atomic_and_default_stays_false ... ok
+test run::audit_15_16::unfinished_script_points_to_user_eof ... ok
+test library::tests::bundled_posts_inspect_cleanly ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running tests/cancellation.rs (target/debug/deps/cancellation-72e9eb5f8b3dd74b)
+
+running 2 tests
+test pre_cancelled_returns_no_output_and_never_parses_script ... ok
+test uncancelled_output_matches_legacy_and_error_text_cannot_forge_cancel ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+     Running tests/constants_consistency.rs (target/debug/deps/constants_consistency-851df6c8b7daadb1)
+
+running 1 test
+test recorder_codes_match_prelude_constants ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/differential.rs (target/debug/deps/differential-d65f8124a530c7c7)
+
+running 3 tests
+test format_matrix_matches_v8 ... ok
+fresh format_expected.json
+fresh scenarios_expected.json
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (3.258458ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (1.083041ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (1.500458ms)
+✔ abcFormat: scale DEG converts radians to degrees (1.340125ms)
+✔ oFormat: width 4 zeropad (program numbers) (1.270292ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (0.911542ms)
+✔ clamping applies after rounding (0.959542ms)
+✔ trimLeadZero renders FANUC-style bare fractions (1.950417ms)
+✔ forceSign marks positives, never zero (2.085917ms)
+✔ getResultingValue/areDifferent compare on the output grid (1.057417ms)
+✔ differential fixtures are fresh (committed == recomputed) (8.475958ms)
+✔ every Euler convention round-trips a rotation matrix (9.434042ms)
+✔ Euler extraction handles the gimbal-lock singularity (1.097708ms)
+✔ rotation factories agree with axis-angle (1.046125ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (8.71175ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (5.5465ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (5.016791ms)
+✔ unreachable orientation throws (1.865083ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.048708ms)
+✔ remapToABC takes the shortest path from the current angles (0.857875ms)
+✔ getPreferredABC honors a positive axis preference (0.84675ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (1.724292ms)
+✔ isABCSupported reflects axis ranges (0.790709ms)
+✔ multi-axis feed: inverse time and DPM (0.846ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (3.60125ms)
+✔ reset forces the next output; force outputs every time (1.998625ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (1.177042ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (1.14675ms)
+✔ modal carries the format's address letter and getCurrent (2.244583ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (1.144083ms)
+✔ createOutputVariable: control + incremental type (1.107375ms)
+✔ ModalGroup enforces per-group exclusivity (1.432625ms)
+✔ formatWords flattens arguments objects and nested arrays (3.162375ms)
+✔ writeWords drops empty lines entirely (1.14825ms)
+✔ writeWords2 outputs only when args 2+ produce text (1.419167ms)
+✔ word separator and EOL are honored (0.919042ms)
+✔ redirection captures words; close returns to normal output (2.079792ms)
+✔ nested redirection pops innermost first (1.088459ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (1.220125ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.20825
+test node_harness_agrees ... ok
+test scenarios_match_v8 ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
+
+     Running tests/golden_fanuc.rs (target/debug/deps/golden_fanuc-cc504d5bca33a37a)
+
+running 12 tests
+test fixture_b_canned_cycles ... ok
+test fixture_c_use_radius_override ... ok
+test fixture_c_full_circle_and_helix ... ok
+test fanuc_machine_paths_run_on_three_axis ... ok
+test fixture_a_two_sections_toolchange ... ok
+test inspect_post_returns_fanuc_property_sheet ... ok
+test ir_version_gate ... ok
+test syntax_error_maps_to_parse_with_line ... ok
+test error_call_halts_with_partial_output ... ok
+test validate_throw_maps_to_runtime_error ... ok
+test runaway_script_hits_budget ... ok
+test five_d_records_dispatch_with_solved_abc ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/shopbot_guards.rs (target/debug/deps/shopbot_guards-463110b1196bef2a)
+
+running 7 tests
+test lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test positive_output_and_comment_injection ... ok
+test planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test scaffold_work_plane_and_tools_fail_closed ... ok
+test unsupported_records_fail_before_export ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.01s
+
+     Running tests/spike.rs (target/debug/deps/spike-635cb620280694a0)
+
+running 10 tests
+test json_round_trip ... ok
+test native_function_sink ... ok
+test named_source_errors_carry_line_info ... ok
+test define_property_accessors ... ok
+test substr_annex_b ... ok
+test minimal_post_end_to_end ... ok
+test script_can_overwrite_host_global ... ok
+test arguments_object_semantics ... ok
+test boa_new_after_prototype_assignment_bug ... ok
+test regexp_literal_and_constructor ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/symbol_audit.rs (target/debug/deps/symbol_audit-ed722aeb5fa05a46)
+
+running 2 tests
+test undeclared_but_used_symbols_are_defined ... ok
+test every_declared_symbol_is_defined ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running unittests src/lib.rs (target/debug/deps/ivac_feeds_speeds-95ec074063a24191)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/approximate.rs (target/debug/deps/approximate-b639014e067bfba2)
+
+running 21 tests
+test diagnostic_trace_retains_rejections_selection_and_order ... ok
+test interpolation_preserves_both_originals_and_is_deterministic ... ok
+test ambiguous_interpolation_anchor_preserves_disagreement_and_determinism ... ok
+test approximate_disagreement_remains_visible_without_averaging ... ok
+test declared_parent_fallback_uses_taxonomy_graph_and_cannot_accept_invented_prefix ... ok
+test invalid_request_and_malformed_pack_trace_do_not_panic ... ok
+test interpolation_does_not_inherit_one_anchors_better_doc_specificity ... ok
+test larger_diameter_caps_cutting_speed_doc_and_machine_limits ... ok
+test no_match_reports_distance_instead_of_already_permitted_transfers ... ok
+test router_class_cannot_become_exact_physical_trial_scope ... ok
+test incompatible_family_flutes_operation_machine_and_material_remain_rejected ... ok
+test machine_transfer_penalty_survives_diameter_adaptation ... ok
+test policy_permission_and_physical_evidence_cannot_be_broadened ... ok
+test multiple_pack_interpolations_do_not_hide_disagreement ... ok
+test two_from_three_has_exact_fifty_percent_gap_and_conservative_factor ... ok
+test six_mm_pocket_normalizes_near_reference_and_keeps_all_transfers_explicit ... ok
+test small_diameter_extrapolation_is_bounded_and_two_vs_three175_is_refused ... ok
+test all_six_exact_rows_are_numerically_unchanged ... ok
+test adaptation_taxonomy_descendants_match_and_trace_agrees ... ok
+test tool_classification_index_ignores_absence_but_rejects_conflict ... ok
+test exact_and_near_precede_farther_and_bracket_candidates ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/dataset.rs (target/debug/deps/dataset-46218c375ed2f5cc)
+
+running 13 tests
+test no_shopbot_or_unknown_machine_transfer ... ok
+test missing_data_explains_actual_scope_without_relaxing_matching ... ok
+test no_pocket_finish_or_unknown_doc_transfer ... ok
+test external_reference_never_becomes_locally_validated_after_clamp ... ok
+test in_memory_validation_matches_json_validation_without_mutating_document ... ok
+test local_trial_records_are_distinct_from_external_references ... ok
+test no_silent_metric_diameter_material_or_tool_transfer ... ok
+test dangling_revisions_and_family_members_refused ... ok
+test explicit_roundtrip_retains_catalog_and_source_snapshots ... ok
+test source_rows_transcribed_without_derating_or_chipload_recomputation ... ok
+test incomplete_data_provenance_or_unearned_evidence_refused_atomically ... ok
+test catalog_duplicates_geometry_conflicts_and_hard_limit_conflicts_refused ... ok
+test schema_versions_unknown_fields_duplicate_fields_and_units_refused ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/lab_presets.rs (target/debug/deps/lab_presets-05bbf6f7c1823029)
+
+running 8 tests
+test imported_physical_test_cannot_postdate_its_saved_revision ... ok
+test draft_is_saved_but_never_supplies_recommendations ... ok
+test history_preserves_prior_evidence_and_rejects_changed_identity ... ok
+test sorbonne_validated_record_precedes_tested_record_without_ui_ranking ... ok
+test local_capture_round_trip_requires_successful_physical_attestation ... ok
+test public_lab_metadata_and_incomplete_validation_are_refused ... ok
+test local_tested_precedence_uses_existing_resolver_and_disabled_deleted_presets_are_ignored ... ok
+test malformed_dates_and_unsupported_authoring_schema_are_rejected_without_panics ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/qualification.rs (target/debug/deps/qualification-1a3e58653b7f38f9)
+
+running 43 tests
+test fs02_full_slot_contradiction_is_invalid ... ok
+test fs01_equation_units_and_profile_unknown_engagement ... ok
+test exact_values_rpm_cap_never_increases_implicit_chipload ... ok
+test equivalent_single_member_family_and_exact_scope_are_ambiguous ... ok
+test exact_feed_tracks_tool_cap_and_rounding_but_never_increases_at_rpm_floor ... ok
+test finish_context_requires_finish_data_and_unknowns_are_visible ... ok
+test family_and_rule_authoring_errors_cannot_bypass_constructor_validation ... ok
+test feed_saturation_reports_target_comparison_without_material_threshold_or_rpm_retuning ... ok
+test exact_rpm_floor_reports_original_chipload_even_with_feed_cap ... ok
+test fs04_inconsistent_machine_or_tool_limits_refuse ... ok
+test fs03_pocket_preserves_nominal_ratio_and_distinction ... ok
+test fs05_feed_and_plunge_limits_are_independent ... ok
+test fs04_rpm_clamps_and_chipload_target_uses_final_rpm ... ok
+test fs02_slot_cannot_use_profile_or_low_radial_data ... ok
+test fs05_unknown_limits_are_not_invented ... ok
+test fs06_unknown_material_missing_profiles_and_dataset_mismatch ... ok
+test fs08_exact_validated_then_tested_then_reference_precedence ... ok
+test fs08_exact_values_keep_chipload_after_rpm_clamp_and_downgrade_applicability ... ok
+test fs08_exact_evidence_never_broadens_to_changed_context ... ok
+test fs09_all_precedence_tiers_and_mode_are_explicit ... ok
+test fs09_ambiguity_in_higher_tier_does_not_fall_through ... ok
+test fs09_equal_or_incomparable_scopes_are_ambiguous_in_any_order ... ok
+test fs09_strict_containment_selects_unique_maximal_scope ... ok
+test fs09_family_subset_containment_and_machine_membership ... ok
+test fs09_families_require_explicit_membership_and_specificity ... ok
+test fs09_inclusive_range_boundaries_and_missing_qualifiers ... ok
+test fs07_unsupported_families_and_operations ... ok
+test fs13_dataset_validation_rejects_invalid_claims_and_duplicates ... ok
+test fs13_validation_label_requires_scope_and_record ... ok
+test fs15_invalid_request_quantities_and_limits ... ok
+test fs13_unknown_fields_and_non_milling_operations_reject_on_deserialize ... ok
+test fs15_nonfinite_and_bad_profile_data_reject_at_construction ... ok
+test fs15_overflow_and_unbounded_large_output_refuse ... ok
+test family_provenance_survives_external_dataset_loss_and_member_reordering ... ok
+test fs15_rounding_and_representability_are_explicit ... ok
+test fs16_aggressiveness_and_evidence_independent_no_hidden_mode_factor ... ok
+test fs16_reduction_expansion_missing_source_and_duplicates_refuse ... ok
+test fs15_repeated_output_and_input_immutability ... ok
+test fs15_limit_invariants_over_deterministic_grid ... ok
+test request_doc_and_nominal_stepover_cannot_be_silently_increased ... ok
+test nominal_scope_containment_selects_narrower_recipe_at_boundaries ... ok
+test plunge_scales_down_for_both_data_modes_and_never_up ... ok
+test fs13_request_profile_set_and_result_round_trip ... ok
+
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/sensitivity.rs (target/debug/deps/sensitivity-89cdbabb29d88a0f)
+
+running 4 tests
+test ten_percent_small_tool_transition_is_continuous_with_integer_feed_rounding ... ok
+test interpolation_entry_exposes_a_larger_selection_jump ... ok
+test availability_boundaries_are_explicit_on_both_sides ... ok
+test diameter_sweep_is_order_independent_and_preserves_evidence_and_caps ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.10s
+
+     Running tests/source_packs.rs (target/debug/deps/source_packs-673bd83c0c993ed5)
+
+running 21 tests
+test derived_quantities_have_units_and_keep_original ... ok
+test composite_sienci_is_not_all_mdf ... ok
+test bundle_registry_is_explicit_and_contains_only_licensed_public_packs ... ok
+test duplicate_pack_ids_refused ... ok
+test classification_and_private_not_bundle ... ok
+test disagreement_selects_authored_record_never_average ... ok
+test exact_local_tested_preset_precedes_reference ... ok
+test generic_material_fallback_and_exact_preference ... ok
+test floating_point_roundoff_does_not_create_false_ambiguity_but_real_doc_difference_does ... ok
+test missing_and_invalid_context_keep_reasons ... ok
+test source_chipload_is_distinguished_from_derived_chipload ... ok
+test deterministic_under_input_reordering ... ok
+test tested_cannot_use_material_fallback ... ok
+test source_record_and_original_values_survive ... ok
+test schema_and_size_fail_closed ... ok
+test identities_and_record_origins_are_required ... ok
+test noncomparable_rpm_is_ambiguous_even_when_clamps_equal ... ok
+test manifest_versions_and_required_license ... ok
+test unknown_material_taxonomy_and_tool_traits_are_rejected ... ok
+test typed_errors_preserve_legacy_api_and_rank_array_contract ... ok
+test normal_and_rapid_stay_in_authored_same_mode_records ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running unittests src/main.rs (target/debug/deps/ivac_server-94c11593a738907d)
+
+running 15 tests
+test tests::pipeline_cancelled_maps_to_408_with_structured_body ... ok
+test tests::bad_request_helper_synthesizes_structured_error ... ok
+test tests::internal_helper_synthesizes_structured_error ... ok
+test tests::pipeline_unknown_tool_promotes_auto_fix_into_http_body ... ok
+test tests::relief_stl_rejects_malformed_stl_with_400 ... ok
+test tests::status_for_kind_matches_legacy_mapping ... ok
+test tests::relief_stl_returns_204_for_a_footprintless_mesh ... ok
+test tests::http_error_response_carries_full_structured_shape ... ok
+test tests::relief_stl_rasterizes_a_flat_quad_to_a_surface_field ... ok
+test tests::generate_gcode_stream_rejects_hpgl_with_400 ... ok
+test tests::generate_gcode_stream_serves_grbl_too ... ok
+test tests::generate_gcode_stream_matches_the_buffered_program ... ok
+test tests::generate_rejects_cps_path_source ... ok
+test tests::audit_15_16_import_memory_and_format_validation ... ok
+test tests::posts_routes_list_inspect_and_guard ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.37s
+
+     Running unittests src/lib.rs (target/debug/deps/ivac_wasm-e9fc5253bb31689b)
+
+running 22 tests
+test sim::tests::advance_endmill_plunge_lowers_cells_and_returns_dirty_aabb ... ok
+test sim::tests::audit_15_16_reset_then_changed_tool_rechecks_cached_warnings ... ok
+test sim::tests::deviation_flags_gouge_under_plunge_and_reststock_around_it ... ok
+test sim::tests::data_ptr_and_len_consistent_with_cols_rows ... ok
+test sim::tests::advance_with_no_cuts_returns_empty_aabb ... ok
+test sim::tests::advance_clears_previous_dirty_so_aabb_reflects_only_this_call ... ok
+test sim::tests::clear_toolpath_drops_warning_cache ... ok
+test sim::tests::deviation_recompute_in_matches_full_over_the_dirty_aabb ... ok
+test sim::tests::deviation_unions_multiple_targets_deepest_wins ... ok
+test sim::tests::checkpoint_same_index_overwrites ... ok
+test sim::tests::nearest_checkpoint_picks_largest_at_or_below_target ... ok
+test sim::tests::new_initializes_heightmap_to_top_z ... ok
+test sim::tests::partial_advance_cut_only_touches_swept_chunk ... ok
+test sim::tests::partial_advance_emits_rapid_warning_only_on_first_slice ... ok
+test sim::tests::partial_advance_plunge_grows_as_t_advances ... ok
+test sim::tests::reset_restores_top_z_and_no_dirty ... ok
+test sim::tests::re_sweep_replays_cached_diagnostics_identically ... ok
+test sim::tests::restore_checkpoint_marks_whole_grid_dirty ... ok
+test sim::tests::three_axis_advance_keeps_sidecar_empty ... ok
+test sim::tests::checkpoint_restore_then_replay_matches_full_replay ... ok
+test sim::tests::form_tool_advance_populates_undercut_sidecar ... ok
+test sim::tests::checkpoint_restore_round_trips_undercut_sidecar ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests ivac_cps
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests ivac_feeds_speeds
+
+running 1 test
+test crates/ivac-feeds-speeds/src/lib.rs - (line 8) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+   Doc-tests ivac_wasm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

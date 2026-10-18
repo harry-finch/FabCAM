@@ -1,0 +1,25 @@
+    Blocking waiting for file lock on build directory
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `release` profile [optimized] target(s) in 4m 08s
+     Running unittests src/lib.rs (target/release/deps/ivac_core-453a196113c33b1d)
+
+running 16 tests
+test cam::halfpipe::tests::circular_arc_profile_depth_curve ... ok
+test cam::halfpipe::tests::halfpipe_z_at_reentrant_corner_uses_corner_radius_not_incircle ... ok
+test cam::halfpipe::tests::is_at_corner_detects_reentrant_geometry ... ok
+test cam::halfpipe::tests::polyline_propagates_depth_limited_flag ... ok
+test cam::halfpipe::tests::polyline_propagates_tool_reach_flag ... ok
+test cam::halfpipe::tests::shared_curve_facet_vertex_never_forces_full_radius_depth ... ok
+test cam::halfpipe::tests::tool_reach_cap_does_not_fire_when_deeper_flute_available ... ok
+test cam::halfpipe::tests::tool_reach_caps_circular_arc_depth ... ok
+test cam::halfpipe::tests::v_bottom_profile_depth_curve ... ok
+test cam::halfpipe::tests::z_cap_clips_both_profiles ... ok
+test pipeline::op_drivers::halfpipe::tests::halfpipe_circular_arc_emits_curved_floor ... ok
+test pipeline::op_drivers::halfpipe::tests::halfpipe_serde_round_trip ... ok
+test pipeline::op_drivers::halfpipe::tests::halfpipe_tool_reach_clamps_deep_profile ... ok
+test pipeline::op_drivers::halfpipe::tests::halfpipe_warns_when_tool_radius_mismatch_exceeds_10pct ... ok
+test pipeline::op_drivers::halfpipe::tests::whirl_serde_round_trip ... ok
+test pipeline::op_drivers::halfpipe::tests::whirl_tool_inflates_gcode_g1_count ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 1188 filtered out; finished in 0.11s
+

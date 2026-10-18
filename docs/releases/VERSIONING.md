@@ -1,6 +1,16 @@
 # FabCAM version policy
 
-## Current: 0.9.0-beta.2 — 2026-10-17
+## Current: 0.9.0-beta.3 — 2026-10-18
+
+User accepted all delivered pending milestones and authorized source publication,
+three fresh desktop candidates, a refreshed test kit and app screenshots. This
+stabilization snapshot includes audit lots9–16, HATCH/SAFE-Z fixes, TEST1 bounded
+qualification and ADR-0023 publication guards, pipeline61. The beta increment
+makes these packages distinguishable from pipeline54 beta.2 installers. Human
+review decisions are recorded; platform/physical observations remain actual test
+records, not inferred from approval. No tag, Release or 1.0 claim is implied.
+
+## Previous: 0.9.0-beta.2 — 2026-10-17
 
 Source publication of CAM clearance/chaining/cache fixes, Feeds & Speeds audit
 corrections, generation timing, UI consistency and packaging preparation advances

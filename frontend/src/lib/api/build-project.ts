@@ -311,9 +311,8 @@ function buildTool(t: FrontToolEntry): WireToolEntry {
     diameter: t.diameter,
     ...(t.tipDiameter !== undefined ? { tip_diameter: t.tipDiameter } : {}),
     // tip_angle_deg is required by the schema (Rust serde-defaults it to
-    // 60, which schemars marks required), so emit it explicitly; 60
-    // round-trips identically to omitting it.
-    tip_angle_deg: t.tipAngleDeg ?? 60,
+    // the kind-specific default), so emit it explicitly. Saved angles win.
+    tip_angle_deg: t.tipAngleDeg ?? (t.kind === 'drill' ? 118 : 60),
     ...(t.dragoff !== undefined ? { dragoff: t.dragoff } : {}),
     ...(t.dragKnifeSelfAlignAngleDeg !== undefined
       ? { drag_knife_self_align_angle_deg: t.dragKnifeSelfAlignAngleDeg }
@@ -400,6 +399,7 @@ function buildContourParams(op: FlatOp): Record<string, unknown> {
     op.tabsActive ||
     op.tabWidth !== undefined ||
     op.tabHeight !== undefined ||
+    op.tabWidthMode !== undefined ||
     op.tabType !== undefined ||
     op.tabRampAngleDeg !== undefined
   ) {
@@ -408,6 +408,7 @@ function buildContourParams(op: FlatOp): Record<string, unknown> {
       width: op.tabWidth ?? 10,
       height: op.tabHeight ?? 1,
       tab_type: op.tabType ?? 'rectangle',
+      width_mode: op.tabWidthMode ?? 'legacy_center',
     };
     if (op.tabType === 'ramp' && op.tabRampAngleDeg !== undefined && op.tabRampAngleDeg !== 30) {
       tabs.ramp_angle_deg = op.tabRampAngleDeg;

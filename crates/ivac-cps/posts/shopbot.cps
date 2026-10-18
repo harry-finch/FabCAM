@@ -74,7 +74,7 @@ function preflight() {
   var machine = JSON.parse(machineText);
   if (machine.mode != "mill" || machine.tool_change != "manual_m0_pause")
     fail("requires milling and manual_m0_pause tool changes");
-  if (machine.toolchange_xy || machine.park_xy || machine.use_tool_length_offsets ||
+  if (machine.toolchange_xy || machine.park_xy || machine.park_at_home || machine.use_tool_length_offsets ||
       machine.post_change_z || machine.post_profile)
     fail("probing, controller offsets, stations, parking and custom scaffold unsupported");
   safeZ = getGlobalParameter("ivacam:clearance-z");

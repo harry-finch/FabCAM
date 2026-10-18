@@ -1,0 +1,169 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.30s
+     Running tests/cad1_qualification.rs (target/debug/deps/cad1_qualification-de60c5eeda614e25)
+
+running 1 test
+test exact_diameter_corners_are_reached_in_emitted_profile_and_pocket ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.37s
+
+     Running tests/cps_posts.rs (target/debug/deps/cps_posts-04ea1552f7d89023)
+
+running 4 tests
+test fanuc_refs_snapshot ... ok
+test two_sided_cps_refuses_unqualified_output ... ok
+test bundled_grbl_snapshot ... ok
+test bundled_grbl_geometry_parity ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/drawing_audit.rs (target/debug/deps/drawing_audit-64392919724bd9b8)
+
+running 13 tests
+test internal_gap_is_not_reported_as_closed ... ok
+test snap_cannot_collapse_micro_edge ... ok
+test simplify_cannot_remove_drill_point_from_sliver ... ok
+test tiny_unclosed_contour_still_protects_drill_point_from_simplification ... ok
+test boundary_point_is_ambiguous_but_supporting_line_is_not ... ok
+test simplify_with_distant_curve_and_drill_point ... ok
+test layer_resolution_preserves_contour_order ... ok
+test circles_and_adjacent_line_arcs_are_valid ... ok
+test simplify_batches_with_gap_closure_and_contour_deletion ... ok
+test overlapping_crossing_and_tangent_curves_still_refuse ... ok
+test transform_order_matches_cam_for_all_mirror_combinations ... ok
+test tiny_gap_is_not_displayed_as_zero_or_silently_closed ... ok
+test intact_circle_generates_through_authoritative_drawing_api ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
+
+     Running tests/geom1_contract.rs (target/debug/deps/geom1_contract-a8125e300d0c86be)
+
+running 23 tests
+test distance_thresholds_are_visible_mm_independent_of_rotation_translation_mirror ... ok
+test evaluated_coordinates_use_frozen_pivot_and_similarity_transform ... ok
+test identical_imports_have_distinct_identity_and_exact_provenance ... ok
+test deletion_does_not_retarget_to_the_next_import ... ok
+test direct_ambiguous_join_refuses_without_relying_on_ui_analysis ... ok
+test exact_duplicate_closed_paths_can_be_removed_but_not_rebound ... ok
+test crossing_result_is_refused_even_within_join_tolerance ... ok
+test invalid_revision_identity_transform_and_unresolved_binding_refuse ... ok
+test reversed_chaining_retains_source_ordinals ... ok
+test gap_preview_is_nonmutating_and_matches_inclusive_visible_tolerance ... ok
+test merge_requires_review_even_if_both_parents_were_selected ... ok
+test snap_and_connector_are_distinct_and_join_requires_binding_review ... ok
+test simplification_has_continuous_bound_and_protects_already_modified_edges ... ok
+test split_does_not_automatically_select_children ... ok
+test simplification_refuses_contained_island_in_removed_sliver ... ok
+test legacy_conversion_proves_membership_and_preserves_unrelated_import ... ok
+test unique_modification_preserves_binding_and_original ... ok
+test zero_line_removal_preserves_intentional_point ... ok
+test edited_sources_fail_explicitly_for_empty_or_synthetic_or_fuzzy_ambiguous_scope ... ok
+test scaled_gap_repairs_preserve_independent_import_and_pivot ... ok
+test deleting_an_earlier_import_cannot_redirect_an_unrelated_operation ... ok
+test edited_generation_uses_authoritative_geometry_and_refuses_old_request_shape ... ok
+test ui_saved_repair_matches_generated_decoded_program_and_resolved_preview ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-d54a5be4b2c3b5b4)
+
+running 7 tests
+test shared_auto_kernel_uses_selected_nesting_depth_not_svg_fill_rules ... ok
+test separate_contours_does_not_preserve_nested_holes ... ok
+test difference_preserves_explicit_operand_order ... ok
+test all_region_modes_ignore_open_contours_and_missing_indices ... ok
+test xor_preserves_parity_after_empty_intermediate ... ok
+test svg_named_groups_remain_one_synthetic_layer ... ok
+test dxf_named_layers_and_import_layer_filter_are_preserved ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/shopbot_m2_post.rs (target/debug/deps/shopbot_m2_post-87aed7062bf8a6ff)
+
+running 27 tests
+test m3_unverified_clearance_refuses_sbp_export ... ok
+test peck_drilling ... ok
+test m4_lab_spindle_runs_real_cam_and_preserves_manual_default ... ok
+test cam3_tab_at_entry_cannot_be_plunged_through ... ok
+test cam3_tab_width_and_absolute_height_override_preserve_material ... ok
+test square_profile ... ok
+test circular_profile ... ok
+test multiple_operations ... ok
+test ux1_curved_ramp_exports_instead_of_rejecting_varying_z_arc ... ok
+test ux1_direct_tabs_and_leads_remain_explicit_supported_choices ... ok
+test cam4_pocket_residual_tracks_emitted_path_and_work_origin ... ok
+test ux1_explicit_geometry_and_stock_translation_preserves_entry_preview ... ok
+test cam3_curved_tabs_preserve_center_and_compensated_radius ... ok
+test unsupported_machine_policies_fail ... ok
+test ux2_invalid_origin_and_obstacle_geometry_fail_before_output ... ok
+test ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct ... ok
+test ux2_unqualified_two_sided_shopbot_scaffold_blocks_before_invalid_output ... ok
+test ux1_unqualified_entry_and_origin_combinations_fail_explicitly ... ok
+test ux1_circular_ramp_chords_obey_post_tolerance_and_direction ... ok
+test ux2_polar_drill_center_and_explicit_approach_translate_with_the_drawing ... ok
+test ux1_final_preview_matches_emitted_xyz_lines_for_profile_and_pocket ... ok
+test ux1_pocket_islands_and_open_profile_helix_never_gain_silent_machine_fallback ... ok
+test cam3_direct_entry_tab_lead_direction_matrix_has_output_preview_parity ... ok
+test island_pocket ... ok
+test ux1_ramps_qualify_simple_curved_concave_open_and_island_sources ... ok
+test ux2_fixture_collision_and_pocket_regions_stay_in_the_same_work_frame ... ok
+test ux2_work_zero_translates_actual_output_without_changing_intent_or_depths ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 57.61s
+
+     Running tests/snapshots_drill_tabs_whirl.rs (target/debug/deps/snapshots_drill_tabs_whirl-8da1b33c291d3f28)
+
+running 4 tests
+test snapshot_profile_ramp_tabs ... ok
+test snapshot_drill_with_stufenfase_and_toolchange ... ok
+test snapshot_whirl_walks_closed_contour ... ok
+test snapshot_profile_rectangle_tabs_and_helix_entry ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/v1_stabilization.rs (target/debug/deps/v1_stabilization-bdb86d80a70ef01f)
+
+running 3 tests
+test nested_auto_pocket_cuts_even_depth_region_and_preserves_odd_depth_island ... ok
+test nested_pocket_matrix_preserves_cutter_clearance_and_every_even_region ... ok
+test deep_pocket_opensbp_decodes_to_the_same_preview_moves ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.57s
+
+     Running tests/vcarve_qualification.rs (target/debug/deps/vcarve_qualification-a32c022d788def42)
+
+running 10 tests
+test a3_short_chain_reaches_target_at_both_ends ... ok
+test a2_interpolated_ramp_never_exceeds_local_target ... ok
+test continuous_clearance_catches_between_sample_collision ... ok
+test a1_perimeter_honors_pass_step_and_depth_limited_radius ... ok
+test invalid_inputs_and_physical_limits_fail_closed ... ok
+test reference_cones_caps_and_flat_tips ... ok
+test medial_axis_is_variable_finite_deterministic_and_does_not_clear_plateau ... ok
+test circle_islands_and_disconnected_regions_are_explicit ... ok
+test topology_matrix_and_winding ... ok
+test a4_decoded_output_preview_generic_parity_and_persistence ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.94s
+
+     Running tests/volume_validation.rs (target/debug/deps/volume_validation-e6abf5c31cb1c94f)
+
+running 8 tests
+test v5az::profile_after_pocket_does_not_dip_below_pocket_floor ... ok
+test gcode_include::gcode_include_g1_slot_volume_matches_closed_form ... ok
+test drill::drill_three_holes_volume_matches_closed_form ... ok
+test chamfer::chamfer_open_edge_emits_lateral_cut_at_each_pass ... ok
+test pocket::pocket_rectangle_volume_matches_closed_form ... ok
+test v5az::chamfer_after_pocket_does_not_dip_below_pocket_floor ... ok
+test chamfer::chamfer_closed_rectangle_volume_matches_closed_form ... ok
+test profile::profile_outside_circle_volume_matches_closed_form ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests/waterline_acceptance.rs (target/debug/deps/waterline_acceptance-7f9fa89e1486d42f)
+
+running 1 test
+test waterline_rough_then_relief_finish_no_gouge_bounded_envelope ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

@@ -1005,80 +1005,57 @@ impl JsonSchema for PocketStrategy {
 
 impl<'de> Deserialize<'de> for PocketStrategy {
     fn deserialize<D: serde::Deserializer<'de>>(de: D) -> Result<Self, D::Error> {
+        use serde::de::Error;
         #[derive(Deserialize)]
-        struct ProfileObj {
-            kind: String,
-            #[serde(default)]
-            radius_mm: Option<f64>,
-            #[serde(default)]
-            included_angle_deg: Option<f64>,
+        #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+        enum Profile {
+            CircularArc { radius_mm: f64 },
+            VBottom { included_angle_deg: f64 },
         }
         #[derive(Deserialize)]
-        #[serde(untagged)]
-        enum Repr {
-            Str(String),
-            Obj {
-                kind: String,
+        #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+        enum Strategy {
+            Cascade,
+            Spiral,
+            Zigzag {
                 #[serde(default)]
-                engagement_angle_deg: Option<f64>,
-                #[serde(default)]
-                loop_radius_factor: Option<f64>,
-                #[serde(default)]
-                angle_deg: Option<f64>,
-                #[serde(default)]
-                profile: Option<ProfileObj>,
+                angle_deg: f64,
+            },
+            Trochoidal {
+                engagement_angle_deg: f64,
+                loop_radius_factor: f64,
+            },
+            Halfpipe {
+                profile: Profile,
             },
         }
-        match Repr::deserialize(de)? {
-            Repr::Str(s) => match s.as_str() {
-                "cascade" => Ok(Self::Cascade),
-                "zigzag" => Ok(Self::Zigzag { angle_deg: 0.0 }),
-                "spiral" => Ok(Self::Spiral),
-                other => Err(serde::de::Error::unknown_variant(
-                    other,
-                    &["cascade", "zigzag", "spiral", "trochoidal", "halfpipe"],
-                )),
-            },
-            Repr::Obj {
-                kind,
-                engagement_angle_deg,
-                loop_radius_factor,
-                angle_deg,
-                profile,
-            } => match kind.as_str() {
-                "cascade" => Ok(Self::Cascade),
-                "zigzag" => Ok(Self::Zigzag {
-                    angle_deg: angle_deg.unwrap_or(0.0),
-                }),
-                "spiral" => Ok(Self::Spiral),
-                "trochoidal" => Ok(Self::Trochoidal {
-                    engagement_angle_deg: engagement_angle_deg.unwrap_or(30.0),
-                    loop_radius_factor: loop_radius_factor.unwrap_or(0.6),
-                }),
-                "halfpipe" => {
-                    let p = profile
-                        .ok_or_else(|| serde::de::Error::missing_field("profile (for halfpipe)"))?;
-                    let profile = match p.kind.as_str() {
-                        "circular_arc" => HalfpipeProfile::CircularArc {
-                            radius_mm: p.radius_mm.unwrap_or(5.0),
-                        },
-                        "v_bottom" => HalfpipeProfile::VBottom {
-                            included_angle_deg: p.included_angle_deg.unwrap_or(60.0),
-                        },
-                        other => {
-                            return Err(serde::de::Error::unknown_variant(
-                                other,
-                                &["circular_arc", "v_bottom"],
-                            ));
-                        }
-                    };
-                    Ok(Self::Halfpipe { profile })
-                }
-                other => Err(serde::de::Error::unknown_variant(
-                    other,
-                    &["cascade", "zigzag", "spiral", "trochoidal", "halfpipe"],
-                )),
-            },
+        let value = serde_json::Value::deserialize(de)?;
+        let value = if let Some(name) = value.as_str() {
+            // Historical strings only exist for these parameterless modes.
+            if !matches!(name, "cascade" | "spiral" | "zigzag") {
+                return Err(D::Error::custom(
+                    "parameterized pocket strategy requires an object",
+                ));
+            }
+            serde_json::json!({"kind":name})
+        } else {
+            value
+        };
+        let raw: Strategy = serde_json::from_value(value).map_err(D::Error::custom)?;
+        match raw {
+            Strategy::Cascade => Ok(Self::Cascade),
+            Strategy::Spiral => Ok(Self::Spiral),
+            Strategy::Zigzag { angle_deg } if angle_deg.is_finite() => Ok(Self::Zigzag { angle_deg }),
+            Strategy::Trochoidal { engagement_angle_deg, loop_radius_factor }
+                if engagement_angle_deg.is_finite() && engagement_angle_deg > 0. && engagement_angle_deg < 180.
+                && loop_radius_factor.is_finite() && loop_radius_factor > 0. =>
+                Ok(Self::Trochoidal { engagement_angle_deg, loop_radius_factor }),
+            Strategy::Halfpipe { profile: Profile::CircularArc { radius_mm } }
+                if radius_mm.is_finite() && radius_mm > 0. => Ok(Self::Halfpipe { profile: HalfpipeProfile::CircularArc { radius_mm } }),
+            Strategy::Halfpipe { profile: Profile::VBottom { included_angle_deg } }
+                if included_angle_deg.is_finite() && included_angle_deg > 0. && included_angle_deg < 180. =>
+                Ok(Self::Halfpipe { profile: HalfpipeProfile::VBottom { included_angle_deg } }),
+            _ => Err(D::Error::custom("pocket strategy requires finite positive geometry parameters and angles below 180 degrees")),
         }
     }
 }
@@ -1349,5 +1326,41 @@ mod tests {
         ));
         assert!(matches!(op.source, OpSource::All));
         assert!(op.enabled);
+    }
+}
+
+#[cfg(test)]
+mod audit_11_12 {
+    use super::*;
+    #[test]
+    fn geometry_fields_are_required_and_named_in_errors() {
+        for (input, field) in [
+            (
+                r#"{"kind":"halfpipe","profile":{"kind":"circular_arc","radius":2}}"#,
+                "radius",
+            ),
+            (
+                r#"{"kind":"halfpipe","profile":{"kind":"circular_arc"}}"#,
+                "radius_mm",
+            ),
+            (
+                r#"{"kind":"trochoidal","engagement_angle_deg":30}"#,
+                "loop_radius_factor",
+            ),
+            (
+                r#"{"kind":"halfpipe","profile":{"kind":"circular_arc","radius_mm":"bad"}}"#,
+                "invalid type",
+            ),
+        ] {
+            assert!(serde_json::from_str::<PocketStrategy>(input)
+                .unwrap_err()
+                .to_string()
+                .contains(field));
+        }
+        assert!(serde_json::from_str::<PocketStrategy>(
+            r#"{"kind":"halfpipe","profile":{"kind":"circular_arc","radius_mm":-2}}"#
+        )
+        .is_err());
+        assert!(serde_json::from_str::<PocketStrategy>(r#""zigzag""#).is_ok());
     }
 }

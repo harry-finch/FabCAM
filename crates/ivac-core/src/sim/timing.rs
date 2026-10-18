@@ -152,41 +152,55 @@ pub fn spindle_warmup_total_s(
 ///
 /// Negative / non-finite arguments are ignored.
 fn sum_g4_dwell_seconds(gcode: &str, dwell_unit: DwellUnit) -> f64 {
-    let scale_to_s = match dwell_unit {
-        DwellUnit::Seconds => 1.0,
-        DwellUnit::Milliseconds => 1.0 / 1000.0,
+    let scale = if matches!(dwell_unit, DwellUnit::Milliseconds) {
+        0.001
+    } else {
+        1.
     };
-    let mut total = 0.0_f64;
+    let mut total = 0.;
+    let mut cycle = false;
+    let mut cycle_p = 0.;
     for raw in gcode.lines() {
         let line = strip_comment(raw);
-        let mut tokens = line.split_whitespace().peekable();
-        // The G4 token must be present in the line for a dwell to fire.
-        let mut has_g4 = false;
-        for tok in tokens.by_ref() {
-            if matches!(tok, "G4" | "g4") {
-                has_g4 = true;
-                break;
-            }
-            // Some posts write "G04"; accept that form too.
-            if matches!(tok, "G04" | "g04") {
-                has_g4 = true;
-                break;
+        let words: Vec<_> = crate::gcode::preview::ascii_words(&line)
+            .into_iter()
+            .filter_map(|(h, v)| {
+                v.replace(',', ".")
+                    .parse::<f64>()
+                    .ok()
+                    .filter(|v| v.is_finite())
+                    .map(|v| (h.to_ascii_uppercase(), v))
+            })
+            .collect();
+        let dwell = words.iter().any(|(h, v)| h == "G" && *v == 4.);
+        let cycle_start = words
+            .iter()
+            .any(|(h, v)| h == "G" && [73., 81., 82., 83.].contains(v));
+        if words
+            .iter()
+            .any(|(h, v)| h == "G" && [0., 1., 2., 3., 80.].contains(v))
+        {
+            cycle = false;
+            cycle_p = 0.;
+        }
+        if cycle_start {
+            cycle = !words.iter().any(|(h, v)| h == "G" && *v == 81.);
+            if !cycle {
+                cycle_p = 0.;
             }
         }
-        if !has_g4 {
-            continue;
-        }
-        // Look for the P / X argument anywhere in the remainder.
-        for tok in line.split_whitespace() {
-            let Some((head, rest)) = tok.split_at_checked(1) else {
-                continue;
-            };
-            if matches!(head, "P" | "p" | "X" | "x") {
-                if let Ok(v) = rest.parse::<f64>() {
-                    if v.is_finite() && v > 0.0 {
-                        total += v * scale_to_s;
-                    }
-                }
+        if dwell {
+            total += words
+                .iter()
+                .filter(|(h, v)| (h == "P" || h == "X") && *v > 0.)
+                .map(|(_, v)| v * scale)
+                .sum::<f64>();
+        } else if cycle {
+            if let Some((_, v)) = words.iter().rev().find(|(h, _)| h == "P") {
+                cycle_p = v.max(0.);
+            }
+            if cycle_start || words.iter().any(|(h, _)| h == "X" || h == "Y") {
+                total += cycle_p * scale;
             }
         }
     }
@@ -610,10 +624,20 @@ fn feeds_per_segment(gcode: &str, segments: &[ToolpathSegment]) -> Vec<f64> {
     let mut feed_by_line: Vec<f64> = Vec::new();
     feed_by_line.push(0.0);
     let mut current: f64 = 0.0;
+    let mut unit_scale = 1.;
     for raw in gcode.lines() {
         let line = strip_comment(raw);
+        for (head, value) in crate::gcode::preview::ascii_words(&line) {
+            if head.eq_ignore_ascii_case("G") {
+                match value {
+                    "20" => unit_scale = 25.4,
+                    "21" => unit_scale = 1.,
+                    _ => {}
+                }
+            }
+        }
         if let Some(v) = scan_modal_f(&line) {
-            current = v;
+            current = v * unit_scale;
         }
         feed_by_line.push(current);
     }
@@ -651,11 +675,12 @@ fn scan_modal_f(line: &str) -> Option<f64> {
                 j += 1;
             }
             let num_start = j;
-            while j < bytes.len() && (bytes[j].is_ascii_digit() || bytes[j] == b'.') {
+            while j < bytes.len() && (bytes[j].is_ascii_digit() || matches!(bytes[j], b'.' | b','))
+            {
                 j += 1;
             }
             if j > num_start {
-                if let Ok(v) = line[i + 1..j].parse::<f64>() {
+                if let Ok(v) = line[i + 1..j].replace(',', ".").parse::<f64>() {
                     if v.is_finite() && v > 0.0 {
                         last = Some(v);
                     }
@@ -1236,5 +1261,24 @@ mod tests {
         assert_eq!(scan_modal_f("G1 F-1 F500 X20"), Some(500.0));
         // Glued: 'F500' embedded in another token is found.
         assert_eq!(scan_modal_f("G1F500X10"), Some(500.0));
+    }
+}
+
+#[cfg(test)]
+mod audit_13_14 {
+    use super::*;
+    #[test]
+    fn inch_feed_and_decimal_comma_are_mm_per_min() {
+        assert_eq!(scan_modal_f("G1F31,5X0"), Some(31.5));
+        let code = "G20\nG1X1F60\nG21\nG1X30F800";
+        let moves = crate::gcode::preview::interpret(code);
+        assert_eq!(feeds_per_segment(code, &moves), vec![1524., 800.]);
+    }
+    #[test]
+    fn dwell_includes_modal_cycles_and_compact_decimal_comma() {
+        assert_eq!(
+            sum_g4_dwell_seconds("G4P0,5\nG82X0Z-2R1P1\nX10\nG80\nX20", DwellUnit::Seconds),
+            2.5
+        );
     }
 }

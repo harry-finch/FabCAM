@@ -1,0 +1,5 @@
+
+> i18n:codegen
+> node scripts/i18n-codegen.mjs
+
+[i18n-codegen] wrote /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/src/lib/i18n/keys.ts (2277 keys)

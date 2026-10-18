@@ -1,0 +1,5 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling xtask v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/xtask)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.21s
+     Running `target/debug/xtask schema-check`
+schema/openapi.yaml is up to date

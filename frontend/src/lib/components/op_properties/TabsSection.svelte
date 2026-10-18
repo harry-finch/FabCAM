@@ -66,6 +66,14 @@
 
 <fieldset>
   <legend>{t('ops.tabs.legend')}</legend>
+  {#if op.tabWidthMode !== 'material_v1'}
+    <p class="hint">{t('ops.tabs.legacy_width')}</p>
+    <button type="button" onclick={() => patch('tabWidthMode', 'material_v1')}
+      >{t('ops.tabs.convert_width')}</button
+    >
+  {:else}
+    <p class="hint">{t('ops.tabs.material_width')}</p>
+  {/if}
   <div class="row" title={t('ops.tabs.mode.help')}>
     <span>{t('ops.tabs.mode.label')}</span>
     <div class="segmented">

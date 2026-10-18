@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-18",
+  "issue": "ivac-q1hjs",
+  "human_review": "ivac-2aow8",
+  "head": "2a3fe5632b4d77ab03d899bcb0a07db54a8b9f7b",
+  "incoming": "uncommitted pipeline57 audits09-14 preserved",
+  "pipeline_version": 58,
+  "public_version": "0.9.0-beta.2",
+  "qualification": "software only; no package/platform/physical acceptance",
+  "results": {
+    "baseline": "2 CPS + 1 HTTP failures reproduced before correction",
+    "core": "1202 PASS serial",
+    "cps": "46 reported PASS / 40 executed; six optional FANUC tests return early without oracle",
+    "node_v8": "39 PASS executed",
+    "http": "15 PASS",
+    "desktop_native": "12 PASS, native FSEvents outside sandbox",
+    "wasm": "22 PASS native bridge tests, not browser runtime",
+    "integration": "41 reported PASS / 40 executed; optional FANUC oracle absent",
+    "clippy": "PASS all-targets CPS/server/Tauri",
+    "fmt": "PASS",
+    "diff": "PASS",
+    "version": "expected snapshot mismatch on pipeline58 bump; reviewed new key 0x126c128703c07931; final core passes"
+  },
+  "commands": {
+    "core": "RUSTC_WRAPPER='' cargo test --offline -p ivac-core --features cps --lib -- --test-threads=1",
+    "cps-http": "RUSTC_WRAPPER='' cargo test --offline -p ivac-server -p ivac-cps",
+    "desktop-native": "RUSTC_WRAPPER='' cargo test --offline -p ivac-tauri --lib -- --test-threads=1 (outside sandbox for native filesystem events)",
+    "wasm": "RUSTC_WRAPPER='' cargo test --offline -p ivac-wasm --lib",
+    "integration": "RUSTC_WRAPPER='' cargo test --offline -p ivac-core --features cps --test cps_posts --test shopbot_m2_post --test vcarve_qualification",
+    "clippy": "RUSTC_WRAPPER='' cargo clippy --offline -p ivac-server -p ivac-cps -p ivac-tauri --all-targets -- -D warnings",
+    "fmt": "cargo fmt -p ivac-core -p ivac-cps -p ivac-server -p ivac-tauri -p ivac-wasm -- --check",
+    "diff": "git diff --check"
+  },
+  "source_sha256": {
+    "crates/ivac-cps/src/engine.rs": "6545e02563af880d64d029160b773e3d9636eab7346eaac3dc10ff43892a0cea",
+    "crates/ivac-cps/src/run.rs": "6325df5e77382c2e20d33bd8871d2eab0ea6f58b07c1ca59646eda6420531bde",
+    "crates/ivac-server/src/main.rs": "20fe68a4b57080dfd33b4801c4de16f43965e4749889fb349e454b978e245dc5",
+    "crates/ivac-tauri/src/commands.rs": "654e6150822ce244d722a05dca47c4c5fe8ea0ab29bfc2902ff9512006c5b113",
+    "crates/ivac-tauri/src/lib.rs": "e06938aa8cf5c81ca0f3c691b696e6abca743fd174e5cc2b8a260d4d372e10d4",
+    "crates/ivac-tauri/src/source_packs.rs": "2daaa2b23c1aefdf21576621a66631c56c0190d8da3fdf98e0401dd8023acfee",
+    "crates/ivac-tauri/src/watcher.rs": "e99bfe1bca4618a83712c4ad2ce54c00be90cdd6ab4e2f1f4f4fc47f535818f5",
+    "crates/ivac-wasm/src/sim.rs": "bb86add7266fe7b33d8b6f5039f577eaa4c23b4fad73c79516576eeab1d69929",
+    "crates/ivac-core/src/version.rs": "f289f1d124669e1b69c770dd830cf2cd3600ffa19f6e2bb2610739e4d75cac9f",
+    "crates/ivac-core/src/pipeline_cache.rs": "9beb4e979249e67d71d1a9691604916caa1247afbc3e5bd44d752a69b58c97cb"
+  },
+  "audit_sha256": {
+    "audit-argon_FabCAM_15.md": "6a29c79223e76e882d6bd37dbd26d7bc16a5fd7e3cdf0727b65e0ca75a6f3097",
+    "audit-argon_FabCAM_16.md": "628cb3c2e8b379503890a47eba090f8fd24ab89fdb03c46a576a7a7ce5ca82a6"
+  },
+  "log_sha256": {
+    "wasm-tests.log": "2b6cbb65a676786d1e4232338fc6afe5d3ab22a7086a7b86936c56d897827050",
+    "version-transition.log": "f10098bd0122d6aaf70b97479da8d325fb436c0cbb7309562a7ef3dfe14efd41",
+    "desktop-sandbox-timeouts.log": "9e2eb15e676dc9ce55a45271d4792086f0614bd8b3cd8d6e30428c35930dabe1",
+    "core.log": "7d8f1d2f2ccc6620515b83001548784f452a874ac423dd1a11893974bdaf1214",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "desktop-errors.log": "cdd737ca56f092dc13bbd288235810f1e9fc8cefbdcdf497a5daa6024d833929",
+    "baseline-http.log": "647339eb66a3a13563001b65bc1be23ef7259c0aa79fa1dad22fc8354409d2b5",
+    "clippy.log": "cd920b7223904c748ad0d8a784d77ba6869a514bc882abcacd8b6e5440a7dd20",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "baseline-cps.log": "9b74b943bfdaaaee38416a995fdeaac304ae9ff65af1dea23a900ae00ccdb5c2",
+    "desktop-native.log": "3b382673d52ab6ac26dc86dceb6bc38468197b22653ed2134e779ebbbdc643b4",
+    "integration.log": "03a0dcc197cb629cf30224b9a95eda09207b98e78105880651a3420d9d472f87",
+    "cps-http.log": "c0c72bc626cb8023c6c2ad1740a2ecd8cb168c55cccf53605a9e8ce90bb9a0d1"
+  },
+  "limits": [
+    "Finite per-loop CPS budgets retained, not wall-clock/admission guarantee",
+    "Sorbonne revisions already 16 decimal digits; no ordering policy change",
+    "WASM tool context already fixed in lot13-14; regression added only",
+    "Linux process predicate tested on host, Linux runtime not executed",
+    "Existing pipeline54 installers unchanged"
+  ]
+}

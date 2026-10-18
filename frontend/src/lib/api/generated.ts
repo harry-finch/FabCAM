@@ -549,6 +549,12 @@ export interface components {
             profile_set: components["schemas"]["FsProfileSet"];
             tools: components["schemas"]["ToolDefinition"][];
         };
+        /** @description Rejected path for inspection only. Deliberately contains no executable text. */
+        DiagnosticPreview: {
+            side?: components["schemas"]["WorkpieceSide"] | null;
+            toolpath: components["schemas"]["ToolpathSegment"][];
+            warnings: components["schemas"]["PipelineWarning"][];
+        };
         /** @description Auto-placed dowel-pin registration for a two-sided job. The front program drills `count` holes of `diameter_mm`, inset `margin_mm` from the stock edge and placed symmetrically about the flip axis so the same holes line up once the stock is flipped. Exact positions are derived in a later phase; this struct is only the operator-facing knobs. */
         DowelPinConfig: {
             /**
@@ -3097,6 +3103,8 @@ export interface components {
         };
         /** @enum {string} */
         TabType: "rectangle" | "ramp";
+        /** @enum {string} */
+        TabWidthMode: "legacy_center" | "material_v1";
         TabsConfig: {
             active: boolean;
             /**
@@ -3112,6 +3120,8 @@ export interface components {
             tab_type: components["schemas"]["TabType"];
             /** Format: double */
             width: number;
+            /** @description Missing in saved projects means the historical centre-path zone. */
+            width_mode?: components["schemas"]["TabWidthMode"];
         };
         /** @enum {string} */
         TextAlignment: "left" | "center" | "right";
@@ -3665,6 +3675,8 @@ export interface components {
             auto_fix?: components["schemas"]["AutoFix"] | null;
             /** @description Stable localization key for the message + hint. `None` means the frontend falls back to the English `message`/`recovery_hint`. */
             code?: components["schemas"]["ErrorCode"] | null;
+            /** @description Inspection-only path from a refused generation; never executable output. */
+            diagnostic_preview?: components["schemas"]["DiagnosticPreview"] | null;
             kind: components["schemas"]["ErrorKind"];
             message: string;
             /** @description Values the localized template interpolates (`{op_id}`, `{name}`, …). Stringified so the wire shape stays a simple `string → string` map. */

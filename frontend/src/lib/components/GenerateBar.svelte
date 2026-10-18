@@ -2,13 +2,14 @@
   import { generateEditedDrawing } from '../state/drawing';
   import { beginGenerationProbe } from '../state/performance-probe';
   import { bindGeneratePalette, exportProblem } from '../state/generate-palette';
-  import { notificationError } from '../api/error-notification';
+  import { frameGenerationError } from '../state/project-generate-ops';
   import CollisionFeedback from './CollisionFeedback.svelte';
   import RemainingMaterial from './RemainingMaterial.svelte';
   import { CircleX, TriangleAlert, Info, Check, RotateCw } from '@lucide/svelte';
   import { inDrawingFrame } from '../state/work-frame';
   import {
     generationContextKey,
+    coerceGenerationPost,
     buildGenerationProject,
     checkCornerRelief,
   } from '../state/generation-context';
@@ -51,12 +52,8 @@
   }
 
   const client = defaultClient();
-  type PostId = 'linuxcnc' | 'grbl' | 'hpgl' | 'cps';
-  function coercePost(v: string): PostId {
-    return v === 'grbl' || v === 'hpgl' || v === 'cps' ? v : 'linuxcnc';
-  }
-  const post = $derived<PostId>(
-    coercePost(project.data.machine.gcodeDialect ?? workspace.get().last_post_processor),
+  const post = $derived(
+    coerceGenerationPost(project.data.machine.gcodeDialect ?? workspace.get().last_post_processor),
   );
   // Changing dialect or CPS properties invalidates cached machine output.
   let generatedPost: string | null = null;
@@ -181,23 +178,14 @@
   );
   let warnings = $derived(warningSummary.sim);
   let allPipelineWarnings = $derived(warningSummary.pipeline);
-  // Tier-4 safety: count out-of-work-area moves from the last Generate.
-  // `out_of_work_area` is intentionally NOT a critical kind (the default
-  // envelope is often a placeholder), so it never blocks via the critical
-  // gate; the opt-in `blockOnWorkAreaViolation` setting promotes it to a
-  // hard EXPORT block for operators who've set their real envelope.
+  // Work-area warnings use their separate opt-in export policy.
   let workAreaViolationCount = $derived(
     allPipelineWarnings.filter((w) => w.kind === 'out_of_work_area').length,
   );
   let criticalCount = $derived(warningSummary.critical);
   let totalWarningCount = $derived(warningSummary.total);
 
-  // Two-sided run: `generatedBack` holds the flipped-stock program and the
-  // toolbar grows a second Download button. The back program carries its
-  // OWN pipeline warnings (the Rust core runs the full pipeline per side),
-  // so its download gate keys off those — but there is no heightfield sim
-  // for the back toolpath yet (that's the dual-surface preview, tracked
-  // separately), so unlike the front gate the back gate is pipeline-only.
+  // Each side has its own output warnings; only the front has simulation diagnostics.
   const twoSided = $derived(project.gen.generatedBack != null);
   const frontExtension = $derived(
     resolveExportExtension(
@@ -338,7 +326,14 @@
         // Cancelled by the user — just snap back to idle.
         project.gen.pipelineState = 'idle';
       } else {
-        project.failGenerate(notificationError(e));
+        if (!acceptsResult()) return;
+        const error = frameGenerationError(e, origin);
+        if (typeof error !== 'string' && error.diagnostic_preview) {
+          outcome = 'blocked';
+          project.gen.inputContextKey = inputContextKey;
+          generatedPost = postTag;
+        }
+        project.failGenerate(error);
       }
     } finally {
       if (ownsDocument()) {
@@ -369,10 +364,22 @@
     await exportGeneratedGcode(post, side);
   }
 
+  function exportDisabled(side: 'front' | 'back') {
+    const r = side === 'back' ? project.gen.generatedBack : project.gen.generated;
+    return (
+      generatedStale ||
+      project.gen.pipelineState !== 'idle' ||
+      !r?.gcode.trim() ||
+      !!exportProblem(exportStatus(), side)
+    );
+  }
+
   const exportStatus = () => ({
     stale: generatedStale,
     critical: criticalCount,
     backCritical: backCriticalCount,
+    fixture: allPipelineWarnings.filter((w) => w.kind === 'fixture_path_collision').length,
+    backFixture: backWarnings.filter((w) => w.kind === 'fixture_path_collision').length,
     workArea: workAreaViolationCount,
     backWorkArea: backWorkAreaCount,
   });
@@ -475,7 +482,7 @@
       <button
         onclick={() => void downloadGcode('front')}
         class="download"
-        disabled={generatedStale || project.gen.pipelineState !== 'idle'}
+        disabled={exportDisabled('front')}
         title={generatedStale ? t('ux1.export.stale') : t('genbar.download.title')}
       >
         {t('genbar.download.front', { ext: frontExtension })}
@@ -483,7 +490,7 @@
       <button
         onclick={() => void downloadGcode('back')}
         class="download"
-        disabled={generatedStale || project.gen.pipelineState !== 'idle'}
+        disabled={exportDisabled('back')}
         title={generatedStale ? t('ux1.export.stale') : t('genbar.download.title')}
       >
         {t('genbar.download.back', { ext: backExtension })}
@@ -492,7 +499,7 @@
       <button
         onclick={() => void downloadGcode()}
         class="download"
-        disabled={generatedStale || project.gen.pipelineState !== 'idle'}
+        disabled={exportDisabled('front')}
         title={generatedStale ? t('ux1.export.stale') : t('genbar.download.title')}
       >
         {t('genbar.download.file', { ext: frontExtension })}

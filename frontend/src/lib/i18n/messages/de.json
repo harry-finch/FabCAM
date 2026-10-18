@@ -1491,7 +1491,7 @@
   "ops.tabs.height.help": "Z-Abstand, auf den der Fräser über jeder Anbindung anhebt. Standard 1 mm.",
   "ops.tabs.type.label": "Typ",
   "ops.tabs.type.rectangle.help": "Rechteckige Anbindung: Der Fräser hebt auf die Anbindungs-Z-Höhe an, fährt die Anbindungsbreite auf konstanter Höhe ab und senkt wieder ab. Standard-Niederhalter.",
-  "ops.tabs.type.ramp.help": "Dreieckige Rampen-Anbindung: Der Fräser fährt auf die Anbindungs-Z-Höhe hinauf und wieder hinunter — ohne Abschnitt mit konstanter Z-Höhe. Lässt sich leichter entfernen als rechteckige Anbindungen.",
+  "ops.tabs.type.ramp.help": "Rampen-Anbindung: allmähliches Anheben und Absenken. Materialbreite behält einen flachen Steg auf Anbindungshöhe; der Legacy-Modus behält die ursprüngliche Dreiecksform.",
   "ops.tabs.ramp_angle.label": "Rampenwinkel",
   "ops.tabs.ramp_angle.help": "Rampenwinkel in Grad. 30° (Standard) ergibt eine Steigung von 1:√3. Kleiner = flachere, längere Rampen; größer = steiler, eher wie eine rechteckige Anbindung. Horizontale Rampenlänge = tabs.height / tan(Winkel).",
   "ops.drill.cycle.label": "Zyklus",
@@ -1770,7 +1770,7 @@
   "ux2.fixture.vertices": "Lokale Eckpunkte · x, y mm pro Zeile",
   "ux2.fixture.remove": "Spannmittel entfernen",
   "ux2.fixture.invalid": "Endliche Koordinaten, positive Maße, Oberkante über Unterkante und ein einfaches Polygon mit mindestens drei Eckpunkten verwenden.",
-  "warn.fixture_path_collision": "Operation {op_id}: Fräserpfad kann Spannmittel „{fixture_name}“ treffen. Keine automatische Umfahrung. Ohne Körpergeometrie ist die Höhenprüfung konservativ; größere Schaft-/Halterradien bleiben unbekannt.",
+  "warn.fixture_path_collision": "Operation {op_id}: Die angegebene Werkzeug-/Körperhülle schneidet die Spannvorrichtung „{fixture_name}“. Programm gesperrt; Vorschau prüfen, Spannvorrichtung oder Bahn ändern und neu erzeugen.",
   "ux2.zero_marker": "Werkstücknull",
   "ux2.two_sided": "Zweiseitige CPS-Ausgabe und versetzte XY-Registrierung sind nicht qualifiziert. Die Einrichtung bleibt erhalten; bei Rückseitenoperationen wird die Ausgabe blockiert.",
   "ux2.zero_z": "Nicht unterstützten Z-Nullpunkt auf null setzen",
@@ -1778,7 +1778,6 @@
   "ux21.collision": "Kollision erkannt",
   "ux21.reason": "{name} schneidet den aufgelösten Werkzeugweg.",
   "ux21.blocked": "Export ist gesperrt.",
-  "ux21.override": "Exportsperre ist in den Einstellungen deaktiviert.",
   "ux21.show": "Kollision anzeigen",
   "cam4.title": "Restmaterial",
   "cam4.operation": "Analysierte Operation",
@@ -2001,5 +2000,8 @@
   "ux6c.arc_settings": "Bogenanpassung",
   "ux6c.fit_before_post": "Bögen vor der Postverarbeitung anpassen",
   "fs391.low_effective_chipload": "Drehzahl- oder Vorschubgrenzen reduzieren die Spanlast unter den Zielwert. Schnittbedingungen prüfen; dies ist keine materialspezifische Reibungsgrenze.",
-  "fs391.generic_profile_direct_entry": "Dieses allgemeine Profil bestätigt keine direkte Eintaucheignung. Axiale Eintauchfähigkeit des Werkzeugs prüfen."
+  "fs391.generic_profile_direct_entry": "Dieses allgemeine Profil bestätigt keine direkte Eintaucheignung. Axiale Eintauchfähigkeit des Werkzeugs prüfen.",
+  "ops.tabs.legacy_width": "Bisherige Stege: Die Breite beschreibt die Werkzeugmittelpunktzone, nicht das verbleibende Material.",
+  "ops.tabs.convert_width": "In Materialbreite umwandeln (ändert Werkzeugweg)",
+  "ops.tabs.material_width": "Materialbreite: Der Werkzeugradius wird berücksichtigt. Neu erzeugte Vorschau prüfen."
 }

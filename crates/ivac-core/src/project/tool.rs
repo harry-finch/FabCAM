@@ -21,8 +21,32 @@ pub struct FormProfileSample {
     pub r_mm: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
-pub struct ToolEntry {
+// Keep the public model and its deserialization helper on one field list.
+// A field-level serde default cannot inspect `kind`; resolve only a missing
+// drill angle here. Explicit values (including 60-degree spot drills) survive.
+macro_rules! tool_entry_model {
+    ($( $(#[$meta:meta])* pub $field:ident: $ty:ty, )*) => {
+        #[derive(Debug, Clone, Serialize, JsonSchema)]
+        pub struct ToolEntry { $( $(#[$meta])* pub $field: $ty, )* }
+        impl<'de> Deserialize<'de> for ToolEntry {
+            fn deserialize<D: serde::Deserializer<'de>>(de: D) -> Result<Self, D::Error> {
+                #[derive(Deserialize)]
+                struct Fields { $( $(#[$meta])* $field: $ty, )* }
+                let mut value = serde_json::Value::deserialize(de)?;
+                if let Some(map) = value.as_object_mut() {
+                    if map.get("kind").and_then(serde_json::Value::as_str) == Some("drill")
+                        && !map.contains_key("tip_angle_deg") {
+                        map.insert("tip_angle_deg".into(), serde_json::json!(118.0));
+                    }
+                }
+                let fields = Fields::deserialize(value).map_err(serde::de::Error::custom)?;
+                Ok(Self { $( $field: fields.$field, )* })
+            }
+        }
+    }
+}
+
+tool_entry_model! {
     pub id: u32,
     pub name: String,
     pub kind: ToolKind,
@@ -296,6 +320,7 @@ pub struct ToolEntry {
     /// the 10° default.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub vcarve_lead_in_angle_deg: Option<f64>,
+
 }
 
 /// Geometry of the tool holder above the shank. The holder is treated as
@@ -812,5 +837,25 @@ mod tests {
         assert!(!json.contains("flute_length_mm"));
         assert!(!json.contains("shank_diameter_mm"));
         assert!(!json.contains("\"holder\""));
+    }
+}
+
+#[cfg(test)]
+mod audit_11_12 {
+    use super::*;
+    #[test]
+    fn missing_drill_angle_defaults_without_rewriting_explicit_angles() {
+        let mut value = serde_json::to_value(ToolEntry::default()).unwrap();
+        value["kind"] = serde_json::json!("drill");
+        value.as_object_mut().unwrap().remove("tip_angle_deg");
+        let drill: ToolEntry = serde_json::from_value(value.clone()).unwrap();
+        assert_eq!(drill.tip_angle_deg, 118.);
+        value["tip_angle_deg"] = serde_json::json!(60.);
+        assert_eq!(
+            serde_json::from_value::<ToolEntry>(value)
+                .unwrap()
+                .tip_angle_deg,
+            60.
+        );
     }
 }

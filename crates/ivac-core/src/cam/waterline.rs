@@ -212,11 +212,21 @@ pub fn slice_mesh_at_z(tris: &[[[f32; 3]; 3]], z: f64) -> Vec<Loop> {
 /// including all otherwise valid loops. The Vec compatibility wrapper is for
 /// geometry inspection; manufacturing callers must propagate this error.
 pub fn slice_mesh_at_z_checked(tris: &[[[f32; 3]; 3]], z: f64) -> Result<Vec<Loop>, String> {
+    slice_mesh_cancellable(tris, z, None)
+}
+fn slice_mesh_cancellable(
+    tris: &[[[f32; 3]; 3]],
+    z: f64,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Result<Vec<Loop>, String> {
     if !z.is_finite() || tris.iter().flatten().flatten().any(|v| !v.is_finite()) {
         return Err("Non-finite waterline mesh or slice height".into());
     }
     let mut segs: Vec<(Point2, Point2)> = Vec::new();
-    for tri in tris {
+    for (i, tri) in tris.iter().enumerate() {
+        if i % 1024 == 0 && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+            return Err("cancelled".into());
+        }
         if let Some(s) = triangle_crossing(tri, z) {
             segs.push(s);
         }
@@ -448,6 +458,21 @@ pub fn waterline_rough_checked(
     bottom_z: f64,
     z_step: f64,
 ) -> Result<Vec<RoughChain>, String> {
+    waterline_rough_cancellable(tris, tool_diameter, stride, top_z, bottom_z, z_step, None)
+}
+
+pub fn waterline_rough_cancellable(
+    tris: &[[[f32; 3]; 3]],
+    tool_diameter: f64,
+    stride: f64,
+    top_z: f64,
+    bottom_z: f64,
+    z_step: f64,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Result<Vec<RoughChain>, String> {
+    if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+        return Err("cancelled".into());
+    }
     if [tool_diameter, stride, top_z, bottom_z, z_step]
         .iter()
         .any(|v| !v.is_finite())
@@ -461,13 +486,20 @@ pub fn waterline_rough_checked(
     }
     let mut out = Vec::new();
     for z in z_levels(top_z, bottom_z, z_step) {
-        let loops = slice_mesh_at_z_checked(tris, z).map_err(|e| format!("Z={z:.6} mm: {e}"))?;
+        if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+            return Err("cancelled".into());
+        }
+        let loops =
+            slice_mesh_cancellable(tris, z, cancel).map_err(|e| format!("Z={z:.6} mm: {e}"))?;
         for chain in clear_level(&loops, tool_diameter, stride) {
             out.push(RoughChain {
                 z,
                 path: chain_to_polyline(&chain),
             });
         }
+    }
+    if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+        return Err("cancelled".into());
     }
     Ok(out)
 }
@@ -853,5 +885,17 @@ mod audit_tests {
         let nested = nest_loops(&rings);
         assert_eq!(nested.len(), 500);
         assert!(nested.iter().all(|r| r.holes.is_empty()));
+    }
+}
+
+#[cfg(test)]
+mod audit_09_10 {
+    use super::*;
+
+    #[test]
+    fn cancelled_roughing_returns_no_chains() {
+        let token = crate::cancel::CancelToken::new();
+        token.cancel();
+        assert!(waterline_rough_cancellable(&[], 1., 1., 0., -10., 1., Some(&token)).is_err());
     }
 }

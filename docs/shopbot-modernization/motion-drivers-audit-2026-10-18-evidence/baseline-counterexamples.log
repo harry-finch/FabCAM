@@ -1,0 +1,59 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.80s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-2668b90f4547368d)
+
+running 4 tests
+test gcode::audit_09_10::two_arc_circle_is_closed_and_has_correct_winding ... FAILED
+test pipeline::op_drivers::thread::audit_09_10::internal_thread_enters_on_bore_axis ... FAILED
+test gcode::audit_09_10::probe_inch_feed_and_modal_restore ... FAILED
+test gcode::audit_09_10::deep_xyz_entry_uses_plunge_feed ... FAILED
+
+failures:
+
+---- gcode::audit_09_10::two_arc_circle_is_closed_and_has_correct_winding stdout ----
+
+thread 'gcode::audit_09_10::two_arc_circle_is_closed_and_has_correct_winding' panicked at crates/ivac-core/src/gcode.rs:3917:2:
+assertion failed: is_closed_path(&s)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- pipeline::op_drivers::thread::audit_09_10::internal_thread_enters_on_bore_axis stdout ----
+
+thread 'pipeline::op_drivers::thread::audit_09_10::internal_thread_enters_on_bore_axis' panicked at crates/ivac-core/src/pipeline/op_drivers/thread.rs:1319:2:
+assertion `left == right` failed
+  left: (20.0, 28.9, -3.0)
+ right: (20.0, 30.0, -3.0)
+
+---- gcode::audit_09_10::probe_inch_feed_and_modal_restore stdout ----
+
+thread 'gcode::audit_09_10::probe_inch_feed_and_modal_restore' panicked at crates/ivac-core/src/gcode.rs:3923:19:
+F10
+G38.2 Z-1 F127
+
+
+---- gcode::audit_09_10::deep_xyz_entry_uses_plunge_feed stdout ----
+
+thread 'gcode::audit_09_10::deep_xyz_entry_uses_plunge_feed' panicked at crates/ivac-core/src/gcode.rs:3912:53:
+assertion `left == right` failed: M3 S18000
+G4 P1
+G0 Z5
+G0 X3 Y4
+F100
+G1 Z0
+F2000
+G1 Z-6
+G1 X5
+G0 Z5
+
+  left: 2000
+ right: 100
+
+
+failures:
+    gcode::audit_09_10::deep_xyz_entry_uses_plunge_feed
+    gcode::audit_09_10::probe_inch_feed_and_modal_restore
+    gcode::audit_09_10::two_arc_circle_is_closed_and_has_correct_winding
+    pipeline::op_drivers::thread::audit_09_10::internal_thread_enters_on_bore_axis
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 1157 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-core --lib`

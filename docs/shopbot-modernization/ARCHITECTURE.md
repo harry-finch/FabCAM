@@ -477,3 +477,35 @@ history/serialization and CAM preflight; no new format, geometric evaluator or F
 recalculation. File, future selected-group and nesting-instance transforms share math
 but distinct ownership. Existing status dimensions are read-only measurement; A1 is
 editable whole-file sizing. Degenerate/invalid input and early-delivery scope need audit.
+
+## ARCH-MACH planned machine/process integration boundary
+
+[ARCH-MACH source inventory](../releases/ARCH_MACH_PLAN.md) identifies reusable geometry/
+drawing/identity, modes/operation drivers, profile snapshots, native PostProcessor and
+feature-gated CPS IR, actual ShopBot output decoder, preview/transports and tests.
+Existing planning/emission interaction, coarse modes, milling/CPS assumptions and backend
+feature differences mean this is not already a universal process/plugin architecture.
+
+Contract layers: shared geometry, process semantics, concrete machine capabilities,
+output adapter, actual-output validation and qualification package. Capability fields
+never authorize an adapter-unsupported feature. Same-process additions normally reuse
+geometry; new process may require explicit operations/UI. Fail closed, preserve source/
+project compatibility and existing machine support; no chosen new Rust interfaces.
+
+[Guide](../development/ADDING_A_MACHINE.md) and [template](../development/MACHINE_INTEGRATION_TEMPLATE.md)
+standardize lawful official-file evidence, independent/differential negative tests,
+manufacturer software and physical gates. ProtoMAX native OMX validates them in V1.5,
+not during planning. Proposed machine-integration skill links authoritative docs only.
+No plugin discovery, universal IR replacement or speculative WAZER/knife implementation.
+
+### Milling publication guard (ADR-0023, pipeline61)
+
+After assembling the supported execution path, the common pipeline checks declared
+fixture envelopes before publishing a successful response. A collision returns a
+structured error with `diagnostic_preview` (path/warnings, no executable text).
+Transports preserve that failure; the frontend displays it with export blocked.
+Unknown body dimensions are a separate diagnostic, not evidence of clearance.
+Write-through executable streams with fixtures are refused before bytes/status;
+progress streaming still uses asynchronous buffered validation. Arbitrary CPS IR
+intent is not substituted for a decoded execution path. See
+[ADR-0023](adr/ADR-0023-milling-program-publication-guard.md).

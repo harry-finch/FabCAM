@@ -1,0 +1,257 @@
+{
+  "previous_recorded_source_matches": {
+    "crates/ivac-core/src/errors.rs": true,
+    "crates/ivac-core/src/pipeline.rs": true,
+    "crates/ivac-core/src/pipeline/work_origin.rs": true,
+    "crates/ivac-core/src/pipeline/two_sided_emit.rs": true,
+    "crates/ivac-core/src/sim/holder.rs": true,
+    "crates/ivac-core/src/sim/fixture_check.rs": true,
+    "crates/ivac-core/src/gcode/preview.rs": true,
+    "crates/ivac-core/src/version.rs": true,
+    "crates/ivac-core/src/pipeline_cache.rs": true,
+    "crates/ivac-core/tests/safe_z_extended.rs": true,
+    "crates/ivac-core/tests/shopbot_m2_post.rs": true,
+    "crates/ivac-server/src/main.rs": true,
+    "crates/ivac-tauri/src/commands.rs": true,
+    "crates/ivac-wasm/src/lib.rs": true,
+    "frontend/src/lib/api/client.ts": true,
+    "frontend/src/lib/api/generated.ts": true,
+    "frontend/src/lib/components/GenerateBar.svelte": true,
+    "frontend/src/lib/components/PhoneWarnings.svelte": true,
+    "frontend/src/lib/components/CollisionFeedback.svelte": true,
+    "frontend/src/lib/state/project-generate-ops.ts": true,
+    "frontend/src/lib/state/generation-context.ts": true,
+    "frontend/src/lib/state/work-frame.ts": true,
+    "frontend/src/lib/state/generate-palette-policy.ts": true,
+    "frontend/src/lib/services/file_ops.ts": true,
+    "frontend/src/lib/state/publication-guard.test.ts": true,
+    "frontend/src/lib/state/generate-palette-policy.test.ts": true,
+    "schema/openapi.yaml": true
+  },
+  "evidence_manifests": {
+    "adr0023": [
+      {
+        "file": "adapters.log",
+        "match": true
+      },
+      {
+        "file": "checks.json",
+        "match": true
+      },
+      {
+        "file": "clippy.log",
+        "match": true
+      },
+      {
+        "file": "core.log",
+        "match": true
+      },
+      {
+        "file": "cps-guards.log",
+        "match": true
+      },
+      {
+        "file": "fmt.log",
+        "match": true
+      },
+      {
+        "file": "frontend-check.log",
+        "match": true
+      },
+      {
+        "file": "frontend-lint.log",
+        "match": true
+      },
+      {
+        "file": "frontend.log",
+        "match": true
+      },
+      {
+        "file": "schema.log",
+        "match": true
+      },
+      {
+        "file": "tauri.log",
+        "match": true
+      },
+      {
+        "file": "test1-run.log",
+        "match": true
+      },
+      {
+        "file": "test1-summary.json",
+        "match": true
+      },
+      {
+        "file": "ux-blocked.png",
+        "match": true
+      }
+    ],
+    "test1": [
+      {
+        "file": "bounded.summary.json",
+        "match": true
+      },
+      {
+        "file": "bounded.tar.gz",
+        "match": true
+      },
+      {
+        "file": "budget-counterexample.json",
+        "match": true
+      },
+      {
+        "file": "budget-counterexample.request.json",
+        "match": true
+      },
+      {
+        "file": "environment.json",
+        "match": true
+      },
+      {
+        "file": "expanded-failed.summary.json",
+        "match": true
+      },
+      {
+        "file": "expanded-failed.tar.gz",
+        "match": true
+      },
+      {
+        "file": "intermediate-failed.summary.json",
+        "match": true
+      },
+      {
+        "file": "intermediate-failed.tar.gz",
+        "match": true
+      },
+      {
+        "file": "reduction.json",
+        "match": true
+      },
+      {
+        "file": "reduction.tar.gz",
+        "match": true
+      },
+      {
+        "file": "source-SHA256SUMS.txt",
+        "match": true
+      },
+      {
+        "file": "test1-core.log",
+        "match": true
+      },
+      {
+        "file": "test1-final-clippy-2.log",
+        "match": true
+      },
+      {
+        "file": "test1-fmt.log",
+        "match": true
+      },
+      {
+        "file": "test1-frontend-check.log",
+        "match": true
+      },
+      {
+        "file": "test1-frontend-tests.log",
+        "match": true
+      },
+      {
+        "file": "test1-halfpipe.log",
+        "match": true
+      },
+      {
+        "file": "test1-regressions.log",
+        "match": true
+      },
+      {
+        "file": "test1-wasm-clippy.log",
+        "match": true
+      },
+      {
+        "file": "test1-wasm-native.log",
+        "match": true
+      }
+    ],
+    "safe-z-extended": [
+      {
+        "file": "collision-policy-cps.json",
+        "match": true
+      },
+      {
+        "file": "collision-policy-false.json",
+        "match": true
+      },
+      {
+        "file": "environment.json",
+        "match": true
+      },
+      {
+        "file": "partial-body-unknown.json",
+        "match": true
+      },
+      {
+        "file": "safe-z-adapters.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-clippy.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-core.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-cps-guards.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-extended-after.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-extended-before.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-final-focused.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-fmt.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-frontend.log",
+        "match": true
+      },
+      {
+        "file": "safe-z-integration.log",
+        "match": true
+      },
+      {
+        "file": "source-SHA256SUMS.txt",
+        "match": true
+      },
+      {
+        "file": "test1-pipeline60.tar.gz",
+        "match": true
+      },
+      {
+        "file": "test1.summary.json",
+        "match": true
+      },
+      {
+        "file": "two-tool-transitions.json",
+        "match": true
+      }
+    ]
+  },
+  "fingerprinted_files": 940,
+  "source_manifest_sha256": "8afa22e76187a1c31d2acbfc2f8df35bd6eceeb40f95d548bd98a47dba0b63a6",
+  "baseline": "2a3fe5632b4d77ab03d899bcb0a07db54a8b9f7b",
+  "pipeline": 61,
+  "scope": "source/build/test fingerprint excludes documentation and tracker; dirty working tree, not installer identity",
+  "hatch_evidence": "No archive manifest exists; retained historical logs, not claimed checksum verified."
+}

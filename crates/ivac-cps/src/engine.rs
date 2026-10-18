@@ -33,7 +33,48 @@ use boa_engine::{Context, JsError, JsNativeError, JsString, JsValue, NativeFunct
 /// handed to boa must implement `Trace`, and this keeps the host
 /// function on the SAFE `from_copy_closure_with_captures` constructor
 /// (the workspace lints on `unsafe_code`).
-pub type EmitSink = Gc<GcRefCell<Vec<String>>>;
+pub type EmitSink = Gc<GcRefCell<EmitBuffer>>;
+
+/// Contiguous output with chunk boundaries retained for the diagnostic API.
+/// No per-fragment String allocations are retained after emit returns.
+#[derive(Debug, Default, boa_gc::Trace, boa_gc::Finalize)]
+pub struct EmitBuffer {
+    text: String,
+    ends: Vec<usize>,
+}
+impl EmitBuffer {
+    pub fn push(&mut self, text: &str) {
+        self.text.push_str(text);
+        self.ends.push(self.text.len());
+    }
+    #[must_use]
+    pub fn len(&self) -> usize {
+        self.ends.len()
+    }
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.ends.is_empty()
+    }
+    pub fn clear(&mut self) {
+        self.text.clear();
+        self.ends.clear();
+    }
+    #[must_use]
+    pub fn concat(&self) -> String {
+        self.text.clone()
+    }
+    fn chunks(&self) -> Vec<String> {
+        let mut start = 0;
+        self.ends
+            .iter()
+            .map(|&end| {
+                let chunk = self.text[start..end].to_string();
+                start = end;
+                chunk
+            })
+            .collect()
+    }
+}
 
 /// The runtime prelude, in eval order. Each entry is
 /// `(source name, source)` — the name shows up in boa diagnostics, so a
@@ -114,7 +155,7 @@ impl Engine {
 
     pub(crate) fn with_cancel(cancel: Option<Arc<AtomicBool>>) -> Self {
         let mut context = Context::default();
-        let sink: EmitSink = Gc::new(GcRefCell::new(Vec::new()));
+        let sink: EmitSink = Gc::new(GcRefCell::new(EmitBuffer::default()));
 
         let emit = NativeFunction::from_copy_closure_with_captures(
             |_this, args, sink, ctx| {
@@ -124,7 +165,7 @@ impl Engine {
                     .unwrap_or_default()
                     .to_string(ctx)?
                     .to_std_string_escaped();
-                sink.borrow_mut().push(text);
+                sink.borrow_mut().push(&text);
                 Ok(JsValue::undefined())
             },
             sink.clone(),
@@ -259,7 +300,7 @@ impl Engine {
     /// Raw chunks collected by `__ivac.emit` so far.
     #[must_use]
     pub fn output(&self) -> Vec<String> {
-        self.sink.borrow().clone()
+        self.sink.borrow().chunks()
     }
 
     /// The emitted program text — all chunks joined verbatim.

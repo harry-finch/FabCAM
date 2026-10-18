@@ -637,8 +637,8 @@ mod tests {
             0,
         );
         // Snapshot — bump PIPELINE_VERSION when this legitimately changes.
-        // Updated for PIPELINE_VERSION 53→54: Boolean holding tabs, analytic drilling and effective CPS tool geometry.
-        assert_eq!(key.0, 0xc88f_4460_8ba4_7db1_u64, "got {:#018x}", key.0);
+        // Updated for PIPELINE_VERSION 59→60: swept holder warnings and explicit ShopBot home-park refusal.
+        assert_eq!(key.0, 0xe0d8_ee57_d0ac_c309_u64, "got {:#018x}", key.0);
     }
 
     #[test]

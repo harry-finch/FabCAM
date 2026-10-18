@@ -1276,16 +1276,19 @@ export type MsgKey =
   | "ops.relief_mill.z_min.help"
   | "ops.relief_mill.z_min.label"
   | "ops.tabs.clear"
+  | "ops.tabs.convert_width"
   | "ops.tabs.count.help"
   | "ops.tabs.count.label"
   | "ops.tabs.disconnected.help"
   | "ops.tabs.disconnected.hint"
   | "ops.tabs.height.help"
   | "ops.tabs.height.label"
+  | "ops.tabs.legacy_width"
   | "ops.tabs.legend"
   | "ops.tabs.manual.help"
   | "ops.tabs.manual.hint"
   | "ops.tabs.manual.placed"
+  | "ops.tabs.material_width"
   | "ops.tabs.mode.help"
   | "ops.tabs.mode.label"
   | "ops.tabs.ramp.summary"
@@ -2062,7 +2065,6 @@ export type MsgKey =
   | "ux2.zero_z"
   | "ux21.blocked"
   | "ux21.collision"
-  | "ux21.override"
   | "ux21.reason"
   | "ux21.show"
   | "ux6.assigned_to_project"
@@ -3553,16 +3555,19 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ops.relief_mill.z_min.help",
   "ops.relief_mill.z_min.label",
   "ops.tabs.clear",
+  "ops.tabs.convert_width",
   "ops.tabs.count.help",
   "ops.tabs.count.label",
   "ops.tabs.disconnected.help",
   "ops.tabs.disconnected.hint",
   "ops.tabs.height.help",
   "ops.tabs.height.label",
+  "ops.tabs.legacy_width",
   "ops.tabs.legend",
   "ops.tabs.manual.help",
   "ops.tabs.manual.hint",
   "ops.tabs.manual.placed",
+  "ops.tabs.material_width",
   "ops.tabs.mode.help",
   "ops.tabs.mode.label",
   "ops.tabs.ramp.summary",
@@ -4339,7 +4344,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ux2.zero_z",
   "ux21.blocked",
   "ux21.collision",
-  "ux21.override",
   "ux21.reason",
   "ux21.show",
   "ux6.assigned_to_project",

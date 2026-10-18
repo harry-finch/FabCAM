@@ -1,0 +1,23 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.59s
+     Running tests/safe_z_extended.rs (target/debug/deps/safe_z_extended-a01bb99c0086ab98)
+
+running 2 tests
+test distant_or_above_body_fixtures_remain_clear ... ok
+test sloped_rapid_cannot_hide_holder_collision_below_high_endpoint ... FAILED
+
+failures:
+
+---- sloped_rapid_cannot_hide_holder_collision_below_high_endpoint stdout ----
+
+thread 'sloped_rapid_cannot_hide_holder_collision_below_high_endpoint' panicked at crates/ivac-core/tests/safe_z_extended.rs:71:17:
+end_z=11,reverse=false: analytic interior holder witness missed
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    sloped_rapid_cannot_hide_holder_collision_below_high_endpoint
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-core --test safe_z_extended`

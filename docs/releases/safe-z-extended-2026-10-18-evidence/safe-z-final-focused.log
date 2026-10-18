@@ -1,0 +1,20 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.13s
+     Running tests/safe_z_extended.rs (target/debug/deps/safe_z_extended-a01bb99c0086ab98)
+
+running 12 tests
+test constant_height_holder_crossing_and_output_uncertainty_band ... ok
+test distant_or_above_body_fixtures_remain_clear ... ok
+test oracle::accepts_tangent ... ok
+test oracle::decoder_preserves_unknown_initial_axes_and_rejects_unknown_motion ... ok
+test oracle::detects_interior_collision ... ok
+test oracle::variable_radius_and_crossing_entry_are_checked ... ok
+test pipeline_checks::characterize_collision_warning_and_streaming_policy_not_safety_acceptance ... ok
+test pipeline_checks::characterize_partial_body_metadata_is_not_complete_clearance_evidence ... ok
+test pipeline_checks::decoded_two_tool_transitions_clear_stock_but_initial_pose_stays_unknown ... ok
+test pipeline_checks::fixture_frame_translation_and_cache_mutation_preserve_warning_semantics ... ok
+test pipeline_checks::shopbot_unqualified_machine_stations_and_parking_stay_refused ... ok
+test sloped_rapid_cannot_hide_holder_collision_below_high_endpoint ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s
+

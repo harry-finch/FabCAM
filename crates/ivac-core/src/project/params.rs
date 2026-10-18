@@ -316,7 +316,7 @@ where
     D: serde::Deserializer<'de>,
 {
     let v = Option::<f64>::deserialize(de)?;
-    Ok(v.filter(|x| x.abs() >= 1e-9))
+    Ok(v.filter(|x| *x != 0.0))
 }
 
 impl OpParamsCommon {
@@ -349,6 +349,7 @@ impl OpParamsCommon {
 pub fn contour_mill_default() -> ContourParams {
     ContourParams {
         tabs: TabsConfig {
+            width_mode: TabWidthMode::LegacyCenter,
             active: false,
             width: 10.0,
             height: 1.0,
@@ -391,6 +392,9 @@ pub fn pocket_mill_default() -> PocketParams {
 // cam::setup for back-compat.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 pub struct TabsConfig {
+    /// Missing in saved projects means the historical centre-path zone.
+    #[serde(default, skip_serializing_if = "TabWidthMode::is_legacy")]
+    pub width_mode: TabWidthMode,
     pub active: bool,
     pub width: f64,
     /// Z height the cutter lifts to over a tab (positive distance above
@@ -408,6 +412,19 @@ pub struct TabsConfig {
     pub ramp_angle_deg: f64,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum TabWidthMode {
+    #[default]
+    LegacyCenter,
+    MaterialV1,
+}
+impl TabWidthMode {
+    fn is_legacy(&self) -> bool {
+        *self == Self::LegacyCenter
+    }
+}
+
 fn default_ramp_angle() -> f64 {
     30.0
 }
@@ -419,6 +436,7 @@ fn is_default_ramp_angle(angle: &f64) -> bool {
 impl Default for TabsConfig {
     fn default() -> Self {
         Self {
+            width_mode: TabWidthMode::LegacyCenter,
             active: false,
             width: 10.0,
             height: 1.0,
@@ -608,6 +626,42 @@ mod tests {
                 let _: OpParams = serde_json::from_value(wire)
                     .unwrap_or_else(|e| panic!("op #{i} step in {path:?}: {e}"));
             }
+        }
+    }
+}
+
+#[cfg(test)]
+mod audit_11_12 {
+    use super::*;
+    #[test]
+    fn width_mode_is_explicit_and_legacy_files_keep_their_meaning() {
+        let legacy = TabsConfig::default();
+        let value = serde_json::to_value(&legacy).unwrap();
+        assert!(value.get("width_mode").is_none());
+        assert_eq!(
+            serde_json::from_value::<TabsConfig>(value.clone())
+                .unwrap()
+                .width_mode,
+            TabWidthMode::LegacyCenter
+        );
+        let mut new = value;
+        new["width_mode"] = serde_json::json!("material_v1");
+        assert_eq!(
+            serde_json::from_value::<TabsConfig>(new)
+                .unwrap()
+                .width_mode,
+            TabWidthMode::MaterialV1
+        );
+    }
+    #[test]
+    fn only_exact_legacy_zero_inherits_not_tiny_or_positive_steps() {
+        for value in [-1e-12, 1e-12, 1.] {
+            let mut json = serde_json::to_value(OpParamsCommon::mill_default()).unwrap();
+            json["step"] = serde_json::json!(value);
+            assert_eq!(
+                serde_json::from_value::<OpParamsCommon>(json).unwrap().step,
+                Some(value)
+            );
         }
     }
 }

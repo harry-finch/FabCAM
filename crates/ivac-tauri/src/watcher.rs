@@ -80,24 +80,28 @@ impl ProjectWatcher {
 
     /// Atomically replace the watch set. Old watches are dropped together
     /// with the underlying `RecommendedWatcher` so we never leave stale
-    /// inotify slots behind. `paths` is deduped; non-existent paths are
-    /// silently skipped (we only watch real files — the directory itself
-    /// is the source of events on Linux, so the parent has to exist).
+    /// inotify slots behind. Targets and parent roots are deduped. Missing files
+    /// retain a watch on an existing parent (CAD delete/recreate saves); targets
+    /// whose parent is missing are skipped. Failed replacement retains old watches.
     pub fn set_paths(&mut self, paths: Vec<PathBuf>) -> Result<(), String> {
-        self.watcher = None;
-        self.watched.clear();
-        self.last_emit
-            .lock()
-            .map_err(|e| format!("watcher mutex poisoned: {e}"))?
-            .clear();
-
         let mut deduped: Vec<PathBuf> = Vec::new();
         for p in paths {
-            if !deduped.iter().any(|q| q == &p) {
+            let p = if p.is_absolute() {
+                p
+            } else {
+                std::env::current_dir().map_err(|e| e.to_string())?.join(p)
+            };
+            if !p.is_dir()
+                && p.parent().is_some_and(Path::is_dir)
+                && !deduped.iter().any(|q| q == &p)
+            {
                 deduped.push(p);
             }
         }
         if deduped.is_empty() {
+            self.watcher = None;
+            self.watched.clear();
+            self.last_emit.lock().map_err(|e| e.to_string())?.clear();
             return Ok(());
         }
 
@@ -132,16 +136,14 @@ impl ProjectWatcher {
         })
         .map_err(|e| format!("watcher init: {e}"))?;
 
-        for p in &deduped {
-            let watch_root: &Path = if p.is_file() {
-                p.parent().unwrap_or(p.as_path())
-            } else {
-                p.as_path()
-            };
-            if let Err(e) = watcher.watch(watch_root, RecursiveMode::NonRecursive) {
-                return Err(format!("watch {}: {}", watch_root.display(), e));
-            }
+        let roots: std::collections::BTreeSet<_> =
+            deduped.iter().filter_map(|p| p.parent()).collect();
+        for root in roots {
+            watcher
+                .watch(root, RecursiveMode::NonRecursive)
+                .map_err(|e| format!("watch {}: {e}", root.display()))?;
         }
+        self.last_emit.lock().map_err(|e| e.to_string())?.clear();
 
         self.watcher = Some(watcher);
         self.watched = deduped;
@@ -202,6 +204,26 @@ mod tests {
         let (tx, rx) = mpsc::channel();
         let sink = Arc::new(TestSink { tx: Mutex::new(tx) });
         (ProjectWatcher::with_sink(sink), rx)
+    }
+
+    #[test]
+    fn audit_15_16_missing_source_does_not_disable_existing_sources() {
+        let dir = tempdir().unwrap();
+        let existing = dir.path().join("exists.svg");
+        touch(&existing, "before");
+        let missing = dir.path().join("missing.svg");
+        let unreachable = dir.path().join("absent/child.svg");
+        let (mut watcher, _) = channel_watcher();
+        watcher
+            .set_paths(vec![
+                existing.clone(),
+                missing.clone(),
+                unreachable,
+                existing.clone(),
+            ])
+            .unwrap();
+        assert_eq!(watcher.watched(), &[existing, missing]);
+        assert!(watcher.watcher.is_some());
     }
 
     fn touch(path: &Path, content: &str) {

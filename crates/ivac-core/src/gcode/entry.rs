@@ -81,12 +81,16 @@ pub(super) fn emit_ramp_pass<P: PostProcessor>(
 }
 
 pub(super) fn is_closed_path(segments: &[Segment]) -> bool {
-    if segments.len() < 3 {
+    if segments.is_empty() {
         return false;
     }
     let first = segments.first().unwrap().start;
     let last = segments.last().unwrap().end;
     first.distance(last) < 1e-3
+        && segments
+            .windows(2)
+            .all(|w| w[0].end.distance(w[1].start) < 1e-3)
+        && crate::cam::offsets::segments_signed_area(segments).abs() > 1e-12
 }
 
 /// Emit one revolution around `segments` while linearly descending Z from
@@ -190,8 +194,8 @@ pub(super) fn plan_helix_entry(
     if dz_per_rev < 1e-9 {
         return None;
     }
-    // Polygon vertices (line endpoints; arc endpoints, no mid-arc
-    // sampling). Sufficient for the shoelace + ray-cast checks below.
+    // Sample curved boundaries for candidate placement; validate the
+    // candidate against the exact source segments below.
     let verts = polygon_vertices(segments);
     if verts.len() < 3 {
         return None;
@@ -230,6 +234,22 @@ pub(super) fn plan_helix_entry(
         );
         return None;
     };
+    // The sampled polygon locates a candidate; exact source-segment
+    // distance also protects concave arc bows hidden behind polygon chords.
+    if segments.iter().any(|s| {
+        let nearest = crate::cam::offsets::closest_point_on_segment(
+            s,
+            crate::cam::offsets::TabPoint {
+                x: center.x,
+                y: center.y,
+                width_override_mm: None,
+                height_override_mm: None,
+            },
+        );
+        center.distance(Point2::new(nearest.x, nearest.y)) < radius + tool_radius - 1e-9
+    }) {
+        return None;
+    }
     // Sample 16 points on the helix circle as a final safety check;
     // all must be inside the polygon. The pole-of-inaccessibility
     // search above already guarantees the center has > radius +
@@ -474,11 +494,9 @@ pub(super) fn emit_helix_entry<P: PostProcessor>(
     }
 }
 
-/// Extract polygon vertices from a segment chain (line endpoints; arc
-/// endpoints — arc midpoints aren't sampled, the polygon is just the
-/// segment endpoint list). Used for signed-area + point-in-polygon
-/// checks during helix planning. The returned list is the closed
-/// polygon's vertex sequence with no duplicate closing vertex.
+/// Extract polygon vertices, sampling curves at most PI/32 radians apart.
+/// Used for candidate placement and point-in-polygon checks; exact source
+/// clearance is checked separately. No duplicate closing vertex.
 fn polygon_vertices(segments: &[Segment]) -> Vec<Point2> {
     let mut v: Vec<Point2> = Vec::with_capacity(segments.len() + 1);
     if segments.is_empty() {
@@ -491,7 +509,20 @@ fn polygon_vertices(segments: &[Segment]) -> Vec<Point2> {
         if matches!(seg.kind, SegmentKind::Point) {
             continue;
         }
-        v.push(seg.end);
+        if matches!(seg.kind, SegmentKind::Arc | SegmentKind::Circle) && seg.bulge != 0.0 {
+            v.extend(
+                crate::math::tessellate_arc(
+                    seg.start,
+                    seg.end,
+                    seg.bulge,
+                    std::f64::consts::PI / 32.0,
+                )
+                .into_iter()
+                .skip(1),
+            );
+        } else {
+            v.push(seg.end);
+        }
     }
     // Drop a duplicate trailing vertex (closed path: last == first).
     if v.len() >= 2 && v.first().unwrap().distance(*v.last().unwrap()) < 1e-6 {

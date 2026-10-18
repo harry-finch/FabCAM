@@ -128,3 +128,25 @@ mod tests {
         assert!(take().is_empty());
     }
 }
+
+#[cfg(test)]
+mod audit_13_14 {
+    use super::*;
+    #[test]
+    fn error_and_unwind_drop_spans_before_reset() {
+        reset();
+        let fail = || -> Result<(), ()> {
+            let _span = Span::enter("error");
+            Err(())
+        };
+        assert!(fail().is_err());
+        reset();
+        assert!(std::panic::catch_unwind(|| {
+            let _span = Span::enter("panic");
+            panic!("test");
+        })
+        .is_err());
+        reset();
+        assert!(take().is_empty());
+    }
+}

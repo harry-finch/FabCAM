@@ -49,6 +49,7 @@ mod op_drivers;
 mod patterns;
 mod regions;
 mod remaining;
+mod safe_z;
 pub use remaining::RemainingMaterial;
 mod selection;
 mod setup_resolver;
@@ -58,6 +59,16 @@ mod tabs;
 mod two_sided_emit;
 mod warnings;
 mod work_origin;
+
+/// Cheap known-stock milling clearance validation for transports before they
+/// commit streaming response headers. Z is unchanged by work-origin resolution;
+/// full pipeline validation still runs before emission.
+///
+/// # Errors
+/// Returns an actionable error for nonfinite or insufficient clearance.
+pub fn validate_clearance(project: &Project) -> Result<(), PipelineError> {
+    safe_z::validate(project)
+}
 
 pub use two_sided_emit::{run_pipeline_two_sided, TwoSidedResponse};
 
@@ -229,7 +240,7 @@ pub struct PipelineResponse {
 /// here. `message` stays as the English fallback for the CLI, logs, and any
 /// `kind` that has no template yet. Mirrors the [`crate::errors::Error`]
 /// `code`/`params` seam (ivac-os2k.6).
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema, PartialEq)]
 pub struct PipelineWarning {
     /// Op the warning applies to. `None` means project-wide.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -301,8 +312,29 @@ pub struct PipelineStats {
     pub offset_count: usize,
 }
 
+/// Rejected path for inspection only. Deliberately contains no executable text.
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct DiagnosticPreview {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub side: Option<crate::project::WorkpieceSide>,
+    pub toolpath: Vec<preview::ToolpathSegment>,
+    pub warnings: Vec<PipelineWarning>,
+}
+
+/// Direct output cannot be retracted after a collision is discovered.
+pub fn validate_direct_output(project: &Project) -> Result<(), PipelineError> {
+    if !project.fixtures.is_empty() {
+        return Err(PipelineError::Fixture("Declared fixtures require buffered generation and validation; direct executable streaming is unavailable. Use /generate or progress streaming.".into()));
+    }
+    Ok(())
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("Program blocked: tool path intersects a declared fixture. Diagnostic preview only.")]
+    FixtureCollision(Box<DiagnosticPreview>),
+    #[error("operation #{0}: unsafe clearance: {1}")]
+    UnsafeClearance(u32, String),
     #[error("operation #{0}: Stufenfase rim chamfer requires milling mode")]
     NonMillingChamfer(u32),
     #[error("drawing: {0}")]
@@ -355,10 +387,16 @@ impl PipelineError {
     pub fn to_structured(&self, project: Option<&Project>) -> Option<crate::Error> {
         use crate::errors::{AutoFix, Error as Structured, ErrorCode};
         match self {
+            PipelineError::FixtureCollision(preview) => {
+                let mut error = Structured::misconfigured(format!("{}{}", preview.side.map_or(String::new(), |side| format!("{side:?} setup: ")), self)).with_hint("Move the fixture or change the tool/path, then regenerate. Warning preferences cannot enable export.");
+                error.diagnostic_preview = Some(preview.clone());
+                Some(error)
+            }
             PipelineError::NonMillingChamfer(id) => Some(Structured::misconfigured(format!(
                 "operation #{id}: Stufenfase rim chamfer requires milling mode"
             ))),
             PipelineError::Cancelled => None,
+            PipelineError::UnsafeClearance(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Set clearance above the declared stock top in the same work frame. No output generated; saved values were not changed.")),
             PipelineError::Drawing(message) => Some(Structured::misconfigured(message.clone()).with_hint("Review edited drawing and source bindings; no output generated.")),
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
             PipelineError::Waterline(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Repair open or ambiguous mesh slices, or change the slice levels. No output generated.")),
@@ -641,6 +679,17 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     crate::feeds_speeds::validate_applied_project(&project)?;
     work_origin::validate_fixtures(&project)?;
     work_origin::resolve(&mut project)?;
+    safe_z::validate(&project)?;
+    if !project.fixtures.is_empty()
+        && req.post_processor == Some(PostProcessorKind::Cps)
+        && !req
+            .cps_post
+            .as_ref()
+            .is_some_and(|p| matches!(&p.source, CpsPostSource::Bundled { id } if id == "shopbot"))
+    {
+        return Err(PipelineError::Fixture("Fixture validation requires a decoded execution path; this CPS post provides only recorded intent. Use a qualified post.".into()));
+    }
+
     for op in project
         .operations
         .iter()
@@ -909,7 +958,19 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // frontend — surfaces soft-limit / gantry-crash risk as a critical
     // `out_of_work_area` warning.
     warnings::push_work_area_warning(&toolpath, &project.machine, &mut warnings);
-    work_origin::fixture_warnings(&project, &toolpath, &mut warnings);
+    work_origin::fixture_warnings_cancellable(&project, &toolpath, &mut warnings, cancel);
+    if cancelled(cancel) {
+        return Err(PipelineError::Cancelled);
+    }
+    if warnings.iter().any(|w| w.kind == "fixture_path_collision") {
+        return Err(PipelineError::FixtureCollision(Box::new(
+            DiagnosticPreview {
+                side: None,
+                toolpath,
+                warnings,
+            },
+        )));
+    }
     // Stock envelope scan. Runs on the same assembled toolpath; emits a
     // critical `out_of_stock` warning so CLI / server / wasm consumers
     // get the guard centrally rather than synthesizing it per-frontend.
@@ -940,23 +1001,37 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // Build per-op tool-rate lookup so the estimator clamps
     // Plunge segments to the tool's plunge_rate even when the post
     // emitted a single F<feed> line.
-    // Route through the per-pipeline `tool_index` HashMap so the
-    // per-op tool fetch is O(1) — was O(tools) per op via the prior
-    // `iter().find(...)` chain.
-    let tool_index = build_tool_index(&project.tools);
+    // Resolve operation overrides, applied cutting data and internal tool swaps;
+    // library defaults alone can incorrectly cap an explicitly faster pass.
     let op_rates: Vec<crate::sim::timing::OpRates> = project
         .operations
         .iter()
         .filter_map(|op| {
-            let tool = tool_index.get(&op.tool_id)?;
+            let setup = synthesize_op_setup(op, &project, &mut Vec::new()).ok()?;
+            let mut feed = setup.tool.rate_h.max(setup.tool.rate_h_finish);
+            let mut plunge = setup.tool.rate_v.max(setup.tool.rate_v_finish);
+            for id in op.finish_tool_id.into_iter().chain(match &op.kind {
+                OpKind::Drill {
+                    spot_first: Some(spot),
+                    ..
+                } => Some(spot.spot_tool_id),
+                _ => None,
+            }) {
+                let mut other = op.clone();
+                other.tool_id = id;
+                if let Ok(extra) = synthesize_op_setup(&other, &project, &mut Vec::new()) {
+                    feed = feed.max(extra.tool.rate_h).max(extra.tool.rate_h_finish);
+                    plunge = plunge.max(extra.tool.rate_v).max(extra.tool.rate_v_finish);
+                }
+            }
             Some(crate::sim::timing::OpRates {
                 op_id: op.id,
-                plunge_rate_mm_min: tool.plunge_rate,
-                feed_rate_mm_min: tool.feed_rate,
+                plunge_rate_mm_min: plunge,
+                feed_rate_mm_min: feed,
             })
         })
         .collect();
-    let time_estimate = match &cps_feeds_dwell {
+    let mut time_estimate = match &cps_feeds_dwell {
         // IR-derived feeds + dwell: timing never depends on the CPS
         // output text being parseable.
         Some((feeds, dwell_s)) => crate::sim::timing::estimate_from_feeds_with_rates(
@@ -977,6 +1052,11 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
             &op_rates,
         ),
     };
+    // Explicit G4 / IR dwell already includes spindle warmups and envelope
+    // waits. Classify the estimated warmup share without counting it twice.
+    time_estimate.total_s -= time_estimate.spindle_warmup_s;
+    time_estimate.spindle_warmup_s = time_estimate.spindle_warmup_s.min(time_estimate.dwell_s);
+    time_estimate.dwell_s -= time_estimate.spindle_warmup_s;
     progress("done", 1.0, "complete");
     Ok(PipelineResponse {
         stats: PipelineStats {
@@ -1233,6 +1313,7 @@ pub fn stream_gcode_with_preview(
     // computable because the tee reconstructed the toolpath.
     warnings::push_work_area_warning(&toolpath, &prep.project.machine, &mut warnings);
     warnings::push_project_stock_warning(&toolpath, &prep.project, &mut warnings);
+    work_origin::fixture_warnings(&prep.project, &toolpath, &mut warnings);
 
     let (total_closed, total_offsets, _) = *stats_collector.borrow();
     Ok(StreamPreviewOutcome {
@@ -1275,10 +1356,12 @@ fn prepare_stream(
     if matches!(post_kind, PostProcessorKind::Hpgl | PostProcessorKind::Cps) {
         return Err(StreamGcodeError::Unsupported(post_kind));
     }
+    validate_direct_output(&request.project)?;
     let mut project = request.project;
     crate::feeds_speeds::validate_applied_project(&project)?;
     work_origin::validate_fixtures(&project)?;
     work_origin::resolve(&mut project)?;
+    safe_z::validate(&project)?;
     for op in project
         .operations
         .iter()
@@ -1318,6 +1401,7 @@ fn prepare_stream(
         .max(1);
     let mut warnings: Vec<PipelineWarning> = Vec::new();
     push_pre_emit_warnings(&project, post_kind, &mut warnings);
+    warnings::two_sided_guard(&project, &objects, &mut warnings)?;
 
     Ok((
         StreamPrep {
@@ -1664,16 +1748,17 @@ fn classify_gcode_include_line(raw: &str) -> GcodeIncludeLineClass {
     let mut has_movement = false;
     let mut multi_axis_word: Option<char> = None;
     let mut simulated_g: Option<u32> = None;
-    let mut unsupported_g: Option<u32> = None;
-    for tok in trimmed.split_whitespace() {
-        if tok.is_empty() {
-            continue;
-        }
-        let head = tok.as_bytes()[0].to_ascii_uppercase();
-        let rest = &tok[1..];
+    let mut unsupported_g: Option<f64> = None;
+    for (word, rest) in preview::ascii_words(trimmed) {
+        let head = word.as_bytes()[0].to_ascii_uppercase();
         match head {
             b'G' => {
-                if let Ok(n) = rest.parse::<u32>() {
+                if let Ok(value) = rest.parse::<f64>() {
+                    if !value.is_finite() || value.fract() != 0. || value == 92. || value == 43. {
+                        unsupported_g = Some(value);
+                        continue;
+                    }
+                    let n = value as u32;
                     if matches!(n, 0 | 1 | 2 | 3 | 73 | 81 | 82 | 83) {
                         simulated_g = Some(n);
                     } else if matches!(
@@ -1706,7 +1791,7 @@ fn classify_gcode_include_line(raw: &str) -> GcodeIncludeLineClass {
                         // modal cancel / distance mode / feed mode —
                         // all heightmap-neutral.
                     } else {
-                        unsupported_g = Some(n);
+                        unsupported_g = Some(value);
                     }
                 }
             }
@@ -1771,7 +1856,8 @@ fn strip_gcode_comment(line: &str) -> String {
 fn count_tool_changes(project: &Project) -> u32 {
     let mut n = 0u32;
     let mut prev_tool_id: Option<u32> = None;
-    for op in project.operations.iter().filter(|o| o.enabled) {
+    let enabled: Vec<_> = project.operations.iter().filter(|o| o.enabled).collect();
+    for op in order_ops_by_tool(&enabled, project.group_ops_by_tool) {
         // Program-only ops (Pause, Homing, Probe, CycleMarker)
         // don't carry a tool — they neither cause nor break a
         // toolchange envelope.
@@ -1781,6 +1867,18 @@ fn count_tool_changes(project: &Project) -> u32 {
         if prev_tool_id != Some(op.tool_id) {
             n += 1;
             prev_tool_id = Some(op.tool_id);
+        }
+        if let OpKind::Drill {
+            spot_first: Some(spot),
+            ..
+        } = &op.kind
+        {
+            if spot.spot_tool_id != op.tool_id
+                && spot.spot_depth_mm < 0.
+                && project.tools.iter().any(|t| t.id == spot.spot_tool_id)
+            {
+                n += 2;
+            }
         }
         if let Some(finish_id) = op.finish_tool_id {
             if finish_id != op.tool_id && op_can_emit_internal_swap(op) {
@@ -1839,7 +1937,8 @@ fn spindle_warmup_seconds(project: &Project) -> f64 {
     };
     let mut total = 0.0;
     let mut prev_tool_id: Option<u32> = None;
-    for op in project.operations.iter().filter(|o| o.enabled) {
+    let enabled: Vec<_> = project.operations.iter().filter(|o| o.enabled).collect();
+    for op in order_ops_by_tool(&enabled, project.group_ops_by_tool) {
         // Program-only ops never load a tool, so they don't
         // contribute to spindle warmup time.
         if op.is_program_only() {
@@ -1849,8 +1948,20 @@ fn spindle_warmup_seconds(project: &Project) -> f64 {
             total += pause_for(op.tool_id);
             prev_tool_id = Some(op.tool_id);
         }
+        if let OpKind::Drill {
+            spot_first: Some(spot),
+            ..
+        } = &op.kind
+        {
+            if spot.spot_tool_id != op.tool_id
+                && spot.spot_depth_mm < 0.
+                && project.tools.iter().any(|t| t.id == spot.spot_tool_id)
+            {
+                total += pause_for(spot.spot_tool_id) + pause_for(op.tool_id);
+            }
+        }
         if let Some(finish_id) = op.finish_tool_id {
-            if finish_id != op.tool_id {
+            if finish_id != op.tool_id && op_can_emit_internal_swap(op) {
                 // Internal dual-tool change inside this op: an extra
                 // toolchange envelope fires for the finish tool.
                 total += pause_for(finish_id);
@@ -1882,22 +1993,26 @@ fn compute_op_cache_key(
     tool_index: &HashMap<u32, &ToolEntry>,
     post_tag: u8,
     blobs: Option<&GlobalKeyBlobs>,
+    context: Option<(u64, Point2, String)>,
 ) -> Option<crate::pipeline_cache::OpCacheKey> {
     let blobs = blobs?;
+    let context = context?;
     let tool = tool_index.get(&op.tool_id).copied()?;
     let finish_tool = op
         .finish_tool_id
         .filter(|id| *id != op.tool_id)
         .and_then(|id| tool_index.get(&id).copied());
     let segments = resolve_op_segment_refs(op, &project.segments, objects);
-    Some(op_cache_key_with_blobs(
-        blobs,
-        op,
-        tool,
-        finish_tool,
-        &segments,
-        post_tag,
-    ))
+    let base = op_cache_key_with_blobs(blobs, op, tool, finish_tool, &segments, post_tag);
+    let spot = match &op.kind {
+        OpKind::Drill {
+            spot_first: Some(spot),
+            ..
+        } => tool_index.get(&spot.spot_tool_id).copied(),
+        _ => None,
+    };
+    let bytes = serde_json::to_vec(&(base.0, context, spot)).ok()?;
+    Some(crate::pipeline_cache::OpCacheKey(seahash::hash(&bytes)))
 }
 
 /// Apply a cache HIT: replay the cached gcode body + the op's planning
@@ -2217,6 +2332,9 @@ where
     // per op — relief brightness grids especially are large and were
     // previously re-serialized for every op's key. `None` when caching is
     // off so we skip the work entirely.
+    let topology_key = cache
+        .and_then(|_| serde_json::to_vec(objects).ok())
+        .map(|bytes| seahash::hash(&bytes));
     let key_blobs = cache.map(|_| {
         GlobalKeyBlobs::new(
             &project.machine,
@@ -2384,6 +2502,8 @@ where
                 &tool_index,
                 post_tag,
                 key_blobs.as_ref(),
+                topology_key
+                    .map(|topology| (topology, last_pos, format!("{:?}", post.capture_state()))),
             )
         };
 
@@ -2712,6 +2832,15 @@ fn emit_boundary_toolchange<P: PostProcessor>(
                         s.tool.speed
                     }
                 }),
+            synthesize_op_setup(op, project, &mut Vec::new())
+                .ok()
+                .map(|s| {
+                    if matches!(op.kind, OpKind::Profile { .. }) {
+                        (s.tool.rate_h_finish, s.tool.rate_v_finish)
+                    } else {
+                        (s.tool.rate_h, s.tool.rate_v)
+                    }
+                }),
         );
     }
     Some(op.tool_id)
@@ -2781,12 +2910,12 @@ pub(crate) fn effective_step(op: &Op, tool: &ToolEntry) -> Result<f64, PipelineW
     op.params
         .step
         .or(tool.default_step)
-        .filter(|v| *v < 0.0)
+        .filter(|v| v.is_finite() && *v <= -1e-9)
         .ok_or_else(|| {
             PipelineWarning::for_op(
                 op.id,
                 "step_unspecified",
-                "depth-per-pass not set on the operation or its tool's default_step",
+                "depth-per-pass must be finite and at most -0.000000001 mm; set it on the operation or its tool",
             )
         })
 }
@@ -2883,6 +3012,7 @@ pub(in crate::pipeline) fn emit_toolchange_envelope<P: PostProcessor>(
     new_tool_id: u32,
     is_first_tool: bool,
     target_speed: Option<u32>,
+    rates: Option<(u32, u32)>,
 ) {
     // A scaffold-owning post handles the swap itself — one structured
     // hook instead of the dialect envelope below. This first-line gate
@@ -2894,6 +3024,7 @@ pub(in crate::pipeline) fn emit_toolchange_envelope<P: PostProcessor>(
             new_tool,
             new_tool_id,
             target_speed,
+            rates,
         ));
         return;
     }
@@ -3576,3 +3707,6 @@ fn resolve_edited_objects(
 
 #[cfg(test)]
 mod lot8_tests;
+
+#[cfg(test)]
+mod audit_13_14;

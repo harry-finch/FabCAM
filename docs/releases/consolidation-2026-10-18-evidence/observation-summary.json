@@ -1,0 +1,146 @@
+{
+  "hatch_actual": {
+    "max_x": 10.0,
+    "max_y": 10.0,
+    "min_x": 0.0,
+    "min_y": 0.0
+  },
+  "hatch_expected": {
+    "min_x": 100,
+    "min_y": 200,
+    "max_x": 110,
+    "max_y": 210
+  },
+  "cases": [
+    {
+      "case": "top_zero",
+      "warning_kinds": [
+        "cps_post_warning"
+      ],
+      "rapid_commands": [
+        "JZ,5.0000",
+        "JZ,5.0000",
+        "J2,20.0000,17.0000",
+        "JZ,5.0000",
+        "JZ,5.0000"
+      ],
+      "known_preview_rapids": [
+        {
+          "from": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": -1.0
+          },
+          "gcode_line": 66,
+          "kind": "rapid",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": 5.0
+          }
+        }
+      ]
+    },
+    {
+      "case": "top_zero_rapid_minus5",
+      "refusal": ".cps post failed: post runtime error: Error: ShopBot MVP: positive authored clearance Z required (shopbot.cps:33:32)\n    at fail (shopbot.cps:33:32)\n    at preflight (shopbot.cps:81:41)\n    at onOpen (shopbot.cps:183:12)\n    at apply (native)\n    at __ivacCallOptional (15_driver.js:326:13)\n    at __ivacExecute (15_driver.js:454:23)"
+    },
+    {
+      "case": "top18_rapid5",
+      "warning_kinds": [
+        "cps_post_warning",
+        "out_of_work_area"
+      ],
+      "rapid_commands": [
+        "JZ,5.0000",
+        "JZ,5.0000",
+        "J2,20.0000,17.0000",
+        "JZ,5.0000",
+        "JZ,5.0000"
+      ],
+      "known_preview_rapids": [
+        {
+          "from": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": 17.0
+          },
+          "gcode_line": 66,
+          "kind": "rapid",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": 5.0
+          }
+        }
+      ]
+    },
+    {
+      "case": "top18_rapid5_unknown_workarea",
+      "warning_kinds": [
+        "cps_post_warning"
+      ],
+      "rapid_commands": [
+        "JZ,5.0000",
+        "JZ,5.0000",
+        "J2,20.0000,17.0000",
+        "JZ,5.0000",
+        "JZ,5.0000"
+      ],
+      "known_preview_rapids": [
+        {
+          "from": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": 17.0
+          },
+          "gcode_line": 66,
+          "kind": "rapid",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": 5.0
+          }
+        }
+      ]
+    },
+    {
+      "case": "top18_rapid23",
+      "warning_kinds": [
+        "cps_post_warning",
+        "out_of_work_area"
+      ],
+      "rapid_commands": [
+        "JZ,23.0000",
+        "JZ,23.0000",
+        "J2,20.0000,17.0000",
+        "JZ,23.0000",
+        "JZ,23.0000"
+      ],
+      "known_preview_rapids": [
+        {
+          "from": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": 17.0
+          },
+          "gcode_line": 66,
+          "kind": "rapid",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": 17.0,
+            "z": 23.0
+          }
+        }
+      ]
+    },
+    {
+      "case": "translated_z_refusal",
+      "refusal": "work origin: numeric Z origin translation is not qualified; use zero work-origin Z and an explicit stock top/depth convention"
+    }
+  ]
+}

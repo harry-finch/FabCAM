@@ -1,0 +1,42 @@
+{
+  "crates/ivac-core/src/input/dxf_in.rs": {
+    "before": "01e9790d346bcdb0b86fb34dd56b60e09667678899b4bc8be923719c78d0c2c9",
+    "after": "c08b45c62e3491326126a2a82b8cc6fd7c90ef8eaec43ec64b73721bfc5d7286"
+  },
+  "crates/ivac-core/src/input/hatch.rs": {
+    "before": "dc484079ca0d4db9ac09f7ee9379610c8fee5e11a63782b2dc812dd6b4cbdff0",
+    "after": "5051c4725ff35fef079b5a7e7ca2c57c845e4d8dae125b8fb23a6f2276278c03"
+  },
+  "crates/ivac-core/src/pipeline.rs": {
+    "before": "893a2215d3c8f5788dbaec3e4921e2ab38ad297b0ec3b5098ca0807d61f1a3cd",
+    "after": "957e0c4569b164fcb78c6136fbec49737dea62765f37047c1a7b4425e85c9dc5"
+  },
+  "crates/ivac-core/src/pipeline/safe_z.rs": {
+    "before": null,
+    "after": "dbccae8bce327ba40acbdc088aa9fad39460aab42dbcd7b2776df77e108b3c14"
+  },
+  "crates/ivac-core/src/pipeline_cache.rs": {
+    "before": "9beb4e979249e67d71d1a9691604916caa1247afbc3e5bd44d752a69b58c97cb",
+    "after": "3753f86afd2a8d12fedf27a045f387a12df1a59f98877628dedd955163432e45"
+  },
+  "crates/ivac-core/src/version.rs": {
+    "before": "f289f1d124669e1b69c770dd830cf2cd3600ffa19f6e2bb2610739e4d75cac9f",
+    "after": "ba1235afa3f132df335a34a3a681cfbd091832d46c80aa77fe0467fb8ed68b5e"
+  },
+  "crates/ivac-core/tests/cps_posts.rs": {
+    "before": "0e15b2516b89f8d0c48616b526395fbd95419a2ce70ad51bf440371d9f32e31e",
+    "after": "c3ba7b5f321f51e15794be842bf2efaf3a9cbd1807550988bef31f54d0f1d788"
+  },
+  "crates/ivac-core/tests/hatch_safe_z.rs": {
+    "before": null,
+    "after": "197da4b3ff2051ce7e7c6aeb5a0eefdf729ef7dde5bcb829f718fbd07471cc3c"
+  },
+  "crates/ivac-core/tests/shopbot_m2_post.rs": {
+    "before": "7b29d3ad18c8d6b85f43bfdd82d1a7ee3f3d491624ddb6fda08f197504c5dae4",
+    "after": "263cca8f9532914f2827c16e42a6865a4a3af8b516bd7cc521308b5971a54296"
+  },
+  "crates/ivac-server/src/main.rs": {
+    "before": "20fe68a4b57080dfd33b4801c4de16f43965e4749889fb349e454b978e245dc5",
+    "after": "e133b01b0bb3650c9256a44c9bce9f5f2088e72b5285a4eaeed390b6b6ae56b1"
+  }
+}

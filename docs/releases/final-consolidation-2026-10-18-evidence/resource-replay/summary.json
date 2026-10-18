@@ -1,0 +1,21 @@
+{
+  "generator": "SplitMix64-v1",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "planned": 1,
+  "executed": 1,
+  "elapsed_seconds": 0.892391041,
+  "results": [
+    {
+      "case": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 1,
+        "scale": 1.0
+      },
+      "status": "fail",
+      "elapsed_seconds": 0.875347292
+    }
+  ],
+  "scope": "bounded software properties; full SAFE-Z qualification NOT included"
+}

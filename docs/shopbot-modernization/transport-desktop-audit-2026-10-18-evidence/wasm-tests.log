@@ -1,0 +1,67 @@
+   Compiling unicode-ident v1.0.24
+   Compiling libc v0.2.186
+   Compiling futures-util v0.3.32
+   Compiling proc-macro2 v1.0.106
+   Compiling wasm-bindgen-shared v0.2.120
+   Compiling quote v1.0.45
+   Compiling getrandom v0.2.17
+   Compiling syn v2.0.117
+   Compiling wasm-bindgen-macro-support v0.2.120
+   Compiling serde_derive_internals v0.29.1
+   Compiling serde_derive v1.0.228
+   Compiling bytemuck_derive v1.11.0
+   Compiling tracing-attributes v0.1.31
+   Compiling thiserror-impl v2.0.18
+   Compiling schemars_derive v0.8.22
+   Compiling tracing v0.1.44
+   Compiling bytemuck v1.25.0
+   Compiling thiserror v2.0.18
+   Compiling font-types v0.9.0
+   Compiling image v0.25.5
+   Compiling tiny-skia-path v0.11.4
+   Compiling wasm-bindgen-macro v0.2.120
+   Compiling read-fonts v0.34.0
+   Compiling wasm-bindgen v0.2.120
+   Compiling serde v1.0.228
+   Compiling usvg v0.45.1
+   Compiling js-sys v0.3.97
+   Compiling console_error_panic_hook v0.1.7
+   Compiling indexmap v1.9.3
+   Compiling chrono v0.4.44
+   Compiling uuid v1.10.0
+   Compiling schemars v0.8.22
+   Compiling dxf v0.6.1
+   Compiling ivac-feeds-speeds v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+   Compiling skrifa v0.36.0
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-wasm v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 15.77s
+     Running unittests src/lib.rs (target/debug/deps/ivac_wasm-c4c4116ce6ae27b7)
+
+running 22 tests
+test sim::tests::advance_with_no_cuts_returns_empty_aabb ... ok
+test sim::tests::clear_toolpath_drops_warning_cache ... ok
+test sim::tests::data_ptr_and_len_consistent_with_cols_rows ... ok
+test sim::tests::advance_endmill_plunge_lowers_cells_and_returns_dirty_aabb ... ok
+test sim::tests::audit_15_16_reset_then_changed_tool_rechecks_cached_warnings ... ok
+test sim::tests::advance_clears_previous_dirty_so_aabb_reflects_only_this_call ... ok
+test sim::tests::deviation_flags_gouge_under_plunge_and_reststock_around_it ... ok
+test sim::tests::checkpoint_same_index_overwrites ... ok
+test sim::tests::deviation_recompute_in_matches_full_over_the_dirty_aabb ... ok
+test sim::tests::deviation_unions_multiple_targets_deepest_wins ... ok
+test sim::tests::nearest_checkpoint_picks_largest_at_or_below_target ... ok
+test sim::tests::partial_advance_cut_only_touches_swept_chunk ... ok
+test sim::tests::partial_advance_emits_rapid_warning_only_on_first_slice ... ok
+test sim::tests::new_initializes_heightmap_to_top_z ... ok
+test sim::tests::partial_advance_plunge_grows_as_t_advances ... ok
+test sim::tests::re_sweep_replays_cached_diagnostics_identically ... ok
+test sim::tests::checkpoint_restore_then_replay_matches_full_replay ... ok
+test sim::tests::three_axis_advance_keeps_sidecar_empty ... ok
+test sim::tests::reset_restores_top_z_and_no_dirty ... ok
+test sim::tests::restore_checkpoint_marks_whole_grid_dirty ... ok
+test sim::tests::form_tool_advance_populates_undercut_sidecar ... ok
+test sim::tests::checkpoint_restore_round_trips_undercut_sidecar ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1028,6 +1028,16 @@ mod tests {
     }
 
     #[test]
+    fn effective_step_rejects_tiny_or_nonfinite_instead_of_single_full_depth_pass() {
+        let mut op = profile_op(1, 1, ToolOffset::Outside);
+        let tool = endmill(1, 3.0);
+        for step in [-1e-12, f64::NEG_INFINITY, f64::NAN] {
+            op.params.step = Some(step);
+            assert!(effective_step(&op, &tool).is_err());
+        }
+    }
+
+    #[test]
     fn effective_step_rejects_non_negative() {
         let mut tool = endmill(1, 3.0);
         tool.default_step = Some(0.5);

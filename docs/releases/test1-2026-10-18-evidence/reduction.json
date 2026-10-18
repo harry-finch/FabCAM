@@ -1,0 +1,68 @@
+{
+  "signature": "move_budget",
+  "trials": [
+    {
+      "input": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 3,
+        "scale": 1.0
+      },
+      "error": "move_budget:actual=20167"
+    },
+    {
+      "input": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 2,
+        "scale": 1.0
+      },
+      "error": "move_budget:actual=20167"
+    },
+    {
+      "input": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 1,
+        "scale": 1.0
+      },
+      "error": "move_budget:actual=20167"
+    },
+    {
+      "input": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 1,
+        "scale": 0.5
+      },
+      "error": null
+    },
+    {
+      "input": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "error": null
+    },
+    {
+      "input": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 1,
+        "scale": 0.0
+      },
+      "error": null
+    }
+  ],
+  "elapsed": 6.246210667,
+  "limit_trials": 128,
+  "limit_seconds": 60
+}

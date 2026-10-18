@@ -1,0 +1,62 @@
+{
+  "circle": {
+    "before": {
+      "moves": 370,
+      "depths": [
+        -5.0,
+        -4.0,
+        -2.0
+      ],
+      "max_endpoint_radial_error_mm": 0.0007397880841679694,
+      "minimum_chord_radius_mm": 27.990234702810614,
+      "speed_commands": [
+        "MS,20.000000,20.000000",
+        "MS,3.333333,3.333333"
+      ]
+    },
+    "after": {
+      "moves": 373,
+      "depths": [
+        -5.0,
+        -4.0,
+        -2.0
+      ],
+      "max_endpoint_radial_error_mm": 0.007043968437653092,
+      "minimum_chord_radius_mm": 27.990672964179105,
+      "speed_commands": [
+        "MS,20.000000,20.000000",
+        "MS,3.333333,3.333333"
+      ]
+    }
+  },
+  "multiple": {
+    "before": {
+      "moves": 370,
+      "depths": [
+        -5.0,
+        -4.0,
+        -2.0
+      ],
+      "max_endpoint_radial_error_mm": 0.0007397880841679694,
+      "minimum_chord_radius_mm": 27.990234702810614,
+      "speed_commands": [
+        "MS,20.000000,20.000000",
+        "MS,3.333333,3.333333"
+      ]
+    },
+    "after": {
+      "moves": 373,
+      "depths": [
+        -5.0,
+        -4.0,
+        -2.0
+      ],
+      "max_endpoint_radial_error_mm": 0.007043968437653092,
+      "minimum_chord_radius_mm": 27.990672964179105,
+      "speed_commands": [
+        "MS,20.000000,20.000000",
+        "MS,3.333333,3.333333"
+      ]
+    }
+  }
+}

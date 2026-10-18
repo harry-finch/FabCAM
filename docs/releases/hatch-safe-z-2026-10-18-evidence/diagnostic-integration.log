@@ -1,0 +1,39 @@
+    Blocking waiting for file lock on build directory
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.71s
+     Running tests/cad1_qualification.rs (target/debug/deps/cad1_qualification-de60c5eeda614e25)
+
+running 1 test
+test exact_diameter_corners_are_reached_in_emitted_profile_and_pocket ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.37s
+
+     Running tests/cps_posts.rs (target/debug/deps/cps_posts-04ea1552f7d89023)
+
+running 4 tests
+test fanuc_refs_snapshot ... ok
+test two_sided_cps_refuses_unqualified_output ... ok
+test bundled_grbl_snapshot ... FAILED
+test bundled_grbl_geometry_parity ... FAILED
+
+failures:
+
+---- bundled_grbl_snapshot stdout ----
+
+thread 'bundled_grbl_snapshot' panicked at crates/ivac-core/tests/cps_posts.rs:50:6:
+cps pipeline runs: UnsafeClearance(1, "clearance Z 0 mm must be above stock top Z 0 mm in the same work frame, by more than 0.00010001 mm output uncertainty. Set a suitable clearance; values were not changed.")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- bundled_grbl_geometry_parity stdout ----
+
+thread 'bundled_grbl_geometry_parity' panicked at crates/ivac-core/tests/cps_posts.rs:50:6:
+cps pipeline runs: UnsafeClearance(1, "clearance Z 0 mm must be above stock top Z 0 mm in the same work frame, by more than 0.00010001 mm output uncertainty. Set a suitable clearance; values were not changed.")
+
+
+failures:
+    bundled_grbl_geometry_parity
+    bundled_grbl_snapshot
+
+test result: FAILED. 2 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p ivac-core --test cps_posts`

@@ -130,22 +130,29 @@ pub fn healthz() -> HealthResponse {
 /// the command signature is identical with and without the `cps`
 /// feature (the macro registration can't be cfg-gated per entry).
 #[tauri::command]
-pub fn list_posts() -> Result<serde_json::Value, String> {
+pub async fn list_posts() -> Result<serde_json::Value, String> {
     #[cfg(feature = "cps")]
     {
-        let entries = ivac_cps::library::BUNDLED
-            .iter()
-            .map(|post| {
-                ivac_cps::inspect_post(post.source, &format!("{}.cps", post.id)).map(|meta| {
-                    ivac_cps::meta::PostListEntry {
+        tokio::task::spawn_blocking(|| {
+            let entries = ivac_cps::library::BUNDLED
+                .iter()
+                .map(|post| {
+                    ivac_cps::inspect_post_with_limits(
+                        post.source,
+                        &format!("{}.cps", post.id),
+                        inspection_limits(),
+                    )
+                    .map(|meta| ivac_cps::meta::PostListEntry {
                         id: post.id.to_string(),
                         meta,
-                    }
+                    })
                 })
-            })
-            .collect::<Result<Vec<_>, _>>()
-            .map_err(|e| format!("bundled post failed inspection: {e}"))?;
-        serde_json::to_value(entries).map_err(|e| e.to_string())
+                .collect::<Result<Vec<_>, _>>()
+                .map_err(|e| format!("bundled post failed inspection: {e}"))?;
+            serde_json::to_value(entries).map_err(|e| e.to_string())
+        })
+        .await
+        .map_err(|e| internal(format!("join error: {e}")))?
     }
     #[cfg(not(feature = "cps"))]
     {
@@ -160,17 +167,33 @@ pub fn list_posts() -> Result<serde_json::Value, String> {
 // the required shape even on the feature-off path that ignores them.
 #[allow(clippy::needless_pass_by_value)]
 #[tauri::command]
-pub fn inspect_post(script: String, filename: Option<String>) -> Result<serde_json::Value, String> {
+pub async fn inspect_post(
+    script: String,
+    filename: Option<String>,
+) -> Result<serde_json::Value, String> {
     #[cfg(feature = "cps")]
     {
-        let name = filename.unwrap_or_else(|| "inline.cps".to_string());
-        let meta = ivac_cps::inspect_post(&script, &name).map_err(|e| e.to_string())?;
-        serde_json::to_value(meta).map_err(|e| e.to_string())
+        tokio::task::spawn_blocking(move || {
+            let name = filename.unwrap_or_else(|| "inline.cps".to_string());
+            let meta = ivac_cps::inspect_post_with_limits(&script, &name, inspection_limits())
+                .map_err(|e| e.to_string())?;
+            serde_json::to_value(meta).map_err(|e| e.to_string())
+        })
+        .await
+        .map_err(|e| internal(format!("join error: {e}")))?
     }
     #[cfg(not(feature = "cps"))]
     {
         let _ = (script, filename);
         Err("this build lacks CPS support".to_string())
+    }
+}
+
+#[cfg(feature = "cps")]
+fn inspection_limits() -> ivac_cps::RunLimits {
+    ivac_cps::RunLimits {
+        loop_iterations: 20_000_000,
+        recursion: 256,
     }
 }
 
@@ -566,14 +589,140 @@ pub async fn evaluate_drawing_cmd(
 ) -> Result<ivac_core::drawing::api::DrawingResponse, String> {
     tokio::task::spawn_blocking(move || ivac_core::drawing::api::evaluate(req))
         .await
-        .map_err(|e| e.to_string())?
+        .map_err(|e| internal(format!("join error: {e}")))?
+        .map_err(|e| serialize_error(WiacError::bad_input(e)))
 }
 #[tauri::command]
 pub async fn generate_drawing_cmd(
     req: ivac_core::drawing::api::DrawingGenerationRequest,
 ) -> Result<ivac_core::pipeline::PipelineResponse, String> {
-    tokio::task::spawn_blocking(move || ivac_core::pipeline::generate_drawing(req))
+    let project = req.machining.project.clone();
+    let result = tokio::task::spawn_blocking(move || {
+        std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            ivac_core::pipeline::generate_drawing(req)
+        }))
+    })
+    .await
+    .map_err(|e| internal(format!("join error: {e}")))?;
+    match result {
+        Ok(Ok(response)) => Ok(response),
+        Ok(Err(e)) => Err(e
+            .to_structured(Some(&project))
+            .map_or_else(|| internal("cancelled"), serialize_error)),
+        Err(panic) => Err(internal(format!("panic: {}", panic_message(&panic)))),
+    }
+}
+
+#[cfg(test)]
+mod audit_15_16 {
+    use super::*;
+    #[tokio::test]
+    async fn collision_error_retains_preview_without_executable_program() {
+        let mut request: PipelineRequest = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/test1/profile.request.json"
+        ))
+        .unwrap();
+        request.project.fixtures.push(ivac_core::project::Fixture {
+            id: 1,
+            name: "clamp".into(),
+            origin: (0., 0.),
+            z_bottom: -100.,
+            z_top: 100.,
+            color: 0,
+            kind: ivac_core::project::FixtureKind::Box {
+                width: 1000.,
+                depth: 1000.,
+            },
+        });
+        let error: serde_json::Value =
+            serde_json::from_str(&generate(request).await.unwrap_err()).unwrap();
+        assert!(!error["diagnostic_preview"]["toolpath"]
+            .as_array()
+            .unwrap()
+            .is_empty());
+        assert!(error["diagnostic_preview"].get("gcode").is_none());
+        assert!(error.get("gcode").is_none());
+    }
+    #[tokio::test]
+    async fn drawing_failures_keep_structured_contract() {
+        use ivac_core::drawing::{
+            api::{DrawingGenerationRequest, DrawingRequest},
+            Drawing,
+        };
+        let drawing = Drawing::from_sources(vec![]).unwrap();
+        let err = evaluate_drawing_cmd(DrawingRequest::Evaluate {
+            version: 999,
+            drawing: drawing.clone(),
+            tolerance_mm: None,
+            simplification_mm: None,
+        })
         .await
-        .map_err(|e| e.to_string())?
-        .map_err(|e| e.to_string())
+        .unwrap_err();
+        let structured: serde_json::Value = serde_json::from_str(&err).unwrap();
+        assert_eq!(structured["kind"], "bad_input");
+        let err = generate_drawing_cmd(DrawingGenerationRequest {
+            version: 999,
+            drawing,
+            bindings: vec![],
+            machining: PipelineRequest {
+                project: ivac_core::project::Project::default(),
+                post_processor: None,
+                cps_post: None,
+            },
+        })
+        .await
+        .unwrap_err();
+        let structured: serde_json::Value = serde_json::from_str(&err).unwrap();
+        assert_eq!(structured["kind"], "misconfigured");
+        assert!(structured["recovery_hint"].as_str().is_some());
+    }
+}
+
+#[cfg(test)]
+mod audit_15_16_tool {
+    use super::*;
+    #[tokio::test]
+    async fn drawing_missing_tool_keeps_assign_tool_action() {
+        let mut project = ivac_core::project::Project::default();
+        project.tools.push(ivac_core::project::ToolEntry {
+            id: 7,
+            ..Default::default()
+        });
+        project.operations.push(ivac_core::project::Op {
+            id: 3,
+            tool_id: 99,
+            ..Default::default()
+        });
+        let error = generate_drawing_cmd(ivac_core::drawing::api::DrawingGenerationRequest {
+            version: ivac_core::drawing::CONTRACT,
+            drawing: ivac_core::drawing::Drawing::from_sources(vec![ivac_core::drawing::Source {
+                id: 1,
+                original: vec![ivac_core::geometry::Segment::line(
+                    ivac_core::geometry::Point2::new(0., 0.),
+                    ivac_core::geometry::Point2::new(10., 0.),
+                    "cut",
+                    7,
+                )],
+                legacy_objects: vec![],
+                pivot: ivac_core::geometry::Point2::new(0., 0.),
+                transform: Default::default(),
+                next_entity: 1,
+            }])
+            .unwrap(),
+            bindings: vec![ivac_core::drawing::api::OperationBinding {
+                operation: 3,
+                binding: ivac_core::drawing::Binding::All,
+            }],
+            machining: PipelineRequest {
+                project,
+                post_processor: None,
+                cps_post: None,
+            },
+        })
+        .await
+        .unwrap_err();
+        let value: serde_json::Value = serde_json::from_str(&error).unwrap();
+        assert_eq!(value["code"], "missing_tool", "{value}");
+        assert_eq!(value["auto_fix"]["suggested_tool_id"], 7, "{value}");
+    }
 }

@@ -1,0 +1,19 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.75s
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-35c9cb31caf1e17f)
+
+running 12 tests
+test audit_15_16::helper_identity_uses_only_exact_executable_basename ... ok
+test commands::audit_15_16::drawing_failures_keep_structured_contract ... ok
+test commands::audit_15_16_tool::drawing_missing_tool_keeps_assign_tool_action ... ok
+test source_packs::tests::audit_15_16_lab_rejects_variable_width_and_text_revisions ... ok
+test source_packs::tests::lab_revisions_use_compare_and_append_not_overwrite ... ok
+test source_packs::tests::rejects_repository_storage ... ok
+test source_packs::tests::stores_only_valid_local_json_and_refuses_duplicate_version ... ok
+test watcher::tests::audit_15_16_missing_source_does_not_disable_existing_sources ... ok
+test watcher::tests::debounce_collapses_rapid_writes ... ok
+test watcher::tests::set_paths_replaces_old_watches ... ok
+test watcher::tests::single_path_emits_event ... ok
+test watcher::tests::unwatch_all_clears_set ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.78s
+

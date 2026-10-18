@@ -175,8 +175,12 @@ fn greedy_nearest_gridded(offsets: &[&PolylineOffset], start: Point2) -> Vec<usi
     let span = (max_x - min_x).max(max_y - min_y).max(1e-6);
     let cells_per_axis = (n as f64).sqrt().clamp(1.0, 2048.0);
     let cell = (span / cells_per_axis).max(1e-6);
-    let cell_of =
-        |p: Point2| -> (i64, i64) { ((p.x / cell).floor() as i64, (p.y / cell).floor() as i64) };
+    let cell_of = |p: Point2| -> (i64, i64) {
+        (
+            ((p.x - min_x) / cell).floor() as i64,
+            ((p.y - min_y) / cell).floor() as i64,
+        )
+    };
 
     let mut grid: std::collections::HashMap<(i64, i64), Vec<u32>> =
         std::collections::HashMap::new();
@@ -191,8 +195,28 @@ fn greedy_nearest_gridded(offsets: &[&PolylineOffset], start: Point2) -> Vec<usi
     }
 
     let mut order = Vec::with_capacity(n);
+    let mut taken = vec![false; n];
     let mut pen = start;
     for _ in 0..n {
+        // Far-away approach/endpoints must not enumerate empty rings. A
+        // bounded linear scan preserves the exact comparator and tie order.
+        if pen.x < min_x || pen.x > max_x || pen.y < min_y || pen.y > max_y {
+            let mut best = None;
+            for (i, o) in offsets.iter().enumerate() {
+                let d = pen.distance(starts[i]);
+                if !taken[i] && offset_better(i, d, o.level, o.is_finish, best) {
+                    best = Some((i, d, o.level, o.is_finish));
+                }
+            }
+            let (chosen, _, _, _) = best.expect("untaken offset");
+            taken[chosen] = true;
+            grid.get_mut(&cell_of(starts[chosen]))
+                .unwrap()
+                .retain(|&i| i as usize != chosen);
+            order.push(chosen);
+            pen = end_pos(offsets[chosen]);
+            continue;
+        }
         let (pcx, pcy) = cell_of(pen);
         let max_r = (pcx - min_cx)
             .abs()
@@ -223,6 +247,7 @@ fn greedy_nearest_gridded(offsets: &[&PolylineOffset], start: Point2) -> Vec<usi
         }
 
         let (chosen, _, _, _) = best.expect("an untaken offset must remain");
+        taken[chosen] = true;
         if let Some(v) = grid.get_mut(&cell_of(starts[chosen])) {
             v.retain(|&x| x as usize != chosen);
         }
@@ -379,6 +404,25 @@ mod tests {
             let mut sorted = order.clone();
             sorted.sort_unstable();
             assert_eq!(sorted, (0..n).collect::<Vec<_>>(), "n={n}");
+        }
+    }
+    #[test]
+    fn audit_09_10_remote_cluster_matches_linear_without_empty_rings() {
+        for origin in [500., 1e12, -1e12] {
+            let owned: Vec<_> = (0..220)
+                .map(|i| {
+                    let p = Point2::new(
+                        origin + (i % 15) as f64 * 0.001,
+                        origin + (i / 15) as f64 * 0.001,
+                    );
+                    off(p, Point2::new(-origin, -origin), 0, false)
+                })
+                .collect();
+            let refs: Vec<_> = owned.iter().collect();
+            assert_eq!(
+                greedy_nearest_gridded(&refs, Point2::new(0., 0.)),
+                greedy_nearest_linear(&refs, Point2::new(0., 0.))
+            );
         }
     }
 }

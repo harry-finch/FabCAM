@@ -1,0 +1,12 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-tauri v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.69s
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-35c9cb31caf1e17f)
+
+running 3 tests
+test commands::audit_15_16::collision_error_retains_preview_without_executable_program ... ok
+test commands::audit_15_16::drawing_failures_keep_structured_contract ... ok
+test commands::audit_15_16_tool::drawing_missing_tool_keeps_assign_tool_action ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.22s
+

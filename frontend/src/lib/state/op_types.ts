@@ -174,6 +174,7 @@ export interface ContourFields {
   /// Optional smaller step for the FINAL Z pass (cleaner bottom).
   finishStep?: number;
   tabType?: TabType;
+  tabWidthMode?: 'legacy_center' | 'material_v1';
   tabRampAngleDeg?: number;
   tabWidth?: number;
   tabHeight?: number;

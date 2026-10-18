@@ -271,3 +271,11 @@ Verify: `pnpm run i18n:codegen && pnpm exec svelte-check` clean and
 Open a `bd` issue (`--type=bug`) with: input file (DXF / SVG / project,
 if distributable), expected output, actual output, platform, build mode
 (server / desktop / browser-WASM).
+
+## Machine and process integration
+
+Start with [Adding a machine](development/ADDING_A_MACHINE.md) and the
+[integration specification template](development/MACHINE_INTEGRATION_TEMPLATE.md).
+[ARCH-MACH](releases/ARCH_MACH_PLAN.md) is planned V1.5 architecture work; these initial
+instructions do not authorize new adapters or a plugin system. Require evidenced
+capabilities/output contract, independent qualification and separate human gates.

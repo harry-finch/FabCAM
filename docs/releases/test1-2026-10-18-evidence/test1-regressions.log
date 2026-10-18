@@ -1,0 +1,39 @@
+    Blocking waiting for file lock on build directory
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `release` profile [optimized] target(s) in 49.76s
+     Running tests/hatch_safe_z.rs (target/release/deps/hatch_safe_z-5891207d272a34d8)
+
+running 14 tests
+test custom_identity_z_rounding_must_not_erase_clearance ... ok
+test finite_and_disabled_and_unknown_stock_contracts ... ok
+test generic_parking_and_stream_preview_retain_safe_air_traversals ... ok
+test hatch_block_is_refused_instead_of_imported_at_definition_coordinates ... ok
+test header_only_job_cannot_bypass_stock_guard ... ok
+test inch_serialization_guard_and_shared_process_boundary ... ok
+test invalid_clearance_stream_writes_no_bytes ... ok
+test known_stock_refuses_clearance_at_or_below_top ... ok
+test shopbot_decoded_lateral_rapids_stay_above_stock_with_two_clearances ... ok
+test shopbot_invalid_stock_clearance_and_existing_z_origin_refuse ... ok
+test shopbot_parking_stays_explicitly_unsupported ... ok
+test stock_edit_is_revalidated_even_after_successful_cached_generation ... ok
+test supported_pocket_and_drill_keep_air_clearance ... ok
+test top_level_hatch_stays_supported_but_unused_block_is_also_refused ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/vcarve_qualification.rs (target/release/deps/vcarve_qualification-7b5c0c2415f0f8a4)
+
+running 10 tests
+test a1_perimeter_honors_pass_step_and_depth_limited_radius ... ok
+test a2_interpolated_ramp_never_exceeds_local_target ... ok
+test a3_short_chain_reaches_target_at_both_ends ... ok
+test a4_decoded_output_preview_generic_parity_and_persistence ... ok
+test circle_islands_and_disconnected_regions_are_explicit ... ok
+test continuous_clearance_catches_between_sample_collision ... ok
+test invalid_inputs_and_physical_limits_fail_closed ... ok
+test medial_axis_is_variable_finite_deterministic_and_does_not_clear_plateau ... ok
+test reference_cones_caps_and_flat_tips ... ok
+test topology_matrix_and_winding ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+

@@ -1,0 +1,49 @@
+fresh format_expected.json
+fresh scenarios_expected.json
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (4.154167ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (1.383583ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (1.490917ms)
+✔ abcFormat: scale DEG converts radians to degrees (1.233083ms)
+✔ oFormat: width 4 zeropad (program numbers) (1.35325ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (1.129583ms)
+✔ clamping applies after rounding (1.163833ms)
+✔ trimLeadZero renders FANUC-style bare fractions (1.369083ms)
+✔ forceSign marks positives, never zero (2.205958ms)
+✔ getResultingValue/areDifferent compare on the output grid (1.404041ms)
+✔ differential fixtures are fresh (committed == recomputed) (8.899625ms)
+✔ every Euler convention round-trips a rotation matrix (9.169125ms)
+✔ Euler extraction handles the gimbal-lock singularity (1.396333ms)
+✔ rotation factories agree with axis-angle (1.251333ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (7.700375ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (6.774125ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (5.818416ms)
+✔ unreachable orientation throws (2.184875ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.287667ms)
+✔ remapToABC takes the shortest path from the current angles (1.122709ms)
+✔ getPreferredABC honors a positive axis preference (1.236417ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (2.200375ms)
+✔ isABCSupported reflects axis ranges (1.059709ms)
+✔ multi-axis feed: inverse time and DPM (1.115708ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (3.880834ms)
+✔ reset forces the next output; force outputs every time (1.714542ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (1.213708ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (1.19825ms)
+✔ modal carries the format's address letter and getCurrent (1.483333ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (1.272083ms)
+✔ createOutputVariable: control + incremental type (1.281625ms)
+✔ ModalGroup enforces per-group exclusivity (1.538166ms)
+✔ formatWords flattens arguments objects and nested arrays (3.972792ms)
+✔ writeWords drops empty lines entirely (1.788ms)
+✔ writeWords2 outputs only when args 2+ produce text (1.233708ms)
+✔ word separator and EOL are honored (1.145375ms)
+✔ redirection captures words; close returns to normal output (1.396334ms)
+✔ nested redirection pops innermost first (1.213042ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (1.388792ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 92.497333

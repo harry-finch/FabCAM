@@ -1,0 +1,34 @@
+   Compiling ivac-core v0.9.0-beta.2 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.99s
+     Running tests/drawing_audit.rs (target/debug/deps/drawing_audit-64392919724bd9b8)
+
+running 13 tests
+test internal_gap_is_not_reported_as_closed ... ok
+test snap_cannot_collapse_micro_edge ... ok
+test simplify_cannot_remove_drill_point_from_sliver ... ok
+test tiny_unclosed_contour_still_protects_drill_point_from_simplification ... ok
+test tiny_gap_is_not_displayed_as_zero_or_silently_closed ... ok
+test layer_resolution_preserves_contour_order ... ok
+test boundary_point_is_ambiguous_but_supporting_line_is_not ... ok
+test simplify_with_distant_curve_and_drill_point ... ok
+test circles_and_adjacent_line_arcs_are_valid ... ok
+test overlapping_crossing_and_tangent_curves_still_refuse ... ok
+test simplify_batches_with_gap_closure_and_contour_deletion ... ok
+test transform_order_matches_cam_for_all_mirror_combinations ... ok
+test intact_circle_generates_through_authoritative_drawing_api ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-d54a5be4b2c3b5b4)
+
+running 7 tests
+test shared_auto_kernel_uses_selected_nesting_depth_not_svg_fill_rules ... ok
+test separate_contours_does_not_preserve_nested_holes ... ok
+test difference_preserves_explicit_operand_order ... ok
+test all_region_modes_ignore_open_contours_and_missing_indices ... ok
+test xor_preserves_parity_after_empty_intermediate ... ok
+test svg_named_groups_remain_one_synthetic_layer ... ok
+test dxf_named_layers_and_import_layer_filter_are_preserved ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

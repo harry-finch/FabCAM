@@ -2088,3 +2088,275 @@ tree: 1,157 serial core tests and frontend 1,324 tests PASS; integrations and
 quality gates PASS as recorded above. Public beta.2 remains unchanged. Human,
 physical and platform review gates remain open. No tag, Release or manual CI
 dispatch is included. Earlier no-publication notes describe historical checkpoints.
+
+
+## 2026-10-17 — Three-platform candidate builds and V1 validation kit
+
+User requested the three builds and an application/test kit at project root.
+Desktop-candidates run39053047404 at clean 2a3fe56 succeeded on macOS arm64,
+Windows x64 and Ubuntu amd64. Downloaded beta.2 DMG/NSIS/DEB and verified all
+checksums/source manifests; no tag or Release. Mounted DMG read-only, copied
+FabCAM.app to Validation-V1-2a3fe56 (beside ivacam), checked strict signature,
+identity/version and arm64 architecture, then detached. No installed app replaced
+or launched. Ubuntu metadata/ELF architecture inspected; Windows remains an
+installer candidate without runtime qualification.
+
+Kit includes35 SVG/DXF imports verified through current CLI, five saved projects,
+PERF1 request references, detailed French S01–S25 per-platform protocol, H01–H04
+review rows and A01–A07 operator campaign with blank CSV records and hashes.
+Overlapping identical import contours chain into one object; XOR kernel evidence
+is explicitly separate from UI import checks. Physical settings/tolerances remain
+operator decisions. [Campaign record](../releases/v1-validation-2026-10-17/README.md).
+Engineering ivac-ei85n complete; installer/runtime/clean-download, human and
+physical qualification remain open. New protocol/docs local, no source commit/push.
+
+
+## 2026-10-18 — Motion/driver audits 09–10 (local checkpoint)
+
+- Verified the twelve independent findings against baseline 2a3fe56/pipeline54;
+  corrected confirmed motion/driver defects and documented rejected or nuanced
+  recommendations. [Report](MOTION_DRIVERS_AUDIT_2026_10_18.md).
+- Added 17 regressions. Integration caught and fixed a rectangular-tab arc-seam
+  puncture exposed by the stricter arc fit. Reviewed GRBL winding and two ShopBot
+  circle tessellation reference changes without loosening geometric assertions.
+- Pipeline55 cache invalidation; public version beta.2 and source formats retained.
+  1,174 core tests PASS serial, 87 integration cases reported PASS (86 executed;
+  optional FANUC absent), Clippy/fmt/diff checks PASS. Evidence stored separately.
+- Cooperative relief/waterline cancellation now wired; ≤200 ms p95 remains
+  UNQUALIFIED (`ivac-42ylx`). Human review `ivac-7y9ft` OPEN.
+- Incoming desktop campaign docs preserved; its pipeline54 installers were not
+  rebuilt. No commit, push, package, release or publication. HARD STOP.
+
+
+## 2026-10-18 — Audits 11–12: holding, preview and contracts
+
+- User approved versioned material-width tabs with explicit conversion; ADR-0022.
+  Old saved jobs remain legacy, new UI Profile/Pocket jobs select material_v1.
+  Protect cutter-swept retained discs, split rectangle arcs analytically, bound
+  ramp interpolation, protect direct entry and keep generic planar/XYZ output.
+- Preview compact words/Unicode/malformed axes and modal drill parameters fixed;
+  original-template token validation, one-pass substitution and signed padding.
+- Missing drill angle resolves by kind; explicit values retained. Pocket strategy
+  payloads no longer invent geometry on missing/misspelled fields. Tiny steps
+  rejected before scheduler fallback; legacy exact-zero inheritance retained.
+  Nested schema conflicts fail generation. Public beta.2, pipeline cache56.
+- User deferred full knife compensation to VINYL ivac-wgovg; no ShopBot expansion.
+- 1,188 core tests PASS serial; 92 integration cases reported PASS (91 executed),
+  1,328 frontend tests PASS plus Node package-state tests, one skipped Vitest;
+  typecheck, lint, Clippy, fmt and whitespace checks PASS. Browser conversion and
+  Undo reviewed; engineering/software evidence only.
+- [Report](HOLDING_PREVIEW_CONTRACT_AUDIT_2026_10_18.md), evidence and ADR retained.
+  Human review ivac-80ewz OPEN. Existing pipeline54 candidates and installation,
+  physical and cancellation-latency gates unchanged. No commit/push/publication.
+  HARD STOP.
+
+## 2026-10-18 — Release-bounded post-audit engineering roadmap
+
+Documentation only: added TEST1 planned V1-required bounded property qualification
+and shared consolidation backlog covering GEOM-CORE conditional, CAM-DIAG/TOOL-TYPES
+post-V1, PERF2 V2+/measured and TIME2 post-V1/optional practical V1.5. Current human
+audit gates, source/pipeline56 versus pipeline54 packages and historical evidence stay
+intact. Updated release critical path/graph and V1 scope/acceptance, V1.5 dependency
+policy, technical roadmap/status/navigation. AUDIT3 remains time-boxed post-accepted V1;
+ProtoMAX is not delayed by completing every architectural recommendation.
+
+TEST1 plans explicit generated domains/oracles, seeded CI/local budgets, minimized
+regressions and operation-specific clearance/cache/OpenSBP contracts; no universal
+clearance or exact Dexel associativity. Written property/framework/budget approval
+precedes code. GEOM-CORE preserves intentional semantic/tolerance differences; contexts/
+tool types need compatible scoped migration, Rayon no assumed WASM fallback, timing
+no unmeasured accuracy guarantee. No implementation, dependency, golden/serialization/
+CAM-output change, hardware test, GitHub issue or commit/push/merge/publication.
+Documentation/architecture/geometry/validation/ShopBot skills applied. HARD STOP
+pending roadmap approval; next proposed new checkpoint is TEST1 contract proposal
+after current audit reviews and integrated final-source evidence.
+
+Documentation validation: added local links/whitespace and retained prior technical
+roadmap/history checked. Concurrent source changes were detected in pipeline.rs and
+sim holder/rapid/sweep/fixture checks; this documentation task did not edit them.
+No unchanged-source-baseline, software test/build or new qualification claim is made.
+
+## 2026-10-18 — Simulation/cache audits 13–14 (pipeline57)
+
+Verified supplied reports against the uncommitted pipeline56 baseline; preserved
+lots 09–12. Fixed form-tool dexel arcs, arc collision footprints, smooth STL
+sample registration, wear radius consistency and warning context. Added missing
+operation cache dependencies, streaming two-sided/fixture guards and timing
+units, resolved feeds, modal dwell and actual-order tool counts. Avoided duplicate
+warmup dwell and retained correct profiling RAII assertions.
+
+Three pre-fix regressions failed. Final serial core 1,202 PASS; focused profiling
+15 PASS; integration 101 reported PASS / 100 executed (optional FANUC absent).
+Clippy/fmt/diff/WASM compile PASS. Source fingerprints and raw logs in the
+[report](SIMULATION_CACHE_AUDIT_2026_10_18.md). No frontend acceptance repeated.
+Engineering ivac-3mbco; human review ivac-97zve OPEN. Earlier reviews and VINYL
+deferral preserved. Software only; installers remain pipeline54. No commit,
+push, package or publication. HARD STOP for human review.
+
+## 2026-10-18 — ShopBot readiness / mandatory native ProtoMAX OMX / V2+ refinement
+
+Documentation only: SAFE-Z required V1 assessment, bounded high-value UX8 intent sheet,
+conditional TAB-SAFE/default evidence and OP-ORDER shared assessment, with independent
+coordinate/output/holding qualifications. No new Z workflow, default or silent ordering.
+Created SHOPBOT_WORKSHOP_ADDITIONS and advanced REST1/HELIX1/VCARVE2 contracts;
+REST1 refines existing Rest Machining rather than duplicate feature.
+
+Native ProtoMAX OMX is now non-negotiable V1.5 output: replace LAYOUT in preparation,
+keep installed MAKE for execution. Refined existing feasibility as OMX1; lawful real
+user-provided differential corpus, format/ownership facts versus hypotheses and human
+writer architecture gate. No reference samples supplied or investigated here. WJ1–4
+plan explicit process, neighbor-aware leads/kerf/pierce, non-milling XY bridges/cut order
+and actual MAKE/physical gate. Infeasibility is blocker/product decision, not DXF-LAYOUT
+fallback. Updated current release scope/matrices/roadmaps and historical assessment
+clarification; retained audit/release IDs, TEST1, consolidation/AUDIT3 and existing reviews.
+
+Canonical documentation/architecture/geometry/validation/ShopBot/ProtoMAX/shared UI/CAM
+UX skills applied. No production/serialization/post/algorithm/golden/artifact change,
+OMX writer/sample, hardware action, GitHub issue or commit/push/merge/publication.
+All new scopes PLANNED/unqualified; current source baseline remains independent.
+HARD STOP pending human approval of updated release roadmap.
+
+Documentation validation: new local links/whitespace checked; baseline source/config/
+data hashes unchanged. Historical qualification and release artifacts were not edited;
+no test/build, OMX investigation or new software/physical qualification claimed here.
+
+## 2026-10-18 — Transport/CPS/desktop audits 15–16 (pipeline58)
+
+Closed engineering ivac-q1hjs; human review ivac-2aow8 OPEN. Fixed missing HTTP
+CPS-path guards, import temp leakage, async blocking, CPS footer absorption and
+source attribution, fragmented retained output, drawing structured-error loss,
+watch-set replacement and Linux helper-name matching. Tests disproved the
+Sorbonne revision allegation: lab revisions already require 16 digits; no
+ordering/migration change retained. WASM reset/tool regression confirms lot13–14.
+
+Evidence: [report](TRANSPORT_DESKTOP_AUDIT_2026_10_18.md). Core 1,202, HTTP 15,
+Tauri 12 (native filesystem events outside sandbox), WASM 22 PASS; CPS 46
+reported/40 executed plus Node39; integration41 reported/40 executed, optional
+FANUC cases absent. Clippy all-targets/fmt/diff PASS. Pipeline58 invalidates old
+caches; public beta.2 and pipeline54 installers unchanged. No commit, push,
+package or publication; software only. Prior review and physical/platform gates
+remain open. HARD STOP.
+
+## 2026-10-18 — ARCH-MACH machine/process contract and developer documentation
+
+Documentation only (ivac-bens7). Added planned V1.5 ARCH-MACH inventory/contract,
+initial ADDING_A_MACHINE guide and reusable specification template; linked release/
+technical roadmap, architecture, OMX1/WJ scope, contribution index, status/navigation.
+No V1 blocker absent a real ShopBot defect; planning before production OMX writer,
+iterative real-reference contract and actual ProtoMAX qualification validate approach.
+
+Source inventory distinguishes shared geometry/identity, process drivers/modes,
+profiles, native/CPS movement contracts, post-resolved ShopBot validation, preview/
+transports and tests. Existing IR is not universal process/plugin support. Guide
+standardizes official reference differences/rights, fact/inference/unknown ledger,
+qualified capability intersection/refusals, smallest adapter, independent output/
+differential/malformed tests, vendor acceptance and separate physical/release gates.
+Proposed .agents/skills/machine-integration/SKILL.md is not created; concise future
+entry point should link authoritative docs. WAZER and Graphtec/Silhouette conceptual
+post-V1.5 cases require separate vendor/protocol/physical evidence, no support claim.
+
+Canonical documentation/architecture/validation/ShopBot/ProtoMAX/upstream workflow
+skills applied. No machine integration, plugin/core refactor, schema/IR/post changes,
+protocol/file investigation, machine action, GitHub issue or commit/push/publication.
+Current working source and release/audit/TEST1/AUDIT3 gates preserved. HARD STOP
+pending human ARCH-MACH approval before implementation.
+
+Documentation validation: added local links/whitespace verified, prior technical text/
+history retained and baseline source/config/data hashes unchanged. No tests/build,
+protocol research or new software/physical machine qualification claimed here.
+
+## 2026-10-18 — Human acceptance of audit campaign
+
+User accepted audits15–16 and previous lots. Closed the six outstanding audit
+review issues (2aow8,97zve,80ewz,7y9ft,rnf0l,v103z). Earlier checkpoint records
+remain historical. Separate GEOM1/FS workflow reviews, platform installations,
+physical trials and release go/no-go are not implied by this software acceptance.
+Recorded [remaining V1 gates](../releases/V1_REMAINING_2026_10_18.md); no tests,
+implementation, commit/push, package or publication started.
+
+## 2026-10-18 — post-audit consolidation / TEST1 and SAFE-Z contracts
+
+- User authorized consolidation, tests and bounded contracts only, retaining no-commit/no-publication and HARD STOP.
+- Re-ran combined pipeline58 core, eleven integrations, FS/CPS/server/native-WASM/Tauri, frontend and static gates. Raw logs/source fingerprints retained in `docs/releases/consolidation-2026-10-18-evidence/`; optional FANUC and frontend skip explicitly counted.
+- Added diagnostic example and DXF fixture: reproduced block HATCH definition-coordinate recovery and stock18/rapid5 unsafe OpenSBP. No production correction in this checkpoint; ivac-aoany and ivac-jnom4 block release until bounded resolution.
+- Reconciled stale scope/tickets: two-sided refusal regression already fixed; duplicate cache race consolidated; old nested Pocket/XOR/tool/text/freshness allegations corrected in active scope. Extended tabs/cancellation and human/platform/physical limits retained.
+- Proposed TEST1 eight-property deterministic subset and SAFE-Z eight-case common-frame contracts, including continuous-motion/rounding budgets, independent output oracle and export freshness. Recommend bounded fail-closed fixes before property implementation; no new Z mode or geometry refactor.
+- Engineering task ivac-9v68y; human gate ivac-af5v1. HARD STOP; no commit/push/tag/package/release.
+
+## 2026-10-18 — targeted HATCH and SAFE-Z corrections, pipeline59
+
+- Contracts accepted; implemented only targeted fixes before TEST1. HATCH in BLOCKS/BLOCK now refuses the entire import with explode/re-export guidance, preserving top-level recovery and existing block support.
+- Shared milling preflight compares known-stock top and operation/header clearance in unchanged program Z, with serialization precision bounds. Invalid requests fail before cache/emission/stream writes; HTTP gcode streaming preflights before200. No saved-value adjustment, new Z capability or ShopBot geometry logic.
+- Three initial regressions reproduced red; expanded fourteen-case focused matrix and explicit legacy-zero-clearance rejection. Byte-identical old CPS format oracle retained without stock safety claims; actual known-stock parity fixture now declares5mm clearance. Original ShopBot zero-clearance backstop separately retained without stock.
+- Pipeline version59 invalidates former cache entries. Structured error/hint added without model/schema migration. Source and frontend regression suites, adapters, wasm32 compile and static checks recorded in release evidence; optional FANUC and frontend skips distinguished.
+- Remaining full SAFE-Z fixture/holder/transition qualification ivac-j09eh; current fixes do not certify all collisions, unknown initial pose or arbitrary custom posts. Human gate ivac-th8y2; TEST1 not launched, no commit/push/publication or machine execution.
+
+
+## 2026-10-18 — TEST1 bounded harness (human review pending)
+
+Accepted HATCH/SAFE-Z checkpoint and implemented deterministic per-case native
+workers, independent continuous geometry/OpenSBP oracles, actual export freshness
+predicate tests, bounded watchdog/replay/reduction and CI configuration. Fixed
+native WASM request replay added without changing generation semantics.
+Final subset256/256PASS,26.38s; expanded20167-move pocket and intermediate20448-move
+two-operation failures retained, not relabelled passing. Generator scale0.25
+keeps the approved20000 cap. Core1204, frontend1360+10, targeted14+10, Halfpipe16,
+native WASM23PASS; fmt/Clippy/typecheck PASS. Details and full evidence:
+[TEST1 report](../releases/TEST1_RESULTS_2026_10_18.md).
+TEST1 overall remains open for full SAFE-Z/D2; review ivac-930yx, larger-domain
+observation ivac-53ky9. No commit/push/publication. HARD STOP.
+
+
+## 2026-10-18 — SAFE-Z extended checkpoint, pipeline60
+
+Accepted TEST1 bounded review ivac-930yx. Reproduced and corrected a sloped-move
+holder-envelope false negative (ivac-kot1d) and silent acceptance of ShopBot
+park_at_home (ivac-dzsan). Cache version60; no geometry/post boundary leak.
+12 focused tests,1204 core,14 HATCH/SAFE-Z,27 ShopBot,8 CPS,16 HTTP,23 native WASM,
+47 frontend tests and TEST1 bounded256/256PASS28.35s; fmt/Clippy PASS.
+Characterization proves native byte-stream collision diagnostics missing and UI
+collision bypass configurable; diameter-only body metadata is not complete.
+Proposed ADR-0023 keeps diagnostics but blocks executable publication and refuses
+fixture-bearing direct streams; no global guard implemented without approval.
+[Results/evidence](../releases/SAFE_Z_EXTENDED_RESULTS_2026_10_18.md).
+Review ivac-6cske OPEN; overall SAFE-Z/TEST1 still OPEN. No commit/push/publication.
+HARD STOP.
+
+## 2026-10-18 — ADR-0023 publication guard, pipeline61
+
+- User accepted prior SAFE-Z findings and authorized ADR-0023 implementation.
+- Added common structured collision refusal with preview-only payload; raw and
+  preview-aware fixture streams refuse before bytes, HTTP before success status.
+- Separated declared cutter/body envelope from incomplete metadata; no inferred
+  drill lengths. Preserved async cancellation and existing output guards.
+- Preserved rejected preview in the UI, removed fixture preference bypass, fixed
+  narrow-screen dirty/stale confusion, retained save/history compatibility.
+- [Results and bounded evidence](../releases/ADR0023_PUBLICATION_GUARD_RESULTS_2026_10_18.md).
+  Human review ivac-8371y; full SAFE-Z/TEST1 and platform/physical gates remain open.
+- No commit/push/publication. HARD STOP.
+
+
+## 2026-10-18 — Final SAFE-Z / TEST1 consolidation, pipeline61
+
+User authorized consolidation only. Mapped Z01–Z08 to fixed/generated evidence;
+reconciled stale planning states and explicit unknown/refused/runtime boundaries.
+Fresh29 focused tests PASS; resource counterexample still20167 moves (expected
+budget failure).27 prior source hashes and53 archived manifest entries verified;
+940 source/build/test files fingerprinted. No production change or latency claim.
+Resource/cancellation remain conditional reserves pending representative packaged
+runtime checks. Report: `docs/releases/FINAL_CONSOLIDATION_2026_10_18.md`.
+Human review ivac-l6ouh OPEN, ADR UX ivac-8371y separate. No commit/push/package/
+publication. HARD STOP; candidate preparation needs separate authorization.
+
+
+## 2026-10-18 — User accepts pending delivered milestones and authorizes beta.3 candidates
+
+Explicit user approval recorded for all delivered review checkpoints, including
+GEOM1/FS/UX, bounded TEST1/SAFE-Z, ADR-0023 and final consolidation. Reviewed
+bounded limits/reserves retained; platform/workshop records remain observations
+to obtain, not synthetic results. All940 source-reference hashes match before
+version-only publication changes. Workspace/Cargo.lock/Tauri/schema advance to
+beta.3, pipeline61 unchanged. User authorizes all pending source commit/push,
+three new candidate builds, refreshed test kit and root native screenshots.
+[Decision and delivery record](../releases/ACCEPTANCE_CANDIDATES_2026_10_18.md).
+Historical reports, installers and evidence preserved; no tag or Release.

@@ -1,0 +1,6 @@
+
+> codegen
+> openapi-typescript ../schema/openapi.yaml -o src/lib/api/generated.ts
+
+✨ openapi-typescript 7.13.0
+🚀 ../schema/openapi.yaml → src/lib/api/generated.ts [70.9ms]

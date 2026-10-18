@@ -33,7 +33,7 @@
 use crate::gcode::preview::{MoveKind, ToolpathSegment};
 use crate::sim::heightmap::ToolProfile;
 use crate::sim::holder::HolderProfile;
-use crate::sim::sweep::{for_each_swept_cell, HeightmapLayout, SurfaceField};
+use crate::sim::sweep::{for_each_motion_cell, HeightmapLayout, SurfaceField};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum RapidCheck {
@@ -71,6 +71,9 @@ pub fn check_rapid_against_stock<S: SurfaceField>(
 ) -> RapidCheck {
     debug_assert!(matches!(segment.kind, MoveKind::Rapid));
 
+    if segment.from.z.min(segment.to.z) >= f64::from(field.surface_top_z()) {
+        return RapidCheck::Clear;
+    }
     let layout = HeightmapLayout::of_surface(field);
 
     // ─────────── (a) cutter-tip envelope walk ───────────
@@ -80,7 +83,7 @@ pub fn check_rapid_against_stock<S: SurfaceField>(
     let pz_min = segment.from.z.min(segment.to.z);
     let mut tip_worst: Option<(f32, u32, u32, f64)> = None;
     if pz_min < f64::from(field.surface_top_z()) {
-        for_each_swept_cell(&layout, segment, profile, |ix, iy, _r, cutter_pz, dz| {
+        for_each_motion_cell(&layout, segment, profile, |ix, iy, _r, cutter_pz, dz| {
             let cell_z = field.surface_z(ix, iy);
             let cutter_surface_z = cutter_pz as f32 + dz;
             if cell_z > cutter_surface_z {
@@ -111,114 +114,32 @@ pub fn check_rapid_against_stock<S: SurfaceField>(
     let Some(holder) = holder else {
         return RapidCheck::Clear;
     };
-    let max_r = holder.max_radius();
-    if max_r <= 0.0 {
-        return RapidCheck::Clear;
-    }
-    let cutting_r = holder.cutting_radius();
-    // The shank/holder is only above the tip; if the *entire* tool
-    // body (tip + total_length) stays above the heightmap top, no
-    // hit possible. The body top is `rapid_pz + total_length`.
-    // Conservatively: if even the lowest tip + 0 mm (the tip itself)
-    // is already at top_z+ we'd have bailed (a) wouldn't have run; but
-    // the shank can collide even when the tip itself is above top_z
-    // — that's the whole point of this pass.
-
-    let cell = layout.cell;
-    let inv_cell = 1.0 / cell;
-    let max_col = layout.cols.saturating_sub(1);
-    let max_row = layout.rows.saturating_sub(1);
-
-    let from = &segment.from;
-    let to = &segment.to;
-    let min_x = from.x.min(to.x) - max_r;
-    let max_x = from.x.max(to.x) + max_r;
-    let min_y = from.y.min(to.y) - max_r;
-    let max_y = from.y.max(to.y) + max_r;
-    let fx0 = (min_x - layout.origin_x) * inv_cell;
-    let fy0 = (min_y - layout.origin_y) * inv_cell;
-    let fx1 = (max_x - layout.origin_x) * inv_cell;
-    let fy1 = (max_y - layout.origin_y) * inv_cell;
-    if fx1 < 0.0 || fy1 < 0.0 {
-        return RapidCheck::Clear;
-    }
-    if fx0 > f64::from(layout.cols) || fy0 > f64::from(layout.rows) {
-        return RapidCheck::Clear;
-    }
-    let ix0 = fx0.floor().max(0.0) as u32;
-    let iy0 = fy0.floor().max(0.0) as u32;
-    let ix1 = (fx1.floor().max(0.0) as u32).min(max_col);
-    let iy1 = (fy1.floor().max(0.0) as u32).min(max_row);
-    if ix0 > ix1 || iy0 > iy1 {
-        return RapidCheck::Clear;
-    }
-
-    let dx = to.x - from.x;
-    let dy = to.y - from.y;
-    let len_sq = dx * dx + dy * dy;
-    let pure_plunge = len_sq < 1e-12;
-    let plunge_z = from.z.min(to.z);
-    let max_r_sq = max_r * max_r;
-    let cutting_r_sq = cutting_r * cutting_r;
-    let mut shank_worst: Option<(f32, u32, u32, f64)> = None;
-
-    for iy in iy0..=iy1 {
-        for ix in ix0..=ix1 {
-            let cx = layout.origin_x + (f64::from(ix) + 0.5) * cell;
-            let cy = layout.origin_y + (f64::from(iy) + 0.5) * cell;
-            let (r_sq, cutter_pz) = if pure_plunge {
-                let ex = cx - from.x;
-                let ey = cy - from.y;
-                (ex * ex + ey * ey, plunge_z)
-            } else {
-                let t = (((cx - from.x) * dx + (cy - from.y) * dy) / len_sq).clamp(0.0, 1.0);
-                let px = from.x + t * dx;
-                let py = from.y + t * dy;
-                let ex = cx - px;
-                let ey = cy - py;
-                (ex * ex + ey * ey, from.z + (to.z - from.z) * t)
-            };
-            if r_sq > max_r_sq {
-                continue;
-            }
-            // Below the cutting radius is the tip envelope; already
-            // tested in pass (a). Avoid double-emit.
-            if r_sq <= cutting_r_sq {
-                continue;
-            }
-            let r = r_sq.sqrt();
-            let Some(holder_lower_z) = holder.lowest_z_for_radius(r) else {
-                continue;
-            };
-            let cell_z = field.surface_z(ix, iy);
-            // Shank/holder surface at radial offset r is at
-            // `cutter_pz + holder_lower_z`. A cell strictly above that
-            // height is a collision.
-            let body_z = cutter_pz + holder_lower_z;
-            if f64::from(cell_z) > body_z {
-                let excess = (f64::from(cell_z) - body_z) as f32;
-                match shank_worst {
-                    Some((best, _, _, _)) if excess <= best => {}
-                    _ => shank_worst = Some((excess, ix, iy, cutter_pz)),
-                }
-            }
+    let footprint = ToolProfile::BallNose {
+        r: holder.max_radius() as f32,
+    };
+    let mut worst: Option<(f64, u32, u32, f64)> = None;
+    for_each_motion_cell(&layout, segment, &footprint, |ix, iy, r, pz, _| {
+        let r = f64::from(r);
+        if r <= holder.cutting_radius() {
+            return;
         }
-    }
-
-    match shank_worst {
+        let Some(lower) = holder.lowest_z_for_radius(r) else {
+            return;
+        };
+        let excess = f64::from(field.surface_z(ix, iy)) - pz - lower;
+        if excess > 0. && worst.map_or(true, |(best, _, _, _)| excess > best) {
+            worst = Some((excess, ix, iy, pz));
+        }
+    });
+    match worst {
         None => RapidCheck::Clear,
-        Some((_excess, ix, iy, rapid_pz)) => {
-            let worst_x = layout.origin_x + (f64::from(ix) + 0.5) * cell;
-            let worst_y = layout.origin_y + (f64::from(iy) + 0.5) * cell;
-            let worst_cell_z = field.surface_z(ix, iy);
-            RapidCheck::Collision {
-                worst_x,
-                worst_y,
-                worst_cell_z,
-                rapid_pz,
-                subkind: RapidCollisionSubkind::Shank,
-            }
-        }
+        Some((_, ix, iy, pz)) => RapidCheck::Collision {
+            worst_x: layout.origin_x + (f64::from(ix) + 0.5) * layout.cell,
+            worst_y: layout.origin_y + (f64::from(iy) + 0.5) * layout.cell,
+            worst_cell_z: field.surface_z(ix, iy),
+            rapid_pz: pz,
+            subkind: RapidCollisionSubkind::Shank,
+        },
     }
 }
 

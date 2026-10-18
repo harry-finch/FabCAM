@@ -1,0 +1,69 @@
+{
+  "source_files_rechecked": 940,
+  "all_source_matches": true,
+  "local_links": [
+    {
+      "document": "docs/releases/FINAL_CONSOLIDATION_2026_10_18.md",
+      "target": "TEST1_RESULTS_2026_10_18.md",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/FINAL_CONSOLIDATION_2026_10_18.md",
+      "target": "FABCAM_V1_SCOPE.md#performance-acceptance-proposal",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/FINAL_CONSOLIDATION_2026_10_18.md",
+      "target": "final-consolidation-2026-10-18-evidence/integrity.json",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/V1_REMAINING_2026_10_18.md",
+      "target": "FINAL_CONSOLIDATION_2026_10_18.md",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/V1_REMAINING_2026_10_18.md",
+      "target": "v1-validation-2026-10-17/PROTOCOLE-V1.md",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/V1_REMAINING_2026_10_18.md",
+      "target": "FABCAM_V1_SCOPE.md",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/V1_REMAINING_2026_10_18.md",
+      "target": "RELEASE_ROADMAP.md",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/TEST1_CONTRACTS.md",
+      "target": "FINAL_CONSOLIDATION_2026_10_18.md",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/TEST1_CONTRACTS.md",
+      "target": "../shopbot-modernization/VCARVE_QUALIFICATION.md#numerical-budget-software-not-machining-accuracy",
+      "exists": true
+    },
+    {
+      "document": "docs/releases/SAFE_Z_CONTRACTS.md",
+      "target": "FINAL_CONSOLIDATION_2026_10_18.md",
+      "exists": true
+    }
+  ],
+  "fresh_tests": {
+    "hatch_safe_z": 14,
+    "safe_z_extended_including_four_oracle_self_checks": 15
+  },
+  "expected_resource_replay": {
+    "exit": 1,
+    "moves": 20167,
+    "budget": 20000,
+    "timeout": false
+  },
+  "environment": "macOS-26.5.2-arm64-arm-64bit",
+  "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+  "no_production_changes_this_checkpoint": true
+}

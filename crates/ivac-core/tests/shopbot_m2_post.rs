@@ -384,6 +384,13 @@ fn m3_unverified_clearance_refuses_sbp_export() {
     for op in &mut p.operations {
         op.params.fast_move_z = clearance;
     }
+    // Known stock now fails earlier in the shared milling preflight.
+    assert!(matches!(
+        post(p.clone()),
+        Err(ivac_core::pipeline::PipelineError::UnsafeClearance(1, _))
+    ));
+    // The existing ShopBot backstop still applies without a stock model.
+    p.stock = None;
     let err = post(p).unwrap_err().to_string();
     assert!(
         err.contains("positive authored clearance Z required"),
@@ -1062,6 +1069,8 @@ fn ux2_work_zero_translates_actual_output_without_changing_intent_or_depths() {
 fn ux2_fixture_collision_and_pocket_regions_stay_in_the_same_work_frame() {
     use ivac_core::project::{Fixture, FixtureKind};
     let mut p = project("square", "svg");
+    // Known flute volume intersects this clamp above the cutting tip.
+    p.tools[0].flute_length_mm = Some(20.);
     p.fixtures = vec![Fixture {
         id: 7,
         name: "SOFTWARE ONLY obstacle".into(),
@@ -1074,14 +1083,24 @@ fn ux2_fixture_collision_and_pocket_regions_stay_in_the_same_work_frame() {
         z_top: 10.,
         color: 0xffa050c0,
     }];
-    let before = post(p.clone()).unwrap();
+    let before = post(p.clone())
+        .unwrap_err()
+        .to_structured(None)
+        .unwrap()
+        .diagnostic_preview
+        .unwrap();
     assert!(before
         .warnings
         .iter()
         .any(|w| w.kind == "fixture_path_collision" && w.params["fixture_id"] == "7"));
     p.work_offset.x_mm = 10.;
     p.work_offset.y_mm = 20.;
-    let after = post(p).unwrap();
+    let after = post(p)
+        .unwrap_err()
+        .to_structured(None)
+        .unwrap()
+        .diagnostic_preview
+        .unwrap();
     assert_eq!(
         before
             .warnings
@@ -1343,11 +1362,26 @@ fn cam3_direct_entry_tab_lead_direction_matrix_has_output_preview_parity() {
 #[test]
 fn cam3_curved_tabs_preserve_center_and_compensated_radius() {
     use ivac_core::project::{TabPlacement, TabPlacementMode, TabType};
-    for tab_type in [TabType::Rectangle, TabType::Ramp] {
+    for (mode, tab_type) in [
+        (
+            ivac_core::project::TabWidthMode::LegacyCenter,
+            TabType::Rectangle,
+        ),
+        (
+            ivac_core::project::TabWidthMode::LegacyCenter,
+            TabType::Ramp,
+        ),
+        (
+            ivac_core::project::TabWidthMode::MaterialV1,
+            TabType::Rectangle,
+        ),
+        (ivac_core::project::TabWidthMode::MaterialV1, TabType::Ramp),
+    ] {
         let mut p = project("circle", "svg");
         let c = p.operations[0].contour_params_mut().unwrap();
         c.tab_mode = TabPlacementMode::Manual;
         c.tabs.width = 12.;
+        c.tabs.width_mode = mode;
         c.tabs.height = 1.;
         c.tabs.tab_type = tab_type;
         c.tab_placements = vec![TabPlacement {
@@ -1356,7 +1390,7 @@ fn cam3_curved_tabs_preserve_center_and_compensated_radius() {
             width_override_mm: None,
             height_override_mm: None,
         }];
-        let response = post(p).unwrap();
+        let response = post(p).unwrap_or_else(|e| panic!("{mode:?}/{tab_type:?}: {e:?}"));
         let moves = parse(&response.gcode);
         // Circle source is centered (60,60), radius25. The manual eighth
         // perimeter location may traverse either orientation; probe all four
@@ -1387,23 +1421,29 @@ fn cam3_curved_tabs_preserve_center_and_compensated_radius() {
 #[test]
 fn cam3_tab_at_entry_cannot_be_plunged_through() {
     use ivac_core::project::{TabPlacement, TabPlacementMode};
-    let mut p = project("square", "svg");
-    let c = p.operations[0].contour_params_mut().unwrap();
-    c.tab_mode = TabPlacementMode::Manual;
-    c.tabs.width = 12.;
-    c.tabs.height = 1.;
-    c.tab_placements = vec![TabPlacement {
-        object_id: 1,
-        t: 0.,
-        width_override_mm: None,
-        height_override_mm: None,
-    }];
-    let response = post(p).unwrap();
-    let minimum = cam3_lowest_z_near(&parse(&response.gcode), [10., 7.]);
-    assert!(
-        minimum.is_finite() && minimum >= -4.0001,
-        "entry destroyed tab: {minimum}"
-    );
+    for mode in [
+        ivac_core::project::TabWidthMode::LegacyCenter,
+        ivac_core::project::TabWidthMode::MaterialV1,
+    ] {
+        let mut p = project("square", "svg");
+        let c = p.operations[0].contour_params_mut().unwrap();
+        c.tab_mode = TabPlacementMode::Manual;
+        c.tabs.width_mode = mode;
+        c.tabs.width = 12.;
+        c.tabs.height = 1.;
+        c.tab_placements = vec![TabPlacement {
+            object_id: 1,
+            t: 0.,
+            width_override_mm: None,
+            height_override_mm: None,
+        }];
+        let response = post(p).unwrap();
+        let minimum = cam3_lowest_z_near(&parse(&response.gcode), [10., 7.]);
+        assert!(
+            minimum.is_finite() && minimum >= -4.0001,
+            "entry destroyed tab: {minimum}"
+        );
+    }
 }
 
 #[test]

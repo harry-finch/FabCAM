@@ -117,3 +117,19 @@ Source presence and passing UI tests do not establish machining correctness.
 - [GEOM2-A1 precise imported-file dimensions](GEOM2_A1_PLAN.md): **PLANNED — NOT
   IMPLEMENTED**, linked local Width/Height via existing Scale, original GEOM1 pivot
   and source/CAM safeguards; early subtask without selection transforms or nesting.
+
+- [Post-audit consolidation policy](../releases/POST_AUDIT_CONSOLIDATION.md) and
+  [TEST1 bounded property qualification](../releases/TEST1_PLAN.md): PLANNED;
+  V1-required test subset, risk-backed geometry only, broader refactors later.
+
+- [ShopBot V1 workshop additions](../releases/SHOPBOT_WORKSHOP_ADDITIONS.md): planned
+  SAFE-Z assessment, bounded UX8 setup sheet and conditional tab/order qualification.
+- [OMX1 native research](../releases/OMX1_PLAN.md) and [WJ1–WJ4 scope](../releases/FABCAM_V1_5_SCOPE.md):
+  V1.5 required native OMX/MAKE workflow replacing LAYOUT; no format compatibility claimed.
+- [V2+ REST1 / HELIX1 / VCARVE2](../releases/ADVANCED_CAM_PLAN.md): bounded advanced
+  CAM proposals, distinct from residual diagnostics/inlay qualification.
+
+- [ARCH-MACH V1.5 extensibility plan](../releases/ARCH_MACH_PLAN.md),
+  [adding a machine](../development/ADDING_A_MACHINE.md) and
+  [integration specification template](../development/MACHINE_INTEGRATION_TEMPLATE.md):
+  documentation-only contract/workflow, first practical validation through ProtoMAX.

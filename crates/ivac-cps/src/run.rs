@@ -26,7 +26,7 @@ use crate::meta::PostMeta;
 const BUNDLE_NAME: &str = "__ivacbundle__";
 const BUNDLE_HEADER: &str = "(function () {\n";
 const BUNDLE_FOOTER: &str =
-    "\n__ivacExports = { execute: __ivacExecute, inspect: __ivacInspect };\n}).call(this);\n";
+    "\n;\n__ivacExports = { execute: __ivacExecute, inspect: __ivacInspect };\n}).call(this);\n";
 
 /// Line spans of the bundle's constituent files.
 struct SourceMap {
@@ -41,7 +41,11 @@ impl SourceMap {
                 return Some((name, bundle_line - start + 1));
             }
         }
-        None
+        // A malformed post may consume the generated footer before failing.
+        // Attribute only this bounded synthetic tail to the user's final line.
+        let (name, start, len) = self.spans.last()?;
+        (bundle_line >= start + len && bundle_line <= start + len + BUNDLE_FOOTER.lines().count())
+            .then_some((name.as_str(), (*len).max(1)))
     }
 
     /// Rewrite `__ivacbundle__:<line>` stack references and
@@ -72,29 +76,30 @@ impl SourceMap {
             }
         }
         // Parse errors carry "at line N, col M" without a file.
-        if let Some(idx) = out.find("line ") {
-            let digits: String = out[idx + 5..]
-                .chars()
-                .take_while(char::is_ascii_digit)
-                .collect();
-            if let Ok(line) = digits.parse::<usize>() {
-                if let Some((file, rel)) = self.resolve(line) {
-                    out = format!(
-                        "{}{file} line {rel}{}",
-                        &out[..idx],
-                        &out[idx + 5 + digits.len()..]
-                    );
-                }
+        let mut mapped = String::with_capacity(out.len());
+        let mut rest = out.as_str();
+        while let Some(idx) = rest.find("at line ") {
+            mapped.push_str(&rest[..idx + 3]);
+            rest = &rest[idx + 3..];
+            let digits: String = rest[5..].chars().take_while(char::is_ascii_digit).collect();
+            if let Some((file, rel)) = digits.parse().ok().and_then(|line| self.resolve(line)) {
+                mapped.push_str(&format!("{file} line {rel}"));
+                rest = &rest[5 + digits.len()..];
+            } else {
+                mapped.push_str("line ");
+                rest = &rest[5..];
             }
         }
+        mapped.push_str(rest);
+        out = mapped;
         out
     }
 
     /// The file a parse-error line falls into (parse errors report
     /// bundle-absolute lines and no path).
     fn file_of_message(&self, message: &str) -> Option<&str> {
-        let idx = message.find("line ")?;
-        let digits: String = message[idx + 5..]
+        let idx = message.rfind("at line ")?;
+        let digits: String = message[idx + 8..]
             .chars()
             .take_while(char::is_ascii_digit)
             .collect();
@@ -437,4 +442,30 @@ pub fn inspect_post_with_limits(
         .map_err(|e| PostError::Contract(e.to_string()))?
         .ok_or_else(|| PostError::Contract("inspect returned undefined".into()))?;
     serde_json::from_value(meta).map_err(|e| PostError::Contract(e.to_string()))
+}
+
+#[cfg(test)]
+mod audit_15_16 {
+    use super::*;
+    #[test]
+    fn unfinished_script_points_to_user_eof() {
+        for script in ["function onOpen() {", "/* unclosed", "var x ="] {
+            let error = inspect_post(script, "broken.cps").expect_err(script);
+            assert!(matches!(error, PostError::Parse { .. }), "{error}");
+            let text = error.to_string();
+            assert!(text.contains("broken.cps line 1"), "{text}");
+            assert!(!text.contains(BUNDLE_NAME), "{text}");
+        }
+    }
+    #[test]
+    fn positions_do_not_rewrite_polyline_text() {
+        let (_, map) = build_bundle("var x = ;", "broken.cps");
+        let line = map.spans.last().unwrap().1;
+        let message = format!("polyline 3 invalid line 2 at line {line}, col 5");
+        assert_eq!(map.file_of_message(&message), Some("broken.cps"));
+        assert_eq!(
+            map.remap_message(&message),
+            "polyline 3 invalid line 2 at broken.cps line 1, col 5"
+        );
+    }
 }

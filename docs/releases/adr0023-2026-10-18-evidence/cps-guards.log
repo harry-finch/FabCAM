@@ -1,0 +1,15 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running tests/shopbot_guards.rs (target/debug/deps/shopbot_guards-1c0668a70ac482a5)
+
+running 8 tests
+test machine_home_park_must_not_be_silently_dropped ... ok
+test positive_output_and_comment_injection ... ok
+test lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test scaffold_work_plane_and_tools_fail_closed ... ok
+test vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test unsupported_records_fail_before_export ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.23s
+

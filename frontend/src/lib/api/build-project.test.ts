@@ -933,3 +933,31 @@ it('preserves unsupported saved V-Carve schedules for backend refusal, including
   });
   expect(op).toMatchObject({ finishStep: 0, throughDepth: -0.2, multiPassRefine: true });
 });
+
+describe('audit 11–12 wire semantics', () => {
+  it('defaults only missing drill angles, preserving explicit 60-degree tools', () => {
+    for (const angle of [undefined, 60, 135]) {
+      const p = buildProject({
+        transformedImport: fakeImport(),
+        machine: baseMachine(),
+        tools: [baseTool({ kind: 'drill', tipAngleDeg: angle })],
+        operations: [profileOp()],
+      });
+      expect(p!.tools[0].tip_angle_deg).toBe(angle ?? 118);
+    }
+  });
+  it('keeps legacy tab semantics until explicit conversion', () => {
+    for (const mode of [undefined, 'material_v1'] as const) {
+      const op = { ...profileOp(), tabsActive: true, tabWidthMode: mode } as OpEntry;
+      const p = buildProject({
+        transformedImport: fakeImport(),
+        machine: baseMachine(),
+        tools: [baseTool()],
+        operations: [op],
+      });
+      expect(JSON.stringify(p!.operations[0])).toContain(
+        `"width_mode":"${mode ?? 'legacy_center'}"`,
+      );
+    }
+  });
+});

@@ -235,6 +235,30 @@ pub fn save_lab_pack(
 mod tests {
     use super::*;
     #[test]
+    fn audit_15_16_lab_rejects_variable_width_and_text_revisions() {
+        let dir = tempfile::tempdir().unwrap();
+        let dir = dir.path().canonicalize().unwrap();
+        let mut pack: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+        ))
+        .unwrap();
+        pack["manifest"]["identity"]["id"] = serde_json::json!("sorbonne-fablab");
+        pack["manifest"]["visibility"] = serde_json::json!("private");
+        pack["manifest"]["distribution"] = serde_json::json!("local_only");
+        pack["records"] = serde_json::json!([]);
+        pack["dataset"]["profile_set"]["profiles"] = serde_json::json!([]);
+        for revision in ["2", "10", "v1", "v1-a", "2026.10"] {
+            pack["manifest"]["identity"]["revision"] = serde_json::json!(revision);
+            assert!(save_lab(&dir, &pack.to_string(), None).is_err());
+        }
+        pack["manifest"]["identity"]["revision"] = serde_json::json!("0000000000000009");
+        save_lab(&dir, &pack.to_string(), None).unwrap();
+        pack["manifest"]["identity"]["revision"] = serde_json::json!("0000000000000010");
+        save_lab(&dir, &pack.to_string(), Some("0000000000000009".into())).unwrap();
+        assert_eq!(std::fs::read_dir(dir).unwrap().count(), 2);
+    }
+
+    #[test]
     fn lab_revisions_use_compare_and_append_not_overwrite() {
         let dir = std::env::temp_dir()
             .canonicalize()

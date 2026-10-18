@@ -180,5 +180,11 @@ export function tryParseStructuredError(input: unknown): WiacError | null {
   if (obj.auto_fix != null && typeof obj.auto_fix === 'object') {
     out.auto_fix = obj.auto_fix as WiacError['auto_fix'];
   }
+  if (obj.diagnostic_preview && typeof obj.diagnostic_preview === 'object') {
+    const preview = obj.diagnostic_preview as Record<string, unknown>;
+    if (Array.isArray(preview.toolpath) && Array.isArray(preview.warnings)) {
+      out.diagnostic_preview = preview as WiacError['diagnostic_preview'];
+    }
+  }
   return out;
 }

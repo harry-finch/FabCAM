@@ -1,0 +1,8 @@
+{
+  "head": "2a3fe5632b4d77ab03d899bcb0a07db54a8b9f7b",
+  "dirty": true,
+  "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+  "pipeline": 59,
+  "source_files": 852,
+  "qualification": "bounded software only; TEST1 overall and SAFE-Z full scope remain open"
+}

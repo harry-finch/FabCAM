@@ -167,3 +167,13 @@ fn vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair() {
             .contains("arcs are unsupported"));
     }
 }
+
+#[test]
+fn machine_home_park_must_not_be_silently_dropped() {
+    let mut v = fixture();
+    v["header"]["parameters"][0]["value"] =
+        json!("{\"mode\":\"mill\",\"tool_change\":\"manual_m0_pause\",\"park_at_home\":true}");
+    let err = run(v).unwrap_err();
+    assert!(err.to_string().contains("parking"), "{err}");
+    assert!(matches!(err, ivac_cps::PostError::PostRuntime { .. }));
+}

@@ -25,6 +25,9 @@ use crate::project::ToolOffset;
 
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema, PartialEq)]
 pub struct Error {
+    /// Inspection-only path from a refused generation; never executable output.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub diagnostic_preview: Option<Box<crate::pipeline::DiagnosticPreview>>,
     pub kind: ErrorKind,
     /// Stable localization key for the message + hint. `None` means the
     /// frontend falls back to the English `message`/`recovery_hint`.
@@ -115,6 +118,7 @@ impl Error {
             recovery_hint: None,
             auto_fix: None,
             span: None,
+            diagnostic_preview: None,
         }
     }
     pub fn bad_input(msg: impl Into<String>) -> Self {

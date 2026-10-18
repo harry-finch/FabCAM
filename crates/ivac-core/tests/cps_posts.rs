@@ -60,6 +60,8 @@ fn fixture_project() -> ivac_core::project::Project {
     profile.id = 1;
     profile.name = "Profile outer".into();
     profile.params.depth = -3.0;
+    // Explicit air clearance: zero at stock top is intentionally refused.
+    profile.params.fast_move_z = 5.0;
     profile.params.step = Some(-1.5);
     profile.source = ivac_core::project::OpSource::Layers {
         layers: vec!["0".into()],
@@ -82,6 +84,7 @@ fn fixture_project() -> ivac_core::project::Project {
         ..Op::default()
     };
     drill.params.depth = -8.0;
+    drill.params.fast_move_z = 5.0;
 
     let mut project = build_project(
         &stock(),
@@ -90,6 +93,17 @@ fn fixture_project() -> ivac_core::project::Project {
         segments,
     );
     project.operations.push(drill);
+    project
+}
+
+/// Historical post-format oracle, with no declared stock/clearance qualification.
+/// Known-stock acceptance is tested separately with explicit 5 mm air clearance.
+fn legacy_post_fixture() -> ivac_core::project::Project {
+    let mut project = fixture_project();
+    project.stock = None;
+    for op in &mut project.operations {
+        op.params.fast_move_z = 0.;
+    }
     project
 }
 
@@ -110,9 +124,25 @@ fn assert_digest(name: &str, text: &str, expected: u64) {
 }
 
 #[test]
+fn legacy_zero_clearance_is_refused_when_stock_is_declared() {
+    let mut project = legacy_post_fixture();
+    project.stock = Some(stock());
+    let error = run_pipeline(
+        PipelineRequest {
+            project,
+            post_processor: Some(PostProcessorKind::Cps),
+            cps_post: Some(selection(CpsPostSource::Bundled { id: "grbl".into() })),
+        },
+        |_, _, _| {},
+    )
+    .unwrap_err();
+    assert!(error.to_string().contains("clearance"));
+}
+
+#[test]
 fn bundled_grbl_snapshot() {
     let response = run_cps(
-        fixture_project(),
+        legacy_post_fixture(),
         CpsPostSource::Bundled { id: "grbl".into() },
     );
     assert_eq!(response.output_extension.as_deref(), Some("gcode"));
@@ -120,9 +150,28 @@ fn bundled_grbl_snapshot() {
     assert!(response.gcode.contains("M30"));
     // Canned cycles expand for GRBL: pecks appear as plain G0/G1.
     assert!(!response.gcode.contains("G83"));
-    // Pipeline 50: two-arc profile now respects winding; only its G2/G3
-    // directions change versus the prior zero-area circle handling.
-    assert_digest("cps_grbl", &response.gcode, 0x8a33_59e1_1295_e3c3);
+    // Pipeline 55: the two-arc closed circle retains G2 on its second
+    // pass instead of incorrectly reversing to G3 as an open contour.
+    let circle = response
+        .gcode
+        .split("(object=1 level=0 pocket=0 segments=2 finish)")
+        .nth(1)
+        .unwrap()
+        .split("(Drill pattern)")
+        .next()
+        .unwrap();
+    assert_eq!(circle.matches("G2 X74.5 I-5.5 F1200").count(), 2);
+    assert!(!circle.contains("G3"));
+    let old_winding = response.gcode.replace(
+        "G1 Z-3. F200\nG2 X74.5 I-5.5 F1200",
+        "G1 Z-3. F200\nG3 X74.5 I-5.5 F1200",
+    );
+    assert_eq!(
+        digest(&old_winding),
+        0x8a33_59e1_1295_e3c3,
+        "reviewed delta must only be second circle pass winding"
+    );
+    assert_digest("cps_grbl", &response.gcode, 0xfbfa_c637_7915_aeab);
 }
 
 #[test]
@@ -134,7 +183,7 @@ fn fanuc_refs_snapshot() {
         return;
     };
     let response = run_cps(
-        fixture_project(),
+        legacy_post_fixture(),
         CpsPostSource::Inline {
             script,
             filename: Some("fanuc.cps".into()),

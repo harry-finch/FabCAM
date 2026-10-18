@@ -47,6 +47,16 @@ use watcher::ProjectWatcher;
 /// We filter by `PPid == our_pid` so a SIGKILL never escapes this
 /// instance — even if another ivac-desktop happens to be running, its
 /// renderer children stay untouched.
+#[cfg(any(target_os = "linux", test))]
+fn is_webkit_command(cmdline: &str) -> bool {
+    matches!(
+        std::path::Path::new(cmdline.split('\0').next().unwrap_or_default())
+            .file_name()
+            .and_then(|n| n.to_str()),
+        Some("WebKitWebProcess" | "WebKitNetworkProcess" | "WebKitGPUProcess")
+    )
+}
+
 #[cfg(target_os = "linux")]
 fn kill_webkit_children() {
     use std::fs;
@@ -82,9 +92,7 @@ fn kill_webkit_children() {
         let Ok(cmdline) = fs::read_to_string(&cmdline_path) else {
             continue;
         };
-        let is_webkit_helper = cmdline.contains("WebKitWebProcess")
-            || cmdline.contains("WebKitNetworkProcess")
-            || cmdline.contains("WebKitGPUProcess");
+        let is_webkit_helper = is_webkit_command(&cmdline);
         if !is_webkit_helper {
             continue;
         }
@@ -288,4 +296,18 @@ fn run_app() -> tauri::Result<()> {
             let _ = &event;
         });
     Ok(())
+}
+
+#[cfg(test)]
+mod audit_15_16 {
+    #[test]
+    fn helper_identity_uses_only_exact_executable_basename() {
+        assert!(super::is_webkit_command(
+            "/usr/lib/WebKitWebProcess\0--arg\0"
+        ));
+        assert!(!super::is_webkit_command(
+            "/usr/bin/editor\0WebKitWebProcess.dxf\0"
+        ));
+        assert!(!super::is_webkit_command("/usr/bin/FakeWebKitWebProcess\0"));
+    }
 }

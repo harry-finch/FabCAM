@@ -38,6 +38,7 @@ const CONTOUR = [
   'leadOut',
   'finishStep',
   'tabType',
+  'tabWidthMode',
   'tabRampAngleDeg',
   'tabWidth',
   'tabHeight',
@@ -174,6 +175,7 @@ export function validTemplate(value: unknown): value is OperationTemplate {
     leadInKind: ['off', 'straight', 'arc'],
     leadOutKind: ['off', 'straight', 'arc'],
     tabType: ['rectangle', 'ramp'],
+    tabWidthMode: ['legacy_center', 'material_v1'],
     frameShape: ['rectangle', 'rounded_rectangle'],
   };
   const nested: Record<string, string[]> = {

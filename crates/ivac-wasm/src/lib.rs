@@ -157,9 +157,7 @@ pub fn from_stl(bytes: &[u8], max_dim: u32) -> Result<JsValue, JsValue> {
 pub fn generate(request: JsValue) -> Result<JsValue, JsValue> {
     let req: PipelineRequest = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
     let project = req.project.clone();
-    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        run_pipeline(req, |_phase, _fraction, _msg| {})
-    }));
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| generate_request(req)));
     match result {
         Ok(Ok(resp)) => serde_wasm_bindgen::to_value(&resp).map_err(into_js_error),
         Ok(Err(e)) => match e.to_structured(Some(&project)) {
@@ -361,7 +359,77 @@ pub fn evaluate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
 pub fn generate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
     guard(|| {
         let req = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
-        let result = ivac_core::pipeline::generate_drawing(req).map_err(into_js_error)?;
+        let result = ivac_core::pipeline::generate_drawing(req).map_err(|e| {
+            e.to_structured(None)
+                .map_or_else(|| into_js_error(e), structured_error_to_js)
+        })?;
         serde_wasm_bindgen::to_value(&result).map_err(into_js_error)
     })
+}
+
+// Pure request boundary shared by the JS entry point and native bridge replay.
+// This does not qualify JS serialization or a browser runtime.
+fn generate_request(
+    req: PipelineRequest,
+) -> Result<ivac_core::pipeline::PipelineResponse, ivac_core::pipeline::PipelineError> {
+    run_pipeline(req, |_phase, _fraction, _msg| {})
+}
+#[cfg(all(test, feature = "cps"))]
+mod test1_bridge {
+    use super::*;
+    #[test]
+    fn native_bridge_preserves_non_executable_collision_diagnostic() {
+        let mut req: PipelineRequest = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/test1/profile.request.json"
+        ))
+        .unwrap();
+        req.project.fixtures.push(ivac_core::project::Fixture {
+            id: 1,
+            name: "clamp".into(),
+            origin: (0., 0.),
+            z_bottom: -100.,
+            z_top: 100.,
+            color: 0,
+            kind: ivac_core::project::FixtureKind::Box {
+                width: 1000.,
+                depth: 1000.,
+            },
+        });
+        let error = generate_request(req)
+            .unwrap_err()
+            .to_structured(None)
+            .unwrap();
+        assert!(!error
+            .diagnostic_preview
+            .as_ref()
+            .unwrap()
+            .toolpath
+            .is_empty());
+        assert!(serde_json::to_value(error).unwrap()["diagnostic_preview"]
+            .get("gcode")
+            .is_none());
+    }
+    #[test]
+    fn shared_profile_and_vcarve_requests_replay_through_native_bridge() {
+        for (request, expected) in [
+            (
+                include_str!("../../../tests/fixtures/test1/profile.request.json"),
+                include_str!("../../../tests/fixtures/test1/profile.sbp"),
+            ),
+            (
+                include_str!("../../../tests/fixtures/test1/vcarve.request.json"),
+                include_str!("../../../tests/fixtures/test1/vcarve.sbp"),
+            ),
+        ] {
+            let req: PipelineRequest = serde_json::from_str(request).unwrap();
+            let result = generate_request(req.clone()).unwrap();
+            assert_eq!(result.gcode, expected);
+            let mut invalid = req;
+            invalid.project.stock.as_mut().unwrap().top_z_mm = 18.;
+            assert!(matches!(
+                generate_request(invalid),
+                Err(ivac_core::pipeline::PipelineError::UnsafeClearance(..))
+            ));
+        }
+    }
 }
