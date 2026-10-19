@@ -28,7 +28,12 @@ PROFILE="$(mktemp -d)"
 cleanup() {
   [[ -n "${PREVIEW_PID:-}" ]] && kill "$PREVIEW_PID" 2>/dev/null || true
   [[ -n "${CHROME_PID:-}" ]] && kill "$CHROME_PID" 2>/dev/null || true
-  rm -rf "$PROFILE"
+  # Let Chrome (and its child processes) finish writing to the profile
+  # before deleting it; otherwise `rm -rf` races ("Directory not empty")
+  # and the failing trap turns a passing smoke run into a non-zero exit.
+  [[ -n "${CHROME_PID:-}" ]] && wait "$CHROME_PID" 2>/dev/null || true
+  sleep 1
+  rm -rf "$PROFILE" 2>/dev/null || true
 }
 trap cleanup EXIT
 

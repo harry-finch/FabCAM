@@ -24,6 +24,13 @@ the desktop bundle is produced by Tauri 2.
 | cargo-deny  | ≥ 0.19           | Optional but recommended; CI runs it. `cargo install cargo-deny --locked`. |
 | sccache     | ≥ 0.15           | Required — `.cargo/config.toml` sets it as `rustc-wrapper` (compile cache; big win after `cargo clean` / across worktrees). `cargo install sccache --locked`, or delete the `[build]` block from `.cargo/config.toml` to opt out. |
 
+> **Reproducible tool setup (release gate).** CI uses Node 24 (`.nvmrc`) and pnpm 10;
+> the release gate was last validated with pnpm 10.34.7. Node ≥ 25 no longer bundles
+> Corepack, so install pnpm locally: `npm install --prefix ~/.local/pnpm-10 pnpm@10.34.7`
+> and put `~/.local/pnpm-10/node_modules/.bin` on `PATH`. `scripts/pre-release.sh` runs the
+> UI smoke gate only if `chromium`, `chromium-browser` or `google-chrome` is on `PATH`
+> (on macOS, symlink the Google Chrome binary as `google-chrome` in a directory on `PATH`).
+
 ### Linux (Debian/Ubuntu)
 
 ```sh

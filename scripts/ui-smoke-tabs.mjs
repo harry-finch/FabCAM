@@ -1,85 +1,71 @@
-// CDP smoke test for the tab freeze: boot the built app, click the
-// Machine and Tool library tabs, and verify the JS thread stays
-// responsive (the bug was an infinite self-invalidating $effect loop
-// that hard-froze the app the moment the tab's panel mounted).
-const CDP_PORT = process.env.CDP_PORT ?? '9224';
-const APP_URL = process.env.APP_URL ?? 'http://localhost:4173/';
+// CDP smoke test for the Atelier shell: boots the built app and checks
+//  - the Welcome screen is shown with no active project (workspace hidden),
+//  - creating a project reveals the workspace and hides Welcome,
+//  - every major area opens, stays responsive (the d41i/tab-freeze bug was
+//    an infinite $effect loop that hard-froze the app on panel mount) and
+//    shows exactly one visible panel,
+//  - Machine > General (settings form) and Machine > Tools (tooling) render,
+//  - no uncaught JS exceptions occur anywhere in the run.
+import { connect, sleep, MAIN_NAV, MACHINE_NAV } from './ui-smoke-lib.mjs';
 
-function evalIn(ws, id, expression, awaitPromise = false) {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error(`FROZEN: evaluate #${id} timed out`)), 5000);
-    const onMsg = (ev) => {
-      const msg = JSON.parse(ev.data);
-      if (msg.id === id) {
-        clearTimeout(timer);
-        ws.removeEventListener('message', onMsg);
-        resolve(msg.result?.result?.value);
-      }
-    };
-    ws.addEventListener('message', onMsg);
-    ws.send(JSON.stringify({ id, method: 'Runtime.evaluate', params: { expression, returnByValue: true, awaitPromise } }));
-  });
-}
+const { evalIn, clickButton, exceptions } = await connect();
+let failed = false;
+const check = (label, ok) => { console.log(`${label}: ${ok ? 'OK' : 'FAIL'}`); if (!ok) failed = true; };
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-const res = await fetch(`http://127.0.0.1:${CDP_PORT}/json/new?${encodeURIComponent(APP_URL)}`, { method: 'PUT' });
-const target = await res.json();
-const ws = new WebSocket(target.webSocketDebuggerUrl);
-await new Promise((r, j) => { ws.addEventListener('open', r); ws.addEventListener('error', j); });
-
-const exceptions = [];
-ws.addEventListener('message', (ev) => {
-  const msg = JSON.parse(ev.data);
-  if (msg.method === 'Runtime.exceptionThrown') {
-    exceptions.push(msg.params.exceptionDetails?.exception?.description ?? msg.params.exceptionDetails?.text ?? 'unknown');
-  }
-});
-ws.send(JSON.stringify({ id: 1, method: 'Runtime.enable', params: {} }));
-
-let id = 10;
-// Wait for boot (tab strip present).
+// Boot: the six-area navigation landmark is present.
 let booted = false;
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 30 && !booted; i++) {
   await sleep(500);
-  try {
-    booted = await evalIn(ws, id++, `document.querySelectorAll('.main-tab').length === 6`);
-    if (booted) break;
-  } catch { /* still loading */ }
+  booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 6`).catch(() => false);
 }
-console.log('boot:', booted ? 'OK' : 'FAILED');
+check('boot (6 areas)', booted);
 if (!booted) process.exit(1);
 
-for (const [idx, name] of [[2, 'tools'], [1, 'machine'], [3, 'settings'], [4, 'help'], [5, 'about'], [0, 'project']]) {
-  await evalIn(ws, id++, `document.querySelectorAll('.main-tab')[${idx}].click(); true`);
+// Welcome screen with no active project.
+const welcome = await evalIn(`({
+  welcome: !!document.querySelector('main.welcome'),
+  hasNew: [...document.querySelectorAll('main.welcome button')].some((b) => b.textContent.trim().startsWith('New project')),
+  workspaceHidden: getComputedStyle(document.querySelector('main.split')).display === 'none',
+})`);
+check('welcome shown, workspace hidden', welcome.welcome && welcome.hasNew && welcome.workspaceHidden);
+
+// Create a project from Welcome.
+check('click "New project"', await clickButton('New project', 'main.welcome'));
+await sleep(2000);
+const created = await evalIn(`({
+  welcomeGone: !document.querySelector('main.welcome'),
+  workspaceVisible: getComputedStyle(document.querySelector('main.split')).display !== 'none',
+})`);
+check('project created, workspace visible', created.welcomeGone && created.workspaceVisible);
+
+// Navigate every major area; each must answer a probe and show one panel.
+for (const [label, name] of [['Tool library', 'tools'], ['Machine', 'machine'], ['Settings', 'settings'], ['Help', 'help'], ['About', 'about']]) {
+  await clickButton(label, MAIN_NAV);
   await sleep(1500);
-  // Responsiveness probe: a frozen effect loop never answers this.
-  const alive = await evalIn(ws, id++, `1 + 1`).then((v) => v === 2).catch(() => false);
-  const visible = await evalIn(
-    ws,
-    id++,
-    idx === 0
-      ? `getComputedStyle(document.querySelector('main.split')).display !== 'none'`
-      : `[...document.querySelectorAll('main.tab-panel')].some((p) => getComputedStyle(p).display !== 'none')`,
-  ).catch(() => false);
-  console.log(`tab ${name}: responsive=${alive ? 'OK' : 'FROZEN'} visible=${visible ? 'OK' : 'NO'}`);
-  if (!alive) process.exit(2);
+  const alive = await evalIn('1 + 1').then((v) => v === 2).catch(() => false);
+  if (!alive) { console.log(`area ${name}: FROZEN`); process.exit(2); }
+  const visiblePanels = await evalIn(`[...document.querySelectorAll('main.tab-panel')].filter((p) => getComputedStyle(p).display !== 'none').length`);
+  const splitHidden = await evalIn(`getComputedStyle(document.querySelector('main.split')).display === 'none'`);
+  check(`area ${name}: responsive, one panel, workspace hidden`, visiblePanels === 1 && splitHidden);
 }
 
-// Machine sub-tabs: Settings form mounts the embedded MachineDialog.
-await evalIn(ws, id++, `document.querySelectorAll('.main-tab')[1].click(); true`);
-await sleep(300);
-await evalIn(ws, id++, `[...document.querySelectorAll('.sub-tab')].find((b) => b.textContent.trim() === 'Settings')?.click(); true`);
-await sleep(1200);
-const aliveSettings = await evalIn(ws, id++, `2 + 2`).then((v) => v === 4).catch(() => false);
-const settingsVisible = await evalIn(ws, id++, `!!document.querySelector('.embedded-shell .grid')`).catch(() => false);
-console.log(`machine>settings: responsive=${aliveSettings ? 'OK' : 'FROZEN'} form=${settingsVisible ? 'OK' : 'NO'}`);
-
-// Tooling chooser rendered?
-await evalIn(ws, id++, `[...document.querySelectorAll('.sub-tab')].find((b) => b.textContent.trim() === 'Tooling')?.click(); true`);
+// Machine sections: General (settings form) then Tools (tooling).
+await clickButton('Machine', MAIN_NAV);
 await sleep(500);
-const tooling = await evalIn(ws, id++, `!!document.querySelector('.tooling')`).catch(() => false);
-console.log(`machine>tooling: rendered=${tooling ? 'OK' : 'NO'}`);
+await clickButton('General', MACHINE_NAV);
+await sleep(1000);
+check('machine > general: settings form', await evalIn(`!!document.querySelector('.embedded-shell .grid')`));
+await clickButton('Tools', MACHINE_NAV);
+await sleep(800);
+const tooling = await evalIn(`!!document.querySelector('.tooling')`);
+const pressed = await evalIn(`document.querySelector('${MACHINE_NAV} button[aria-pressed="true"]')?.textContent.trim()`);
+check('machine > tools: tooling rendered', tooling && pressed === 'Tools');
+
+// Back to the project workspace.
+await clickButton('Project', MAIN_NAV);
+await sleep(800);
+check('project area: workspace visible again', await evalIn(`getComputedStyle(document.querySelector('main.split')).display !== 'none'`));
 
 console.log('page exceptions:', exceptions.length === 0 ? 'none' : exceptions.slice(0, 3).join(' | '));
-process.exit(aliveSettings && tooling ? 0 : 3);
+if (exceptions.length > 0) failed = true;
+process.exit(failed ? 3 : 0);

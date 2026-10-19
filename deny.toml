@@ -51,6 +51,26 @@ ignore = [
     "RUSTSEC-2025-0081",  # unic-char-property unmaintained
     "RUSTSEC-2025-0098",  # unic-ucd-version unmaintained
     "RUSTSEC-2025-0100",  # unic-ucd-ident unmaintained
+    # --- Added 2026-10-19 (release-gate closure; human-approved). All four are
+    # "unmaintained" notices, NOT vulnerabilities. Verified: no compatible
+    # (semver-minor) update clears them.
+    # unsafe-libyaml: path xtask -> serde_yaml 0.9 -> unsafe-libyaml. Build
+    # tooling only (schema generation), never shipped. Replacing serde_yaml
+    # risks changing generated schema/openapi.yaml formatting; the maintained
+    # fork serde_yaml_ng still uses unsafe-libyaml.
+    # Review trigger: xtask drops serde_yaml, or a safe-Rust YAML emitter
+    # (e.g. serde-saphyr) is adopted; or the advisory becomes a vulnerability.
+    "RUSTSEC-2024-0449",  # unsafe-libyaml unmaintained (xtask-only)
+    # zvariant / zbus_names / zvariant_derive: path ivac-tauri ->
+    # tauri-plugin-opener (2.5.x–2.7.x all require zbus ^5.9) -> zbus 5 ->
+    # {zvariant, zbus_names, zvariant_derive}. The crates were merged into
+    # zbus >= 6, so the fix is a major zbus migration upstream in Tauri's
+    # plugin, deliberately not forced here.
+    # Review trigger: tauri-plugin-opener (or Tauri) adopts zbus >= 6, or any of
+    # these crates gets a vulnerability advisory; remove all three together.
+    "RUSTSEC-2026-0370",  # zvariant unmaintained (via tauri-plugin-opener -> zbus 5)
+    "RUSTSEC-2026-0371",  # zbus_names unmaintained (same path)
+    "RUSTSEC-2026-0372",  # zvariant_derive unmaintained (same path)
 ]
 
 [licenses]

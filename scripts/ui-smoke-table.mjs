@@ -1,36 +1,15 @@
-// Runtime smoke for the tool-table view: seed a 120-tool inventory via
-// localStorage, then verify filtering, sorting, and pagination in the
-// rendered Tool library tab.
-const CDP_PORT = process.env.CDP_PORT ?? '9224';
-const APP_URL = process.env.APP_URL ?? 'http://localhost:4173/';
+// Runtime smoke for the Tool library: seed a 120-tool inventory via
+// localStorage, then verify list rendering, search filtering, sorting,
+// pagination and tool selection in the rendered Tool library area, and
+// that no uncaught JS exception occurs.
+import { connect, sleep, MAIN_NAV } from './ui-smoke-lib.mjs';
 
-function evalIn(ws, id, expression) {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error(`FROZEN: evaluate #${id} timed out`)), 6000);
-    const onMsg = (ev) => {
-      const msg = JSON.parse(ev.data);
-      if (msg.id === id) {
-        clearTimeout(timer);
-        ws.removeEventListener('message', onMsg);
-        resolve(msg.result?.result?.value);
-      }
-    };
-    ws.addEventListener('message', onMsg);
-    ws.send(JSON.stringify({ id, method: 'Runtime.evaluate', params: { expression, returnByValue: true } }));
-  });
-}
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const { evalIn, clickButton, exceptions } = await connect();
 
-const res = await fetch(`http://127.0.0.1:${CDP_PORT}/json/new?${encodeURIComponent(APP_URL)}`, { method: 'PUT' });
-const target = await res.json();
-const ws = new WebSocket(target.webSocketDebuggerUrl);
-await new Promise((r, j) => { ws.addEventListener('open', r); ws.addEventListener('error', j); });
-let id = 10;
-
-// Wait for first boot (localStorage is per-origin, so the seed has to
-// happen ON the app origin), then seed 120 inventory tools and reload.
+// localStorage is per-origin: wait for first boot on the app origin, seed
+// 120 inventory tools, reload.
 await sleep(4000);
-await evalIn(ws, id++, `
+await evalIn(`
   const tools = Array.from({length: 120}, (_, i) => ({
     id: i + 1,
     name: 'tool-' + String(i + 1).padStart(3, '0'),
@@ -47,55 +26,68 @@ await evalIn(ws, id++, `
   true
 `);
 await sleep(5000);
-const booted = await evalIn(ws, id++, `document.querySelectorAll('.main-tab').length === 6`);
+const booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 6`);
 console.log('boot:', booted ? 'OK' : 'FAILED');
 if (!booted) process.exit(1);
 
-await evalIn(ws, id++, `document.querySelectorAll('.main-tab')[2].click(); true`);
-await sleep(1200);
+await clickButton('Tool library', MAIN_NAV);
+await sleep(1500);
 
-const r1 = await evalIn(ws, id++, `({
-  rows: document.querySelectorAll('.table .row:not(.head)').length,
-  pager: document.querySelector('.table-pager')?.textContent.replace(/\\s+/g,' ').trim() ?? null,
+const snapshot = () => evalIn(`({
+  items: document.querySelectorAll('.tool-list button[data-tool-id]').length,
+  first: document.querySelector('.tool-list button[data-tool-id]')?.textContent.replace(/\\s+/g, ' ').trim() ?? null,
+  pager: document.querySelector('.table-pager span')?.textContent ?? null,
+  hasPager: !!document.querySelector('.table-pager'),
   count: document.querySelector('.tc-count')?.textContent ?? null,
 })`);
+
+const r1 = await snapshot();
 console.log('page1:', JSON.stringify(r1));
 
-// Filter to torches: 12 rows, pager disappears.
-await evalIn(ws, id++, `
+// Filter to torches: 12 items, pager disappears.
+await evalIn(`
   const inp = document.querySelector('.tc-search');
-  const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
-  set.call(inp, 'plasma');
+  Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(inp, 'plasma');
   inp.dispatchEvent(new Event('input', { bubbles: true }));
   true`);
 await sleep(400);
-const r2 = await evalIn(ws, id++, `({
-  rows: document.querySelectorAll('.table .row:not(.head)').length,
-  pager: !!document.querySelector('.table-pager'),
-  firstName: document.querySelector('.table .row:not(.head) input[type=text]')?.value ?? null,
-})`);
+const r2 = await snapshot();
 console.log('filtered:', JSON.stringify(r2));
 
-// Clear, sort by diameter desc (two clicks), check first row.
-await evalIn(ws, id++, `document.querySelector('.tc-clear')?.click(); true`);
-await sleep(200);
-await evalIn(ws, id++, `[...document.querySelectorAll('.sort-h')].find(b => b.textContent.includes('⌀')).click(); true`);
-await sleep(200);
-await evalIn(ws, id++, `[...document.querySelectorAll('.sort-h')].find(b => b.textContent.includes('⌀')).click(); true`);
+// Clear the filter, sort by diameter, check ordering across pages.
+await clickButton('Clear');
 await sleep(300);
-const r3 = await evalIn(ws, id++, `({
-  arrow: [...document.querySelectorAll('.sort-h')].find(b => b.textContent.includes('⌀')).textContent.includes('▼'),
-  firstDia: document.querySelectorAll('.table .row:not(.head) input[type=number]')[0]?.value ?? null,
+await evalIn(`
+  const s = document.querySelector('label.sort select');
+  s.value = 'diameter';
+  s.dispatchEvent(new Event('change', { bubbles: true }));
+  true`);
+await sleep(300);
+const r3 = await snapshot();
+console.log('sorted:', JSON.stringify(r3));
+
+// Next page: still sorted (diameters rise), pager advances.
+await clickButton('Next', '.table-pager');
+await sleep(300);
+const r4 = await snapshot();
+console.log('page2:', JSON.stringify(r4));
+
+// Select the first tool on this page: detail pane shows it, row is pressed.
+await evalIn(`document.querySelector('.tool-list button[data-tool-id]').click(); true`);
+await sleep(400);
+const r5 = await evalIn(`({
+  id: document.querySelector('.tool-list button[data-tool-id]')?.dataset.toolId,
+  pressed: document.querySelector('.tool-list button[data-tool-id]')?.getAttribute('aria-pressed'),
+  heading: document.querySelector('section.detail h2')?.textContent ?? null,
 })`);
-console.log('sorted-desc:', JSON.stringify(r3));
+console.log('selected:', JSON.stringify(r5));
 
-// Pagination: next page works.
-await evalIn(ws, id++, `[...document.querySelectorAll('.table-pager button')].at(-1).click(); true`);
-await sleep(300);
-const r4 = await evalIn(ws, id++, `document.querySelector('.table-pager span')?.textContent ?? null`);
-console.log('pager-next:', JSON.stringify(r4));
-
-const ok = r1.rows === 50 && r1.pager?.includes('1 of 3') && r2.rows === 12 && r2.pager === false
-  && r3.arrow === true && r3.firstDia === '6' && r4?.includes('2 of 3');
+console.log('page exceptions:', exceptions.length === 0 ? 'none' : exceptions.slice(0, 3).join(' | '));
+const ok = r1.items === 50 && r1.pager === 'Page 1 of 3' && r1.count === '120 tools'
+  && r2.items === 12 && r2.hasPager === false && r2.count === '12 of 120 tools'
+  && r3.items === 50 && r3.count === '120 tools' && r3.first?.includes('Ø0.5 mm')
+  && r4.pager === 'Page 2 of 3' && r4.first?.includes('Ø3 mm')
+  && r5.pressed === 'true' && r5.heading?.startsWith(`#${r5.id} `)
+  && exceptions.length === 0;
 console.log(ok ? 'TABLE SMOKE: PASS' : 'TABLE SMOKE: FAIL');
 process.exit(ok ? 0 : 3);
