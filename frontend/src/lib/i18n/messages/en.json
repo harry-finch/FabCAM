@@ -367,7 +367,7 @@
   "machine.emit_arcs": "Emit G2 / G3 arc moves",
   "machine.emit_arcs.title": "Fit curved polylines into native G2/G3 arc moves where possible. Yields smaller, smoother G-code. Disable if your controller has buggy arc handling.",
   "machine.emit_comments": "Emit comments in G-code",
-  "machine.emit_comments.title": "Include (parenthesized) comments in the G-code — section markers, op names, tool numbers. Disable for controllers that reject comments.",
+  "machine.emit_comments.title": "Include optional descriptive comments (object, level and pass details). Mandatory operator instructions (tool changes, pauses), operation markers and technical tool-provenance markers are always emitted, so this does not produce a comment-free program.",
   "machine.fast_move_z": "Fast-move Z",
   "machine.fast_move_z.title": "Authored clearance Z for rapid moves between cuts. Review it against stock and clamps; a positive value alone is not a clearance validation.",
   "machine.hpgl_note": "Drag mode emits HPGL plotter commands, not G-code. The post-processor profile (templates, axes, etc.) is ignored — HPGL has no analogue for these tokens.",

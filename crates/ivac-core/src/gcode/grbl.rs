@@ -26,6 +26,31 @@ use crate::project::{ToolOffset, UnitSystem};
 /// - Mismatched / nested parens leave the line untouched — those are
 ///   almost certainly not intended as comments.
 fn rewrite_paren_comments_for_grbl(line: &str) -> String {
+    // Text after a `;` outside parentheses is already a line comment: its
+    // parentheses (e.g. a tool name) are inert and must not be rewritten
+    // into extra lines.
+    let mut depth = false;
+    let split = line.char_indices().find_map(|(i, c)| match c {
+        '(' => {
+            depth = true;
+            None
+        }
+        ')' => {
+            depth = false;
+            None
+        }
+        ';' if !depth => Some(i),
+        _ => None,
+    });
+    if let Some(i) = split {
+        let (code, comment) = line.split_at(i);
+        if code.trim().is_empty() {
+            return line.to_string();
+        }
+        let rewritten = rewrite_paren_comments_for_grbl(code);
+        let sep = if rewritten.contains('\n') { "\n" } else { " " };
+        return format!("{}{sep}{}", rewritten.trim_end(), comment.trim_end());
+    }
     let trimmed = line.trim_end();
     // Reject inputs without a `(` quickly; most lines are pure gcode.
     if !trimmed.contains('(') {
@@ -167,7 +192,10 @@ impl PostProcessor for Post {
     }
     fn comment(&mut self, text: &str) {
         // GRBL strips parentheses-wrapped comments; emit as semicolon for safety.
-        self.inner.raw(&format!("; {text}"));
+        self.inner.raw(&format!(
+            "; {}",
+            crate::gcode::comment_text(text, crate::gcode::CommentStyle::Semicolon)
+        ));
     }
     fn unit(&mut self, unit: UnitSystem) {
         self.inner.unit(unit);
@@ -471,6 +499,17 @@ impl PostProcessor for Post {
 mod tests {
     use super::*;
     use crate::gcode::post_profile::PostProfile;
+
+    #[test]
+    fn semicolon_comments_keep_their_inert_parentheses_on_one_line() {
+        for line in ["; pause: swap to tool 2 (x) T5 (y)", "; --- a (b) ---"] {
+            assert_eq!(rewrite_paren_comments_for_grbl(line), line);
+        }
+        assert_eq!(
+            rewrite_paren_comments_for_grbl("G1 X1 (a) ; b (c)"),
+            "G1 X1\n; a\n; b (c)"
+        );
+    }
 
     #[test]
     fn gcxl_raw_paren_comment_rewritten_to_semicolon() {

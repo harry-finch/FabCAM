@@ -340,7 +340,10 @@ impl PostProcessor for Post {
         self.write(cmd);
     }
     fn comment(&mut self, text: &str) {
-        self.write(format!("({text})"));
+        self.write(format!(
+            "({})",
+            crate::gcode::comment_text(text, crate::gcode::CommentStyle::Paren)
+        ));
     }
     fn unit(&mut self, unit: UnitSystem) {
         self.write(match unit {

@@ -104,7 +104,8 @@ use crate::cam::chaining::{classify_containment, segments_to_objects};
 use crate::cam::setup::Setup;
 use crate::cam::VcObject;
 use crate::gcode::{
-    emit_program_begin_with_preload, emit_program_end, grbl, hpgl, linuxcnc, preview, PostProcessor,
+    comment_text, emit_program_begin_with_preload, emit_program_end, grbl, hpgl, linuxcnc, preview,
+    CommentStyle, PostProcessor,
 };
 use crate::geometry::Point2;
 use crate::pipeline_cache::{op_cache_key_with_blobs, GlobalKeyBlobs, OpCacheValue, PipelineCache};
@@ -2194,7 +2195,10 @@ fn emit_program_only_op<P: PostProcessor>(
             if label.is_empty() {
                 post.raw("; ---");
             } else {
-                post.raw(&format!("; --- {label} ---"));
+                post.raw(&format!(
+                    "; --- {} ---",
+                    comment_text(label, CommentStyle::Semicolon)
+                ));
             }
         }
         // GcodeInclude — substitute `{x}`/`{y}`/`{z}`/`{f}`/`{s}`/
@@ -2211,7 +2215,11 @@ fn emit_program_only_op<P: PostProcessor>(
             let header = if path.is_empty() {
                 format!("; OP {} (gcode include)", op.id)
             } else {
-                format!("; OP {} (gcode include: {path})", op.id)
+                format!(
+                    "; OP {} (gcode include: {})",
+                    op.id,
+                    comment_text(path, CommentStyle::Semicolon)
+                )
             };
             post.raw(&header);
             let safe_z = op.params.fast_move_z;
@@ -2426,7 +2434,10 @@ where
         // SectionCtx instead of marker comment lines.
         if cur_group != prev_group && !owns_scaffold {
             if let Some(g) = cur_group {
-                post.raw(&format!("; === GROUP: {g} ==="));
+                post.raw(&format!(
+                    "; === GROUP: {} ===",
+                    comment_text(g, CommentStyle::Semicolon)
+                ));
             } else {
                 // Transitioning OUT of a group into no-group. Emit a
                 // closing marker so the operator can see the phase

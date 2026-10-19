@@ -92,7 +92,7 @@
   "machine.work_area": "Arbeitsbereich",
   "machine.work_area.legend_title": "Arbeitsraum der Maschine in mm — das Rohmaterial nimmt automatisch diese Größe an, wenn keine Zeichnung geladen ist, und (künftige) Simulationsprüfungen verwenden ihn als Referenz für die Software-Endschalter.",
   "machine.emit_comments": "Kommentare im G-Code ausgeben",
-  "machine.emit_comments.title": "Kommentare (in Klammern) in den G-Code einfügen — Abschnittsmarken, Bearbeitungsnamen, Werkzeugnummern. Für Steuerungen deaktivieren, die Kommentare ablehnen.",
+  "machine.emit_comments.title": "Optionale beschreibende Kommentare (Objekt-, Ebenen- und Durchgangsdetails) einfügen. Verbindliche Bedieneranweisungen (Werkzeugwechsel, Pausen), Bearbeitungsmarken und technische Werkzeug-Herkunftsmarken werden immer ausgegeben; das Programm ist also nie kommentarfrei.",
   "machine.emit_arcs": "G2/G3-Kreisbögen ausgeben",
   "machine.emit_arcs.title": "Gekrümmte Polylinien wo möglich in native G2/G3-Kreisbögen umwandeln. Ergibt kleineren, glatteren G-Code. Deaktivieren, wenn Ihre Steuerung Kreisbögen fehlerhaft verarbeitet.",
   "machine.arc_tol": "Toleranz der Bogenanpassung",

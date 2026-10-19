@@ -1338,6 +1338,58 @@ pub fn configure_post_state(
 /// `-0.000` / `-0` — some controllers (Heidenhain, vintage FANUC)
 /// reject a leading minus on a zero coordinate, and operators reading
 /// the listing rightly find `Z-0` confusing.
+/// How a dialect delimits comment text.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CommentStyle {
+    /// `( … )`: the first `)` closes the comment, and a nested `(` is an
+    /// error in LinuxCNC.
+    Paren,
+    /// `; …` to end of line.
+    Semicolon,
+}
+
+/// Make arbitrary text (tool, operation and group names, pause messages,
+/// file paths) safe to place inside one comment line. Control characters,
+/// including newlines, become spaces so the text can never start a new
+/// executable line; in `Paren` style, parentheses become brackets so it can
+/// neither close the comment nor nest one. LinuxCNC "active" comments
+/// (`MSG,`, `DEBUG,`, `PRINT,`, `LOG…`, `PROBEOPEN`/`PROBECLOSE`, `ABORT,`,
+/// and `;py,`) are defused with a leading `_` so text is never interpreted.
+#[must_use]
+pub fn comment_text(text: &str, style: CommentStyle) -> String {
+    let mut out: String = text
+        .chars()
+        .map(|c| match c {
+            c if c.is_control() => ' ',
+            '(' if style == CommentStyle::Paren => '[',
+            ')' if style == CommentStyle::Paren => ']',
+            c => c,
+        })
+        .collect();
+    let lead = out.trim_start().to_ascii_lowercase();
+    let active = match style {
+        CommentStyle::Paren => [
+            "msg,",
+            "debug,",
+            "print,",
+            "log,",
+            "logopen,",
+            "logappend,",
+            "logclose",
+            "probeopen",
+            "probeclose",
+            "abort,",
+        ]
+        .iter()
+        .any(|k| lead.starts_with(k)),
+        CommentStyle::Semicolon => lead.starts_with("py,"),
+    };
+    if active {
+        out.insert(0, '_');
+    }
+    out
+}
+
 #[must_use]
 pub fn fmt_num(v: f64, sep: char) -> String {
     fmt_num_dp(v, sep, 4)
@@ -1535,6 +1587,30 @@ mod tests {
         assert_eq!(fmt_num(0.0, '.'), "0");
         // Comma locale: same suppression rule.
         assert_eq!(fmt_num(-0.0, ','), "0");
+    }
+
+    #[test]
+    fn comment_text_cannot_close_nest_or_break_a_comment() {
+        use CommentStyle::{Paren, Semicolon};
+        assert_eq!(comment_text("x) T5 (y", Paren), "x] T5 [y");
+        assert_eq!(comment_text("a((b))", Paren), "a[[b]]");
+        assert_eq!(comment_text("l1\nG0 Z-50\r\tM6", Paren), "l1 G0 Z-50  M6");
+        assert_eq!(comment_text("l1\nG0 Z-50", Semicolon), "l1 G0 Z-50");
+        // Parentheses are inert after `;`.
+        assert_eq!(comment_text("x) T5 (y", Semicolon), "x) T5 (y");
+        assert_eq!(comment_text("\u{0}\u{1b}[31m", Semicolon), "  [31m");
+        // LinuxCNC active comments are defused; ordinary text is untouched.
+        assert_eq!(comment_text("MSG,boom", Paren), "_MSG,boom");
+        assert_eq!(comment_text(" logopen,/tmp/x", Paren), "_ logopen,/tmp/x");
+        assert_eq!(comment_text("py,import os", Semicolon), "_py,import os");
+        assert_eq!(
+            comment_text("logo engraving ø3", Paren),
+            "logo engraving ø3"
+        );
+        assert_eq!(
+            comment_text("FABTOOL/1 REQUEST 2", Paren),
+            "FABTOOL/1 REQUEST 2"
+        );
     }
 
     #[test]
