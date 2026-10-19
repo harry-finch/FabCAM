@@ -214,6 +214,7 @@ mod tests {
 
     fn seg(from: (f64, f64, f64), to: (f64, f64, f64)) -> ToolpathSegment {
         ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: from.0,
                 y: from.1,

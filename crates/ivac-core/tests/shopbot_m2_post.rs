@@ -1,5 +1,7 @@
-//! M2: actual import -> CAM -> CPS -> OpenSBP, with independent text semantics.
+//! M2: actual import -> CAM -> CPS -> `OpenSBP`, with independent text semantics.
 #![cfg(feature = "cps")]
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::cast_possible_truncation, clippy::float_cmp)]
 mod common;
 use common::{build_project, drill_tool, endmill_tool, op_single_pass, stock_at_origin};
 use ivac_core::input::{import_bytes, ImportOptions};
@@ -138,18 +140,18 @@ fn parse(text: &str) -> Vec<Move> {
             }
             "JZ" => {
                 assert_eq!(values.len(), 1);
-                pos[2] = values[0]
+                pos[2] = values[0];
             }
             "J2" => {
                 assert_eq!(values.len(), 2);
                 assert!(pos[2] > 0., "XY jog below stock");
                 pos[0] = values[0];
-                pos[1] = values[1]
+                pos[1] = values[1];
             }
             "M3" => {
                 assert_eq!(values.len(), 3);
                 assert!(speed > 0.);
-                pos.copy_from_slice(&values)
+                pos.copy_from_slice(&values);
             }
             _ => panic!("undocumented command {line}"),
         }
@@ -203,13 +205,13 @@ fn check(case: &str) {
                     }
                 }
                 if m.to[2] >= 1.5 - 0.0001 {
-                    retract = true
+                    retract = true;
                 }
                 if !m.rapid && m.to[2] < bottom - 0.0001 {
                     assert!(retract, "missing full peck retract");
                     assert!(bottom - m.to[2] <= 2.0001);
                     assert!((m.to[0] - 60.).abs() < 0.0001 && (m.to[1] - 60.).abs() < 0.0001);
-                    assert!((m.speed - 200. / 60.).abs() < 0.000001);
+                    assert!((m.speed - 200. / 60.).abs() < 0.000_001);
                     bottom = m.to[2];
                     retract = false;
                     pecks += 1;
@@ -228,7 +230,7 @@ fn check(case: &str) {
                 }
             }
             assert!(cut.iter().any(|m| (m.to[2] + 5.).abs() < 0.0001));
-            assert!(cut.iter().any(|m| (m.speed - 20.).abs() < 0.000001));
+            assert!(cut.iter().any(|m| (m.speed - 20.).abs() < 0.000_001));
             if case == "circle" {
                 for m in cut.iter().filter(|m| (m.from[2] - m.to[2]).abs() < 0.0001) {
                     let r = (m.to[0] - 60.).hypot(m.to[1] - 60.);
@@ -327,7 +329,8 @@ fn check(case: &str) {
             assert!(first < second);
             let between = &text[first..second];
             assert!(between.contains("Stop spindle manually") && between.contains("Load tool 2"));
-            assert!(text[..second].ends_with("RPM. Wait until ready before OK.\nPAUSE\n"));
+            assert!(text[..second]
+                .ends_with("RPM. Wait until ready before OK.\nPAUSE\n' FABTOOL/1 ACTIVE 1 2\n"));
         }
     }
     // Validate decoded geometry/coverage before accepting a reference update.
@@ -335,23 +338,23 @@ fn check(case: &str) {
 }
 #[test]
 fn square_profile() {
-    check("square")
+    check("square");
 }
 #[test]
 fn circular_profile() {
-    check("circle")
+    check("circle");
 }
 #[test]
 fn island_pocket() {
-    check("pocket")
+    check("pocket");
 }
 #[test]
 fn peck_drilling() {
-    check("drill")
+    check("drill");
 }
 #[test]
 fn multiple_operations() {
-    check("multiple")
+    check("multiple");
 }
 #[test]
 fn unsupported_machine_policies_fail() {
@@ -636,7 +639,7 @@ fn ux1_unqualified_entry_and_origin_combinations_fail_explicitly() {
             }
             "ramp-leads" => {
                 p.operations[0].contour_params_mut().unwrap().leads.r#in =
-                    ivac_core::project::LeadKind::Straight
+                    ivac_core::project::LeadKind::Straight;
             }
             "short" => {
                 p.segments = common::closed_rectangle(10., 10., 11., 11.);
@@ -1081,7 +1084,7 @@ fn ux2_fixture_collision_and_pocket_regions_stay_in_the_same_work_frame() {
         origin: (7., 60.),
         z_bottom: 0.,
         z_top: 10.,
-        color: 0xffa050c0,
+        color: 0xffa0_50c0,
     }];
     let before = post(p.clone())
         .unwrap_err()
@@ -1153,7 +1156,7 @@ fn ux2_invalid_origin_and_obstacle_geometry_fail_before_output() {
             origin: (10., 10.),
             z_bottom: 0.,
             z_top: 5.,
-            color: 0xffa050c0,
+            color: 0xffa0_50c0,
         }];
         assert!(post(p).unwrap_err().to_string().contains("obstacle 3"));
     }

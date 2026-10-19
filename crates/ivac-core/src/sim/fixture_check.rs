@@ -115,6 +115,8 @@ fn check_linear_segment_against_fixtures(
 /// radius bounds sagitta, preventing false negatives; contacts inside this
 /// numerical boundary remain conservatively reported.
 #[must_use]
+// value is range-checked or bounded above; float casts saturate; operand is non-negative by construction (validated, clamped or saturating).
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 pub fn check_segment_against_fixtures(
     segment: &ToolpathSegment,
     tool_radius: f64,
@@ -369,6 +371,7 @@ mod tests {
 
     fn seg(from: (f64, f64, f64), to: (f64, f64, f64)) -> ToolpathSegment {
         ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: from.0,
                 y: from.1,
@@ -699,6 +702,7 @@ mod audit_13_14 {
         for ccw in [false, true] {
             let y = if ccw { 10. } else { -10. };
             let segment = ToolpathSegment {
+                tool_ref: None,
                 from: Pose3 {
                     x: 10.,
                     y: 0.,

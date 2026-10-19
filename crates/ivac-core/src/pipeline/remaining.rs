@@ -282,10 +282,10 @@ fn at_depth(m: &ToolpathSegment, depth: f64) -> Option<PathD> {
             m.from.y + t * (m.to.y - m.from.y),
         )
     };
-    let crossing = if a != b {
-        ((depth - m.from.z) / (m.to.z - m.from.z)).clamp(0., 1.)
-    } else {
+    let crossing = if a == b {
         0.
+    } else {
+        ((depth - m.from.z) / (m.to.z - m.from.z)).clamp(0., 1.)
     };
     Some(vec![
         point(if a { 0. } else { crossing }),
@@ -373,6 +373,8 @@ fn region_area(r: &RegionPreview) -> f64 {
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod tests {
     use super::*;
     use crate::gcode::preview::Pose3;
@@ -386,6 +388,7 @@ mod tests {
     }
     fn movement(a: [f64; 3], b: [f64; 3], kind: MoveKind) -> ToolpathSegment {
         ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: a[0],
                 y: a[1],

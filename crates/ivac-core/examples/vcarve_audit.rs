@@ -1,8 +1,10 @@
 #[path = "../tests/common/mod.rs"]
 mod common;
-use common::*;
-use ivac_core::pipeline::*;
-use ivac_core::project::*;
+use common::{build_project, op_single_pass, stock_at_origin, vbit_tool};
+use ivac_core::pipeline::{
+    run_pipeline, CpsPostSelection, CpsPostSource, PipelineRequest, PostProcessorKind,
+};
+use ivac_core::project::{OpKind, VCarveParams};
 use ivac_core::{Point2, Segment};
 fn main() {
     let pts = [(0., 0.), (20., 0.), (20., 10.), (0., 10.)];
@@ -62,7 +64,7 @@ fn main() {
                     source: CpsPostSource::Bundled {
                         id: "shopbot".into(),
                     },
-                    properties: Default::default(),
+                    properties: std::collections::BTreeMap::default(),
                 }),
             },
             |_, _, _| {},
@@ -88,10 +90,7 @@ fn main() {
     let gouges = paths
         .iter()
         .flatten()
-        .filter(|p| p.0 > 1. && p.2 < -0.010001)
+        .filter(|p| p.0 > 1. && p.2 < -0.010_001)
         .collect::<Vec<_>>();
-    println!(
-        "ramp in shallow target zone (x>1, target=-0.01): {:?}",
-        gouges
-    );
+    println!("ramp in shallow target zone (x>1, target=-0.01): {gouges:?}");
 }

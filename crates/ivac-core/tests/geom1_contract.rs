@@ -1,4 +1,6 @@
 //! Independent analytical references for the GEOM1 contract. No CAM snapshots.
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp)]
 use ivac_core::drawing::{Binding, Contour, Drawing, Identity, Source, Transform, Transition};
 use ivac_core::geometry::{Point2, Segment};
 fn line(a: (f64, f64), b: (f64, f64)) -> Segment {
@@ -170,7 +172,7 @@ fn distance_thresholds_are_visible_mm_independent_of_rotation_translation_mirror
             mirror_x: true,
             mirror_y: false,
         };
-        for (gap, expected) in [(0.099999, false), (0.100001, true)] {
+        for (gap, expected) in [(0.099_999, false), (0.100_001, true)] {
             let d = t.distance_mm(Point2::new(0., 0.), Point2::new(gap / scale, 0.));
             assert_eq!(d > 0.1, expected);
             assert!((d - gap).abs() < 1e-14);
@@ -235,7 +237,7 @@ fn gap_preview_is_nonmutating_and_matches_inclusive_visible_tolerance() {
                 contour: id,
                 edge,
                 connector: false,
-                tolerance_mm: 0.099999
+                tolerance_mm: 0.099_999
             }],
             &[]
         )
@@ -434,8 +436,8 @@ fn scaled_gap_repairs_preserve_independent_import_and_pivot() {
                     connector: true,
                     tolerance_mm: mm,
                 };
-                assert!(d.preview_repairs(&[r(0.099999)], &[]).is_err());
-                let (a, _) = d.preview_repairs(&[r(0.100001)], &[]).unwrap();
+                assert!(d.preview_repairs(&[r(0.099_999)], &[]).is_err());
+                let (a, _) = d.preview_repairs(&[r(0.100_001)], &[]).unwrap();
                 let e = a.evaluate().unwrap();
                 assert!(e.closed[0]);
                 assert_eq!(a.imports[0].pivot, d.imports[0].pivot);
@@ -557,7 +559,7 @@ fn simplification_has_continuous_bound_and_protects_already_modified_edges() {
         deviation_mm: mm,
     };
     assert!(d.preview_repairs(&[r(0.0099)], &[]).is_err());
-    let (a, _) = d.preview_repairs(&[r(0.010001)], &[]).unwrap();
+    let (a, _) = d.preview_repairs(&[r(0.010_001)], &[]).unwrap();
     assert_eq!(a.contours[0].edges.len(), 2);
     assert_eq!(a.contours[0].edges[0].geometry, line((0., 0.), (2., 0.)));
     assert!(a.preview_repairs(&[r(0.1)], &[]).is_err());
@@ -586,7 +588,7 @@ fn simplification_refuses_contained_island_in_removed_sliver() {
             &[Repair::Simplify {
                 contour: c.id,
                 edge: c.edges[0].id,
-                deviation_mm: 0.010001,
+                deviation_mm: 0.010_001,
             }],
             &[],
         )
@@ -605,8 +607,18 @@ fn ui_saved_repair_matches_generated_decoded_program_and_resolved_preview() {
     ))
     .unwrap();
     let response = generate_drawing(request.clone()).unwrap();
+    // ADR-0025 adds only `' FABTOOL/1` provenance comments; every other byte
+    // still equals the saved GEOM1 software reference.
+    let (markers, rest): (Vec<&str>, Vec<&str>) = response
+        .gcode
+        .split_inclusive('\n')
+        .partition(|l| l.starts_with("' FABTOOL/1 "));
     assert_eq!(
-        response.gcode,
+        markers,
+        ["' FABTOOL/1 REQUEST 0 1\n", "' FABTOOL/1 ACTIVE 0 1\n"]
+    );
+    assert_eq!(
+        rest.concat(),
         include_str!("../../../docs/shopbot-modernization/geom1/square-repaired-software-only.sbp")
     );
     let mut reference = request.machining.clone();

@@ -46,6 +46,7 @@ fn assert_snapshot(name: &str, actual: &str, expected: &str) {
 
 fn flat_endmill(number: u32) -> ToolSpec {
     ToolSpec {
+        project_tool_id: None,
         number,
         description: format!("{number}mm flat"),
         diameter: f64::from(number),
@@ -457,6 +458,7 @@ N135 M30\n\
 /// that combination itself).
 fn fixture_b() -> Program {
     let drill = ToolSpec {
+        project_tool_id: None,
         number: 5,
         description: "5mm drill".into(),
         diameter: 5.0,

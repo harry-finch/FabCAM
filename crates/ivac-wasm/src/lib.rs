@@ -67,6 +67,7 @@ pub fn healthz() -> Result<JsValue, JsValue> {
 pub fn version() -> Result<JsValue, JsValue> {
     #[allow(unused_mut)]
     let mut capabilities = vec![
+        "movement-tool-provenance-1",
         "import-dxf",
         "generate-gcode",
         "feeds-speeds",
@@ -423,7 +424,17 @@ mod test1_bridge {
         ] {
             let req: PipelineRequest = serde_json::from_str(request).unwrap();
             let result = generate_request(req.clone()).unwrap();
-            assert_eq!(result.gcode, expected);
+            // ADR-0025 adds only `' FABTOOL/1` provenance comments; every other
+            // byte still equals the saved TEST1 reference.
+            let (markers, rest): (Vec<&str>, Vec<&str>) = result
+                .gcode
+                .split_inclusive('\n')
+                .partition(|l| l.starts_with("' FABTOOL/1 "));
+            assert_eq!(
+                markers,
+                ["' FABTOOL/1 REQUEST 0 1\n", "' FABTOOL/1 ACTIVE 0 1\n"]
+            );
+            assert_eq!(rest.concat(), expected);
             let mut invalid = req;
             invalid.project.stock.as_mut().unwrap().top_z_mm = 18.;
             assert!(matches!(

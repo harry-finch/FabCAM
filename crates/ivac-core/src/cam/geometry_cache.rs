@@ -85,23 +85,39 @@ fn geometry_key(
     GeometryKey(words)
 }
 
+/// One bounded LRU per algorithm. The process-global instances below back
+/// the public entry points; tests build private instances so their entry
+/// counts never observe work done by unrelated tests running in parallel.
+struct GeometryCache<V> {
+    inner: OnceLock<Mutex<LruCache<GeometryKey, V>>>,
+    name: &'static str,
+}
+
+impl<V> GeometryCache<V> {
+    const fn new(name: &'static str) -> Self {
+        Self {
+            inner: OnceLock::new(),
+            name,
+        }
+    }
+
+    fn lock(&self) -> MutexGuard<'_, LruCache<GeometryKey, V>> {
+        self.inner
+            .get_or_init(|| {
+                Mutex::new(LruCache::new(
+                    NonZeroUsize::new(CAPACITY).expect("non-zero capacity"),
+                ))
+            })
+            .lock()
+            .unwrap_or_else(|_| panic!("{} cache mutex poisoned", self.name))
+    }
+}
+
 // ── medial axis ──────────────────────────────────────────────────────
 
 type MedialAxisOutput = Vec<Vec<VPoint>>;
 
-static MEDIAL_AXIS_CACHE: OnceLock<Mutex<LruCache<GeometryKey, MedialAxisOutput>>> =
-    OnceLock::new();
-
-fn medial_axis_lock() -> MutexGuard<'static, LruCache<GeometryKey, MedialAxisOutput>> {
-    MEDIAL_AXIS_CACHE
-        .get_or_init(|| {
-            Mutex::new(LruCache::new(
-                NonZeroUsize::new(CAPACITY).expect("non-zero capacity"),
-            ))
-        })
-        .lock()
-        .expect("medial-axis cache mutex poisoned")
-}
+static MEDIAL_AXIS_CACHE: GeometryCache<MedialAxisOutput> = GeometryCache::new("medial-axis");
 
 /// Cached wrapper around [`medial_axis_cancellable`]. Keys by the
 /// region's outer ring + every hole; recomputes on a miss, returns the
@@ -112,15 +128,24 @@ fn medial_axis_lock() -> MutexGuard<'static, LruCache<GeometryKey, MedialAxisOut
 /// the cache and burn the next caller. Hit path doesn't check cancel
 /// (a clone is cheap and the caller still gets to react to the flag
 /// itself).
+#[must_use]
 pub fn medial_axis_cached(region: &VcRegion, cancel: Option<&CancelToken>) -> MedialAxisOutput {
+    medial_axis_cached_in(&MEDIAL_AXIS_CACHE, region, cancel)
+}
+
+fn medial_axis_cached_in(
+    cache: &GeometryCache<MedialAxisOutput>,
+    region: &VcRegion,
+    cancel: Option<&CancelToken>,
+) -> MedialAxisOutput {
     crate::profile_scope!("medial.cache_lookup");
     let key = geometry_key(ALG_MEDIAL_AXIS, &region.outer, &region.holes, None);
-    if let Some(v) = medial_axis_lock().get(&key).cloned() {
+    if let Some(v) = cache.lock().get(&key).cloned() {
         return v;
     }
     let out = medial_axis_cancellable(region, cancel);
     if !cancel.is_some_and(CancelToken::is_cancelled) {
-        medial_axis_lock().put(key, out.clone());
+        cache.lock().put(key, out.clone());
     }
     out
 }
@@ -129,19 +154,8 @@ pub fn medial_axis_cached(region: &VcRegion, cancel: Option<&CancelToken>) -> Me
 
 type PocketCascadeOutput = Vec<Vec<Point2>>;
 
-static POCKET_CASCADE_CACHE: OnceLock<Mutex<LruCache<GeometryKey, PocketCascadeOutput>>> =
-    OnceLock::new();
-
-fn pocket_cascade_lock() -> MutexGuard<'static, LruCache<GeometryKey, PocketCascadeOutput>> {
-    POCKET_CASCADE_CACHE
-        .get_or_init(|| {
-            Mutex::new(LruCache::new(
-                NonZeroUsize::new(CAPACITY).expect("non-zero capacity"),
-            ))
-        })
-        .lock()
-        .expect("pocket-cascade cache mutex poisoned")
-}
+static POCKET_CASCADE_CACHE: GeometryCache<PocketCascadeOutput> =
+    GeometryCache::new("pocket-cascade");
 
 /// Cached wrapper around [`crate::cam::offsets::pocket_cascade_with_islands`].
 /// Keys by the boundary, every island, and the step delta. Re-runs of
@@ -153,56 +167,40 @@ pub fn pocket_cascade_with_islands_cached(
     islands: &[Vec<Point2>],
     delta: f64,
 ) -> PocketCascadeOutput {
+    pocket_cascade_with_islands_cached_in(&POCKET_CASCADE_CACHE, boundary, islands, delta)
+}
+
+fn pocket_cascade_with_islands_cached_in(
+    cache: &GeometryCache<PocketCascadeOutput>,
+    boundary: &[Point2],
+    islands: &[Vec<Point2>],
+    delta: f64,
+) -> PocketCascadeOutput {
     let key = geometry_key(
         ALG_POCKET_CASCADE_WITH_ISLANDS,
         boundary,
         islands,
         Some(delta),
     );
-    if let Some(v) = pocket_cascade_lock().get(&key).cloned() {
+    if let Some(v) = cache.lock().get(&key).cloned() {
         return v;
     }
     let out = crate::cam::offsets::pocket_cascade_with_islands(boundary, islands, delta);
-    pocket_cascade_lock().put(key, out.clone());
+    cache.lock().put(key, out.clone());
     out
-}
-
-// ── test introspection ───────────────────────────────────────────────
-
-#[cfg(test)]
-pub(crate) fn medial_axis_cache_len() -> usize {
-    medial_axis_lock().len()
-}
-
-#[cfg(test)]
-pub(crate) fn pocket_cascade_cache_len() -> usize {
-    pocket_cascade_lock().len()
-}
-
-#[cfg(test)]
-pub(crate) fn clear_all_caches() {
-    medial_axis_lock().clear();
-    pocket_cascade_lock().clear();
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    /// The medial-axis / pocket-cascade caches are process-global
-    /// (`OnceLock<Mutex<LruCache>>`), so the cache tests — which each
-    /// `clear_all_caches()` then assert a global length — raced under the
-    /// default parallel test runner (one test's clear/insert landed
-    /// between another's populate and its length assertion). Serialize
-    /// them on this guard so each test owns the caches for its whole
-    /// body. `unwrap_or_else(into_inner)` recovers from poisoning so a
-    /// genuine assertion failure in one test doesn't cascade-fail the rest.
-    static TEST_GUARD: Mutex<()> = Mutex::new(());
+    /// A private cache per test: no shared state, so no serialization guard.
+    fn medial() -> GeometryCache<MedialAxisOutput> {
+        GeometryCache::new("test medial-axis")
+    }
 
-    fn lock_caches() -> MutexGuard<'static, ()> {
-        TEST_GUARD
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner)
+    fn cascade() -> GeometryCache<PocketCascadeOutput> {
+        GeometryCache::new("test pocket-cascade")
     }
 
     fn square(side: f64) -> Vec<Point2> {
@@ -223,7 +221,6 @@ mod tests {
 
     #[test]
     fn cached_medial_axis_matches_uncached_on_cold_and_warm_calls() {
-        let _g = lock_caches();
         let region = square_region(13.0);
         let reference = crate::cam::vcarve::medial_axis(&region);
         assert_eq!(medial_axis_cached(&region, None), reference);
@@ -267,13 +264,12 @@ mod tests {
     }
     #[test]
     fn medial_axis_cached_same_region_hits_cache() {
-        let _g = lock_caches();
-        clear_all_caches();
+        let cache = medial();
         let r = square_region(20.0);
-        let v1 = medial_axis_cached(&r, None);
-        let len_after_miss = medial_axis_cache_len();
-        let v2 = medial_axis_cached(&r, None);
-        let len_after_hit = medial_axis_cache_len();
+        let v1 = medial_axis_cached_in(&cache, &r, None);
+        let len_after_miss = cache.lock().len();
+        let v2 = medial_axis_cached_in(&cache, &r, None);
+        let len_after_hit = cache.lock().len();
         assert_eq!(
             len_after_miss, 1,
             "first call should populate the cache (got {len_after_miss})"
@@ -291,19 +287,17 @@ mod tests {
 
     #[test]
     fn medial_axis_cached_different_region_misses() {
-        let _g = lock_caches();
-        clear_all_caches();
-        let _ = medial_axis_cached(&square_region(20.0), None);
-        let _ = medial_axis_cached(&square_region(30.0), None);
-        assert_eq!(medial_axis_cache_len(), 2);
+        let cache = medial();
+        let _ = medial_axis_cached_in(&cache, &square_region(20.0), None);
+        let _ = medial_axis_cached_in(&cache, &square_region(30.0), None);
+        assert_eq!(cache.lock().len(), 2);
     }
 
     #[test]
     fn medial_axis_cached_holes_change_key() {
-        let _g = lock_caches();
-        clear_all_caches();
+        let cache = medial();
         let mut r = square_region(20.0);
-        let _ = medial_axis_cached(&r, None);
+        let _ = medial_axis_cached_in(&cache, &r, None);
         // Same outer, add a hole — different region, must miss.
         r.holes.push(vec![
             Point2::new(5.0, 5.0),
@@ -311,37 +305,34 @@ mod tests {
             Point2::new(10.0, 10.0),
             Point2::new(5.0, 10.0),
         ]);
-        let _ = medial_axis_cached(&r, None);
-        assert_eq!(medial_axis_cache_len(), 2);
+        let _ = medial_axis_cached_in(&cache, &r, None);
+        assert_eq!(cache.lock().len(), 2);
     }
 
     #[test]
     fn pocket_cascade_cached_same_inputs_hits_cache() {
-        let _g = lock_caches();
-        clear_all_caches();
+        let cache = cascade();
         let boundary = square(20.0);
-        let _ = pocket_cascade_with_islands_cached(&boundary, &[], 2.0);
-        let len_after_miss = pocket_cascade_cache_len();
-        let _ = pocket_cascade_with_islands_cached(&boundary, &[], 2.0);
-        let len_after_hit = pocket_cascade_cache_len();
+        let _ = pocket_cascade_with_islands_cached_in(&cache, &boundary, &[], 2.0);
+        let len_after_miss = cache.lock().len();
+        let _ = pocket_cascade_with_islands_cached_in(&cache, &boundary, &[], 2.0);
+        let len_after_hit = cache.lock().len();
         assert_eq!(len_after_miss, 1);
         assert_eq!(len_after_hit, 1);
     }
 
     #[test]
     fn pocket_cascade_cached_different_delta_misses() {
-        let _g = lock_caches();
-        clear_all_caches();
+        let cache = cascade();
         let boundary = square(20.0);
-        let _ = pocket_cascade_with_islands_cached(&boundary, &[], 2.0);
-        let _ = pocket_cascade_with_islands_cached(&boundary, &[], 2.5);
-        assert_eq!(pocket_cascade_cache_len(), 2);
+        let _ = pocket_cascade_with_islands_cached_in(&cache, &boundary, &[], 2.0);
+        let _ = pocket_cascade_with_islands_cached_in(&cache, &boundary, &[], 2.5);
+        assert_eq!(cache.lock().len(), 2);
     }
 
     #[test]
     fn pocket_cascade_cached_islands_change_key() {
-        let _g = lock_caches();
-        clear_all_caches();
+        let cache = cascade();
         let boundary = square(20.0);
         let island = vec![
             Point2::new(5.0, 5.0),
@@ -349,8 +340,8 @@ mod tests {
             Point2::new(10.0, 10.0),
             Point2::new(5.0, 10.0),
         ];
-        let _ = pocket_cascade_with_islands_cached(&boundary, &[], 2.0);
-        let _ = pocket_cascade_with_islands_cached(&boundary, &[island], 2.0);
-        assert_eq!(pocket_cascade_cache_len(), 2);
+        let _ = pocket_cascade_with_islands_cached_in(&cache, &boundary, &[], 2.0);
+        let _ = pocket_cascade_with_islands_cached_in(&cache, &boundary, &[island], 2.0);
+        assert_eq!(cache.lock().len(), 2);
     }
 }

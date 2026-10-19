@@ -151,6 +151,8 @@ pub fn spindle_warmup_total_s(
 ///     compared to what the controller would honor).
 ///
 /// Negative / non-finite arguments are ignored.
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn sum_g4_dwell_seconds(gcode: &str, dwell_unit: DwellUnit) -> f64 {
     let scale = if matches!(dwell_unit, DwellUnit::Milliseconds) {
         0.001
@@ -741,6 +743,7 @@ mod tests {
 
     fn cut_seg(from: (f64, f64, f64), to: (f64, f64, f64)) -> ToolpathSegment {
         ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: from.0,
                 y: from.1,
@@ -947,6 +950,7 @@ mod tests {
         // 100 mm/s². s_acc = 100/200 = 0.5; cruise 9 mm; t = 2*0.1 +
         // 9/10 = 1.1 s.
         let segs = vec![ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 0.0,
                 y: 0.0,
@@ -992,6 +996,7 @@ mod tests {
         // to cruise; the trapezoidal estimator gets within ~10%.)
         let segs = vec![
             ToolpathSegment {
+                tool_ref: None,
                 from: Pose3 {
                     x: 0.0,
                     y: 0.0,
@@ -1008,6 +1013,7 @@ mod tests {
                 arc: None,
             },
             ToolpathSegment {
+                tool_ref: None,
                 from: Pose3 {
                     x: 0.0,
                     y: 0.0,
@@ -1265,6 +1271,8 @@ mod tests {
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod audit_13_14 {
     use super::*;
     #[test]

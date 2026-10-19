@@ -2759,10 +2759,19 @@ fn cache_hit_produces_identical_response() {
     // very same gcode produces — proving the memo is a transparent cache
     // over a pure function, not a divergent shortcut.
     let (fresh_tp, fresh_idx) = crate::gcode::preview::interpret_with_index(&r2.gcode);
+    // Interpreter memo is geometry-only; provenance is enriched afterwards.
+    // The complete enriched cold/warm toolpaths were compared above.
+    let mut geometry = r2.toolpath.clone();
+    for segment in &mut geometry {
+        segment.tool_ref = None;
+    }
     assert_eq!(
-        serde_json::to_vec(&r2.toolpath).unwrap(),
-        serde_json::to_vec(&fresh_tp).unwrap(),
-        "memoized cache-hit toolpath must equal a fresh interpret of the same gcode"
+        serde_json::to_vec(&geometry).unwrap(),
+        serde_json::to_vec(&fresh_tp).unwrap()
+    );
+    assert_eq!(
+        serde_json::to_value(&r1.tool_provenance).unwrap(),
+        serde_json::to_value(&r2.tool_provenance).unwrap()
     );
     assert_eq!(r2.gcode_index.lines_to_segment, fresh_idx.lines_to_segment);
     assert_eq!(r2.gcode_index.segments_to_line, fresh_idx.segments_to_line);

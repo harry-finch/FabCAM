@@ -56,6 +56,7 @@ fn program_with(records: usize) -> Program {
             id: 1,
             strategy: "contour2d".into(),
             tool: ToolSpec {
+                project_tool_id: None,
                 number: 1,
                 description: "6mm flat".into(),
                 diameter: 6.0,

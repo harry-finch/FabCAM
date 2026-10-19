@@ -427,6 +427,12 @@ components:
       - cx
       - cy
       type: object
+    Authority:
+      enum:
+      - unavailable
+      - planned
+      - resolved
+      type: string
     AutoFix:
       oneOf:
       - properties:
@@ -3070,6 +3076,16 @@ components:
           allOf:
           - $ref: '#/components/schemas/TimeEstimate'
           description: Acceleration- and jerk-aware program-time estimate. See [`crate::sim::timing`] for the integrator. The total accounts for motion under the trapezoidal profile, tool-change time (`MachineConfig.toolchange_s` × number of M6s), and per-tool spindle pauses summed across used tools.
+        tool_provenance:
+          allOf:
+          - $ref: '#/components/schemas/ToolProvenance'
+          default:
+            authority: unavailable
+            bindings: []
+            diagnostics: []
+            revision: 0
+            transitions: []
+          description: Runtime provenance, not persisted source or physical machine state.
         toolpath:
           items:
             $ref: '#/components/schemas/ToolpathSegment'
@@ -4570,6 +4586,16 @@ components:
           allOf:
           - $ref: '#/components/schemas/TimeEstimate'
           description: Acceleration- and jerk-aware program-time estimate. See [`crate::sim::timing`] for the integrator. The total accounts for motion under the trapezoidal profile, tool-change time (`MachineConfig.toolchange_s` × number of M6s), and per-tool spindle pauses summed across used tools.
+        tool_provenance:
+          allOf:
+          - $ref: '#/components/schemas/ToolProvenance'
+          default:
+            authority: unavailable
+            bindings: []
+            diagnostics: []
+            revision: 0
+            transitions: []
+          description: Runtime provenance, not persisted source or physical machine state.
         toolpath:
           items:
             $ref: '#/components/schemas/ToolpathSegment'
@@ -6339,6 +6365,28 @@ components:
       - toolchange_s
       - total_s
       type: object
+    ToolBinding:
+      properties:
+        program_tool_number:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        project_tool_id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        reference:
+          format: uint32
+          minimum: 1.0
+          type: integer
+        tool:
+          $ref: '#/components/schemas/ToolEntry'
+      required:
+      - program_tool_number
+      - project_tool_id
+      - reference
+      - tool
+      type: object
     ToolChangeStrategy:
       description: 'How the post-processor handles a tool change at an op boundary. Widened from the historical `supports_toolchange: bool` because the two *manual* behaviors need different emission: grblHAL / FluidNC accept `M6` as a prompt (the controller parks, prompts the operator, and can run a semi-automatic tool-length probe), while stock GRBL / Marlin reject `M6` (`error:20`) and must fall back to a portable `M0` program pause. Serde also accepts a plain bool via [`deserialize_toolchange`] (`true → Atc`, `false → ManualM0Pause`).'
       oneOf:
@@ -6846,6 +6894,56 @@ components:
       - inside
       - on
       type: string
+    ToolProvenance:
+      properties:
+        authority:
+          $ref: '#/components/schemas/Authority'
+        bindings:
+          items:
+            $ref: '#/components/schemas/ToolBinding'
+          type: array
+        diagnostics:
+          items:
+            type: string
+          type: array
+        revision:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        transitions:
+          items:
+            $ref: '#/components/schemas/ToolTransition'
+          type: array
+      required:
+      - authority
+      - bindings
+      - diagnostics
+      - revision
+      - transitions
+      type: object
+    ToolTransition:
+      properties:
+        after_ref:
+          format: uint32
+          minimum: 1.0
+          type: integer
+        before_ref:
+          format: uint32
+          minimum: 1.0
+          type:
+          - integer
+          - 'null'
+        evidence:
+          type: string
+        output_line:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - after_ref
+      - evidence
+      - output_line
+      type: object
     ToolpathSegment:
       properties:
         arc:
@@ -6871,6 +6969,13 @@ components:
           type: integer
         to:
           $ref: '#/components/schemas/Pose3'
+        tool_ref:
+          description: Result-local immutable tool binding. Missing means unknown, never a fallback.
+          format: uint32
+          minimum: 1.0
+          type:
+          - integer
+          - 'null'
       required:
       - from
       - kind

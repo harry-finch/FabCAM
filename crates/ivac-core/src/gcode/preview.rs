@@ -66,6 +66,9 @@ pub struct ArcXY {
 
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema, PartialEq)]
 pub struct ToolpathSegment {
+    /// Result-local immutable tool binding. Missing means unknown, never a fallback.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tool_ref: Option<std::num::NonZeroU32>,
     pub from: Pose3,
     pub to: Pose3,
     pub kind: MoveKind,
@@ -223,6 +226,8 @@ impl Interpreter {
     /// (the old loop `continue`) so the modal state still flushes back to
     /// `self` afterward.
     #[allow(clippy::too_many_lines)]
+    // exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+    #[allow(clippy::float_cmp)]
     fn feed_line(&mut self, raw: &str) {
         let mut state = self.state;
         let mut active_code = self.active_code;
@@ -377,6 +382,7 @@ impl Interpreter {
                     }
                     let seg_idx = out.len() as u32;
                     out.push(ToolpathSegment {
+                        tool_ref: None,
                         from,
                         to,
                         kind,
@@ -460,6 +466,7 @@ impl Interpreter {
                     // straight chord rather than fabricating a bogus arc.
                     let seg_idx = out.len() as u32;
                     out.push(ToolpathSegment {
+                        tool_ref: None,
                         from,
                         to,
                         kind,
@@ -544,6 +551,7 @@ impl Interpreter {
                         z: nz,
                     };
                     out.push(ToolpathSegment {
+                        tool_ref: None,
                         from: prev,
                         to: chord_to,
                         kind: MoveKind::Arc,
@@ -569,6 +577,7 @@ impl Interpreter {
             }
             let seg_idx = out.len() as u32;
             out.push(ToolpathSegment {
+                tool_ref: None,
                 from,
                 to,
                 kind,
@@ -1247,6 +1256,8 @@ mod tests {
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod audit_11_12 {
     use super::*;
     #[test]

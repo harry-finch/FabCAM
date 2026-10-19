@@ -11,4 +11,4 @@
 /// anything observable. Folded into every cache key so a format change
 /// cleanly invalidates every entry across every running process, and we
 /// never serve stale shapes from before the change.
-pub const PIPELINE_VERSION: u32 = 61;
+pub const PIPELINE_VERSION: u32 = 63;

@@ -984,6 +984,7 @@ mod tests {
 
     fn plunge(x: f64, y: f64, top: f64, bottom: f64) -> ToolpathSegment {
         ToolpathSegment {
+            tool_ref: None,
             from: Pose3 { x, y, z: top },
             to: Pose3 { x, y, z: bottom },
             kind: MoveKind::Plunge,
@@ -1055,6 +1056,7 @@ mod tests {
     fn advance_with_no_cuts_returns_empty_aabb() {
         let mut sim = new_sim(0.0, 0.0, 20.0, 20.0, 1.0, 0.0);
         let rapid = vec![ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 0.0,
                 y: 0.0,
@@ -1116,6 +1118,7 @@ mod tests {
     fn partial_advance_cut_only_touches_swept_chunk() {
         let mut sim = new_sim(0.0, 0.0, 40.0, 40.0, 1.0, 0.0);
         let cut = ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 5.0,
                 y: 20.0,
@@ -1283,6 +1286,7 @@ mod tests {
         let segs = vec![
             plunge(10.0, 10.0, 0.0, -5.0),
             ToolpathSegment {
+                tool_ref: None,
                 from: Pose3 {
                     x: 0.0,
                     y: 20.0,
@@ -1360,6 +1364,7 @@ mod tests {
         // Rapid through material: starts below top_z, so check_rapid_against_stock
         // reports a collision.
         let rapid = ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 0.0,
                 y: 20.0,

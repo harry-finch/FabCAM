@@ -1,5 +1,7 @@
-//! UX3 decoded ShopBot coverage, multipass, clearance and refusal proofs.
+//! UX3 decoded `ShopBot` coverage, multipass, clearance and refusal proofs.
 #![cfg(feature = "cps")]
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp)]
 mod common;
 use common::{build_project, endmill_tool, op_single_pass, stock_at_origin};
 use ivac_core::cam::planar_surface::{planar_raster, PlanarSurfaceParams};
@@ -121,8 +123,8 @@ fn decoded_shopbot_covers_every_target_edge_and_corner_in_xy_origins_and_both_di
         for ix in 0..=80 {
             for iy in 0..=80 {
                 let q = [
-                    xmin + (xmax - xmin) * ix as f64 / 80. - 5.,
-                    ymin + (ymax - ymin) * iy as f64 / 80. - 7.,
+                    xmin + (xmax - xmin) * f64::from(ix) / 80. - 5.,
+                    ymin + (ymax - ymin) * f64::from(iy) / 80. - 7.,
                 ];
                 assert!(
                     final_cuts.iter().any(|m| distance(q, m) <= 3.),
@@ -151,7 +153,7 @@ fn depths_are_bounded_and_every_xy_rapid_occurs_at_safe_z() {
         .filter(|m| !m.rapid && m.to[2] < 0.)
         .map(|m| m.to[2])
         .collect();
-    depths.sort_by(|a, b| a.total_cmp(b));
+    depths.sort_by(f64::total_cmp);
     depths.dedup();
     assert_eq!(depths, vec![-1.3, -1., -0.5]);
     for m in &moves {
@@ -262,13 +264,20 @@ fn fixture_on_extended_edge_travel_is_still_a_collision() {
         origin: (15., 30.),
         z_bottom: -2.,
         z_top: 4.,
-        color: 0xffa050c0,
+        color: 0xffa0_50c0,
     });
-    let response = run(p).unwrap();
-    assert!(response
-        .warnings
-        .iter()
-        .any(|w| w.kind == "fixture_path_collision"));
+    // ADR-0023 (approved 2026-10-18): a detected fixture collision blocks the
+    // executable program; the warning survives only in the diagnostic preview.
+    match run(p) {
+        Err(PipelineError::FixtureCollision(preview)) => {
+            assert!(!preview.toolpath.is_empty());
+            assert!(preview
+                .warnings
+                .iter()
+                .any(|w| w.kind == "fixture_path_collision"));
+        }
+        other => panic!("expected a blocking fixture collision, got {other:?}"),
+    }
 }
 #[test]
 fn standalone_generic_output_and_disabled_invalid_op_are_supported() {
@@ -313,8 +322,8 @@ fn contour_jobs_retain_their_existing_work_origin_warning() {
         "Profile",
         OpKind::Profile {
             offset: ToolOffset::On,
-            profile: Default::default(),
-            contour: Default::default(),
+            profile: ProfileParams::default(),
+            contour: ContourParams::default(),
         },
         1,
         -0.5,

@@ -130,6 +130,17 @@ impl Post {
 }
 
 impl PostProcessor for Post {
+    fn replay_tool_intents(&mut self, intents: &[(crate::gcode::ToolIntentPhase, u32)]) {
+        self.inner.tool_intents.extend_from_slice(intents);
+    }
+    fn planned_tool_intents(&self) -> &[(crate::gcode::ToolIntentPhase, u32)] {
+        &self.inner.tool_intents
+    }
+    fn tool_intent(&mut self, phase: crate::gcode::ToolIntentPhase, id: u32) {
+        self.inner.tool_intents.push((phase, id));
+        self.comment(&format!("FABTOOL/1 {} {id}", phase.label()));
+    }
+
     fn fmt_dwell_post(&self, seconds: f64) -> String {
         // Delegate to the inner LinuxCNC post so the trait-default
         // drill_simple / drill_peck / drill_chip_break methods (GRBL

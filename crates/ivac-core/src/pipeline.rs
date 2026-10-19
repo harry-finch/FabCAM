@@ -104,7 +104,7 @@ use crate::cam::chaining::{classify_containment, segments_to_objects};
 use crate::cam::setup::Setup;
 use crate::cam::VcObject;
 use crate::gcode::{
-    emit_program_begin, emit_program_end, grbl, hpgl, linuxcnc, preview, PostProcessor,
+    emit_program_begin_with_preload, emit_program_end, grbl, hpgl, linuxcnc, preview, PostProcessor,
 };
 use crate::geometry::Point2;
 use crate::pipeline_cache::{op_cache_key_with_blobs, GlobalKeyBlobs, OpCacheValue, PipelineCache};
@@ -196,6 +196,9 @@ pub enum CpsParamValue {
 
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct PipelineResponse {
+    /// Runtime provenance, not persisted source or physical machine state.
+    #[serde(default)]
+    pub tool_provenance: provenance::ToolProvenance,
     pub gcode: String,
     pub toolpath: Vec<preview::ToolpathSegment>,
     pub gcode_index: preview::GcodeIndex,
@@ -331,6 +334,8 @@ pub fn validate_direct_output(project: &Project) -> Result<(), PipelineError> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("operation #{0}: {1} cannot be emitted by CPS; disable it or choose a supported post. No program generated.")]
+    UnsupportedCpsMotion(u32, String),
     #[error("Program blocked: tool path intersects a declared fixture. Diagnostic preview only.")]
     FixtureCollision(Box<DiagnosticPreview>),
     #[error("operation #{0}: unsafe clearance: {1}")]
@@ -396,6 +401,7 @@ impl PipelineError {
                 "operation #{id}: Stufenfase rim chamfer requires milling mode"
             ))),
             PipelineError::Cancelled => None,
+            PipelineError::UnsupportedCpsMotion(id, kind) => Some(Structured::misconfigured(format!("{kind} cannot be emitted by the CPS route; disable the operation or choose a supported post.")).with_param("op_id", *id).with_param("kind", kind.as_str()).with_hint("No program generated. Saved operation retained.")),
             PipelineError::UnsafeClearance(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Set clearance above the declared stock top in the same work frame. No output generated; saved values were not changed.")),
             PipelineError::Drawing(message) => Some(Structured::misconfigured(message.clone()).with_hint("Review edited drawing and source bindings; no output generated.")),
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
@@ -769,6 +775,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // emit loop returns. `finish()` joins the buffered program into the
     // `String` the preview + timing passes below consume. Add a run_per_op
     // argument here once, not 3x.
+    let native_intents;
     macro_rules! run_with_post {
         ($post:expr) => {{
             let mut p = $post;
@@ -786,6 +793,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
                 cache,
                 post_tag,
             )?;
+            native_intents = p.planned_tool_intents().to_vec();
             p.finish()
         }};
     }
@@ -810,6 +818,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         // memoizes the whole run) → ivac_cps::run_post.
         #[cfg(feature = "cps")]
         PostProcessorKind::Cps => {
+            native_intents = Vec::new();
             let selection = req
                 .cps_post
                 .as_ref()
@@ -920,7 +929,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     // the text-interpreting path. `cps_feeds_dwell` carries the
     // per-segment feeds + dwell from the selected representation for timing.
     #[cfg(feature = "cps")]
-    let (toolpath, gcode_index, cps_feeds_dwell) = if let Some(program) = &cps_program {
+    let (mut toolpath, gcode_index, cps_feeds_dwell) = if let Some(program) = &cps_program {
         let shopbot = req.cps_post.as_ref().is_some_and(|selection| {
             matches!(&selection.source, CpsPostSource::Bundled { id } if id == "shopbot")
         });
@@ -947,7 +956,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         (toolpath, index, None)
     };
     #[cfg(not(feature = "cps"))]
-    let (toolpath, gcode_index) = match cache {
+    let (mut toolpath, gcode_index) = match cache {
         Some(c) => c.interpret_memoized(&gcode, || preview::interpret_with_index(&gcode)),
         None => preview::interpret_with_index(&gcode),
     };
@@ -1031,6 +1040,21 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
             })
         })
         .collect();
+    #[cfg(feature = "cps")]
+    let tool_provenance = if let Some(program) = &cps_program {
+        let selection = req.cps_post.as_ref();
+        let shopbot = selection
+            .is_some_and(|s| matches!(&s.source,CpsPostSource::Bundled{id} if id=="shopbot"));
+        let lab = selection
+            .and_then(|s| s.properties.get("labSpindle1Control"))
+            .is_some_and(|v| matches!(v, CpsParamValue::Bool(true)));
+        provenance::cps(&project, program, &gcode, &mut toolpath, shopbot, lab)
+    } else {
+        provenance::native(&project, post_kind, &gcode, &mut toolpath, &native_intents)
+    };
+    #[cfg(not(feature = "cps"))]
+    let tool_provenance =
+        provenance::native(&project, post_kind, &gcode, &mut toolpath, &native_intents);
     let mut time_estimate = match &cps_feeds_dwell {
         // IR-derived feeds + dwell: timing never depends on the CPS
         // output text being parseable.
@@ -1059,6 +1083,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     time_estimate.dwell_s -= time_estimate.spindle_warmup_s;
     progress("done", 1.0, "complete");
     Ok(PipelineResponse {
+        tool_provenance,
         stats: PipelineStats {
             object_count: objects.len(),
             closed_object_count: total_closed,
@@ -1480,6 +1505,14 @@ fn validate_cps_request(req: &PipelineRequest) -> Result<(), PipelineError> {
     if req.cps_post.is_none() {
         return Err(PipelineError::CpsSelectionMissing);
     }
+    for op in req.project.operations.iter().filter(|op| op.enabled) {
+        if matches!(op.kind, OpKind::Homing { .. } | OpKind::Probe { .. }) {
+            return Err(PipelineError::UnsupportedCpsMotion(
+                op.id,
+                program_only_label(&op.kind).into(),
+            ));
+        }
+    }
     Ok(())
 }
 
@@ -1739,6 +1772,8 @@ fn classify_gcode_include_body(expanded: &str) -> GcodeIncludeClassification {
     out
 }
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn classify_gcode_include_line(raw: &str) -> GcodeIncludeLineClass {
     let stripped = strip_gcode_comment(raw);
     let trimmed = stripped.trim();
@@ -2029,6 +2064,7 @@ fn apply_cached_op<P: PostProcessor>(
     last_pos: &mut Point2,
     stats: &std::cell::RefCell<(usize, usize, usize)>,
 ) -> bool {
+    post.replay_tool_intents(&cached.tool_intents);
     post.out_extend_lines(&cached.gcode_lines);
     post.restore_state(&cached.exit_state);
     warnings.extend(cached.warnings.iter().cloned());
@@ -2051,6 +2087,7 @@ fn store_op_cache<P: PostProcessor>(
     key: crate::pipeline_cache::OpCacheKey,
     post: &P,
     body_marker: usize,
+    intent_marker: usize,
     closed_count: usize,
     offset_count: usize,
     internal_swap_emitted: bool,
@@ -2063,6 +2100,7 @@ fn store_op_cache<P: PostProcessor>(
         key,
         OpCacheValue {
             gcode_lines: lines,
+            tool_intents: post.planned_tool_intents()[intent_marker..].to_vec(),
             closed_count,
             offset_count,
             exit_state: post.capture_state(),
@@ -2310,7 +2348,12 @@ where
     if owns_scaffold {
         post.begin_program(&cps_ctx::build_program_ctx(project, header_setup));
     } else {
-        emit_program_begin(header_setup, post);
+        let preload = project
+            .operations
+            .iter()
+            .find(|o| o.enabled && !o.is_program_only())
+            .map(|o| o.tool_id);
+        emit_program_begin_with_preload(header_setup, post, preload);
     }
     let gcode_progress = |emitted: usize, total: usize| -> f64 {
         let denom = total.max(1) as f64;
@@ -2451,6 +2494,7 @@ where
         // the buffered program stays byte-identical (ivac-3j1p).
         post.checkpoint();
         let body_marker = post.out_lines_count();
+        let intent_marker = post.planned_tool_intents().len();
 
         // Program-only ops (Pause / Homing / Probe / CycleMarker /
         // GcodeInclude) emit raw program scaffolding and skip the tool /
@@ -2576,6 +2620,7 @@ where
                     key,
                     post,
                     body_marker,
+                    intent_marker,
                     closed_count_emitted,
                     offset_count_emitted,
                     internal_swap_emitted,
@@ -3032,6 +3077,7 @@ pub(in crate::pipeline) fn emit_toolchange_envelope<P: PostProcessor>(
     // touching the spindle. The post delta-encodes Z so this collapses
     // to nothing on the FIRST op (program_begin already moved there).
     // Skipping a needed lift is more dangerous than an extra rapid.
+    post.tool_intent(crate::gcode::ToolIntentPhase::Request, new_tool_id);
     let fast_z = header_setup.mill.fast_move_z;
     post.move_to(None, None, Some(fast_z));
 
@@ -3228,6 +3274,7 @@ pub(in crate::pipeline) fn emit_toolchange_envelope<P: PostProcessor>(
             // warning so it isn't silent.
         }
     }
+    post.tool_intent(crate::gcode::ToolIntentPhase::Active, new_tool_id);
 }
 
 /// The operator-facing prompt (if any) that must appear BEFORE
@@ -3554,7 +3601,7 @@ pub fn generate_drawing(
     }
     // The evaluated Rust drawing owns the coordinates. Caller-supplied legacy
     // segments are not used as a fallback or independent source of truth.
-    req.project.segments = evaluated.segments.clone();
+    req.project.segments.clone_from(&evaluated.segments);
     let progress = |_: &str, _: f64, _: &str| {};
     let mut sink = |_: PipelineEvent| {};
     run_pipeline_impl(
@@ -3646,7 +3693,7 @@ fn resolve_edited_objects(
             })?;
         let combine = match &op.source {
             OpSource::Layers { combine, .. } | OpSource::Objects { combine, .. } => *combine,
-            OpSource::All => Default::default(),
+            OpSource::All => crate::project::SourceCombine::default(),
         };
         if op.enabled && !matches!(op.kind, crate::project::OpKind::PlanarSurface { .. }) {
             let empty = match &binding.binding {
@@ -3710,3 +3757,5 @@ mod lot8_tests;
 
 #[cfg(test)]
 mod audit_13_14;
+
+pub mod provenance;

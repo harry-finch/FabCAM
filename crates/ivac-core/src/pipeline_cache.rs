@@ -85,6 +85,8 @@ pub struct OpCacheValue {
     /// no `join` on store, no per-line re-`split`/alloc on the hot hit
     /// path.
     pub gcode_lines: Vec<String>,
+    /// Independent planner intents for the cached body, not parsed from its text.
+    pub tool_intents: Vec<(crate::gcode::ToolIntentPhase, u32)>,
     /// Closed-object count this op contributed to `PipelineStats`.
     pub closed_count: usize,
     /// Offset count this op contributed to `PipelineStats`.
@@ -637,8 +639,8 @@ mod tests {
             0,
         );
         // Snapshot — bump PIPELINE_VERSION when this legitimately changes.
-        // Updated for PIPELINE_VERSION 59→60: swept holder warnings and explicit ShopBot home-park refusal.
-        assert_eq!(key.0, 0xe0d8_ee57_d0ac_c309_u64, "got {:#018x}", key.0);
+        // Updated for PIPELINE_VERSION 62→63: movement tool provenance.
+        assert_eq!(key.0, 0xeef6_fec1_a924_77bc_u64, "got {:#018x}", key.0);
     }
 
     #[test]
@@ -874,6 +876,7 @@ mod tests {
             cache.put(
                 OpCacheKey(i),
                 OpCacheValue {
+                    tool_intents: Vec::new(),
                     gcode_lines: vec![format!("op{i}")],
                     closed_count: 0,
                     offset_count: 0,
@@ -902,6 +905,7 @@ mod tests {
     fn put_then_get_round_trips() {
         let cache = PipelineCache::new(10);
         let v = OpCacheValue {
+            tool_intents: Vec::new(),
             gcode_lines: vec!["G1 X1 Y2".into()],
             closed_count: 3,
             offset_count: 4,

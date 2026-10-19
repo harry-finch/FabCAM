@@ -73,6 +73,7 @@ pub struct SectionToolCtx {
 /// Tool description in post-facing terms (mm / radians / rpm).
 #[derive(Debug, Clone)]
 pub struct CpsToolInfo {
+    pub project_tool_id: u32,
     /// `ToolEntry.id` — the project-level tool key (what T-words use).
     pub number: u32,
     pub description: String,
@@ -263,6 +264,7 @@ pub(crate) fn build_section_tool_ctx(
 fn cps_tool_info(entry: Option<&ToolEntry>, fallback_id: u32, rpm: u32) -> CpsToolInfo {
     let Some(t) = entry else {
         return CpsToolInfo {
+            project_tool_id: fallback_id,
             number: fallback_id,
             description: String::new(),
             kind: ToolKind::Endmill,
@@ -285,6 +287,7 @@ fn cps_tool_info(entry: Option<&ToolEntry>, fallback_id: u32, rpm: u32) -> CpsTo
         _ => 0.0,
     };
     CpsToolInfo {
+        project_tool_id: t.id,
         number: t.id,
         description: t.name.clone(),
         kind: t.kind,

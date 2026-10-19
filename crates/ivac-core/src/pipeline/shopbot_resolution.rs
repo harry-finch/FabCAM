@@ -7,6 +7,8 @@ use super::PipelineWarning;
 use crate::gcode::cps_recorder::IrPreview;
 use crate::gcode::preview::{GcodeIndex, MoveKind, Pose3, ToolpathSegment};
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(super) fn resolved_preview(text: &str) -> Result<(IrPreview, GcodeIndex), String> {
     let mut preview = IrPreview::default();
     let mut index = GcodeIndex {
@@ -84,6 +86,7 @@ pub(super) fn resolved_preview(text: &str) -> Result<(IrPreview, GcodeIndex), St
             index.lines_to_segment[i + 1] = segment_no;
             index.segments_to_line.push(line_no);
             preview.segments.push(ToolpathSegment {
+                tool_ref: None,
                 from: Pose3 { x, y, z },
                 to: Pose3 {
                     x: tx,
@@ -109,6 +112,45 @@ fn number(text: &str) -> Result<f64, String> {
         .ok_or_else(|| "non-finite/invalid numeric ShopBot output".into())
 }
 
+/// Operator load instruction written by the bundled post's `onSection`.
+pub(super) const LOAD_PREFIX: &str = "' Spindle OFF and stationary. Load tool ";
+
+/// Largest distance between a planned length and its emitted `xyz` text: the
+/// post rounds to 4 decimals (half away from zero), so at most half a unit in
+/// the last place. The slack bounds the prelude's representation nudge
+/// (≤ max(1e-13, |v|·1e-12) mm, i.e. < 1e-9 mm below 1 m) and f64 parsing.
+pub(super) const XYZ_HALF_QUANTUM_MM: f64 = 0.5e-4;
+const XYZ_ROUNDING_SLACK_MM: f64 = 1e-9;
+
+/// Decode `<number> D=<diameter>;` after [`LOAD_PREFIX`]. `None` when the line
+/// is not a load instruction. The diameter must use the post's exact `xyz`
+/// rendering (digits, point, four decimals) and be finite and positive.
+pub(super) fn load_instruction(line: &str) -> Option<Result<(u32, f64), String>> {
+    let rest = line.strip_prefix(LOAD_PREFIX)?;
+    let parsed = (|| {
+        let (number, rest) = rest.split_once(" D=")?;
+        let (diameter, _) = rest.split_once(';')?;
+        let (whole, decimals) = diameter.split_once('.')?;
+        let digits = |s: &str| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit());
+        if !digits(number) || !digits(whole) || decimals.len() != 4 || !digits(decimals) {
+            return None;
+        }
+        let diameter = diameter.parse::<f64>().ok()?;
+        (diameter.is_finite() && diameter > 0.).then_some((number.parse().ok()?, diameter))
+    })();
+    Some(parsed.ok_or_else(|| "Malformed manual load instruction".into()))
+}
+
+/// Whether an emitted 4-decimal length is the post's rendering of `planned`.
+/// A tolerance check only: it never establishes tool identity.
+pub(super) fn xyz_renders(emitted: f64, planned: f64) -> bool {
+    planned.is_finite()
+        && emitted.is_finite()
+        && (emitted - planned).abs() <= XYZ_HALF_QUANTUM_MM + XYZ_ROUNDING_SLACK_MM
+}
+
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(super) fn entry_diagnostics(program: &ivac_cps::ir::Program) -> Vec<PipelineWarning> {
     use ivac_cps::ir::{ParamValue, Record};
     program.sections.iter().filter_map(|section| {
@@ -143,6 +185,8 @@ pub(super) fn entry_diagnostics(program: &ivac_cps::ir::Program) -> Vec<Pipeline
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod tests {
     use super::*;
     #[test]

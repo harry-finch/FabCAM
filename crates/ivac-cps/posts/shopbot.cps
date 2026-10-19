@@ -195,7 +195,9 @@ function onOpen() {
     pause("Stop spindle. Verify work zero, stock, clearances and controller jog speeds before continuing.");
   }
 }
+var provenanceSection = 0;
 function onSection() {
+  comment("FABTOOL/1 REQUEST " + provenanceSection + " " + tool.number);
   // Establish Z before any XY, then require explicit tool/zero verification.
   writeln("JZ," + xyz.format(safeZ));
   if (labSpindle1) {
@@ -210,6 +212,8 @@ function onSection() {
     writeln("JZ," + xyz.format(safeZ));
     pause("Start spindle CW manually at " + spindleSpeed + " RPM. Wait until ready before OK.");
   }
+  comment("FABTOOL/1 ACTIVE " + provenanceSection + " " + tool.number);
+  provenanceSection++;
   comment(getParameter("operation-comment", "Operation"));
   position = {x:NaN, y:NaN, z:safeZ};
   lastFeed = undefined;

@@ -249,6 +249,7 @@ fn tool_type_code(kind: ToolKind) -> u32 {
 
 fn tool_spec(tool: &CpsToolInfo) -> ir::ToolSpec {
     ir::ToolSpec {
+        project_tool_id: Some(tool.project_tool_id),
         number: tool.number,
         description: tool.description.clone(),
         diameter: tool.diameter,
@@ -718,8 +719,12 @@ pub fn ir_to_toolpath(program: &ir::Program) -> Vec<ToolpathSegment> {
 /// Full preview extraction (segments + feeds + dwell).
 #[must_use]
 pub fn ir_preview(program: &ir::Program) -> IrPreview {
+    ir_preview_sections(&program.sections)
+}
+
+pub(crate) fn ir_preview_sections(sections: &[ir::Section]) -> IrPreview {
     let mut preview = IrPreview::default();
-    for section in &program.sections {
+    for section in sections {
         let mut pos = pose(section.initial_position);
         let op_id = section.id;
         for record in &section.records {
@@ -825,6 +830,7 @@ fn push_segment(
     feed_mm_min: f64,
 ) {
     preview.segments.push(ToolpathSegment {
+        tool_ref: None,
         from,
         to,
         kind,
@@ -1082,6 +1088,7 @@ mod tests {
 
     fn tool(number: u32, kind: ToolKind, rpm: u32) -> CpsToolInfo {
         CpsToolInfo {
+            project_tool_id: number,
             number,
             description: format!("tool {number}"),
             kind,

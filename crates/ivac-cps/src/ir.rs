@@ -192,6 +192,9 @@ pub struct Section {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolSpec {
+    /// Explicit owner identity supplied by `FabCAM`; generic third-party IR may omit it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub project_tool_id: Option<u32>,
     pub number: u32,
     #[serde(default)]
     pub description: String,
@@ -374,6 +377,7 @@ mod tests {
                 id: 7,
                 strategy: "contour2d".into(),
                 tool: ToolSpec {
+                    project_tool_id: None,
                     number: 3,
                     description: "6mm flat".into(),
                     diameter: 6.0,

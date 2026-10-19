@@ -255,6 +255,7 @@ mod lot7_tests {
             color: 0,
         });
         let mut segment = ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: -5.,
                 y: 1.05,

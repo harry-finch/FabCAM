@@ -188,6 +188,15 @@ pub trait PostProcessor {
     /// for a scaffold-owning post.
     fn program_event(&mut self, _ev: &cps_ctx::ProgramEventCtx) {}
 
+    /// Explicit planner intent; native posts serialize a reserved structured marker.
+    fn replay_tool_intents(&mut self, _intents: &[(ToolIntentPhase, u32)]) {}
+    fn planned_tool_intents(&self) -> &[(ToolIntentPhase, u32)] {
+        &[]
+    }
+    fn tool_intent(&mut self, phase: ToolIntentPhase, project_tool_id: u32) {
+        self.comment(&format!("FABTOOL/1 {} {project_tool_id}", phase.label()));
+    }
+
     fn separation(&mut self) {}
     fn raw(&mut self, _cmd: &str) {}
     fn comment(&mut self, _text: &str) {}
@@ -669,7 +678,7 @@ pub fn emit_polylines<P: PostProcessor>(
     offsets: &[PolylineOffset],
     post: &mut P,
 ) -> String {
-    program_begin(setup, post);
+    program_begin(setup, post, None);
     let mut last_pos = Point2::new(0.0, 0.0);
     emit_polylines_block(setup, offsets, post, &mut last_pos);
     program_end(setup, post);
@@ -680,7 +689,16 @@ pub fn emit_polylines<P: PostProcessor>(
 /// of the program, then loop through each op calling
 /// [`emit_polylines_block`], then close with [`emit_program_end`].
 pub fn emit_program_begin<P: PostProcessor>(setup: &Setup, post: &mut P) {
-    program_begin(setup, post);
+    program_begin(setup, post, None);
+}
+
+/// Pipeline header with explicit assumed preloaded project-tool identity.
+pub(crate) fn emit_program_begin_with_preload<P: PostProcessor>(
+    setup: &Setup,
+    post: &mut P,
+    preload: Option<u32>,
+) {
+    program_begin(setup, post, preload);
 }
 
 /// Footer-only emit. Counterpart to [`emit_program_begin`].
@@ -1041,7 +1059,7 @@ pub fn emit_drill_block<P: PostProcessor>(
     post.move_to(None, None, Some(fast_z));
 }
 
-fn program_begin<P: PostProcessor>(setup: &Setup, post: &mut P) {
+fn program_begin<P: PostProcessor>(setup: &Setup, post: &mut P, preload: Option<u32>) {
     // Thread the decimal separator + N-numbering knobs into
     // the post state BEFORE any output flows so every emitted line
     // honors the project's MachineConfig.
@@ -1063,6 +1081,9 @@ fn program_begin<P: PostProcessor>(setup: &Setup, post: &mut P) {
     ctx.spindle = setup.tool.speed;
     ctx.unit = setup.machine.unit;
     post.set_token_ctx(&ctx);
+    if let Some(id) = preload {
+        post.tool_intent(ToolIntentPhase::Preload, id);
+    }
     post.program_start();
     post.unit(setup.machine.unit);
     post.absolute(true);
@@ -3949,7 +3970,7 @@ mod audit_09_10 {
             for tabs in [false, true] {
                 for ramp in [false, true] {
                     let mut setup = Setup::default();
-                    setup.mill.depth = -(passes as f64);
+                    setup.mill.depth = -f64::from(passes);
                     setup.mill.step = -1.;
                     setup.tool.rate_h = 1000;
                     setup.tool.rate_h_finish = 1000;
@@ -4023,6 +4044,23 @@ mod audit_09_10 {
             assert!(from.distance(c) > 10.);
         } else {
             panic!("expected lead");
+        }
+    }
+}
+
+/// Tool intent is separate from physical tool activation.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ToolIntentPhase {
+    Preload,
+    Request,
+    Active,
+}
+impl ToolIntentPhase {
+    const fn label(self) -> &'static str {
+        match self {
+            Self::Preload => "PRELOAD",
+            Self::Request => "REQUEST",
+            Self::Active => "ACTIVE",
         }
     }
 }

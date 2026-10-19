@@ -158,6 +158,7 @@ mod tests {
 
     fn rapid(from: Pose3, to: Pose3) -> ToolpathSegment {
         ToolpathSegment {
+            tool_ref: None,
             from,
             to,
             kind: MoveKind::Rapid,
@@ -274,6 +275,7 @@ mod tests {
         let mut d = SimDiagnostics::new();
         let segments = vec![
             ToolpathSegment {
+                tool_ref: None,
                 from: pose(5.0, 10.0, -1.0),
                 to: pose(15.0, 10.0, -1.0),
                 kind: MoveKind::Cut,
@@ -282,6 +284,7 @@ mod tests {
                 arc: None,
             },
             ToolpathSegment {
+                tool_ref: None,
                 from: pose(15.0, 20.0, -2.0),
                 to: pose(25.0, 20.0, -2.0),
                 kind: MoveKind::Rapid,
@@ -290,6 +293,7 @@ mod tests {
                 arc: None,
             },
             ToolpathSegment {
+                tool_ref: None,
                 from: pose(20.0, 30.0, 0.0),
                 to: pose(20.0, 30.0, -1.0),
                 kind: MoveKind::Plunge,

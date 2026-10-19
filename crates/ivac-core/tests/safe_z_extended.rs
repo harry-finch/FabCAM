@@ -1,3 +1,5 @@
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp, clippy::unnecessary_box_returns)]
 #[allow(dead_code)]
 #[path = "test1/oracle.rs"]
 mod oracle;
@@ -34,6 +36,7 @@ fn body() -> HolderProfile {
 }
 fn motion(from: [f64; 3], to: [f64; 3]) -> ToolpathSegment {
     ToolpathSegment {
+        tool_ref: None,
         from: Pose3 {
             x: from[0],
             y: from[1],

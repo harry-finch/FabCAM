@@ -26,6 +26,7 @@ pub struct Post {
     /// rather than a bare `Vec<String>`, so a future append-only sink can
     /// stream without buffering the whole program. Behavior is unchanged.
     sink: GcodeSink,
+    pub(crate) tool_intents: Vec<(crate::gcode::ToolIntentPhase, u32)>,
 }
 
 impl Post {
@@ -312,6 +313,17 @@ fn axis_for(letter: char, axes: &crate::gcode::post_profile::AxesConfig) -> Axis
 }
 
 impl PostProcessor for Post {
+    fn replay_tool_intents(&mut self, intents: &[(crate::gcode::ToolIntentPhase, u32)]) {
+        self.tool_intents.extend_from_slice(intents);
+    }
+    fn planned_tool_intents(&self) -> &[(crate::gcode::ToolIntentPhase, u32)] {
+        &self.tool_intents
+    }
+    fn tool_intent(&mut self, phase: crate::gcode::ToolIntentPhase, id: u32) {
+        self.tool_intents.push((phase, id));
+        self.comment(&format!("FABTOOL/1 {} {id}", phase.label()));
+    }
+
     fn fmt_dwell_post(&self, seconds: f64) -> String {
         // Honour the active profile's dwell_unit when the
         // trait-default drill_simple / drill_peck / drill_chip_break

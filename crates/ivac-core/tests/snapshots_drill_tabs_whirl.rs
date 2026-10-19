@@ -220,9 +220,18 @@ fn snapshot_drill_with_stufenfase_and_toolchange() {
             .any(|l| l.starts_with("G1") && l.contains("Z-")),
         "missing rim chamfer G1 Z move:\n{actual}",
     );
+    // ADR-0025 provenance comments are pinned separately; every other byte
+    // must keep the pre-provenance digest.
+    let (markers, rest): (Vec<&str>, Vec<&str>) = actual
+        .split_inclusive('\n')
+        .partition(|l| l.starts_with("(FABTOOL/1 "));
+    assert_eq!(
+        markers,
+        ["(FABTOOL/1 REQUEST 2)\n", "(FABTOOL/1 ACTIVE 2)\n"]
+    );
     // Full-snapshot pin: capture a stable digest of the gcode so a
     // single-line change anywhere in the op surfaces as a diff.
-    let digest = seahash_hex(&actual);
+    let digest = seahash_hex(&rest.concat());
     assert_snapshot(
         "drill_stufenfase_toolchange",
         &digest,

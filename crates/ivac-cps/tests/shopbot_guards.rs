@@ -1,4 +1,4 @@
-//! Owned ShopBot post must reject records the generic dispatcher can omit.
+//! Owned `ShopBot` post must reject records the generic dispatcher can omit.
 use ivac_cps::{ir::Program, library::bundled, run_post};
 use serde_json::{json, Value};
 fn fixture() -> Value {
@@ -94,7 +94,17 @@ fn lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause() {
     let result = lab_run(fixture()).unwrap();
     let text = result.text;
     assert!(text.contains("SA\n' Tool 1 installed"));
-    assert!(text.contains("SO,1,0\nJZ,5.0000\nTR,18000\nSO,4,1\nSO,1,1\nPAUSE 2.000\n"));
+    // Controller commands only (`'` lines are OpenSBP comments): the reviewed
+    // spindle-1 start sequence is unchanged.
+    let commands: String = text
+        .split_inclusive('\n')
+        .filter(|l| !l.starts_with('\''))
+        .collect();
+    assert!(commands.contains("SO,1,0\nJZ,5.0000\nTR,18000\nSO,4,1\nSO,1,1\nPAUSE 2.000\n"));
+    // ADR-0025 provenance comments bracket that whole sequence.
+    assert!(text.contains(
+        "SO,1,0\n' FABTOOL/1 REQUEST 0 1\nJZ,5.0000\nTR,18000\nSO,4,1\nSO,1,1\nPAUSE 2.000\n' FABTOOL/1 ACTIVE 0 1\n"
+    ));
     assert!(text.ends_with("JZ,5.0000\nSO,1,0\nEND\n"));
     assert!(text.find("SO,1,1").unwrap() < text.find("M3,").unwrap());
     assert!(!text.lines().any(|l| l == "PAUSE"

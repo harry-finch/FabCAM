@@ -4,12 +4,14 @@ VD,,1
 SA
 ' Stop spindle. Verify work zero, stock, clearances and controller jog speeds before continuing.
 PAUSE
+' FABTOOL/1 REQUEST 0 1
 JZ,5.0000
 ' Spindle OFF and stationary. Load tool 1 D=6.0000; set work Z zero for this tool. Return to clearance before OK.
 PAUSE
 JZ,5.0000
 ' Start spindle CW manually at 18000 RPM. Wait until ready before OK.
 PAUSE
+' FABTOOL/1 ACTIVE 0 1
 ' multiple
 ' OP 1
 PAUSE 1.000
@@ -44,12 +46,14 @@ JZ,5.0000
 JZ,5.0000
 ' Stop spindle manually and wait until stationary before OK.
 PAUSE
+' FABTOOL/1 REQUEST 1 2
 JZ,5.0000
 ' Spindle OFF and stationary. Load tool 2 D=6.0000; set work Z zero for this tool. Return to clearance before OK.
 PAUSE
 JZ,5.0000
 ' Start spindle CW manually at 18000 RPM. Wait until ready before OK.
 PAUSE
+' FABTOOL/1 ACTIVE 1 2
 ' Circle after drill
 ' OP 2
 ' object=0 level=0 pocket=0 segments=7 finish

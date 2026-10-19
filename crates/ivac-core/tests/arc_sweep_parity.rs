@@ -68,6 +68,7 @@ fn tessellate(from: Pose3, to: Pose3, cx: f64, cy: f64, step_deg: f64) -> Vec<To
             }
         };
         segs.push(ToolpathSegment {
+            tool_ref: None,
             from: prev,
             to: next,
             kind: MoveKind::Cut,

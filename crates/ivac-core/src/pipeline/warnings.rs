@@ -1518,6 +1518,7 @@ mod tests {
         use crate::gcode::preview::{MoveKind, Pose3, ToolpathSegment};
         let machine = crate::project::MachineConfig::default(); // 200×300×50
         let seg = |fx, fy, fz, tx, ty, tz, kind, line| ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: fx,
                 y: fy,
@@ -1567,6 +1568,7 @@ mod tests {
     fn work_area_scan_silent_when_in_bounds_or_unset() {
         use crate::gcode::preview::{MoveKind, Pose3, ToolpathSegment};
         let in_bounds = vec![ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 0.0,
                 y: 0.0,
@@ -1601,6 +1603,7 @@ mod tests {
             z: 0.0,
         };
         let wild = vec![ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 0.0,
                 y: 0.0,
@@ -1640,6 +1643,7 @@ mod tests {
             ..Default::default()
         };
         let seg = |fx, fy, fz, tx, ty, tz, kind, line| ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: fx,
                 y: fy,
@@ -1700,6 +1704,7 @@ mod tests {
             flip: None,
         };
         let seg = |z: f64, kind, line| ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 50.0,
                 y: 40.0,
@@ -1744,6 +1749,7 @@ mod tests {
                                                                 // are inside X≤200, but the 0° crest reaches (225,150) — 25 mm past
                                                                 // the +X travel.
         let arc_seg = |arc| ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 195.0,
                 y: 120.0,
@@ -1802,6 +1808,7 @@ mod tests {
         // CCW arc about (50, 78) R=10: endpoints (60,78)/(40,78) inside,
         // 90° crest reaches (50, 88) — 8 mm past the +Y stock edge.
         let seg = ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 60.0,
                 y: 78.0,
@@ -1836,6 +1843,7 @@ mod tests {
     fn stock_scan_silent_when_in_bounds_or_unset() {
         use crate::gcode::preview::{MoveKind, Pose3, ToolpathSegment};
         let wild = vec![ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 0.0,
                 y: 0.0,
@@ -1870,6 +1878,7 @@ mod tests {
 
         // Cut fully inside the box → no warning.
         let in_bounds = vec![ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 1.0,
                 y: 1.0,

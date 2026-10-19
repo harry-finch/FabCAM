@@ -1692,6 +1692,7 @@ mod tests {
 
     fn seg(kind: MoveKind, from: Pose3, to: Pose3) -> ToolpathSegment {
         ToolpathSegment {
+            tool_ref: None,
             from,
             to,
             kind,
@@ -3399,6 +3400,7 @@ mod tests {
             ccw: true,
         };
         let seg = ToolpathSegment {
+            tool_ref: None,
             from: pose(5.0, 0.0, -1.0),
             to: pose(0.0, 5.0, -1.0),
             kind: MoveKind::Arc,
@@ -3431,6 +3433,8 @@ mod tests {
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod audit_13_14 {
     use super::*;
     #[test]
@@ -3439,6 +3443,7 @@ mod audit_13_14 {
             segments: vec![(0., 8.), (4., 8.), (4., 2.), (12., 2.)],
         };
         let segment = ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 30.,
                 y: 20.,
@@ -3521,6 +3526,7 @@ mod audit_13_14_cache {
     #[test]
     fn warning_cache_rechecks_changed_tool_at_same_index() {
         let segment = ToolpathSegment {
+            tool_ref: None,
             from: Pose3 {
                 x: 5.,
                 y: 5.,
