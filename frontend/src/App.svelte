@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ProgramQualification from './lib/components/ProgramQualification.svelte';
+  import { programLabel } from './lib/state/program-label';
   import { cornerReliefUi } from './lib/state/corner-relief-ui.svelte';
   import ToolpathVisibility from './lib/components/ToolpathVisibility.svelte';
   import { fixtureFocus } from './lib/state/fixture-focus.svelte';
@@ -434,27 +436,10 @@
     if (last) project.sel.selectedOpId = last.id;
   }
 
-  /// 3D button label cycles with the preview mode: 'both' → "3D",
-  /// 'wireframe' → "3Dwire", 'solid' → "3Dsolid". The button does
-  /// double duty — first click in 2D mode switches to 3D (keeping the
-  /// current preview mode); subsequent clicks cycle modes. Shift+click
-  /// reverses the cycle.
-  const PREVIEW_CYCLE: ('both' | 'wireframe' | 'solid')[] = ['both', 'wireframe', 'solid'];
-  const threeDLabel = $derived.by<string>(() => {
-    const m = project.data.settings.previewMode;
-    if (m === 'wireframe') return '3Dwire';
-    if (m === 'solid') return '3Dsolid';
-    return '3D';
-  });
-  function onClick3dButton(e: MouseEvent) {
-    if (activePane !== '3d') {
-      activePane = '3d';
-      return;
-    }
-    const i = PREVIEW_CYCLE.indexOf(project.data.settings.previewMode);
-    const step = e.shiftKey ? -1 : 1;
-    const next = PREVIEW_CYCLE[(i + step + PREVIEW_CYCLE.length) % PREVIEW_CYCLE.length];
-    project.updateSettings({ previewMode: next });
+  // View selection is stable; rendering preferences live in Settings.
+  const threeDLabel = '3D';
+  function onClick3dButton() {
+    activePane = '3d';
   }
   /// WAI-ARIA tablist arrow-key nav: ArrowLeft/Right toggles activePane,
   /// Home/End jump to 2D/3D. Roving tabindex on the buttons themselves
@@ -747,6 +732,8 @@
   );
   const statusBarText = $derived(composeStatusBar(statusInfoText, statusShortcutHints));
 </script>
+
+<ProgramQualification />
 
 <CommandPalette
   bind:this={commandPalette}
@@ -1071,7 +1058,7 @@
     {:else if project.gen.generated}
       <BottomSheet
         key="gcode"
-        label={t('app.sheet.gcode')}
+        label={programLabel(project.gen.generated?.output_extension, t('app.sheet.gcode'))}
         code="NGC"
         side="left"
         count={project.gen.generated.gcode.split('\n').length}
@@ -1297,7 +1284,7 @@
               title={t('app.gcode.toggle_tip')}
             >
               {gcodeOpen ? '▼' : '▶'}
-              {t('app.gcode.label')}
+              {programLabel(project.gen.generated?.output_extension, t('app.gcode.label'))}
               <span class="hint"
                 >{t('app.gcode.lines', {
                   count: project.gen.generated.gcode.split('\n').length,

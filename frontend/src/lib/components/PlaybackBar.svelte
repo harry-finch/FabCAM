@@ -29,6 +29,15 @@
   import type { SimWarning } from '../api/types';
   import { t } from '../i18n';
 
+  const activeOperation = $derived.by(() => {
+    const mapped = playheadToSegment(
+      project.playhead,
+      project.gen.toolpathCumLen,
+      project.gen.toolpathTotalLen,
+    );
+    const id = project.gen.generated?.toolpath[mapped.segIdx]?.op_id;
+    return project.data.operations.find((op) => op.id === id)?.name;
+  });
   let speed = $state(1.0);
   let playing = $state(false);
   let raf = 0;
@@ -46,7 +55,8 @@
     if (!playing) return;
     const dt = (now - lastTs) / 1000;
     lastTs = now;
-    let next = project.playhead + dt * 0.1 * speed;
+    const rate = Number.isFinite(speed) ? Math.min(10, Math.max(0.1, speed)) : 1;
+    let next = project.playhead + dt * 0.1 * rate;
     if (next >= 1) {
       next = 1;
       playing = false;
@@ -70,7 +80,14 @@
     if (!project.gen.generated) return;
     const t = e.target as HTMLElement | null;
     const tag = t?.tagName ?? '';
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t?.isContentEditable) {
+    if (
+      tag === 'INPUT' ||
+      tag === 'TEXTAREA' ||
+      tag === 'SELECT' ||
+      tag === 'BUTTON' ||
+      t?.closest('[role="dialog"]') ||
+      t?.isContentEditable
+    ) {
       return;
     }
     e.preventDefault();
@@ -198,6 +215,9 @@
 
 {#if project.gen.generated && project.gen.generated.toolpath.length > 0}
   <div class="bar">
+    <span class="active-operation" title={activeOperation ?? t('uxd.playback.path')}>
+      {activeOperation ?? t('uxd.playback.path')}
+    </span>
     <button
       type="button"
       class="op-nav"
@@ -247,7 +267,7 @@
           : t('playback.scrub.forward')}
       />
       {#if chapterTicks.length > 0}
-        <div class="chapter-ticks" aria-hidden="true">
+        <div class="chapter-ticks">
           {#each chapterTicks as tick, i (i)}
             <button
               type="button"
@@ -265,7 +285,7 @@
         </div>
       {/if}
       {#if warnings.length > 0}
-        <div class="markers" aria-hidden="true">
+        <div class="markers">
           {#each warnings as w (w)}
             {@const f = segIdxToFraction(simWarningSegmentIdx(w))}
             {#if f != null}
@@ -293,7 +313,7 @@
         aria-label={t('playback.speed.aria')}
       /></label
     >
-    <span class="counter">
+    <span class="counter" title={t('uxd.playback.distance')}>
       {(() => {
         const total = project.gen.generated.toolpath.length;
         const mapped = playheadToSegment(
@@ -308,10 +328,22 @@
         return `${shown}/${total}`;
       })()}
     </span>
+    <span class="playback-note">{t('uxd.playback.distance')}</span>
   </div>
 {/if}
 
 <style>
+  .active-operation {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text);
+  }
+  .playback-note {
+    font-size: var(--inspector-font-field);
+  }
+
   .bar {
     display: flex;
     align-items: center;

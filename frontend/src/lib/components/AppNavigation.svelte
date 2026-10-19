@@ -2,6 +2,7 @@
   import { suggestMachineName } from '../state/tool_naming';
   import { machineIdentity } from '../state/machine-identity';
   import { TriangleAlert } from '@lucide/svelte';
+  import { isProgramOnlyOp } from '../state/op_types';
   import { project } from '../state/project.svelte';
   import { t } from '../i18n';
   type Area = 'project' | 'machine' | 'tools' | 'settings' | 'help' | 'about';
@@ -70,11 +71,14 @@
     onclick={() => onNavigate('tools')}
     title={t('app.tab.tools_tip')}>{t('app.tab.tools')}</button
   >
-  {#if operationToolLabel != null}
+  {#if operationToolLabel != null && selectedOpForHint && !isProgramOnlyOp(selectedOpForHint.kind) && mainTab === 'project'}
     <button
       type="button"
       class="main-tab context-tab"
-      onclick={onShowOperation}
+      onclick={() => {
+        if (selectedOperationTool) project.sel.toolsDialogFocusId = selectedOperationTool.id;
+        else onShowOperation();
+      }}
       aria-label={operationToolLabel == null
         ? t('app.tab.tools')
         : t('app.context.operation_tool_tip', {

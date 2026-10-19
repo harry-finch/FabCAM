@@ -1,3 +1,5 @@
+import { programExportStatus } from '../state/program-qualification';
+import { exportSafetyProblem } from '../state/generate-palette-policy';
 import { generationExportIsCurrent } from '../state/generation-run';
 import { cornerReliefGenerationError } from '../state/generation-context';
 import { commitDocumentLoad } from '../state/document-load';
@@ -747,6 +749,13 @@ export async function exportGeneratedGcode(
     project.setError(t('genbar.error.block_critical', { count: fixtureCollisions }));
     return;
   }
+  const safetyProblem = () =>
+    exportSafetyProblem(programExportStatus(project, postProcessor), side, project.data.settings);
+  const problem = safetyProblem();
+  if (problem) {
+    project.setError(t(problem.key, { count: problem.count }));
+    return;
+  }
   const twoSided = project.gen.generatedBack != null;
   const base = project.transformedImport?.filename?.replace(/\.[^.]+$/, '') ?? 'output';
   const ext = exportExtension(postProcessor, gen);
@@ -762,6 +771,11 @@ export async function exportGeneratedGcode(
     if (typeof path === 'string') {
       if (!isCurrent()) {
         project.setError(t('ux1.export.stale'));
+        return;
+      }
+      const problem = safetyProblem();
+      if (problem) {
+        project.setError(t(problem.key, { count: problem.count }));
         return;
       }
       try {

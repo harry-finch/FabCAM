@@ -12,6 +12,10 @@
     type OpFieldValue,
     type CutDirection,
   } from '../state/project.svelte';
+  import { depthFields, storedPassDepth } from '../state/inspector-policy';
+  import { generationContextKey, coerceGenerationPost } from '../state/generation-context';
+  import { workspace } from '../state/workspace.svelte';
+  import SavedCuttingRates from './op_properties/SavedCuttingRates.svelte';
   import { defaultClient } from '../api/http';
   import type { HelixRadiusResponse } from '../api/types';
   import { prettyOpKind } from '../state/project-types';
@@ -46,6 +50,25 @@
   // Shared CSS avoids duplicated :global rules. Vite imports it once;
   // the .props prefix keeps these styles namespaced.
   import './op_properties/op-properties.css';
+
+  const chamferGeneratedZ = $derived.by(() => {
+    if (
+      op?.kind !== 'chamfer' ||
+      !project.gen.generated?.gcode ||
+      project.gen.pipelineState !== 'idle'
+    )
+      return null;
+    const post = coerceGenerationPost(
+      project.data.machine.gcodeDialect ?? workspace.get().last_post_processor,
+    );
+    if (project.gen.inputContextKey !== generationContextKey(project, post)) return null;
+    let z = Infinity;
+    for (const segment of project.gen.generated.toolpath) {
+      if (segment.op_id === op.id && segment.kind !== 'rapid')
+        z = Math.min(z, segment.from.z, segment.to.z);
+    }
+    return Number.isFinite(z) ? z : null;
+  });
 
   const apiClient = defaultClient();
   const HELIX_PREVIEW_DEBOUNCE_MS = 300;
@@ -182,6 +205,7 @@
       window.clearTimeout(timer);
     };
   });
+  const fields = $derived(depthFields(op?.kind ?? 'profile'));
   const depthCopy = $derived(vcarveDepthPresentation(op));
 </script>
 
@@ -451,57 +475,73 @@
 
     <fieldset>
       <legend>{t('opprops.cut')}</legend>
-      <label class="row" title={depthCopy.help ? t(depthCopy.help) : undefined}>
-        <span>{t(depthCopy.label)}</span>
-        <div class="num-cell">
-          <input
-            type="number"
-            step="0.1"
-            value={op.depth}
-            onchange={(e) => {
-              const raw = (e.currentTarget as HTMLInputElement).value;
-              const v = parseFloat(raw);
-              // Reject NaN: a typo must not silently change the target depth.
-              if (Number.isFinite(v)) patch('depth', v);
-            }}
-          />
-          <span class="unit">mm</span>
-        </div>
-      </label>
-      {#snippet advancedCutSettings()}
-        {#if op.kind === 'vcarve'}
-          <div class="row" title={t('ops.vcarve.start.help')}>
-            <span>{t('opprops.cut.start_depth')}</span>
-            <span>{op.startDepth === 0 ? t('ops.vcarve.start.fixed') : `${op.startDepth} mm`}</span>
+      {#if fields.final}<label class="row" title={depthCopy.help ? t(depthCopy.help) : undefined}>
+          <span>{t(depthCopy.label)}</span>
+          <div class="num-cell">
+            <input
+              type="number"
+              step="0.1"
+              value={op.depth}
+              onchange={(e) => {
+                const raw = (e.currentTarget as HTMLInputElement).value;
+                const v = parseFloat(raw);
+                // Reject NaN: a typo must not silently change the target depth.
+                if (Number.isFinite(v)) patch('depth', v);
+              }}
+            />
+            <span class="unit">mm</span>
           </div>
-        {:else}
-          <label class="row">
-            <span>{t('opprops.cut.start_depth')}</span>
-            <div class="num-cell">
-              <input
-                type="number"
-                step="0.1"
-                value={op.startDepth}
-                onchange={(e) => {
-                  const raw = (e.currentTarget as HTMLInputElement).value;
-                  const v = parseFloat(raw);
-                  if (Number.isFinite(v)) patch('startDepth', v);
-                }}
-              />
-              <span class="unit">mm</span>
+        </label>
+      {/if}
+      {#if op.kind === 'chamfer'}<ChamferSection {op} {patch} />
+        <p class="hint">{t('uxa.chamfer_depth')}</p>
+        <div class="row">
+          <span>{t('uxa.generated_z')}</span><span
+            >{chamferGeneratedZ == null
+              ? t('uxa.generate_for_z')
+              : `${chamferGeneratedZ.toFixed(3)} mm`}</span
+          >
+        </div>{/if}
+      {#if fields.undercut}<p class="warn-chip">{t('uxa.undercut')}</p>{/if}
+      {#if op.kind === 'drill'}<DrillSection {op} {patch} />{/if}
+      {#snippet advancedCutSettings()}
+        {#if fields.start}
+          {#if op.kind === 'vcarve'}
+            <div class="row" title={t('ops.vcarve.start.help')}>
+              <span>{t('opprops.cut.start_depth')}</span>
+              <span
+                >{op.startDepth === 0 ? t('ops.vcarve.start.fixed') : `${op.startDepth} mm`}</span
+              >
             </div>
-          </label>
+          {:else}
+            <label class="row">
+              <span>{t('opprops.cut.start_depth')}</span>
+              <div class="num-cell">
+                <input
+                  type="number"
+                  step="0.1"
+                  value={op.startDepth}
+                  onchange={(e) => {
+                    const raw = (e.currentTarget as HTMLInputElement).value;
+                    const v = parseFloat(raw);
+                    if (Number.isFinite(v)) patch('startDepth', v);
+                  }}
+                />
+                <span class="unit">mm</span>
+              </div>
+            </label>
+          {/if}
         {/if}
-        {#if !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}
+        {#if fields.step && !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}
           <label class="row" title={depthCopy.stepHelp ? t(depthCopy.stepHelp) : undefined}>
-            <span>{t('opprops.cut.step')}</span>
+            <span>{t('uxa.pass_depth')}</span>
             <div class="step-cell">
               <input
                 type="number"
                 step="0.1"
-                value={op.step ?? ''}
+                value={op.step == null ? '' : Math.abs(op.step)}
                 placeholder={stepInheriting && toolDefaultStep !== null && toolDefaultStep < 0
-                  ? t('opprops.cut.step.from_tool', { value: toolDefaultStep })
+                  ? t('opprops.cut.step.from_tool', { value: -toolDefaultStep })
                   : '—'}
                 class:inherit={stepInheriting && toolDefaultStep !== null && toolDefaultStep < 0}
                 class:invalid={stepMissing}
@@ -511,8 +551,8 @@
                     patch('step', null);
                     return;
                   }
-                  const n = parseFloat(v);
-                  patch('step', isNaN(n) ? null : n);
+                  const stored = storedPassDepth(v);
+                  if (stored !== undefined) patch('step', stored);
                 }}
               />
               <span class="unit">mm</span>
@@ -530,7 +570,7 @@
             <p class="step-error">{t('opprops.cut.step.required')}</p>
           {/if}
         {/if}
-        {#if isContourOp(op)}
+        {#if (isContourOp(op) || op.kind === 'chamfer') && fields.finishStep}
           <label class="row" title={t('opprops.cut.finish_step.title')}>
             <span>{t('opprops.cut.finish_step')}</span>
             <div class="num-cell">
@@ -538,10 +578,11 @@
                 type="number"
                 step="0.05"
                 placeholder={t('opprops.cut.finish_step.placeholder')}
-                value={op.finishStep ?? ''}
+                value={op.finishStep == null ? '' : Math.abs(op.finishStep)}
                 onchange={(e) => {
-                  const v = parseFloat((e.currentTarget as HTMLInputElement).value);
-                  patch('finishStep', isNaN(v) ? undefined : v);
+                  const value = e.currentTarget.value;
+                  const stored = storedPassDepth(value);
+                  if (stored !== undefined) patch('finishStep', stored ?? undefined);
                 }}
               />
               <span class="unit">mm</span>
@@ -636,7 +677,7 @@
             </div>
           </div>
         {/if}
-        {#if op.kind !== 'vcarve'}
+        {#if fields.through}
           <label class="row" title={t('opprops.cut.through_depth.title')}>
             <span>{t('opprops.cut.through_depth')}</span>
             <div class="num-cell">
@@ -653,6 +694,8 @@
               <span class="unit">mm</span>
             </div>
           </label>
+        {/if}
+        {#if fields.list}
           <label class="row" title={t('opprops.cut.depth_list.title')}>
             <span>{t('opprops.cut.depth_list')}</span>
             <div class="num-cell">
@@ -858,7 +901,7 @@
           {/if}
         {/if}
       {/snippet}
-      {#if project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket')}
+      {#if project.data.machine.mode === 'mill'}
         <details class="inspector-disclosure depth-entry">
           <summary>{t('fs35.advanced_depth')}</summary>{@render advancedCutSettings()}
         </details>
@@ -872,10 +915,15 @@
       {#key op.id}<FeedsSpeedsSection {op} />{/key}
     {/if}
 
+    {#if project.data.machine.mode === 'mill' && op.kind !== 'profile' && op.kind !== 'pocket'}<SavedCuttingRates
+        {op}
+      />{/if}
+
     {#if op.kind === 'profile' || op.kind === 'pocket'}
       <details
         class="optional-section"
-        open={(op.tabMode?.kind ?? 'off') !== 'off' ||
+        open={op.tabsActive ||
+          (op.tabMode?.kind ?? 'off') !== 'off' ||
           (op.tabPlacements && op.tabPlacements.length > 0)}
       >
         <summary>
@@ -903,23 +951,16 @@
       <PocketSection {op} {patch} />
     {/if}
 
-    {#if op.kind === 'drill'}
-      <DrillSection {op} {patch} />
-    {/if}
-
     {#if op.kind === 'profile' || op.kind === 'pocket' || op.kind === 'engrave' || op.kind === 'drag_knife' || op.kind === 't_slot' || op.kind === 'dovetail'}
       <details
         class="optional-section"
-        open={op.feedRateOverride !== undefined ||
-          op.plungeRateOverride !== undefined ||
+        open={(project.data.machine.mode !== 'mill' &&
+          (op.feedRateOverride !== undefined || op.plungeRateOverride !== undefined)) ||
           (op.cornerFeedReduction ?? 0) > 0}
       >
         <summary>
-          {project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket')
-            ? t('fs35.advanced_feed')
-            : t('opprops.feeds')}
-          {#if !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}<span
-              class="opt-summary"
+          {project.data.machine.mode === 'mill' ? t('fs35.advanced_feed') : t('opprops.feeds')}
+          {#if project.data.machine.mode !== 'mill'}<span class="opt-summary"
               >{op.feedRateOverride !== undefined ||
               op.plungeRateOverride !== undefined ||
               (op.cornerFeedReduction ?? 0) > 0
@@ -929,12 +970,11 @@
         </summary>
         <fieldset class="optional-fieldset">
           <legend
-            >{project.data.machine.mode === 'mill' &&
-            (op.kind === 'profile' || op.kind === 'pocket')
+            >{project.data.machine.mode === 'mill'
               ? t('fs35.advanced_feed')
               : t('opprops.feeds')}</legend
           >
-          {#if !op.appliedCutting && !(project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket'))}
+          {#if !op.appliedCutting && project.data.machine.mode !== 'mill'}
             <label class="row" title={t('opprops.feeds.feed_rate.title')}>
               <span>{t('opprops.feeds.feed_rate')}</span>
               <div class="num-cell">
@@ -1017,10 +1057,6 @@
 
     {#if op.kind === 'vcarve'}
       <VCarveSection {op} {patch} />
-    {/if}
-
-    {#if op.kind === 'chamfer'}
-      <ChamferSection {op} {patch} />
     {/if}
 
     {#if op.kind === 'thread'}

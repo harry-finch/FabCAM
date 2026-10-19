@@ -29,9 +29,11 @@ export function drawCornerRelief(
         disabled: !!candidate.reason,
       });
       ctx.beginPath();
-      ctx.arc(xy[0], xy[1], selected ? 6 : 4, 0, 2 * Math.PI);
+      const highlighted = cornerReliefUi.highlighted === cornerKey(candidate.reference);
+      ctx.lineWidth = highlighted ? 3 : 2;
+      ctx.arc(xy[0], xy[1], highlighted ? 10 : selected ? 6 : 4, 0, 2 * Math.PI);
       ctx.strokeStyle = candidate.reason ? themeVar('--text-muted') : accent;
-      ctx.fillStyle = selected ? accent : themeVar('--surface');
+      ctx.fillStyle = selected ? accent : themeVar('--bg-elevated');
       ctx.fill();
       ctx.stroke();
       if (selected && candidate.center) {

@@ -1,4 +1,10 @@
 <script lang="ts">
+  import ProgramPostNotice from './ProgramPostNotice.svelte';
+  import { project } from '../../state/project.svelte';
+  import { workspace } from '../../state/workspace.svelte';
+  const cps = $derived(
+    (project.data.machine.gcodeDialect ?? workspace.get().last_post_processor) === 'cps',
+  );
   /// GcodeInclude op-properties: file-picker + path display + content
   /// textarea, plus the variable cheat-sheet hint and the verbose
   /// unsim-warning toggle.
@@ -12,6 +18,8 @@
   }
   let { op, patch }: Props = $props();
 </script>
+
+<ProgramPostNotice kind="gcode_include" />
 
 <label class="row">
   <span>{t('ops.gcode_include.name.label')}</span>
@@ -38,15 +46,15 @@
   />
 </label>
 {#if op.path}
-  <p class="hint">
-    {t('ops.gcode_include.loaded_from.hint')} <code>{op.path}</code> · {t(
-      'ops.gcode_include.loaded_stats.hint',
-      {
-        characters: op.content?.length ?? 0,
-        lines: op.content?.split('\n').length ?? 0,
-      },
-    )}
-  </p>
+  {#if !cps}<p class="hint">
+      {t('ops.gcode_include.loaded_from.hint')} <code>{op.path}</code> · {t(
+        'ops.gcode_include.loaded_stats.hint',
+        {
+          characters: op.content?.length ?? 0,
+          lines: op.content?.split('\n').length ?? 0,
+        },
+      )}
+    </p>{/if}
 {/if}
 <label class="row" title={t('ops.gcode_include.content.help')}>
   <span>{t('ops.gcode_include.content.label')}</span>
@@ -59,18 +67,18 @@
     style="font-family: ui-monospace, monospace; white-space: pre;"
   ></textarea>
 </label>
-<p class="hint hint-pause">
-  {t('ops.gcode_include.tokens_intro.hint')}
-  <code>{'{x}'}</code> <code>{'{y}'}</code> <code>{'{z}'}</code>
-  {t('ops.gcode_include.token_xyz.hint')}
-  <code>{'{f}'}</code>
-  {t('ops.gcode_include.token_feed.hint')}
-  <code>{'{s}'}</code>
-  {t('ops.gcode_include.token_spindle.hint')}
-  <code>{'{safe_z}'}</code>
-  {t('ops.gcode_include.token_safez.hint')} <code>{'{tokens}'}</code>
-  {t('ops.gcode_include.tokens_outro.hint')}
-</p>
+{#if !cps}<p class="hint hint-pause">
+    {t('ops.gcode_include.tokens_intro.hint')}
+    <code>{'{x}'}</code> <code>{'{y}'}</code> <code>{'{z}'}</code>
+    {t('ops.gcode_include.token_xyz.hint')}
+    <code>{'{f}'}</code>
+    {t('ops.gcode_include.token_feed.hint')}
+    <code>{'{s}'}</code>
+    {t('ops.gcode_include.token_spindle.hint')}
+    <code>{'{safe_z}'}</code>
+    {t('ops.gcode_include.token_safez.hint')} <code>{'{tokens}'}</code>
+    {t('ops.gcode_include.tokens_outro.hint')}
+  </p>{/if}
 <!-- Verbose per-line warning toggle. Off by default; users
      debugging an exotic block flip it on to see exactly which
      lines were skipped and why. -->

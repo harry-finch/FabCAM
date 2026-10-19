@@ -1,4 +1,10 @@
 <script lang="ts">
+  import ProgramPostNotice from './ProgramPostNotice.svelte';
+  import { project } from '../../state/project.svelte';
+  import { workspace } from '../../state/workspace.svelte';
+  const cps = $derived(
+    (project.data.machine.gcodeDialect ?? workspace.get().last_post_processor) === 'cps',
+  );
   /// Probe op-properties: G38.2 probe move along the selected axis.
   /// No tool / source needed — the operator wires the probe to the machine.
   /// Styles inherited from OpPropertiesPanel's :global(.props ...) rules.
@@ -11,6 +17,8 @@
   }
   let { op, patch }: Props = $props();
 </script>
+
+<ProgramPostNotice kind="probe" />
 
 <label class="row">
   <span>{t('ops.probe.name.label')}</span>
@@ -52,8 +60,8 @@
       patch('feedMmMin', Number.parseInt((e.currentTarget as HTMLInputElement).value, 10))}
   />
 </label>
-<p class="hint hint-pause">
-  {t('ops.probe.emits.hint')}
-  <code>G38.2 {(op.axis ?? 'z').toUpperCase()}{op.distanceMm ?? -10} F{op.feedMmMin ?? 100}</code
-  >{t('ops.probe.halts.hint')}
-</p>
+{#if !cps}<p class="hint hint-pause">
+    {t('ops.probe.emits.hint')}
+    <code>G38.2 {(op.axis ?? 'z').toUpperCase()}{op.distanceMm ?? -10} F{op.feedMmMin ?? 100}</code
+    >{t('ops.probe.halts.hint')}
+  </p>{/if}

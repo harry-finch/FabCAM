@@ -27,9 +27,10 @@ import type { SimWarning } from '../api/types';
 /// * `critical` — at least one critical sim or pipeline warning.
 /// * `warning`  — non-critical warnings present.
 /// * `clean`    — ran, no warnings.
-export type WarningSeverity = 'idle' | 'stale' | 'critical' | 'warning' | 'clean';
+export type WarningSeverity = 'idle' | 'stale' | 'critical' | 'warning' | 'clean' | 'unverified';
 
 export interface WarningsSummaryInput {
+  verification?: import('../sim/qualification').QualificationPhase;
   /// Accumulated sim diagnostics warnings (`project.gen.simDiagnostics?.warnings ?? []`).
   simWarnings: SimWarning[];
   /// Pipeline-level warnings from the last Generate
@@ -76,6 +77,7 @@ export function summarizeWarnings(input: WarningsSummaryInput): WarningsSummary 
   else if (stale) severity = 'stale';
   else if (critical > 0) severity = 'critical';
   else if (total > 0) severity = 'warning';
+  else if (input.verification && input.verification !== 'current') severity = 'unverified';
   else severity = 'clean';
 
   return { sim, pipeline, critical, total, hasRun, stale, severity };

@@ -157,6 +157,7 @@ const h = vi.hoisted(() => {
 });
 
 vi.mock('ivac-wasm', () => ({
+  version: () => ({ capabilities: ['movement-tool-provenance-1'] }),
   default: async () => ({ memory: h.memory }),
   Simulator: h.FakeSimulator,
 }));

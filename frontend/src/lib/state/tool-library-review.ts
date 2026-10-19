@@ -23,6 +23,8 @@ export function toolLibraryImpacts(
         id: tool.id,
         before: tool.name,
         after: replacement.name,
+        kindBefore: tool.kind,
+        kindAfter: replacement.kind,
         diameterBefore: tool.diameter,
         diameterAfter: replacement.diameter,
         operations: operations.filter((o) => o.toolId === tool.id).map((o) => o.name),

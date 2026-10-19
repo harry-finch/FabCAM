@@ -811,7 +811,11 @@
           /><span class="unit">s</span></span
         >
       </label>
-      <label class="check" title={t('machine.park_home.title')}>
+      {#if isShopBot}<p class="help">{t('uxa.shopbot_parking')}</p>{/if}
+      <label
+        class="check"
+        title={isShopBot ? t('uxa.shopbot_parking') : t('machine.park_home.title')}
+      >
         <input type="checkbox" bind:checked={draft.parkAtHome} />
         {t('machine.park_home')}
       </label>

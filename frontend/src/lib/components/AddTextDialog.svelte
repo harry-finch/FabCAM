@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { compatibleTextTool } from '../state/preparation';
   /**
    * AddTextDialog — single-step "add editable text + create engrave op" flow.
    *
@@ -244,8 +245,7 @@
     if (!want) return project.data.tools[0]?.id ?? 1;
     const match = project.data.tools.find((t) => t.kind === want);
     if (match) return match.id;
-    // Fall back to any tool if the required kind isn't in the library.
-    return project.data.tools[0]?.id ?? 1;
+    return 0;
   }
 
   const filteredTools = $derived.by(() => {
@@ -340,7 +340,12 @@
     return btoa(binary);
   }
 
+  const toolCompatible = $derived(
+    compatibleTextTool(project.data.tools, d.toolId, STYLE_TABLE[d.style].toolKind),
+  );
+
   async function apply() {
+    if (!toolCompatible) return;
     busy = true;
     errorMsg = null;
     let txOpen = false;
@@ -357,6 +362,7 @@
       // TextLayer.singleLine cached flag reflects the current font.
       await renderPreview();
 
+      if (!toolCompatible) throw new Error(t('uxc.text_tool'));
       const bytes_b64 = bytesToBase64(bytes);
       const fontSource: TextFontSource = d.useUserFont
         ? {
@@ -643,6 +649,7 @@
         </label>
       {/if}
 
+      {#if !toolCompatible}<p role="status">{t('uxc.text_tool')}</p>{/if}
       {#if STYLE_TABLE[d.style].defaultDepth != null}
         <label title={t('dialog.text.depth.title')}>
           <span>{t('dialog.text.depth')}</span>
@@ -667,7 +674,9 @@
         <button class="btn-danger" onclick={close}>{t('common.discard')}</button>
       {:else}
         <button class="btn-secondary" onclick={close}>{t('common.cancel')}</button>
-        <button class="btn-primary" onclick={apply} disabled={busy}>{t('dialog.text.add')}</button>
+        <button class="btn-primary" onclick={apply} disabled={busy || !toolCompatible}
+          >{t('dialog.text.add')}</button
+        >
       {/if}
     </footer>
   </Modal>

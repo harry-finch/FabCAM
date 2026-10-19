@@ -27,7 +27,6 @@
   /// content shows on the right — the full stacked form overwhelms.
   /// Modal mode (unused since the tab landed) keeps the stacked list.
   const GROUPS = [
-    { id: 'view', labelKey: 'settings.group.view' },
     { id: 'appearance', labelKey: 'settings.group.appearance' },
     { id: 'preview', labelKey: 'settings.group.preview' },
     { id: 'performance', labelKey: 'settings.group.performance' },
@@ -112,35 +111,6 @@
     <section class:group-hidden={groupHidden('feeds-speeds')}>
       <FeedsSpeedsSourcesSettings />
     </section>
-    <section class:group-hidden={groupHidden('view')}>
-      <h3>{t('settings.group.view')}</h3>
-      <div class="grid">
-        <label
-          >{t('settings.view.preview_style')}
-          <select
-            value={project.data.settings.previewMode}
-            onchange={(e) =>
-              update(
-                'previewMode',
-                (e.currentTarget as HTMLSelectElement).value as AppSettings['previewMode'],
-              )}
-          >
-            <option value="both">{t('settings.view.preview_style.both')}</option>
-            <option value="wireframe">{t('settings.view.preview_style.wireframe')}</option>
-            <option value="solid">{t('settings.view.preview_style.solid')}</option>
-          </select>
-        </label>
-        <label class="check">
-          <input
-            type="checkbox"
-            checked={project.data.settings.showStockBox}
-            onchange={(e) => update('showStockBox', (e.currentTarget as HTMLInputElement).checked)}
-          />
-          <span>{t('settings.view.show_stock_box')}</span>
-        </label>
-      </div>
-    </section>
-
     <section class:group-hidden={groupHidden('appearance')}>
       <h3>{t('settings.group.appearance')}</h3>
       <div class="grid">
@@ -205,6 +175,15 @@
     <section class:group-hidden={groupHidden('preview')}>
       <h3>{t('settings.group.preview')}</h3>
       <p class="hint">{t('settings.preview.intro')}</p>
+      <label class="check">
+        <input
+          type="checkbox"
+          checked={project.data.settings.showStockBox}
+          onchange={(e) => update('showStockBox', (e.currentTarget as HTMLInputElement).checked)}
+        />
+        <span>{t('settings.view.show_stock_box')}</span>
+      </label>
+
       <div class="grid">
         <label
           >{t('settings.preview.solid_color')}
@@ -416,16 +395,6 @@
     <section class:group-hidden={groupHidden('performance')}>
       <h3>{t('settings.group.performance')}</h3>
       <div class="grid">
-        <label class="check">
-          <input
-            type="checkbox"
-            checked={project.data.settings.solidPreviewByDefault}
-            onchange={(e) =>
-              update('solidPreviewByDefault', (e.currentTarget as HTMLInputElement).checked)}
-          />
-          <span>{t('settings.performance.solid_default')}</span>
-        </label>
-
         <label
           >{t('settings.performance.max_sim_cells')}
           <input
@@ -445,6 +414,7 @@
                 ),
               )}
           />
+          <small class="hint">{project.data.settings.maxSimulationCells.toLocaleString()}</small>
         </label>
 
         <label
@@ -466,6 +436,7 @@
                 ),
               )}
           />
+          <small class="hint">{project.data.settings.maxRenderTriangles.toLocaleString()}</small>
         </label>
       </div>
       <!-- eslint-disable-next-line svelte/no-at-html-tags -- static, translator-authored markup -->
@@ -494,6 +465,7 @@
     <section class:group-hidden={groupHidden('safety')}>
       <h3>{t('settings.group.safety')}</h3>
       <div class="grid">
+        <p class="help">{t('uxa.safety')}</p>
         <label class="check">
           <input
             type="checkbox"
@@ -568,7 +540,7 @@
           </label>
         {/each}
         <label title={t('settings.snap.grid_step.title')}
-          >{t('settings.snap.grid_step')}
+          >{t('settings.snap.grid_step')} (mm)
           <input
             type="number"
             min="0.1"

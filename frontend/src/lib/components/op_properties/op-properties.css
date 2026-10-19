@@ -496,3 +496,15 @@
 .props .depth-entry .hint {
   font-size: var(--inspector-font-meta);
 }
+
+/* Keep pass thickness editable when the inspector is narrow or text is zoomed. */
+.props .step-cell {
+  display: grid;
+  grid-template-columns: minmax(4.375rem, 1fr) var(--inspector-unit-width);
+}
+.props .step-cell .reset-link {
+  grid-column: 1 / -1;
+  justify-self: start;
+  white-space: normal;
+  text-align: left;
+}

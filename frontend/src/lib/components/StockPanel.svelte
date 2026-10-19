@@ -1,4 +1,5 @@
 <script lang="ts">
+  import WorkZeroPicker from './WorkZeroPicker.svelte';
   /// Stock settings — the always-present workpiece every layer / op
   /// attaches to. The stock-first rework redesigned this
   /// panel around the project's only piece of stock (a box):
@@ -418,6 +419,7 @@
     >
       {t('ux2.zero_stock')}
     </button>
+    <WorkZeroPicker />
     <p class="placement-help">{t('fs36.stock_wcs_help')}</p>
     {#if !availableWcs.includes(project.data.workOffset.wcs) || project.data.workOffset.z_mm !== 0}
       <p class="placement-help" role="alert">{t('ux2.wcs.unsupported')}</p>

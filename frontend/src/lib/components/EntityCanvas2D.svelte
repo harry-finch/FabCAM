@@ -260,6 +260,7 @@
     void project.sel.selectedObjects;
     void cornerReliefUi.response;
     void cornerReliefUi.corners;
+    void cornerReliefUi.highlighted;
     void cornerReliefUi.editing;
     void project.data.operations;
     void project.sel.selectedOpId;
@@ -1778,7 +1779,14 @@
       fixtureTools.ids,
       themeVar('--error', '#e54848'),
     );
-    drawWorkZero(ctx, project2, project.data.workOffset, accent, t('ux2.zero_marker'));
+    drawWorkZero(
+      ctx,
+      project2,
+      project.data.workOffset,
+      accent,
+      t('ux2.zero_marker'),
+      themeVar('--bg-app', '#fff'),
+    );
     reliefHits = drawCornerRelief(ctx, project2, scale, themeVar, accent);
 
     drawTabs(

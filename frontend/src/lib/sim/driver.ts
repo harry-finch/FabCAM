@@ -29,7 +29,7 @@ import type {
   ToolpathSegment,
 } from '../api/types';
 import type { AppSettings, Fixture, ToolEntry } from '../state/project.svelte';
-import { toWireToolKind } from '../api/build-project';
+import { toWireTool, simulationGrid } from './config';
 
 interface SimulatorWasm {
   // wasm-bindgen produces a constructor on the generated class; this
@@ -142,6 +142,7 @@ interface SimulatorWasm {
 }
 
 interface WasmModule {
+  version(): { capabilities?: string[] };
   default?: (
     module_or_path?: unknown,
   ) => Promise<{ memory: WebAssembly.Memory } & Record<string, unknown>>;
@@ -195,6 +196,8 @@ async function loadWasm(): Promise<WasmHandle> {
         throw new Error('ivac-wasm pkg missing default init export');
       }
       const init = await mod.default();
+      if (!mod.version().capabilities?.includes('movement-tool-provenance-1'))
+        throw new Error('Simulator tool provenance contract unavailable');
       if (!init.memory) {
         throw new Error('ivac-wasm init returned no memory');
       }
@@ -211,81 +214,8 @@ async function loadWasm(): Promise<WasmHandle> {
 /// them feeding the same Rust `ToolKind` deserializer. The kind name
 /// must go through `toWireToolKind` so the frontend `cone` becomes the
 /// backend `kegel`.
-export function toWireTool(t: ToolEntry): Record<string, unknown> {
-  return {
-    id: t.id,
-    name: t.name,
-    kind: toWireToolKind(t.kind),
-    diameter: t.diameter,
-    ...(t.tipDiameter !== undefined ? { tip_diameter: t.tipDiameter } : {}),
-    ...(t.tipAngleDeg !== undefined ? { tip_angle_deg: t.tipAngleDeg } : {}),
-    ...(t.dragoff !== undefined ? { dragoff: t.dragoff } : {}),
-    flutes: t.flutes,
-    speed: t.speed,
-    plunge_rate: t.plungeRate,
-    feed_rate: t.feedRate,
-    coolant: t.coolant,
-    ...(t.fluteLengthMm !== undefined ? { flute_length_mm: t.fluteLengthMm } : {}),
-    ...(t.lengthMm !== undefined ? { length_mm: t.lengthMm } : {}),
-    ...(t.compressionTransitionMm !== undefined
-      ? { compression_transition_mm: t.compressionTransitionMm }
-      : {}),
-    ...(t.threadPitchMm !== undefined ? { thread_pitch_mm: t.threadPitchMm } : {}),
-    ...(t.shankDiameterMm !== undefined ? { shank_diameter_mm: t.shankDiameterMm } : {}),
-    ...(t.holder !== undefined ? { holder: t.holder } : {}),
-    // Per-kind sim/holder metadata so the heightfield simulator can
-    // pick the right cutter profile and holder-check uses the right
-    // shank dims. Bull-nose collapses to a fillet profile in the sim;
-    // form-profile (incl. the folded-in T-slot) carves its (z, r)
-    // sample list when ≥2 rows are present.
-    ...(t.cornerRadiusMm !== undefined ? { corner_radius_mm: t.cornerRadiusMm } : {}),
-    // Beam / torch cut width — the laser_beam and plasma_torch sim
-    // profiles carve a kerf-radius spot instead of a tool radius.
-    ...(t.kerfMm !== undefined && t.kerfMm > 0 ? { kerf_mm: t.kerfMm } : {}),
-    // Wear compensation — the sim carves at the effective diameter.
-    ...(t.wearOffsetMm !== undefined && t.wearOffsetMm !== 0
-      ? { wear_offset_mm: t.wearOffsetMm }
-      : {}),
-    ...(t.kind === 'form_profile' && t.formProfileMm !== undefined && t.formProfileMm.length >= 2
-      ? { form_profile_mm: t.formProfileMm.map((s) => ({ z_mm: s.zMm, r_mm: s.rMm })) }
-      : {}),
-    ...(t.zShiftMm !== undefined ? { z_shift_mm: t.zShiftMm } : {}),
-  };
-}
-
-/// `computeFootprint` moved to the THREE-free `./footprint`
-/// module so the API layer can resolve the stock box without importing
-/// this THREE-heavy driver. Imported for this module's own `build()` use
-/// and re-exported for the existing 3D-scene import sites.
+export { toWireTool, effectiveSimCellCap, WASM_TRIAL_SIM_CELL_CAP } from './config';
 export { computeFootprint };
-
-/// The in-browser (`?api=wasm`) trial runs the sim single-threaded
-/// on the main thread, so a too-fine heightfield makes `set_toolpath` /
-/// `advance` / mesh upload stutter the UI. Cap the grid harder there.
-/// This is the single fidelity knob: a lower-res carve PREVIEW is an
-/// acceptable trial trade — far better than laggy scrubbing. Native /
-/// server / Tauri keep the user's full `maxSimulationCells`. ~250k cells
-/// ≈ a 500×500 grid over the footprint — smooth, still legible.
-export const WASM_TRIAL_SIM_CELL_CAP = 250_000;
-
-/// Effective sim cell cap for the active transport. In wasm-trial mode
-/// it's the tighter of the user's setting and [`WASM_TRIAL_SIM_CELL_CAP`];
-/// everywhere else it's the user's setting verbatim. Pure so it's
-/// unit-tested without the wasm module.
-export function effectiveSimCellCap(userMaxCells: number, isWasm: boolean): number {
-  const userCap = Math.max(1, userMaxCells);
-  return isWasm ? Math.min(userCap, WASM_TRIAL_SIM_CELL_CAP) : userCap;
-}
-
-/// Compute cell size from the active tool diameter when settings is in
-/// 'auto' mode. Targets ~tool_diameter/15, clamped 0.05..2.0 mm.
-function computeCellSize(toolDiameter: number, settings: AppSettings): number {
-  if (settings.cellResolutionMode === 'manual') {
-    return Math.max(0.01, settings.cellResolutionMm);
-  }
-  return Math.max(0.05, Math.min(2.0, toolDiameter / 15));
-}
-
 export interface DriverOptions {
   scene: THREE.Scene;
   requestRender: () => void;
@@ -546,6 +476,7 @@ export class HeightfieldDriver {
     /// front sim to completion); the playhead-driven front carve gets its own
     /// resolver via `advanceTo`. Falls back to `tool` for every segment when
     /// omitted (fine for a single-op front).
+    resolutionDiameter?: number;
     toolForSeg?: (segIdx: number) => ToolEntry;
     /// Resolves the cutting tool for each BACK toolpath segment (by op). Only
     /// consulted when `generatedBack` is present.
@@ -567,27 +498,13 @@ export class HeightfieldDriver {
       return;
     }
     const fp = computeFootprint(input.imported, input.stock);
-    const cellSize = computeCellSize(input.tool.diameter, input.settings);
-    const cols = Math.ceil((fp.maxX - fp.minX) / cellSize) + 1;
-    const rows = Math.ceil((fp.maxY - fp.minY) / cellSize) + 1;
-    const cellCount = cols * rows;
-    // Sim-side cap: `maxSimulationCells` bounds WASM heap allocation
-    // (4 bytes / cell). Halve cell density only when the user's
-    // setting is exceeded — accurately reflecting their preference.
-    // The GPU-side cap is handled separately by the LOD pyramid
-    // via `maxRenderTriangles`, so high sim accuracy no
-    // longer forces a coarse mesh.
-    // In the in-browser wasm trial the sim is single-threaded on
-    // the main thread, so clamp harder to keep rebuild + scrub smooth.
     const isWasm = isWasmTransport();
-    const simCellCap = effectiveSimCellCap(input.settings.maxSimulationCells, isWasm);
-    let effectiveCellSize = cellSize;
-    let coarsened = false;
-    if (cellCount > simCellCap) {
-      const scale = Math.sqrt(cellCount / simCellCap);
-      effectiveCellSize = cellSize * scale;
-      coarsened = true;
-    }
+    const { cellSize, effectiveCellSize, coarsened } = simulationGrid(
+      fp,
+      input.resolutionDiameter ?? input.tool.diameter,
+      input.settings,
+      isWasm,
+    );
     // Stock top plane Z (default 0). Carving descends from here;
     // the floor is topZ − thickness. Toolpath Z is absolute (WCS), so a
     // raised top models zeroing below the stock surface.

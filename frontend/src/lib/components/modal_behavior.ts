@@ -107,3 +107,21 @@ export function handleModalKey(
     }
   }
 }
+
+/** Recover the full dialog after display/zoom changes; dragging remains permissive. */
+export function fitModalToViewport(
+  g: ModalGeom,
+  w: number,
+  h: number,
+  vw: number,
+  vh: number,
+): ModalGeom {
+  const width = Math.min(g.width ?? w, Math.max(1, vw - 16));
+  const height = Math.min(g.height ?? h, Math.max(1, vh - 16));
+  return {
+    left: Math.max(0, Math.min(g.left, vw - width)),
+    top: Math.max(0, Math.min(g.top, vh - height)),
+    width: g.width == null ? null : width,
+    height: g.height == null ? null : height,
+  };
+}

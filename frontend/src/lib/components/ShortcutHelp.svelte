@@ -78,8 +78,8 @@
         </dl>
       </section>
 
-      <section>
-        <h3>{t('shortcuts.section.touch')}</h3>
+      <details>
+        <summary>{t('shortcuts.section.touch')}</summary>
         <dl>
           <dt><kbd>pinch</kbd></dt>
           <dd>{t('shortcuts.touch.pinch')}</dd>
@@ -102,7 +102,7 @@
           <dt><kbd>bottom handles</kbd></dt>
           <dd>{t('shortcuts.touch.bottom_handles')}</dd>
         </dl>
-      </section>
+      </details>
     </div>
 
     {#if !embedded}

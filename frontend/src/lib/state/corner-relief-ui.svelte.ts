@@ -1,6 +1,7 @@
 import type { CornerRef, CornerReliefResponse } from '../api/types';
 export const cornerReliefUi = $state({
   editing: false,
+  highlighted: null as string | null,
   corners: [] as CornerRef[],
   response: null as CornerReliefResponse | null,
   diameter: 0,
@@ -17,6 +18,7 @@ export function toggleCorner(c: CornerRef) {
 }
 export function closeCornerRelief() {
   cornerReliefUi.editing = false;
+  cornerReliefUi.highlighted = null;
   cornerReliefUi.original = null;
   cornerReliefUi.response = null;
   cornerReliefUi.corners = [];

@@ -69,7 +69,7 @@
 <fieldset>
   <legend>{t('ops.relief.source.legend')}</legend>
   <label class="row">
-    <span>{t('ops.relief_mill.image.label')}</span>
+    <span>{t('uxd.stl_source')}</span>
     <div class="num-cell">
       <select
         value={op.sourceId}

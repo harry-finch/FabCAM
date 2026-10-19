@@ -4,6 +4,7 @@
     __scrollCache,
     __geomCache,
     centeredModalPosition,
+    fitModalToViewport,
     clampModalPosition,
     handleModalKey,
     FOCUSABLE_SELECTOR,
@@ -119,6 +120,12 @@
     if (persistKey) __geomCache.set(persistKey, geom);
   }
 
+  function recoverViewport() {
+    if (!body || !geom) return;
+    const rect = body.getBoundingClientRect();
+    geom = fitModalToViewport(geom, rect.width, rect.height, window.innerWidth, window.innerHeight);
+    if (persistKey) __geomCache.set(persistKey, geom);
+  }
   let resizeObserver: ResizeObserver | null = null;
 
   onMount(() => {
@@ -136,7 +143,13 @@
         if (!body) return;
         const rect = body.getBoundingClientRect();
         if (remembered) {
-          geom = { ...remembered };
+          geom = fitModalToViewport(
+            remembered,
+            rect.width,
+            rect.height,
+            window.innerWidth,
+            window.innerHeight,
+          );
         } else {
           const c = centeredModalPosition(
             rect.width,
@@ -146,6 +159,7 @@
           );
           geom = { left: c.left, top: c.top, width: null, height: null };
         }
+        window.addEventListener('resize', recoverViewport);
         headerEl = body.querySelector('header');
         if (draggable && headerEl) {
           headerEl.addEventListener('pointerdown', onHeaderPointerDown);
@@ -176,6 +190,7 @@
       if (headerEl) headerEl.removeEventListener('pointerdown', onHeaderPointerDown);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('resize', recoverViewport);
       resizeObserver?.disconnect();
       if (restoreFocus && trigger instanceof HTMLElement && document.contains(trigger))
         trigger.focus();
@@ -237,7 +252,8 @@
     box-shadow: 0 10px 40px var(--shadow-modal);
     max-height: 86vh;
     overflow: auto;
-    min-width: min(480px, 100vw);
+    min-width: min(480px, calc(100vw - 16px));
+    max-width: calc(100vw - 16px);
     /* tabindex="-1" on the body makes it focusable so we can pull focus
        into the dialog programmatically on open, without it appearing in
        the natural Tab order. */
@@ -257,8 +273,8 @@
   }
   .modal.resizable {
     resize: both;
-    min-width: 320px;
-    min-height: 200px;
+    min-width: min(320px, calc(100vw - 16px));
+    min-height: min(200px, calc(100vh - 16px));
     max-width: 96vw;
     max-height: 92vh;
   }

@@ -179,3 +179,8 @@ describe('warn.<kind> template ↔ pipeline param drift', () => {
     }
   });
 });
+
+it('uses the backend message when an old payload omits template parameters', () => {
+  const w = { kind: 'out_of_work_area', message: '12 moves outside work area.' };
+  expect(warningMessage(w, () => 'Outside ({count})')).toBe(w.message);
+});

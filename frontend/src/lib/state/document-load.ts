@@ -41,6 +41,7 @@ export async function commitDocumentLoad(
     'toolpathCumLen',
     'toolpathTotalLen',
     'simDiagnostics',
+    'qualification',
     'lastGenerateCachedCount',
     'lastGenerateOpCount',
   ]);

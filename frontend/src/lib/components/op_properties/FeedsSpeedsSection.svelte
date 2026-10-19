@@ -1,6 +1,13 @@
 <script lang="ts">
   import { untrack, tick, onDestroy } from 'svelte';
   import Modal from '../Modal.svelte';
+  import MaterialPicker from '../MaterialPicker.svelte';
+  import type { MaterialIdentity } from '../../state/project-types';
+  import { setMaterialCommand } from '../../state/commands';
+  let draftMaterial = $state<MaterialIdentity | undefined>();
+  const materialPending = $derived(
+    JSON.stringify(draftMaterial) !== JSON.stringify(project.data.material),
+  );
   import {
     PreviewRequests,
     displayNumber,
@@ -209,6 +216,7 @@
     const captured = key;
     if (
       review &&
+      !materialPending &&
       wire &&
       project.data.material &&
       !recommendationSources.loading &&
@@ -262,7 +270,7 @@
     }
   }
   async function apply(source: (typeof suggestions)[number]) {
-    if (!wire || !api.feedsSpeeds || previewStale) return;
+    if (!wire || !api.feedsSpeeds || previewStale || materialPending) return;
     const captured = key;
     const revision = requests.start();
     busy = true;
@@ -277,6 +285,7 @@
       });
       if (
         !review ||
+        materialPending ||
         !requests.owns(revision) ||
         captured !== key ||
         !result.applied_op?.params.applied_cutting
@@ -485,6 +494,7 @@
         bind:this={reviewTrigger}
         onclick={() => {
           fullWidth = op.fsFullWidth ?? false;
+          draftMaterial = project.data.material ? { ...project.data.material } : undefined;
           review = true;
           error = '';
         }}>{t('fs391.review_recommendation')}</button
@@ -505,10 +515,32 @@
     >
       <div class="recommendation" aria-busy={busy}>
         <h4 id="cutting-recommendation-title">{t('fs35.recommendation')}</h4>
+        <MaterialPicker
+          value={draftMaterial}
+          onchange={(value) => {
+            draftMaterial = value;
+            requests.cancel();
+            responses = [];
+            attempted = false;
+            error = '';
+            busy = false;
+          }}
+        />
+        {#if materialPending}
+          <p role="status">{t('uxc.material_draft')}</p>
+          <button
+            type="button"
+            class="inspector-action"
+            onclick={() =>
+              project.history.exec(setMaterialCommand(draftMaterial), project.target())}
+            >{t('uxc.material_apply')}</button
+          >
+        {/if}
         <p class="context-line">
-          {materialLabel} · {op.kind === 'profile' ? t('fs35.profile') : t('fs35.pocket')} · Ø{tool
-            ? displayNumber(tool.diameter, 3)
-            : '—'} mm · {tool?.flutes ?? '—'}F
+          {t('fs35.saved_material')}: {materialLabel} · {op.kind === 'profile'
+            ? t('fs35.profile')
+            : t('fs35.pocket')} · Ø{tool ? displayNumber(tool.diameter, 3) : '—'} mm · {tool?.flutes ??
+            '—'}F
         </p>
         {#if op.kind === 'profile'}<label class="check-row"
             ><input type="checkbox" bind:checked={fullWidth} />{t('fs.full_width')}</label
@@ -526,7 +558,7 @@
         {:else if !recommendationSources.rows.length}<p role="status">
             {t('fs35.sources_disabled')}
           </p>{/if}
-        {#if !project.data.material}<p role="status">{t('fs35.define_material')}</p>{/if}
+        {#if !project.data.material}<p role="status">{t('uxc.choose_material_here')}</p>{/if}
         {#if attempted && !busy && !suggestions.length && !error && !previewStale}
           <div
             class="no-match"
@@ -743,7 +775,7 @@
           <button
             type="button"
             class="inspector-action primary"
-            disabled={busy || previewStale || !suggestions.length || !!error}
+            disabled={busy || materialPending || previewStale || !suggestions.length || !!error}
             onclick={() => {
               if (suggestions[0]) void apply(suggestions[0]);
             }}>{t('fs35.apply')}</button

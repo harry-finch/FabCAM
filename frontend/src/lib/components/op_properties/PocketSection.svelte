@@ -12,6 +12,7 @@
     type PocketOp,
     type PocketStrategy,
   } from '../../state/project.svelte';
+  import { pocketFramePatch } from '../../state/preparation';
   import { t } from '../../i18n';
 
   interface Props {
@@ -35,9 +36,7 @@
       title={t('ops.pocket.outside.help')}
       onclick={() => {
         const diameter = opTool ? opTool.diameter : 3;
-        patch('frameShape', 'rectangle');
-        patch('framePaddingMm', 3 * diameter);
-        patch('sourceCombine', 'difference');
+        project.updateOperation(op.id, pocketFramePatch(diameter, true));
       }}>{t('ops.pocket.outside.convert')}</button
     >
   </fieldset>
@@ -94,6 +93,13 @@
         </label>
       {/if}
     </details>
+    <p class="hint">{t('uxc.frame_legacy')}</p>
+    <button
+      type="button"
+      class="reset-link"
+      onclick={() => project.updateOperation(op.id, pocketFramePatch(0, false))}
+      >{t('uxc.frame_cancel')}</button
+    >
   </fieldset>
 {/if}
 <fieldset>

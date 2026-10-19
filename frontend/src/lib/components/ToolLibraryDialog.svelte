@@ -1,6 +1,4 @@
 <script lang="ts">
-  /// Inventory-wide draft transaction with independent selected-tool inspection.
-  /// Existing project commands own copy propagation, history and stale output.
   import {
     project,
     type ToolEntry,
@@ -24,6 +22,9 @@
   import ToolLibraryFilters from './ToolLibraryFilters.svelte';
   import ToolRetainedFields from './ToolRetainedFields.svelte';
   import ToolDetailBasics from './ToolDetailBasics.svelte';
+  import ToolCopyComparison from './ToolCopyComparison.svelte';
+  import ToolApplyReview from './ToolApplyReview.svelte';
+  import ToolDimensionDiagram from './ToolDimensionDiagram.svelte';
   import { Plus, Trash2 } from '@lucide/svelte';
   import { deepEqual } from './dialog-draft';
   import { changeToolKind, toolLibraryImpacts } from '../state/tool-library-review';
@@ -49,11 +50,8 @@
     /// switches, so an in-progress draft survives), footer becomes
     /// Apply / Revert.
     embedded?: boolean;
-    /// Backing store: 'project' edits the working tool set of the
-    /// current project/machine (the legacy modal behavior); 'inventory'
-    /// edits the workspace-level SHOP inventory — every tool the user
-    /// owns. Inventory commits propagate into same-id stocked copies in
-    /// the project, so "the 6 mm endmill" stays one tool everywhere.
+    /// Project copies and local inventory are distinct stores. Inventory Apply
+    /// reviews existing same-ID propagation; IDs are not physical identities.
     source?: 'project' | 'inventory';
   }
   let { open, onClose, embedded = false, source = 'project' }: Props = $props();
@@ -69,10 +67,6 @@
     return project.data.tools;
   });
 
-  /// Draft / pristine / dirty / discard lifecycle lives in DialogDraft
-  /// so X / Esc / click-outside can prompt before silently discarding
-  /// edits. The `draft` alias keeps the table markup terse — row
-  /// rebuilds always reassign `dd.draft`, never the alias.
   const dd = new DialogDraft<ToolEntry[]>();
   const draft = $derived(dd.draft ?? []);
   let selectedId = $state<number | null>(null);
@@ -93,7 +87,9 @@
   const currentToken = $derived(
     JSON.stringify([draft, backingTools, project.data.tools, project.data.operations, source]),
   );
-  const impacts = $derived(toolLibraryImpacts(draft, project.data.tools, project.data.operations));
+  const impacts = $derived(
+    toolLibraryImpacts(draft, isInventory ? project.data.tools : baseline, project.data.operations),
+  );
   const reviewCurrent = $derived(reviewToken !== null && reviewToken === currentToken);
   const removedReferences = $derived(
     !isInventory
@@ -175,13 +171,7 @@
       return;
     project.removeTool(selectedStocked.id);
   }
-  /// Mode filter: the default view shows only tools the machine's
-  /// EFFECTIVE mode set (primary mode + capabilities — a combo
-  /// mill+plasma machine keeps both halves visible) can run; the
-  /// "N hidden — Show all" row reveals the rest. View-only — a mode
-  /// switch never mutates the library.
   let showIncompatible = $state(false);
-  /// Row index whose wear calibration dialog is open, or null.
   let calibratingIdx = $state<number | null>(null);
   function applyCalibration(idx: number, wearOffsetMm: number, dateIso: string) {
     dd.draft = draft.map((t, i) =>
@@ -271,16 +261,8 @@
     });
   });
 
-  // Numeric-field validation, fieldApplies, and the per-kind
-  // disabled-reason tooltips all live in lib/state/tool_validation.ts;
-  // the dialog wires them in via the imports up top.
   let hasInvalidRow = $derived(draft.length === 0 || draft.some(rowInvalid));
 
-  /// Close protocol (dd.requestClose): the first attempt on a dirty
-  /// draft arms the inline "Discard / Keep editing" footer pair; the
-  /// second confirms. The inline bar replaces the prior `window.confirm`
-  /// prompt, which silently returns false in some Tauri / WebKitGTK
-  /// builds (audit-C10).
   function close() {
     if (dd.requestClose()) onClose();
   }
@@ -345,7 +327,6 @@
     else onClose();
   }
 
-  /// Embedded-mode Revert: drop the draft back to the committed tools.
   function revert() {
     dd.open(backingTools);
     baseline = $state.snapshot(backingTools);
@@ -395,20 +376,12 @@
     dd.draft = draft.map((tool, i) => (i === idx ? changeToolKind(tool, kind) : tool));
   }
 
-  /// Apply a holder preset (by label) to draft row `idx`, merging its patch.
-  /// The preset table + the patch math live in the pure, unit-tested
-  /// tool_presets module; the dropdown reads HOLDER_PRESETS from there too.
   function applyPreset(idx: number, label: string) {
     const patch = applyPresetPatch(draft[idx], label);
     if (!patch) return;
     dd.draft = draft.map((t, i) => (i === idx ? { ...t, ...patch } : t));
   }
 
-  /// Persist a holder-shape change from the ToolHolderEditor child. The
-  /// child owns the kind selector, per-kind default dimensions, and the
-  /// geometry inputs; the parent just writes the resulting shape onto the
-  /// row. Bypasses updateField's auto-naming (a holder edit never changes
-  /// the suggested name), matching the previous direct-map behavior.
   function setHolder(idx: number, holder: HolderShape | undefined) {
     dd.draft = draft.map((t, i) => (i === idx ? { ...t, holder } : t));
   }
@@ -416,10 +389,18 @@
 
 {#snippet shell()}
   {#if !embedded}<header>
-      <h2 id="tools-title">{t('tools.title')}</h2>
+      <h2 id="tools-title">{isInventory ? t('uxb.library') : t('uxb.project')}</h2>
       <button class="dlg-close" onclick={close} aria-label={t('common.close')}>×</button>
     </header>{/if}
   <div class="table-actions">
+    <strong>{isInventory ? t('uxb.library') : t('uxb.project')}</strong>
+    {#if isInventory}<button
+        class="tc-file"
+        disabled={!project.data.tools.length}
+        onclick={() => {
+          project.sel.toolsDialogFocusId = project.data.tools[0]?.id ?? null;
+        }}>{t('uxb.edit_project')}</button
+      >{/if}
     <button class="tc-file" onclick={() => fileOps.exportToolset($state.snapshot(draft))}
       >{t('ux6b.export_draft')}</button
     >
@@ -457,30 +438,20 @@
         >{t('ux6b.replace_draft')}</button
       >
     </div>{/if}
-  {#if reviewToken !== null}<div class="notice" role="status">
-      <strong>{t('ux6b.apply_title')}</strong>
-      <p>{isInventory ? t('ux6b.apply_scope') : t('ux6b.project_scope')}</p>
-      {#if isInventory && impacts.length}<ul>
-          {#each impacts as impact (impact.id)}<li>
-              #{impact.id}
-              {impact.before} → {impact.after} · {impact.operations.join(', ') ||
-                t('ux6b.no_operations')}
-            </li>{/each}
-        </ul>{:else if isInventory}<p>{t('ux6b.no_sync')}</p>{/if}
-      {#if !reviewCurrent}<p>{t('ux6b.review_changed')}</p>{/if}
-      <button class="btn-secondary" onclick={() => (reviewToken = null)}
-        >{t('common.cancel')}</button
-      >
-      <button
-        class="btn-primary"
-        disabled={!reviewCurrent ||
-          conflict ||
-          hasInvalidRow ||
-          removedReferences.length > 0 ||
-          pendingImport !== null}
-        onclick={commit}>{t('common.apply')}</button
-      >
-    </div>{/if}
+  {#if reviewToken !== null}
+    <ToolApplyReview
+      {isInventory}
+      {impacts}
+      {reviewCurrent}
+      disabled={!reviewCurrent ||
+        conflict ||
+        hasInvalidRow ||
+        removedReferences.length > 0 ||
+        pendingImport !== null}
+      onCancel={() => (reviewToken = null)}
+      onApply={commit}
+    />
+  {/if}
   <div class="body">
     <aside>
       <label class="sort"
@@ -583,88 +554,102 @@
             >{/each}
         </nav>
         <div class="detail-body">
-          {#if section === 'geometry'}
-            <ToolDetailBasics
-              {tool}
-              onUpdateField={(k, v) => updateField(i, k, v)}
-              onKindChange={(kind) => onKindChange(i, kind)}
-            />
-            <p class="hint">{t('ux6b.geometry_help')}</p>
-          {/if}
-          {#if section === 'mounting'}<p class="hint">{t('ux6b.mounting_help')}</p>{/if}
-          {#if section === 'availability'}
-            <div class="availability">
-              <h3>{t('ux6b.current_machine')}</h3>
-              <p>{selectedStocked ? t('ux6b.same_id_copy') : t('ux6b.not_stocked')}</p>
-              {#if selectedStocked && !deepEqual(tool, selectedStocked)}<p class="notice">
-                  {t('ux6b.copy_differs')}
-                </p>{/if}
-              <p>
-                {toolCompatibleWithAnyMode(tool.kind, machineModes)
-                  ? t('ux6b.compatible')
-                  : t('ux6b.incompatible')}
-              </p>
-              {#if isInventory}<div class="actions">
-                  <button
-                    class="tc-file"
-                    disabled={dd.isDirty ||
-                      !toolCompatibleWithAnyMode(tool.kind, machineModes) ||
-                      (selectedStocked !== undefined && deepEqual(tool, selectedStocked))}
-                    onclick={addToMachine}
-                    ><Plus size={16} aria-hidden="true" />{t('ux6b.add_machine')}</button
-                  ><button
-                    class="tc-file"
-                    disabled={cannotRemoveStocked}
-                    onclick={removeFromMachine}>{t('ux6b.remove_machine')}</button
-                  >
-                </div>{/if}
-              <p class="hint">{t('ux6b.association_help')}</p>
-              <h3>{t('ux6b.operations')}</h3>
-              <ul>
-                {#each selectedUses as op (op.id)}<li>{op.name}</li>{:else}<li>
-                    {t('ux6b.no_operations')}
-                  </li>{/each}
-              </ul>
-              <h3>{t('ux6b.profile_copies')}</h3>
-              <ul>
-                {#each selectedCopies as profile (profile.id)}<li>{profile.name}</li>{:else}<li>
-                    {t('ux6b.no_profiles')}
-                  </li>{/each}
-              </ul>
-              <p class="hint">{t('ux6b.copy_help')}</p>
+          <div
+            class="detail-layout"
+            class:with-diagram={section === 'geometry' || section === 'mounting'}
+          >
+            <div class="detail-fields">
+              {#if section === 'geometry'}
+                <ToolDetailBasics
+                  {tool}
+                  onUpdateField={(k, v) => updateField(i, k, v)}
+                  onKindChange={(kind) => onKindChange(i, kind)}
+                />
+                <p class="hint">{t('ux6b.geometry_help')}</p>
+              {/if}
+              {#if section === 'mounting'}<p class="hint">{t('ux6b.mounting_help')}</p>{/if}
+              {#if section === 'availability'}
+                <div class="availability">
+                  <h3>{t('ux6b.current_machine')}</h3>
+                  <p>{selectedStocked ? t('ux6b.same_id_copy') : t('ux6b.not_stocked')}</p>
+                  {#if selectedStocked && !deepEqual(tool, selectedStocked)}<p class="notice">
+                      {t('ux6b.copy_differs')}
+                    </p>
+                    <ToolCopyComparison
+                      before={{ label: t('uxb.project'), ...selectedStocked }}
+                      after={{ label: isInventory ? t('uxb.library') : t('uxb.after'), ...tool }}
+                    />{/if}
+                  <p>
+                    {toolCompatibleWithAnyMode(tool.kind, machineModes)
+                      ? t('ux6b.compatible')
+                      : t('ux6b.incompatible')}
+                  </p>
+                  {#if isInventory}<div class="actions">
+                      <button
+                        class="tc-file"
+                        disabled={dd.isDirty ||
+                          !toolCompatibleWithAnyMode(tool.kind, machineModes) ||
+                          (selectedStocked !== undefined && deepEqual(tool, selectedStocked))}
+                        onclick={addToMachine}
+                        ><Plus size={16} aria-hidden="true" />{t('ux6b.add_machine')}</button
+                      ><button
+                        class="tc-file"
+                        disabled={cannotRemoveStocked}
+                        onclick={removeFromMachine}>{t('ux6b.remove_machine')}</button
+                      >
+                    </div>{/if}
+                  <p class="hint">{t('ux6b.association_help')}</p>
+                  <h3>{t('ux6b.operations')}</h3>
+                  <ul>
+                    {#each selectedUses as op (op.id)}<li>{op.name}</li>{:else}<li>
+                        {t('ux6b.no_operations')}
+                      </li>{/each}
+                  </ul>
+                  <h3>{t('ux6b.profile_copies')}</h3>
+                  <ul>
+                    {#each selectedCopies as profile (profile.id)}<li>{profile.name}</li>{:else}<li>
+                        {t('ux6b.no_profiles')}
+                      </li>{/each}
+                  </ul>
+                  <p class="hint">{t('ux6b.copy_help')}</p>
+                </div>
+              {:else}
+                <ToolRowExpandedEditor
+                  {tool}
+                  {section}
+                  onUpdateField={(k, v) => updateField(i, k, v)}
+                  onApplyPreset={(label) => applyPreset(i, label)}
+                  onSetHolder={(h) => setHolder(i, h)}
+                  onCalibrate={() => (calibratingIdx = i)}
+                />
+              {/if}
+              {#if section === 'advanced'}
+                <details>
+                  <summary>{t('ux6b.legacy')}</summary>
+                  <p class="hint">{t('fs35.fallback_help')}</p>
+                  <p class="hint">{tool.speed} RPM · {tool.feedRate} / {tool.plungeRate} mm/min</p>
+                  <ToolDetailBasics
+                    {tool}
+                    legacy
+                    onUpdateField={(k, v) => updateField(i, k, v)}
+                    onKindChange={(kind) => onKindChange(i, kind)}
+                  />
+                  <ToolRowExpandedEditor
+                    {tool}
+                    section="legacy"
+                    onUpdateField={(k, v) => updateField(i, k, v)}
+                    onApplyPreset={(label) => applyPreset(i, label)}
+                    onSetHolder={(h) => setHolder(i, h)}
+                    onCalibrate={() => (calibratingIdx = i)}
+                  />
+                </details>
+                <ToolRetainedFields {tool} />
+              {/if}
             </div>
-          {:else}
-            <ToolRowExpandedEditor
-              {tool}
-              {section}
-              onUpdateField={(k, v) => updateField(i, k, v)}
-              onApplyPreset={(label) => applyPreset(i, label)}
-              onSetHolder={(h) => setHolder(i, h)}
-              onCalibrate={() => (calibratingIdx = i)}
-            />
-          {/if}
-          {#if section === 'advanced'}
-            <details>
-              <summary>{t('ux6b.legacy')}</summary>
-              <p class="hint">{t('fs35.fallback_help')}</p>
-              <p class="hint">{tool.speed} RPM · {tool.feedRate} / {tool.plungeRate} mm/min</p>
-              <ToolDetailBasics
+            {#if section === 'geometry' || section === 'mounting'}<ToolDimensionDiagram
                 {tool}
-                legacy
-                onUpdateField={(k, v) => updateField(i, k, v)}
-                onKindChange={(kind) => onKindChange(i, kind)}
-              />
-              <ToolRowExpandedEditor
-                {tool}
-                section="legacy"
-                onUpdateField={(k, v) => updateField(i, k, v)}
-                onApplyPreset={(label) => applyPreset(i, label)}
-                onSetHolder={(h) => setHolder(i, h)}
-                onCalibrate={() => (calibratingIdx = i)}
-              />
-            </details>
-            <ToolRetainedFields {tool} />
-          {/if}
+              />{/if}
+          </div>
         </div>
       {:else}<p class="hint">{t('ux6b.select_tool')}</p>{/if}
     </section>
@@ -827,8 +812,22 @@
     flex: 1;
     min-height: 0;
   }
-  .detail-body > :global(*) {
+  .detail-layout {
+    display: grid;
+    gap: 24px;
+    align-items: start;
+  }
+  .detail-fields {
+    min-width: 0;
     max-width: 640px;
+  }
+  .with-diagram {
+    grid-template-columns: minmax(250px, 640px) minmax(240px, 340px);
+  }
+  @media (max-width: 1350px) {
+    .with-diagram {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
   nav {
     display: flex;

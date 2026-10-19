@@ -1,10 +1,16 @@
 <script lang="ts">
+  import { WorkZeroBuilder } from '../scene3d/work-zero';
+  let workZeroBuilder: WorkZeroBuilder | undefined;
+  $effect(() => {
+    workZeroBuilder?.build(project.data.workOffset);
+  });
   import { probePreview } from '../state/performance-probe';
   import { onMount, onDestroy, untrack } from 'svelte';
   import * as THREE from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   import { project, playheadToSegment } from '../state/project.svelte';
   import { workspace } from '../state/workspace.svelte';
+  import { programTools } from '../sim/tool-provenance';
   import { HeightfieldDriver } from '../sim/driver';
   import { deviationTargets } from '../sim/deviation_target';
   import { pixelsPerCell } from '../scene3d/lod';
@@ -324,6 +330,8 @@
     toolpathBuilder = new ToolpathBuilder(builderCtx, css);
     toolGlyphBuilder = new ToolGlyphBuilder(builderCtx, css);
     stockBuilder = new StockBoxBuilder(builderCtx, css);
+    workZeroBuilder = new WorkZeroBuilder(builderCtx, css);
+    workZeroBuilder.build(project.data.workOffset);
     workAreaBuilder = new WorkAreaBuilder(builderCtx, css);
     tabsBuilder = new TabsBuilder(builderCtx, css);
     approachBuilder = new ApproachBuilder(builderCtx, css);
@@ -441,6 +449,7 @@
     // Builders own + free their groups.
     toolGlyphBuilder?.dispose();
     stockBuilder?.dispose();
+    workZeroBuilder?.dispose();
     workAreaBuilder?.dispose();
     tabsBuilder?.dispose();
     approachBuilder?.dispose();
@@ -522,7 +531,7 @@
       selectedObjects: project.sel.selectedObjects,
       textLayers: project.data.textLayers,
       hasGenerated: !!project.gen.generated, // affects fade for non-selected imports
-      previewMode: project.data.settings.previewMode, // contrast-against-stock color
+      previewMode: 'both', // contrast-against-stock color
       edgeColor: project.data.settings.edgeColor,
       lineWidth: project.data.settings.previewLineWidth,
       wireVisible,
@@ -733,23 +742,36 @@
 
   /// Wireframe visibility — wireframe/both modes show lines, solid mode
   /// hides them. Used by both the preview-mode effect and the rebuild
-  /// functions so freshly-created LineSegments start with the right
-  /// visibility (otherwise toggling solid → wireframe would only affect
-  /// the buffer that was alive at the toggle moment).
-  const wireVisible = $derived(project.data.settings.previewMode !== 'solid');
+  /// Legacy previewMode remains readable in preferences; rendering uses stock +
+  /// paths, with path visibility controlled independently. Failed simulation can
+  /// still leave diagnostic path geometry visible.
+  const wireVisible = true;
 
   /// Build a per-segment tool resolver for the sim: each toolpath segment
   /// is carved with ITS op's tool (looked up by op_id), so a multi-op
   /// program (e.g. endmill profile then v-bit chamfer) carves each part
   /// with the correct cutter cross-section instead of one tool for all.
-  function toolForSegment(segs: ToolpathSegment[]): (i: number) => ToolEntry {
-    const byOp = new Map<number, ToolEntry>();
-    for (const op of project.data.operations) {
-      const t = project.data.tools.find((tt) => tt.id === op.toolId);
-      if (t) byOp.set(op.id, t);
+  function prepareProgram(program: typeof project.gen.generated) {
+    try {
+      return program ? programTools(program) : null;
+    } catch {
+      return null;
     }
-    const fallback = project.data.tools[0];
-    return (i) => byOp.get(segs[i]?.op_id ?? -1) ?? fallback;
+  }
+  const frontTools = $derived(prepareProgram(project.gen.generated));
+  const backTools = $derived(prepareProgram(project.gen.generatedBack));
+  function resolvedProgram(program: NonNullable<typeof project.gen.generated>) {
+    return program === project.gen.generatedBack ? backTools : frontTools;
+  }
+  function toolForSegment(segs: ToolpathSegment[]): (i: number) => ToolEntry {
+    const program =
+      segs === project.gen.generatedBack?.toolpath
+        ? project.gen.generatedBack
+        : project.gen.generated;
+    if (!program) throw new Error('Missing generated program');
+    const resolved = resolvedProgram(program);
+    if (!resolved) throw new Error('Unknown generated tool provenance');
+    return (i) => resolved.resolve(segs[i]);
   }
 
   // Visibility changes do not rebuild path buffers or reconfigure simulation.
@@ -762,16 +784,7 @@
   $effect(() => {
     if (!scene) return;
     const settings = project.data.settings;
-    // Wire-mesh visibility tracks the preview mode: wireframe / both
-    // show the toolpath + imported lines; solid hides them in favor of
-    // the heightfield carved-stock mesh. wireVisible is a $derived at
-    // module scope so the rebuild functions see the same value.
     importedBuilder?.setWireVisible(wireVisible);
-    if (settings.previewMode === 'wireframe') {
-      driver?.setVisible(false);
-      requestRender();
-      return;
-    }
     // Text-inclusive geometry so a text-only project's heightfield is sized
     // to the text (transformedImport is null for text-only — that's why the
     // solid sim never built, leaving only the wireframe).
@@ -781,17 +794,17 @@
     // The back program of a two-sided (flip-stock) run drives the reflected
     // dual-surface preview; `null` for the common single-sided job.
     const generatedBack = project.gen.generatedBack;
-    const firstOp = project.data.operations[0];
+    const resolved = generated ? resolvedProgram(generated) : null;
+    const backResolved = generatedBack ? resolvedProgram(generatedBack) : null;
     const tool =
-      project.data.tools.find((t) => t.id === (firstOp?.toolId ?? 0)) ?? project.data.tools[0];
-    if (!imported || !generated || !tool) {
+      resolved && generated?.toolpath.length ? resolved.resolve(generated.toolpath[0]) : null;
+    if (!imported || !generated || !tool || !resolved || (generatedBack && !backResolved)) {
       driver?.setVisible(false);
-      // Nothing generated → no two-sided solid → drop any stale conflict
-      // diamonds so they don't float over an empty scene.
       if (conflictMarkers.length > 0) conflictMarkers = [];
       requestRender();
       return;
     }
+    const resolutionDiameter = Math.min(resolved.diameter, backResolved?.diameter ?? Infinity);
     const cellRes = settings.cellResolutionMode === 'manual' ? settings.cellResolutionMm : -1;
     // Sim-rebuild key uses ONLY the fields the heightfield cares about:
     // the bbox + stock bounds + tool diameter + cell resolution +
@@ -812,7 +825,9 @@
       bbox: imported.bbox,
       stock: project.data.stock,
       tool_id: tool.id,
-      tool_dia: tool.diameter,
+      tool_dia: resolutionDiameter,
+      provenance: generated.tool_provenance,
+      backProvenance: generatedBack?.tool_provenance,
       cellRes,
       maxCells: settings.maxSimulationCells,
       gen_id: project.gen.generatedVersion,
@@ -820,8 +835,8 @@
     });
     if (key === lastSimKey) {
       driver?.setVisible(true);
-      driver?.setSolidVisible(settings.previewMode === 'solid' || settings.previewMode === 'both');
-      driver?.setEdgesVisible(settings.previewMode === 'solid' || settings.previewMode === 'both');
+      driver?.setSolidVisible(true);
+      driver?.setEdgesVisible(true);
       requestRender();
       return;
     }
@@ -845,6 +860,7 @@
             generated,
             generatedBack,
             tool,
+            resolutionDiameter,
             // Per-op tool resolver for the FRONT program — used only by the
             // two-sided conflict pass (throwaway front carve to completion).
             toolForSeg: toolForSegment(generated.toolpath),
@@ -858,12 +874,8 @@
           });
           probePreview('simulation_configure_end', generationVersion);
           driver.setVisible(true);
-          driver.setSolidVisible(
-            settings.previewMode === 'solid' || settings.previewMode === 'both',
-          );
-          driver.setEdgesVisible(
-            settings.previewMode === 'solid' || settings.previewMode === 'both',
-          );
+          driver.setSolidVisible(true);
+          driver.setEdgesVisible(true);
           lastSimKey = key;
           // Replay 0..head so we see the carved state immediately (not
           // an unmilled stock we have to scrub forward through).
@@ -900,7 +912,7 @@
     void project.playhead;
     if (!driver) return;
     const generated = project.gen.generated;
-    if (!generated || project.data.tools.length === 0) return;
+    if (!generated || !resolvedProgram(generated)) return;
     driver.advanceTo(
       project.playhead,
       generated.toolpath,

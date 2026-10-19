@@ -1,5 +1,6 @@
 export interface ExportStatus {
   stale: boolean;
+  qualification: import('../sim/qualification').QualificationPhase;
   fixture?: number;
   backFixture?: number;
   critical: number;
@@ -16,6 +17,8 @@ export function exportSafetyProblem(
   if (fixture > 0) return { key: 'genbar.error.block_critical' as const, count: fixture };
   const critical = side === 'back' ? status.backCritical : status.critical;
   const area = side === 'back' ? status.backWorkArea : status.workArea;
+  if (settings.blockOnCriticalSimWarnings && status.qualification !== 'current')
+    return { key: 'qualification.export_block' as const, count: 0 };
   if (settings.blockOnCriticalSimWarnings && critical > 0)
     return { key: 'genbar.error.block_critical' as const, count: critical };
   if (settings.blockOnWorkAreaViolation && area > 0)

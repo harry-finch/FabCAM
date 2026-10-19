@@ -1,4 +1,8 @@
 <script lang="ts">
+  import { programWarningSummary, qualificationPhase } from '../state/program-qualification';
+  const post = $derived(
+    coerceGenerationPost(project.data.machine.gcodeDialect ?? workspace.get().last_post_processor),
+  );
   /// Phone status chip + warnings/generate panel. The desktop GenerateBar
   /// (Generate button + warnings chip + warnings panel) is hidden on
   /// narrow, so its panel — which lives inside that hidden subtree — can
@@ -8,7 +12,7 @@
   /// list. Generate is routed through `generateBus` (the same signal the
   /// pull-to-refresh gesture uses), which the still-mounted GenerateBar
   /// honours.
-  import { generationContextKey, coerceGenerationPost } from '../state/generation-context';
+  import { coerceGenerationPost } from '../state/generation-context';
   import { workspace } from '../state/workspace.svelte';
   import { project } from '../state/project.svelte';
   import { t } from '../i18n';
@@ -16,8 +20,7 @@
   import { generateBus } from '../state/generate-bus.svelte';
   import FloatingPanel from './FloatingPanel.svelte';
   import { simWarningSeverity, simWarningSummary } from '../sim/warnings';
-  import { pipelineWarningSeverity, type PipelineWarning } from '../api/pipeline-warnings';
-  import { summarizeWarnings } from '../state/warnings-summary';
+  import { pipelineWarningSeverity } from '../api/pipeline-warnings';
 
   let open = $state(false);
   let copied = $state(false);
@@ -28,24 +31,7 @@
   /// Aggregation + severity lane shared with the desktop GenerateBar (see
   /// state/warnings-summary.ts). `summary.severity` drives the chip class
   /// below; the raw arrays still drive the per-row list.
-  const summary = $derived(
-    summarizeWarnings({
-      simWarnings: project.gen.simDiagnostics?.warnings ?? [],
-      pipelineWarnings:
-        (project.gen.generated as { warnings?: PipelineWarning[] } | null)?.warnings ?? [],
-      hasGenerated: project.gen.generated != null,
-      hasSimDiagnostics: project.gen.simDiagnostics != null,
-      dirty:
-        project.gen.generated != null &&
-        project.gen.inputContextKey !==
-          generationContextKey(
-            project,
-            coerceGenerationPost(
-              project.data.machine.gcodeDialect ?? workspace.get().last_post_processor,
-            ),
-          ),
-    }),
-  );
+  const summary = $derived(programWarningSummary(project, post));
   const simWarnings = $derived(summary.sim);
   const pipeWarnings = $derived(summary.pipeline);
   const hasRun = $derived(summary.hasRun);
@@ -91,6 +77,7 @@
     if (stale) return '↻';
     if (critical > 0) return '⛔';
     if (total > 0) return '⚠';
+    if (summary.severity === 'unverified') return '…';
     return '✓';
   });
   // severity lanes (idle/stale/critical/warning/clean) map 1:1 to the
@@ -100,6 +87,8 @@
     if (generating) return '…';
     if (!hasRun) return t('phonewarn.chip.generate');
     if (stale) return t('phonewarn.chip.stale');
+    if (summary.severity === 'unverified')
+      return t(`qualification.${qualificationPhase(project, post)}`);
     if (total === 0) return t('phonewarn.chip.ok');
     return critical > 0 ? `${total} (${critical}!)` : `${total}`;
   });
@@ -107,6 +96,8 @@
     if (generating) return t('phonewarn.title.generating');
     if (!hasRun) return t('phonewarn.title.no_program');
     if (stale) return t('phonewarn.title.stale');
+    if (summary.severity === 'unverified')
+      return t(`qualification.${qualificationPhase(project, post)}`);
     if (total === 0) return t('phonewarn.title.no_warnings');
     return total === 1 ? t('phonewarn.title.one') : t('phonewarn.title.many', { count: total });
   });
@@ -163,7 +154,11 @@
       {/if}
       <div class="wlist">
         {#if total === 0}
-          <p class="empty">{t('phonewarn.empty')}</p>
+          <p class="empty">
+            {qualificationPhase(project, post) === 'current'
+              ? t('phonewarn.empty')
+              : t(`qualification.${qualificationPhase(project, post)}`)}
+          </p>
         {:else}
           {#each simWarnings as w, i (`sim-${i}`)}
             <div class="row sev-{simWarningSeverity(w)}">

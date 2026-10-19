@@ -15,6 +15,7 @@
 /// existing `project.gen.generated`, `project.gen.pipelineState`, etc.
 /// call site keeps working unchanged.
 
+import type { Qualification } from '../sim/qualification';
 import type { GenerateResponse, SimDiagnostics } from '../api/types';
 
 export type PipelinePhase = 'idle' | 'running' | 'cancelling' | 'completed';
@@ -92,6 +93,8 @@ export class GeneratedState {
   /// Most recent sim diagnostics. Written through by the sim driver
   /// after each forward `advance()`. `null` when no sim has run (or
   /// the preview is wireframe-only).
+  qualification = $state<Qualification | null>(null);
+
   simDiagnostics = $state<SimDiagnostics | null>(null);
 
   reset(): void {
@@ -105,6 +108,7 @@ export class GeneratedState {
     this.toolpathCumLen = null;
     this.toolpathTotalLen = 0;
     this.simDiagnostics = null;
+    this.qualification = null;
     this.generating = false;
     this.pipelineState = 'idle';
     this.pipelineProgress = null;
@@ -115,6 +119,7 @@ export class GeneratedState {
   /// Start a new pipeline run. Resets all transient state so the UI
   /// can't leak progress / cache counters from the prior run.
   beginGenerate(): void {
+    this.qualification = null;
     this.remainingVisible = false;
     this.inputContextKey = null; // A failed/replaced request cannot re-enable a previous export.
     this.generating = true;

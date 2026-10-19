@@ -5,6 +5,7 @@ export function drawWorkZero(
   origin: { x_mm: number; y_mm: number; wcs: string },
   accent: string,
   label: string,
+  background: string,
 ) {
   const [x, y] = project(origin.x_mm, origin.y_mm);
   ctx.save();
@@ -18,7 +19,17 @@ export function drawWorkZero(
   ctx.moveTo(x, y - 10);
   ctx.lineTo(x, y + 10);
   ctx.stroke();
-  ctx.font = '11px sans-serif';
-  ctx.fillText(`${label} · ${origin.wcs}`, x + 12, y - 10);
+  ctx.font = 'bold 12px sans-serif';
+  const text = `${label} · ${origin.wcs}`;
+  const width = ctx.measureText(text).width;
+  const lx = Math.max(
+    4,
+    Math.min(x + 12, (ctx.canvas.clientWidth || ctx.canvas.width) - width - 4),
+  );
+  const ly = Math.max(14, y - 12);
+  ctx.strokeStyle = background;
+  ctx.lineWidth = 4;
+  ctx.strokeText(text, lx, ly);
+  ctx.fillText(text, lx, ly);
   ctx.restore();
 }

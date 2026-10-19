@@ -1,4 +1,9 @@
 import {
+  defaultProjectTools,
+  defaultProjectMachine,
+  defaultProjectStock,
+} from './project-defaults';
+import {
   DEFAULT_SOURCE_SETTINGS,
   normalizeSourceSettings,
   type SourceSettings,
@@ -260,48 +265,18 @@ export class ProjectDataState {
   /// the operations list lands. Today these don't drive Generate yet
   /// (the legacy setup path is still wired) but they're persisted via
   /// .vc-project so the user can curate a stable set across sessions.
-  tools = $state<ToolEntry[]>([
-    {
-      id: 1,
-      name: '3mm endmill',
-      kind: 'endmill',
-      diameter: 3,
-      flutes: 2,
-      speed: 18000,
-      plungeRate: 100,
-      feedRate: 800,
-      coolant: 'off',
-    },
-  ]);
+  tools = $state<ToolEntry[]>(defaultProjectTools());
 
   /// Project-scoped machine settings. Same story as tools — duplicates
   /// `setup.machine` until the rewire lands but is the source of truth
   /// going forward.
-  machine = $state<MachineSettings>({
-    unit: 'mm',
-    mode: 'mill',
-    comments: true,
-    arcs: true,
-    toolchangeStrategy: 'manual_m0_pause',
-    fastMoveZ: 5,
-    accel: { x: 250, y: 250, z: 250 },
-    toolchangeS: 5,
-    rapidSpeed: 5000,
-    workArea: { x: 200, y: 300, z: 50 },
-  });
+  machine = $state<MachineSettings>(defaultProjectMachine());
 
   /// Stock visualization in the 3D view. `auto` (default) derives the
   /// rectangular extent from the imported bbox plus a small margin and
   /// uses setup.mill.depth for the thickness; explicit values override.
   /// `visible` toggles the translucent box without losing the dimensions.
-  stock = $state<StockConfig>({
-    visible: true,
-    mode: 'auto',
-    margin: 5,
-    thickness: 5,
-    customX: 100,
-    customY: 100,
-  });
+  stock = $state<StockConfig>(defaultProjectStock());
 
   /// Project fixtures (clamps, dogs, vise jaws). Threaded into the
   /// sim's collision check so the cutter can't run them over.

@@ -9,6 +9,7 @@
 /// Extracted from Scene3D.svelte. Owns its THREE.Group.
 
 import * as THREE from 'three';
+import { programTools } from '../sim/tool-provenance';
 import type { GenerateResponse } from '../api/types';
 import type { OpEntry, ToolEntry } from '../state/project.svelte';
 import { playheadToSegment } from '../state/project.svelte';
@@ -30,6 +31,8 @@ export class ToolGlyphBuilder implements Builder {
   readonly group = new THREE.Group();
   private mesh: THREE.Mesh | undefined;
   private meshKey = '';
+  private program: GenerateResponse | null = null;
+  private resolved: ReturnType<typeof programTools> | null = null;
   /// Per-toolpath-kind tip colors. Recomputed by `refreshTipColors` so
   /// theme switches don't leave the tip a stale color.
   private tipColorByKind: Record<string, number> = {
@@ -90,17 +93,20 @@ export class ToolGlyphBuilder implements Builder {
 
     const colorHex = this.tipColorByKind[seg.kind] ?? this.tipColorByKind.cut;
 
-    // Pick the tool by the op actually cutting at the playhead (the
-    // segment's op), so the displayed cutter changes as the playhead
-    // crosses op boundaries. Fall back to the selected op, then the first.
-    const segOp = input.operations.find((o) => o.id === seg.op_id);
-    const selOp =
-      input.selectedOpId == null
-        ? null
-        : (input.operations.find((o) => o.id === input.selectedOpId) ?? null);
-    const opForTool = segOp ?? selOp ?? input.operations[0];
-    const tool = input.tools.find((t) => t.id === (opForTool?.toolId ?? 0)) ?? input.tools[0];
-    const diameter = Math.max(0.2, tool?.diameter ?? 3);
+    // Generated movement identity owns both the glyph and material simulation.
+    let tool: ToolEntry;
+    try {
+      if (this.program !== gen) {
+        this.resolved = programTools(gen);
+        this.program = gen;
+      }
+      tool = this.resolved!.resolve(seg);
+      this.group.visible = true;
+    } catch {
+      this.group.visible = false;
+      return;
+    }
+    const diameter = Math.max(0.01, tool.diameter - (tool.wearOffsetMm ?? 0));
     const mode = input.machineMode;
     const dragoff = tool?.dragoff;
     const tipDiameter = tool?.tipDiameter;

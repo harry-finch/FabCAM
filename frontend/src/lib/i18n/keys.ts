@@ -335,7 +335,6 @@ export type MsgKey =
   | "fs35.compatibility_help"
   | "fs35.custom_material_help"
   | "fs35.cutting"
-  | "fs35.define_material"
   | "fs35.fallback"
   | "fs35.fallback_help"
   | "fs35.finishing"
@@ -811,16 +810,11 @@ export type MsgKey =
   | "oplist.side.back"
   | "oplist.side.count.title"
   | "oplist.side.front"
-  | "oplist.status.cycle_marker"
   | "oplist.status.dirty"
-  | "oplist.status.gcode_include"
-  | "oplist.status.homing"
   | "oplist.status.no_drawing"
   | "oplist.status.not_generated"
   | "oplist.status.orphan_layers"
   | "oplist.status.orphan_objects"
-  | "oplist.status.pause"
-  | "oplist.status.probe"
   | "oplist.status.tool_missing"
   | "oplist.status.up_to_date"
   | "oplist.status_btn.aria"
@@ -1522,6 +1516,13 @@ export type MsgKey =
   | "post.tool_change"
   | "preview.toolpaths.label"
   | "preview.toolpaths.tip"
+  | "qualification.back"
+  | "qualification.current"
+  | "qualification.export_block"
+  | "qualification.failed"
+  | "qualification.pending"
+  | "qualification.stale"
+  | "qualification.unavailable"
   | "recent.button"
   | "recent.clear"
   | "recent.open_hint"
@@ -1549,7 +1550,6 @@ export type MsgKey =
   | "report.status.error"
   | "report.status.not_generated"
   | "report.status.ok"
-  | "report.status.pause"
   | "report.status.warnings"
   | "report.time.arc"
   | "report.time.cut"
@@ -1562,10 +1562,8 @@ export type MsgKey =
   | "report.time.total"
   | "report.title"
   | "report.tools.col.diameter"
-  | "report.tools.col.feed"
   | "report.tools.col.kind"
   | "report.tools.col.name"
-  | "report.tools.col.speed"
   | "report.tools.empty"
   | "report.tools.title"
   | "report.untitled_project"
@@ -1589,14 +1587,12 @@ export type MsgKey =
   | "settings.group.safety"
   | "settings.group.snap"
   | "settings.group.sources"
-  | "settings.group.view"
   | "settings.group_nav.aria"
   | "settings.performance.caps_hint"
   | "settings.performance.exact_rewind"
   | "settings.performance.exact_rewind.hint"
   | "settings.performance.max_render_triangles"
   | "settings.performance.max_sim_cells"
-  | "settings.performance.solid_default"
   | "settings.preview.arrow_density"
   | "settings.preview.arrow_off"
   | "settings.preview.cell_resolution"
@@ -1636,10 +1632,6 @@ export type MsgKey =
   | "settings.sources.auto_reload"
   | "settings.sources.hint"
   | "settings.title"
-  | "settings.view.preview_style"
-  | "settings.view.preview_style.both"
-  | "settings.view.preview_style.solid"
-  | "settings.view.preview_style.wireframe"
   | "settings.view.show_stock_box"
   | "shell.brand"
   | "shell.browser_files"
@@ -2185,6 +2177,69 @@ export type MsgKey =
   | "ux7.obsolete"
   | "ux7.running"
   | "ux7.success"
+  | "uxa.chamfer_depth"
+  | "uxa.cps_marker_skipped"
+  | "uxa.cps_motion_blocked"
+  | "uxa.disabled"
+  | "uxa.generate_for_z"
+  | "uxa.generated_z"
+  | "uxa.group_milling"
+  | "uxa.group_program"
+  | "uxa.group_special"
+  | "uxa.marker_short"
+  | "uxa.pass_depth"
+  | "uxa.pause_cps"
+  | "uxa.pending"
+  | "uxa.rates_help"
+  | "uxa.safety"
+  | "uxa.saved_rates"
+  | "uxa.shopbot_parking"
+  | "uxa.shopbot_raw_blocked"
+  | "uxa.unavailable_short"
+  | "uxa.undercut"
+  | "uxa.unsupported_applied"
+  | "uxb.after"
+  | "uxb.before"
+  | "uxb.diagram"
+  | "uxb.edit_project"
+  | "uxb.free_shank"
+  | "uxb.holder_size"
+  | "uxb.holder_unknown"
+  | "uxb.inconsistent"
+  | "uxb.invalid"
+  | "uxb.library"
+  | "uxb.project"
+  | "uxb.schematic"
+  | "uxb.unknown"
+  | "uxc.authored_stock"
+  | "uxc.choose_material_here"
+  | "uxc.current"
+  | "uxc.drawing"
+  | "uxc.frame_cancel"
+  | "uxc.frame_legacy"
+  | "uxc.material_apply"
+  | "uxc.material_draft"
+  | "uxc.minimum_z"
+  | "uxc.no_drawing"
+  | "uxc.palette_layers"
+  | "uxc.palette_operations"
+  | "uxc.program_origin"
+  | "uxc.rates_help"
+  | "uxc.report_stale"
+  | "uxc.rough"
+  | "uxc.saved_rates"
+  | "uxc.setup"
+  | "uxc.software_report"
+  | "uxc.stale"
+  | "uxc.stock"
+  | "uxc.stock_z"
+  | "uxc.text_tool"
+  | "uxc.xy_only"
+  | "uxc.zero_target"
+  | "uxd.playback.distance"
+  | "uxd.playback.path"
+  | "uxd.stl"
+  | "uxd.stl_source"
   | "warn.chamfer_non_vbit"
   | "warn.chamfer_width_clamped_to_reach"
   | "warn.compression_transition_above_cut"
@@ -2614,7 +2669,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.compatibility_help",
   "fs35.custom_material_help",
   "fs35.cutting",
-  "fs35.define_material",
   "fs35.fallback",
   "fs35.fallback_help",
   "fs35.finishing",
@@ -3090,16 +3144,11 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "oplist.side.back",
   "oplist.side.count.title",
   "oplist.side.front",
-  "oplist.status.cycle_marker",
   "oplist.status.dirty",
-  "oplist.status.gcode_include",
-  "oplist.status.homing",
   "oplist.status.no_drawing",
   "oplist.status.not_generated",
   "oplist.status.orphan_layers",
   "oplist.status.orphan_objects",
-  "oplist.status.pause",
-  "oplist.status.probe",
   "oplist.status.tool_missing",
   "oplist.status.up_to_date",
   "oplist.status_btn.aria",
@@ -3801,6 +3850,13 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "post.tool_change",
   "preview.toolpaths.label",
   "preview.toolpaths.tip",
+  "qualification.back",
+  "qualification.current",
+  "qualification.export_block",
+  "qualification.failed",
+  "qualification.pending",
+  "qualification.stale",
+  "qualification.unavailable",
   "recent.button",
   "recent.clear",
   "recent.open_hint",
@@ -3828,7 +3884,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "report.status.error",
   "report.status.not_generated",
   "report.status.ok",
-  "report.status.pause",
   "report.status.warnings",
   "report.time.arc",
   "report.time.cut",
@@ -3841,10 +3896,8 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "report.time.total",
   "report.title",
   "report.tools.col.diameter",
-  "report.tools.col.feed",
   "report.tools.col.kind",
   "report.tools.col.name",
-  "report.tools.col.speed",
   "report.tools.empty",
   "report.tools.title",
   "report.untitled_project",
@@ -3868,14 +3921,12 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "settings.group.safety",
   "settings.group.snap",
   "settings.group.sources",
-  "settings.group.view",
   "settings.group_nav.aria",
   "settings.performance.caps_hint",
   "settings.performance.exact_rewind",
   "settings.performance.exact_rewind.hint",
   "settings.performance.max_render_triangles",
   "settings.performance.max_sim_cells",
-  "settings.performance.solid_default",
   "settings.preview.arrow_density",
   "settings.preview.arrow_off",
   "settings.preview.cell_resolution",
@@ -3915,10 +3966,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "settings.sources.auto_reload",
   "settings.sources.hint",
   "settings.title",
-  "settings.view.preview_style",
-  "settings.view.preview_style.both",
-  "settings.view.preview_style.solid",
-  "settings.view.preview_style.wireframe",
   "settings.view.show_stock_box",
   "shell.brand",
   "shell.browser_files",
@@ -4464,6 +4511,69 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ux7.obsolete",
   "ux7.running",
   "ux7.success",
+  "uxa.chamfer_depth",
+  "uxa.cps_marker_skipped",
+  "uxa.cps_motion_blocked",
+  "uxa.disabled",
+  "uxa.generate_for_z",
+  "uxa.generated_z",
+  "uxa.group_milling",
+  "uxa.group_program",
+  "uxa.group_special",
+  "uxa.marker_short",
+  "uxa.pass_depth",
+  "uxa.pause_cps",
+  "uxa.pending",
+  "uxa.rates_help",
+  "uxa.safety",
+  "uxa.saved_rates",
+  "uxa.shopbot_parking",
+  "uxa.shopbot_raw_blocked",
+  "uxa.unavailable_short",
+  "uxa.undercut",
+  "uxa.unsupported_applied",
+  "uxb.after",
+  "uxb.before",
+  "uxb.diagram",
+  "uxb.edit_project",
+  "uxb.free_shank",
+  "uxb.holder_size",
+  "uxb.holder_unknown",
+  "uxb.inconsistent",
+  "uxb.invalid",
+  "uxb.library",
+  "uxb.project",
+  "uxb.schematic",
+  "uxb.unknown",
+  "uxc.authored_stock",
+  "uxc.choose_material_here",
+  "uxc.current",
+  "uxc.drawing",
+  "uxc.frame_cancel",
+  "uxc.frame_legacy",
+  "uxc.material_apply",
+  "uxc.material_draft",
+  "uxc.minimum_z",
+  "uxc.no_drawing",
+  "uxc.palette_layers",
+  "uxc.palette_operations",
+  "uxc.program_origin",
+  "uxc.rates_help",
+  "uxc.report_stale",
+  "uxc.rough",
+  "uxc.saved_rates",
+  "uxc.setup",
+  "uxc.software_report",
+  "uxc.stale",
+  "uxc.stock",
+  "uxc.stock_z",
+  "uxc.text_tool",
+  "uxc.xy_only",
+  "uxc.zero_target",
+  "uxd.playback.distance",
+  "uxd.playback.path",
+  "uxd.stl",
+  "uxd.stl_source",
   "warn.chamfer_non_vbit",
   "warn.chamfer_width_clamped_to_reach",
   "warn.compression_transition_above_cut",

@@ -10,6 +10,7 @@ import {
   __geomCache,
   centeredModalPosition,
   clampModalPosition,
+  fitModalToViewport,
   FOCUSABLE_SELECTOR,
 } from './modal_behavior';
 
@@ -173,4 +174,15 @@ describe('Modal geometry cache (zi6p)', () => {
     expect(__geomCache.get('machine')).toEqual({ left: 100, top: 50, width: 700, height: 500 });
     expect(__geomCache.get('tools')).toBeUndefined();
   });
+});
+
+it('recovers a remembered dialog after display shrink without losing its actions', () => {
+  const old = { left: 1300, top: 800, width: 600, height: 700 };
+  const next = fitModalToViewport(old, 600, 700, 1280, 800);
+  expect(next.left + next.width!).toBeLessThanOrEqual(1280);
+  expect(next.top + next.height!).toBeLessThanOrEqual(800);
+  const tiny = fitModalToViewport(old, 600, 700, 300, 180);
+  expect(tiny.width).toBe(284);
+  expect(tiny.height).toBe(164);
+  expect(old.left).toBe(1300);
 });

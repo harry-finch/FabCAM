@@ -343,6 +343,8 @@ export interface components {
              */
             cy: number;
         };
+        /** @enum {string} */
+        Authority: "unavailable" | "planned" | "resolved";
         AutoFix: {
             /** @enum {string} */
             kind: "assign_tool";
@@ -1355,6 +1357,17 @@ export interface components {
             stats: components["schemas"]["PipelineStats"];
             /** @description Acceleration- and jerk-aware program-time estimate. See [`crate::sim::timing`] for the integrator. The total accounts for motion under the trapezoidal profile, tool-change time (`MachineConfig.toolchange_s` × number of M6s), and per-tool spindle pauses summed across used tools. */
             time_estimate: components["schemas"]["TimeEstimate"];
+            /**
+             * @description Runtime provenance, not persisted source or physical machine state.
+             * @default {
+             *       "authority": "unavailable",
+             *       "bindings": [],
+             *       "diagnostics": [],
+             *       "revision": 0,
+             *       "transitions": []
+             *     }
+             */
+            tool_provenance: components["schemas"]["ToolProvenance"];
             toolpath: components["schemas"]["ToolpathSegment"][];
             /** @description Non-fatal warnings raised during planning — mostly tool-fit problems (cutter doesn't fit the geometry, kind mismatch, …). The frontend surfaces these in the operations list status badge and a sidebar list; the gcode is still emitted. */
             warnings?: components["schemas"]["PipelineWarning"][];
@@ -2308,6 +2321,17 @@ export interface components {
             stats: components["schemas"]["PipelineStats"];
             /** @description Acceleration- and jerk-aware program-time estimate. See [`crate::sim::timing`] for the integrator. The total accounts for motion under the trapezoidal profile, tool-change time (`MachineConfig.toolchange_s` × number of M6s), and per-tool spindle pauses summed across used tools. */
             time_estimate: components["schemas"]["TimeEstimate"];
+            /**
+             * @description Runtime provenance, not persisted source or physical machine state.
+             * @default {
+             *       "authority": "unavailable",
+             *       "bindings": [],
+             *       "diagnostics": [],
+             *       "revision": 0,
+             *       "transitions": []
+             *     }
+             */
+            tool_provenance: components["schemas"]["ToolProvenance"];
             toolpath: components["schemas"]["ToolpathSegment"][];
             /** @description Non-fatal warnings raised during planning — mostly tool-fit problems (cutter doesn't fit the geometry, kind mismatch, …). The frontend surfaces these in the operations list status badge and a sidebar list; the gcode is still emitted. */
             warnings?: components["schemas"]["PipelineWarning"][];
@@ -3199,6 +3223,15 @@ export interface components {
             /** Format: double */
             total_s: number;
         };
+        ToolBinding: {
+            /** Format: uint32 */
+            program_tool_number: number;
+            /** Format: uint32 */
+            project_tool_id: number;
+            /** Format: uint32 */
+            reference: number;
+            tool: components["schemas"]["ToolEntry"];
+        };
         /** @description How the post-processor handles a tool change at an op boundary. Widened from the historical `supports_toolchange: bool` because the two *manual* behaviors need different emission: grblHAL / FluidNC accept `M6` as a prompt (the controller parks, prompts the operator, and can run a semi-automatic tool-length probe), while stock GRBL / Marlin reject `M6` (`error:20`) and must fall back to a portable `M0` program pause. Serde also accepts a plain bool via [`deserialize_toolchange`] (`true → Atc`, `false → ManualM0Pause`). */
         ToolChangeStrategy: "atc" | "manual_m6_prompt" | "manual_m0_pause" | "ignore";
         ToolConfig: {
@@ -3551,6 +3584,23 @@ export interface components {
         ToolKind: ("endmill" | "ball_nose" | "v_bit" | "engraver" | "drag_knife" | "drill") | "laser_beam" | "bull_nose" | "compression" | "form_profile" | "kegel" | "thread_mill" | "plasma_torch";
         /** @enum {string} */
         ToolOffset: "none" | "outside" | "inside" | "on";
+        ToolProvenance: {
+            authority: components["schemas"]["Authority"];
+            bindings: components["schemas"]["ToolBinding"][];
+            diagnostics: string[];
+            /** Format: uint32 */
+            revision: number;
+            transitions: components["schemas"]["ToolTransition"][];
+        };
+        ToolTransition: {
+            /** Format: uint32 */
+            after_ref: number;
+            /** Format: uint32 */
+            before_ref?: number | null;
+            evidence: string;
+            /** Format: uint32 */
+            output_line: number;
+        };
         ToolpathSegment: {
             /** @description Present only on the chord segments of a tessellated `G2`/`G3` arc, carrying that arc's center + direction so the simulator can carve the analytic sub-arc footprint instead of the straight chord. `None` for every straight move. Omitted from the wire form when absent. */
             arc?: components["schemas"]["ArcXY"] | null;
@@ -3569,6 +3619,11 @@ export interface components {
              */
             op_id: number;
             to: components["schemas"]["Pose3"];
+            /**
+             * Format: uint32
+             * @description Result-local immutable tool binding. Missing means unknown, never a fallback.
+             */
+            tool_ref?: number | null;
         };
         Transform: {
             mirror_x: boolean;

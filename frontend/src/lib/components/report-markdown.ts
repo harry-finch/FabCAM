@@ -17,10 +17,15 @@ export interface ReportOp {
   source: string;
   depth: string;
   status: string;
+  minimumZ?: string;
+  savedRates?: string;
 }
 
 export interface ReportData {
   projectName: string;
+  setup?: string[][];
+  generationState?: string;
+  safetyNote?: string;
   /// Full version string, e.g. "FabCAM v0.0.0 (abc1234, built 2026-05-25T…)".
   generatedBy: string;
   dateIso: string;
@@ -60,6 +65,17 @@ export function buildReportMarkdown(d: ReportData): string {
   body.push(`# ${d.projectName}`, '');
   body.push(`_${d.dateDisplay} · FabCAM report_`, '');
 
+  if (d.generationState) body.push(`**Generation: ${cell(d.generationState)}**`, '');
+  if (d.safetyNote) body.push(cell(d.safetyNote), '');
+  if (d.setup) {
+    body.push('## Setup (authored coordinates, mm)', '', '| Setting | Value |', '| --- | --- |');
+    for (const row of d.setup) body.push(`| ${cell(row[0])} | ${cell(row[1])} |`);
+    body.push(
+      '',
+      'Saved rates are operation inputs, before machine/post limits. Feed / plunge in mm/min; no claim of measured machine speed.',
+      '',
+    );
+  }
   if (d.stats) {
     body.push('## Toolpath stats', '');
     body.push('| Metric | Value |', '| --- | --- |');
@@ -83,12 +99,12 @@ export function buildReportMarkdown(d: ReportData): string {
   if (d.ops.length > 0) {
     body.push('## Operations', '');
     body.push(
-      '| Op | Kind | Tool | Source | Depth | Status |',
-      '| --- | --- | --- | --- | --- | --- |',
+      '| Op | Kind | Tool | Source | Requested depth | Generated min Z (program) | Saved rpm / feed / plunge | Status |',
+      '| --- | --- | --- | --- | --- | --- | --- | --- |',
     );
     for (const o of d.ops) {
       body.push(
-        `| ${cell(o.name)} | ${cell(o.kind)} | ${cell(o.tool)} | ${cell(o.source)} | ${cell(o.depth)} | ${cell(o.status)} |`,
+        `| ${cell(o.name)} | ${cell(o.kind)} | ${cell(o.tool)} | ${cell(o.source)} | ${cell(o.depth)} | ${cell(o.minimumZ ?? '—')} | ${cell(o.savedRates ?? '—')} | ${cell(o.status)} |`,
       );
     }
     body.push('');

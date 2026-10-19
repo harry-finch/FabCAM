@@ -42,10 +42,14 @@ export function warningMessage(w: PipelineWarning, t: Translate): string {
   // `warn.<kind>`, else the backend's English `message`. Both `t(`warn.${…}`)`
   // calls are inline so the i18n dead-key scanner registers `warn.` as a live
   // runtime prefix (see the note above).
+  // Older/partial payloads may omit interpolation parameters. Preserve the
+  // backend explanation rather than exposing unresolved {tokens}.
+  const complete = (message: string) =>
+    /\{[a-zA-Z_][a-zA-Z_0-9]*\}/.test(message) ? w.message : message;
   const variant = params.variant;
   if (variant && KNOWN_KEYS.has(`warn.${w.kind}.${variant}`)) {
-    return t(`warn.${w.kind}.${variant}` as MsgKey, params);
+    return complete(t(`warn.${w.kind}.${variant}` as MsgKey, params));
   }
-  if (KNOWN_KEYS.has(`warn.${w.kind}`)) return t(`warn.${w.kind}` as MsgKey, params);
+  if (KNOWN_KEYS.has(`warn.${w.kind}`)) return complete(t(`warn.${w.kind}` as MsgKey, params));
   return w.message;
 }

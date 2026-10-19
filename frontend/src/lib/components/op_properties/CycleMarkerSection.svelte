@@ -1,4 +1,10 @@
 <script lang="ts">
+  import ProgramPostNotice from './ProgramPostNotice.svelte';
+  import { project } from '../../state/project.svelte';
+  import { workspace } from '../../state/workspace.svelte';
+  const cps = $derived(
+    (project.data.machine.gcodeDialect ?? workspace.get().last_post_processor) === 'cps',
+  );
   /// CycleMarker op-properties: comment-only marker. Pendants and
   /// gcode viewers that index by program line can jump to the next marker.
   /// Styles inherited from OpPropertiesPanel's :global(.props ...) rules.
@@ -11,6 +17,8 @@
   }
   let { op, patch }: Props = $props();
 </script>
+
+<ProgramPostNotice kind="cycle_marker" />
 
 <label class="row">
   <span>{t('ops.cycle_marker.name.label')}</span>
@@ -29,8 +37,8 @@
     oninput={(e) => patch('label', (e.currentTarget as HTMLInputElement).value)}
   />
 </label>
-<p class="hint hint-pause">
-  {t('ops.cycle_marker.emits.hint')} <code>; --- {op.label ?? ''} ---</code>{t(
-    'ops.cycle_marker.no_motion.hint',
-  )}
-</p>
+{#if !cps}<p class="hint hint-pause">
+    {t('ops.cycle_marker.emits.hint')} <code>; --- {op.label ?? ''} ---</code>{t(
+      'ops.cycle_marker.no_motion.hint',
+    )}
+  </p>{/if}

@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { operationCapability, operationRunState } from '../state/inspector-policy';
+  import { generationContextKey, coerceGenerationPost } from '../state/generation-context';
+  import { workspace } from '../state/workspace.svelte';
   import OperationTemplates from './OperationTemplates.svelte';
   import { CopyPlus } from '@lucide/svelte';
   /// Operations list — ordered flat list of CAM operations the program
@@ -30,6 +33,8 @@
   let { active, onActivate }: Props = $props();
 
   let templatesDialog: OperationTemplates;
+  let sectionHeaderHeight = $state(0);
+  let addButton: HTMLButtonElement;
   let pickerOpen = $state(false);
   let dragId = $state<number | null>(null);
   let dragOverId = $state<number | null>(null);
@@ -115,51 +120,25 @@
     });
   }
 
+  const activePost = $derived(
+    coerceGenerationPost(project.data.machine.gcodeDialect ?? workspace.get().last_post_processor),
+  );
+  const generationCurrent = $derived(
+    project.gen.inputContextKey != null &&
+      project.gen.inputContextKey === generationContextKey(project, activePost),
+  );
+
+  function activeKindHelp(op: OpEntry): string {
+    const reason = operationCapability(op.kind, activePost, project.data.machine);
+    if (reason) return t(reason);
+    return activePost === 'cps' && op.kind === 'pause' ? t('uxa.pause_cps') : pickerHelp(op.kind);
+  }
+
   function statusFor(op: OpEntry): { label: string; tone: 'ok' | 'warn' | 'bad'; reason: string } {
-    // Program-only ops (Pause, Homing, Probe, CycleMarker,
-    // GcodeInclude) carry no tool / source / geometry by design.
-    // They emit a small fixed gcode sequence (M0, G28, G38.2, a
-    // comment marker, or an included file) and never touch a
-    // spindle / cutter. The standard validation chain below would
-    // mark them red for 'Tool #0 missing'. Short-circuit to OK so
-    // the row reads as a deliberate program-flow building block
-    // instead of a config error.
-    if (op.kind === 'pause') {
-      return {
-        label: '✓',
-        tone: 'ok',
-        reason: t('oplist.status.pause'),
-      };
-    }
-    if (op.kind === 'homing') {
-      return {
-        label: '✓',
-        tone: 'ok',
-        reason: t('oplist.status.homing'),
-      };
-    }
-    if (op.kind === 'probe') {
-      return {
-        label: '✓',
-        tone: 'ok',
-        reason: t('oplist.status.probe'),
-      };
-    }
-    if (op.kind === 'cycle_marker') {
-      return {
-        label: '✓',
-        tone: 'ok',
-        reason: t('oplist.status.cycle_marker'),
-      };
-    }
-    if (op.kind === 'gcode_include') {
-      return {
-        label: '✓',
-        tone: 'ok',
-        reason: t('oplist.status.gcode_include'),
-      };
-    }
-    if (!project.data.tools.find((tool) => tool.id === op.toolId)) {
+    if (!op.enabled) return { label: '—', tone: 'warn', reason: t('uxa.disabled') };
+    const capability = operationCapability(op.kind, activePost, project.data.machine);
+    if (capability) return { label: '⚠', tone: 'warn', reason: t(capability) };
+    if (!isProgramOnlyOp(op.kind) && !project.data.tools.find((tool) => tool.id === op.toolId)) {
       return {
         label: '✘',
         tone: 'bad',
@@ -167,6 +146,7 @@
       };
     }
     if (
+      !isProgramOnlyOp(op.kind) &&
       !project.transformedImport &&
       project.data.textLayers.length === 0 &&
       op.kind !== 'planar_surface'
@@ -197,21 +177,27 @@
         };
       }
     }
-    if (project.data.dirty) {
+    const output =
+      twoSided && op.side === 'back' ? project.gen.generatedBack : project.gen.generated;
+    const state = operationRunState(
+      op.enabled,
+      !!output?.gcode,
+      generationCurrent,
+      project.gen.pipelineState,
+    );
+    if (state !== 'current')
       return {
-        label: '⚠',
+        label: state === 'stale' ? '⚠' : '·',
         tone: 'warn',
-        reason: t('oplist.status.dirty'),
+        reason: t(
+          state === 'stale'
+            ? 'oplist.status.dirty'
+            : state === 'pending'
+              ? 'uxa.pending'
+              : 'oplist.status.not_generated',
+        ),
       };
-    }
-    if (!project.gen.generated) {
-      return {
-        label: '·',
-        tone: 'warn',
-        reason: t('oplist.status.not_generated'),
-      };
-    }
-    const opWarnings = (project.gen.generated.warnings ?? []).filter((w) => w.op_id === op.id);
+    const opWarnings = (output?.warnings ?? []).filter((w) => w.op_id === op.id);
     if (opWarnings.length > 0) {
       const bad = opWarnings.find(
         (w) => w.kind === 'tool_kind_mismatch' || w.kind === 'tool_geometry_impossible',
@@ -321,6 +307,7 @@
   /// drag-grip's mouse-only counterpart). Roving tabindex
   /// on each row: only the selected op is in the tab order.
   function onListKey(e: KeyboardEvent) {
+    if ((e.target as Element | null)?.getAttribute('role') !== 'option') return;
     // Navigate/reorder over the VISIBLE ops (respects the two-sided
     // grouping + filter). Single-sided this is just project.data.operations.
     const ops = visibleOps;
@@ -380,7 +367,11 @@
        the caret's own activation. -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <div class="group-head sidebar-section-head" onclick={onActivate}>
+  <div
+    class="group-head sidebar-section-head"
+    bind:clientHeight={sectionHeaderHeight}
+    onclick={onActivate}
+  >
     <button
       class="caret-btn"
       onclick={(e) => {
@@ -411,6 +402,7 @@
     >
     <button
       class="add-btn"
+      bind:this={addButton}
       onclick={(e) => {
         e.stopPropagation();
         if (!active) onActivate();
@@ -433,7 +425,13 @@
   {#if active}
     {#if pickerOpen}
       <div class="picker-host">
-        <OpKindPicker onPick={pick} />
+        <OpKindPicker
+          onPick={pick}
+          onDismiss={() => {
+            pickerOpen = false;
+            addButton?.focus();
+          }}
+        />
       </div>
     {/if}
 
@@ -468,6 +466,8 @@
       >
         <div
           class="row"
+          class:active-context={selected}
+          style:top={selected ? `${sectionHeaderHeight}px` : undefined}
           ondragover={(e) => onDragOver(e, op.id)}
           ondrop={(e) => onDrop(e, op.id)}
           onclick={() => selectOp(op.id)}
@@ -498,8 +498,8 @@
           <span class="caret" aria-hidden="true">{selected ? '▾' : '▸'}</span>
           <span
             class="ico"
-            title={`${kindLabel(op.kind)} — ${pickerHelp(op.kind)}`}
-            aria-label={`${kindLabel(op.kind)} — ${pickerHelp(op.kind)}`}
+            title={`${kindLabel(op.kind)} — ${activeKindHelp(op)}`}
+            aria-label={`${kindLabel(op.kind)} — ${activeKindHelp(op)}`}
             style:color={op.kind === 'pause' ? null : opSourceCss(op.id, selected)}
             >{KIND_ICON[op.kind]}</span
           >
@@ -640,6 +640,13 @@
 </div>
 
 <style>
+  .active-context {
+    position: sticky;
+    z-index: 3;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--accent);
+  }
+
   /* Project-level tool-grouping toggle above the ops list. */
   .group-by-tool {
     display: flex;

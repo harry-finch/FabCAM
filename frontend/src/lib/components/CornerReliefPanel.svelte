@@ -228,18 +228,26 @@
       </div>
       <div class="corners" aria-label={t('cad1.selection')}>
         {#each ui.response?.candidates ?? [] as c (cornerKey(c.reference))}
-          <label class="corner" title={c.reason ?? t('cad1.toggle')}>
+          <label
+            class="corner"
+            title={c.reason ?? t('cad1.toggle')}
+            onmouseenter={() => (ui.highlighted = cornerKey(c.reference))}
+            onmouseleave={() => (ui.highlighted = null)}
+          >
             <input
               type="checkbox"
               checked={ui.corners.some((x) => cornerKey(x) === cornerKey(c.reference))}
               disabled={!!c.reason}
+              onfocus={() => (ui.highlighted = cornerKey(c.reference))}
+              onblur={() => (ui.highlighted = null)}
               onchange={() => toggleCorner(c.reference)}
             />
             <span
               >{t('cad1.corner', {
                 object: c.reference.object_id,
                 corner: c.reference.corner_index + 1,
-              })}{#if c.reason}<small>{c.reason}</small>{/if}</span
+              })}<small>X {c.vertex.x.toFixed(2)} · Y {c.vertex.y.toFixed(2)} mm</small
+              >{#if c.reason}<small>{c.reason}</small>{/if}</span
             >
           </label>
         {/each}

@@ -961,3 +961,33 @@ describe('audit 11–12 wire semantics', () => {
     }
   });
 });
+
+it('keeps saved chamfer depth fields and descent settings on the wire after inspector changes', () => {
+  const op: OpEntry = {
+    ...profileOp(),
+    kind: 'chamfer',
+    chamferWidthMm: 1.2,
+    depth: -8,
+    startDepth: -3,
+    step: -0.5,
+    finishStep: -0.1,
+    throughDepth: 0.7,
+    depthList: [-2, -8],
+  };
+  const before = JSON.stringify(op);
+  const project = buildProject({
+    transformedImport: fakeImport(),
+    machine: baseMachine(),
+    tools: [baseTool({ kind: 'v_bit' })],
+    operations: [op],
+  });
+  expect(project!.operations[0].params).toMatchObject({
+    depth: -8,
+    start_depth: -3,
+    step: -0.5,
+    finish_step: -0.1,
+    through_depth: 0.7,
+    depth_list: [-2, -8],
+  });
+  expect(JSON.stringify(op)).toBe(before);
+});

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import SnapControls from './SnapControls.svelte';
   import { Eye, EyeOff } from '@lucide/svelte';
   import { drawingLayers, layerSwatch } from '../state/drawing-layers';
   import DrawingCleanupPanel from './DrawingCleanupPanel.svelte';
@@ -233,6 +234,7 @@
   </div>
   {#if !collapsed}
     <div class="group-body">
+      <SnapControls />
       {#if project.data.imports.length > 0}
         <h3 class="list-heading">{t('layers.imported_files')}</h3>
       {/if}

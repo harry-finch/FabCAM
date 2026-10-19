@@ -1,4 +1,10 @@
 <script lang="ts">
+  import ProgramPostNotice from './ProgramPostNotice.svelte';
+  import { project } from '../../state/project.svelte';
+  import { workspace } from '../../state/workspace.svelte';
+  const cps = $derived(
+    (project.data.machine.gcodeDialect ?? workspace.get().last_post_processor) === 'cps',
+  );
   /// Homing op-properties: name + safe-Z toggle. The op emits G28
   /// (machine-specific home) and, optionally, a rapid Z lift afterwards.
   /// No tool, no source, no Z schedule.
@@ -12,6 +18,8 @@
   }
   let { op, patch }: Props = $props();
 </script>
+
+<ProgramPostNotice kind="homing" />
 
 <label class="row">
   <span>{t('ops.homing.name.label')}</span>
@@ -29,8 +37,8 @@
     onchange={(e) => patch('retractToSafeZ', (e.currentTarget as HTMLInputElement).checked)}
   />
 </label>
-<p class="hint hint-pause">
-  {t('ops.homing.pipeline.hint_prefix')}<code>G28</code>{t('ops.homing.pipeline.hint_suffix', {
-    suffix: (op.retractToSafeZ ?? true) ? t('ops.homing.pipeline.safe_z_suffix') : '',
-  })}
-</p>
+{#if !cps}<p class="hint hint-pause">
+    {t('ops.homing.pipeline.hint_prefix')}<code>G28</code>{t('ops.homing.pipeline.hint_suffix', {
+      suffix: (op.retractToSafeZ ?? true) ? t('ops.homing.pipeline.safe_z_suffix') : '',
+    })}
+  </p>{/if}

@@ -1,4 +1,10 @@
 <script lang="ts">
+  import {
+    qualifiedDiagnostics,
+    programWarningSummary,
+    qualificationPhase,
+    programExportStatus,
+  } from '../state/program-qualification';
   import { generateEditedDrawing } from '../state/drawing';
   import { beginGenerationProbe } from '../state/performance-probe';
   import { bindGeneratePalette, exportProblem } from '../state/generate-palette';
@@ -27,12 +33,9 @@
   import { generateBus } from '../state/generate-bus.svelte';
   import { exportGeneratedGcode, exportSimulatedStockStl } from '../services/file_ops';
   import type { SimWarning, TimeEstimate } from '../api/types';
-  import {
-    pipelineWarningSeverity,
-    countCriticalPipelineWarnings,
-    type PipelineWarning,
-  } from '../api/pipeline-warnings';
-  import { summarizeWarnings, showGenerationSummary } from '../state/warnings-summary';
+  import { pipelineWarningSeverity } from '../api/pipeline-warnings';
+  import { countCriticalPipelineWarnings } from '../api/pipeline-warnings';
+  import { showGenerationSummary } from '../state/warnings-summary';
   import GenerateProgress from './GenerateProgress.svelte';
   import FloatingPanel from './FloatingPanel.svelte';
   import { workspace } from '../state/workspace.svelte';
@@ -44,7 +47,7 @@
   import { cpsSelectionKey, toCpsPostRequest } from './cps-post-form';
   import { warningMessage } from './warning-display';
 
-  import { formatHms, formatShort } from './generate-time';
+  import { formatDuration } from './generate-time';
 
   function timeEstimate(): TimeEstimate | null {
     const r = project.gen.generated as { time_estimate?: TimeEstimate } | null;
@@ -166,22 +169,11 @@
       project.gen.inputContextKey !== generationContextKey(project, post),
   );
 
-  const warningSummary = $derived(
-    summarizeWarnings({
-      simWarnings: project.gen.simDiagnostics?.warnings ?? [],
-      pipelineWarnings:
-        (project.gen.generated as { warnings?: PipelineWarning[] } | null)?.warnings ?? [],
-      hasGenerated: project.gen.generated != null,
-      hasSimDiagnostics: project.gen.simDiagnostics != null,
-      dirty: generatedStale,
-    }),
-  );
+  const backSimWarnings = $derived(qualifiedDiagnostics(project, post, 'back')?.warnings ?? []);
+  const warningSummary = $derived(programWarningSummary(project, post));
   let warnings = $derived(warningSummary.sim);
   let allPipelineWarnings = $derived(warningSummary.pipeline);
   // Work-area warnings use their separate opt-in export policy.
-  let workAreaViolationCount = $derived(
-    allPipelineWarnings.filter((w) => w.kind === 'out_of_work_area').length,
-  );
   let criticalCount = $derived(warningSummary.critical);
   let totalWarningCount = $derived(warningSummary.total);
 
@@ -200,13 +192,6 @@
       project.gen.generatedBack?.output_extension ?? undefined,
       project.data.machine.postProfile?.file_extension,
     ),
-  );
-  const backWarnings = $derived(
-    (project.gen.generatedBack as { warnings?: PipelineWarning[] } | null)?.warnings ?? [],
-  );
-  const backCriticalCount = $derived(countCriticalPipelineWarnings(backWarnings));
-  const backWorkAreaCount = $derived(
-    backWarnings.filter((w) => w.kind === 'out_of_work_area').length,
   );
 
   async function run() {
@@ -374,15 +359,7 @@
     );
   }
 
-  const exportStatus = () => ({
-    stale: generatedStale,
-    critical: criticalCount,
-    backCritical: backCriticalCount,
-    fixture: allPipelineWarnings.filter((w) => w.kind === 'fixture_path_collision').length,
-    backFixture: backWarnings.filter((w) => w.kind === 'fixture_path_collision').length,
-    workArea: workAreaViolationCount,
-    backWorkArea: backWorkAreaCount,
-  });
+  const exportStatus = () => programExportStatus(project, post);
   bindGeneratePalette(exportStatus, run, cancelRun, downloadGcode, () => {
     warningPanelOpen = true;
   });
@@ -429,6 +406,8 @@
         return t('genbar.chip.idle');
       case 'stale':
         return t('genbar.chip.stale');
+      case 'unverified':
+        return t(`qualification.${qualificationPhase(project, post)}`);
       case 'clean':
         return t('genbar.chip.clean');
       case 'critical':
@@ -478,6 +457,9 @@
     />
   {/if}
   {#if project.gen.generated}
+    <span class="muted" role="status" title={project.gen.qualification?.message ?? ''}>
+      {t(`qualification.${qualificationPhase(project, post)}`)}
+    </span>
     {#if twoSided}
       <button
         onclick={() => void downloadGcode('front')}
@@ -510,7 +492,7 @@
       class="download"
       title={t('genbar.download.stl_title')}
     >
-      STL
+      {t('uxd.stl')}
     </button>
     <span class="stats">
       {t('genbar.stats.summary', {
@@ -530,21 +512,23 @@
     {#if timeEstimate()}
       {@const est = timeEstimate()!}
       <span class="time-chip" tabindex="0" role="button" aria-label={t('genbar.time.aria')}>
-        <span class="time">⏱ {formatHms(est.total_s)}</span>
+        <span class="time">⏱ {formatDuration(est.total_s)}</span>
         <div class="time-breakdown" role="tooltip">
           <table>
             <tbody>
-              <tr><th>{t('genbar.time.total')}</th><td>{formatHms(est.total_s)}</td></tr>
-              <tr><th>{t('genbar.time.cut')}</th><td>{formatShort(est.cut_s)}</td></tr>
-              <tr><th>{t('genbar.time.rapid')}</th><td>{formatShort(est.rapid_s)}</td></tr>
-              <tr><th>{t('genbar.time.plunge')}</th><td>{formatShort(est.plunge_s)}</td></tr>
-              <tr><th>{t('genbar.time.retract')}</th><td>{formatShort(est.retract_s)}</td></tr>
-              <tr><th>{t('genbar.time.arc')}</th><td>{formatShort(est.arc_s)}</td></tr>
-              <tr><th>{t('genbar.time.toolchange')}</th><td>{formatShort(est.toolchange_s)}</td></tr
+              <tr><th>{t('genbar.time.total')}</th><td>{formatDuration(est.total_s)}</td></tr>
+              <tr><th>{t('genbar.time.cut')}</th><td>{formatDuration(est.cut_s)}</td></tr>
+              <tr><th>{t('genbar.time.rapid')}</th><td>{formatDuration(est.rapid_s)}</td></tr>
+              <tr><th>{t('genbar.time.plunge')}</th><td>{formatDuration(est.plunge_s)}</td></tr>
+              <tr><th>{t('genbar.time.retract')}</th><td>{formatDuration(est.retract_s)}</td></tr>
+              <tr><th>{t('genbar.time.arc')}</th><td>{formatDuration(est.arc_s)}</td></tr>
+              <tr
+                ><th>{t('genbar.time.toolchange')}</th><td>{formatDuration(est.toolchange_s)}</td
+                ></tr
               >
               <tr
                 ><th>{t('genbar.time.spindle_warmup')}</th><td
-                  >{formatShort(est.spindle_warmup_s)}</td
+                  >{formatDuration(est.spindle_warmup_s)}</td
                 ></tr
               >
             </tbody>
@@ -635,10 +619,15 @@
   onClose={() => (warningPanelOpen = false)}
   title={t('genbar.panel.title', { count: totalWarningCount })}
   ariaLabel={t('genbar.panel.aria')}
+  initialHeight={320}
 >
   <div class="list">
     {#if totalWarningCount === 0}
-      <p class="empty">{t('genbar.panel.empty')}</p>
+      <p class="empty">
+        {qualificationPhase(project, post) === 'current'
+          ? t('genbar.panel.empty')
+          : t(`qualification.${qualificationPhase(project, post)}`)}
+      </p>
     {:else}
       {#each warnings as w, i (`sim-${i}`)}
         {@const sev = simWarningSeverity(w)}
@@ -647,11 +636,13 @@
           <summary>
             <span class="dot" aria-hidden="true"></span>
             <span class="source" title={t('genbar.row.sim_title')}>{t('genbar.row.sim')}</span>
-            <span class="kind">{w.kind}</span>
-            <span class="msg">{summary}</span>
+            <span class="msg"
+              >{backSimWarnings.includes(w) ? `${t('qualification.back')}: ` : ''}{summary}</span
+            >
             <button
               type="button"
               class="row-action"
+              disabled={backSimWarnings.includes(w)}
               onclick={(e) => {
                 e.stopPropagation();
                 flyToWarning(w);
@@ -680,8 +671,9 @@
             <span class="source pipeline" title={t('genbar.row.pipeline_title')}
               >{t('genbar.row.pipeline')}</span
             >
-            <span class="kind" title={pw.kind}>{vcarveContext ?? pw.kind}</span>
-            <span class="msg">{warningMessage(pw, t)}</span>
+            <span class="msg"
+              >{vcarveContext ? `${vcarveContext} — ` : ''}{warningMessage(pw, t)}</span
+            >
             {#if hasFix}
               <button
                 type="button"
@@ -945,6 +937,9 @@
     color: var(--sim-warn-fg);
     border-color: color-mix(in srgb, var(--warn) 40%, transparent);
   }
+  .sim-chip:hover:not(:disabled) {
+    background: var(--bg-elevated);
+  }
   .sim-chip.critical {
     background: var(--sim-critical-bg);
     color: var(--sim-critical-fg);
@@ -988,7 +983,7 @@
   }
   .list details.row > summary {
     display: grid;
-    grid-template-columns: 0.8rem 3.6rem 8rem minmax(0, 1fr) auto;
+    grid-template-columns: 0.8rem 3.6rem minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.5rem;
     padding: 0.35rem 0.55rem;
@@ -1035,18 +1030,11 @@
     color: var(--accent);
     border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   }
-  .list .kind {
-    font-family: ui-monospace, monospace;
-    color: var(--text-muted);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   .list .msg {
     color: var(--text-strong);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
   }
   .list .row-action {
     background: transparent;

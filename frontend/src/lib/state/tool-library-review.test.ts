@@ -33,6 +33,8 @@ describe('UX6-B library review contracts', () => {
         id: 1,
         before: original.name,
         after: 'New definition',
+        kindBefore: original.kind,
+        kindAfter: changed.kind,
         diameterBefore: original.diameter,
         diameterAfter: changed.diameter,
         operations: ['Manual contour'],

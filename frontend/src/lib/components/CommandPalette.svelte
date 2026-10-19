@@ -123,7 +123,15 @@
     return record.category === 'tool'
       ? undefined
       : (actionState(record)?.reason ??
-          (!actionState(record) ? t('palette.unavailable') : undefined));
+          (!actionState(record)
+            ? t(
+                record.action === 'drawing-cleanup'
+                  ? 'uxc.palette_layers'
+                  : ['templates', 'capture-template'].includes(record.action ?? '')
+                    ? 'uxc.palette_operations'
+                    : 'palette.unavailable',
+              )
+            : undefined));
   }
   function captureOffer() {
     const result = results[cursor];

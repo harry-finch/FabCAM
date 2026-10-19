@@ -22,3 +22,13 @@ export function formatShort(s: number | undefined): string {
   }
   return formatHms(s);
 }
+
+/** Explicit units, rounded before decomposition (never displays 1 min 60 s). */
+export function formatDuration(seconds: number | undefined): string {
+  if (seconds == null || !Number.isFinite(seconds) || seconds < 0) return '—';
+  const total = Math.round(seconds);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return [h ? `${h} h` : '', h || m ? `${m} min` : '', `${s} s`].filter(Boolean).join(' ');
+}

@@ -1,3 +1,8 @@
+import {
+  defaultProjectTools,
+  defaultProjectMachine,
+  defaultProjectStock,
+} from './project-defaults';
 import { computeUnsavedWork } from './unsaved';
 import { validateProjectFile, hasFeedsSpeedsData } from './feeds-speeds-persistence';
 // Project-file / workspace lifecycle extracted from the ProjectState
@@ -243,10 +248,17 @@ export function restoreProject(p: ProjectState, file: ProjectFile) {
   if (Array.isArray(file.selectedEntities) && file.selectedEntities.length > 0) {
     p.sel.selectedEntities = new Set(file.selectedEntities);
   }
-  if (file.stock) p.data.stock = { ...p.data.stock, ...file.stock };
-  if (Array.isArray(file.tools) && file.tools.length > 0)
-    p.data.tools = file.tools.map(migrateLegacyToolTerms);
-  if (file.machine) p.data.machine = { ...p.data.machine, ...migrateMachineSettings(file.machine) };
+  p.data.stock = { ...defaultProjectStock(), ...file.stock };
+  p.data.tools = Array.isArray(file.tools)
+    ? file.tools.map(migrateLegacyToolTerms)
+    : defaultProjectTools();
+  // A full document owns its machine, including inactive/unknown authored keys.
+  // Missing legacy dialect means LinuxCNC, not the previously used workspace post.
+  p.data.machine = {
+    ...defaultProjectMachine(),
+    gcodeDialect: 'linuxcnc',
+    ...migrateMachineSettings(file.machine ?? {}),
+  };
   if (Array.isArray(file.operations)) p.data.operations = file.operations;
   p.data.fixtures = Array.isArray(file.fixtures) ? file.fixtures : [];
   p.data.textLayers = Array.isArray(file.textLayers) ? file.textLayers : [];

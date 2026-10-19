@@ -57,7 +57,7 @@ describe('buildReportMarkdown', () => {
     expect(md).toContain('## Tools');
     expect(md).toContain('| 3mm flat | endmill | 3.00 |');
     expect(md).toContain('## Operations');
-    expect(md).toContain('| Profile | profile | 3mm flat | all geometry | -5.00 mm | ok |');
+    expect(md).toContain('| Profile | profile | 3mm flat | all geometry | -5.00 mm | — | — | ok |');
     expect(md).toContain('## Warnings');
     expect(md).toContain('**1 critical · 2 non-critical**');
     expect(md).toContain('- **tool_too_large** — tool wider than slot');

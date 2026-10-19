@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { programLabel } from '../state/program-label';
   /// G-code text panel — the "inspect" half of the bidirectional link
   /// between gcode and the 3D toolpath:
   ///   * Clicking a line moves the playhead to the matching segment so
@@ -339,7 +340,7 @@
       class:readonly={activeSide === 'back'}
       bind:this={host}
       role="listbox"
-      aria-label={t('gcode.label')}
+      aria-label={programLabel(activeGen?.output_extension, t('gcode.label'))}
       tabindex="0"
       onkeydown={onPanelKey}
       onscroll={onScroll}

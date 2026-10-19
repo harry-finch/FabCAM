@@ -1,7 +1,14 @@
 import { it, expect } from 'vitest';
 import { exportSafetyProblem } from './generate-palette-policy';
 const settings = { blockOnCriticalSimWarnings: true, blockOnWorkAreaViolation: true };
-const clean = { stale: false, critical: 0, backCritical: 0, workArea: 0, backWorkArea: 0 };
+const clean = {
+  qualification: 'current' as const,
+  stale: false,
+  critical: 0,
+  backCritical: 0,
+  workArea: 0,
+  backWorkArea: 0,
+};
 it.each(['front', 'back'] as const)('blocks critical and envelope warnings on %s', (side) => {
   const status = {
     ...clean,

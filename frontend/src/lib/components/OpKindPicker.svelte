@@ -87,14 +87,17 @@
   /// menu offers). Used both as the inline picker under OperationsList
   /// and from the EntityCanvas2D right-click menu.
   import { project } from '../state/project.svelte';
+  import { workspace } from '../state/workspace.svelte';
+  import { operationCapability } from '../state/inspector-policy';
 
   interface Props {
     onPick: (kind: PickerKind) => void;
+    onDismiss?: () => void;
     /// When true, the Pocket Outside entry is disabled if the user has
     /// no canvas selection (the wrapper needs source objects).
     requireSelectionForPocketOutside?: boolean;
   }
-  let { onPick, requireSelectionForPocketOutside = true }: Props = $props();
+  let { onPick, onDismiss, requireSelectionForPocketOutside = true }: Props = $props();
 
   const pocketOutsideDisabled = $derived(
     requireSelectionForPocketOutside && project.sel.selectedObjects.size === 0,
@@ -144,6 +147,40 @@
     const req = OP_REQUIRES[kind];
     return req.some((c) => machineCapabilities.includes(c));
   }
+  const activePost = $derived(
+    project.data.machine.gcodeDialect ?? workspace.get().last_post_processor,
+  );
+  const groups = [
+    {
+      label: 'uxa.group_milling',
+      kinds: [
+        'profile',
+        'pocket',
+        'pocket_outside',
+        'drill',
+        'planar_surface',
+        'vcarve',
+        'engrave',
+        'chamfer',
+      ],
+    },
+    {
+      label: 'uxa.group_special',
+      kinds: [
+        'thread',
+        't_slot',
+        'dovetail',
+        'relief_mill',
+        'waterline_rough',
+        'drag_knife',
+        'raster_engrave',
+      ],
+    },
+    {
+      label: 'uxa.group_program',
+      kinds: ['pause', 'homing', 'probe', 'cycle_marker', 'gcode_include'],
+    },
+  ] as const;
   const visibleKinds = $derived(ALL_PICKER_KINDS.filter(isPickerKindSupported));
 
   /// Arrow-key nav across the 2-column picker grid. The picker is opened
@@ -151,6 +188,12 @@
   /// LayerList "+ Add"); without keyboard arrow nav, users dependent on
   /// the keyboard had to Tab through the whole document to walk items.
   function onPickerKey(e: KeyboardEvent) {
+    if (e.key === 'Escape' && onDismiss) {
+      e.preventDefault();
+      e.stopPropagation();
+      onDismiss();
+      return;
+    }
     const root = e.currentTarget as HTMLElement;
     const items = Array.from(
       root.querySelectorAll<HTMLElement>('button[role="menuitem"]:not(:disabled)'),
@@ -178,24 +221,61 @@
 </script>
 
 <div class="picker" role="menu" tabindex="-1" onkeydown={onPickerKey} use:autoFocusFirst>
-  {#each visibleKinds as k (k)}
-    {@const disabled = k === 'pocket_outside' && pocketOutsideDisabled}
-    <button
-      class="kind"
-      role="menuitem"
-      onclick={() => onPick(k)}
-      {disabled}
-      title={disabled ? t('ops.picker.select_first') : pickerHelp(k)}
-      aria-label={t('ops.picker.add_aria', { label: pickerLabel(k) })}
-    >
-      <span class="ico" aria-hidden="true">{PICKER_ICON[k]}</span>
-      <span>{pickerLabel(k)}</span>
-    </button>
+  {#each groups as group (group.label)}
+    {#if visibleKinds.some((k) => (group.kinds as readonly string[]).includes(k))}<div
+        class="group-label"
+      >
+        {t(group.label)}
+      </div>{/if}
+    {#each visibleKinds.filter((k) => (group.kinds as readonly string[]).includes(k)) as k (k)}
+      {@const capability =
+        k === 'pocket_outside' ? null : operationCapability(k, activePost, project.data.machine)}
+      {@const disabled =
+        (capability != null && capability !== 'uxa.cps_marker_skipped') ||
+        (k === 'pocket_outside' && pocketOutsideDisabled)}
+      <button
+        class="kind"
+        role="menuitem"
+        onclick={() => onPick(k)}
+        {disabled}
+        title={capability
+          ? t(capability)
+          : activePost === 'cps' && k === 'pause'
+            ? t('uxa.pause_cps')
+            : disabled
+              ? t('ops.picker.select_first')
+              : pickerHelp(k)}
+        aria-label={t('ops.picker.add_aria', { label: pickerLabel(k) })}
+      >
+        <span class="ico" aria-hidden="true">{PICKER_ICON[k]}</span>
+        <span
+          >{pickerLabel(k)}{#if capability}<small
+              >{t(
+                capability === 'uxa.cps_marker_skipped'
+                  ? 'uxa.marker_short'
+                  : 'uxa.unavailable_short',
+              )}</small
+            >{/if}</span
+        >
+      </button>
+    {/each}
   {/each}
 </div>
 
 <style>
+  .group-label {
+    grid-column: 1 / -1;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+  small {
+    display: block;
+    font-size: 0.68rem;
+  }
   .picker {
+    max-height: min(32rem, 60vh);
+    overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.2rem;
@@ -222,7 +302,7 @@
     border-color: var(--accent);
   }
   .kind:disabled {
-    opacity: 0.4;
+    color: var(--text-muted);
     cursor: not-allowed;
   }
   .ico {

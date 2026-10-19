@@ -513,3 +513,18 @@ body,
   font-variant-numeric: tabular-nums;
   line-height: 1.4;
 }
+
+/* Native file controls follow the same compact workshop buttons. */
+input[type='file']::file-selector-button {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.55rem;
+  margin-right: 0.5rem;
+  font: inherit;
+  cursor: pointer;
+}
+textarea {
+  max-width: 100%;
+}

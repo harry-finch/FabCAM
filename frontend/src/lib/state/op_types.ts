@@ -249,11 +249,13 @@ export interface DrillOp extends OpBase {
   spotFirst?: { spotDepthMm: number; spotToolId: number };
 }
 
-/// Chamfer op — single-pass constant-Z bevel along the
+/// Chamfer op — constant-Z bevel with controlled descent along the
 /// selected closed contour, depth driven by V-bit cone math
 /// (`z = -width / tan(tipAngle / 2)`).
 export interface ChamferOp extends OpBase {
   kind: 'chamfer';
+  /// Optional final descent thickness, consumed by the shared mill scheduler.
+  finishStep?: number;
   /// Chamfer width on the workpiece, mm. Optional so the UI can
   /// clear the value (user types 0 ⇒ unset); pipeline treats unset
   /// as zero-width = no chamfer.

@@ -38,6 +38,7 @@ export function setGenerated(p: ProjectState, r: GenerateResponse) {
   // when it's visible. Without this, a stale critical sim warning kept
   // showing in the warning chip after a fix-and-regenerate.
   p.gen.simDiagnostics = null;
+  p.gen.qualification = null;
   p.data.dirty = false;
   p.error = null;
   p.playhead = 1.0;
@@ -83,6 +84,13 @@ export function failGenerate(p: ProjectState, err: string | WiacError) {
     // Adapt inspection-only data to the existing preview consumers. No program.
     setGenerated(p, {
       gcode: '',
+      tool_provenance: {
+        revision: 1,
+        authority: 'unavailable',
+        bindings: [],
+        transitions: [],
+        diagnostics: ['Inspection-only rejected output'],
+      },
       toolpath: err.diagnostic_preview.toolpath,
       warnings: err.diagnostic_preview.warnings,
       gcode_index: { lines_to_segment: [], segments_to_line: [] },

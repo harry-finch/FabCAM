@@ -75,7 +75,7 @@
         />
       </label>
       <label>
-        <span>{t('tools.holder.stickout')}</span>
+        <span>{t('uxb.free_shank')}</span>
         <input
           type="number"
           step="0.5"
