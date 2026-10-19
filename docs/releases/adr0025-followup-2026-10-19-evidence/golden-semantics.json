@@ -1,0 +1,53 @@
+{
+ "tests/fixtures/shopbot-m2/circle.sbp": {
+  "head_sha256": "8d50aee971dc17c481ce27a71fd19ea88ba2eb774bb4c8e27724977dd7073a59",
+  "current_without_markers_sha256": "8d50aee971dc17c481ce27a71fd19ea88ba2eb774bb4c8e27724977dd7073a59",
+  "identical_without_markers": true,
+  "markers": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ]
+ },
+ "tests/fixtures/shopbot-m2/drill.sbp": {
+  "head_sha256": "8acdcf8930a8b39de75160823f74f70e7004b6b3661998dde8fdc7c9cdbe5177",
+  "current_without_markers_sha256": "8acdcf8930a8b39de75160823f74f70e7004b6b3661998dde8fdc7c9cdbe5177",
+  "identical_without_markers": true,
+  "markers": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ]
+ },
+ "tests/fixtures/shopbot-m2/multiple.sbp": {
+  "head_sha256": "75afc14c75639e26ec7c0f9458bbc19c1e8fd03a2fa89e1a6d8666a5789ea7da",
+  "current_without_markers_sha256": "75afc14c75639e26ec7c0f9458bbc19c1e8fd03a2fa89e1a6d8666a5789ea7da",
+  "identical_without_markers": true,
+  "markers": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' FABTOOL/1 ACTIVE 0 1",
+   "' FABTOOL/1 REQUEST 1 2",
+   "' FABTOOL/1 ACTIVE 1 2"
+  ]
+ },
+ "tests/fixtures/shopbot-m2/pocket.sbp": {
+  "head_sha256": "bcc2bf0736e5b08e5ca11166a5ff7be591d0a8ae65121874b5a937ed9613dd5e",
+  "current_without_markers_sha256": "bcc2bf0736e5b08e5ca11166a5ff7be591d0a8ae65121874b5a937ed9613dd5e",
+  "identical_without_markers": true,
+  "markers": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ]
+ },
+ "tests/fixtures/shopbot-m2/square.sbp": {
+  "head_sha256": "57133a45fc583c781243c9918434b968e3e491735616bde9b666fe49dc5f89d8",
+  "current_without_markers_sha256": "57133a45fc583c781243c9918434b968e3e491735616bde9b666fe49dc5f89d8",
+  "identical_without_markers": true,
+  "markers": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ]
+ },
+ "docs/shopbot-modernization/geom1/square-repaired-software-only.sbp": {
+  "sha256": "4d68539b5086b9ccbaa283dc543ee83cb5534cca141afd9a8ba0d877d0b0efb8",
+  "note": "unchanged historic reference; test compares marker-free output to it"
+ }
+}

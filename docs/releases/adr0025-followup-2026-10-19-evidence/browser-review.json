@@ -1,0 +1,13 @@
+{
+  "frontend": "frontend/dist built 2026-10-19 15:37 (newer than every frontend source), served statically",
+  "backends": {"before": "release ivac-server from the pre-fix tree", "after": "release ivac-server after corrections"},
+  "transport": "HTTP (?api=)",
+  "cases": [
+    {"project": "review-shopbot-single-3-32in", "before": {"qualification": "Full-program verification unavailable", "download_sbp_enabled": false, "warnings": "1 warning(s)"},
+     "after": {"qualification": "Full-program simulation complete", "download_sbp_enabled": true, "warnings": "1 warning(s)", "home": "1/532 complete, export enabled", "end": "532/532 complete, export enabled"}},
+    {"project": "review-shopbot-3-32in (rough 8 mm + finish 3/32 in)", "after": {"qualification": "Full-program simulation complete", "home": "1/168 complete", "end": "168/168 complete", "export": "blocked by the existing critical dual-tool manual-change warning (unchanged policy)"}},
+    {"project": "review-linuxcnc-m6-name", "before": {"qualification": "Full-program verification unavailable", "download_ngc_enabled": false},
+     "after": {"qualification": "Full-program simulation complete", "download_ngc_enabled": false, "reason": "existing critical dual-tool manual-change warning (unchanged policy)"}}
+  ],
+  "not_done": "The browser download itself was not triggered (it would write to the user's Downloads folder); the export gate state was observed."
+}

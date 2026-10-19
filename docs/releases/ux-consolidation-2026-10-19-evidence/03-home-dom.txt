@@ -1,0 +1,105 @@
+- navigation "Main areas":
+  - text: FabCAM
+  - button "Project"
+  - 'button "Machine: LOT A — SOFTWARE REVIEW ONLY"':
+    - generic: "Machine:"
+    - generic: LOT A — SOFTWARE REVIEW ONLY
+  - button "Tool library"
+  - button "Settings"
+  - button "Help"
+  - button "About"
+- generic "File":
+  - text: File
+- button "Open"
+- button "Save"
+- generic "saved-preparation.ivac-project.json — Saved project":
+  - generic: saved-preparation.ivac-project.json
+  - generic: Saved project
+- button "Undo" [disabled]:
+- button "Redo" [disabled]:
+- button "Generate toolpaths"
+- generic "Wall-clock generation time, including request preparation and result processing. Preview simulation is separate; this is not estimated machining time.":
+  - text: Generated in
+  - generic: 0.0 s
+- button "Download .ngc"
+- button "Carved stock STL"
+- generic: 2 obj · 33 offsets · 431 moves
+- button "Time breakdown": ⏱ 13 min 9 s
+- button "1 warning(s)":
+  - text: 1 warning(s)
+- generic "Remaining material":
+  - generic: Remaining material
+  - generic: Not analyzed
+  - generic "Analysis details"
+- generic "Show / hide the translucent fill that marks each pocket operation's machined region.":
+  - checkbox "Regions" [checked]
+  - generic: Regions
+- generic "Show toolpath lines and direction arrows. Stock simulation stays active.":
+  - checkbox "Toolpaths" [checked]
+  - generic: Toolpaths
+- tablist "Viewport mode":
+  - tab "2D"
+  - tab "3D" [selected]
+- main:
+  - button "Fit view to scene": ⌖
+  - generic "Toolpath playback"
+  - button "Previous op (#1 Pocket — source union retained)": ⏮
+  - button "Play": ▶
+  - button "Next op (#1 Pocket — source union retained)": ⏭
+  - slider "Toolpath playback position" [active]: "0"
+  - 'button "Jump to #1 Pocket — source union retained"'
+  - text: ×
+  - spinbutton "Playback speed multiplier": "1"
+  - generic "Path distance · not machining time": 1/431
+  - generic: Path distance · not machining time
+  - button "▶ Program 713 lines":
+    - text: ▶ Program
+    - generic: 713 lines
+  - separator "Drag to resize the side panel · double-click to reset"
+  - complementary:
+    - region "Stock":
+      - button "▸ Stock 120 × 120 × 10 mm":
+        - generic: ▸
+        - generic: Stock
+        - generic "Current stock dimensions (Length × Width × Thickness) in mm": 120 × 120 × 10 mm
+    - region "Drawings":
+      - complementary:
+        - button "Collapse layers panel": ▾
+        - checkbox "Toggle visibility of all imported layers" [checked]
+        - generic: Drawings
+        - generic "1 imported drawing": "1"
+        - button "+ Add"
+        - generic "Snap to"
+        - heading "Imported files" [level=3]
+        - generic "square_100.svg"
+        - generic: 4 segments · 1 layer
+        - button "▸ File transform":
+          - generic: ▸
+          - generic: File transform
+        - heading "Layers 1" [level=3]
+        - paragraph: Hidden layers are still used by CAM.
+        - list "Layers":
+          - button "Hide layer svg" [pressed]:
+          - 'img "Imported layer color: ACI 7 (read-only; drawing palette). Not a toolpath color."'
+          - 'generic "svg — Imported drawing: square_100.svg."': svg
+          - generic "4 segments": 4 seg
+          - button "Delete layer svg": ×
+      - button "Drawing cleanup":
+        - text: Drawing cleanup
+      - button "Corner relief" [disabled]:
+        - text: Corner relief
+      - paragraph: Click a contour edge in the drawing, then open Corner relief.
+    - region "Text":
+      - complementary:
+        - button "Activate text panel": ▸
+        - generic: Text
+        - generic: "0"
+        - button "Add text": + Add
+    - region "Operations":
+      - button "Activate operations panel": ▸
+      - generic: Operations
+      - generic "Number of operations": "1"
+      - button "Operation templates":
+        - text: Templates
+      - button "Add operation": +
+- contentinfo "bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts"

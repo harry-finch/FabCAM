@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-19",
+  "head": "66f229ea21cccf73a76fd45d0e9f9fe3721a41a1",
+  "version": "0.9.0-beta.3",
+  "pipeline": 62,
+  "uncommitted": true,
+  "files": [
+    {
+      "file": "after-apply.ivac-project.json",
+      "sha256": "ddf37317f4b4472b75c2675b777c167d216eab6f1bdb7f53c1d4c065c0b4d993",
+      "format": "JSON data"
+    },
+    {
+      "file": "build.log",
+      "sha256": "d743bc1732d2653134336cc43355cfbac3ed42a71dc1cabc15af75f30b14d7ca",
+      "format": "Unicode text, UTF-8 text, with CR, LF line terminators, with escape sequences"
+    },
+    {
+      "file": "check.log",
+      "sha256": "cd7b82b438d15dde0ee4fccc9167f84434fd4c8040117480b758b08920438435",
+      "format": "ASCII text"
+    },
+    {
+      "file": "copies-1920.jpg",
+      "sha256": "086aa3aa7ae10352395adeba96b0ccbe965d46ce7ae5ea8151260ab46d30449f",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x780, components 3"
+    },
+    {
+      "file": "copies-light-1280.jpg",
+      "sha256": "239353652a1a2fbc7758a856bcfa8383039dc6b8ccc56d9f0cb4293f61fbd793",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1280x780, components 3"
+    },
+    {
+      "file": "copies.ivac-project.json",
+      "sha256": "a359898cd654cef28387101b815854eadbe3cfb71a7785ccc2b70bcb0d5a3df9",
+      "format": "JSON data"
+    },
+    {
+      "file": "library-review-final-1280.jpg",
+      "sha256": "cdea3304714288f188a8bbd2c9d1d2da47d1ee7fea9a42f87e85829b3f8593ec",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1280x780, components 3"
+    },
+    {
+      "file": "library-unknown-1920.jpg",
+      "sha256": "1822789f13064cd094851e0fed7ecd39d20c9c1f3687d01547efd3ccd8de2ae6",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x1080, components 3"
+    },
+    {
+      "file": "lint.log",
+      "sha256": "27db8120787d818efa12af0c97d73f156b2ee2cc178a19e247a77222062a2fe9",
+      "format": "ASCII text"
+    },
+    {
+      "file": "mounting-1920-verified.jpg",
+      "sha256": "9e80c202234f33329e44aa2b0ea2deb97955d87555aa24f355ec3faed2550204",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x780, components 3"
+    },
+    {
+      "file": "mounting-dom-final.jpg",
+      "sha256": "06b745ccac7e7ff6da63f6aaa34b3bfa8e7f92473a799c8d229646b9e1ec6cc5",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1280x720, components 3"
+    },
+    {
+      "file": "mounting-final-dark-full.jpg",
+      "sha256": "6fce29162602ff2f7a728119dda78a072e95d385984851593803ea2a01ef24ef",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x1080, components 3"
+    },
+    {
+      "file": "mounting-final-light-1920.jpg",
+      "sha256": "ee274946b5898b1167612610557971448be7bb5b45e9997bfe9503010cf898db",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x780, components 3"
+    },
+    {
+      "file": "mounting-project-1920.jpg",
+      "sha256": "7e9e9f6dccae02ecfdfc5e9c7786495a03e18d845e1ce7b2d88e675a57e138a8",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x780, components 3"
+    },
+    {
+      "file": "mounting-wide-recheck.jpg",
+      "sha256": "4244833459da4d830db9ef553c232665b404748a2fd9783a684c4512a76f95e4",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1280x720, components 3"
+    },
+    {
+      "file": "project-diagram-1280.jpg",
+      "sha256": "0953ce5e55bde6dec8dec3da49df26fe89c6ce54cbea2c9fd40953c20937dfe3",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1280x780, components 3"
+    },
+    {
+      "file": "stale-review.jpg",
+      "sha256": "6fb0af88f4302b66ce7a486f8388de8ef9cb677430a9087478bab38d61a57756",
+      "format": "JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x780, components 3"
+    },
+    {
+      "file": "test.log",
+      "sha256": "37f6b550de8fecbe4b7cb7f6064ef7ed09935b8e0da7ad76b2cb9a96e1328d92",
+      "format": "Unicode text, UTF-8 text"
+    }
+  ],
+  "source_sha256": {
+    "ToolLibraryDialog.svelte": "e4f2a09155a4f2e223c93963e07fdeff66d0b209ec9c56181966d127dc45c7cd",
+    "ToolApplyReview.svelte": "6adf917b2d2c31f4ec22c21012f3288fe989b746d336b9aa983f45094ed6c92e",
+    "ToolImpactList.svelte": "24560ddb3b7611e09b286dcc0adeb0b56072419500852dd0089eff3d416539e0",
+    "ToolCopyComparison.svelte": "7c702a4e8ed80fe5c2034c01361aa1355dd6d81afec167e51f00b71adb3f7106",
+    "ToolDimensionDiagram.svelte": "571f82a21a9cfa92a5980a024cbedc627eb20425fca59acb3f710aee86700146",
+    "ToolRowExpandedEditor.svelte": "0652f830e500b60cef8545abc0de2b0ca4f45003e1002f7a30f82d250ae0508c",
+    "AppNavigation.svelte": "3d915a60272db33ab410f827f1faf89b1409eafcbfaaea1c87b6a29a41ebe88b"
+  },
+  "excluded_diagnostic_captures": [
+    "mounting-final-dark-full.jpg",
+    "mounting-wide-recheck.jpg"
+  ],
+  "limits": "Browser-only; actual capture sizes recorded. Native platform, exact zoom and machine qualification not performed; Modal viewport follow-up ivac-ntg7i."
+}

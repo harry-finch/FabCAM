@@ -279,3 +279,9 @@ Start with [Adding a machine](development/ADDING_A_MACHINE.md) and the
 [ARCH-MACH](releases/ARCH_MACH_PLAN.md) is planned V1.5 architecture work; these initial
 instructions do not authorize new adapters or a plugin system. Require evidenced
 capabilities/output contract, independent qualification and separate human gates.
+
+## Future MCP integration
+
+[MCP developer planning guide](development/MCP_INTEGRATION.md) links the optional
+[POST-V1.5 MCP1 roadmap](releases/MCP1_PLAN.md). No server/setup/tool implementation
+exists from this plan; audit application ownership/security before exposing services.

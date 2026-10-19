@@ -1,0 +1,14 @@
+[
+  {
+    "level": "error",
+    "message": "benign: ResizeObserver loop completed with undelivered notifications.",
+    "timestamp": "2026-10-19T09:19:15.431Z",
+    "url": "http://127.0.0.1:18803/assets/index-Bv09L1dt.js"
+  },
+  {
+    "level": "error",
+    "message": "benign: ResizeObserver loop completed with undelivered notifications.",
+    "timestamp": "2026-10-19T09:25:37.257Z",
+    "url": "http://127.0.0.1:18803/assets/index-DPUrizLW.js"
+  }
+]

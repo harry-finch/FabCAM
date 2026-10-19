@@ -56,3 +56,7 @@ is superseded by named tracks in ROADMAP.
   material width for new Profile/Pocket operations; software review pending.
 
 - [ADR-0023 — milling program publication guard](ADR-0023-milling-program-publication-guard.md): PROPOSED, human approval required; common fixture-collision rejection, explicit model completeness and bounded direct-stream policy.
+
+- [ADR-0024 — Full-program simulation qualification](ADR-0024-full-program-simulation-qualification.md): architecture approved; local implementation and software evidence complete, human checkpoint review pending.
+
+- [ADR-0025 — Movement tool provenance](ADR-0025-movement-tool-provenance.md): PROPOSED, Phase A only; nullable generated tool references, immutable bindings and emitted-intent verification. Human approval required before implementation.

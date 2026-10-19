@@ -1,0 +1,11 @@
+{
+  "frontend/src/lib/services/file_ops.ts": "4c0154a1732770dc3341a3a919fc046bf12c1d0ed07a1c46b688c821ad97c7fa",
+  "frontend/src/lib/state/project-file-ops.ts": "88597011df8b84a6ee9aaaba19b155ff6a1ee0a24758d673f088fe74256aac4e",
+  "frontend/src/lib/state/generated.svelte.ts": "ce2e009b813521e58ff836e62f01e6ad6fc787a0f2bc4217eaafc5e6e9c1245c",
+  "frontend/src/lib/state/project-generate-ops.ts": "6d6c8dc380f7022a08b497c3d91d6d9e864e08f3cab73486b1d84f0588101938",
+  "frontend/src/lib/sim/driver.ts": "c80d43be3b5a119de2a3990305da34dbe7388662eff699433c88480c035a81ae",
+  "frontend/src/lib/components/Scene3D.svelte": "f5df0c139d2aa6153419284da2105f2028c48ea826f0e3101bd82e6aee04c943",
+  "frontend/src/lib/components/GenerateBar.svelte": "7932aca535e54d6e8d0b184accc38cc2694f47d6b00bc6bacf926c67477f9fb7",
+  "frontend/src/lib/components/ReportDialog.svelte": "5c8cd255fdb2492ae362cd596d2abf143ab6c51c00625a24a460c8dc37e65d1c",
+  "frontend/src/lib/api/wasm-worker-protocol.ts": "0ff46b79f85630ec588a3c3b7bccc5b629232534a9de15c78e09e5730e5add3d"
+}

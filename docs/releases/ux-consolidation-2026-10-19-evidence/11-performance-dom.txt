@@ -1,0 +1,31 @@
+- navigation "Main areas":
+  - text: FabCAM
+  - button "Project"
+  - 'button "Machine: LOT A — SOFTWARE REVIEW ONLY"':
+    - generic: "Machine:"
+    - generic: LOT A — SOFTWARE REVIEW ONLY
+  - button "Tool library"
+  - button "Settings"
+  - button "Help"
+  - button "About"
+- main:
+  - navigation "Setting groups":
+    - button "Appearance"
+    - button "3D preview"
+    - button "Performance" [active]
+    - button "Sim safety"
+    - button "Feeds & Speeds"
+    - button "Source files"
+    - button "Snap to"
+  - heading "Performance" [level=3]
+  - text: Max simulation cells
+  - spinbutton "Max simulation cells 1 000 000": "1000000"
+  - generic: 1 000 000
+  - text: Max render triangles
+  - spinbutton "Max render triangles 2 000 000": "2000000"
+  - generic: 2 000 000
+  - paragraph: "Max simulation cells caps the WASM heightmap grid (and so the simulation accuracy). Max render triangles caps the 3D-sim preview's mesh size: the renderer automatically drops to a coarser LOD level when zoomed out or when simulation cells exceed the budget. Simulation accuracy is preserved; only the rendered mesh degrades. Stepped voxel mesh ≈ 6 triangles per cell."
+  - checkbox "Exact 3D rewind on backstep" [checked]
+  - generic: Exact 3D rewind on backstep
+  - paragraph: When enabled, backward scrubbing restores and replays the stock to the selected path position. Large paths can take longer. When disabled, the stock keeps its deepest cuts; after Generate it may show the final result even when the cursor moves backward. Playback follows path distance, not machining time.
+- contentinfo "bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts"

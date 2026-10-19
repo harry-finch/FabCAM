@@ -1,5 +1,8 @@
 # CAM validation register
 
+> 2026-10-19 — **ADR-0025 implemented locally, human review pending**: [movement-tool provenance results](../releases/MULTI_TOOL_PROVENANCE_RESULTS_2026_10_19.md). Pipeline63; immutable per-move tool bindings, independent native intent manifest/cache replay, bounded ShopBot emitted-intent validation, shared playback/full-program resolver. Existing post guards, manual assumptions and advanced two-sided exclusions retained. No performance optimization, commit, push or publication. **HARD STOP before any next checkpoint.**
+
+
 M1 software evidence obtained 2026-10-10 on the uncommitted working tree based
 on `7752ef281350faca18f737b3cb13986e6abd0474`. Exact tolerances and reproduction
 notes: [M1_QUALIFICATION](M1_QUALIFICATION.md). M0 environment limitations are
@@ -185,3 +188,32 @@ scope; no CAM4/CAD1 Phase C or physical qualification claim.
 ## V-Carve software checkpoint
 
 [Current qualification](VCARVE_QUALIFICATION.md): A1 pass scheduling/radius, A2 interpolated envelope, A3 complete short-chain depth, A4 independent OpenSBP/preview parity PASS. Full medial area coverage PARTIAL; Perimeter square-island offset explicitly refused. Halfpipe unchanged/regressions pass. Synthetic settings, no physical test; human gate ivac-1b75.
+
+## 2026-10-19 — Full-program export and load regression checkpoint
+
+[ADR-0024 results](../releases/UX_SAFETY_LOAD_RESULTS_2026_10_19.md) records direct
+export, worker lifecycle, real WASM and browser Home/report invariants; project
+replacement/roundtrip/Undo evidence; targeted SAFE-Z/post regressions and TEST1
+256/256. Software scope only. Human gate ivac-3i00w, coverage limits ivac-b0js3.
+No installer or physical qualification inferred.
+
+## 2026-10-19 — ADR-0025 follow-up (ivac-b0js3.1)
+
+[Results](../releases/ADR0025_FOLLOWUP_RESULTS_2026_10_19.md). Software scope only; human review pending.
+
+| ID | Evidence required | Current status |
+| --- | --- | --- |
+| PROV-A | Bundled ShopBot provenance for imperial and metric load diameters | Pass after fix: 1/64–1/2 in matrix and 6 mm + 3/32 in rough/finish resolve; malformed/out-of-bound diameters and number mismatches refuse |
+| PROV-B | Native tool names never read as machine words; real `T`/`M6`/`M06`/`M61` still refuse | Pass after fix: LinuxCNC/GRBL names with M6, M06, T2, Unicode, parentheses, `;`; adversarial envelopes |
+| PROV-C | Unmodelled native features stay planned-only with a reason | Pass: Homing (G28), custom profile, optional stop; single plain tool resolves |
+| PROV-WS | Full workspace regression | `cargo test --workspace` parallel green; CI `--all-features` variant recorded in results |
+
+## 2026-10-19 — G-code comment safety and release gate (ivac-4ql18)
+
+[Results](../releases/GCODE_COMMENT_SAFETY_RELEASE_GATE_2026_10_19.md). Software scope only.
+
+| ID | Evidence required | Current status |
+| --- | --- | --- |
+| GC-COMMENT | Hostile tool/op/group/pause/label text never changes executable LinuxCNC/GRBL lines | Pass: `tests/comment_safety.rs`, unit and GRBL rewriter tests; provenance resolved |
+| REL-PEDANTIC | `pre-release.sh` pedantic Clippy gate | Pass under the documented `[workspace.lints]` policy |
+

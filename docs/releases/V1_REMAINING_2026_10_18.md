@@ -1,5 +1,11 @@
 # Remaining V1 gates — consolidated 2026-10-18
 
+> 2026-10-19 — [P0/P1 corrections qualified in software](UX_SAFETY_LOAD_RESULTS_2026_10_19.md). Playback no longer controls export qualification; optional post metadata no longer leaks between full project loads. Review **ivac-3i00w** and coverage limits **ivac-b0js3** before candidate preparation. UX D/consolidation and platform gates remain separate. Existing desktop artifacts unchanged; no new release authorization.
+
+> Latest follow-up — 2026-10-19: [Stage A export/load investigation](UX_SAFETY_LOAD_STAGE_A_2026_10_19.md) confirms both defects with executable red evidence. P0/P1 remain unresolved. Dedicated background simulation qualification is proposed in ADR-0024 and awaits the requested architectural approval. No new candidate preparation; B–D and final qualification still pending.
+
+> 2026-10-19 — **Consolidation UX A–D terminée, candidats BLOQUÉS** (beta.3/pipeline62). [Bilan et preuves](UX_V1_CONSOLIDATION_2026_10_19.md). Core1204, frontend1387/1 SKIP +10 Node, intégration59 et TEST1 optimisé256/256 PASS. Un correctif clavier local ; défaut sécurité lecture/export **ivac-3xqtb** et réserve chargement/format **ivac-52tpd** soumis sans correction. Revues **ivac-amibd / ivac-he4lt OPEN**. Candidats existants beta.3/pipeline61 inchangés. Aucun commit/push/publication ni nouveau candidat. **HARD STOP pour validation.** Les notices antérieures sont historiques.
+
 Current source: beta.2/pipeline61, uncommitted; existing candidates: pipeline54.
 [Consolidation and exact evidence](FINAL_CONSOLIDATION_2026_10_18.md) supersedes the
 pipeline58/59 triage state. No commit, push, build or publication authorized.

@@ -1,0 +1,8 @@
+    Finished `release` profile [optimized] target(s) in 0.11s
+     Running unittests src/lib.rs (target/release/deps/ivac_core-2be62a30fe01c24f)
+
+running 1 test
+test gcode::cps_recorder::tests::mid_section_toolchange_splits ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1203 filtered out; finished in 0.00s
+

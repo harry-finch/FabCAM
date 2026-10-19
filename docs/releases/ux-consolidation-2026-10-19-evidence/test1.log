@@ -1,0 +1,2 @@
+{"generator": "SplitMix64-v1", "platform": "macOS-26.5.2-arm64-arm-64bit", "planned": 256, "executed": 174, "elapsed_seconds": 120.023658791, "scope": "bounded software properties; full SAFE-Z qualification NOT included"}
+{'pass': 137, 'fail': 0, 'timeout': 4, 'stage_timeout': 33}

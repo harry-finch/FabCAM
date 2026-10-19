@@ -1,0 +1,202 @@
+{
+  "kind": "ivac-project",
+  "version": 1,
+  "imports": [
+    {
+      "id": 1,
+      "source": {
+        "filename": "square_100.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10.0,
+              "y": 10.0
+            },
+            "end": {
+              "x": 110.0,
+              "y": 10.0
+            },
+            "bulge": 0.0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 110.0,
+              "y": 10.0
+            },
+            "end": {
+              "x": 110.0,
+              "y": 110.0
+            },
+            "bulge": 0.0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 110.0,
+              "y": 110.0
+            },
+            "end": {
+              "x": 10.0,
+              "y": 110.0
+            },
+            "bulge": 0.0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10.0,
+              "y": 110.0
+            },
+            "end": {
+              "x": 10.0,
+              "y": 10.0
+            },
+            "bulge": 0.0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 4
+          }
+        ],
+        "bbox": {
+          "min_x": 10.0,
+          "min_y": 10.0,
+          "max_x": 110.0,
+          "max_y": 110.0
+        },
+        "unit_scale": 1.0,
+        "warnings": [],
+        "objects": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 10.0,
+              "min_y": 10.0,
+              "max_x": 110.0,
+              "max_y": 110.0
+            }
+          }
+        ]
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      "lastImportPath": null
+    }
+  ],
+  "visibleLayers": [
+    "svg"
+  ],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 0,
+    "thickness": 10,
+    "customX": 120,
+    "customY": 120,
+    "offsetX": 0,
+    "offsetY": 0,
+    "offsetZ": 2
+  },
+  "tools": [
+    {
+      "id": 2,
+      "name": "Project cutter \u2014 \u00d83 mm \u2014 long name for identity review",
+      "kind": "endmill",
+      "diameter": 3,
+      "flutes": 2,
+      "speed": 18000,
+      "plungeRate": 200,
+      "feedRate": 1200,
+      "coolant": "off",
+      "tipAngleDeg": 60,
+      "tipDiameter": 0,
+      "lengthMm": 55,
+      "fluteLengthMm": 15,
+      "shankDiameterMm": 6,
+      "stickoutLengthMm": 12,
+      "holder": {
+        "kind": "stepped",
+        "cylinder_diameter_mm": 20,
+        "cylinder_length_mm": 12,
+        "cone_top_diameter_mm": 35,
+        "cone_length_mm": 25
+      }
+    }
+  ],
+  "machine": {
+    "name": "LOT A \u2014 SOFTWARE REVIEW ONLY",
+    "unit": "mm",
+    "mode": "mill",
+    "capabilities": [
+      "mill"
+    ],
+    "comments": true,
+    "arcs": false,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 5,
+    "workArea": {
+      "x": 140,
+      "y": 140,
+      "z": 10
+    },
+    "gcodeDialect": "linuxcnc",
+    "decimalSeparator": ".",
+    "parkAtHome": false,
+    "optionalStop": false
+  },
+  "operations": [
+    {
+      "id": 1,
+      "name": "Pocket \u2014 source union retained",
+      "enabled": true,
+      "kind": "pocket",
+      "toolId": 2,
+      "sourceLayers": [
+        "svg"
+      ],
+      "depth": -1,
+      "step": -0.5,
+      "pocketStrategy": "cascade",
+      "sourceCombine": "union",
+      "startDepth": 0
+    }
+  ],
+  "workOffset": {
+    "x_mm": 10,
+    "y_mm": 10,
+    "z_mm": 0,
+    "wcs": "G54"
+  }
+}

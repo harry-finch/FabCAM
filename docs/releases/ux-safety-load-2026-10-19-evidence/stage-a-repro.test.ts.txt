@@ -1,0 +1,62 @@
+// Stage A reproductions: expected to FAIL until the two defects are corrected.
+// I/O and application stores are mocked; production restore/snapshot,
+// diagnostics setter, warning summarizer and export service execute unchanged.
+import { readFileSync } from 'node:fs';
+import { beforeEach, expect, it, vi } from 'vitest';
+import { restoreProject, snapshotProject } from '../state/project-file-ops';
+import { setSimDiagnostics } from '../state/project-generate-ops';
+import { workshopWarnings } from '../state/workshop-report';
+import { exportSafetyProblem } from '../state/generate-palette-policy';
+import type { ProjectState } from '../state/project.svelte';
+import type { SimDiagnostics } from '../api/types';
+const io = vi.hoisted(() => ({ project: {} as ProjectState, write: vi.fn() }));
+vi.mock('../state/project.svelte', () => ({ project: io.project }));
+vi.mock('../state/workspace.svelte', () => ({ workspace: {} }));
+vi.mock('../state/confirm.svelte', () => ({ confirmStore: {} }));
+vi.mock('../state/text_preview.svelte', () => ({ resetPreviewCache: vi.fn() }));
+vi.mock('../state/import-ops', () => ({ setImported: vi.fn(), refreshSourceWatch: vi.fn() }));
+vi.mock('../state/generation-context', () => ({ generationContextKey: () => 'current', cornerReliefGenerationError: () => null }));
+vi.mock('../api/env', () => ({ isTauri: () => true, isAndroid: () => false }));
+vi.mock('../api/http', () => ({ defaultClient: {} }));
+vi.mock('../api/client', () => ({ tryParseStructuredError: () => null }));
+vi.mock('../i18n', () => ({ t: (key: string) => key }));
+vi.mock('@tauri-apps/plugin-dialog', () => ({ save: async () => '/not-written.ngc' }));
+vi.mock('@tauri-apps/plugin-fs', () => ({ writeTextFile: io.write }));
+import { exportGeneratedGcode } from './file_ops';
+const file = JSON.parse(readFileSync(new URL('../../../../docs/releases/ux-c-2026-10-19-evidence/saved-preparation.ivac-project.json', import.meta.url), 'utf8'));
+const collision: SimDiagnostics = { warnings: [{ kind: 'rapid_through_material', segment_idx: 0, worst_x: 0, worst_y: 0, penetration_mm: 1 }] } as SimDiagnostics;
+const cpsPost = { source: 'bundled', bundledId: 'shopbot', properties: {} };
+beforeEach(() => {
+  vi.clearAllMocks();
+  Object.assign(io.project, {
+    data: { ...structuredClone(file), serializedExtensions: {}, machine: { ...file.machine, cpsPost } },
+    sel: {}, history: { clear: vi.fn() }, setError: vi.fn(),
+    gen: { generated: { gcode: 'G0 X1\n', warnings: [], toolpath: [] }, generatedBack: null, pipelineState: 'idle', inputContextKey: 'current', simDiagnostics: collision },
+  });
+});
+it('P0: actual export service must reject an already known full-program collision', async () => {
+  await exportGeneratedGcode('linuxcnc');
+  expect(io.write).not.toHaveBeenCalled();
+});
+it('P0: Home must not clear the program block or report critical warning', () => {
+  const status = () => ({ stale: false, critical: workshopWarnings([], io.project.gen.simDiagnostics?.warnings ?? []).bad, backCritical: 0, workArea: 0, backWorkArea: 0 });
+  const policy = { blockOnCriticalSimWarnings: true, blockOnWorkAreaViolation: true };
+  expect(exportSafetyProblem(status(), 'front', policy)).toBeDefined();
+  setSimDiagnostics(io.project, { warnings: [] }); // Driver publishes restored prefix at Home.
+  expect.soft(exportSafetyProblem(status(), 'front', policy)).toBeDefined();
+  expect(workshopWarnings([], io.project.gen.simDiagnostics?.warnings ?? []).bad).toBe(1);
+});
+it('P1: real restore/save must not inherit an absent optional post', () => {
+  expect(file.machine.cpsPost).toBeUndefined();
+  restoreProject(io.project, structuredClone(file));
+  expect(snapshotProject(io.project).machine.cpsPost).toBeUndefined();
+});
+it('P1 control: explicitly authored inactive CPS data is preserved', () => {
+  restoreProject(io.project, { ...structuredClone(file), machine: { ...file.machine, cpsPost } });
+  expect(snapshotProject(io.project).machine.cpsPost).toEqual(cpsPost);
+});
+it('P0 control: mandatory fixture refusal still protects actual export', async () => {
+  io.project.gen.generated!.warnings = [{ kind: 'fixture_path_collision', message: 'fixture' }] as never;
+  await exportGeneratedGcode('linuxcnc');
+  expect(io.write).not.toHaveBeenCalled();
+});

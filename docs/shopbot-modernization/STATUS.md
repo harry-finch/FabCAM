@@ -1,5 +1,30 @@
 # Status — 2026-10-18
 
+> 2026-10-19 — **G-code comment safety and release gate (ivac-4ql18)**: [results](../releases/GCODE_COMMENT_SAFETY_RELEASE_GATE_2026_10_19.md). User text in native comments can no longer close/nest a comment, add a line or form a LinuxCNC active comment; `comments: false` wording clarified; pedantic pre-release gate restored without behaviour change. Workspace 1601/0, CI all-features 1596/0, TEST1 256/256 and 1824/1824, frontend green. README parity (pre-existing) red; cargo-deny unavailable. Committed work does not close ivac-3i00w, ivac-b0js3, ivac-b0js3.1 or other open human gates.
+
+> 2026-10-19 — **ADR-0025 follow-up (ivac-b0js3.1), human review pending**: [results](../releases/ADR0025_FOLLOWUP_RESULTS_2026_10_19.md). Confirmed and corrected two provenance false negatives (ShopBot imperial load diameters; tool names read as G-code words), explicit planned-only reasons, ADR verification scope clarified. Seven red tests triaged (metadata-only, outdated ADR-0023 expectation, parallel cache interference, example lint); `cargo test --workspace` green in parallel. No output-byte, guard, export-policy or schema change; no commit/push/publication. **HARD STOP before the next correction campaign.**
+
+> 2026-10-19 — **ADR-0025 implemented locally, human review pending**: [movement-tool provenance results](../releases/MULTI_TOOL_PROVENANCE_RESULTS_2026_10_19.md). Pipeline63; immutable per-move tool bindings, independent native intent manifest/cache replay, bounded ShopBot emitted-intent validation, shared playback/full-program resolver. Existing post guards, manual assumptions and advanced two-sided exclusions retained. No performance optimization, commit, push or publication. **HARD STOP before any next checkpoint.**
+
+
+> 2026-10-19 — **ivac-b0js3 Phase A complete, architecture PROPOSED**: [independent multi-tool provenance review](../releases/MULTI_TOOL_PROVENANCE_PHASE_A_2026_10_19.md) and [ADR-0025](adr/ADR-0025-movement-tool-provenance.md). Confirmed identity/lookup limits; cache-only-index and invented-dowel-tool claims refuted. 37 frontend +5 Rust controls PASS; read-only counterexamples recorded. Documentation/evidence only; production, schemas, output and qualification fixtures unchanged. **HARD STOP for architecture approval**, no implementation/commit/publication. Earlier review gates remain separate.
+
+> 2026-10-19 — [ADR-0024 P0/P1 results](../releases/UX_SAFETY_LOAD_RESULTS_2026_10_19.md): background full-program verification and actual export guards implemented; full-project restore no longer inherits previous optional machine data. Frontend1429 PASS/1 existing SKIP +10 Node, check/lint/build PASS; SAFE-Z/post targeted regressions and TEST1 256/256 PASS; browser Home/report/clean export/CPS roundtrip verified. Human review **ivac-3i00w OPEN**, coverage limits **ivac-b0js3 OPEN**. UX D/consolidation gates separate; pipeline61 installers unchanged. No commit/push/publication. **HARD STOP before candidates.**
+
+> Follow-up — 2026-10-19: [Export/load Stage A](../releases/UX_SAFETY_LOAD_STAGE_A_2026_10_19.md) reproduces P0 ivac-3xqtb and P1 ivac-52tpd (3 red cases, 2 controls; 47 existing focused tests PASS). No production correction yet. [ADR-0024](adr/ADR-0024-full-program-simulation-qualification.md) PROPOSED: independent background full-program verifier versus manual completed-3D qualification. HARD STOP at requested architecture gate; B–D await decision. Candidates blocked; no commit/push/build/publication. UX D and consolidation gates remain distinct.
+
+> 2026-10-19 — **Consolidation UX A–D terminée, candidats BLOQUÉS** (beta.3/pipeline62). [Bilan et preuves](../releases/UX_V1_CONSOLIDATION_2026_10_19.md). Core1204, frontend1387/1 SKIP +10 Node, intégration59 et TEST1 optimisé256/256 PASS. Un correctif clavier local ; défaut sécurité lecture/export **ivac-3xqtb** et réserve chargement/format **ivac-52tpd** soumis sans correction. Revues **ivac-amibd / ivac-he4lt OPEN**. Candidats existants beta.3/pipeline61 inchangés. Aucun commit/push/publication ni nouveau candidat. **HARD STOP pour validation.** Les notices antérieures sont historiques.
+
+> 2026-10-19 — **Lot D UX livré localement**, beta.3/pipeline62 : vues stables, diagnostics lisibles, réglages consolidés et fenêtres recalées. [Résultats et limites](../releases/UX_V1_LOT_D_2026_10_19.md). A/B/C acceptés ; revue D **ivac-he4lt OPEN**. Frontend1387 PASS/1 SKIP +10 Node, check/lint/build PASS. Aucun commit/push/publication. **HARD STOP** ; consolidation et candidats ultérieurs non lancés.
+
+> 2026-10-19 — **Lot C UX livré localement**, beta.3/pipeline62 : origine XY, Frame réversible, matériau en brouillon, compatibilité texte et fiche atelier fidèle aux résultats courants. [Résultats et limites](../releases/UX_V1_LOT_C_2026_10_19.md). Lot B accepté (`ivac-ex4v8` fermé). Revue C **ivac-9pljy OPEN**. Tests frontend 1383 PASS/1 SKIP +10 Node ; check/lint/build PASS. Aucun commit/push/publication. **HARD STOP avant lot D**, non commencé. Les notices antérieures sont historiques.
+
+> 2026-10-19 — **Lot B UX livré localement**, beta.3/pipeline62 : copies projet/locales explicites, comparaison type/diamètre avant application, accès contextuel et schéma dimensionnel. [Résultats et limites](../releases/UX_V1_LOT_B_2026_10_19.md). Lot A accepté (`ivac-lec7h` fermé). Revue B **ivac-ex4v8 OPEN** ; réserve fenêtre redimensionnée `ivac-ntg7i`. Aucun commit/push/publication. **HARD STOP avant lot C**.
+
+> 2026-10-19 — **Lot A UX livré localement**, beta.3/pipeline62 : états de génération fiables, refus CPS Homing/Probe, inspecteurs par consommateurs, menu/contextes et copie sécurité. [Résultats et preuves](../releases/UX_V1_LOT_A_2026_10_19.md). Plan Phase0 accepté (`ivac-2tndr` fermé) ; revue du lot A **ivac-lec7h OPEN**. Aucun commit/push/publication ; candidats existants inchangés. **HARD STOP avant lot B**.
+
+> 2026-10-19 — [V1 UX audit Phase0](../releases/UX_V1_POLISH_PHASE0_2026_10_19.md) complete: full audit01–62 consolidated against beta.3/pipeline61 source. Four batches proposed, not started; consumer/capability corrections and separate CPS/envelope/fonts decisions documented. Existing beta.3 candidate evidence retained. Human approval required before implementation. No production change, commit/push/publication. **HARD STOP**.
+
 > User approval and candidate campaign — 2026-10-18: all delivered pending milestones accepted explicitly; [decision and delivery record](../releases/ACCEPTANCE_CANDIDATES_2026_10_18.md). Source advances to **0.9.0-beta.3**, pipeline61, with commit/push and fresh macOS/Windows/Ubuntu builds authorized. Refreshed root validation kit and native app screen captures requested. Prior review OPEN headers are historical; unperformed platform/physical measurements are not fabricated. No tag/Release. [Delivery complete](../releases/beta3-delivery-2026-10-18/README.md): three builds PASS at db5bde5, verified installers/app and refreshed root kit,62native screenshots with gallery. macOS open/generate/preview/export smoke PASS; manual platform/physical records remain actual tests to execute.
 
 > Current checkpoint — 2026-10-18: [Final SAFE-Z / TEST1 consolidation](../releases/FINAL_CONSOLIDATION_2026_10_18.md), pipeline61. Fresh29 focused checks PASS; preserved20,167-move budget failure reproduced. Source/evidence integrity checked; no production change. Human review **ivac-l6ouh OPEN**; ADR UX review ivac-8371y separate. Resource/cancellation reserves conditional; platform/physical gates unchanged. Next after approval: matching candidates with separate commit/push/workflow authorization. No commit/push/build/publication. **HARD STOP**.
@@ -83,6 +108,19 @@ OMX writer design: [contract/initial inventory](../releases/ARCH_MACH_PLAN.md),
 real supported-ShopBot risk; current audit reviews and TEST1/release priorities stay.
 Initial docs do not validate machine support; ProtoMAX practical qualification remains
 future. No new adapter, skill installation or machine investigation started here.
+
+MCP1 AI/MCP integration is **PLANNED — POST-V1.5/V2+**, optional and not started:
+[plan](../releases/MCP1_PLAN.md), [developer entry](../development/MCP_INTEGRATION.md).
+Read-only MVP before any separately approved writes/generation/export; local candidate
+transport and desktop/offline ownership/security need audit. Current accepted beta.3
+candidate campaign/manual platform/physical work and TEST1/release priorities unchanged;
+no server/listener/commands/schema/AI dependency or machine control introduced now.
+
+STEP1-A/B, optional STEP2 and Smart Workshop SMART1/2, FIT1-A/B and refined REST1
+are **PLANNED — NOT IMPLEMENTED**, V2+; [unified priorities](../releases/V2_WORKSHOP_PRIORITIES.md).
+MULTI1 is linked ARCH-MACH/product scope, not another architecture project. No V1/V1.5
+expansion except separately demonstrated safety/correctness need; current V1 candidate
+blockers/reviews and native OMX priorities preserved. No kernel/dependency/feature launch.
 
 ## Historical Phase 0 audit — identity decision subsequently approved
 

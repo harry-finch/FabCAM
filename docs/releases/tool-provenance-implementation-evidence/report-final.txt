@@ -1,0 +1,236 @@
+Browser tab: 8, Title: "FabCAM v0.9.0-beta.3 (v0.4.0-40-g66f229e-dirty)", URL: "http://127.0.0.1:18803/?api=http%3A%2F%2F127.0.0.1%3A18806".
+1 AXWebArea FabCAM v0.9.0-beta.3 (v0.4.0-40-g66f229e-dirty), URL: 127.0.0.1:18803/?api=http%3A%2F%2F127.0.0.1%3A18806
+	2 container app
+		3 container
+			4 container Screen
+				5 button Previous screen
+				6 pop up button (collapsed) 3D ▾, Secondary Actions: Expand
+				7 button Next screen
+			8 pop up button 2 warnings — tap for details
+			9 button (collapsed) File, Secondary Actions: Expand
+				10 text File
+			11 button Open
+			12 pop up button (collapsed) Save ▾, Secondary Actions: Expand
+			13 button Project report
+			14 pop up button (collapsed) Description: Menu, Secondary Actions: Expand
+		28 container Program
+			29 button (collapsed) Description: Expand Program, Help: Drag or tap to open Program, Secondary Actions: Expand
+				30 text NGC
+				31 text 306
+		17 container Operations
+			18 button (collapsed) Description: Expand Operations, Help: Drag or tap to open Operations, Secondary Actions: Expand
+				19 text OPS
+				20 text 1
+		32 container
+			33 button Description: Fit view to scene, Help: Fit view to scene (F)
+			34 text ADR-0025 — rough Ø8 / finish Ø2
+			35 button Previous op (#1 ADR-0025 — rough Ø8 / finish Ø2)
+			36 button Play
+			37 button (disabled) Next op
+			38 slider (settable, integer) Description: Toolpath playback position, Value: 1, Help: Scrub: the 3D heightfield exactly tracks the playhead — backstep restores the nearest checkpoint and replays only the remainder. Toggle "Exact 3D rewind" off in Settings → Performance for the fastest scrubbing at the price of time-accurate rewind.
+			39 button Description: Jump to #1 ADR-0025 — rough Ø8 / finish Ø2, Help: #1 ADR-0025 — rough Ø8 / finish Ø2
+			40 text ×
+			41 stepper (settable, integer) Description: Playback speed multiplier, Help: Playback speed, Value: 1
+			42 text 171/171
+			43 text Path distance · not machining time
+		44 container Project report
+			45 container
+				46 heading Project report, Value: 2, ID: report-title
+					47 text Project report
+				48 button Close
+			49 container report-print-root
+				50 container
+					51 heading square_100.svg, Value: 1
+						52 text square_100.svg
+					53 text 19/10/2026 15:35:21 · FabCAM report
+				54 container
+					55 heading Workshop setup, Value: 3
+						56 text Workshop setup
+					57 text Current generated program
+					58 table
+						59 row
+							60 cell
+								61 text Stock
+							62 cell
+								63 text 120.00 × 120.00 × 10 mm
+						64 row
+							65 cell
+								66 text Stock top / bottom Z (program)
+							67 cell
+								68 text 0 / -10 mm
+						69 row
+							70 cell
+								71 text Material
+							72 cell
+								73 text WOOD / MDF
+						74 row
+							75 cell
+								76 text Stock minimum (drawing XY)
+							77 cell
+								78 text X 0.00 · Y 0.00 mm
+						79 row
+							80 cell
+								81 text Program origin in drawing coordinates
+							82 cell
+								83 text G54 · X 0 · Y 0 · Z 0 mm
+					84 text Saved operation rates are inputs before machine/post limits, not measured machine speeds. Generated min Z is in program coordinates; requested depth is an authored setting. Software report — review generation and simulation warnings before machine setup. Full-program simulation complete
+				85 container
+					86 heading Toolpath stats, Value: 3
+						87 text Toolpath stats
+					88 table
+						89 row
+							90 cell
+								91 text Objects
+							92 cell
+								93 text 2
+						94 row
+							95 cell
+								96 text Offsets
+							97 cell
+								98 text 13
+						99 row
+							100 cell
+								101 text Toolpath segments
+							102 cell
+								103 text 171
+						104 row
+							105 cell
+								106 text Enabled ops
+							107 cell
+								108 text 1
+				109 container
+					110 heading Estimated time, Value: 3
+						111 text Estimated time
+					112 table
+						113 row
+							114 cell
+								115 text Total
+							116 cell
+								117 text 00:05:23
+						118 row
+							119 cell
+								120 text Cut
+							121 cell
+								122 text 00:04:32
+						123 row
+							124 cell
+								125 text Rapid
+							126 cell
+								127 text 00:00:10
+						128 row
+							129 cell
+								130 text Plunge
+							131 cell
+								132 text 00:00:28
+						133 row
+							134 cell
+								135 text Retract
+							136 cell
+								137 text 00:00:00
+						138 row
+							139 cell
+								140 text Arc
+							141 cell
+								142 text 00:00:00
+						143 row
+							144 cell
+								145 text Tool change
+							146 cell
+								147 text 00:00:10
+						148 row
+							149 cell
+								150 text Spindle warm-up
+							151 cell
+								152 text 00:00:02
+				153 container
+					154 heading Tools used, Value: 3
+						155 text Tools used
+					156 table
+						157 row
+							158 cell
+								159 text #
+							160 cell
+								161 text Name
+							162 cell
+								163 text ⌀ mm
+							164 cell
+								165 text Kind
+						166 row
+							167 cell
+								168 text 2
+							169 cell
+								170 text Rough Ø8 — provenance review
+							171 cell
+								172 text 8.00
+							173 cell
+								174 text endmill
+						175 row
+							176 cell
+								177 text 7
+							178 cell
+								179 text Finish Ø2 — provenance review
+							180 cell
+								181 text 2.00
+							182 cell
+								183 text endmill
+				184 container
+					185 heading Operations, Value: 3
+						186 text Operations
+					187 table
+						188 row
+							189 cell
+								190 text #
+							191 cell
+								192 text Name
+							193 cell
+								194 text Kind
+							195 cell
+								196 text Tool
+							197 cell
+								198 text Source
+							199 cell
+								200 text Depth
+							201 cell
+								202 text Generated min Z (program)
+							203 cell
+								204 text Saved RPM · feed / plunge
+							205 cell
+								206 text Status
+						207 row
+							208 cell
+								209 text 1
+							210 cell
+								211 text ADR-0025 — rough Ø8 / finish Ø2
+							212 cell
+								213 text pocket
+							214 cell
+								215 text Rough Ø8 — provenance review
+							216 cell
+								217 text "svg"
+							218 cell
+								219 text -2.00 mm
+							220 cell
+								221 text -2.000 mm
+							222 cell
+								223 text Rough: 18000 rpm · 1200 / 200 mm/min · Finishing parameters: 18000 rpm · 1200 / 200 mm/min
+							224 cell
+								225 text error
+				226 container
+					227 heading Warnings, Value: 3
+						228 text Warnings
+					229 text 1 critical · 1 non-critical
+					230 content list
+						231 container
+							232 AXListMarker • 
+							233 text MULTI_TOOL_MANUAL_MACHINE  — This program needs 1 manual tool change. The machine has no automatic tool changer, so the program pauses (M0) for each hand swap — re-establish the tool's Z after every change (see the machine's post-change Z setting).
+						234 container
+							235 AXListMarker • 
+							236 text DUAL_TOOL_NO_TOOLCHANGE  — op 'ADR-0025 — rough Ø8 / finish Ø2' uses a dual-tool setup (rough + finish) but the machine's tool-change strategy doesn't emit M6 (manual M0-pause or ignore); the gcode will assume a manual tool change.
+				237 text Generated by FabCAM v0.9.0-beta.3 (v0.4.0-40-g66f229e-dirty), built 2026-10-19T13:34:39.190Z · 19/10/2026 15:35:21
+			238 container
+				239 button Save Markdown…
+				240 button Print
+		26 container bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts
+			27 text bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1
+
+The focused UI element is 48 button Close

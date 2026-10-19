@@ -1,0 +1,184 @@
+- navigation "Main areas":
+  - text: FabCAM
+  - button "Project"
+  - 'button "Machine: LOT A — SOFTWARE REVIEW ONLY"':
+    - generic: "Machine:"
+    - generic: LOT A — SOFTWARE REVIEW ONLY
+  - button "Tool library"
+  - 'button "Tool for selected operation Pocket — source union retained: T2 · Project cutter — Ø3 mm — long name for identity review — edit project tool"':
+    - generic: "Op. tool:"
+    - generic: T2 · Project cutter — Ø3 mm — long name for identity review
+  - button "Settings"
+  - button "Help"
+  - button "About"
+- generic "File":
+  - text: File
+- button "Open"
+- button "Save"
+- generic "saved-preparation.ivac-project.json — Unsaved changes":
+  - generic: saved-preparation.ivac-project.json
+  - generic: Unsaved changes
+- button "Undo":
+- button "Redo" [disabled]:
+- button "Regenerate toolpaths"
+- generic "Wall-clock generation time, including request preparation and result processing. Preview simulation is separate; this is not estimated machining time.":
+  - text: Project changed — result obsolete after
+  - generic: 0.0 s
+- button "Download .ngc" [disabled]
+- button "Carved stock STL"
+- generic: 2 obj · 33 offsets · 431 moves
+- button "Time breakdown": ⏱ 13 min 9 s
+- 'button "Warnings: stale — re-Generate"':
+  - text: "Warnings: stale — re-Generate"
+- generic "Remaining material":
+  - generic: Remaining material
+  - generic: Out of date — regenerate
+- generic "Show / hide the translucent fill that marks each pocket operation's machined region.":
+  - checkbox "Regions" [checked]
+  - generic: Regions
+- generic "Show toolpath lines and direction arrows. Stock simulation stays active.":
+  - checkbox "Toolpaths" [checked]
+  - generic: Toolpaths
+- tablist "Viewport mode":
+  - tab "2D"
+  - tab "3D" [selected]
+- main:
+  - button "Fit view to scene": ⌖
+  - generic "Pocket — source union retained"
+  - button "Previous op (#1 Pocket — source union retained)": ⏮
+  - button "Play": ▶
+  - button "Next op" [disabled]: ⏭
+  - slider "Toolpath playback position": "1"
+  - 'button "Jump to #1 Pocket — source union retained"'
+  - button "Rapid through material at segment 0, x=59.3 y=58.7": ✕
+  - text: ×
+  - spinbutton "Playback speed multiplier": "1"
+  - generic "Path distance · not machining time": 431/431
+  - generic: Path distance · not machining time
+  - button "▶ Program 713 lines":
+    - text: ▶ Program
+    - generic: 713 lines
+  - separator "Drag to resize the side panel · double-click to reset"
+  - complementary:
+    - region "Stock":
+      - button "▾ Stock 120 × 120 × 10 mm" [expanded]:
+        - generic: ▾
+        - generic: Stock
+        - generic "Current stock dimensions (Length × Width × Thickness) in mm": 120 × 120 × 10 mm
+      - generic: Material
+      - combobox "Material":
+        - option "Choose job material"
+        - option "WOOD"
+        - option "WOOD / MDF" [selected]
+        - option "WOOD / PLYWOOD"
+        - option "WOOD / PLYWOOD / POPLAR"
+        - option "WOOD / PLYWOOD / BIRCH"
+        - option "WOOD / HARDWOOD"
+        - option "WOOD / SOFTWOOD"
+        - option "PLASTIC"
+        - option "PLASTIC / PMMA"
+        - option "PLASTIC / PMMA / CAST"
+        - option "PLASTIC / PMMA / EXTRUDED"
+        - option "PLASTIC / POM"
+        - option "PLASTIC / HDPE"
+        - option "PLASTIC / POLYCARBONATE"
+        - option "PLASTIC / PVC"
+        - option "METAL"
+        - option "METAL / ALUMINIUM"
+        - option "METAL / ALUMINIUM / 6061"
+        - option "METAL / ALUMINIUM / 7075"
+        - option "Source softwood / soft plywood / MDF category"
+        - option "Other material…"
+      - paragraph: Applies to every operation in this job. Material identity is separate from stock dimensions.
+      - group "Mode":
+        - generic: Mode
+        - radio "Auto (fit to drawing)"
+        - generic: Auto (fit to drawing)
+        - radio "Manual" [checked]
+        - generic: Manual
+      - group "Dimensions":
+        - generic: Dimensions
+        - generic: Length
+        - spinbutton "Length mm": "120"
+        - generic: mm
+        - generic: Width
+        - spinbutton "Width mm": "120"
+        - generic: mm
+        - generic: Thickness
+        - spinbutton "Thickness mm": "10"
+        - generic: mm
+      - group "Stock minimum corner · drawing coordinates":
+        - paragraph: Manual stock keeps its existing drawing-bbox reference. Edit the effective minimum corner here; its base follows drawing bounds.
+        - generic: Stock minimum corner · drawing coordinates
+        - generic: X
+        - spinbutton "X mm": "0"
+        - generic: mm
+        - generic: "Y"
+        - spinbutton "Y mm": "0"
+        - generic: mm
+        - generic: Z
+        - spinbutton "Z mm": "2"
+        - generic: mm
+      - generic "Lower-left corner · relative to work zero":
+        - generic: Lower-left corner · relative to work zero
+        - generic: X -120.00 · Y 0.00 mm
+      - group "Work origin (WCS)":
+        - generic "The WCS origin — where on the imported drawing the operator zeroed the machine. Cuts are emitted relative to this point; if it falls outside the geometry bbox the simulator warns. Auto-defaults to the bbox bottom-left on fresh import.": Work origin (WCS)
+        - generic: WCS
+        - combobox "WCS":
+          - option "G54" [selected]
+          - option "G55"
+          - option "G56"
+          - option "G57"
+          - option "G58"
+          - option "G59"
+        - generic: X
+        - spinbutton "X mm": "120"
+        - generic: mm
+        - generic: "Y"
+        - spinbutton "Y mm": "0"
+        - generic: mm
+        - button "Snap to bbox bottom-left"
+        - button "Set work zero to stock corner"
+        - text: Place work zero on
+        - combobox "Place work zero on":
+          - option "Stock" [selected]
+          - option "Drawing bounds"
+        - group "Place work zero on":
+          - button "X 0.00 · Y 120.00 mm": ●
+          - button "X 60.00 · Y 120.00 mm": ●
+          - button "X 120.00 · Y 120.00 mm": ●
+          - button "X 0.00 · Y 60.00 mm": ●
+          - button "X 60.00 · Y 60.00 mm": ●
+          - button "X 120.00 · Y 60.00 mm": ●
+          - button "X 0.00 · Y 0.00 mm": ●
+          - button "X 60.00 · Y 0.00 mm": ●
+          - button "X 120.00 · Y 0.00 mm" [active] [pressed]: ●
+        - paragraph: XY only — Z and stock placement are unchanged · Z 0.00 mm
+        - paragraph: Work X/Y are the zero point in the drawing. Output subtracts this point; preview stays aligned with the drawing. Stock top Z and cut depths keep their existing convention.
+      - generic "Fixtures / keep-outs 0"
+      - group "Two-sided (flip stock)":
+        - generic: Two-sided (flip stock)
+        - checkbox "Enable two-sided machining"
+        - generic: Enable two-sided machining
+    - region "Drawings":
+      - complementary:
+        - button "Activate layers panel": ▸
+        - checkbox "Toggle visibility of all imported layers" [checked]
+        - generic: Drawings
+        - generic "1 imported drawing": "1"
+        - button "+ Add"
+    - region "Text":
+      - complementary:
+        - button "Activate text panel": ▸
+        - generic: Text
+        - generic: "0"
+        - button "Add text": + Add
+    - region "Operations":
+      - button "Activate operations panel": ▸
+      - generic: Operations
+      - generic "Number of operations": "1"
+      - button "Operation templates":
+        - text: Templates
+      - button "Add operation": +
+- contentinfo "bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts"

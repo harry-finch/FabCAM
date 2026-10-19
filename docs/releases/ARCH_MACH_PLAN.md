@@ -103,3 +103,21 @@ actual coding/physical/publication steps each require their existing authorizati
 No current review, release ID, TEST1/AUDIT3/platform or physical gate is closed here.
 
 **HARD STOP — awaiting human approval of ARCH-MACH before implementation.**
+
+## Optional later MCP consumer
+
+[MCP1](MCP1_PLAN.md), planned POST-V1.5/V2+, may discover and expose qualified process/
+machine/adapter capabilities through shared authoritative services. It must not hardcode
+machine semantics or duplicate CAM when a new machine is added. ARCH-MACH/ProtoMAX and
+FabCAM do not depend on MCP or an AI service; capability discovery grants no mutation,
+export or hardware authority. No integration implemented by this cross-reference.
+
+## MULTI1 linked product objective and STEP source independence
+
+MULTI1 is [shared-process product experience](SMART_WORKSHOP_PLAN.md), not another
+architecture milestone: reuse accepted geometry/cleanup across machines while preserving
+process-specific operations. Switching machine never silently converts milling to jet;
+qualified semantic mapping needs explicit preview/approval, otherwise preserve original
+intent and offer process-specific replacement. V1.5 foundation remains native OMX/WJ;
+advanced assistance stays V2. [STEP1](STEP_PLAN.md) adds a process-independent source
+adapter later, not ShopBot/ProtoMAX-specific import or a requirement for V1.5.

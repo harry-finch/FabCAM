@@ -1,0 +1,15 @@
+
+> check
+> svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json
+
+Loading svelte-check in workspace: /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+Getting Svelte diagnostics...
+
+/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/src/lib/components/GenerateBar.svelte:696:90
+Error: Cannot find name 'w'. (ts)
+                class="row-action"
+                disabled={qualifiedDiagnostics(project, post, 'back')?.warnings.includes(w)}
+                onclick={(e) => {
+
+====================================
+svelte-check found 1 error and 0 warnings in 1 file

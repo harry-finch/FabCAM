@@ -1,0 +1,44 @@
+{
+  "pipeline_version": 63,
+  "scope": "bounded software; human review pending",
+  "core_serial": 1205,
+  "tool_provenance_integration": 8,
+  "cps_posts": 5,
+  "hatch_safe_z": 14,
+  "safe_z_extended": 15,
+  "shopbot_m2": 27,
+  "vcarve": 10,
+  "wasm_host": 22,
+  "frontend": {
+    "passed": 1438,
+    "existing_skipped": 1,
+    "files": 159,
+    "node_passed": 10
+  },
+  "check": "0 errors / 0 warnings",
+  "lint": "pass",
+  "clippy": "scoped core/cps lib+tests pass; all-target pre-existing example lint remains",
+  "test1_release_before_manifest": 256,
+  "test1_final": {
+    "passed": 256,
+    "profile": "release",
+    "elapsed_seconds": 30.312637209,
+    "evidence": "test1-accepted/summary.json"
+  },
+  "build": "pass; existing chunk-size/dynamic-import warnings",
+  "physical_qualification": false,
+  "published": false,
+  "debug_test1_nonacceptance": {
+    "passed": 146,
+    "timeouts": 8,
+    "stage_timeout": 33,
+    "executed": 187,
+    "planned": 256,
+    "budget_seconds": 180
+  },
+  "parallel_debug_core_nonacceptance": "2 shared geometry-cache counter assertions; serial 1205/1205 passed",
+  "post_serial_final_defensive_guard": {
+    "unit_passed": 4,
+    "multi_tool_integration_passed": 8
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-19",
+  "head": "66f229ea21cccf73a76fd45d0e9f9fe3721a41a1",
+  "candidate_source": "db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+  "version": "0.9.0-beta.3",
+  "pipeline": 61,
+  "inputs": [
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM — V1 UX Audit Consolidation & Polish.md",
+      "sha256": "0a5b2f3326b9714ede28a6daeade6e1192514d9987f1bee7388ba3d43576d00e",
+      "lines": 146
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/audit-argon_UX.md",
+      "sha256": "05e52639aff1506d23a28012f9dbe403434dd4510916737da07224646c951b78",
+      "lines": 783
+    }
+  ],
+  "audit_read": "all 783 lines, batches01-10/11-20/21-30/31-40/41-50/51-60/61-62 and user comments",
+  "visual_inspection": [
+    "07-brut-origines-brides.jpg",
+    "27-outil-disponibilite.jpg",
+    "54-inspecteur-surfacage.jpg"
+  ],
+  "visual_scope": "existing native beta3 screenshots; no new rendered runtime or keyboard qualification during planning",
+  "code_difference_candidate_to_head": "documentation only",
+  "production_changes": "none"
+}

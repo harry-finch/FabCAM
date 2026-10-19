@@ -1,0 +1,26 @@
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cps)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.45s
+     Running tests/tool_provenance.rs (target/debug/deps/tool_provenance-e1dd99428e004f18)
+
+running 2 tests
+test ignored_multi_tool_is_not_resolved ... ok
+test native_rough_finish_carries_two_bodies_under_one_operation ... FAILED
+
+failures:
+
+---- native_rough_finish_carries_two_bodies_under_one_operation stdout ----
+
+thread 'native_rough_finish_carries_two_bodies_under_one_operation' panicked at crates/ivac-core/tests/tool_provenance.rs:17:5:
+assertion `left == right` failed
+  left: Planned
+ right: Resolved
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    native_rough_finish_carries_two_bodies_under_one_operation
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p ivac-core --test tool_provenance`

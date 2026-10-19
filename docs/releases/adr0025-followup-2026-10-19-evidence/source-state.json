@@ -1,0 +1,24 @@
+{
+ "base_commit": "66f229ea21cccf73a76fd45d0e9f9fe3721a41a1",
+ "working_tree": "uncommitted; preserves all prior ADR-0024/0025 work",
+ "files_sha256": {
+  "crates/ivac-core/src/pipeline/provenance.rs": "15c03b4ff1919a5b22eb52b880e29f8ad7479f0542c4409dfe1f2c210d3de26c",
+  "crates/ivac-core/src/pipeline/shopbot_resolution.rs": "612eb14416d6ff7e7419269c2f4c4a2240d6aae9af97c747e38b315baf3825e9",
+  "crates/ivac-core/src/cam/geometry_cache.rs": "8b3392a0abb621472c1c5f0e6ecaa5111c3d8d68d46a57034bdd7ad6c1f24b4f",
+  "crates/ivac-core/examples/vcarve_audit.rs": "71055fbd52dd327319519efe0b373963028269ccfefa27b41803dea5acde2b59",
+  "crates/ivac-core/tests/tool_provenance.rs": "59ba17a776b935470efd93181c084e10b7df27bbee3e549ddbc7273d9a769156",
+  "crates/ivac-core/tests/ux3_qualification.rs": "e4daea2d48634232c681e951fb6d20a90fb1c50fb9b4440312461cf78a903198",
+  "crates/ivac-core/tests/geom1_contract.rs": "6e8a388e4afec4d29ea41f308aa42b229fb1fd5e803b3d05d2a9913db1284120",
+  "crates/ivac-core/tests/snapshots_drill_tabs_whirl.rs": "9ee48604e9eb0109d932befd2333e7b0f065bd8a368f8b81eb1aa7341c31f3fd",
+  "crates/ivac-cps/tests/shopbot_guards.rs": "0c5bf6a1d90a666e22fd0fbafa6e91af80781e91bd2bff35141f1e711f4cc5de",
+  "crates/ivac-wasm/src/lib.rs": "3ba31d75ab1b5a2dddadeb7e88898b0c6b42700850f7faf26dfaf0e45b9a3579",
+  "docs/shopbot-modernization/geom1/square-repaired-software-only.sbp": "4d68539b5086b9ccbaa283dc543ee83cb5534cca141afd9a8ba0d877d0b0efb8",
+  "tests/fixtures/test1/profile.sbp": "811069c89434cca80349e20e5ce430f255a8f1028e6367a71ab6d8b5b4808b0b",
+  "tests/fixtures/test1/vcarve.sbp": "15b4afab43968ac3d979a8910c3480d6045fe643b96f716f5bd9b7123e4292eb"
+ },
+ "unchanged_references": [
+  "docs/shopbot-modernization/geom1/square-repaired-software-only.sbp",
+  "tests/fixtures/test1/profile.sbp",
+  "tests/fixtures/test1/vcarve.sbp"
+ ]
+}

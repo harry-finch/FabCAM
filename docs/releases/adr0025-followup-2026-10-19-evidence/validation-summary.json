@@ -1,0 +1,68 @@
+{
+ "fmt_check": "pass",
+ "clippy_strict_all_targets": "pass (default and --all-features, -D warnings, excl. ivac-tauri)",
+ "clippy_pedantic_pre_release": "FAIL pre-existing: 67 errors in untouched ivac-feeds-speeds / ivac-cps files",
+ "schema_check": "up to date",
+ "version_check": "tauri.conf.json matches 0.9.0-beta.3",
+ "cargo_test_workspace_parallel": {
+  "passed": 1598,
+  "failed": 0,
+  "ignored": 0,
+  "binaries": 49
+ },
+ "cargo_test_ci_all_features_parallel": {
+  "passed": 1593,
+  "failed": 0,
+  "ignored": 1,
+  "ignored_note": "test1_case runs only through scripts/test1/run.py",
+  "binaries": 46
+ },
+ "core_lib_parallel_repeats": [
+  1208,
+  1208,
+  1208
+ ],
+ "named_suites_in_workspace": {
+  "tool_provenance": 12,
+  "core_lib": 1208,
+  "hatch_safe_z": 14,
+  "safe_z_extended": 15,
+  "shopbot_m2_post": 27,
+  "shopbot_m1_qualification": 11,
+  "shopbot_guards": 8,
+  "cps_posts": 5,
+  "vcarve_qualification": 10,
+  "geom1_contract": 23,
+  "ux3_qualification": 8,
+  "snapshots_drill_tabs_whirl": 4,
+  "ivac_wasm_cps_lib": 24
+ },
+ "frontend": {
+  "eslint": "pass",
+  "prettier": "pass",
+  "svelte_check": "0 errors / 0 warnings",
+  "tsc_node": "pass",
+  "node_tests": "10/10",
+  "vitest": {
+   "files": 159,
+   "passed": 1438,
+   "skipped": 1
+  }
+ },
+ "test1_release": {
+  "cases_32": "256/256 planned pass",
+  "cases_256": "1824/1824 pass in 210 s",
+  "frontend_lifecycle": "32/32"
+ },
+ "repro_matrix": {
+  "cases": 48,
+  "authority_changes": 12,
+  "command_or_tool_line_differences": 0
+ },
+ "browser": "see browser-review.json",
+ "not_run": [
+  "ivac-tauri build/tests (excluded as in CI)",
+  "controller/simulator/physical validation",
+  "actual browser download"
+ ]
+}

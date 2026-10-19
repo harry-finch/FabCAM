@@ -1,5 +1,17 @@
 # FabCAM release roadmap — approved direction
 
+> 2026-10-19 — [P0/P1 export/load checkpoint](UX_SAFETY_LOAD_RESULTS_2026_10_19.md): software fixes and integrated evidence complete; human gate **ivac-3i00w OPEN**, explicit qualification coverage limits **ivac-b0js3 OPEN**. No new candidates/commit/publication authorized. UX D and consolidation gates remain distinct. **HARD STOP.**
+
+> 2026-10-19 — **Consolidation UX A–D terminée, candidats BLOQUÉS** (beta.3/pipeline62). [Bilan et preuves](UX_V1_CONSOLIDATION_2026_10_19.md). Core1204, frontend1387/1 SKIP +10 Node, intégration59 et TEST1 optimisé256/256 PASS. Un correctif clavier local ; défaut sécurité lecture/export **ivac-3xqtb** et réserve chargement/format **ivac-52tpd** soumis sans correction. Revues **ivac-amibd / ivac-he4lt OPEN**. Candidats existants beta.3/pipeline61 inchangés. Aucun commit/push/publication ni nouveau candidat. **HARD STOP pour validation.** Les notices antérieures sont historiques.
+
+> 2026-10-19 — **Lot D UX livré localement**, beta.3/pipeline62 : vues stables, diagnostics lisibles, réglages consolidés et fenêtres recalées. [Résultats et limites](UX_V1_LOT_D_2026_10_19.md). A/B/C acceptés ; revue D **ivac-he4lt OPEN**. Frontend1387 PASS/1 SKIP +10 Node, check/lint/build PASS. Aucun commit/push/publication. **HARD STOP** ; consolidation et candidats ultérieurs non lancés.
+
+> 2026-10-19 — **Lot C UX livré localement**, beta.3/pipeline62 : origine XY, Frame réversible, matériau en brouillon, compatibilité texte et fiche atelier fidèle aux résultats courants. [Résultats et limites](UX_V1_LOT_C_2026_10_19.md). Lot B accepté (`ivac-ex4v8` fermé). Revue C **ivac-9pljy OPEN**. Tests frontend 1383 PASS/1 SKIP +10 Node ; check/lint/build PASS. Aucun commit/push/publication. **HARD STOP avant lot D**, non commencé. Les notices antérieures sont historiques.
+
+> 2026-10-19 — **Lot B UX livré localement**, beta.3/pipeline62 : copies projet/locales explicites, comparaison type/diamètre avant application, accès contextuel et schéma dimensionnel. [Résultats et limites](UX_V1_LOT_B_2026_10_19.md). Lot A accepté (`ivac-lec7h` fermé). Revue B **ivac-ex4v8 OPEN** ; réserve fenêtre redimensionnée `ivac-ntg7i`. Aucun commit/push/publication. **HARD STOP avant lot C**.
+
+> 2026-10-19 — [V1 UX audit Phase0](UX_V1_POLISH_PHASE0_2026_10_19.md) complete: full audit01–62 consolidated against beta.3/pipeline61 source. Four batches proposed, not started; consumer/capability corrections and separate CPS/envelope/fonts decisions documented. Existing beta.3 candidate evidence retained. Human approval required before implementation. No production change, commit/push/publication. **HARD STOP**.
+
 > Current checkpoint — 2026-10-18: [Final SAFE-Z / TEST1 consolidation](FINAL_CONSOLIDATION_2026_10_18.md), pipeline61. Fresh29 focused checks PASS; preserved20,167-move budget failure reproduced. Source/evidence integrity checked; no production change. Human review **ivac-l6ouh OPEN**; ADR UX review ivac-8371y separate. Resource/cancellation reserves conditional; platform/physical gates unchanged. Next after approval: matching candidates with separate commit/push/workflow authorization. No commit/push/build/publication. **HARD STOP**.
 
 Earlier checkpoint notices below are historical snapshots; their OPEN/not-started wording is superseded by the current report and tracker.
@@ -202,11 +214,12 @@ mandatory V1.5 gate. Target-software preview is distinct from independent decodi
 
 ## FabCAM 2.0+ roadmap
 
-GEOM2/3 beyond any approved A1 minimum; NEST1/2 and multi-sheet optimization;
-common-line research; two-sided registration; complete-area V-Carve and inlays;
-rest machining; extensive templates; additional processes/posts; optional FabSBP
-interoperability. Retain plans and IDs, no dates or bundled commitment to all items.
-Existing useful capabilities remain in the application with honest support labels.
+[Unified workshop priority view](V2_WORKSHOP_PRIORITIES.md) coordinates high-priority
+STEP1-A, SMART1, FIT1-A, SMART2 optimization and existing REST1, followed by FIT1-B
+and separately scoped projection/recognition. Existing HELIX1 HIGH, VCARVE2, GEOM2/3,
+NEST1/2, inlays/two-sided, PERF2 and optional MCP1 retain targets; capacity/order
+conflicts require explicit human review. No bundled commitment or V1/V1.5 expansion.
+
 
 ## Dependency graph
 
@@ -411,3 +424,43 @@ operations/semantics/UI. WAZER and Graphtec/Silhouette are post-V1.5 conceptual 
 studies, not verified protocol support or permission to implement. Proposed local
 machine-integration skill links this guide/template; no skill installed now.
 Current TEST1/AUDIT3/ShopBot/native OMX product decisions and gates are preserved.
+
+## MCP1 — AI Integration & MCP Server
+
+**PLANNED — POST-V1.5 / FabCAM 2.0+**, optional local integration; no AI/cloud/client
+requirement for FabCAM, no V1/ProtoMAX/current-audit/TEST1 delay. [Plan and API inventory](MCP1_PLAN.md).
+A architecture/API/state/security audit → B useful read-only inspection/analysis/recommendation
+MVP → separately approved C transactional proposal/preview/validate/human-Apply → D guarded
+generation/output analysis/export permissions. Candidate local fabcam-mcp/stdio is unfrozen;
+remote listener needs separate review. No server/dependency/network/schema/command now.
+
+Reuse authoritative services, source IDs/units/lineage and FS saved-value/privacy contracts;
+separate offline documents from desktop-owned unsaved state/history. Capabilities follow
+ARCH-MACH qualification, not hardcoded machine claims; ARCH-MACH never depends on MCP.
+Explicit project/filesystem scopes and read/write/generate/export authority, revision
+conflicts, bounded resources and untrusted-content defenses are future acceptance.
+No FabCAM MCP machine control; FabSBP hardware authority is separately designed.
+[Developer planning entry](../development/MCP_INTEGRATION.md). Each phase requires human
+review; roadmap addition does not authorize implementation or publication.
+
+## STEP and Smart Workshop refinements — 2026-10-19
+
+All **PLANNED — NOT IMPLEMENTED**, subject to human roadmap/scope approval.
+
+| Milestone | Placement / boundary |
+| --- | --- |
+| STEP1-A — STEP Import & Planar Face Contour Extraction | V2+ HIGH, among first major capabilities; isolated kernel/packaging feasibility gate, explicit accepted local contours then existing CAM, no automatic operations |
+| STEP1-B — Advanced Projected Geometry Extraction | Follow A; direction/visibility/depth/overlap filtering; edge Z is context, not automatically operation depth |
+| STEP2 — Automatic Machining Feature Recognition | Optional later detected feature→reviewed proposal; never prerequisite for STEP1 |
+| SMART1 — Smart Layer-to-Operation Mapping | V2 HIGH: configurable deterministic layer/preset/template proposals, explicit rules/context/tool conflicts and human Apply |
+| SMART2 — Smart Tabs & Collision-Aware Leads | Advanced optimization V2; V1 only demonstrated supported-scope safety/defect work through existing TAB-SAFE/audit gates; no default/algorithm replacement from suggestion alone |
+| FIT1-A — Fit Calibration Assistant | V2 HIGH preferred first fit deliverable: explicit signed test patterns and measured local provenance, no universal fit value |
+| FIT1-B — Targeted Assembly Compensation | Later V2: selected mating geometry, preserved source/preview/approval; fit versus finishing allowance distinct |
+| REST1-A/B/C | Refines existing V2 HIGH REST1 into candidate regions, safe paths and guided UX; no direct diagnostic-polygons→Pocket assumption |
+| MULTI1 — Unified Multi-Process Workflow | Product objective linked to ARCH-MACH/native OMX foundation V1.5, progressive V2 UX; no rival architecture milestone or silent operation reinterpretation |
+
+[STEP feasibility/identity/qualification](STEP_PLAN.md), [Smart contracts](SMART_WORKSHOP_PLAN.md),
+[one proposed priority view](V2_WORKSHOP_PRIORITIES.md). No production dependency/kernel,
+viewer, operations, UI/schema/output changes or physical/calibration claims. Current
+V1 candidates remain blocked by recorded issues/review; V1.5 native OMX without LAYOUT
+and its acceptance requirements remain intact. No machine control/FabSBP dependency.

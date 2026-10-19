@@ -1,0 +1,11 @@
+{
+  "semantic_equal": false,
+  "changed_top_level": [
+    "workOffset"
+  ],
+  "cpsPost_in_saved": false,
+  "tools_equal": true,
+  "operations_equal": true,
+  "normalization": "Default all-zero G54 workOffset omitted by existing snapshot policy",
+  "equal_after_documented_normalization": true
+}

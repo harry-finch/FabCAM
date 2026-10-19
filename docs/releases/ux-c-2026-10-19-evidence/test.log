@@ -1,0 +1,184 @@
+
+> test
+> node --test scripts/wasm-package-state.test.mjs && vitest run
+
+✔ incomplete package rejected: ivac_wasm_bg.wasm (4.507125ms)
+✔ incomplete package rejected: ivac_wasm.js (2.765916ms)
+✔ incomplete package rejected: ivac_wasm.d.ts (2.454583ms)
+✔ incomplete package rejected: ivac_wasm_bg.wasm.d.ts (2.475584ms)
+✔ incomplete package rejected: package.json (3.346125ms)
+✔ content fingerprints detect old timestamps, changed bindings and lockfile; unchanged package passes (3.671125ms)
+✔ concurrent source edit prevents stamping successful old build (2.422667ms)
+✔ release CLI fails closed without toolchain; only explicit dev accepts complete stale package (146.348208ms)
+✔ empty assets and malformed manifest are never complete (2.538666ms)
+✔ embedded font/data changes and file deletion invalidate the package (4.133041ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 233.79875
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ✓ src/lib/sim/heightfield_mesh.test.ts (17 tests) 11ms
+ ✓ src/lib/api/build-project.test.ts (48 tests) 8ms
+ ✓ src/lib/state/commands.test.ts (51 tests) 10ms
+ ✓ src/lib/state/feeds-speeds.test.ts (14 tests) 8ms
+ ✓ src/lib/sim/driver.test.ts (29 tests) 7ms
+ ✓ src/lib/state/operation-templates.test.ts (11 tests) 10ms
+ ✓ src/lib/sim/driver.deviation.test.ts (4 tests) 15ms
+ ✓ src/lib/sim/driver.two_sided_conflict.test.ts (5 tests) 23ms
+ ✓ src/lib/state/workspace.test.ts (12 tests) 7ms
+ ✓ src/lib/state/lab-presets.test.ts (13 tests) 50ms
+ ✓ src/lib/api/client.test.ts (16 tests) 11ms
+ ✓ src/lib/services/document-lifecycle.test.ts (24 tests) 127ms
+ ✓ src/lib/state/file-transform.test.ts (11 tests) 6ms
+ ✓ src/lib/scene3d/toolpath_buffers.test.ts (19 tests) 18ms
+ ✓ src/lib/canvas/spatial-index.test.ts (14 tests) 48ms
+ ✓ src/lib/sim/undercut_mesh.test.ts (6 tests) 5ms
+ ✓ src/lib/state/geometry-source-ui.test.ts (11 tests) 8ms
+ ✓ src/lib/state/history.test.ts (18 tests) 8ms
+ ✓ src/lib/cam/raster_preview.test.ts (18 tests) 3ms
+ ✓ src/lib/canvas/viewport.test.ts (15 tests) 4ms
+ ✓ src/lib/components/Modal.test.ts (14 tests) 4ms
+ ✓ src/lib/state/tool_picker.test.ts (21 tests) 16ms
+ ✓ src/lib/components/AddTextDialog.test.ts (15 tests) 9ms
+ ✓ src/lib/cam/post-profile-preview.test.ts (23 tests) 7ms
+ ✓ src/lib/state/drawing-layers.test.ts (8 tests) 13ms
+ ✓ src/lib/services/shopbot-machine-load.test.ts (4 tests) 29ms
+ ✓ src/lib/canvas/fixture-gesture.test.ts (6 tests) 6ms
+ ✓ src/lib/api/wasm-worker-client.test.ts (10 tests) 12ms
+ ✓ src/lib/canvas/osnap.test.ts (13 tests) 3ms
+ ✓ src/lib/state/tool_family.test.ts (9 tests) 15ms
+ ✓ src/lib/sim/playhead.test.ts (13 tests) 4ms
+ ✓ src/lib/state/drawing.test.ts (8 tests) 43ms
+ ✓ src/lib/components/component-size-guard.test.ts (3 tests) 3ms
+ ✓ src/lib/state/operation-template-ui.test.ts (6 tests) 9ms
+ ✓ src/lib/components/ErrorToast.test.ts (12 tests) 4ms
+ ✓ src/lib/canvas/pointer-move.test.ts (20 tests) 4ms
+ ✓ src/lib/state/op_defaults.test.ts (20 tests) 4ms
+ ✓ src/lib/canvas/selection-geometry.test.ts (24 tests) 10ms
+ ✓ src/lib/state/planar-surface.test.ts (8 tests) 4ms
+ ✓ src/lib/state/app-menu.test.ts (12 tests) 2ms
+ ✓ src/lib/components/warning-display.test.ts (6 tests) 3ms
+ ✓ src/lib/components/cps-post-form.test.ts (12 tests) 8ms
+ ✓ src/lib/state/status-bar-text.test.ts (19 tests) 9ms
+ ✓ src/lib/api/pipeline-warnings.test.ts (26 tests) 10ms
+ ✓ src/lib/state/project-types.test.ts (16 tests) 4ms
+ ✓ src/lib/state/preparation.test.ts (7 tests) 6ms
+ ✓ src/lib/state/tool_validation.test.ts (14 tests) 7ms
+ ✓ src/lib/state/tool_table.test.ts (11 tests) 27ms
+ ✓ src/lib/sim/deviation_target.test.ts (9 tests) 4ms
+ ✓ src/lib/state/corner-relief.test.ts (6 tests) 33ms
+ ✓ src/lib/canvas/tab-hit.test.ts (13 tests) 8ms
+ ✓ src/lib/components/dh1n-regression.test.ts (1 test) 12ms
+ ✓ src/lib/canvas/stock-gizmo.test.ts (15 tests) 6ms
+ ✓ src/lib/state/source-packs.test.ts (6 tests) 9ms
+ ✓ src/lib/canvas/touch-gestures.test.ts (10 tests) 8ms
+ ✓ src/lib/cam/tabs.test.ts (8 tests) 9ms
+ ✓ src/lib/state/vcarve-controls.test.ts (6 tests) 11ms
+ ✓ src/lib/scene3d/flip_gizmo.test.ts (10 tests) 6ms
+ ✓ src/lib/state/warnings-summary.test.ts (8 tests) 15ms
+ ✓ src/lib/state/op_tool_constraint.test.ts (23 tests) 5ms
+ ✓ src/lib/state/generation-context.test.ts (3 tests) 8ms
+ ✓ src/lib/state/mode_switch.test.ts (8 tests) 4ms
+ ✓ src/lib/state/stock-outline.test.ts (6 tests) 5ms
+ ✓ src/lib/sim/two_sided_conflict.test.ts (6 tests) 5ms
+ ✓ src/lib/state/palette-search.test.ts (20 tests) 9ms
+ ✓ src/lib/canvas/render/chrome.test.ts (19 tests) 6ms
+ ✓ src/lib/canvas/entity-selection.test.ts (12 tests) 2ms
+ ✓ src/lib/state/recommendation-preview.test.ts (5 tests) 21ms
+ ✓ src/lib/canvas/pointer-down.test.ts (9 tests) 8ms
+ ✓ src/lib/canvas/context-menu.test.ts (8 tests) 7ms
+ ✓ src/lib/components/report-markdown.test.ts (5 tests) 5ms
+ ✓ src/lib/state/vcarve-strategy-ui.test.ts (8 tests) 6ms
+ ✓ src/lib/state/palette-dispatch.test.ts (6 tests) 6ms
+ ✓ src/lib/state/gcode_window.test.ts (9 tests) 2ms
+ ✓ src/lib/state/tool-library-review.test.ts (4 tests) 4ms
+ ✓ src/lib/state/palette-tool.test.ts (6 tests) 2ms
+ ✓ src/lib/services/toolset-draft-io.test.ts (2 tests) 7ms
+ ✓ src/lib/canvas/ghost-tab.test.ts (6 tests) 8ms
+ ✓ src/lib/state/throttle.test.ts (7 tests) 8ms
+ ✓ src/lib/canvas/touch-tracker.test.ts (7 tests) 15ms
+ ✓ src/lib/state/tool_presets.test.ts (7 tests) 5ms
+ ✓ src/lib/canvas/render/tabs.test.ts (6 tests) 5ms
+ ✓ src/lib/state/tool_naming.test.ts (6 tests) 4ms
+ ✓ src/lib/canvas/fixture-hit.test.ts (5 tests) 2ms
+ ✓ src/lib/state/selection.test.ts (12 tests) 2ms
+ ✓ src/lib/components/floating-panel.test.ts (9 tests) 3ms
+ ✓ src/lib/canvas/render/entities.test.ts (4 tests) 4ms
+ ✓ src/lib/scene3d/picker.test.ts (4 tests) 12ms
+ ✓ src/lib/state/gcode_chapters.test.ts (8 tests) 5ms
+ ✓ src/lib/state/machine_profiles.test.ts (5 tests) 5ms
+ ✓ src/lib/state/tool_wear.test.ts (8 tests) 9ms
+ ✓ src/lib/state/bottom-panel-fold.test.ts (9 tests) 3ms
+ ✓ src/lib/state/generation-run.test.ts (9 tests) 4ms
+ ✓ src/lib/state/relief_image.test.ts (5 tests) 7ms
+ ✓ src/lib/state/machine-profile-review.test.ts (4 tests) 4ms
+ ✓ src/lib/canvas/text-hit.test.ts (8 tests) 4ms
+ ✓ src/lib/state/inspector-policy.test.ts (4 tests) 4ms
+ ✓ src/lib/canvas/pointer-up.test.ts (7 tests) 4ms
+ ✓ src/lib/state/work-frame.test.ts (4 tests) 10ms
+ ✓ src/lib/i18n/i18n-core.test.ts (7 tests) 4ms
+ ✓ src/lib/canvas/render/regions.test.ts (3 tests) 4ms
+ ✓ src/lib/state/activities.test.ts (7 tests) 3ms
+ ✓ src/lib/sim/warnings.test.ts (5 tests) 2ms
+ ✓ src/lib/state/tool_inventory.test.ts (7 tests) 5ms
+ ✓ src/lib/canvas/render/segment.test.ts (5 tests) 4ms
+ ✓ src/lib/state/workspace-layout.test.ts (12 tests) 5ms
+ ✓ src/lib/state/relief_stl.test.ts (3 tests) 4ms
+ ✓ src/lib/services/shopbot-offline-demo.test.ts (1 test) 3ms
+ ✓ src/lib/state/feeds-speeds-sources.test.ts (4 tests) 6ms
+ ✓ src/lib/canvas/box_select.test.ts (5 tests) 5ms
+ ✓ src/lib/scene3d/raster_heatmap.test.ts (6 tests) 13ms
+ ✓ src/lib/scene3d/tessellate.test.ts (5 tests) 4ms
+ ✓ src/lib/state/publication-guard.test.ts (5 tests) 2ms
+ ✓ src/lib/services/gcode-export.test.ts (8 tests) 2ms
+ ✓ src/lib/state/tool-dimensions.test.ts (3 tests) 3ms
+ ✓ src/lib/state/entry-support.test.ts (3 tests) 6ms
+ ✓ src/lib/state/tool_mode_defaults.test.ts (5 tests) 4ms
+ ✓ src/lib/scene3d/warning_position.test.ts (5 tests) 2ms
+ ✓ src/lib/components/markdown-lite.test.ts (9 tests) 16ms
+ ✓ src/lib/state/op_source.test.ts (5 tests) 3ms
+ ✓ src/lib/state/tool-migration.test.ts (4 tests) 3ms
+ ✓ src/lib/state/performance-probe.test.ts (3 tests) 7ms
+ ✓ src/lib/state/test1-lifecycle.test.ts (32 tests) 4ms
+ ✓ src/lib/canvas/aci-color.test.ts (6 tests) 4ms
+ ✓ src/lib/state/generate-palette-policy.test.ts (6 tests) 3ms
+ ✓ src/lib/sim/dual_surface.test.ts (4 tests) 16ms
+ ✓ src/lib/i18n/coverage.test.ts (7 tests | 1 skipped) 2506ms
+   ✓ i18n no dead keys > every catalog key is referenced in src/ 2470ms
+ ✓ src/lib/state/op_types.test.ts (2 tests) 3ms
+ ✓ src/lib/state/relief.test.ts (5 tests) 4ms
+ ✓ src/lib/state/machine-identity.test.ts (8 tests) 6ms
+ ✓ src/lib/state/tool_form_profiles.test.ts (4 tests) 37ms
+ ✓ src/lib/state/layout.test.ts (5 tests) 23ms
+ ✓ src/lib/state/feeds-speeds-explanation.test.ts (3 tests) 8ms
+ ✓ src/lib/scene3d/lod.test.ts (4 tests) 2ms
+ ✓ src/lib/scene3d/dispose.test.ts (3 tests) 21ms
+ ✓ src/lib/components/palette-discoverability.test.ts (3 tests) 6ms
+ ✓ src/lib/state/unsaved.test.ts (4 tests) 4ms
+ ✓ src/lib/state/palette-keyboard.test.ts (4 tests) 1ms
+ ✓ src/lib/state/op-color.test.ts (4 tests) 11ms
+ ✓ src/lib/state/remaining-material.test.ts (3 tests) 4ms
+ ✓ src/lib/actions/longpress-tooltip.test.ts (4 tests) 1ms
+ ✓ src/lib/state/fixture-collisions.test.ts (2 tests) 4ms
+ ✓ src/lib/api/error-notification.test.ts (2 tests) 11ms
+ ✓ src/lib/state/cutting-origin-presentation.test.ts (4 tests) 3ms
+ ✓ src/lib/state/generated-progress.test.ts (2 tests) 3ms
+ ✓ src/lib/state/sidebar-pane.test.ts (6 tests) 2ms
+ ✓ src/lib/components/dialog-draft.test.ts (5 tests) 5ms
+ ✓ src/lib/services/file-kind.test.ts (2 tests) 3ms
+ ✓ src/lib/components/LoadingOverlay.test.ts (4 tests) 10ms
+ ✓ src/lib/state/palette-shortcut.test.ts (9 tests) 3ms
+ ✓ src/lib/actions/swipe-horizontal.test.ts (5 tests) 1ms
+ ✓ src/lib/scene3d/work-zero.test.ts (1 test) 8ms
+
+ Test Files  152 passed (152)
+      Tests  1383 passed | 1 skipped (1384)
+   Start at  10:54:51
+   Duration  5.30s (transform 3.27s, setup 0ms, collect 9.20s, tests 3.85s, environment 77ms, prepare 10.27s)
+

@@ -1,0 +1,13 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.02s
+     Running tests/test1_properties.rs (target/debug/deps/test1_properties-3ea0a1e69b7b04a8)
+
+running 5 tests
+test test1_case ... ignored, Run via scripts/test1/run.py: process watchdog, seeds and evidence required
+test oracle::accepts_tangent ... ok
+test oracle::variable_radius_and_crossing_entry_are_checked ... ok
+test oracle::detects_interior_collision ... ok
+test oracle::decoder_preserves_unknown_initial_axes_and_rejects_unknown_motion ... ok
+
+test result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

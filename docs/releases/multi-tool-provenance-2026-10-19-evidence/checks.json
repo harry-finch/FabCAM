@@ -1,0 +1,9 @@
+{
+  "source_files_checked": 707,
+  "source_files_changed": [],
+  "report_links": "PASS",
+  "frontend_tests_pass": 37,
+  "rust_tests_pass": 5,
+  "probe": "PASS",
+  "scope": "Phase A only; no new qualification or implementation"
+}

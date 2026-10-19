@@ -1,0 +1,17 @@
+{
+  "tests/fixtures/shopbot-m2/circle.sbp": {
+    "only_provenance_comments_changed": true
+  },
+  "tests/fixtures/shopbot-m2/pocket.sbp": {
+    "only_provenance_comments_changed": true
+  },
+  "tests/fixtures/shopbot-m2/square.sbp": {
+    "only_provenance_comments_changed": true
+  },
+  "tests/fixtures/shopbot-m2/multiple.sbp": {
+    "only_provenance_comments_changed": true
+  },
+  "tests/fixtures/shopbot-m2/drill.sbp": {
+    "only_provenance_comments_changed": true
+  }
+}

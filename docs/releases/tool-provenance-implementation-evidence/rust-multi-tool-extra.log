@@ -1,0 +1,16 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.36s
+     Running tests/tool_provenance.rs (target/debug/deps/tool_provenance-e1dd99428e004f18)
+
+running 8 tests
+test spot_drill_and_chamfer_keep_three_tool_geometries ... ok
+test injected_reserved_marker_cannot_certify_native_output ... ok
+test numbered_native_output_keeps_physical_line_bindings ... ok
+test leading_tool_less_pause_and_duplicate_ids_do_not_guess ... ok
+test ignored_multi_tool_is_not_resolved ... ok
+test native_rough_finish_carries_two_bodies_under_one_operation ... ok
+test native_change_strategies_and_tool_reuse_keep_stable_bindings ... ok
+test shopbot_resolved_moves_use_finish_body_and_keep_guarded_subset ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+

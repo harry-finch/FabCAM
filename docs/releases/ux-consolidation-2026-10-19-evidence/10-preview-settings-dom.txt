@@ -1,0 +1,49 @@
+- navigation "Main areas":
+  - text: FabCAM
+  - button "Project"
+  - 'button "Machine: LOT A — SOFTWARE REVIEW ONLY"':
+    - generic: "Machine:"
+    - generic: LOT A — SOFTWARE REVIEW ONLY
+  - button "Tool library"
+  - button "Settings"
+  - button "Help"
+  - button "About"
+- main:
+  - navigation "Setting groups":
+    - button "Appearance"
+    - button "3D preview" [active]
+    - button "Performance"
+    - button "Sim safety"
+    - button "Feeds & Speeds"
+    - button "Source files"
+    - button "Snap to"
+  - heading "3D preview" [level=3]
+  - paragraph: Appearance of the simulated stock. Toolpaths can be shown or hidden in the viewport. Simulation is an approximation, not machine qualification.
+  - checkbox "Show stock outline in 3D" [checked]
+  - generic: Show stock outline in 3D
+  - text: Solid color
+  - 'textbox "Solid color #c8b48a"': "#c8b48a"
+  - textbox: "#c8b48a"
+  - text: Solid opacity
+  - slider "Solid opacity 0.50": "0.5"
+  - generic: "0.50"
+  - text: Edge color
+  - 'textbox "Edge color #1a1a1a"': "#1a1a1a"
+  - textbox: "#1a1a1a"
+  - text: Edge opacity
+  - slider "Edge opacity 1.00": "1"
+  - generic: "1.00"
+  - checkbox "Deviation overlay (relief verify)"
+  - generic: Deviation overlay (relief verify)
+  - paragraph: Tint carved terrain red where it gouges below the relief target and green where stock remains. Needs a relief-mill op.
+  - text: Preview line width
+  - slider "Preview line width 1.5 px": "1.5"
+  - generic: 1.5 px
+  - text: Tool-move arrow density
+  - slider "Tool-move arrow density 1.00×": "1"
+  - generic: 1.00×
+  - text: Cell resolution
+  - combobox "Cell resolution":
+    - option "Auto (tool diameter / 15)" [selected]
+    - option "Manual"
+- contentinfo "bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts"

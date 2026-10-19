@@ -1,0 +1,225 @@
+- navigation "Main areas":
+  - text: FabCAM
+  - button "Project"
+  - 'button "Machine: LOT A — SOFTWARE REVIEW ONLY"':
+    - generic: "Machine:"
+    - generic: LOT A — SOFTWARE REVIEW ONLY
+  - button "Tool library"
+  - button "Settings"
+  - button "Help"
+  - button "About"
+- generic "File":
+  - text: File
+- button "Open"
+- button "Save"
+- generic "saved-preparation.ivac-project.json — Saved project":
+  - generic: saved-preparation.ivac-project.json
+  - generic: Saved project
+- button "Undo" [disabled]:
+- button "Redo" [disabled]:
+- button "Generate toolpaths"
+- generic "Wall-clock generation time, including request preparation and result processing. Preview simulation is separate; this is not estimated machining time.":
+  - text: Generated in
+  - generic: 0.0 s
+- button "Download .ngc" [disabled]
+- button "Carved stock STL"
+- generic: 2 obj · 33 offsets · 431 moves
+- button "Time breakdown": ⏱ 13 min 9 s
+- button "2 warning(s) (1 critical)":
+  - text: 2 warning(s) (1 critical)
+- generic "Remaining material":
+  - generic: Remaining material
+  - generic: Not analyzed
+  - generic "Analysis details"
+- generic "Show / hide the translucent fill that marks each pocket operation's machined region.":
+  - checkbox "Regions" [checked]
+  - generic: Regions
+- generic "Show toolpath lines and direction arrows. Stock simulation stays active.":
+  - checkbox "Toolpaths" [checked]
+  - generic: Toolpaths
+- tablist "Viewport mode":
+  - tab "2D"
+  - tab "3D" [selected]
+- main:
+  - button "Fit view to scene": ⌖
+  - generic "Pocket — source union retained"
+  - button "Previous op (#1 Pocket — source union retained)": ⏮
+  - button "Play": ▶
+  - button "Next op" [disabled]: ⏭
+  - slider "Toolpath playback position": "1"
+  - 'button "Jump to #1 Pocket — source union retained"'
+  - button "Rapid through material at segment 0, x=59.3 y=58.7": ✕
+  - text: ×
+  - spinbutton "Playback speed multiplier": "1"
+  - generic "Path distance · not machining time": 431/431
+  - generic: Path distance · not machining time
+  - button "▶ Program 713 lines":
+    - text: ▶ Program
+    - generic: 713 lines
+  - separator "Drag to resize the side panel · double-click to reset"
+  - complementary:
+    - region "Stock":
+      - button "▸ Stock 120 × 120 × 10 mm":
+        - generic: ▸
+        - generic: Stock
+        - generic "Current stock dimensions (Length × Width × Thickness) in mm": 120 × 120 × 10 mm
+    - region "Drawings":
+      - complementary:
+        - button "Collapse layers panel": ▾
+        - checkbox "Toggle visibility of all imported layers" [checked]
+        - generic: Drawings
+        - generic "1 imported drawing": "1"
+        - button "+ Add"
+        - generic "Snap to"
+        - heading "Imported files" [level=3]
+        - generic "square_100.svg"
+        - generic: 4 segments · 1 layer
+        - button "▸ File transform":
+          - generic: ▸
+          - generic: File transform
+        - heading "Layers 1" [level=3]
+        - paragraph: Hidden layers are still used by CAM.
+        - list "Layers":
+          - button "Hide layer svg" [pressed]:
+          - 'img "Imported layer color: ACI 7 (read-only; drawing palette). Not a toolpath color."'
+          - 'generic "svg — Imported drawing: square_100.svg."': svg
+          - generic "4 segments": 4 seg
+          - button "Delete layer svg": ×
+      - button "Drawing cleanup":
+        - text: Drawing cleanup
+      - button "Corner relief" [disabled]:
+        - text: Corner relief
+      - paragraph: Click a contour edge in the drawing, then open Corner relief.
+    - region "Text":
+      - complementary:
+        - button "Activate text panel": ▸
+        - generic: Text
+        - generic: "0"
+        - button "Add text": + Add
+    - region "Operations":
+      - button "Activate operations panel": ▸
+      - generic: Operations
+      - generic "Number of operations": "1"
+      - button "Operation templates":
+        - text: Templates
+      - button "Add operation": +
+- dialog "Project report":
+  - banner:
+    - heading "Project report" [level=2]
+    - button "Close": ×
+  - article:
+    - heading "square_100.svg" [level=1]
+    - paragraph: 19/10/2026 11:19:24 · FabCAM report
+    - heading "Workshop setup" [level=3]
+    - status: Current generated program
+    - table:
+      - rowgroup:
+        - row "Stock 120.00 × 120.00 × 10 mm":
+          - rowheader "Stock"
+          - cell "120.00 × 120.00 × 10 mm"
+        - row "Stock top / bottom Z (program) 2 / -8 mm":
+          - rowheader "Stock top / bottom Z (program)"
+          - cell "2 / -8 mm"
+        - row "Material WOOD / MDF":
+          - rowheader "Material"
+          - cell "WOOD / MDF"
+        - row "Stock minimum (drawing XY) X 0.00 · Y 0.00 mm":
+          - rowheader "Stock minimum (drawing XY)"
+          - cell "X 0.00 · Y 0.00 mm"
+        - row "Program origin in drawing coordinates G54 · X 60 · Y 60 · Z 0 mm":
+          - rowheader "Program origin in drawing coordinates"
+          - cell "G54 · X 60 · Y 60 · Z 0 mm"
+    - paragraph: Saved operation rates are inputs before machine/post limits, not measured machine speeds. Generated min Z is in program coordinates; requested depth is an authored setting.
+    - status: Software report — review generation and simulation warnings before machine setup.
+    - heading "Toolpath stats" [level=3]
+    - table:
+      - rowgroup:
+        - row "Objects 2":
+          - rowheader "Objects"
+          - cell "2"
+        - row "Offsets 33":
+          - rowheader "Offsets"
+          - cell "33"
+        - row "Toolpath segments 431":
+          - rowheader "Toolpath segments"
+          - cell "431"
+        - row "Enabled ops 1":
+          - rowheader "Enabled ops"
+          - cell "1"
+    - heading "Estimated time" [level=3]
+    - table:
+      - rowgroup:
+        - row "Total 00:13:09":
+          - rowheader "Total"
+          - cell "00:13:09"
+        - row "Cut 00:11:47":
+          - rowheader "Cut"
+          - cell "00:11:47"
+        - row "Rapid 00:00:15":
+          - rowheader "Rapid"
+          - cell "00:00:15"
+        - row "Plunge 00:01:00":
+          - rowheader "Plunge"
+          - cell "00:01:00"
+        - row "Retract 00:00:00":
+          - rowheader "Retract"
+          - cell "00:00:00"
+        - row "Arc 00:00:00":
+          - rowheader "Arc"
+          - cell "00:00:00"
+        - row "Tool change 00:00:05":
+          - rowheader "Tool change"
+          - cell "00:00:05"
+        - row "Spindle warm-up 00:00:01":
+          - rowheader "Spindle warm-up"
+          - cell "00:00:01"
+    - heading "Tools used" [level=3]
+    - table:
+      - rowgroup:
+        - row "# Name ⌀ mm Kind":
+          - columnheader "#"
+          - columnheader "Name"
+          - columnheader "⌀ mm"
+          - columnheader "Kind"
+      - rowgroup:
+        - row "2 Project cutter — Ø3 mm — long name for identity review 3.00 endmill":
+          - cell "2"
+          - cell "Project cutter — Ø3 mm — long name for identity review"
+          - cell "3.00"
+          - cell "endmill"
+    - heading "Operations" [level=3]
+    - table:
+      - rowgroup:
+        - row "# Name Kind Tool Source Depth Generated min Z (program) Saved RPM · feed / plunge Status":
+          - columnheader "#"
+          - columnheader "Name"
+          - columnheader "Kind"
+          - columnheader "Tool"
+          - columnheader "Source"
+          - columnheader "Depth"
+          - columnheader "Generated min Z (program)"
+          - columnheader "Saved RPM · feed / plunge"
+          - columnheader "Status"
+      - rowgroup:
+        - 'row "1 Pocket — source union retained pocket Project cutter — Ø3 mm — long name for identity review \"svg\" -1.00 mm -1.000 mm Rough: 18000 rpm · 1100 / 200 mm/min · Finishing parameters: 18000 rpm · 1200 / 200 mm/min error"':
+          - cell "1"
+          - cell "Pocket — source union retained"
+          - cell "pocket"
+          - cell "Project cutter — Ø3 mm — long name for identity review"
+          - cell "\"svg\""
+          - cell "-1.00 mm"
+          - cell "-1.000 mm"
+          - 'cell "Rough: 18000 rpm · 1100 / 200 mm/min · Finishing parameters: 18000 rpm · 1200 / 200 mm/min"'
+          - cell "error"
+    - heading "Warnings" [level=3]
+    - paragraph: 1 critical · 1 non-critical
+    - list:
+      - strong: rapid_through_material
+      - text: — Rapid through material at segment 0, x=59.3 y=58.7
+      - strong: out_of_work_area
+      - text: — 294 cut moves outside the machine work area (first at gcode line 20). The controller may refuse the move (soft-limit fault) or, worse, crash into the gantry. Set Project.work_offset so the cuts land inside the work envelope.
+    - paragraph: Generated by FabCAM v0.9.0-beta.3 (v0.4.0-40-g66f229e-dirty), built 2026-10-19T09:15:28.706Z · 19/10/2026 11:19:24
+  - contentinfo:
+    - button "Save Markdown…" [active]
+    - button "Print"
+- contentinfo "bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts"

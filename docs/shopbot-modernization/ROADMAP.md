@@ -1,5 +1,24 @@
 # FabCAM release roadmap
 
+> 2026-10-19 — **ADR-0025 implemented locally, human review pending**: [movement-tool provenance results](../releases/MULTI_TOOL_PROVENANCE_RESULTS_2026_10_19.md). Pipeline63; immutable per-move tool bindings, independent native intent manifest/cache replay, bounded ShopBot emitted-intent validation, shared playback/full-program resolver. Existing post guards, manual assumptions and advanced two-sided exclusions retained. No performance optimization, commit, push or publication. **HARD STOP before any next checkpoint.**
+
+
+> 2026-10-19 — **ivac-b0js3 Phase A complete, architecture PROPOSED**: [independent multi-tool provenance review](../releases/MULTI_TOOL_PROVENANCE_PHASE_A_2026_10_19.md) and [ADR-0025](adr/ADR-0025-movement-tool-provenance.md). Confirmed identity/lookup limits; cache-only-index and invented-dowel-tool claims refuted. 37 frontend +5 Rust controls PASS; read-only counterexamples recorded. Documentation/evidence only; production, schemas, output and qualification fixtures unchanged. **HARD STOP for architecture approval**, no implementation/commit/publication. Earlier review gates remain separate.
+
+> 2026-10-19 — [P0/P1 export/load checkpoint](../releases/UX_SAFETY_LOAD_RESULTS_2026_10_19.md): software fixes and integrated evidence complete; human gate **ivac-3i00w OPEN**, explicit qualification coverage limits **ivac-b0js3 OPEN**. No new candidates/commit/publication authorized. UX D and consolidation gates remain distinct. **HARD STOP.**
+
+> 2026-10-19 — **Consolidation UX A–D terminée, candidats BLOQUÉS** (beta.3/pipeline62). [Bilan et preuves](../releases/UX_V1_CONSOLIDATION_2026_10_19.md). Core1204, frontend1387/1 SKIP +10 Node, intégration59 et TEST1 optimisé256/256 PASS. Un correctif clavier local ; défaut sécurité lecture/export **ivac-3xqtb** et réserve chargement/format **ivac-52tpd** soumis sans correction. Revues **ivac-amibd / ivac-he4lt OPEN**. Candidats existants beta.3/pipeline61 inchangés. Aucun commit/push/publication ni nouveau candidat. **HARD STOP pour validation.** Les notices antérieures sont historiques.
+
+> 2026-10-19 — **Lot D UX livré localement**, beta.3/pipeline62 : vues stables, diagnostics lisibles, réglages consolidés et fenêtres recalées. [Résultats et limites](../releases/UX_V1_LOT_D_2026_10_19.md). A/B/C acceptés ; revue D **ivac-he4lt OPEN**. Frontend1387 PASS/1 SKIP +10 Node, check/lint/build PASS. Aucun commit/push/publication. **HARD STOP** ; consolidation et candidats ultérieurs non lancés.
+
+> 2026-10-19 — **Lot C UX livré localement**, beta.3/pipeline62 : origine XY, Frame réversible, matériau en brouillon, compatibilité texte et fiche atelier fidèle aux résultats courants. [Résultats et limites](../releases/UX_V1_LOT_C_2026_10_19.md). Lot B accepté (`ivac-ex4v8` fermé). Revue C **ivac-9pljy OPEN**. Tests frontend 1383 PASS/1 SKIP +10 Node ; check/lint/build PASS. Aucun commit/push/publication. **HARD STOP avant lot D**, non commencé. Les notices antérieures sont historiques.
+
+> 2026-10-19 — **Lot B UX livré localement**, beta.3/pipeline62 : copies projet/locales explicites, comparaison type/diamètre avant application, accès contextuel et schéma dimensionnel. [Résultats et limites](../releases/UX_V1_LOT_B_2026_10_19.md). Lot A accepté (`ivac-lec7h` fermé). Revue B **ivac-ex4v8 OPEN** ; réserve fenêtre redimensionnée `ivac-ntg7i`. Aucun commit/push/publication. **HARD STOP avant lot C**.
+
+> 2026-10-19 — **Lot A UX livré localement**, beta.3/pipeline62 : états de génération fiables, refus CPS Homing/Probe, inspecteurs par consommateurs, menu/contextes et copie sécurité. [Résultats et preuves](../releases/UX_V1_LOT_A_2026_10_19.md). Plan Phase0 accepté (`ivac-2tndr` fermé) ; revue du lot A **ivac-lec7h OPEN**. Aucun commit/push/publication ; candidats existants inchangés. **HARD STOP avant lot B**.
+
+> 2026-10-19 — [V1 UX audit Phase0](../releases/UX_V1_POLISH_PHASE0_2026_10_19.md) complete: full audit01–62 consolidated against beta.3/pipeline61 source. Four batches proposed, not started; consumer/capability corrections and separate CPS/envelope/fonts decisions documented. Existing beta.3 candidate evidence retained. Human approval required before implementation. No production change, commit/push/publication. **HARD STOP**.
+
 > Current checkpoint — 2026-10-18: [Final SAFE-Z / TEST1 consolidation](../releases/FINAL_CONSOLIDATION_2026_10_18.md), pipeline61. Fresh29 focused checks PASS; preserved20,167-move budget failure reproduced. Source/evidence integrity checked; no production change. Human review **ivac-l6ouh OPEN**; ADR UX review ivac-8371y separate. Resource/cancellation reserves conditional; platform/physical gates unchanged. Next after approval: matching candidates with separate commit/push/workflow authorization. No commit/push/build/publication. **HARD STOP**.
 
 Earlier checkpoint notices below are historical snapshots; their OPEN/not-started wording is superseded by the current report and tracker.
@@ -666,3 +685,44 @@ and [specification template](../development/MACHINE_INTEGRATION_TEMPLATE.md) are
 not implemented extensibility or machine support. Proposed local machine-integration
 skill is not created. Post-V1.5 WAZER/vinyl cases stress-test boundaries only; no protocol
 or vendor-permission assumptions. No generic plugin, new adapter/schema or runtime work.
+
+## MCP1 — AI Integration & MCP Server
+
+**PLANNED — POST-V1.5 / V2+**, optional; V1 ShopBot, native OMX V1.5, current audit
+closure and TEST1 remain priorities. [Architecture/security/phase plan](../releases/MCP1_PLAN.md)
+and [developer guide](../development/MCP_INTEGRATION.md).
+
+| Phase | Future scope / gate |
+| --- | --- |
+| MCP1-A | Core/application API and desktop/offline ownership audit; local stdio candidate, no new business logic; human architecture/security approval |
+| MCP1-B | Read-only scoped project/geometry/machine/tool/operation/diagnostic inspection and suggestions, with privacy/qualification limits; useful without writes |
+| MCP1-C | Later proposal→preview→validate→human approval→atomic Apply with revision/history/identity and stale-output protection; separate desktop/offline workflows |
+| MCP1-D | Later authorized generation/analysis and separately approved export through existing validation/resource/cancel/output guards; no hardware execution |
+
+No server/dependencies/listeners/commands/schema change now. Capability discovery uses
+ARCH-MACH-qualified services; adding machines should not duplicate MCP business logic.
+Private packs/files need authorization; AI/project content is untrusted, client presence
+is not permission. No machine control or mandatory AI vendor/subscription/cloud.
+**HARD STOP — awaiting human approval of the MCP1 roadmap addition.**
+
+## V2 Smart Workshop / STEP source preparation — planning refinement
+
+**PLANNED — NOT IMPLEMENTED.** [Unified priority/dependency view](../releases/V2_WORKSHOP_PRIORITIES.md)
+preserves V1 blockers/TEST1/platform/workshop and V1.5 native OMX/ARCH-MACH priority.
+
+| Milestone | Target / linked scope |
+| --- | --- |
+| STEP1-A / STEP1-B | V2+ HIGH planar face→explicit 2D extraction, then separate advanced projection; [source/kernel/packaging/identity proof](../releases/STEP_PLAN.md) |
+| STEP2 | Optional later feature recognition→proposal, never STEP1 dependency |
+| SMART1 | V2 HIGH layer conventions/workshop mapping presets→reviewed operations, reusing layer sources/UX4/services |
+| SMART2 | V2 smart tab/neighbor-aware lead optimization; pre-V1 only demonstrated safety defects under current TAB-SAFE/audits |
+| FIT1-A / FIT1-B | V2 HIGH calibration assistant first, later selected mating-feature compensation; signed dimensions/provenance and no double allowance |
+| REST1-A/B/C | Existing REST1 refined, not duplicated: residual candidates→safe smaller-tool paths→guided UX |
+| MULTI1 | Linked ARCH-MACH product objective, V1.5 foundation/V2 evolution; no silent process conversion |
+
+[Smart workflows and independent qualification](../releases/SMART_WORKSHOP_PLAN.md).
+Proposed first wave STEP1-A feasibility/delivery and SMART1, then FIT1-A, SMART2,
+REST1 and FIT1-B; STEP1-B/STEP2 separately. Existing HELIX1 HIGH/VCARVE2 and other
+V2 items retain targets; no unapproved global order change. STEP kernels/libraries,
+model viewer, recognition/mapping/calibration/smart operations and schema/UI are
+not implemented by these plans. No dependency on STEP or assistance for native OMX.

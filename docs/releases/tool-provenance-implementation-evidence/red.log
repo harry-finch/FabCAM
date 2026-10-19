@@ -1,0 +1,27 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+error[E0599]: no variant or associated item named `LinuxCnc` found for enum `PostProcessorKind` in the current scope
+  --> crates/ivac-core/tests/tool_provenance.rs:16:101
+   |
+16 | ...rocessor:Some(PostProcessorKind::LinuxCnc),cps_post:None},|_,_,_|{}).unwrap();
+   |                                     ^^^^^^^^ variant or associated item not found in `PostProcessorKind`
+   |
+help: there is a variant with a similar name
+   |
+16 -     let result=run_pipeline(PipelineRequest{project:pocket(),post_processor:Some(PostProcessorKind::LinuxCnc),cps_post:None},|_,_,_|{}).unwrap();
+16 +     let result=run_pipeline(PipelineRequest{project:pocket(),post_processor:Some(PostProcessorKind::Linuxcnc,cps_post:None},|_,_,_|{}).unwrap();
+   |
+
+error[E0599]: no variant or associated item named `LinuxCnc` found for enum `PostProcessorKind` in the current scope
+  --> crates/ivac-core/tests/tool_provenance.rs:26:89
+   |
+26 |     let r=run_pipeline(PipelineRequest{project:p,post_processor:Some(PostProcessorKind::LinuxCnc),cps_post:None},|_,_,_|{}).unwrap();
+   |                                                                                         ^^^^^^^^ variant or associated item not found in `PostProcessorKind`
+   |
+help: there is a variant with a similar name
+   |
+26 -     let r=run_pipeline(PipelineRequest{project:p,post_processor:Some(PostProcessorKind::LinuxCnc),cps_post:None},|_,_,_|{}).unwrap();
+26 +     let r=run_pipeline(PipelineRequest{project:p,post_processor:Some(PostProcessorKind::Linuxcnc,cps_post:None},|_,_,_|{}).unwrap();
+   |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `ivac-core` (test "tool_provenance") due to 2 previous errors

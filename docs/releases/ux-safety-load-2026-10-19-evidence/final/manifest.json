@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-19",
+  "head": "66f229ea21cccf73a76fd45d0e9f9fe3721a41a1",
+  "working_tree": "dirty; pre-existing UX A-D and other changes preserved",
+  "source_version": "0.9.0-beta.3",
+  "pipeline": 62,
+  "qualification_revision": "full-sim-1",
+  "source_sha256": {
+    "frontend/src/App.svelte": "fcf4098d3c2678a63d7828fe4f67dc5b8b90f8bfa2f9d08ddf16343419d2adc8",
+    "frontend/src/lib/sim/config.ts": "ea74dea9ead3c08fca56b032b0fbaf3e050658731743c70e2730583ad4488048",
+    "frontend/src/lib/sim/driver.ts": "4c91e65342a43ddf3ed4ab2bfa7c1f663343e1f43199e70dfea1b6519ca8f2d0",
+    "frontend/src/lib/sim/qualification.ts": "1bf68c1ef8ea87c4e9ce6cba0904e47a47c48f57d53d99d161cd53894d6cfce2",
+    "frontend/src/lib/sim/qualification-run.ts": "d486f57867a1c85a01d43fe04f04f29088d7df8fbec217b8f17e0887fd6b1eb8",
+    "frontend/src/lib/sim/qualification.worker.ts": "1b440b6d883d9ef6ab3f50fc0169f97ab416afe53d167375aaaea91152c365f0",
+    "frontend/src/lib/sim/verify-program.ts": "e48501a222b5d423a5669c7f2c8a40720ef76565a835f646cf006ba485aa4c0a",
+    "frontend/src/lib/sim/qualification.test.ts": "2dfc44cc4edfa839828000004275f4d45a118f34fa0132cd87ceaa4db16ad281",
+    "frontend/src/lib/sim/qualification-wasm.test.ts": "d664394dc4384b4d830b4c23bcd3dbd72cbcd030bd49d937dd53802bc7eeb9e3",
+    "frontend/src/lib/state/program-qualification.ts": "61d47c459e697e98100acbc8f7519c3be1b9abc0ecc1ba52d09e607c043d82fb",
+    "frontend/src/lib/state/program-qualification.test.ts": "e2b1e4bb6725c510094ce49eb3180aab0ac4c015c9d82276b30bf0acf81bd378",
+    "frontend/src/lib/state/generated.svelte.ts": "59575bf28a1d35fe7cbc955494969c07eacbee5653a074aa06dd2cf6343492a5",
+    "frontend/src/lib/state/project-generate-ops.ts": "39fb6920e087478e684d72aecb790a90ad2feaab18029daadf02af6b00753021",
+    "frontend/src/lib/state/document-load.ts": "7e50ce2d402b5d3b62f65a7f683693863da9e7449bc7c721beb48d787393283a",
+    "frontend/src/lib/state/generate-palette-policy.ts": "5a9eb996b889744c8aedcd8c63aab3aeae9b0b5ba78000294bdec67abc0910dc",
+    "frontend/src/lib/state/generate-palette-policy.test.ts": "2b2e5ab0ac6aa6057156210de973ba263204ba0e8da1ccbae43ebe24c14225ec",
+    "frontend/src/lib/state/project-defaults.ts": "7641ad93a1124b9f770227fd4f110d5761fbb6a90578764977ce1d85da56a275",
+    "frontend/src/lib/state/project-data.svelte.ts": "ca9482ef9836035240db9abe778d9608351aaf19dfa1150af3cd2655a5709d51",
+    "frontend/src/lib/state/project-file-ops.ts": "806024c205345f2a76f41029a497919274c04cf80797c5e1146c6144123f88b4",
+    "frontend/src/lib/state/warnings-summary.ts": "1bffc5e3caafd9eaf43aa01febb5882ce67c27d7723bcf03bf3aa95381495c38",
+    "frontend/src/lib/services/file_ops.ts": "00203920d16a74c3a7b8bb0703c5baebe15878b33e45fe5c5a41e013aa0cdb8e",
+    "frontend/src/lib/services/qualification-export.test.ts": "389c7e1c0d0e5b6db4f48ac15a3327fb3e08cc6cd1b20cef7a0ebb7793e01335",
+    "frontend/src/lib/services/project-replacement.test.ts": "c97a90ddb7554c9f8e8face4c999b4ae85c189112d302a4eb5af1837dccadece",
+    "frontend/src/lib/components/ProgramQualification.svelte": "acb850a2a07081af4baadf012ae1450305e6b578ad24ef52cd51406e5d960788",
+    "frontend/src/lib/components/GenerateBar.svelte": "709f4d3021e5c2150f59ea817e8418a686a187fc3f5151c99b8112225430e88e",
+    "frontend/src/lib/components/PhoneWarnings.svelte": "1985bb9064605805f35b85f6c0dc8e91ca8d6ee91427620ed41473ac34f4b354",
+    "frontend/src/lib/components/ReportDialog.svelte": "d562ad6f736a61a9cfcbc556e244dc1e965768217ea64e14148bb0eca0826171",
+    "frontend/src/lib/components/Scene3D.svelte": "489d29cbc891c8afde9745a6536984d2357a2cb1fc28f035f36f4fa50cd941d2",
+    "frontend/src/lib/i18n/keys.ts": "0295fb96ff62704dd473eee757878fdc48fb66e5ec52756082b397380cbeb631",
+    "frontend/src/lib/i18n/messages/en.json": "ed6b4ace245e385ad384c7c9139daea36a904bedc162da41007266c8620f4d7a",
+    "frontend/src/lib/i18n/messages/de.json": "88c5af9989c325a3f98045bd24da0136b28bbff18059d4caba85413d3b796c3d"
+  },
+  "wasm_sha256": "afa69cf4dd13d94ff5c9c43047dc6e01746c8c769de53b72c5311abef78cb49c",
+  "final_logs": [
+    "check-accepted.log",
+    "lint-accepted.log",
+    "tests-accepted.log",
+    "build-accepted.log",
+    "rust-regressions.log",
+    "test1.log"
+  ],
+  "frontend": {
+    "files": 158,
+    "pass": 1429,
+    "existing_skip": 1,
+    "node_script_pass": 10
+  },
+  "test1": {
+    "pass": 256,
+    "planned": 256
+  },
+  "human_review": "ivac-3i00w",
+  "coverage_followup": "ivac-b0js3",
+  "not_qualified": [
+    "native installers",
+    "physical machining",
+    "large-job memory/latency",
+    "unsupported process/tool/fixture cases"
+  ]
+}

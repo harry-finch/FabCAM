@@ -23,3 +23,12 @@ UX/capability contracts. No algorithm, library, serialization or machine output 
 Existing inlay and two-sided plans, GEOM/NEST and consolidation remain separately scheduled.
 
 **HARD STOP — human scope/architecture approval before implementation.**
+
+## REST1 refinement — True Area Rest-Machining (2026-10-19)
+
+Existing REST1 identity/target retained, now scoped as A residual→candidate regions,
+B safe smaller-tool operation, C guided UX. [Detailed phases/contracts](SMART_WORKSHOP_PLAN.md)
+replace no existing qualified algorithm; diagnostic polygons alone remain insufficient.
+[Unified V2 priority view](V2_WORKSHOP_PRIORITIES.md) includes STEP/SMART/FIT alongside
+existing HELIX1 HIGH/VCARVE2 and other plans. Exact resource/order tradeoffs need human
+approval; this is not implementation or silent demotion of prior high-priority work.

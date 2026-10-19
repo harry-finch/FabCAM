@@ -1,0 +1,31 @@
+{
+  "source_head": "66f229ea21cccf73a76fd45d0e9f9fe3721a41a1",
+  "source_version": "0.9.0-beta.3",
+  "pipeline": 62,
+  "dirty_source": true,
+  "production_change": "OperationsList.svelte: one row-target keyboard guard",
+  "frontend": {
+    "passed": 1387,
+    "skipped": 1,
+    "node_wasm_passed": 10
+  },
+  "core_passed": 1204,
+  "focused_integration_passed": 59,
+  "fanuc_external_oracle": "absent; conditional test does not execute oracle",
+  "test1_release": {
+    "passed": 256,
+    "planned": 256,
+    "elapsed_seconds": 27.420222959
+  },
+  "test1_debug": "incomplete:137pass,4timeout,33stage_timeout,174results/256planned",
+  "candidate_collector_tests_passed": 4,
+  "candidate_generation": "not authorized/not run",
+  "existing_candidates": "beta.3/pipeline61/db5bde5d05b25328f29e27d210b7efeb8c0f429a",
+  "safety_blocker": "ivac-3xqtb",
+  "format_loading_reserve": "ivac-52tpd",
+  "human_reviews_open": [
+    "ivac-amibd",
+    "ivac-he4lt"
+  ],
+  "publication": "none; HARD STOP"
+}

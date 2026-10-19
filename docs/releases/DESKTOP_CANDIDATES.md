@@ -1,5 +1,7 @@
 # Desktop candidates — preparation checkpoint
 
+> 2026-10-19 — **Consolidation UX A–D terminée, candidats BLOQUÉS** (beta.3/pipeline62). [Bilan et preuves](UX_V1_CONSOLIDATION_2026_10_19.md). Core1204, frontend1387/1 SKIP +10 Node, intégration59 et TEST1 optimisé256/256 PASS. Un correctif clavier local ; défaut sécurité lecture/export **ivac-3xqtb** et réserve chargement/format **ivac-52tpd** soumis sans correction. Revues **ivac-amibd / ivac-he4lt OPEN**. Candidats existants beta.3/pipeline61 inchangés. Aucun commit/push/publication ni nouveau candidat. **HARD STOP pour validation.** Les notices antérieures sont historiques.
+
 2026-10-16 · FabCAM 0.9.0-beta.1 · ivac-2p53v.
 User accepted the stabilization lot and authorized desktop preparation.
 Windows 11 and Ubuntu workshop hosts become available again **Monday 19 October**,

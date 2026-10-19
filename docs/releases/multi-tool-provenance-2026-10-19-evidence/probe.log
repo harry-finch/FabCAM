@@ -1,0 +1,4 @@
+CONFIRMED: leading program-only toolId=0 rejects before simulation
+CONFIRMED: emitted synthetic/unknown op_id not in enabled-op map rejects and frees simulator
+{"auto25_4":1.6933333333333331,"auto1_5":0.1,"note":"requested cells only, before cap; no collision-miss claim"}
+All Phase A counterexample assertions passed; mock proves lookup/lifecycle only, not machine geometry.

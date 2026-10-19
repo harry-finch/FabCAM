@@ -1,0 +1,10 @@
+
+> lint
+> eslint . && prettier --check .
+
+
+/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/src/lib/components/GenerateBar.svelte
+  696:90  error  'w' is not defined  no-undef
+
+✖ 1 problem (1 error, 0 warnings)
+

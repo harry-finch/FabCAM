@@ -133,3 +133,12 @@ Source presence and passing UI tests do not establish machining correctness.
   [adding a machine](../development/ADDING_A_MACHINE.md) and
   [integration specification template](../development/MACHINE_INTEGRATION_TEMPLATE.md):
   documentation-only contract/workflow, first practical validation through ProtoMAX.
+
+- [MCP1 optional AI integration plan](../releases/MCP1_PLAN.md) and
+  [developer planning guide](../development/MCP_INTEGRATION.md): POST-V1.5/V2+,
+  read-only first, shared authority/privacy and controlled later editing; not implemented.
+
+- [Unified V2 workshop priorities](../releases/V2_WORKSHOP_PRIORITIES.md),
+  [STEP source/extraction plan](../releases/STEP_PLAN.md) and
+  [Smart Workshop contracts](../releases/SMART_WORKSHOP_PLAN.md): PLANNED STEP1/2,
+  SMART1/2, FIT1 and refined REST1; MULTI1 links existing ARCH-MACH.

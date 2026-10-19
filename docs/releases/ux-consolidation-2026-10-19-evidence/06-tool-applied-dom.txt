@@ -1,0 +1,197 @@
+- navigation "Main areas":
+  - text: FabCAM
+  - button "Project"
+  - 'button "Machine: LOT A — SOFTWARE REVIEW ONLY"':
+    - generic: "Machine:"
+    - generic: LOT A — SOFTWARE REVIEW ONLY
+  - button "Tool library"
+  - 'button "Tool for selected operation Pocket — source union retained: T2 · Project cutter — Ø3 mm — long name for identity review — edit project tool"':
+    - generic: "Op. tool:"
+    - generic: T2 · Project cutter — Ø3 mm — long name for identity review
+  - button "Settings"
+  - button "Help"
+  - button "About"
+- generic "File":
+  - text: File
+- button "Open"
+- button "Save"
+- generic "saved-preparation.ivac-project.json — Unsaved changes":
+  - generic: saved-preparation.ivac-project.json
+  - generic: Unsaved changes
+- button "Undo":
+- button "Redo" [disabled]:
+- button "Regenerate toolpaths"
+- generic "Wall-clock generation time, including request preparation and result processing. Preview simulation is separate; this is not estimated machining time.":
+  - text: Project changed — result obsolete after
+  - generic: 0.0 s
+- button "Download .ngc" [disabled]
+- button "Carved stock STL"
+- generic: 2 obj · 33 offsets · 431 moves
+- button "Time breakdown": ⏱ 13 min 9 s
+- 'button "Warnings: stale — re-Generate"':
+  - text: "Warnings: stale — re-Generate"
+- generic "Remaining material":
+  - generic: Remaining material
+  - generic: Out of date — regenerate
+- generic "Show / hide the translucent fill that marks each pocket operation's machined region.":
+  - checkbox "Regions" [checked]
+  - generic: Regions
+- generic "Show toolpath lines and direction arrows. Stock simulation stays active.":
+  - checkbox "Toolpaths" [checked]
+  - generic: Toolpaths
+- tablist "Viewport mode":
+  - tab "2D"
+  - tab "3D" [selected]
+- main:
+  - button "Fit view to scene": ⌖
+  - generic "Pocket — source union retained"
+  - button "Previous op (#1 Pocket — source union retained)": ⏮
+  - button "Play": ▶
+  - button "Next op" [disabled]: ⏭
+  - slider "Toolpath playback position": "1"
+  - 'button "Jump to #1 Pocket — source union retained"'
+  - button "Rapid through material at segment 0, x=59.5 y=58.1": ✕
+  - text: ×
+  - spinbutton "Playback speed multiplier": "1"
+  - generic "Path distance · not machining time": 431/431
+  - generic: Path distance · not machining time
+  - button "▶ Program 713 lines":
+    - text: ▶ Program
+    - generic: 713 lines
+  - separator "Drag to resize the side panel · double-click to reset"
+  - complementary:
+    - region "Stock":
+      - button "▸ Stock 120 × 120 × 10 mm":
+        - generic: ▸
+        - generic: Stock
+        - generic "Current stock dimensions (Length × Width × Thickness) in mm": 120 × 120 × 10 mm
+    - region "Drawings":
+      - complementary:
+        - button "Activate layers panel": ▸
+        - checkbox "Toggle visibility of all imported layers" [checked]
+        - generic: Drawings
+        - generic "1 imported drawing": "1"
+        - button "+ Add"
+    - region "Text":
+      - complementary:
+        - button "Activate text panel": ▸
+        - generic: Text
+        - generic: "0"
+        - button "Add text": + Add
+    - region "Operations":
+      - button "Collapse operations panel" [expanded]: ▾
+      - generic: Operations
+      - generic "Number of operations": "1"
+      - button "Operation templates":
+        - text: Templates
+      - button "Add operation": +
+      - listbox:
+        - option "Pocket — Removes material inside a closed boundary. Choose Cascade/Zigzag/Spiral/Trochoidal strategy. Pocket — source union retained Project cutter — Ø3 mm — long name for identity review ⚠ Duplicate operation Pocket — source union retained Delete operation Pocket — source union retained" [selected]:
+          - generic: ⋮⋮
+          - checkbox [checked]
+          - generic: ▾
+          - generic "Pocket — Removes material inside a closed boundary. Choose Cascade/Zigzag/Spiral/Trochoidal strategy.": ▣
+          - generic "Pocket — source union retained"
+          - generic "Project cutter — Ø3 mm — long name for identity review"
+          - generic "Project changed since the last Generate — re-Generate to refresh this operation's program.": ⚠
+          - button "Duplicate operation Pocket — source union retained": ⎘
+          - button "Delete operation Pocket — source union retained": ×
+        - button "Save as template…"
+        - complementary:
+          - generic: Name
+          - textbox "Name": Pocket — source union retained
+          - generic "Physical cutter from the tools available on this machine. Supplies cutter geometry and fallback cutting defaults.":
+            - generic: Tool
+            - combobox "Tool Edit this project tool":
+              - option "#2 Project cutter — Ø3 mm — long name for identity review (4.01 mm)" [selected]
+            - button "Edit this project tool" [active]: ⚙
+          - generic "Optional finish tool. When different from the rough tool, the pipeline runs the bulk cascade with the rough tool, emits a T<n> M6 tool change, then walks the wall ring with this smaller / sharper finish tool at its finish-set feed/speed. Empty = single-tool (the rough tool also defines the wall).":
+            - generic: Finish tool
+            - combobox "Finish tool":
+              - option "— same as rough —" [selected]
+              - option "#2 Project cutter — Ø3 mm — long name for identity review (4.01 mm)" [disabled]
+          - group "Geometry":
+            - generic: Geometry
+            - generic "Choose drawing contours for this operation. Selected geometry is a saved set of contour IDs, not a live canvas selection. Use the selection button to bind new contours.":
+              - generic: Use geometry from
+              - combobox "Use geometry from":
+                - option "All available geometry"
+                - option "Specific layers" [selected]
+                - option "Selected geometry"
+            - generic "Select one layer name across the drawings. Saved multiple-layer bindings are preserved; choosing another layer replaces that binding. SVG groups are flattened into the synthetic svg layer.":
+              - generic: Layer
+              - combobox "Layer":
+                - option "— pick a layer —" [disabled]
+                - option "SVG geometry · square_100.svg" [selected]
+                - option "Stock outline"
+            - generic "Unites selected closed contours using the nonzero winding rule. Open contours do not form regions.":
+              - generic: Contour interpretation
+              - combobox "Contour interpretation":
+                - option "Automatic — nested contours"
+                - option "Union" [selected]
+                - option "Difference"
+                - option "Intersection"
+                - option "Exclusive areas (XOR)"
+                - option "Separate contours"
+            - paragraph: Unites selected closed contours using the nonzero winding rule. Open contours do not form regions.
+            - button "Select one or more objects in the 2D canvas first to enable this." [disabled]: Set sources from selection
+          - group "Cut":
+            - generic: Cut
+            - generic: Final Z
+            - spinbutton "Final Z mm": "-1"
+            - generic: mm
+            - generic "Advanced depth and entry"
+            - option "conventional" [selected]
+            - option "climb"
+            - option "conventional" [selected]
+            - option "climb"
+            - option "direct" [selected]
+            - option "ramp"
+            - option "helix"
+          - region "Cutting parameters":
+            - heading "Cutting parameters" [level=3]
+            - generic: Spindle
+            - spinbutton "Spindle rpm": "18000"
+            - generic: rpm
+            - generic: Feed
+            - spinbutton "Feed mm/min Modified": "1100"
+            - generic: mm/min
+            - generic "Manually edited cutting value":
+              - generic: Modified
+            - generic: Plunge
+            - spinbutton "Plunge mm/min": "200"
+            - generic: mm/min
+            - generic: Pass depth
+            - spinbutton "Pass depth mm": "0.5"
+            - generic: mm
+            - generic: Stepover
+            - spinbutton "Stepover %": "50.0"
+            - generic: "%"
+            - generic "Finishing parameters"
+            - button "Save as preset…"
+            - button "Review recommendation…"
+          - generic "▸ Tabs Off":
+            - text: ▸ Tabs
+            - generic: "Off"
+          - option "rectangle" [selected]
+          - option "ramp"
+          - group "Pocket Outside":
+            - generic: Pocket Outside
+            - paragraph: "Convert this Pocket into a Pocket Outside operation: the pipeline auto-derives a frame around the selection at generate time and carves the area BETWEEN the frame and the selection."
+            - button "Convert to Pocket Outside →"
+          - group "Pocket":
+            - generic: Pocket
+            - generic: Strategy
+            - combobox "Strategy":
+              - option "cascade (concentric)" [selected]
+              - option "zigzag (raster fill)"
+              - option "spiral"
+              - option "Trochoidal (load-limiting)"
+              - option "Halfpipe (slot, profiled floor)"
+            - paragraph: Cascade retracts between contours. Spiral connects them where boundary/island checks allow; otherwise it falls back to separate contours.
+            - generic "Pocket overlap"
+          - generic "▸ Advanced feed behaviour"
+          - generic "▸ Group (none)":
+            - text: ▸ Group
+            - generic: (none)
+- contentinfo "bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts"

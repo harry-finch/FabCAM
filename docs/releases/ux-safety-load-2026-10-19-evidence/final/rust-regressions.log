@@ -1,0 +1,94 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `release` profile [optimized] target(s) in 1m 08s
+     Running tests/cps_posts.rs (target/release/deps/cps_posts-20264e4bdefbc54f)
+
+running 5 tests
+test fanuc_refs_snapshot ... ok
+test two_sided_cps_refuses_unqualified_output ... ok
+test legacy_zero_clearance_is_refused_when_stock_is_declared ... ok
+test bundled_grbl_snapshot ... ok
+test bundled_grbl_geometry_parity ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/safe_z_extended.rs (target/release/deps/safe_z_extended-faf5a5c6047f7965)
+
+running 15 tests
+test oracle::variable_radius_and_crossing_entry_are_checked ... ok
+test distant_or_above_body_fixtures_remain_clear ... ok
+test pipeline_checks::declared_flute_is_checked_even_when_holder_is_unknown ... ok
+test constant_height_holder_crossing_and_output_uncertainty_band ... ok
+test oracle::accepts_tangent ... ok
+test oracle::detects_interior_collision ... ok
+test sloped_rapid_cannot_hide_holder_collision_below_high_endpoint ... ok
+test oracle::decoder_preserves_unknown_initial_axes_and_rejects_unknown_motion ... ok
+test pipeline_checks::progress_stream_collision_never_signals_done_and_cancel_never_publishes ... ok
+test pipeline_checks::declared_complete_holder_blocks_where_unknown_body_only_warns ... ok
+test pipeline_checks::collisions_refuse_output_preserve_preview_and_streams_emit_zero_bytes ... ok
+test pipeline_checks::characterize_partial_body_metadata_is_not_complete_clearance_evidence ... ok
+test pipeline_checks::decoded_two_tool_transitions_clear_stock_but_initial_pose_stays_unknown ... ok
+test pipeline_checks::fixture_frame_translation_and_cache_mutation_preserve_warning_semantics ... ok
+test pipeline_checks::shopbot_unqualified_machine_stations_and_parking_stay_refused ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/shopbot_m2_post.rs (target/release/deps/shopbot_m2_post-3b0bf5b10a72140c)
+
+running 27 tests
+test m3_unverified_clearance_refuses_sbp_export ... ok
+test peck_drilling ... ok
+test cam3_tab_at_entry_cannot_be_plunged_through ... ok
+test m4_lab_spindle_runs_real_cam_and_preserves_manual_default ... ok
+test cam3_tab_width_and_absolute_height_override_preserve_material ... ok
+test square_profile ... ok
+test circular_profile ... ok
+test multiple_operations ... ok
+test ux1_curved_ramp_exports_instead_of_rejecting_varying_z_arc ... ok
+test cam4_pocket_residual_tracks_emitted_path_and_work_origin ... ok
+test ux1_direct_tabs_and_leads_remain_explicit_supported_choices ... ok
+test ux1_explicit_geometry_and_stock_translation_preserves_entry_preview ... ok
+test cam3_curved_tabs_preserve_center_and_compensated_radius ... ok
+test ux1_circular_ramp_chords_obey_post_tolerance_and_direction ... ok
+test ux2_invalid_origin_and_obstacle_geometry_fail_before_output ... ok
+test ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct ... ok
+test ux2_unqualified_two_sided_shopbot_scaffold_blocks_before_invalid_output ... ok
+test unsupported_machine_policies_fail ... ok
+test ux1_unqualified_entry_and_origin_combinations_fail_explicitly ... ok
+test ux1_final_preview_matches_emitted_xyz_lines_for_profile_and_pocket ... ok
+test ux2_polar_drill_center_and_explicit_approach_translate_with_the_drawing ... ok
+test ux1_pocket_islands_and_open_profile_helix_never_gain_silent_machine_fallback ... ok
+test cam3_direct_entry_tab_lead_direction_matrix_has_output_preview_parity ... ok
+test island_pocket ... ok
+test ux1_ramps_qualify_simple_curved_concave_open_and_island_sources ... ok
+test ux2_fixture_collision_and_pocket_regions_stay_in_the_same_work_frame ... ok
+test ux2_work_zero_translates_actual_output_without_changing_intent_or_depths ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.79s
+
+     Running tests/test1_properties.rs (target/release/deps/test1_properties-a28bea547eac3aa1)
+
+running 5 tests
+test test1_case ... ignored, Run via scripts/test1/run.py: process watchdog, seeds and evidence required
+test oracle::accepts_tangent ... ok
+test oracle::variable_radius_and_crossing_entry_are_checked ... ok
+test oracle::decoder_preserves_unknown_initial_axes_and_rejects_unknown_motion ... ok
+test oracle::detects_interior_collision ... ok
+
+test result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/vcarve_qualification.rs (target/release/deps/vcarve_qualification-1104b9d7e8e2ea7f)
+
+running 10 tests
+test a3_short_chain_reaches_target_at_both_ends ... ok
+test a2_interpolated_ramp_never_exceeds_local_target ... ok
+test continuous_clearance_catches_between_sample_collision ... ok
+test a1_perimeter_honors_pass_step_and_depth_limited_radius ... ok
+test invalid_inputs_and_physical_limits_fail_closed ... ok
+test reference_cones_caps_and_flat_tips ... ok
+test medial_axis_is_variable_finite_deterministic_and_does_not_clear_plateau ... ok
+test circle_islands_and_disconnected_regions_are_explicit ... ok
+test topology_matrix_and_winding ... ok
+test a4_decoded_output_preview_generic_parity_and_persistence ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+

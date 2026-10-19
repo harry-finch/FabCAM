@@ -1,0 +1,23 @@
+✘ [ERROR] Could not resolve "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/vitest.config.ts"
+
+failed to load config from /Users/mugen/Documents/01_Projets/FabCAM/ivacam/vitest.config.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯
+Error: Build failed with 1 error:
+error: Could not resolve "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/vitest.config.ts"
+    at failureErrorWithLog (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:1472:15)
+    at /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:943:7)
+    at /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+
+

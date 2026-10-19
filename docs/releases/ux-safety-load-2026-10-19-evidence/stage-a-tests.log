@@ -1,0 +1,24 @@
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ❯ src/lib/services/ux-safety-load-repro.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/services/ux-safety-load-repro.test.ts [ src/lib/services/ux-safety-load-repro.test.ts ]
+Error: ENOENT: no such file or directory, open '/Users/mugen/Documents/01_Projets/FabCAM/docs/releases/ux-c-2026-10-19-evidence/saved-preparation.ivac-project.json'
+ ❯ src/lib/services/ux-safety-load-repro.test.ts:26:25
+     24| vi.mock('@tauri-apps/plugin-fs', () => ({ writeTextFile: io.write }));
+     25| import { exportGeneratedGcode } from './file_ops';
+     26| const file = JSON.parse(readFileSync(new URL('../../../../../docs/rele…
+       |                         ^
+     27| const collision: SimDiagnostics = { warnings: [{ kind: 'rapid_through_…
+     28| const cpsPost = { source: 'bundled', bundledId: 'shopbot', properties:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  11:53:01
+   Duration  270ms (transform 66ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 38ms)
+

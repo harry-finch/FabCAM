@@ -1,0 +1,12 @@
+{
+  "version": "0.9.0-beta.3",
+  "transport": "wasm",
+  "capabilities": [
+    "import-dxf",
+    "generate-gcode",
+    "feeds-speeds",
+    "post-linuxcnc",
+    "post-grbl",
+    "post-hpgl"
+  ]
+}

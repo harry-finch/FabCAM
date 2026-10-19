@@ -1,0 +1,938 @@
+{
+ "A.shopbot.single.6mm": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=6.0000; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 582,
+  "command_digest": "ce126a58b9b4834619165acbbed1666334564b7b00d81051c4fc70728d0971d2"
+ },
+ "A.shopbot.single.3.175mm": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=3.1750; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 1400,
+  "command_digest": "c43fe780faa958d0d1ecd0e0e2b19fc5b6f8247d4ab4ebb2e19ef015920ada51"
+ },
+ "A.shopbot.single.0.8mm": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=0.8000; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 76846,
+  "command_digest": "b88e9733eb88fc474314daf557c5cb8ee9303fb277184d4a56a0cfa359a69fdc"
+ },
+ "A.shopbot.single.1/64in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=0.3969; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 251938,
+  "command_digest": "a99d23100f4aeed3df951a8d97a424e4f5a9862f6048036f10637a997dea94df"
+ },
+ "A.shopbot.single.1/32in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=0.7938; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 76574,
+  "command_digest": "91d3d4c8fe2fa9c839ee16284592c2f4cae9950dd3e4674c489ac57637016b34"
+ },
+ "A.shopbot.single.3/64in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=1.1906; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 31718,
+  "command_digest": "0dd203522faac5bdf681e69525027ac27b7dac9899ed296cc6e45aca0e733f84"
+ },
+ "A.shopbot.single.1/16in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=1.5875; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 14408,
+  "command_digest": "f242e55878addb0add2edb698895e141f29f65b1d830373f4c65a2e62e4e4aea"
+ },
+ "A.shopbot.single.3/32in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=2.3813; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 3075,
+  "command_digest": "386070efacdbf6e1f5f9e1e7e27d884442d871521ee9dbe230c18729809f0587"
+ },
+ "A.shopbot.single.1/8in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=3.1750; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 1400,
+  "command_digest": "c43fe780faa958d0d1ecd0e0e2b19fc5b6f8247d4ab4ebb2e19ef015920ada51"
+ },
+ "A.shopbot.single.5/32in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=3.9688; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 1288,
+  "command_digest": "8757f02162b08a92140132333e26d21af3ae1750fb8de9394de56926a291fc79"
+ },
+ "A.shopbot.single.3/16in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=4.7625; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 896,
+  "command_digest": "85812a94b2eb5bf93c4011d5dc765ee97654e7d13739211e5c76dd99ab4b60a3"
+ },
+ "A.shopbot.single.7/32in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=5.5563; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 435,
+  "command_digest": "406cf45691927a75d146041f9a1a10e69a96829721b45a41ba1fc7f7595d864a"
+ },
+ "A.shopbot.single.1/4in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=6.3500; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 325,
+  "command_digest": "cc49241911814a67dd6bad20b36a6a326b70ab15be58c6f0661ffc5bf4387532"
+ },
+ "A.shopbot.single.9/32in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=7.1438; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 259,
+  "command_digest": "4a4b8c35c2f8fa547f49e0a332c7439771e9481b72f162a8562e99e355c6d6af"
+ },
+ "A.shopbot.single.1/2in": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=12.7000; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1"
+  ],
+  "command_line_count": 28,
+  "command_digest": "a3472109f306e4e047c6fcd5902eb55783209641a4e60b776fd5a9a4ba840542"
+ },
+ "A.shopbot.rough6_finish3_32": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "' FABTOOL/1 REQUEST 0 1",
+   "' Spindle OFF and stationary. Load tool 1 D=2.0000; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 0 1",
+   "' toolchange: finish pass with tool 2",
+   "' FABTOOL/1 REQUEST 1 2",
+   "' Spindle OFF and stationary. Load tool 2 D=2.3813; set work Z zero for this tool. Return to clearance before OK.",
+   "' FABTOOL/1 ACTIVE 1 2"
+  ],
+  "command_line_count": 6843,
+  "command_digest": "53a19643777c68cc02410c0602e667f28b53fa595b71bf0eceefe27af811b2c9"
+ },
+ "B.linuxcnc.m0.Fraise 1mm": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (Fraise 1mm))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.Fraise filetage M6": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (Fraise filetage M6))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.Taraud M06": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (Taraud M06))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.T2 special": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (T2 special))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.outil t3": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (outil t3))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.Fraise (6mm)": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (Fraise (6mm)))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.Fraise ø3 ünïcødé": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (Fraise ø3 ünïcødé))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.x) T5 (y": {
+  "authority": "unavailable",
+  "diagnostics": [
+   "Unexpected tool selection in manual/ignored envelope"
+  ],
+  "bindings": 0,
+  "refs": [
+   null
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (x) T5 (y))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.M6": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (M6))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.m0.a;b M6": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (a;b M6))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "B.linuxcnc.atc.Fraise 1mm": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(toolchange: T1 (2mm endmill) for op 1 (TEST1 SOFTWARE ONLY))",
+   "(FABTOOL/1 REQUEST 1)",
+   "T1 M6",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "T2 M6",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "afb6792107b702d3cac5c01f68b3b1ba64f160815ffc82c127fb3850b26dc811"
+ },
+ "B.linuxcnc.atc.Fraise filetage M6": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(toolchange: T1 (2mm endmill) for op 1 (TEST1 SOFTWARE ONLY))",
+   "(FABTOOL/1 REQUEST 1)",
+   "T1 M6",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "T2 M6",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "afb6792107b702d3cac5c01f68b3b1ba64f160815ffc82c127fb3850b26dc811"
+ },
+ "B.grbl.m0.Fraise 1mm": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (Fraise 1mm)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.Fraise filetage M6": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (Fraise filetage M6)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.Taraud M06": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (Taraud M06)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.T2 special": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (T2 special)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.outil t3": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (outil t3)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.Fraise (6mm)": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (Fraise (6mm))",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.Fraise ø3 ünïcødé": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (Fraise ø3 ünïcødé)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.x) T5 (y": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (x) T5 (y)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.M6": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (M6)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.m0.a;b M6": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; FABTOOL/1 REQUEST 1",
+   "; pause: swap to tool 1 (2mm endmill)",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; pause: swap to tool 2 (a;b M6)",
+   "M0",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "0f60fc87b29d166f09f9c48bc0e54902d65c3facbe2185def6995795a5d01a50"
+ },
+ "B.grbl.atc.Fraise 1mm": {
+  "authority": "planned",
+  "diagnostics": [
+   "Change to tool 1 lacks exactly one owned `T1 M6` request",
+   "Change to tool 2 lacks exactly one owned `T2 M6` request",
+   "Tool intent or movement coverage is not resolved for this output"
+  ],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; toolchange: T1 (2mm endmill) for op 1 (TEST1 SOFTWARE ONLY)",
+   "; FABTOOL/1 REQUEST 1",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6780,
+  "command_digest": "cb65783867ece51a0ff78cf8cf3404ebb6bed579b1b85f5a6c0daabae68440e2"
+ },
+ "B.grbl.atc.Fraise filetage M6": {
+  "authority": "planned",
+  "diagnostics": [
+   "Change to tool 1 lacks exactly one owned `T1 M6` request",
+   "Change to tool 2 lacks exactly one owned `T2 M6` request",
+   "Tool intent or movement coverage is not resolved for this output"
+  ],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "; FABTOOL/1 PRELOAD 1",
+   "; toolchange: T1 (2mm endmill) for op 1 (TEST1 SOFTWARE ONLY)",
+   "; FABTOOL/1 REQUEST 1",
+   "; FABTOOL/1 ACTIVE 1",
+   "; toolchange: finish pass with tool 2",
+   "; FABTOOL/1 REQUEST 2",
+   "; FABTOOL/1 ACTIVE 2"
+  ],
+  "command_line_count": 6780,
+  "command_digest": "cb65783867ece51a0ff78cf8cf3404ebb6bed579b1b85f5a6c0daabae68440e2"
+ },
+ "B.linuxcnc.ignore.multi": {
+  "authority": "planned",
+  "diagnostics": [
+   "Ignored change to tool 2 cannot establish the mounted tool",
+   "Tool intent or movement coverage is not resolved for this output"
+  ],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6778,
+  "command_digest": "e9f0bb995ee655e2573bbd6a4a78c541825a908ea379a5a2e0d9b7c07cf7a43c"
+ },
+ "C.linuxcnc.single": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)"
+  ],
+  "command_line_count": 6756,
+  "command_digest": "8811fb093ccca4cdc3a86fe036a74d37bffb9c92efc61a4ed9a97752ddd96b30"
+ },
+ "C.linuxcnc.single.homing": {
+  "authority": "planned",
+  "diagnostics": [
+   "Homing (G28), probing (G38.2) and raw G-code includes are not modelled by the program preview",
+   "Tool intent or movement coverage is not resolved for this output"
+  ],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)"
+  ],
+  "command_line_count": 6759,
+  "command_digest": "e074c63550d376eddd7b85533d5a9f68e4f5475c03c151d3e633c791eac6b5d2"
+ },
+ "C.linuxcnc.single.homing_noretract": {
+  "authority": "planned",
+  "diagnostics": [
+   "Homing (G28), probing (G38.2) and raw G-code includes are not modelled by the program preview",
+   "Tool intent or movement coverage is not resolved for this output"
+  ],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)"
+  ],
+  "command_line_count": 6758,
+  "command_digest": "5859548061a6c7c29592e0f388d783d69eb5894f534b6df5b5eae99e437df43b"
+ },
+ "C.linuxcnc.single.empty_profile": {
+  "authority": "planned",
+  "diagnostics": [
+   "Custom post profiles (templates, axes, formats) are not certified for resolved tool provenance",
+   "Tool intent or movement coverage is not resolved for this output"
+  ],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)"
+  ],
+  "command_line_count": 6756,
+  "command_digest": "8811fb093ccca4cdc3a86fe036a74d37bffb9c92efc61a4ed9a97752ddd96b30"
+ },
+ "C.linuxcnc.single.comments_false": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 1,
+  "refs": [
+   1
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)"
+  ],
+  "command_line_count": 6756,
+  "command_digest": "8811fb093ccca4cdc3a86fe036a74d37bffb9c92efc61a4ed9a97752ddd96b30"
+ },
+ "C.linuxcnc.multi.comments_false": {
+  "authority": "resolved",
+  "diagnostics": [],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (Fraise 1mm))",
+   "M0",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "ae37a46a53f249ae561d2b947c955987962ab23226b71afa9f4cfaa8243f9b02"
+ },
+ "C.linuxcnc.multi.optional_stop": {
+  "authority": "planned",
+  "diagnostics": [
+   "Manual change to tool 2 lacks a standalone M0 stop (an optional stop may be skipped)",
+   "Tool intent or movement coverage is not resolved for this output"
+  ],
+  "bindings": 2,
+  "refs": [
+   1,
+   2
+  ],
+  "tool_lines": [
+   "(FABTOOL/1 PRELOAD 1)",
+   "(FABTOOL/1 REQUEST 1)",
+   "(pause: swap to tool 1 (2mm endmill))",
+   "(FABTOOL/1 ACTIVE 1)",
+   "; toolchange: finish pass with tool 2",
+   "(FABTOOL/1 REQUEST 2)",
+   "(pause: swap to tool 2 (Fraise 1mm))",
+   "M1",
+   "(FABTOOL/1 ACTIVE 2)"
+  ],
+  "command_line_count": 6782,
+  "command_digest": "c1e863514589e3b3c5c45518b75491e6afa3e4e5a017357d3649a1a4783fa79a"
+ }
+}

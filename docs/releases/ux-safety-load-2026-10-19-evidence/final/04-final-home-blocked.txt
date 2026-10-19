@@ -1,0 +1,111 @@
+Browser tab: 7, Title: "FabCAM v0.9.0-beta.3 (v0.4.0-40-g66f229e-dirty)", URL: "http://127.0.0.1:18803/?api=http%3A%2F%2F127.0.0.1%3A18804".
+1 AXWebArea FabCAM v0.9.0-beta.3 (v0.4.0-40-g66f229e-dirty), URL: 127.0.0.1:18803/?api=http%3A%2F%2F127.0.0.1%3A18804
+	2 container app
+		3 container Main areas
+			4 text FabCAM
+			5 button Project
+			6 button Description: Machine: LOT A — SOFTWARE REVIEW ONLY, Help: LOT A — SOFTWARE REVIEW ONLY — Active machine, its tooling, and its settings
+				7 text Machine:
+				8 text LOT A — SOFTWARE REVIEW ONLY
+			9 button Tool library, Help: The shop's tool inventory
+			10 button Settings, Help: App settings — theme, sim safety, performance
+			11 button Help, Help: Keyboard & mouse shortcuts and usage help
+			12 button About, Help: Version, license, acknowledgements
+		80 container
+			81 button (collapsed) File, Secondary Actions: Expand
+				82 text File
+		15 button Open, Help: Open a drawing (DXF / SVG) or a saved .ivac-project.json (Ctrl+O)
+		16 button Save, Help: Save the current project (Ctrl+S)
+		17 container saved-preparation.ivac-project.json — Saved project
+			18 text saved-preparation.ivac-project.json Saved project
+		19 button (disabled) Description: Undo, Help: Nothing to undo
+		20 button (disabled) Description: Redo, Help: Nothing to redo
+		83 button Generate toolpaths, Help: Run the CAM pipeline and produce a toolpath. Reads the current ops, tools, stock, and machine — output is cached so unchanged ops re-emit instantly.
+		84 container Wall-clock generation time, including request preparation and result processing. Preview simulation is separate; this is not estimated machining time.
+			85 text Generated in  0.0 s
+		86 text Full-program simulation complete
+		87 button (disabled) Download .ngc, Help: Save the generated toolpath to disk in the selected dialect's file extension.
+		88 button Carved stock STL, Help: Export the simulated (carved) stock as a binary STL mesh.
+		89 text 2 obj · 33 offsets · 431 moves
+		90 button Time breakdown
+		91 button (collapsed) 2 warning(s) (1 critical), Help: Click for details, Secondary Actions: Expand
+		92 container Remaining material
+			93 text Remaining material Not analyzed
+			94 button (collapsed) Analysis details, Secondary Actions: Expand
+				95 text Analysis details
+		96 container Show / hide the translucent fill that marks each pocket operation's machined region.
+			97 checkbox (settable, integer) Description: Regions, Value: 1
+			98 text Regions
+		99 container Show toolpath lines and direction arrows. Stock simulation stays active.
+			100 checkbox (settable, integer) Description: Toolpaths, Value: 1
+			101 text Toolpaths
+		23 tab group Viewport mode
+			24 tab (selectable, settable, boolean) 2D, Value: 0
+			25 tab (selected, settable, boolean) 3D, Help: Show the 3D preview. Toolpath visibility is controlled separately., Value: 1
+		26 container
+			102 button Description: Fit view to scene, Help: Fit view to scene (F)
+			103 text Toolpath playback
+			104 button Previous op (#1 Pocket — source union retained)
+			105 button Play
+			106 button Next op (#1 Pocket — source union retained)
+			107 container
+				108 slider (settable, integer) Description: Toolpath playback position, Value: 0, Help: Scrub: the 3D heightfield exactly tracks the playhead — backstep restores the nearest checkpoint and replays only the remainder. Toggle "Exact 3D rewind" off in Settings → Performance for the fastest scrubbing at the price of time-accurate rewind.
+				109 button Description: Jump to #1 Pocket — source union retained, Help: #1 Pocket — source union retained
+			110 container
+				111 text ×
+				112 stepper (settable, integer) Description: Playback speed multiplier, Help: Playback speed, Value: 1
+			113 text 1/431
+			114 text Path distance · not machining time
+			115 button ▶ Program 713 lines, Help: Show / hide the generated program. Line synchronization is available only when the post supplies a matching index.
+				116 text ▶ Program
+				117 text 713 lines
+			32 splitter Drag to resize the side panel · double-click to reset
+			33 container Stock
+				34 button (collapsed) ▸ Stock 120 × 120 × 10 mm, Help: Expand stock settings, Secondary Actions: Expand
+					35 text ▸
+					36 text Stock
+					37 text 120 × 120 × 10 mm
+			38 container Drawings
+				39 container
+					40 button Description: Collapse layers panel, Help: Collapse layers
+					41 checkbox (settable, integer) Description: Toggle visibility of all imported layers, Help: Show or hide all imported layers in drawing views and picking. CAM sources are unchanged., Value: 1
+					42 text Drawings
+					43 text 1
+					44 pop up button (collapsed) + Add, Help: Add a drawing or editable text geometry, Secondary Actions: Expand
+					45 button (collapsed) Snap to, Secondary Actions: Expand
+						46 text Snap to
+					47 heading IMPORTED FILES, Value: 3
+						48 text IMPORTED FILES
+					49 text square_100.svg 4 segments · 1 layer
+					50 button (collapsed) ▸ File transform, Secondary Actions: Expand, Help: Layout convenience: translate / rotate / scale / mirror this drawing. Pivot for rotate / scale / mirror is the drawing's original bbox center.
+						51 text ▸
+						52 text File transform
+					53 heading LAYERS 1, Value: 3
+						54 text LAYERS  1
+					55 text Hidden layers are still used by CAM.
+					56 content list Layers
+						57 container
+							58 checkbox Description: Hide layer svg, Help: Hide layer svg in drawing views and picking. CAM sources are unchanged., Value: 1
+							59 image Imported layer color: ACI 7 (read-only; drawing palette). Not a toolpath color.
+							60 text svg
+							61 text 4 seg
+							62 button Description: Delete layer svg, Help: Delete this layer and its geometry from all imported drawings. Undo is available.
+				63 button Drawing cleanup
+				64 button (disabled) Corner relief, Help: Select closed contours, then choose the corners to relieve
+				65 text Click a contour edge in the drawing, then open Corner relief.
+			66 container Text
+				67 container
+					68 button Description: Activate text panel, Help: Expand text panel
+					69 text Text 0
+					70 button Description: Add text, Help: Add text engraving (T)
+			71 container Operations
+				72 container
+					73 button (collapsed) Description: Activate operations panel, Help: Expand operations panel, Secondary Actions: Expand
+					74 text Operations
+					75 text 1
+					76 button Operation templates
+					77 button Add operation
+		78 container
+			79 text bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts
+
+The focused UI element is 108 slider (settable, integer) Description: Toolpath playback position, Value: 0, Help: Scrub: the 3D heightfield exactly tracks the playhead — backstep restores the nearest checkpoint and replays only the remainder. Toggle "Exact 3D rewind" off in Settings → Performance for the fastest scrubbing at the price of time-accurate rewind.

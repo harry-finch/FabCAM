@@ -1,0 +1,113 @@
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ❯ src/lib/services/ux-safety-load-repro.test.ts (5 tests | 3 failed) 6ms
+   × P0: actual export service must reject an already known full-program collision 3ms
+     → expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "/not-written.ngc",
+      "G0 X1
+    ",
+    ]
+
+
+Number of calls: 1
+
+   × P0: Home must not clear the program block or report critical warning 1ms
+     → expected undefined to be defined
+     → expected +0 to be 1 // Object.is equality
+   × P1: real restore/save must not inherit an absent optional post 1ms
+     → expected { source: 'bundled', …(2) } to be undefined
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/services/ux-safety-load-repro.test.ts > P0: actual export service must reject an already known full-program collision
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "/not-written.ngc",
+      "G0 X1
+    ",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/lib/services/ux-safety-load-repro.test.ts:39:24
+     37| it('P0: actual export service must reject an already known full-progra…
+     38|   await exportGeneratedGcode('linuxcnc');
+     39|   expect(io.write).not.toHaveBeenCalled();
+       |                        ^
+     40| });
+     41| it('P0: Home must not clear the program block or report critical warni…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/lib/services/ux-safety-load-repro.test.ts > P0: Home must not clear the program block or report critical warning
+AssertionError: expected undefined to be defined
+ ❯ src/lib/services/ux-safety-load-repro.test.ts:46:63
+     44|   expect(exportSafetyProblem(status(), 'front', policy)).toBeDefined();
+     45|   setSimDiagnostics(io.project, { warnings: [] }); // Driver publishes…
+     46|   expect.soft(exportSafetyProblem(status(), 'front', policy)).toBeDefi…
+       |                                                               ^
+     47|   expect(workshopWarnings([], io.project.gen.simDiagnostics?.warnings …
+     48| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/lib/services/ux-safety-load-repro.test.ts > P0: Home must not clear the program block or report critical warning
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/lib/services/ux-safety-load-repro.test.ts:47:83
+     45|   setSimDiagnostics(io.project, { warnings: [] }); // Driver publishes…
+     46|   expect.soft(exportSafetyProblem(status(), 'front', policy)).toBeDefi…
+     47|   expect(workshopWarnings([], io.project.gen.simDiagnostics?.warnings …
+       |                                                                                   ^
+     48| });
+     49| it('P1: real restore/save must not inherit an absent optional post', (…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/lib/services/ux-safety-load-repro.test.ts > P1: real restore/save must not inherit an absent optional post
+AssertionError: expected { source: 'bundled', …(2) } to be undefined
+
+- Expected: 
+undefined
+
++ Received: 
+Object {
+  "bundledId": "shopbot",
+  "properties": Object {},
+  "source": "bundled",
+}
+
+ ❯ src/lib/services/ux-safety-load-repro.test.ts:52:55
+     50|   expect(file.machine.cpsPost).toBeUndefined();
+     51|   restoreProject(io.project, structuredClone(file));
+     52|   expect(snapshotProject(io.project).machine.cpsPost).toBeUndefined();
+       |                                                       ^
+     53| });
+     54| it('P1 control: explicitly authored inactive CPS data is preserved', (…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 2 passed (5)
+   Start at  11:53:07
+   Duration  240ms (transform 61ms, setup 0ms, collect 80ms, tests 6ms, environment 0ms, prepare 30ms)
+

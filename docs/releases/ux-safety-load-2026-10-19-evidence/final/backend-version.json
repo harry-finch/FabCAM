@@ -1,0 +1,14 @@
+{
+  "version": "0.9.0-beta.3",
+  "transport": "rust-server",
+  "capabilities": [
+    "import-dxf",
+    "generate-gcode",
+    "feeds-speeds",
+    "stream-gcode",
+    "post-linuxcnc",
+    "post-grbl",
+    "post-hpgl",
+    "post-cps"
+  ]
+}

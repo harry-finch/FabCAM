@@ -1,0 +1,12 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.03s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-322d57cd074e88ca)
+
+running 4 tests
+test input::intern::tests::intern_str_provenance_independent ... ok
+test pipeline::provenance::output_contract_tests::native_contradictions_and_deleted_changes_cannot_resolve ... ok
+test pipeline::provenance::output_contract_tests::shopbot_marker_is_not_sufficient_without_matching_pause_and_expected_section ... ok
+test pipeline::provenance::tests::legacy_is_unknown_and_zero_reference_is_invalid ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 1201 filtered out; finished in 0.00s
+

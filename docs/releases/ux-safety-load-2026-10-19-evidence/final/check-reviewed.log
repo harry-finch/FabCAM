@@ -1,0 +1,15 @@
+
+> check
+> svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json
+
+Loading svelte-check in workspace: /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+Getting Svelte diagnostics...
+
+/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/src/lib/components/GenerateBar.svelte:36:42
+Error: 'PipelineWarning' is declared but its value is never read. (ts)
+  import type { SimWarning, TimeEstimate } from '../api/types';
+  import { pipelineWarningSeverity, type PipelineWarning } from '../api/pipeline-warnings';
+  import { countCriticalPipelineWarnings } from '../api/pipeline-warnings';
+
+====================================
+svelte-check found 1 error and 0 warnings in 1 file

@@ -1,5 +1,39 @@
 # Engineering log
 
+> 2026-10-19 — **ADR-0025 implemented locally, human review pending**: [movement-tool provenance results](../releases/MULTI_TOOL_PROVENANCE_RESULTS_2026_10_19.md). Pipeline63; immutable per-move tool bindings, independent native intent manifest/cache replay, bounded ShopBot emitted-intent validation, shared playback/full-program resolver. Existing post guards, manual assumptions and advanced two-sided exclusions retained. No performance optimization, commit, push or publication. **HARD STOP before any next checkpoint.**
+
+
+> 2026-10-19 — **ivac-b0js3 Phase A complete, architecture PROPOSED**: [independent multi-tool provenance review](../releases/MULTI_TOOL_PROVENANCE_PHASE_A_2026_10_19.md) and [ADR-0025](adr/ADR-0025-movement-tool-provenance.md). Confirmed identity/lookup limits; cache-only-index and invented-dowel-tool claims refuted. 37 frontend +5 Rust controls PASS; read-only counterexamples recorded. Documentation/evidence only; production, schemas, output and qualification fixtures unchanged. **HARD STOP for architecture approval**, no implementation/commit/publication. Earlier review gates remain separate.
+
+> 2026-10-19 — User approved ADR-0024 background worker. [P0/P1 checkpoint](../releases/UX_SAFETY_LOAD_RESULTS_2026_10_19.md) implements runtime-only complete-program qualification, actual export recheck after Save dialog, stable report/Markdown warnings and canonical project-load defaults. Dedicated worker reuses Rust Simulator; no geometry/post changes or schema migration. Frontend1429+10 Node PASS/1 existing SKIP; targeted Rust and TEST1 256/256 PASS; browser proof retained. Human gate ivac-3i00w; unsupported tool/fixture traces explicit ivac-b0js3. No publication.
+
+> 2026-10-19 — [UX export/load Stage A](../releases/UX_SAFETY_LOAD_STAGE_A_2026_10_19.md): actual export service bypass and playback/report diagnostic loss reproduced; restore/snapshot optional-post inheritance reproduced. I/O mocked, no output written. 3 expected failing cases, 2 passing controls, 47 existing focused tests PASS. Proposed ADR-0024 records worker boundary decision; no implementation or schema change. User-requested architecture stop before B–D; both defects unresolved.
+
+
+## 2026-10-19 — Consolidation UX A–D
+
+Régressions intégrées et parcours réels sur l'arbre conservé beta.3/pipeline62.
+Seule correction de production : navigation clavier limitée aux lignes d'opération,
+sans détourner les flèches de leurs inspecteurs. Core1204, intégration59,
+frontend1387/1 SKIP +10 Node et TEST1 optimisé256/256 PASS. Tentative TEST1 debug
+incomplète conservée. Sécurité rewind/export ivac-3xqtb et métadonnée machine retenue
+à l'ouverture ivac-52tpd soumis sans correction ; préparation candidats bloquée.
+[Preuves et bilan](../releases/UX_V1_CONSOLIDATION_2026_10_19.md).
+Revue consolidation ivac-amibd et D ivac-he4lt ouvertes. Aucun commit/push/publication,
+paquet ou workflow distant. HARD STOP pour validation.
+
+## 2026-10-19 — Lot D UX
+
+Vues 2D/3D fixes, parcours indépendants, diagnostics complets et fallback des paramètres de traduction absents, contexte de lecture et unités, réglages consolidés, fenêtres recalées après resize. 1387 tests frontend PASS/1 SKIP +10 Node ; check/lint/build PASS. Revue claire/sombre et réduction 1920→1280. [Rapport D](../releases/UX_V1_LOT_D_2026_10_19.md). C accepté ; gate D ivac-he4lt. Aucun commit/publication ; HARD STOP.
+
+## 2026-10-19 — Lot C UX
+
+Origine XY sans mutation stock/Z, Frame atomique réversible conservant la combinaison, brouillon matériau explicite, garde de compatibilité texte, sélection et fiche atelier avec fraîcheur/alertes de simulation. 1383 tests frontend PASS/1 SKIP +10 Node ; check/lint/build PASS, revue navigateur clair/sombre et sauvegarde/réouverture. [Rapport C](../releases/UX_V1_LOT_C_2026_10_19.md). Lot B accepté ; gate C ivac-9pljy. Aucun commit/publication ; HARD STOP avant D.
+
+## 2026-10-19 — Lot B UX
+
+Comparaison explicite des outils projet/local et revue avant Apply, accès contextuel, schéma coté avec inconnues et queue libre conforme au Rust. Frontend1375 PASS/1 SKIP, check/lint/build PASS ; revue navigateur et limites documentées. [Rapport B](../releases/UX_V1_LOT_B_2026_10_19.md). Lot A accepté ; gate B ivac-ex4v8. Aucun commit/publication ; HARD STOP.
+
 ## 2026-10-10 — M0 qualification
 
 - Initial FabCAM folder contained the supplied skills pack, not a Git checkout.
@@ -2380,3 +2414,119 @@ undone; no unsupported output generated. Manual CSV/physical/clean-host results
 not fabricated. [Final record](../releases/beta3-delivery-2026-10-18/README.md).
 Source push required existing SSH because HTTPS OAuth lacks workflow scope;
 remotes preserved. Final documentation handoff committed separately. No tag/Release.
+
+## 2026-10-18 — MCP1 optional AI integration roadmap
+
+Documentation only (ivac-c2q72): added planned POST-V1.5/V2+ MCP1 A API/state/security
+audit, B read-only MVP, C later transactional human-approved writes and D guarded
+generation/analysis/export. Created MCP1_PLAN and developer MCP_INTEGRATION entry;
+linked release/technical roadmaps, architecture, ARCH-MACH, contribution index/status.
+Current accepted beta.3 candidates/manual platform/physical qualification and V1/V1.5/
+audit/TEST1 priorities remain intact; MCP is optional, not an AI/cloud/vendor dependency.
+
+Read-only source inventory distinguishes Rust core/transport candidates from portable
+project loading and Svelte/workspace/history ownership; no universal headless service
+or desktop revision API claimed. Separate offline copy versus live unsaved session,
+proposal/revision approval, existing command/history/lineage/freshness and private FS
+suggestion versus applied-value authority. Local fabcam-mcp/stdio is candidate only;
+no remote endpoint without review. Client/project/AI content grants no file/write/export
+permission. Preserve corrected transport/CPS/import controls, quotas/cancel/late-result
+refusals and final output parity; no hardware control (separate FabSBP contract).
+
+Proposed future mcp-integration skill would link authoritative docs, not created now.
+Canonical documentation/architecture/validation/feeds-speeds/Professional Workshop UI
+skills applied. No server/dependency/network/tool/command/schema/CAM/output change,
+GitHub issue or commit/push/merge/release. HARD STOP awaiting roadmap approval.
+
+Documentation checks: added local links/whitespace and retained prior planning/history
+verified; baseline source/config/data hashes unchanged. No software tests/build or
+MCP protocol/client compatibility claim made by this documentation-only task.
+
+
+## 2026-10-19 — V1 UX audit Phase0 (ivac-0gc58)
+
+Read all783 lines of Argon audit (01–62) and user decisions; inspected existing
+native captures07/27/54 and current source66f229e (code identical to candidate
+db5bde5). Proposed four bounded batches in releases/UX_V1_POLISH_PHASE0_2026_10_19.md.
+Confirmed premature program-only success states and CPS skipped intentions; corrected
+audit assumptions about Chamfer stepdown, T-slot start depth, existing2D origin marker,
+reviewed same-ID tools, mandatory collision publication guard and depth-filtered remaining
+analysis. Separate approval for stronger CPS refusal, work-envelope policy, system fonts
+and material/Frame semantics. No code, runtime test, package or publication changes.
+Preserved pre-existing MCP1 docs. HARD STOP for human plan review.
+
+## 2026-10-19 — V1 UX lot A, checkpoint local
+
+Plan Phase0 accepté. États programme soumis à la fraîcheur réelle, refus commun
+CPS Homing/Probe, menu groupé/contextuel, ligne active sticky corrigée après revue
+rendue, profondeurs par consommateurs et vitesses enregistrées explicites. Copie
+parking/sécurité clarifiée. Pipeline62 et empreinte cache intentionnelle. 1204
+tests core, 44 intégrations ciblées et 1372 tests frontend PASS (1 skip existant).
+Build/typecheck/lint/fmt/Clippy PASS. Revue navigateur1280/1920, sombre/clair ;
+aucune nouvelle qualification native/physique/distribution. [Rapport](../releases/UX_V1_LOT_A_2026_10_19.md).
+Revue humaine ivac-lec7h OPEN ; HARD STOP avant lot B. Sans commit/push/publication.
+
+## 2026-10-19 — STEP and unified Smart Workshop roadmap planning
+
+Documentation only (ivac-8ji6y), treating the two user files as planning briefs.
+Added STEP_PLAN, SMART_WORKSHOP_PLAN and single V2_WORKSHOP_PRIORITIES view;
+updated release/technical roadmaps, advanced CAM REST1, ARCH-MACH product boundary,
+architecture/status/navigation. STEP1-A high-priority isolated kernel feasibility,
+planar face→2D geometry; B projection separate; STEP2 optional recognition, never
+required for extraction. No kernel/format capability claimed by existing STL viewer.
+ADR-0021 accepted source/lineage/pivot and changed-source review remain authority.
+
+SMART1 layer rules propose not silently apply; existing layer sources/templates need
+actual domain/precedence audit. FIT1-A explicit measured calibration pattern/provenance
+before B selected mating geometry; no material validation or FS recipe inference.
+SMART2 advanced placement V2, pre-V1 only supported-safety defects under existing gates.
+REST1 refined A residual candidates/B qualified paths/C guided UX, not duplicate Pocket.
+MULTI1 linked ARCH-MACH objective; no silent conversion when machine/process changes.
+First V2 wave retains STEP1-A and SMART1, then proposed FIT1-A/SMART2/REST1/FIT1-B;
+HELIX1 high priority and other V2 scopes preserved with scheduling tradeoffs explicit.
+
+Documentation/architecture/geometry/validation/CAM UX/Professional Workshop UI/FS
+skills applied. V1 current candidate blockers and native OMX V1.5 remain priorities.
+No production/kernel/dependency/viewer/UI/automatic operation/schema/post change,
+physical test/calibration, GitHub issue or commit/push/merge/release. HARD STOP for
+human approval of STEP and Smart Workshop roadmap before implementation.
+
+Documentation validation: new links/whitespace and retained prior planning/history
+checked; baseline source/config/data hashes unchanged. No test/build/kernel research
+or new software/physical qualification claimed in this documentation task.
+
+## 2026-10-19 — ADR-0025 follow-up: provenance false negatives and full regression
+
+Scope ivac-b0js3.1, from an independent audit treated as hypotheses. Reproduced on a
+pre-fix release server: bundled ShopBot load diameters were compared as Rust-formatted
+text against the prelude's half-away rounding (1/32, 3/32, 7/32, 9/32 in → unavailable);
+native manual envelopes matched the substring `M6` in operator comments (tool named
+`Fraise filetage M6` → unavailable), while missing `M06` and an executable `T5` after a
+nested `)`. Corrected with a strict load-instruction decoder plus a bounded numeric
+rounding check (identity still from section/number/binding), and RS274 executable-word
+parsing (`T`, `M6`/`M06`, `M61`; standalone `M0`). Planned-only now states its reason;
+Homing/Probe/raw include must stay planned because the preview models neither G28 nor
+a probe trigger. ADR-0025 gained an explicit verification-scope section (native intent
+comparison is a consistency check; envelope and ShopBot decoding are independent).
+
+Test triage: four metadata-only `FABTOOL` differences now compare marker-free output
+with unchanged references and pin markers; `ux3` fixture test was already red at HEAD
+and now follows ADR-0023 blocking; geometry-cache tests use private cache instances;
+example lint fixed. Found, not fixed: LinuxCNC tool-change comments nest parentheses
+(pre-existing upstream output). Pedantic pre-release Clippy gate red before/after in
+FS/CPS crates. No output-byte, guard, export-policy, schema or pipeline-version change;
+no commit/push/publication. HARD STOP for human review.
+
+## 2026-10-19 — G-code comment safety, release gate and Git consolidation
+
+Scope ivac-4ql18. Centralized `gcode::comment_text` (control chars → space; LinuxCNC
+parentheses → brackets; active-comment prefixes defused) for LinuxCNC/GRBL comments
+and raw `;` lines carrying group, cycle-label or include text; GRBL's paren rewriter
+now leaves text after `;` alone. Adversarial integration test compares executable
+lines with a benign control. `comments: false` wording clarified (EN/DE), contract
+unchanged. Pedantic gate: `pre-release.sh` re-applies the documented workspace
+allow-list it was overriding; 308 sites fixed mechanically or with local justified
+allows. Full parallel qualification green except pre-existing README parity;
+cargo-deny unavailable. Validated work then committed in logical groups; large TEST1
+per-case evidence kept local. Open human gates unchanged.
+

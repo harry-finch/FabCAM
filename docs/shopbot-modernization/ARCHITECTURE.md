@@ -509,3 +509,53 @@ Write-through executable streams with fixtures are refused before bytes/status;
 progress streaming still uses asynchronous buffered validation. Arbitrary CPS IR
 intent is not substituted for a decoded execution path. See
 [ADR-0023](adr/ADR-0023-milling-program-publication-guard.md).
+
+## Planned MCP1 optional AI access boundary
+
+[MCP1](../releases/MCP1_PLAN.md) is a POST-V1.5/V2+ thin protocol layer over existing
+services, not another CAM/FS/state implementation. Rust models/pipeline/drawing/FS,
+CLI/HTTP/Tauri/WASM are reuse candidates; full portable project semantics and workspace
+libraries/operation mutations/history still need application-service audit. Current HTTP
+capability is not sufficient authority to expose paths/scripts or desktop state.
+
+Candidate local stdio executable is unfrozen; no MCP server/API/network listener exists
+from this plan. Useful read-only subset precedes controlled writes; offline snapshots and
+live desktop unsaved/history ownership require different revision/approval workflows.
+Never mutate desktop-open project files behind the owner or bypass commands/preflight.
+Suggestions stay distinct from applied rates and raw private pack disclosure.
+
+Capabilities derive from ARCH-MACH/process/adapter/backend qualification, not MCP machine
+assumptions. Resources/errors/reads/writes/generation/export need independent scope,
+validation, quotas, approval and audit contracts. Preserve stale/cancel/late/partial-result
+and final-output safeguards. No hardware authority; future FabSBP is separate. See
+[developer planning guide](../development/MCP_INTEGRATION.md); no schemas or skill created.
+
+## Planned STEP sources and Smart Workshop application services
+
+[STEP1](../releases/STEP_PLAN.md) proposes isolated B-Rep source import/face-loop extraction,
+not a CAM rewrite or existing STL/Scene3D feature. Kernel/license/native packaging/WASM
+feasibility precedes dependency choice. Accepted contours use ADR-0021 source/identity/
+lineage/explicit frame contract; re-exported B-Rep indices cannot silently rebind jobs.
+Projection/feature recognition are separate later stages, not automatic operation depth.
+
+[Smart Workshop](../releases/SMART_WORKSHOP_PLAN.md) reuses source Layers, UX4 templates,
+existing tools/machines/material, history and authoritative services. SMART1 mapping
+rules and FIT calibration provenance require explicit precedence/schema audit, not FS
+recipes/inference from names or shapes. REST1 A/B/C extends diagnostics only with proven
+stock/depth/accessibility/entry; FIT compensation distinct from finish allowance.
+SMART2 preserves qualified holding/manual intent and process-specific swept envelopes.
+No current API/model chosen; proposals/preview/human Apply preserve identity/freshness.
+MULTI1 belongs to ARCH-MACH process-boundary/product work; geometry reuse cannot imply
+silent machine-switch operation conversion. Future MCP consumes these services, no
+separate assistance business logic or cloud requirement. All remain planned V2 except
+existing V1 safety assessments and V1.5 architectural foundation.
+
+## Complete-program simulation authority (ADR-0024)
+
+The dedicated frontend verification worker reuses Rust/WASM Simulator and shared
+grid/tool adapters without rendering meshes. Its request-scoped transient result
+is independent of playback diagnostics; toolbar, report and actual export use a
+shared current-program policy. Native Save rechecks after the picker. Project
+replacement uses canonical fresh defaults plus the loaded embedded snapshot,
+never the preceding machine. No schema migration. See [ADR-0024](adr/ADR-0024-full-program-simulation-qualification.md)
+and [qualification/limits](../releases/UX_SAFETY_LOAD_RESULTS_2026_10_19.md).

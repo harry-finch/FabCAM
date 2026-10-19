@@ -1,0 +1,8 @@
+    Finished `release` profile [optimized] target(s) in 0.12s
+     Running unittests src/lib.rs (target/release/deps/ivac_core-2be62a30fe01c24f)
+
+running 1 test
+test pipeline::two_sided_emit::tests::lot7_dowels_refuse_bad_layout_or_invented_tools ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1203 filtered out; finished in 0.00s
+

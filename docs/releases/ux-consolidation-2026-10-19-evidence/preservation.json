@@ -1,0 +1,70 @@
+{
+  "head": "66f229ea21cccf73a76fd45d0e9f9fe3721a41a1",
+  "incoming_file_count": 2530,
+  "changed_incoming": [
+    {
+      "path": "docs/releases/DESKTOP_CANDIDATES.md",
+      "incoming_sha256": "55343c052992d37f5c1b70f1d96787b5d49645cd52607fcb0c6e15174f168412",
+      "current_sha256": "dcbb8470193e130642487a154230ead94ab88c5e38acb3a3dcb8cadb65c32592"
+    },
+    {
+      "path": "docs/releases/RELEASE_ROADMAP.md",
+      "incoming_sha256": "d576e8ea667c950d16b16f49a0c74ffa0e42708e2fff9e7108fe874630fa7d67",
+      "current_sha256": "3a4285abc0a7bd10812ce2c51b425b29d3cd82a3b02a867d30e24b72e29bf063"
+    },
+    {
+      "path": "docs/releases/V1_REMAINING_2026_10_18.md",
+      "incoming_sha256": "220e4bdb0837398ff6dde36f727ec2f6ff8a62bc01434e870ec074e1497767c3",
+      "current_sha256": "55d3a8086bcf6897500f6a32949f58497389ee047d1e52eed4789481c367f97e"
+    },
+    {
+      "path": "docs/shopbot-modernization/DEVLOG.md",
+      "incoming_sha256": "b0ee61673074ee8c8c00eb0206c2ab5a2660930607d0f6e1a8fa298982c28c8e",
+      "current_sha256": "5f745e2d0b39cae39fe572ff4f325010fa3465a2c64f30ae9147e32fc96c0179"
+    },
+    {
+      "path": "docs/shopbot-modernization/ROADMAP.md",
+      "incoming_sha256": "d1f97240cf5361b77bfefbb2da242735886de85f1fef752153c1f659c39bb5c4",
+      "current_sha256": "c6c167ab9a7ad875b0540ae5261375367e0e63b4cde0e04c6aa3bc78236b601c"
+    },
+    {
+      "path": "docs/shopbot-modernization/STATUS.md",
+      "incoming_sha256": "eb745dd6c9e0aef393b3adb78836bbda44a9efed55550a689d349add0a7de1c7",
+      "current_sha256": "43ade5f7410b2c33b3ac5af0d67ffe84a3a2b6c0e3ea07eb5038ee915c2db8b7"
+    },
+    {
+      "path": "frontend/src/lib/components/OperationsList.svelte",
+      "incoming_sha256": "019a22a9f47e884aace8d5cc3b83ba2f3fe515e4d75e2bf1c896e76269e4072b",
+      "current_sha256": "ed6adb39e103d788a523f96b54b7df8971dc582df0bfdc1211eae9042a11cb34"
+    }
+  ],
+  "all_other_incoming_identical": true,
+  "document_history": [
+    {
+      "path": "docs/releases/RELEASE_ROADMAP.md",
+      "incoming_document_body_preserved": true
+    },
+    {
+      "path": "docs/releases/V1_REMAINING_2026_10_18.md",
+      "incoming_document_body_preserved": true
+    },
+    {
+      "path": "docs/shopbot-modernization/STATUS.md",
+      "incoming_document_body_preserved": true
+    },
+    {
+      "path": "docs/shopbot-modernization/DEVLOG.md",
+      "incoming_document_body_preserved": true
+    },
+    {
+      "path": "docs/shopbot-modernization/ROADMAP.md",
+      "incoming_document_body_preserved": true
+    },
+    {
+      "path": "docs/releases/DESKTOP_CANDIDATES.md",
+      "incoming_document_body_preserved": true
+    }
+  ],
+  "only_production_delta": "one guard line in OperationsList.svelte",
+  "deleted_incoming": []
+}

@@ -1,0 +1,118 @@
+- navigation "Main areas":
+  - text: FabCAM
+  - button "Project"
+  - 'button "Machine: LOT A — SOFTWARE REVIEW ONLY"':
+    - generic: "Machine:"
+    - generic: LOT A — SOFTWARE REVIEW ONLY
+  - button "Tool library"
+  - button "Settings"
+  - button "Help"
+  - button "About"
+- generic "File":
+  - text: File
+- button "Open"
+- button "Save"
+- generic "saved-controls.ivac-project.json — Unsaved changes":
+  - generic: saved-controls.ivac-project.json
+  - generic: Unsaved changes
+- button "Undo":
+- button "Redo" [disabled]:
+- button "Generate toolpaths"
+- generic "Wall-clock generation time, including request preparation and result processing. Preview simulation is separate; this is not estimated machining time.":
+  - text: Generated in
+  - generic: 0.3 s
+- button "Download .sbp"
+- button "Carved stock STL"
+- generic: 2 obj · 1 offsets · 137 moves
+- button "Time breakdown": ⏱ 1 min 14 s
+- button "1 warning(s)":
+  - text: 1 warning(s)
+- generic "Remaining material":
+  - generic: Remaining material
+  - combobox "Analysis operation":
+    - 'option "OFFLINE DEMO ONLY: outside square" [selected]'
+    - option "Inspection pause"
+  - generic: Not analyzed
+  - generic "Analysis details"
+- generic "Show toolpath lines and direction arrows. Stock simulation stays active.":
+  - checkbox "Toolpaths" [checked]
+  - generic: Toolpaths
+- tablist "Viewport mode":
+  - tab "2D"
+  - tab "3D" [selected]
+- main:
+  - button "Fit view to scene": ⌖
+  - 'generic "OFFLINE DEMO ONLY: outside square"'
+  - button "Previous op" [disabled]: ⏮
+  - button "Play": ▶
+  - button "Next op" [disabled]: ⏭
+  - slider "Toolpath playback position": "1"
+  - text: ×
+  - spinbutton "Playback speed multiplier": "1"
+  - generic "Path distance · not machining time": 137/137
+  - generic: Path distance · not machining time
+  - button "▶ OpenSBP 168 lines":
+    - text: ▶ OpenSBP
+    - generic: 168 lines
+  - separator "Drag to resize the side panel · double-click to reset"
+  - complementary:
+    - region "Stock":
+      - button "▸ Stock 140 × 140 × 10 mm":
+        - generic: ▸
+        - generic: Stock
+        - generic "Current stock dimensions (Length × Width × Thickness) in mm": 140 × 140 × 10 mm
+    - region "Drawings":
+      - complementary:
+        - button "Activate layers panel": ▸
+        - checkbox "Toggle visibility of all imported layers" [checked]
+        - generic: Drawings
+        - generic "1 imported drawing": "1"
+        - button "+ Add"
+    - region "Text":
+      - complementary:
+        - button "Activate text panel": ▸
+        - generic: Text
+        - generic: "0"
+        - button "Add text": + Add
+    - region "Operations":
+      - button "Collapse operations panel" [expanded]: ▾
+      - generic: Operations
+      - generic "Number of operations": "3"
+      - button "Operation templates":
+        - text: Templates
+      - button "Add operation": +
+      - generic "Reorder operations so same-tool work runs back-to-back, cutting the number of tool changes (a T1/T2/T1 program becomes T1, T1, T2). Matters most on manual machines, where each swap is minutes + a re-probe. Program-only ops and ops with 'Pin order' set stay put. Off = the order shown here.":
+        - checkbox "Group ops by tool"
+        - text: Group ops by tool
+      - listbox:
+        - 'option "Profile — Cuts along the contour of selected geometry. Tool stays inside, outside, or on the path. OFFLINE DEMO ONLY: outside square OFFLINE DEMO ONLY: 6mm endmill ✓ Duplicate operation OFFLINE DEMO ONLY: outside square Delete operation OFFLINE DEMO ONLY: outside square"':
+          - generic: ⋮⋮
+          - checkbox [checked]
+          - generic: ▸
+          - generic "Profile — Cuts along the contour of selected geometry. Tool stays inside, outside, or on the path.": ▢
+          - 'generic "OFFLINE DEMO ONLY: outside square"'
+          - 'generic "OFFLINE DEMO ONLY: 6mm endmill"'
+          - generic "Up to date with the last Generate.": ✓
+          - 'button "Duplicate operation OFFLINE DEMO ONLY: outside square"': ⎘
+          - 'button "Delete operation OFFLINE DEMO ONLY: outside square"': ×
+        - option "Homing — Not supported by CPS output. Disable this operation or choose a supported post. Generation is blocked. Saved Homing — unsupported CPS — homing — — Duplicate operation Saved Homing — unsupported CPS Delete operation Saved Homing — unsupported CPS":
+          - generic: ⋮⋮
+          - checkbox
+          - generic: ▸
+          - generic "Homing — Not supported by CPS output. Disable this operation or choose a supported post. Generation is blocked.": ⌂
+          - generic "Saved Homing — unsupported CPS"
+          - generic "Homing": — homing —
+          - generic "Disabled — not included in the program": —
+          - button "Duplicate operation Saved Homing — unsupported CPS": ⎘
+          - button "Delete operation Saved Homing — unsupported CPS": ×
+        - option "Pause — Pause is handled by the selected CPS post. ShopBot uses an operator pause; no G-code sequence is implied. Inspection pause — pause — ✓ Duplicate operation Inspection pause Delete operation Inspection pause":
+          - generic: ⋮⋮
+          - checkbox [checked]
+          - generic: ▸
+          - generic "Pause — Pause is handled by the selected CPS post. ShopBot uses an operator pause; no G-code sequence is implied.": ⏸
+          - generic "Inspection pause"
+          - generic "Pause": — pause —
+          - generic "Up to date with the last Generate.": ✓
+          - button "Duplicate operation Inspection pause": ⎘
+          - button "Delete operation Inspection pause": ×
+- contentinfo "bbox=(10.00,10.00)–(110.00,110.00) · 4 segments · unit_scale=1 · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts"

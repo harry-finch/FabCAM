@@ -1,0 +1,18 @@
+{
+  "initial_roundtrip_semantically_identical": true,
+  "after_cps_journey_changed_keys": [
+    "machine"
+  ],
+  "added_machine_keys": {
+    "cpsPost": {
+      "source": "bundled",
+      "bundledId": "shopbot",
+      "properties": {}
+    }
+  },
+  "material_equal": true,
+  "operations_equal": true,
+  "tools_equal": true,
+  "stock_equal": true,
+  "origin_equal": true
+}
