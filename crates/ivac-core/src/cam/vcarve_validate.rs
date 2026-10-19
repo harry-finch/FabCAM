@@ -237,8 +237,8 @@ mod audit_tests {
     fn prepared_checks_indices_and_nearly_flat_large_radius_arcs() {
         let points = [
             Point2::new(0.0, 0.0),
-            Point2::new(100000.0, 0.0),
-            Point2::new(100000.0, 10.0),
+            Point2::new(100_000.0, 0.0),
+            Point2::new(100_000.0, 10.0),
             Point2::new(0.0, 10.0),
         ];
         let mut segments: Vec<_> = (0..4)

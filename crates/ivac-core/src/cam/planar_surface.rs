@@ -32,6 +32,8 @@ pub struct PlanarRaster {
 /// Allocation limit, independent of physical machining tolerances.
 pub const MAX_SURFACE_LINES: usize = 100_000;
 
+// value is range-checked or bounded above; float casts saturate; operand is non-negative by construction (validated, clamped or saturating).
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 pub fn planar_raster(p: &PlanarSurfaceParams, diameter: f64) -> Result<PlanarRaster, String> {
     let values = [
         p.origin[0],
@@ -105,6 +107,8 @@ pub fn planar_raster(p: &PlanarSurfaceParams, diameter: f64) -> Result<PlanarRas
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod tests {
     use super::*;
     fn params() -> PlanarSurfaceParams {
@@ -131,8 +135,8 @@ mod tests {
             for ix in 0..=90 {
                 for iy in 0..=90 {
                     let q = [
-                        xmin + (xmax - xmin) * ix as f64 / 90.0,
-                        ymin + (ymax - ymin) * iy as f64 / 90.0,
+                        xmin + (xmax - xmin) * f64::from(ix) / 90.0,
+                        ymin + (ymax - ymin) * f64::from(iy) / 90.0,
                     ];
                     let distance = raster
                         .lines

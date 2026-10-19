@@ -57,8 +57,16 @@ step "cargo fmt --check"      cargo fmt --all -- --check
 # leave it off for the inner dev loop (so daily `cargo clippy` runs in
 # ~30 s instead of 3 min); the release gate restores the strict walk
 # so nothing slips out.
+# A command-line `-W clippy::pedantic` overrides the earlier [workspace.lints]
+# allows, so re-apply exactly that documented allow-list (root Cargo.toml)
+# after it. Keep both lists in sync.
 step "cargo clippy -Dwarnings (with pedantic)" \
-  cargo clippy --workspace --all-targets -- -W clippy::pedantic -D warnings
+  cargo clippy --workspace --all-targets -- -W clippy::pedantic \
+    -A clippy::module_name_repetitions -A clippy::missing_errors_doc \
+    -A clippy::missing_panics_doc -A clippy::too_many_lines \
+    -A clippy::too_many_arguments -A clippy::similar_names \
+    -A clippy::many_single_char_names -A clippy::field_reassign_with_default \
+    -A clippy::items_after_statements -D warnings
 # waud: prefer cargo-nextest when installed (parallel test-binary
 # execution, ~30-60 % faster wall time on multi-binary workspaces).
 # Falls through to plain `cargo test` when nextest isn't on PATH, so

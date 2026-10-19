@@ -58,6 +58,7 @@ impl Transform {
         }
         Ok(())
     }
+    #[must_use]
     pub fn point(&self, p: Point2, pivot: Point2) -> Point2 {
         let mut x = (p.x - pivot.x) * self.scale;
         let mut y = (p.y - pivot.y) * self.scale;
@@ -73,6 +74,7 @@ impl Transform {
             pivot.y + x * sin + y * cos + self.translate.y,
         )
     }
+    #[must_use]
     pub fn distance_mm(&self, a: Point2, b: Point2) -> f64 {
         a.distance(b) * self.scale.abs()
     }
@@ -355,6 +357,7 @@ impl Drawing {
     pub fn validate_for_generation(&self) -> Result<(), String> {
         topology::validate(self)
     }
+    #[must_use]
     pub fn preserve_binding(&self, binding: &Binding) -> Binding {
         match binding {
             Binding::Contours { ids }

@@ -104,7 +104,7 @@ mod tests {
             .map(|i| {
                 let memo = memo.clone();
                 std::thread::spawn(move || {
-                    let x = f64::from_bits(0x3ff0000000000001 + u64::from(i));
+                    let x = f64::from_bits(0x3ff0_0000_0000_0001 + u64::from(i));
                     let regions = vec![RegionPreview {
                         op_id: u32::from(i),
                         outer: vec![Point2::new(x, -0.)],

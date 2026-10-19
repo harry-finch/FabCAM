@@ -1,3 +1,5 @@
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::cast_possible_truncation, clippy::float_cmp)]
 use ivac_core::drawing::repair::Repair;
 use ivac_core::drawing::{Binding, Drawing, Source, Transform};
 use ivac_core::{Point2, Segment};
@@ -221,10 +223,10 @@ fn transform_order_matches_cam_for_all_mirror_combinations() {
                     );
                     assert_eq!(
                         b.bulge,
-                        if mirror_x != mirror_y {
-                            -a.bulge
-                        } else {
+                        if mirror_x == mirror_y {
                             a.bulge
+                        } else {
+                            -a.bulge
                         }
                     );
                 }

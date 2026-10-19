@@ -51,7 +51,7 @@ fn result(d: f64) -> KnowledgeResult {
 #[test]
 fn availability_boundaries_are_explicit_on_both_sides() {
     for (d, below_available) in [(3.175 / 1.5, false), (6.35 / 0.5, true)] {
-        for (offset, expected) in [(-0.000001, below_available), (0.000001, !below_available)] {
+        for (offset, expected) in [(-0.000_001, below_available), (0.000_001, !below_available)] {
             let r = result(d + offset);
             assert_eq!(
                 matches!(
@@ -70,8 +70,8 @@ fn availability_boundaries_are_explicit_on_both_sides() {
 #[test]
 fn ten_percent_small_tool_transition_is_continuous_with_integer_feed_rounding() {
     let boundary = 3.175 / 1.1;
-    let low = result(boundary - 0.000001);
-    let high = result(boundary + 0.000001);
+    let low = result(boundary - 0.000_001);
+    let high = result(boundary + 0.000_001);
     assert_eq!(
         low.explanation.as_ref().unwrap().summary.match_quality,
         Some(MatchQuality::Approximate)
@@ -93,7 +93,7 @@ fn ten_percent_small_tool_transition_is_continuous_with_integer_feed_rounding() 
     };
     // Policy 2 removes the step; integer feed output may still differ by one mm/min.
     assert_eq!(low.parameters.rpm, high.parameters.rpm);
-    let ratio = high.parameters.feed_mm_min as f64 / low.parameters.feed_mm_min as f64;
+    let ratio = f64::from(high.parameters.feed_mm_min) / f64::from(low.parameters.feed_mm_min);
     assert!((ratio - 1.0).abs() < 0.002);
     assert!((high.parameters.doc_mm / low.parameters.doc_mm - 1.0).abs() < 0.00001);
 }
@@ -101,8 +101,8 @@ fn ten_percent_small_tool_transition_is_continuous_with_integer_feed_rounding() 
 #[test]
 fn interpolation_entry_exposes_a_larger_selection_jump() {
     let boundary = 6.35 / 1.5;
-    let before = result(boundary - 0.000001);
-    let after = result(boundary + 0.000001);
+    let before = result(boundary - 0.000_001);
+    let after = result(boundary + 0.000_001);
     assert_eq!(
         before.explanation.as_ref().unwrap().summary.match_quality,
         Some(MatchQuality::Approximate)
@@ -122,6 +122,8 @@ fn interpolation_entry_exposes_a_larger_selection_jump() {
     else {
         panic!("expected available interpolation boundary");
     };
-    assert!(after.parameters.feed_mm_min as f64 / before.parameters.feed_mm_min as f64 > 1.5);
+    assert!(
+        f64::from(after.parameters.feed_mm_min) / f64::from(before.parameters.feed_mm_min) > 1.5
+    );
     assert_eq!(before.source_evidence, after.source_evidence);
 }

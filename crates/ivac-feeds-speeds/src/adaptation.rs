@@ -1,5 +1,10 @@
 //! FS3.9 bounded adaptations. Policy thresholds are eligibility rules, not physical limits.
-use crate::*;
+use crate::{
+    normalized_quantities, CuttingData, Engagement, EngagementScope, Engine, Evidence,
+    FeedsSpeedsRecommendation, FeedsSpeedsRequest, Identity, IdentitySelector, KnowledgeRecord,
+    OperationKind, Profile, ProfileCategory, ProfileSet, Range, Recommendation, RecordOrigin,
+    ScopeMismatch, SourcePack, SourcePackError, ToolClassification, KNOWLEDGE_POLICY,
+};
 use serde::{Deserialize, Serialize};
 
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -29,6 +34,7 @@ pub enum MatchQuality {
 }
 impl MatchQuality {
     /// Explicit policy ordering, independent of enum declaration / serialized names.
+    #[must_use]
     pub const fn rank_cost(self) -> u32 {
         match self {
             Self::Exact => 0,
@@ -114,6 +120,8 @@ pub(crate) fn validate_adaptation(
     Ok(())
 }
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(crate) fn adapt_profile(
     pack: &SourcePack,
     origin: &RecordOrigin,
@@ -186,7 +194,7 @@ pub(crate) fn adapt_profile(
                         .is_some_and(|id| a.tools.contains(id))
                 }) =>
             {
-                p.scope.tool = r.tool.identity.clone()
+                p.scope.tool.clone_from(&r.tool.identity);
             }
             "operation" | "engagement"
                 if source.scope.operation == OperationKind::FullSlot
@@ -198,7 +206,7 @@ pub(crate) fn adapt_profile(
                 p.scope.operation = OperationKind::Pocket;
                 p.scope.engagement = EngagementScope::Nominal {
                     ratio: Range {
-                        min: 0.000001,
+                        min: 0.000_001,
                         max: 1.0,
                     },
                 };
@@ -273,6 +281,8 @@ pub(crate) fn adapt_profile(
     ))
 }
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(crate) fn add_interpolations(
     candidates: &mut Vec<(KnowledgeRecord, Recommendation)>,
     request: &FeedsSpeedsRequest,
@@ -459,6 +469,8 @@ pub fn matching_trace_checked(
 
 /// Explain failed derived eligibility, rather than listing scopes the declared
 /// transfer policy already permits. This function never supplies cutting values.
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(crate) fn derived_rejections(
     pack: &SourcePack,
     origin: &RecordOrigin,
@@ -481,7 +493,7 @@ pub(crate) fn derived_rejections(
         && matches!(r.operation.engagement,Engagement::Nominal{ratio} if ratio>0.0 && ratio<=1.0)
         && origin.adaptation.as_ref().is_some_and(|a| a.slot_to_pocket);
     rejected.retain(|m| match m.field.as_str() {
-        "doc_mm" => false,
+        "doc_mm" | "diameter_mm" => false,
         "machine" => !origin.adaptation.as_ref().is_some_and(|a| {
             r.machine
                 .identity
@@ -502,7 +514,6 @@ pub(crate) fn derived_rejections(
                 .is_some_and(|id| a.tools.contains(id))
         }),
         "operation" | "engagement" => !slot_transfer,
-        "diameter_mm" => false,
         _ => true,
     });
     let d = p.scope.diameter_mm.min;

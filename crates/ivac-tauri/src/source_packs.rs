@@ -106,10 +106,14 @@ fn store_locked(dir: &Path, json: &str) -> Result<String, String> {
     Ok(text)
 }
 #[tauri::command]
+// owned argument is the transport/command contract.
+#[allow(clippy::needless_pass_by_value)]
 pub fn import_source_pack(app: tauri::AppHandle, json: String) -> Result<String, String> {
     store(&root(&app)?, &json)
 }
 #[tauri::command]
+// owned argument is the transport/command contract.
+#[allow(clippy::needless_pass_by_value)]
 pub fn list_source_packs(app: tauri::AppHandle) -> Result<Vec<String>, String> {
     let dir = root(&app)?;
     let mut rows = Vec::new();
@@ -117,7 +121,7 @@ pub fn list_source_packs(app: tauri::AppHandle) -> Result<Vec<String>, String> {
         .map_err(|e| e.to_string())?
         .collect::<Result<Vec<_>, _>>()
         .map_err(|e| e.to_string())?;
-    paths.sort_by_key(|p| p.file_name());
+    paths.sort_by_key(std::fs::DirEntry::file_name);
     let lab_head = paths
         .iter()
         .filter(|p| {
@@ -126,7 +130,7 @@ pub fn list_source_packs(app: tauri::AppHandle) -> Result<Vec<String>, String> {
                 .starts_with("sorbonne-fablab@")
                 && p.path().extension().is_some_and(|v| v == "json")
         })
-        .map(|p| p.file_name())
+        .map(std::fs::DirEntry::file_name)
         .max();
     for entry in paths {
         if entry
@@ -175,6 +179,8 @@ fn lab_write_lock(dir: &Path) -> Result<LabWriteLock, String> {
     let _file = std::fs::OpenOptions::new().write(true).create_new(true).open(&lock_path).map_err(|_| "Another Sorbonne save is in progress; retry. If the application crashed, close all instances before removing its .sorbonne-write-lock marker".to_string())?;
     Ok(LabWriteLock(lock_path))
 }
+// owned argument is the transport/command contract.
+#[allow(clippy::needless_pass_by_value)]
 fn save_lab(dir: &Path, json: &str, expected: Option<String>) -> Result<String, String> {
     prepare_directory(dir)?;
     let _lock = lab_write_lock(dir)?;
@@ -196,7 +202,7 @@ fn save_lab(dir: &Path, json: &str, expected: Option<String>) -> Result<String, 
             .starts_with("sorbonne-fablab@")
             && e.path().extension().is_some_and(|v| v == "json")
     });
-    candidates.sort_by_key(|e| e.file_name());
+    candidates.sort_by_key(std::fs::DirEntry::file_name);
     let head = if let Some(entry) = candidates.last() {
         let meta = std::fs::symlink_metadata(entry.path()).map_err(|e| e.to_string())?;
         if !meta.is_file() || meta.file_type().is_symlink() || meta.len() > 2 * 1024 * 1024 {
@@ -223,6 +229,8 @@ fn save_lab(dir: &Path, json: &str, expected: Option<String>) -> Result<String, 
     store_locked(dir, json)
 }
 #[tauri::command]
+// owned argument is the transport/command contract.
+#[allow(clippy::needless_pass_by_value)]
 pub fn save_lab_pack(
     app: tauri::AppHandle,
     json: String,

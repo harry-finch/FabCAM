@@ -40,7 +40,7 @@ fn available(result: KnowledgeResult) -> (Box<Recommendation>, KnowledgeExplanat
         FeedsSpeedsRecommendation::Available { recommendation } => {
             (recommendation, result.explanation.unwrap())
         }
-        other => panic!("{other:?}"),
+        other @ FeedsSpeedsRecommendation::Unavailable { .. } => panic!("{other:?}"),
     }
 }
 fn synthetic(id: &str, feed: f64, taxon: Option<&str>) -> SourcePack {

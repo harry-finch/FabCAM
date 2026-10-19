@@ -1,4 +1,6 @@
 //! Independent software references. Synthetic settings, not machining advice.
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp)]
 mod common;
 use common::*;
 use ivac_core::cam::vcarve_plan::plan;
@@ -95,9 +97,9 @@ fn a3_short_chain_reaches_target_at_both_ends() {
 fn reference_cones_caps_and_flat_tips() {
     for (angle, tip, cap, expected) in [
         (90., 0., 2., 2.),
-        (60., 0., 2., 3.464101615137755),
+        (60., 0., 2., 3.464_101_615_137_755),
         (90., 1., 2., 1.5),
-        (60., 1., 2., 2.598076211353316),
+        (60., 1., 2., 2.598_076_211_353_316),
     ] {
         let mut p = rectangle_project(false);
         p.tools[0] = vbit_tool(1, 8., angle, tip);
@@ -144,7 +146,7 @@ fn invalid_inputs_and_physical_limits_fail_closed() {
                 p.operations[0]
                     .vcarve_params_mut()
                     .unwrap()
-                    .multi_pass_refine = true
+                    .multi_pass_refine = true;
             }
             6 => {
                 p.segments.pop();
@@ -157,7 +159,7 @@ fn invalid_inputs_and_physical_limits_fail_closed() {
                 p.operations[0]
                     .vcarve_params_mut()
                     .unwrap()
-                    .carve_max_width_mm = Some(-1.)
+                    .carve_max_width_mm = Some(-1.);
             }
         }
         assert!(generic(p).is_err(), "variant {variant}");
@@ -260,7 +262,7 @@ fn topology_matrix_and_winding() {
         ),
         (
             "near collinear",
-            vec![(0., 0.), (10., 0.000001), (20., 0.), (20., 10.), (0., 10.)],
+            vec![(0., 0.), (10., 0.000_001), (20., 0.), (20., 10.), (0., 10.)],
         ),
     ];
     for (name, pts) in shapes {
@@ -275,8 +277,10 @@ fn topology_matrix_and_winding() {
             println!(
                 "matrix {name} reverse={reverse}: {}",
                 r.as_ref()
-                    .map(|r| format!("{} moves", r.toolpath.len()))
-                    .unwrap_or_else(|e| e.to_string())
+                    .map_or_else(std::string::ToString::to_string, |r| format!(
+                        "{} moves",
+                        r.toolpath.len()
+                    ))
             );
             // These reference geometries must stay supported, not silently regress to refusal.
             assert!(r.is_ok(), "{name}: {r:?}");
@@ -341,8 +345,10 @@ fn circle_islands_and_disconnected_regions_are_explicit() {
             println!(
                 "matrix case={case} medial={medial}: {}",
                 r.as_ref()
-                    .map(|r| format!("{} moves", r.toolpath.len()))
-                    .unwrap_or_else(|e| e.to_string())
+                    .map_or_else(std::string::ToString::to_string, |r| format!(
+                        "{} moves",
+                        r.toolpath.len()
+                    ))
             );
             assert!(r.is_ok(), "reference case={case} medial={medial}: {r:?}");
             // Pipeline 50 fixes the old 0.25 mm island-join overcut. Qualify
@@ -356,7 +362,7 @@ fn circle_islands_and_disconnected_regions_are_explicit() {
                     .filter(|s| s.from.z <= 0. && s.to.z <= 0.)
                 {
                     for j in 0..=100 {
-                        let t = j as f64 / 100.;
+                        let t = f64::from(j) / 100.;
                         let x = segment.from.x + t * (segment.to.x - segment.from.x);
                         let y = segment.from.y + t * (segment.to.y - segment.from.y);
                         let z = segment.from.z + t * (segment.to.z - segment.from.z);
@@ -401,7 +407,7 @@ fn shopbot(project: Project) -> Result<PipelineResponse, PipelineError> {
                 source: CpsPostSource::Bundled {
                     id: "shopbot".into(),
                 },
-                properties: Default::default(),
+                properties: std::collections::BTreeMap::default(),
             }),
         },
         |_, _, _| {},

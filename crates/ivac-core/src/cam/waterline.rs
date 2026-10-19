@@ -873,7 +873,7 @@ mod audit_tests {
     fn audit_nesting_prefilters_disjoint_and_equal_area_loops() {
         let rings: Vec<_> = (0..500)
             .map(|i| {
-                let x = i as f64 * 4.;
+                let x = f64::from(i) * 4.;
                 vec![
                     Point2::new(x, 0.),
                     Point2::new(x + 2., 0.),

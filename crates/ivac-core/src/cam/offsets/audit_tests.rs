@@ -93,7 +93,7 @@ fn audit_approach_projects_onto_long_side() {
 fn audit_waterline_circle_clearance() {
     let ring: Vec<_> = (0..128)
         .map(|i| {
-            let a = i as f64 * std::f64::consts::TAU / 128.;
+            let a = f64::from(i) * std::f64::consts::TAU / 128.;
             p(10. * a.cos(), 10. * a.sin())
         })
         .collect();
@@ -161,7 +161,7 @@ fn audit_approach_splits_arcs_without_changing_shape_or_tabs() {
 fn audit_zigzag_additional_clearance_is_geometric_and_rotation_invariant() {
     let ring: Vec<_> = (0..128)
         .map(|i| {
-            let a = i as f64 * std::f64::consts::TAU / 128.;
+            let a = f64::from(i) * std::f64::consts::TAU / 128.;
             p(10. * a.cos(), 10. * a.sin())
         })
         .collect();
@@ -193,7 +193,7 @@ fn audit_offset_island_chords_keep_clearance() {
                 for j in 0..=20 {
                     let a = ring[i];
                     let b = ring[(i + 1) % ring.len()];
-                    let t = j as f64 / 20.;
+                    let t = f64::from(j) / 20.;
                     let q = p(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
                     let d = (q.x.abs() - 2.).max(0.).hypot((q.y.abs() - 2.).max(0.));
                     assert!(d >= 3. - 1e-6, "island chord clearance={d}");
@@ -214,7 +214,7 @@ fn audit_waterline_nested_holes_and_split_domains_stay_clear() {
     assert!(!chains.is_empty());
     for s in chains.iter().flatten() {
         for j in 0..=20 {
-            let t = j as f64 / 20.;
+            let t = f64::from(j) / 20.;
             let q = p(
                 s.start.x + (s.end.x - s.start.x) * t,
                 s.start.y + (s.end.y - s.start.y) * t,
@@ -278,7 +278,7 @@ fn audit_pocket_wall_directions_m3_m4_climb_conventional() {
                         finish_cut_direction: direction,
                         ..Default::default()
                     },
-                    pocket: Default::default(),
+                    pocket: crate::project::PocketParams::default(),
                 },
                 ..Default::default()
             };

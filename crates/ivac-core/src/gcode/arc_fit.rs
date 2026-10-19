@@ -584,7 +584,7 @@ mod audit_09_10 {
     fn coarse_cocircular_vertices_do_not_authorize_changing_facets() {
         let p: Vec<_> = (0..10)
             .map(|i| {
-                let a = (i as f64 * 10.).to_radians();
+                let a = (f64::from(i) * 10.).to_radians();
                 Point2::new(50. * a.cos(), 50. * a.sin())
             })
             .collect();

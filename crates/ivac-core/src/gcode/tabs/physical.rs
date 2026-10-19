@@ -2,7 +2,7 @@
 //! projected tab anchor; its Minkowski sum with the cutter disc is protected.
 //! Rectangle transitions are analytic line/circle intersections. Ramp emission
 //! uses an upper envelope over entire intervals (not just endpoint samples).
-use super::*;
+use super::{math, Point2, PostProcessor, Segment, SegmentKind, RETENTION_MARGIN_MM};
 use crate::cam::offsets::TabPoint;
 
 // Endpoint uplift budget in mm. Total interpolated excess is <= twice this
@@ -31,11 +31,11 @@ fn point(seg: &Segment, t: f64) -> Point2 {
 }
 
 fn length(seg: &Segment) -> f64 {
-    if seg.bulge != 0. {
+    if seg.bulge == 0. {
+        seg.start.distance(seg.end)
+    } else {
         let (_, _, _, r) = math::bulge_to_arc(seg.start, seg.end, seg.bulge);
         r * (4. * seg.bulge.atan()).abs()
-    } else {
-        seg.start.distance(seg.end)
     }
 }
 
@@ -241,7 +241,7 @@ mod audit_11_12 {
                     .filter(|m| m.kind != crate::gcode::preview::MoveKind::Rapid)
                 {
                     for k in 0..=20 {
-                        let t = k as f64 / 20.;
+                        let t = f64::from(k) / 20.;
                         let x = m.from.x + t * (m.to.x - m.from.x);
                         let z = m.from.z + t * (m.to.z - m.from.z);
                         // A radius-3 cutter can touch retained x in [-3,3]

@@ -161,7 +161,7 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
             if axes.is_empty() {
                 return Err(invalid("No medial axis could be resolved at the 0.1 mm sampling spacing. Geometry is unsupported; no output generated."));
             }
-            for axis in axes.iter() {
+            for axis in &axes {
                 let (path, limited, zero) = crate::profile_measure!(
                     "vcarve.target_depth",
                     crate::cam::vcarve::polyline_to_z(

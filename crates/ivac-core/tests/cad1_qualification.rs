@@ -1,4 +1,4 @@
-//! Geometry-only CAD relief through the unchanged generic CAM and ShopBot post.
+//! Geometry-only CAD relief through the unchanged generic CAM and `ShopBot` post.
 #![cfg(feature = "cps")]
 mod common;
 use common::{build_project, endmill_tool, op_single_pass, stock_at_origin};
@@ -151,7 +151,7 @@ fn exact_diameter_corners_are_reached_in_emitted_profile_and_pocket() {
                             source: CpsPostSource::Bundled {
                                 id: "shopbot".into(),
                             },
-                            properties: Default::default(),
+                            properties: std::collections::BTreeMap::default(),
                         }),
                     },
                     |_, _, _| {},

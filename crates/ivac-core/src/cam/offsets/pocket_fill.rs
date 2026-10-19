@@ -346,6 +346,7 @@ pub fn pocket_zigzag(
 /// Raster a geometrically eroded center domain, preserving split components
 /// and holes returned by Clipper. `inset` is additional clearance in mm;
 /// callers supply either raw geometry or an already compensated center domain.
+#[must_use]
 pub fn pocket_zigzag_inset(
     boundary: &[Point2],
     holes: &[Vec<Point2>],

@@ -1,4 +1,6 @@
 //! FS3.9 software qualification, not machining evidence.
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp)]
 use ivac_feeds_speeds::*;
 fn pack() -> SourcePack {
     load_source_pack_json(include_str!(
@@ -46,7 +48,9 @@ fn available(result: KnowledgeResult) -> (Box<Recommendation>, KnowledgeExplanat
         FeedsSpeedsRecommendation::Available { recommendation } => {
             (recommendation, result.explanation.unwrap())
         }
-        r => panic!("{r:?} {:?}", result.scope_rejections),
+        r @ FeedsSpeedsRecommendation::Unavailable { .. } => {
+            panic!("{r:?} {:?}", result.scope_rejections)
+        }
     }
 }
 #[test]
@@ -175,7 +179,7 @@ fn incompatible_family_flutes_operation_machine_and_material_remain_rejected() {
             2 => r.operation.kind = OperationKind::Finish,
             3 => r.machine.identity = None,
             _ => r.material.identity = Some(taxon_identity("wood.hardwood")),
-        };
+        }
         assert!(
             matches!(
                 recommend_packs(&[p.clone()], &r).unwrap().recommendation,

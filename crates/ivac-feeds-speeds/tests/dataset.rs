@@ -1,3 +1,5 @@
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp)]
 use ivac_feeds_speeds::*;
 use serde_json::{json, Value};
 const DATA: &str = include_str!("../../../data/feeds-speeds/sienci-router-reference.v1.json");
@@ -10,7 +12,7 @@ fn request(doc: &DatasetDocument, index: usize) -> FeedsSpeedsRequest {
         .unwrap();
     let doc_mm = match profile.data {
         CuttingData::ExactValues { doc_mm, .. } => doc_mm,
-        _ => unreachable!(),
+        CuttingData::ChiploadTarget { .. } => unreachable!(),
     };
     FeedsSpeedsRequest {
         schema_version: DOMAIN_SCHEMA_VERSION,
@@ -45,7 +47,7 @@ fn request(doc: &DatasetDocument, index: usize) -> FeedsSpeedsRequest {
 fn available(engine: &Engine, r: &FeedsSpeedsRequest) -> Box<Recommendation> {
     match engine.recommend(r) {
         FeedsSpeedsRecommendation::Available { recommendation } => recommendation,
-        other => panic!("{other:?}"),
+        other @ FeedsSpeedsRecommendation::Unavailable { .. } => panic!("{other:?}"),
     }
 }
 fn unavailable(engine: &Engine, r: &FeedsSpeedsRequest) {
@@ -199,12 +201,12 @@ fn schema_versions_unknown_fields_duplicate_fields_and_units_refused() {
 #[test]
 fn dangling_revisions_and_family_members_refused() {
     reject(|v| {
-        v["profile_set"]["profiles"][0]["scope"]["material"]["identity"]["revision"] = json!("2")
+        v["profile_set"]["profiles"][0]["scope"]["material"]["identity"]["revision"] = json!("2");
     });
     reject(|v| v["profile_set"]["profiles"][0]["scope"]["tool"]["id"] = json!("absent"));
     reject(|v| {
         v["profile_set"]["machine_families"] =
-            json!([{"id":"lab","members":[{"id":"absent","revision":"1"}]}])
+            json!([{"id":"lab","members":[{"id":"absent","revision":"1"}]}]);
     });
 }
 #[test]

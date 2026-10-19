@@ -1,7 +1,7 @@
 //! CSV audit: cargo run -p ivac-feeds-speeds --example sensitivity > sensitivity.csv
 mod sensitivity_support;
-use ivac_feeds_speeds::*;
-use sensitivity_support::*;
+use ivac_feeds_speeds::{recommend_packs, Aggressiveness, FeedsSpeedsRecommendation};
+use sensitivity_support::{diameters, pack, request};
 fn main() {
     let p = pack();
     println!("scenario,mode,diameter_mm,quality,record,source_diameters,rpm,feed_mm_min,plunge_mm_min,doc_mm,transition");
@@ -64,7 +64,9 @@ fn main() {
                             ),
                         )
                     }
-                    _ => ("Unavailable,none,none".into(), ",,,".into()),
+                    FeedsSpeedsRecommendation::Unavailable { .. } => {
+                        ("Unavailable,none,none".into(), ",,,".into())
+                    }
                 };
                 let transition = key != previous;
                 println!("{scenario},{mode:?},{d:.9},{key},{values},{transition}");

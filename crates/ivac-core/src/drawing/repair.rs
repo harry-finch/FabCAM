@@ -510,7 +510,7 @@ impl Drawing {
                 let id = self.allocate(a.import)?;
                 let parents = vec![*a, *b];
                 ca.id = id;
-                ca.parents = parents.clone();
+                ca.parents.clone_from(&parents);
                 self.contours.retain(|c| c.id != *a && c.id != *b);
                 self.contours.insert(ai.min(bi), ca);
                 self.transitions.push(Transition {

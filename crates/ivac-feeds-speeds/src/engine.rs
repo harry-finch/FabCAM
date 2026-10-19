@@ -1,4 +1,10 @@
-use crate::{matching, validation, *};
+use crate::{
+    matching, validation, Adjustment, Applicability, CuttingData, CuttingFamily, Diagnostic,
+    Engagement, EntryStrategy, FamilyMembership, FeedsSpeedsRecommendation, FeedsSpeedsRequest,
+    Identity, IdentitySelector, OperationKind, Profile, ProfileRejection, ProfileSet, Provenance,
+    Recommendation, RecommendedParameters, UnavailableReason, ValidationIssue,
+    DOMAIN_SCHEMA_VERSION, ENGINE_VERSION,
+};
 
 /// Validated immutable supplied data. Deserialization alone does not validate data;
 /// construction always passes through [`Engine::new`].
@@ -18,6 +24,7 @@ impl Engine {
     }
 
     /// Pure proposal: neither request nor dataset is mutated or externally read.
+    #[must_use]
     pub fn recommend(&self, request: &FeedsSpeedsRequest) -> FeedsSpeedsRecommendation {
         match self.propose(request) {
             Ok(recommendation) => FeedsSpeedsRecommendation::Available {
@@ -29,6 +36,7 @@ impl Engine {
 
     /// Closest refused scopes for explanation only. This does not select a
     /// recommendation, change precedence or relax any applicability criterion.
+    #[must_use]
     pub fn scope_rejections(&self, r: &FeedsSpeedsRequest) -> Vec<ProfileRejection> {
         let mut rows: Vec<_> = self
             .profiles
@@ -108,6 +116,8 @@ impl Engine {
     }
 }
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn change(
     adjustments: &mut Vec<Adjustment>,
     field: &str,
@@ -141,6 +151,8 @@ fn ceiling(
     }
 }
 
+// value is range-checked or bounded above; float casts saturate; operand is non-negative by construction (validated, clamped or saturating).
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 fn integer(value: f64, field: &str) -> Result<u32, UnavailableReason> {
     if !value.is_finite() || value < 1.0 || value > f64::from(u32::MAX) {
         return Err(UnavailableReason::UnrepresentableOutput {

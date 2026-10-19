@@ -2,6 +2,7 @@
 //! NC text) and [`inspect_post`] (top-level eval → property sheet).
 
 use boa_engine::JsValue;
+use std::fmt::Write as _;
 use std::sync::{
     atomic::{AtomicBool, Ordering},
     Arc,
@@ -83,7 +84,7 @@ impl SourceMap {
             rest = &rest[idx + 3..];
             let digits: String = rest[5..].chars().take_while(char::is_ascii_digit).collect();
             if let Some((file, rel)) = digits.parse().ok().and_then(|line| self.resolve(line)) {
-                mapped.push_str(&format!("{file} line {rel}"));
+                let _ = write!(mapped, "{file} line {rel}");
                 rest = &rest[5 + digits.len()..];
             } else {
                 mapped.push_str("line ");
@@ -304,6 +305,8 @@ pub fn run_post_with_limits(
 ///
 /// # Errors
 /// As [`run_post`], including [`PostError::Cancelled`] when the flag is set.
+// Owned flag is the public API contract (callers hand over a clone).
+#[allow(clippy::needless_pass_by_value)]
 pub fn run_post_cancellable(
     script: &str,
     script_name: &str,
@@ -317,7 +320,7 @@ pub fn run_post_cancellable(
         program,
         properties,
         RunLimits::default(),
-        Some(cancel),
+        Some(&cancel),
     )
 }
 
@@ -327,13 +330,10 @@ fn run_post_inner(
     program: &ir::Program,
     properties: &serde_json::Value,
     limits: RunLimits,
-    cancel: Option<Arc<AtomicBool>>,
+    cancel: Option<&Arc<AtomicBool>>,
 ) -> Result<PostOutput, PostError> {
     let check_cancel = || {
-        if cancel
-            .as_ref()
-            .is_some_and(|flag| flag.load(Ordering::Relaxed))
-        {
+        if cancel.is_some_and(|flag| flag.load(Ordering::Relaxed)) {
             Err(PostError::Cancelled)
         } else {
             Ok(())
@@ -347,7 +347,7 @@ fn run_post_inner(
             ir::IR_VERSION
         )));
     }
-    let mut engine = Engine::with_cancel(cancel.clone());
+    let mut engine = Engine::with_cancel(cancel.cloned());
     apply_limits(&mut engine, limits);
     let evaluated = eval_bundled(&mut engine, script, script_name);
     check_cancel()?;

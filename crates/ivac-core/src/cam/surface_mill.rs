@@ -197,6 +197,8 @@ pub fn drop_cutter(
         .expect("no cancellation token")
 }
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub fn drop_cutter_cancellable(
     field: &SurfaceField,
     tool_radius_mm: f64,

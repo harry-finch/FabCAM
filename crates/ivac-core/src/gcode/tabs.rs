@@ -473,7 +473,7 @@ mod audit_09_10 {
             .iter()
             .filter(|m| (m.to.x - b.x).hypot(m.to.y - b.y) < 1e-6)
         {
-            assert!(m.to.z >= -4.000001, "tab seam plunged through: {m:?}");
+            assert!(m.to.z >= -4.000_001, "tab seam plunged through: {m:?}");
         }
     }
 }

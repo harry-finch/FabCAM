@@ -33,6 +33,8 @@ impl Knot {
 }
 // Remove only exact affine redundancy. A repeated epsilon merge could accumulate
 // target/envelope drift over thousands of passes; do not spend that error budget.
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn simplify(knots: &mut Vec<Knot>) {
     let mut out: Vec<Knot> = Vec::with_capacity(knots.len());
     for &c in knots.iter() {
@@ -64,6 +66,8 @@ fn simplify(knots: &mut Vec<Knot>) {
 /// Coordinates are mm, Z is relative to stock top (negative into stock).
 /// Returns one continuous path per chain, beginning at stock top. No hidden
 /// vertical entry, no extrapolated XY ramp, no surface jump between chains.
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub fn plan(
     axis: &[(f64, f64, f64)],
     step: f64,

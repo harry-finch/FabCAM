@@ -1,5 +1,5 @@
 //! Structured opt-in errors; legacy String APIs remain compatible at adapter boundaries.
-use crate::*;
+use crate::{DatasetLoadError, SourcePack, ValidationIssue, MAX_PACK_BYTES};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

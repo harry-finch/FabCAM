@@ -623,6 +623,8 @@ pub fn small_circle_drill(obj: &VcObject, tool_radius: f64) -> Option<PolylineOf
 /// chains. Common centre/radius alone is insufficient (a reversed half-loop
 /// or multiple revolutions is not a circle boundary). Tolerances below cover
 /// floating arithmetic only, not physical fit or polygon-to-circle inference.
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(crate) fn analytic_circle_geometry(obj: &VcObject) -> Option<(Point2, f64)> {
     use crate::geometry::SegmentKind;
     if !obj.closed || obj.segments.is_empty() {

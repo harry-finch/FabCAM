@@ -1266,7 +1266,7 @@ mod audit_09_10 {
         };
         op.source = OpSource::Layers {
             layers: vec!["target".into()],
-            combine: Default::default(),
+            combine: crate::project::SourceCombine::default(),
         };
         let mut segs = closed_circle(Point2::new(10., 10.), 8.);
         for s in &mut segs {

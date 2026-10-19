@@ -1,5 +1,7 @@
 //! Explicit JSON distribution boundary. No filesystem/network access or bundled default.
-use crate::*;
+use crate::{
+    CuttingData, CuttingFamily, Engine, Identity, IdentitySelector, ProfileSet, ValidationIssue,
+};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
@@ -70,9 +72,11 @@ pub struct LoadedDataset {
     engine: Engine,
 }
 impl LoadedDataset {
+    #[must_use]
     pub fn document(&self) -> &DatasetDocument {
         &self.document
     }
+    #[must_use]
     pub fn engine(&self) -> &Engine {
         &self.engine
     }
@@ -87,13 +91,15 @@ pub fn load_dataset_json(json: &str) -> Result<LoadedDataset, DatasetLoadError> 
 }
 
 /// Validate an in-memory document without a JSON round trip.
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub fn validate_dataset(document: &DatasetDocument) -> Result<Engine, Vec<ValidationIssue>> {
     let mut issues = crate::validation::set_issues(&document.profile_set);
     let mut issue = |field: String, message: &str| {
         issues.push(ValidationIssue {
             field,
             message: message.into(),
-        })
+        });
     };
     if document.format_version != DATASET_FORMAT_VERSION {
         issue("format_version".into(), "unsupported dataset format");

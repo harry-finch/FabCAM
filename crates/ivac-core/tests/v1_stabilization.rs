@@ -1,3 +1,9 @@
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_precision_loss,
+    clippy::cast_sign_loss
+)]
 mod common;
 use common::{build_project, endmill_tool, op_single_pass, run, stock_at_origin};
 use ivac_core::gcode::preview::MoveKind;
@@ -190,7 +196,7 @@ fn deep_pocket_opensbp_decodes_to_the_same_preview_moves() {
                 source: CpsPostSource::Bundled {
                     id: "shopbot".into(),
                 },
-                properties: Default::default(),
+                properties: std::collections::BTreeMap::default(),
             }),
         },
         |_, _, _| {},

@@ -1116,6 +1116,8 @@ mod tests {
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod audit_six {
     use super::*;
     #[test]
@@ -1238,7 +1240,7 @@ mod audit_six {
             assert_eq!(out.segments[0].start, out.segments.last().unwrap().end);
             assert!(out.segments.iter().all(|s| s.bulge == 0.));
             for i in 0..=2000 {
-                let t = std::f64::consts::TAU * i as f64 / 2000.;
+                let t = std::f64::consts::TAU * f64::from(i) / 2000.;
                 let p = xf.apply(
                     major.x * t.cos() + minor.x * t.sin(),
                     major.y * t.cos() + minor.y * t.sin(),
@@ -1248,7 +1250,7 @@ mod audit_six {
                     .iter()
                     .map(|s| chord_distance(p, s))
                     .fold(f64::INFINITY, f64::min);
-                assert!(dist <= 0.01000001, "error {dist}");
+                assert!(dist <= 0.010_000_01, "error {dist}");
             }
         }
     }

@@ -1,5 +1,12 @@
 //! Versioned DATA-only pack boundary and deterministic reconciliation. No I/O.
-use crate::*;
+use crate::{
+    adapt_profile, add_interpolations, derived_rejections, validate_adaptation, validate_dataset,
+    AdaptationScope, Aggressiveness, CandidateRank, CuttingData, CuttingFamily, DatasetDocument,
+    DatasetLoadError, Derivation, EngagementScope, Engine, Evidence, FeedsSpeedsRecommendation,
+    FeedsSpeedsRequest, Identity, IdentitySelector, MatchQuality, MatchingTrace, Profile,
+    ProfileCategory, ProfileRejection, ProfileSet, Range, Recommendation, ScopeMismatch,
+    SourcePackError, UnavailableReason, DOMAIN_SCHEMA_VERSION, ENGINE_VERSION,
+};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
@@ -101,6 +108,8 @@ pub struct LabReview {
 #[cfg_attr(feature = "schema", schemars(rename = "FsLabPreset"))]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+// serialized wire/ranking record; fields are independent flags.
+#[allow(clippy::struct_excessive_bools)]
 pub struct LabPreset {
     pub name: String,
     pub state: LabState,
@@ -298,6 +307,7 @@ pub(crate) fn known_taxon(id: &str) -> bool {
     MATERIAL_TAXONOMY.iter().any(|t| t.0 == id)
 }
 
+#[must_use]
 pub fn material_taxonomy() -> Vec<MaterialTaxon> {
     MATERIAL_TAXONOMY
         .iter()
@@ -309,6 +319,7 @@ pub fn material_taxonomy() -> Vec<MaterialTaxon> {
         })
         .collect()
 }
+#[must_use]
 pub fn taxon_identity(id: &str) -> Identity {
     Identity {
         id: format!("material/{id}"),
@@ -334,6 +345,7 @@ pub(crate) fn taxon_distance(parent: &str, identity: &Identity) -> Option<u32> {
     }
 }
 
+#[must_use]
 pub fn safe_pack_id(value: &str) -> bool {
     !value.is_empty()
         && value.len() <= 100
@@ -526,6 +538,7 @@ fn validate_pack_policy(pack: &SourcePack) -> Result<(), String> {
     Ok(())
 }
 /// Distribution is enforced by the build registry separately; manifest alone grants no bundle entry.
+#[must_use]
 pub fn public_bundle_eligible(pack: &SourcePack) -> bool {
     validate_source_pack(pack).is_ok()
         && pack.manifest.visibility == Visibility::Public
@@ -546,6 +559,9 @@ pub struct NormalizedQuantities {
     pub chipload_derived: bool,
     pub radial_engagement_derived: bool,
 }
+#[must_use]
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub fn normalized_quantities(p: &Profile) -> NormalizedQuantities {
     let (rpm, chipload, doc, woc) = match p.data {
         CuttingData::ExactValues {
@@ -656,6 +672,12 @@ pub fn recommend_packs_checked(
     recommend_packs_traced(packs, request, None)
 }
 
+// value is range-checked or bounded above; float casts saturate; operand is non-negative by construction (validated, clamped or saturating); exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::float_cmp
+)]
 pub(crate) fn recommend_packs_traced(
     packs: &[SourcePack],
     request: &FeedsSpeedsRequest,
@@ -838,7 +860,7 @@ pub(crate) fn recommend_packs_traced(
                         quality_cost: derivation.as_ref().map_or(0, |d| d.quality.rank_cost()),
                         machine_transfer: derivation
                             .as_ref()
-                            .map_or(0, |d| d.machine_transfer as u32),
+                            .map_or(0, |d| u32::from(d.machine_transfer)),
                         machine_specificity: selector_cost(&original.scope.machine),
                         nonspecific_tool: u32::from(p.scope.tool.is_none()),
                         diameter_range: u32::from(
@@ -974,7 +996,10 @@ pub(crate) fn recommend_packs_traced(
             message: "Missing candidate profile".into(),
         })?
         .clone();
-    recommendation.provenance.derivation = selected.derivation.clone();
+    recommendation
+        .provenance
+        .derivation
+        .clone_from(&selected.derivation);
     let range = Range {
         min: candidates[0].1.parameters.effective_chipload_mm_tooth,
         max: candidates[candidates.len() - 1]

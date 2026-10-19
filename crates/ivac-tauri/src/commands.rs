@@ -705,7 +705,7 @@ mod audit_15_16_tool {
                 )],
                 legacy_objects: vec![],
                 pivot: ivac_core::geometry::Point2::new(0., 0.),
-                transform: Default::default(),
+                transform: ivac_core::drawing::Transform::default(),
                 next_entity: 1,
             }])
             .unwrap(),

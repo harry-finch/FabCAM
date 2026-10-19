@@ -1,4 +1,6 @@
-//! Independent TEST1 OpenSBP and continuous straight-segment oracle.
+//! Independent TEST1 `OpenSBP` and continuous straight-segment oracle.
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::cast_possible_truncation, clippy::float_cmp)]
 use ivac_core::geometry::{Point2, Segment};
 #[derive(Clone)]
 pub struct Move {

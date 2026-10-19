@@ -1,4 +1,6 @@
 //! Targeted post-audit regressions; no machine execution.
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp)]
 mod common;
 use common::{build_project, closed_rectangle, endmill_tool, op_single_pass, stock_at_origin};
 use ivac_core::input::{import_bytes, ImportOptions};
@@ -165,7 +167,7 @@ fn shopbot(mut req: PipelineRequest) -> PipelineRequest {
         source: CpsPostSource::Bundled {
             id: "shopbot".into(),
         },
-        properties: Default::default(),
+        properties: std::collections::BTreeMap::default(),
     });
     req
 }

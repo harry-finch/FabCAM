@@ -17,7 +17,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let mut runs = Vec::new();
         for index in 0..repeats {
             let start = Instant::now();
-            let out = ivac_core::input::import_bytes(&args[1], &bytes, &Default::default())?;
+            let out = ivac_core::input::import_bytes(
+                &args[1],
+                &bytes,
+                &ivac_core::ImportOptions::default(),
+            )?;
             runs.push(json!({"run":index,"import_ms":start.elapsed().as_secs_f64()*1000.,"segments":out.segments.len(),"objects":out.object_meta.len(),"layers":out.layers.len()}));
         }
         fs::write(

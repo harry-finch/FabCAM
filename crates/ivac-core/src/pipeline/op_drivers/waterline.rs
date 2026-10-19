@@ -253,6 +253,8 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod audit_09_10 {
     use super::*;
 

@@ -1,4 +1,6 @@
 //! Synthetic software fixtures only: none of these numbers are material cutting advice.
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::float_cmp)]
 use ivac_feeds_speeds::*;
 
 fn id(name: &str) -> Identity {
@@ -103,14 +105,18 @@ fn engine(profiles: Vec<Profile>) -> Engine {
 fn available(result: FeedsSpeedsRecommendation) -> Recommendation {
     match result {
         FeedsSpeedsRecommendation::Available { recommendation } => *recommendation,
-        other => panic!("expected available: {other:?}"),
+        other @ FeedsSpeedsRecommendation::Unavailable { .. } => {
+            panic!("expected available: {other:?}")
+        }
     }
 }
 
 fn unavailable(result: FeedsSpeedsRecommendation) -> UnavailableReason {
     match result {
         FeedsSpeedsRecommendation::Unavailable { reason } => reason,
-        other => panic!("expected unavailable: {other:?}"),
+        other @ FeedsSpeedsRecommendation::Available { .. } => {
+            panic!("expected unavailable: {other:?}")
+        }
     }
 }
 
@@ -738,7 +744,7 @@ fn fs13_validation_label_requires_scope_and_record() {
                     .evidence_record
                     .as_mut()
                     .unwrap()
-                    .validation_criteria_reference = None
+                    .validation_criteria_reference = None;
             }
             _ => p.scope.flute_count = None,
         }

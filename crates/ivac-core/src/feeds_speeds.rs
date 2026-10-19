@@ -178,6 +178,7 @@ pub fn cam_request(
 
 /// Stable native context snapshot; includes source/geometry and relevant tools/limits.
 /// Dataset availability/revision never participates in generation.
+#[must_use]
 pub fn context_key(project: &Project, op: &Op) -> String {
     let mut params = op.params.clone();
     params.applied_cutting = None;
@@ -236,6 +237,8 @@ pub fn saved_rates(op: &Op, tool: &ToolEntry, pass: PassKind) -> Result<(u32, u3
     ))
 }
 
+// owned argument is the transport/command contract.
+#[allow(clippy::needless_pass_by_value)]
 pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
     if request.dataset_json.len() > 16 * 1024 * 1024 {
         return Err("Enabled source data exceeds 16 MiB".into());
@@ -398,8 +401,8 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
         None
     };
     Ok(FsCamResponse {
-        knowledge,
         recommendation,
+        knowledge,
         applied_op,
         scope_rejections,
     })
@@ -661,8 +664,8 @@ mod tests {
         });
         p.operations[0].kind = OpKind::Pocket {
             strategy: crate::project::PocketStrategy::Cascade,
-            contour: Default::default(),
-            pocket: Default::default(),
+            contour: crate::project::ContourParams::default(),
+            pocket: crate::project::PocketParams::default(),
         };
         p.operations[0].params.step = Some(-1.0);
         let pack = fs::load_source_pack_json(include_str!(
@@ -1135,8 +1138,8 @@ mod tests {
         profile["source"]["author"] = serde_json::json!("Original synthetic software fixture");
         p.operations[0].kind = OpKind::Pocket {
             strategy: crate::project::PocketStrategy::Spiral,
-            contour: Default::default(),
-            pocket: Default::default(),
+            contour: crate::project::ContourParams::default(),
+            pocket: crate::project::PocketParams::default(),
         };
         p.operations[0].pocket_params_mut().unwrap().xy_overlap = 0.6;
         let d = fs::load_dataset_json(&data.to_string()).unwrap();

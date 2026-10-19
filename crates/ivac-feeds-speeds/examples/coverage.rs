@@ -1,5 +1,10 @@
 //! Reproducible coverage audit of the reviewed bundled pack; no machining validation.
-use ivac_feeds_speeds::*;
+use ivac_feeds_speeds::{
+    load_source_pack_json, material_taxonomy, recommend_packs, taxon_identity, Aggressiveness,
+    CuttingFamily, Engagement, EntryStrategy, FeedsSpeedsRequest, Identity, MachineSnapshot,
+    MatchQuality, MaterialSnapshot, OperationContext, OperationKind, ToolSnapshot,
+    KNOWLEDGE_POLICY,
+};
 fn main() {
     let pack = load_source_pack_json(include_str!(
         "../../../data/feeds-speeds/packs/sienci-longmill.v3.json"

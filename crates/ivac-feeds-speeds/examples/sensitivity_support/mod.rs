@@ -1,5 +1,9 @@
 //! Software audit fixtures; machine limits are synthetic, not hardware specifications.
-use ivac_feeds_speeds::*;
+use ivac_feeds_speeds::{
+    load_source_pack_json, taxon_identity, Aggressiveness, CuttingFamily, Engagement,
+    EntryStrategy, FeedsSpeedsRequest, Identity, MachineSnapshot, MaterialSnapshot,
+    OperationContext, OperationKind, SourcePack, ToolSnapshot,
+};
 pub fn pack() -> SourcePack {
     load_source_pack_json(include_str!(
         "../../../../data/feeds-speeds/packs/sienci-longmill.v3.json"
@@ -47,7 +51,7 @@ pub fn diameters() -> Vec<f64> {
     for source in [3.175, 6.35] {
         for delta in [0.0, 0.1, 0.25, 0.5] {
             for boundary in [source / (1.0 + delta), source / (1.0 - delta)] {
-                for epsilon in [-0.000001, 0.0, 0.000001] {
+                for epsilon in [-0.000_001, 0.0, 0.000_001] {
                     ds.push(boundary + epsilon);
                 }
             }

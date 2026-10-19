@@ -412,8 +412,8 @@ mod tests {
             let owned: Vec<_> = (0..220)
                 .map(|i| {
                     let p = Point2::new(
-                        origin + (i % 15) as f64 * 0.001,
-                        origin + (i / 15) as f64 * 0.001,
+                        origin + f64::from(i % 15) * 0.001,
+                        origin + f64::from(i / 15) * 0.001,
                     );
                     off(p, Point2::new(-origin, -origin), 0, false)
                 })

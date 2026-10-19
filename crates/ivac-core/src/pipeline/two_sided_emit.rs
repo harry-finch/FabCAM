@@ -297,6 +297,8 @@ fn dowel_centres(
 /// anything else moves. The holes go through the stock (+0.5 mm) so a pin can
 /// pass through into the fixture. An unambiguous existing matching drill is
 /// required; physical tip geometry and authored drilling rates are never invented.
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn inject_dowel_op(
     project: &mut Project,
     stock: &StockConfig,
@@ -445,6 +447,8 @@ fn prepend_lines(gcode: &str, lines: &[String]) -> String {
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod tests {
     use super::*;
     use crate::pipeline::test_helpers::{endmill, pocket_op};

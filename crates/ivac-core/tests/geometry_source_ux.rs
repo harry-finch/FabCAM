@@ -1,4 +1,6 @@
 //! Audit fixtures for existing interpretation. No geometry algorithm changes.
+// Test fixtures assert exact literal values and bounded indices.
+#![allow(clippy::needless_pass_by_value)]
 use ivac_core::cam::chaining::{classify_containment, segments_to_objects};
 use ivac_core::cam::source_combine::{combine_source_regions, CombinedRegion};
 use ivac_core::cam::VcObject;

@@ -841,6 +841,8 @@ mod tests {
 }
 
 #[cfg(test)]
+// Test fixtures assert exact literal values and bounded indices.
+#[allow(clippy::float_cmp)]
 mod audit_11_12 {
     use super::*;
     #[test]

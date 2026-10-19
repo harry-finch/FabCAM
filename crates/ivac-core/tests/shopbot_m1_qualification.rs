@@ -1,4 +1,4 @@
-//! M1 machining-intent qualification. No ShopBot dialect is emitted here.
+//! M1 machining-intent qualification. No `ShopBot` dialect is emitted here.
 //! Fixtures are imported through the production SVG/DXF dispatch; assertions
 //! use independent analytic dimensions, distances and raster coverage.
 mod common;

@@ -204,7 +204,7 @@ fn lot8_uniform_tab_phase_avoids_every_rectangle_corner_without_changing_spacing
         Point2::new(30., 20.),
         Point2::new(0., 20.),
     ];
-    let phase = crate::cam::tabs::corner_safe_tab_phase(&pts, 4, 10., 5.000001).unwrap();
+    let phase = crate::cam::tabs::corner_safe_tab_phase(&pts, 4, 10., 5.000_001).unwrap();
     for i in 0..4 {
         let t = (f64::from(i) * 25. + phase).rem_euclid(100.);
         for corner in [0., 30., 50., 80.] {
@@ -218,9 +218,11 @@ fn lot8_uniform_tab_phase_avoids_every_rectangle_corner_without_changing_spacing
         Point2::new(5., 5.),
         Point2::new(0., 5.),
     ];
-    assert!(crate::cam::tabs::corner_safe_tab_phase(&tiny, 1, 12., 6.000001).is_none());
+    assert!(crate::cam::tabs::corner_safe_tab_phase(&tiny, 1, 12., 6.000_001).is_none());
 }
 #[test]
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn lot8_frame_tab_survives_final_resolved_native_cut_height() {
     let mut p = tabbed_pocket(true);
     p.segments = closed_square_offset(20., 20., 20.);
@@ -292,7 +294,7 @@ fn lot8_same_tool_finish_rpm_change_is_refused_not_silently_ignored_by_shopbot()
                 source: CpsPostSource::Bundled {
                     id: "shopbot".into(),
                 },
-                properties: Default::default(),
+                properties: BTreeMap::default(),
             }),
         },
         |_, _, _| {},

@@ -409,7 +409,7 @@ mod audit_six {
             assert!(!ctx.tolerance_failed);
             assert!(ctx.segments.len() > 1);
             for i in 0..=1000 {
-                let t = i as f64 / 1000.;
+                let t = f64::from(i) / 1000.;
                 let u = 1. - t;
                 let p = Point2::new(
                     u * u * u * cps[0].x

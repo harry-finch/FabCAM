@@ -3,6 +3,8 @@
 use super::PipelineError;
 use crate::project::{MachineMode, OpKind, Project, UnitSystem};
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(super) fn validate(project: &Project) -> Result<(), PipelineError> {
     if project.machine.mode != MachineMode::Mill {
         return Ok(());

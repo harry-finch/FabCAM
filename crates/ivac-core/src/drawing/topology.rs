@@ -2,6 +2,8 @@
 use super::Drawing;
 use crate::geometry::{Point2, SegmentKind};
 
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 pub(super) fn orient(a: Point2, b: Point2, c: Point2) -> Result<i8, String> {
     let u = (b.x - a.x) * (c.y - a.y);
     let v = (b.y - a.y) * (c.x - a.x);

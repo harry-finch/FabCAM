@@ -258,6 +258,8 @@ pub(crate) struct SegmentBoxIndex {
     cell: f64,
 }
 impl SegmentBoxIndex {
+    // operand is non-negative by construction (validated, clamped or saturating).
+    #[allow(clippy::cast_sign_loss)]
     pub(crate) fn new(edges: &[(Point2, Point2)]) -> Self {
         let bounds: Vec<_> = edges
             .iter()
@@ -308,6 +310,8 @@ impl SegmentBoxIndex {
             cell,
         }
     }
+    // operand is non-negative by construction (validated, clamped or saturating).
+    #[allow(clippy::cast_sign_loss)]
     pub(crate) fn candidates(&self, min: Point2, max: Point2, out: &mut Vec<usize>) -> usize {
         out.clear();
         let (x0, x1, y0, y1) = (
@@ -459,6 +463,8 @@ impl SegmentRayGrid {
     /// edge end), so the segment is filed in the foot's cell. The walk
     /// visits every cell the ray crosses inside the occupied bbox, so it
     /// visits the foot's cell and collects the segment.
+    // exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+    #[allow(clippy::float_cmp)]
     pub fn collect_candidates(&self, origin: Point2, dir: (f64, f64), out: &mut Vec<u32>) {
         out.clear();
         if self.n == 0 || (dir.0 == 0.0 && dir.1 == 0.0) {

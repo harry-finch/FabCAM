@@ -57,7 +57,7 @@ fn main() {
                 source: CpsPostSource::Bundled {
                     id: "shopbot".into(),
                 },
-                properties: Default::default(),
+                properties: std::collections::BTreeMap::default(),
             }),
         };
         let response = ivac_core::pipeline::run_pipeline(request.clone(), |_, _, _| {});

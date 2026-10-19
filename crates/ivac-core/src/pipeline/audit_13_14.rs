@@ -91,6 +91,8 @@ fn cache_key_tracks_spot_tool_entry_position_state_and_topology() {
     assert_ne!(base, key(&p, Point2::new(0., 0.), 1, "coolant off"));
 }
 #[test]
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn grouped_tool_counts_and_spot_round_trip() {
     let mut p = project_with(
         vec![
@@ -117,6 +119,8 @@ fn grouped_tool_counts_and_spot_round_trip() {
     assert_eq!(spindle_warmup_seconds(&p), 7.);
 }
 #[test]
+// exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
+#[allow(clippy::float_cmp)]
 fn included_compact_motion_and_unsupported_decimal_modes_are_distinct() {
     assert!(matches!(
         classify_gcode_include_line("G1X10Y2"),
