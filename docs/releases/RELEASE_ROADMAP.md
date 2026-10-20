@@ -134,6 +134,7 @@ named refinements; detailed historical acceptance criteria remain linked below.
 | UX4 / UX4.1 templates | V1 CONDITIONAL | Retain existing local templates; extensive recipe automation unnecessary | Existing behavior regression; low |
 | UX5 palette | V1 REQUIRED | Retain accepted workflow and keyboard access; no expansion | Integrated UI review; low |
 | UX6 Phase 0/A/B | V1 REQUIRED | Accepted machine/profile/tool ownership UX; test persistence and identity | Native verification + defect triage |
+| Tool-inspector stylized illustration refinement | POST-V1.5 | Planned UX enhancement; family identification and dimensional guidance beyond the existing schematic | Shared vector component + accessible field/dimension interaction; [scope below](#tool-inspector--stylized-illustration-and-dimensional-guidance) |
 | V-Carve A1–A4 / final diagnostics | V1 CONDITIONAL | Include bounded groove/spine modes as limited; no arbitrary clearing promise | Text reopen triage + physical sample if advertised; medium |
 | Advanced V-Carve / paired inlays | EXPERIMENTAL / RESEARCH | Current coverage partial; paired fit unqualified, defer to 2.0+ | High geometry + physical evidence |
 | PERF1-A/B1/B2 | V1 REQUIRED | Retain measured exact-input reuse; representative performance acceptance | RC measurement; medium |
@@ -193,6 +194,56 @@ and separately scoped projection/recognition. Existing HELIX1 HIGH, VCARVE2, GEO
 NEST1/2, inlays/two-sided, PERF2 and optional MCP1 retain targets; capacity/order
 conflicts require explicit human review. No bundled commitment or V1/V1.5 expansion.
 
+
+## Tool inspector — stylized illustration and dimensional guidance
+
+**PLANNED — NOT IMPLEMENTED refinement · POST-V1.5 UX/UI enhancement.**
+This refines the optional silhouette intent in [UX6-B](../shopbot-modernization/ux/UX6_B_PLAN.md),
+without reopening accepted machine/tool ownership work. The current
+[Tool inspector](../../frontend/src/lib/components/ToolLibraryDialog.svelte) already
+shows a [basic SVG dimensional schematic](../../frontend/src/lib/components/ToolDimensionDiagram.svelte)
+in Geometry/Mounting, with D/F/S/L annotations and unknown-value handling. That
+existing schematic does not deliver the family-specific illustration and linked
+interaction planned here. This is inspector UX, not a CAM-engine feature or a V1
+readiness blocker.
+
+The future component must be a **stylized UI illustration**, not a generic technical
+drawing or photorealistic rendering. Match FabCAM's compact interface, its existing
+small Lucide outline icon family (`@lucide/svelte`), and the clean geometric logic
+of the [FabCAM A1 brand/logo](../../assets/branding/fabcam/README.md). Follow
+[Professional Workshop UI](../../.agents/skills/professional-workshop-ui/SKILL.md):
+consistent stroke weight, restrained detail, dark neutral surfaces, shared tokens,
+legible labels and limited semantic accents. The current blue/graphite brand takes
+precedence over generic identity-color examples. Prefer a lightweight, vector-based
+(for example SVG) reusable component, suitable for other application contexts while
+preserving compact inspector density.
+
+Two complementary purposes define the planned scope:
+
+- **Tool identification:** a compact, recognizable representation of the selected
+  tool family: flat end mill, ball nose, V-bit, drill, chamfer/engraving bit and
+  other supported cutter families. Show only distinctions supported by the actual
+  tool definition; a stylized silhouette is not a precise physical model.
+- **Pedagogical dimensional guidance:** visually indicate and label cutter diameter,
+  shank diameter, overall length, cutting/flute length, tip angle for V-bits or
+  drills, and other relevant geometry-specific dimensions. Use actual available
+  values/units and applicable fields; unknown dimensions remain explicit rather
+  than being inferred from illustrative proportions.
+
+Future interaction should link the form and illustration in both directions:
+hovering or focusing a form field highlights its corresponding dimension; hovering
+a dimension highlights the related inspector field. Provide a keyboard-focus
+equivalent, accessible labels, visible focus and a non-color-only highlight so
+the explanation does not depend on pointer hover or color perception. Highlighting
+must not change values or move editing focus unexpectedly.
+
+Future acceptance review should cover supported family recognition, correct
+field/dimension correspondence and units, unknown/inapplicable values, compact
+layout, visual consistency and keyboard accessibility. The illustration is
+explanatory, not collision/clearance validation or evidence of machining safety;
+tool data, feeds/speeds, geometry and output semantics retain their current owners.
+This roadmap update authorizes no implementation, production/test changes or
+release-gate changes. **HARD STOP after this documentation update.**
 
 ## Dependency graph
 
