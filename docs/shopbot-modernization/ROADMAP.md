@@ -19,6 +19,8 @@ for acceptance criteria, blockers and human gates. This page is not a second dia
 |---|---|---|
 | V1 review and candidate refresh | Open gates in [V1 readiness](../releases/V1_READINESS.md); combined-source gate before separately authorized matching builds | Human reviews, clean-host platform records and supervised workshop evidence, then explicit V1 acceptance |
 | Milling correctness reserves | `ivac-2zll` RPM transition; `ivac-53ky9` resource budget; `ivac-42ylx` cancellation; ADR-0025 two-sided coverage | Triage supported V1 risk before expanding scope; no silent post/geometry change |
+| Security follow-up | [SEC1-01–09 matrix and future custom CPS confinement](../releases/SEC1_FOLLOWUP_ROADMAP.md); separate post-V1 security track | V1 bundled-only policy and pending corrections verified before acceptance; no automatic V1.5 dependency |
+| Independent UX/data | [Illustration, stock coloring, terminology and existing source-pack guide](../releases/SEC1_FOLLOWUP_ROADMAP.md#independent-ux-and-data-follow-ups) | Planned UX is not a SEC1 blocker; existing guide review reused |
 | FS follow-up | FS0–FS3.9 delivered, [acceptance matrix](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md#feeds--speeds-milestone-matrix); FS4 deferred/nonblocking; sensitivity smoothing remains proposed | No restart of FS0, automatic physical-evidence promotion or FS4 launch |
 | AUDIT3 | After explicit accepted V1, before main V1.5 implementation | Approved time box, retained accepted source/evidence; not a new V1 blocker |
 | ProtoMAX V1.5 | Approved [V1.5 plan](../releases/FABCAM_V1_5_SCOPE.md); ARCH-MACH planning and lawful OMX1 evidence before native writer/process work | Native MAKE plus actual platform/physical qualification; no LAYOUT substitution |

@@ -10,6 +10,21 @@ The runtime lives in [`crates/ivac-cps`](../crates/ivac-cps): a JS
 engine ([boa], pure Rust, so every transport can run it) plus a runtime
 prelude implementing the kernel API the posts call.
 
+## V1 support policy
+
+**FabCAM V1 supports bundled trusted CPS execution only.** The maintainer approved
+this policy; enforcement remains pending verification in the separate SEC1
+corrective checkpoint. See [scope, legacy preservation and acceptance criteria](releases/SEC1_FOLLOWUP_ROADMAP.md#approved-v1-cps-policy).
+Imported/embedded/path-based custom scripts must be refused before inspection or
+generation, with clear diagnostics and preserved legacy project data. Custom CPS
+execution is deferred pending confinement, not permanently removed.
+
+The custom-file UI/CLI examples below describe inherited developer APIs and
+future compatibility references, **not supported V1 end-user instructions**.
+Restricted host APIs and loop/recursion limits do not establish aggregate CPU,
+heap, output or diagnostic confinement. Bundled ShopBot retains its separate
+qualified operation subset and output checks.
+
 ## Using a post
 
 - **Bundled**: pick one in *Machine settings → G-code dialect → CPS
@@ -80,7 +95,8 @@ Things worth knowing about this runtime specifically:
   rather than failing silently.
 - **Sandbox**: no filesystem, network, or process access — the only host
   API is NC text out plus diagnostics. `redirectToFile` captures into
-  memory and warns; execution budgets stop runaway loops.
+  memory and warns; loop/recursion limits exist, but do not bound all cumulative
+  work or memory.
 - **What is not supported in v1**: probing macros, subprograms written
   to separate files, turning and additive. Those symbols exist and emit
   a named diagnostic, so a post touching them tells you what it wanted.

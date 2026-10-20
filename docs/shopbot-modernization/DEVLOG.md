@@ -2631,3 +2631,20 @@ output names, with explicit partial-publication errors and no pair-atomic claim.
 retain initial audit, policy approval, tests and limitations. Separate logical
 commits authorized only after qualification; no push, package, release or hardware.
 Human review is the next gate, not authorization to start another checkpoint.
+
+
+## 2026-10-20 — SEC1 roadmap and V1 scope reconciliation
+
+Documentation-only checkpoint `ivac-pknlj`, isolated from SEC1 implementation at
+`6043bfe`. Recorded maintainer-approved bundled-only V1 CPS policy and mapped all
+nine [SEC1 findings](../releases/SEC1_FOLLOWUP_ROADMAP.md) to conditional V1 gates
+or separate post-V1 security work. SEC1-01/04/08 remain pending verification;
+`ivac-5yxyu`, `ivac-q1nz1` and human gates reused. Custom CPS confinement is planned,
+not implemented or imposed on ProtoMAX V1.5. Existing illustration and source-pack
+guide preserved; missing stock-color/terminology UX recorded as planned. No source,
+configuration, schema, tests, accepted ADR or historical evidence changed; no push,
+merge, publication or implementation authorized. Audit report integration remains
+an explicit local-evidence dependency before portable publication of its links.
+Scoped diff/whitespace review passed; 9/9 SEC1 rows, 207 local links and their
+anchors checked, with the separate unchanged audit dependency verified by hash.
+No production tests rerun for this documentation-only change.

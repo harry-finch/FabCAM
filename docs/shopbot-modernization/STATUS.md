@@ -38,6 +38,12 @@ acceptance remain pending. [M4 evidence](M4_VALIDATION.md) stays bounded and his
 
 ## Remaining gates and next action
 
+SEC1 audit engineering `ivac-btkaq` is complete; human review `ivac-1ahyt` remains
+OPEN. The maintainer approved **bundled trusted CPS only for V1**. Separate
+SEC1-01/04/08 corrections (`ivac-dqlol` OPEN) remain pending verification at inspected `6043bfe`;
+see [security dispositions and post-V1 plan](../releases/SEC1_FOLLOWUP_ROADMAP.md).
+No implementation completion or new qualification is claimed by this reconciliation.
+
 NUMSAFE3 engineering (`ivac-fh2av`) is qualified; **HARD STOP for human review**
 `ivac-zulb3`. [Resource/export results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md)
 record the approved budgets, new-only pair contract, commits and remaining limits.
