@@ -1,6 +1,8 @@
 # FabCAM V1 readiness
 
-Snapshot **2026-10-20**, SEC1 software checkpoint, beta.3/pipeline63.
+Snapshot **2026-10-20**, V1-FREEZE review checkpoint, beta.3/pipeline63.
+[Exact final source and aggregate qualification receipt](V1_FREEZE_READINESS_2026_10_20.md)
+controls freeze readiness; human freeze review `ivac-4k4qx` remains OPEN.
 [SEC1 frozen-source results](SEC1_REMEDIATION_RESULTS_2026_10_20.md): 20/20 local gates;
 CPS external execution refused; promotion disabled, remote workflows not run.
 [Current implementation receipt](NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md#final-qualification-receipt);

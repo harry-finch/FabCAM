@@ -1,6 +1,6 @@
 # FabCAM — current status
 
-V1-FREEZE integration **2026-10-20**, beta.3 / pipeline63;
+V1-FREEZE human-review checkpoint **2026-10-20**, beta.3 / pipeline63;
 [freeze scope, qualification and next decision](../releases/V1_FREEZE_READINESS_2026_10_20.md).
 SEC1 baseline:
 [implementation, frozen-source qualification and handoff](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md).
@@ -25,15 +25,14 @@ Promotion is disabled; remote CI and approval protection have not been exercised
 
 ## Software gate and candidates
 
-Integrated `scripts/pre-release.sh`: **exit 0, 16/16 gates PASS** in the qualified
-macOS environment; NUMSAFE3 frozen-source Rust **1654 PASS/1 ignored**, frontend
-**1458 PASS/1 skip**. See the [NUMSAFE3 receipt](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md#final-qualification-receipt).
-The earlier integration remains recorded in
-[reconciliation](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md#integrated-validation).
-Historical NUMSAFE2 reports record 16 green gates and 136 byte-identical valid programs;
-those observations retain their tested source and do not imply installed-platform acceptance.
-The historical NUMSAFE3 run used a scoped `stat` wrapper. SEC1 now fixes the
-portable fail-closed size gate and qualifies it without that wrapper; see its report.
+V1-FREEZE [report and exact-source receipt](../releases/V1_FREEZE_READINESS_2026_10_20.md)
+own the current qualification: 1666 reported Rust passes, 1460 frontend passes,
+TEST1 256/256 and 136 byte-identical programs measured in preparation; the final
+receipt must confirm the complete 20-gate replay on its named commit. Retain the
+one ignored worker (separately watchdog-tested), locale skip and optional absent
+oracle limits. No current-source installed-platform or physical acceptance inferred.
+Historical SEC1/NUMSAFE3 receipts retain their source/environment; portable size
+checks now run without the old stat wrapper.
 
 Existing [beta.3 candidates](../releases/beta3-delivery-2026-10-18/README.md) are
 **`db5bde5` / pipeline61**, with three builds and bounded macOS smoke. They do not
@@ -46,7 +45,7 @@ acceptance remain pending. [M4 evidence](M4_VALIDATION.md) stays bounded and his
 [SEC1 follow-up matrix](../releases/SEC1_FOLLOWUP_ROADMAP.md) separates locally
 qualified SEC1-01/04/08 from deferred hardening and custom CPS confinement.
 Option A documentation integration completed on `codex/v1-freeze-readiness`;
-final freeze/candidate approval remains pending. The [Pocket RPM matrix](../releases/V1_POCKET_RPM_QUALIFICATION_2026_10_20.md)
+final freeze/candidate approval `ivac-4k4qx` remains pending. The [Pocket RPM matrix](../releases/V1_POCKET_RPM_QUALIFICATION_2026_10_20.md)
 retains supported dual-tool manual sections and refuses intra-section RPM changes.
 
 SEC1 engineering (`ivac-dqlol`) is qualified locally; **HARD STOP for human review**

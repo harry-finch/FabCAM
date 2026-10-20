@@ -2673,3 +2673,15 @@ reconciliation pending-state statements describe its inspected 6043bfe, not curr
 engineering status. SEC1-01/04/08 locally qualified; human review ivac-1mqti OPEN.
 No accepted ADR or historical report/evidence rewritten; FS guide already integrated.
 No freeze approval, push, installer, promotion or hardware action.
+
+
+## 2026-10-20 — V1-FREEZE integrated scope and final qualification handoff
+
+Option A merge 57aab6a retains newer SEC1 and deferred roadmap scope. Bounded
+ShopBot diagnostic 6f5e76a plus strict test cleanup 2e1257f preserve machine commands;
+four real Pocket/section/lab/profile regressions qualify supported dual-tool RPM
+and explicit intra-section refusal. [Freeze report](../releases/V1_FREEZE_READINESS_2026_10_20.md)
+records 1666 Rust/1460 frontend preparation passes, TEST1 256, corpus 136 exact and
+the mandatory final exact-commit receipt. Failed bootstrap/cache-layout attempts
+are retained, not counted as passing gates. Human review ivac-4k4qx and independent
+existing gates remain OPEN; no final freeze, push, installer, release or hardware.

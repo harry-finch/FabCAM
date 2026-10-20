@@ -1,9 +1,13 @@
 # V1-FREEZE — baseline readiness and integration decision
 
-2026-10-20 · `ivac-zdgjf` · **Option A approved; integrated qualification in progress.**
+2026-10-20 · `ivac-zdgjf` · **Option A integrated; conditional Go for human freeze review.**
 The maintainer explicitly approved Option A after the first Phase A report.
 Documentation is now reconciled with eb747eb and the newer SEC1 evidence.
-The proposed scope below remains subject to final human freeze approval.
+The scope below remains subject to final human freeze approval `ivac-4k4qx`.
+The exact proposed SHA and aggregate final result are in the
+[final local receipt](../../dist-test/v1-freeze-2026-10-20/final-receipt.json).
+It identifies this report-bearing commit after Git assigns its hash; acceptance
+requires its successful complete run, not an earlier revision's green result.
 
 ## 1. Git and worktree state
 
@@ -24,7 +28,7 @@ the sandbox, then succeeded with authorized read access.
 | `FabCAM-docs-consolidation` / `codex/sec1-roadmap` | `7e1c24b` | One unmerged documentation reconciliation commit based on `6043bfe`; clean tracked tree |
 | `codex/docs-consolidation` (no active worktree) | `744774d` | Already ancestor of main; guide/consolidation must not be integrated twice |
 | `feature/shopbot-mvp` (historical) | `c9d3f3b` | Historical branch, not candidate source |
-| `FabCAM-v1-freeze` / `codex/v1-freeze-readiness` | based on `eb747eb` | Isolated report-only worktree created for this decision record |
+| `FabCAM-v1-freeze` / `codex/v1-freeze-readiness` | final SHA in receipt | Isolated integrated source; Option A merge + bounded diagnostic/regressions + current freeze documentation |
 
 Tracked-clean does not mean evidence-free. Local evidence in the primary is not
 silently transferred into an isolated checkout or treated as published evidence.
@@ -117,20 +121,62 @@ These bounded classifications retain [V1 scope](FABCAM_V1_SCOPE.md). Software
 qualification, human acceptance, installed-platform and physical evidence remain
 independent; unsupported inherited/UI-visible operations are not promoted.
 
-## 7. Integrated qualification receipt
+## 7. Integrated qualification and reproducibility
 
-Final counts and exact tested commit will be recorded after the complete run.
-Local evidence: `dist-test/v1-freeze-2026-10-20/`. The first exploratory run is
-retained separately: two new-test pedantic lint findings and missing frontend/dist
-for Tauri in this fresh worktree. Fixed tests and bootstrapped build will be
-requalified; no failed gate is counted as a pass or guard weakened.
+The [final receipt](../../dist-test/v1-freeze-2026-10-20/final-receipt.json) is
+mandatory: it records exact source SHA/tree, full tracked-file fingerprints before
+and after, complete gate exit, counts, corpus identity and logs. The proposed
+candidate is **that exact tested commit**, not main, origin/main or an arbitrary
+newer branch tip. The receipt supplies the self-referential SHA after commit.
 
-Required final run: workspace all-features and pedantic strict Clippy, frontend
-lint/types/tests/production build, schema/version/codegen, import, NUMSAFE1/2/3,
-SEC1/CPS trust, ShopBot M1/M2, SAFE-Z, V-Carve, tool provenance/full-program verifier,
-native export transactions, separate TEST1 watchdog and pre-release. The corpus
-comparison covers 136 outputs/results against the retained SEC1 reference.
-Actual commands, tool versions, skips and source fingerprints belong to the receipt.
+| Check | Measured component result / final-run requirement |
+|---|---|
+| Workspace all-features | 1666 reported Rust PASS, 1 ignored TEST1 worker; must pass again in final aggregate |
+| Strict/pedantic Clippy | PASS with repository's canonical allow-list; no weakened warnings |
+| Schema/version/codegen/readme | PASS; no generated-contract drift |
+| Frontend lint/types/Vitest/production build | PASS; 1460 Vitest PASS, 1 pre-existing locale assertion skipped |
+| Import, NUMSAFE1/2/3, CPS trust, ShopBot M1/M2, SAFE-Z, V-Carve, provenance/verifier, native export | PASS in workspace; new Pocket matrix included, native file export 11 PASS |
+| TEST1 watchdog | 256/256 PASS, 44.40s during preparation; separate final-commit replay required, budget 120s |
+| Output corpus | 136/136 byte-identical to pinned NUMSAFE SHA-256 manifest; no error placeholders; final replay required |
+| WASM / size / cargo-deny / headless smoke | PASS; no installed-platform or physical claim |
+| Aggregate pre-release | Final exact-commit receipt must say exit 0 and 20/20; prior 19/20 is explicitly not qualification |
+| Links | 289 relative links/anchors checked; one unchanged local-only audit dependency verified in primary |
+
+Environment: macOS 26.5.2 arm64, Rust/cargo 1.88.0, Node 24.21.0, pnpm 10.34.6,
+wasm-pack 0.15.0, wasm-bindgen 0.2.120, cached wasm-opt and Chrome exec wrapper.
+A shared Cargo target cache is used; isolated `target/debug` points to that cache
+so existing CLI checks execute the freshly built binary at their expected path.
+This is build layout, not a production/test-guard change. Frontend dependencies
+were installed from the frozen lockfile; no lockfile changed. The temporary corpus
+runner uses current core source and the same dependency versions (only its own
+local package differs). Its first direct-rustc linkage attempt failed due to
+mismatched serde artifacts; the Cargo-resolved runner passes the pinned corpus.
+
+Retained failed attempts: initial bootstrap lacked frontend/dist required by
+Tauri and exposed two pedantic test-style issues, corrected and rechecked. The
+second full run passed 19/20; its CLI gate could not find the shared-cache binary
+at the isolated default path. After fixing the ignored build layout, both CLI
+checks were rerun; final full qualification remains governed by the final receipt.
+No failed run is counted as green, no source/test/evidence was hidden or removed.
+
+The ignored TEST1 worker is exercised through the separate watchdog. Seven
+optional FANUC oracle paths may return early because the non-distributed oracle
+is absent; reported passes do not establish those seven oracle comparisons.
+The frontend skip remains explicit. Build warnings remain warnings, not physical
+qualification. No package/install/network-service/hostile-directory claim follows.
+
+Reproduce with the pinned toolchain and documented build prerequisites:
+
+```sh
+RUSTC_WRAPPER='' scripts/pre-release.sh
+python3 scripts/test1/build.py
+python3 scripts/test1/run.py --binary <printed-executable> --output <new-directory> --cases 32 --budget 120 --frontend
+```
+
+Complete command/environment/log hashes, corpus harness and source fingerprints
+are retained in `dist-test/v1-freeze-2026-10-20/`. Nothing was moved from earlier
+evidence. The final qualification harness repeats the full gate, TEST1 and corpus
+on one clean commit and rejects any tracked-source change during the run.
 
 ## 8. Remote CI and open blockers
 
@@ -140,7 +186,7 @@ Current SEC1 source is not on origin/main and has no current-source remote
 qualification established here. Local workflow fixtures/YAML parsing do not prove
 remote execution. Push/workflow dispatch remain unauthorized and pending gates.
 
-Immediate blockers to final freeze endorsement: final software receipt and
+Immediate conditions for final freeze endorsement: successful exact-commit receipt and
 relevant human checkpoint dispositions, including acceptance of the now-qualified
 `ivac-2zll` limited-support matrix. Integration Option A is no longer pending. Later release gates:
 remote CI, current installers/upgrade/runtime, representative performance, physical
@@ -158,8 +204,8 @@ its applicability. **This report does not approve or activate the freeze.**
 
 ## 10. Candidate preparation plan — no installers built
 
-Source SHA: **not yet selected**; engineering base proposed above, resulting
-integration/qualified SHA must be explicitly approved. Keep current version
+Source SHA: **exact `source_sha` in the final receipt**, also stated in the
+checkpoint handoff. Human approval of that full SHA is required before builds. Keep current version
 `0.9.0-beta.3` / pipeline63 unless separately approved; use an explicit candidate
 run/manifest identifier, not an invented release tag.
 
@@ -195,15 +241,19 @@ physical evidence bounded. No hardware authority is granted by this checklist.
 
 ## 12. Recommendation
 
-Pending the final receipt: no final freeze approval or candidate builds yet.
-The useful next human decision is acceptance of the bounded scope and completed
-engineering checkpoints, not a new feature campaign. No review gate is closed by
-Option A or by passing tests. Remote CI, native-platform/workshop acceptance and
-publication remain separate.
+**Conditional Go for human functional-freeze review**, conditional on successful
+20/20 final exact-commit receipt and the recorded human scope/checkpoint decisions.
+Option A and bounded RPM investigation are completed; no new functional milestone
+is required before candidate tests. `ivac-2zll` is a qualified exclusion/support
+matrix awaiting acceptance, not a blanket ban on dual-tool Pocket.
+
+**No-Go for release or unapproved candidate construction.** Human review
+`ivac-4k4qx`, independent existing reviews, remote CI, native platform/workshop
+acceptance and publication remain separate. Passing tests closes none of them.
 
 ## 13. Exact next action and hard stop
 
-After complete software qualification, review the exact tested SHA, this capability
+Review the successful final receipt's exact tested SHA, this capability
 matrix and pending human gates, and explicitly approve the functional freeze and
 candidate construction. Any later code change requires a new qualified revision.
 No push, tag, installer build, draft release, promotion activation or hardware.
