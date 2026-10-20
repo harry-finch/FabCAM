@@ -20,6 +20,7 @@ The task's human decision must be recorded separately from implementation comple
 
 | Gate | Current disposition | Required next evidence / decision |
 |---|---|---|
+| V1-FREEZE Option A `ivac-zdgjf` | Documentation reconciliation completed in isolated freeze branch; [supported/refused Pocket matrix](V1_POCKET_RPM_QUALIFICATION_2026_10_20.md) qualified with deterministic controls | [Final qualification/source receipt](V1_FREEZE_READINESS_2026_10_20.md); `ivac-2zll` scope and other human reviews remain pending; no freeze/build approval inferred |
 | SEC1 `ivac-dqlol` / review `ivac-1mqti` | SEC1-01/04/08 implemented and locally qualified; source-bound workflow verification tested offline | [Results](SEC1_REMEDIATION_RESULTS_2026_10_20.md); remote CI, operational human protection and any promotion activation remain separate |
 | NUMSAFE3 `ivac-fh2av` / review `ivac-zulb3` | Approved budgets implemented; frozen-source 16/16 gates, 1654 Rust tests, 256 TEST1 and 136 byte-identical outputs | [Report](NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md); human review OPEN; no pair-atomic, universal latency, installed-platform or physical claim |
 | NUMSAFE / NUMSAFE2 `ivac-knphk` / `ivac-o9gwj` | CLOSED; accepted and committed as `e1a0c95` / `2c6e4e1` | [NUMSAFE](NUMERICAL_RUNTIME_SAFETY_RESULTS_2026_10_20.md), [NUMSAFE2](NUMSAFE2_PASS_LIMITS_RESULTS_2026_10_20.md); retain streaming partial-file, specialized-loop and mid-op cancellation limits |

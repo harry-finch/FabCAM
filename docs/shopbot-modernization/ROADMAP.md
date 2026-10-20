@@ -15,6 +15,9 @@ for acceptance criteria, blockers and human gates. This page is not a second dia
 
 ## Remaining work and dependencies
 
+[Active V1-FREEZE integration and proposed freeze contract](../releases/V1_FREEZE_READINESS_2026_10_20.md)
+retains all human/platform/physical gates; no new functionality is launched.
+
 | Work | Status and dependency | Acceptance boundary |
 |---|---|---|
 | V1 review and candidate refresh | Open gates in [V1 readiness](../releases/V1_READINESS.md); combined-source gate before separately authorized matching builds | Human reviews, clean-host platform records and supervised workshop evidence, then explicit V1 acceptance |

@@ -9,6 +9,10 @@ code, software evidence and human checkpoint acceptance are separate states.
 Use current readiness/explicit acceptance records to resolve later dispositions;
 this index does not approve, revoke or rewrite a decision.
 
+[V1-FREEZE acceptance matrix](../../releases/V1_FREEZE_READINESS_2026_10_20.md#4-compact-human-acceptance-matrix)
+reconciles the current ADR-0024/0025/0026 implementation reviews without rewriting
+accepted ADR text or promoting architecture approval to release acceptance.
+
 Use the [versioned ADR template](../../../.agents/skills/project-documentation/assets/ADR-TEMPLATE.md).
 Include context, alternatives, evidence, compatibility, validation and approval.
 Preserve accepted reasoning and history; future WJ semantics require their own

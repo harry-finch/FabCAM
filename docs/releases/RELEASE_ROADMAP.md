@@ -109,6 +109,16 @@ This is stabilization, not a new broad architecture program. Existing ADRs remai
 No parallel geometry engine, hidden rate recalculation, post-specific repair or
 serialization change is proposed here.
 
+## V1 functional freeze checkpoint
+
+[Current V1-FREEZE report](V1_FREEZE_READINESS_2026_10_20.md) reconciles Option A
+with qualified SEC1 and the [Pocket RPM exclusion/support matrix](V1_POCKET_RPM_QUALIFICATION_2026_10_20.md).
+After explicit human approval of the exact qualified source/scope: no new features,
+broad UX/architecture or machine/post capabilities. Only reproducible defect,
+safety, installer and qualification corrections, each tested and committed with
+renewed affected acceptance. Future security/UX/ProtoMAX/V2 scope stays deferred;
+this policy is proposed, not a declaration that freeze or release is accepted.
+
 ## V1 conditional features
 
 GEOM2-A1 exact whole-file Width/Height is useful but existing uniform Scale and

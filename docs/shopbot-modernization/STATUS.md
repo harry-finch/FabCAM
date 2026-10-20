@@ -1,6 +1,8 @@
 # FabCAM — current status
 
-SEC1 remediation checkpoint **2026-10-20**, beta.3 / pipeline63;
+V1-FREEZE integration **2026-10-20**, beta.3 / pipeline63;
+[freeze scope, qualification and next decision](../releases/V1_FREEZE_READINESS_2026_10_20.md).
+SEC1 baseline:
 [implementation, frozen-source qualification and handoff](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md).
 20/20 local software gates, 1662 reported Rust PASS and 1460 frontend PASS.
 Promotion is disabled; remote CI and approval protection have not been exercised.
@@ -43,7 +45,9 @@ acceptance remain pending. [M4 evidence](M4_VALIDATION.md) stays bounded and his
 
 [SEC1 follow-up matrix](../releases/SEC1_FOLLOWUP_ROADMAP.md) separates locally
 qualified SEC1-01/04/08 from deferred hardening and custom CPS confinement.
-V1-FREEZE integration is authorized; final freeze/candidate approval remains pending.
+Option A documentation integration completed on `codex/v1-freeze-readiness`;
+final freeze/candidate approval remains pending. The [Pocket RPM matrix](../releases/V1_POCKET_RPM_QUALIFICATION_2026_10_20.md)
+retains supported dual-tool manual sections and refuses intra-section RPM changes.
 
 SEC1 engineering (`ivac-dqlol`) is qualified locally; **HARD STOP for human review**
 `ivac-1mqti`. NUMSAFE3 review `ivac-zulb3` remains independent. [Resource/export results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md)

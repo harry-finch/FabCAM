@@ -1,10 +1,9 @@
 # V1-FREEZE — baseline readiness and integration decision
 
-2026-10-20 · `ivac-zdgjf` · **NO-GO for final freeze/candidate builds at this checkpoint.**
-**Phase A decision stop**, as required by the V1-FREEZE request: the engineering
-source is identifiable, but the requested combined documentation baseline has
-conflicts and outstanding acceptance decisions. Later phases below are an inventory
-and proposed plan, not completed integration, qualification or freeze approval.
+2026-10-20 · `ivac-zdgjf` · **Option A approved; integrated qualification in progress.**
+The maintainer explicitly approved Option A after the first Phase A report.
+Documentation is now reconciled with eb747eb and the newer SEC1 evidence.
+The proposed scope below remains subject to final human freeze approval.
 
 ## 1. Git and worktree state
 
@@ -51,19 +50,12 @@ main now has their implementation/evidence. Copying that old state would regress
 current status. Its nine-finding follow-up, deferred CPS confinement and independent
 UX entries remain useful. Its audit report link still depends on local evidence.
 
-**Option A — recommended:** approve reconciliation of `7e1c24b` onto the engineering
-baseline `eb747eb`, retaining the newer SEC1 facts, all pending human gates, the
-future security/UX entries and the existing FS guide. Prepare a reviewed scoped
-integration commit; retain the original branches/evidence. Then qualify that exact
-combined tree and present its resulting SHA for freeze approval.
-
-**Option B:** explicitly defer the unmerged nonblocking roadmap update, use main
-as the engineering candidate base, and record the documentation scope exception.
-The actual final source still needs qualification and the remaining review/RPM
-decisions; this option does not approve the freeze either.
-
-No option is selected implicitly. No integration, ADR status change or canonical
-status rewrite was performed during this Phase A stop.
+**Option A approved and integrated** as merge commit 57aab6a: the documentation
+commit 7e1c24b is in the ancestry, without duplicating 744774d already on main.
+Semantic resolution retains newer SEC1 facts/CPS policy and all pending reviews,
+plus the nine-finding follow-up, deferred custom CPS confinement and UX entries.
+No accepted ADR/historical report or primary evidence was changed. SEC1 audit
+report integration remains an explicitly documented local-evidence dependency.
 
 ## 4. Compact human acceptance matrix
 
@@ -88,31 +80,20 @@ An earlier architecture approval is not H for a later implementation checkpoint.
 No human gate was closed. See [V1 readiness](V1_READINESS.md) for the canonical
 register; this matrix is a decision snapshot, not an acceptance action.
 
-## 5. ivac-2zll — preliminary source conclusion, investigation pending
+## 5. ivac-2zll — exact bounded V1 treatment
 
-The existing [ShopBot post](../../crates/ivac-cps/posts/shopbot.cps) preflights all
-IR sections and rejects unhandled records through `unsupported record <kind>`.
-[CpsRecorder](../../crates/ivac-core/src/gcode/cps_recorder.rs) emits `SpindleSpeed`
-when RPM/direction changes; the post's record switch has no corresponding case.
-The [dual-tool driver](../../crates/ivac-core/src/pipeline/op_drivers/dual_tool.rs)
-separates actual finish offsets and establishes a finish-tool envelope; declaration
-of a finish tool alone is not proof that this path runs.
+[Real CAM→ShopBot matrix](V1_POCKET_RPM_QUALIFICATION_2026_10_20.md): single-tool
+rough/finish at different effective RPM is refused inside a section. A distinct
+finish tool with actual wall offsets creates a section boundary and supports
+17000→10000 in manual mode. Same tool ID does not split; no wall ring means no
+finish tool/RPM is executed. Lab preloaded-tool-1 mode refuses tool 2 regardless
+of RPM; ATC/M6/Ignore machine strategies remain refused. Positive and negative
+controls run twice for exact determinism; four focused regressions PASS.
 
-Manual mode establishes tool/Z/RPM at section boundaries. Lab spindle-1 mode
-requires preloaded tool 1, a flat end mill and integer RPM <=18000, and explicitly
-refuses tool changes. Neither fact establishes the exact Pocket combination matrix.
-The ticket's 17000→10000 case is historical evidence, not a new reproduction here.
-**Do not conclude that all two-tool Pocket operations are unsupported.**
-
-Proposed V1 treatment: preserve deterministic preflight refusal for unsupported
-intra-section RPM records; no new OpenSBP spindle behavior. After the integration
-decision, reproduce same/different tool and RPM cases, with/without actual finish
-offsets, manual versus lab mode and supported tool-change profiles. Check complete
-refusal/no partial successful program and positive supported controls. Assess the
-current generic diagnostic; propose an actionable bounded diagnostic and tests if
-needed. No production change, regression claim or ticket closure occurs now.
-Changing emitted commands or machine-control assumptions requires the requested
-human HARD STOP before implementation. `ivac-2zll` remains OPEN.
+The bounded diagnostic adds operation/context/action while preserving refusal,
+settings and emitted valid commands. `ivac-2zll` remains OPEN pending human V1
+scope acceptance, not a missing blanket multi-tool capability. No new spindle
+control/output contract was implemented or authorized.
 
 ## 6. Proposed capability contract — not freeze approval
 
@@ -124,7 +105,7 @@ human HARD STOP before implementation. `ivac-2zll` remains OPEN.
 | Feeds & Speeds | Retain FS0–FS3.9, source packs and manual overrides; bounded suggestions, no implied physical validation of every setting |
 | Profile / Pocket / Drill | Bounded existing ShopBot tool/entry/geometry matrix; preserve unsupported-case guards |
 | V-Carve / inherited operations | Only qualified subsets, explicit limitations; no blanket advanced clearing/Relief/Waterline ShopBot qualification |
-| Multi-tool | Supported section/manual-tool combinations only; Pocket rough/finish RPM matrix pending investigation above; lab preloaded mode excludes tool changes |
+| Multi-tool | Supported section/manual-tool combinations only; Pocket rough/finish matrix qualified above; same-section changes refused; lab preloaded mode excludes tool changes |
 | OpenSBP | Bundled ShopBot, metric bounded milling and qualified scaffold; no new spindle/ATC/probing/controller semantics |
 | Simulation / full-program verifier | Independent current full-program qualification/freshness; playback or successful bytes alone is insufficient |
 | Program export | Complete qualified output; native per-file transactional contract, precise cleanup/partial-pair reporting; no pair-atomic/crash/hostile-directory guarantee |
@@ -132,26 +113,24 @@ human HARD STOP before implementation. `ivac-2zll` remains OPEN.
 | CPS trust | Bundled trusted execution only; imported/embedded/path custom execution refused before evaluation |
 | Deferred | Real custom-CPS confinement, advanced UI/interactive tool illustrations, stock surface/core colors, 3D naming, advanced two-sided work, ProtoMAX V1.5 and V2+ CAM; retain future roadmap rather than declare complete |
 
-These are proposed classifications to reconcile against [V1 scope](FABCAM_V1_SCOPE.md)
-and the actual operation tests after baseline selection, not a newly qualified matrix.
+These bounded classifications retain [V1 scope](FABCAM_V1_SCOPE.md). Software
+qualification, human acceptance, installed-platform and physical evidence remain
+independent; unsupported inherited/UI-visible operations are not promoted.
 
-## 7. Qualification evidence and unexecuted work
+## 7. Integrated qualification receipt
 
-**No Phase F suite was run for V1-FREEZE**, because Phase A's conflicting-baseline
-stop precedes selecting the combined final tree. Historical SEC1 receipt reports
-20/20 local gates, 1662 Rust PASS, 1460 frontend PASS, TEST1 256/256 and 136 exact
-outputs. Preserve its documented ignored/early-return FANUC-oracle cases and
-frontend skip. Those counts are not this checkpoint's results or acceptance of a
-new freeze SHA. Rust is pinned 1.88, Node 24, pnpm 10; actual execution versions
-must be captured anew with the next run, not inferred from config.
+Final counts and exact tested commit will be recorded after the complete run.
+Local evidence: `dist-test/v1-freeze-2026-10-20/`. The first exploratory run is
+retained separately: two new-test pedantic lint findings and missing frontend/dist
+for Tauri in this fresh worktree. Fixed tests and bootstrapped build will be
+requalified; no failed gate is counted as a pass or guard weakened.
 
-After the integration decision and any approved bounded correction: run workspace
-all-features, strict/pedantic Clippy, frontend lint/types/tests/production build,
-schema/version/codegen, import, NUMSAFE1/2/3, SEC1 trust, ShopBot M1/M2, SAFE-Z,
-V-Carve, provenance/full-program verification, export transactions, TEST1 and
-`pre-release.sh`. Compare qualified output corpus/goldens. Record source SHA,
-commands, tool versions, logs, skips, failures, output hashes and limitations.
-Do not weaken checks to reuse the earlier green result.
+Required final run: workspace all-features and pedantic strict Clippy, frontend
+lint/types/tests/production build, schema/version/codegen, import, NUMSAFE1/2/3,
+SEC1/CPS trust, ShopBot M1/M2, SAFE-Z, V-Carve, tool provenance/full-program verifier,
+native export transactions, separate TEST1 watchdog and pre-release. The corpus
+comparison covers 136 outputs/results against the retained SEC1 reference.
+Actual commands, tool versions, skips and source fingerprints belong to the receipt.
 
 ## 8. Remote CI and open blockers
 
@@ -161,9 +140,9 @@ Current SEC1 source is not on origin/main and has no current-source remote
 qualification established here. Local workflow fixtures/YAML parsing do not prove
 remote execution. Push/workflow dispatch remain unauthorized and pending gates.
 
-Immediate blockers to final freeze endorsement: combined documentation/source
-selection; relevant human checkpoint dispositions; exact `ivac-2zll` exclusion/
-positive-control decision; final-tree software qualification. Later release gates:
+Immediate blockers to final freeze endorsement: final software receipt and
+relevant human checkpoint dispositions, including acceptance of the now-qualified
+`ivac-2zll` limited-support matrix. Integration Option A is no longer pending. Later release gates:
 remote CI, current installers/upgrade/runtime, representative performance, physical
 ShopBot evidence and explicit V1 go/no-go. Deferred hardening is not automatically
 a V1.5 prerequisite. Promotion remains disabled and must stay so.
@@ -214,23 +193,18 @@ Profile/Pocket/Drill, supported tool/RPM transitions and advertised limited mode
 record dimensions/depths, holding and stopping observations. Keep M4's historical
 physical evidence bounded. No hardware authority is granted by this checklist.
 
-## 12. Recommendation and decisions
+## 12. Recommendation
 
-**NO-GO for final functional-freeze approval or candidate builds now.**
-**Conditional Go for continued freeze preparation** after selecting an integration
-option and recording the required human checkpoint dispositions. This is a bounded
-integration/acceptance step, not permission to add features or restart FS0.
+Pending the final receipt: no final freeze approval or candidate builds yet.
+The useful next human decision is acceptance of the bounded scope and completed
+engineering checkpoints, not a new feature campaign. No review gate is closed by
+Option A or by passing tests. Remote CI, native-platform/workshop acceptance and
+publication remain separate.
 
 ## 13. Exact next action and hard stop
 
-Human decision requested: approve **Option A** reconciliation scope (recommended)
-or choose Option B and its documentation exception. Preserve the pending reviews;
-do not bulk-close them through this choice. Once resolved, continue the authorized
-source investigation/integration/qualification phases and return with the exact
-qualified SHA and scope for **separate final freeze/candidate-build approval**.
-No final candidate SHA can honestly be proposed for approval before that work.
-
-Report checks only: reviewed Git comparison, read-only tracker/GitHub inventory,
-source inspection, Markdown relative links/anchors and scoped whitespace/diff.
-No integrated software result was invented. **HARD STOP at Phase A integration
-options; no merge, push, tag, installer, promotion or hardware action.**
+After complete software qualification, review the exact tested SHA, this capability
+matrix and pending human gates, and explicitly approve the functional freeze and
+candidate construction. Any later code change requires a new qualified revision.
+No push, tag, installer build, draft release, promotion activation or hardware.
+**FINAL HARD STOP — awaiting human freeze and exact candidate-SHA approval.**

@@ -242,3 +242,14 @@ No installer or physical qualification inferred.
 | NUM-PASSES | ≤ 1000 depth passes / pecks per hole / V-Carve and half-pipe levels; refused before motion; boundary exact | Pass: `tests/numsafe2.rs` + unit tests (ivac-o9gwj) |
 | NUM-STEP | Supplied invalid depth per pass refused; omitted step keeps documented default | Pass: `tests/numsafe2.rs` |
 
+
+
+## V1-FREEZE — Pocket RPM and candidate boundary
+
+[Qualified Pocket matrix](../releases/V1_POCKET_RPM_QUALIFICATION_2026_10_20.md)
+covers real CAM→bundled ShopBot: equal/different same-section RPM, distinct finish
+tool sections, omitted wall ring, lab preloaded mode and non-M0 machine strategies.
+Four focused regressions PASS; repeated outputs/refusals are deterministic. Bounded
+diagnostic change only; no new OpenSBP command or physical claim.
+[Integrated freeze receipt](../releases/V1_FREEZE_READINESS_2026_10_20.md) owns final
+source/software gates. ivac-2zll and final human freeze approval remain open.
