@@ -523,3 +523,9 @@ filesystem handling, power loss or forced process termination. CLI streaming
 retains its documented lack of preview-derived warnings. See the
 [NUMSAFE3 report](releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md) for
 software evidence, operating-system limits and remaining qualification gates.
+
+SEC1 publication reporting: native program export returns a published path and an
+optional cleanup warning. Failure to remove a staging name after final publication
+must not be reported as an unpublished file. CLI pair export continues after a
+first-side cleanup warning; any second-side publication failure is explicitly
+partial, preserves existing destinations and never triggers destructive rollback.

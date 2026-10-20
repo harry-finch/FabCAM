@@ -7,6 +7,16 @@ use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use tempfile::NamedTempFile;
 
+/// A successful final-name publication, possibly with a staging cleanup warning.
+/// An Err from publish always means this attempt did not publish the final name.
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+#[must_use]
+pub struct PublishedFile {
+    pub path: PathBuf,
+    pub cleanup_warning: Option<String>,
+}
+
 /// A prepared destination whose contents have not yet been published.
 #[derive(Debug)]
 pub struct StagedFile {
@@ -74,7 +84,16 @@ impl StagedFile {
     ///
     /// Replacement uses the platform rename supported by `tempfile`. Symlink
     /// targets are refused; parent resolution is pinned at staging time.
-    pub fn publish(mut self, new_only: bool) -> io::Result<()> {
+    pub fn publish(self, new_only: bool) -> io::Result<PublishedFile> {
+        self.publish_with_cleanup(new_only, tempfile::TempPath::close)
+    }
+
+    // Injection is private and available to unit tests, never a transport option.
+    fn publish_with_cleanup(
+        mut self,
+        new_only: bool,
+        cleanup: impl FnOnce(tempfile::TempPath) -> io::Result<()>,
+    ) -> io::Result<PublishedFile> {
         self.finish()?;
         destination(&self.target)?;
         if let Ok(meta) = fs::metadata(&self.target) {
@@ -84,10 +103,18 @@ impl StagedFile {
         let temporary = file.into_temp_path(); // close before publication
         if new_only {
             fs::hard_link(&temporary, &target)?;
-            // Drop removes the staging name. The published inode is complete.
-            temporary.close()
+            // Final publication has succeeded: cleanup can only add a warning.
+            let cleanup_warning = cleanup(temporary).err().map(|error| error.to_string());
+            Ok(PublishedFile {
+                path: target,
+                cleanup_warning,
+            })
         } else {
-            temporary.persist(target).map_err(|e| e.error)
+            temporary.persist(&target).map_err(|e| e.error)?;
+            Ok(PublishedFile {
+                path: target,
+                cleanup_warning: None,
+            })
         }
     }
 }
@@ -139,7 +166,7 @@ mod tests {
         staged.write_all(bytes).unwrap();
         staged.finish().unwrap();
         assert_eq!(fs::read(&target).unwrap(), b"old");
-        staged.publish(false).unwrap();
+        let _published = staged.publish(false).unwrap();
         assert_eq!(fs::read(&target).unwrap(), bytes);
         assert_eq!(fs::read_dir(dir.path()).unwrap().count(), 1);
     }
@@ -252,5 +279,47 @@ mod tests {
         std::os::unix::fs::symlink(&other, &link).unwrap();
         assert!(StagedFile::new(&link).is_err());
         assert_eq!(fs::read(other).unwrap(), b"untouched");
+    }
+}
+
+#[cfg(test)]
+mod cleanup_tests {
+    use super::*;
+    #[test]
+    fn cleanup_failure_reports_published_bytes_and_keeps_other_side_publishable() {
+        let dir = tempfile::tempdir().unwrap();
+        for side in ["front", "back"] {
+            let target = dir.path().join(side);
+            let mut staged = StagedFile::new(&target).unwrap();
+            staged.write_all(b"complete program").unwrap();
+            let result = staged
+                .publish_with_cleanup(true, |temporary| {
+                    let _retained = temporary.keep().unwrap();
+                    Err(io::Error::other("injected cleanup failure"))
+                })
+                .unwrap();
+            assert_eq!(result.path, target.canonicalize().unwrap());
+            assert_eq!(
+                result.cleanup_warning.as_deref(),
+                Some("injected cleanup failure")
+            );
+            assert_eq!(fs::read(&target).unwrap(), b"complete program");
+        }
+    }
+    #[test]
+    fn second_side_failure_is_unpublished_and_first_remains_complete() {
+        let dir = tempfile::tempdir().unwrap();
+        let front_path = dir.path().join("front");
+        let back_path = dir.path().join("back");
+        let mut front = StagedFile::new(&front_path).unwrap();
+        let mut back = StagedFile::new(&back_path).unwrap();
+        front.write_all(b"front").unwrap();
+        back.write_all(b"back").unwrap();
+        let first = front.publish(true).unwrap();
+        assert!(first.cleanup_warning.is_none());
+        fs::write(&back_path, b"concurrent destination").unwrap();
+        assert!(back.publish(true).is_err());
+        assert_eq!(fs::read(front_path).unwrap(), b"front");
+        assert_eq!(fs::read(back_path).unwrap(), b"concurrent destination");
     }
 }

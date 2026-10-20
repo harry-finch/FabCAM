@@ -18,6 +18,7 @@ const io = vi.hoisted(() => ({
   write: vi.fn(),
   beforeSave: () => {},
   desktop: true,
+  cleanupWarning: null as string | null,
 }));
 vi.mock('../state/project.svelte', () => ({ project: io.project }));
 vi.mock('../state/workspace.svelte', () => ({ workspace: {} }));
@@ -42,7 +43,8 @@ vi.mock('@tauri-apps/plugin-fs', () => ({ writeTextFile: io.write }));
 vi.mock('@tauri-apps/api/core', () => ({
   invoke: (command: string, args: { path: string; text: string }) => {
     expect(command).toBe('publish_program_file');
-    return io.write(args.path, args.text);
+    io.write(args.path, args.text);
+    return { path: args.path, cleanupWarning: io.cleanupWarning };
   },
 }));
 import { exportGeneratedGcode } from './file_ops';
@@ -73,6 +75,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   io.beforeSave = () => {};
   io.desktop = true;
+  io.cleanupWarning = null;
   Object.assign(io.project, {
     data: {
       ...structuredClone(file),
@@ -197,4 +200,14 @@ it('a front-only diagnostic cannot qualify an existing back program', async () =
   io.project.gen.generatedBack = io.project.gen.generated;
   await exportGeneratedGcode('linuxcnc', 'back');
   expect(io.write).not.toHaveBeenCalled();
+});
+
+it('reports published with cleanup warning without claiming save failure', async () => {
+  io.project.gen.qualification!.front = { warnings: [] };
+  io.cleanupWarning = 'injected cleanup failure';
+  await exportGeneratedGcode('linuxcnc');
+  expect(io.write).toHaveBeenCalledOnce();
+  expect(io.project.setError).toHaveBeenCalledWith(
+    'Published /not-written.ngc. Temporary-file cleanup warning: injected cleanup failure',
+  );
 });

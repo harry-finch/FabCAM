@@ -185,3 +185,22 @@ resolved by retaining that probe as a unit-only test. Clippy required moving hel
 above the test module. Initial frontend commands selected the host pnpm wrapper;
 reran with the project's existing pnpm 10 path. No dependency policy changed.
 Full integrated validation and output corpus comparison remain pending below.
+
+## Batch B — truthful publication state
+
+Batch A commit: `5e789e5`.
+`PublishedFile { path, cleanupWarning }` now represents successful publication;
+`Err` means the attempt did not publish the final filename. A post-hard-link cleanup
+failure returns success with a warning. CLI reports that warning and continues the
+already staged pair; a later publication failure accurately reports partial output.
+Tauri returns the same structured outcome; frontend reports “Published …” rather
+than “save failed”. No byte transformation, rollback or pair overwrite was added.
+
+`cargo test --offline -p ivac-file-export`: 11 PASS, including private injected
+cleanup failures and a second-side no-clobber failure. First test run exposed macOS
+`/var` versus `/private/var` canonical-path comparison in the new assertion; fixed
+the assertion and reran successfully. `cargo check --offline -p ivac-cli -p
+ivac-tauri` passed. Rebuilt CLI and `python3 scripts/numsafe3-cli-check.py` passed
+preservation, byte equality, staging and pair checks. Frontend actual export service
+checks: 24 PASS, including publication-with-warning; project replacement consumers
+are updated to the shared result. OS installation acceptance remains unqualified.

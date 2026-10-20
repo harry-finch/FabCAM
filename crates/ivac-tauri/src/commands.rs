@@ -739,19 +739,21 @@ pub async fn publish_program_file(
     app: tauri::AppHandle,
     path: PathBuf,
     text: String,
-) -> Result<(), String> {
+) -> Result<ivac_file_export::PublishedFile, String> {
     use tauri_plugin_fs::FsExt;
     let path = ivac_file_export::destination(&path).map_err(|e| e.to_string())?;
     if !app.fs_scope().is_allowed(&path) {
         return Err("export destination is outside the granted filesystem scope".into());
     }
-    tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
-        let mut staged = ivac_file_export::StagedFile::new(&path).map_err(|e| e.to_string())?;
-        staged
-            .write_all(text.as_bytes())
-            .map_err(|e| e.to_string())?;
-        staged.publish(false).map_err(|e| e.to_string())
-    })
+    tauri::async_runtime::spawn_blocking(
+        move || -> Result<ivac_file_export::PublishedFile, String> {
+            let mut staged = ivac_file_export::StagedFile::new(&path).map_err(|e| e.to_string())?;
+            staged
+                .write_all(text.as_bytes())
+                .map_err(|e| e.to_string())?;
+            staged.publish(false).map_err(|e| e.to_string())
+        },
+    )
     .await
     .map_err(|e| e.to_string())?
 }

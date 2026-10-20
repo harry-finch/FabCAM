@@ -419,7 +419,7 @@ fn cmd_stream(args: impl Iterator<Item = String>) -> Result<()> {
     })?;
 
     if let Some(staged) = staged {
-        staged.publish(false)?;
+        report_publication(staged.publish(false)?);
     }
 
     // Summary + warnings to stderr — stdout stays pure g-code.
@@ -471,11 +471,11 @@ fn cmd_stream_two_sided(
         })
         .transpose()?;
     // Both complete programs are staged before either final name is created.
-    front.publish(true)?;
+    report_publication(front.publish(true)?);
     if let Some(back) = back {
-        back.publish(true).with_context(|| format!(
+        report_publication(back.publish(true).with_context(|| format!(
             "Partial publication: {} was created, but {} was not published. No existing destination was overwritten; choose a fresh output base.",
-            front_path.display(), back_path.display()))?;
+            front_path.display(), back_path.display()))?);
     }
     report_program(&front_path, &two.front);
     if let Some(back) = &two.back {
@@ -596,4 +596,13 @@ fn build_offsets(
     };
     let _ = VcObject::new(Vec::new(), false); // exercise the constructor
     (offsets, stats)
+}
+
+fn report_publication(published: ivac_file_export::PublishedFile) {
+    if let Some(warning) = published.cleanup_warning {
+        eprintln!(
+            "Published {} successfully; temporary-file cleanup warning: {warning}",
+            published.path.display()
+        );
+    }
 }

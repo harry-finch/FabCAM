@@ -811,7 +811,15 @@ export async function exportGeneratedGcode(
         return;
       }
       try {
-        await invoke('publish_program_file', { path, text });
+        const published = await invoke<{ path: string; cleanupWarning: string | null }>(
+          'publish_program_file',
+          { path, text },
+        );
+        if (published.cleanupWarning) {
+          project.setError(
+            `Published ${published.path}. Temporary-file cleanup warning: ${published.cleanupWarning}`,
+          );
+        }
       } catch (e) {
         project.setError(`save: ${notificationText(e)}`);
       }
