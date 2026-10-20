@@ -2532,3 +2532,15 @@ allows. Full parallel qualification green except pre-existing README parity;
 cargo-deny unavailable. Validated work then committed in logical groups; large TEST1
 per-case evidence kept local. Open human gates unchanged.
 
+## 2026-10-20 — Import correctness: DXF OCS, BLOCK transforms, units
+
+Scope ivac-feder. Independent Python generator (Arbitrary Axis Algorithm, INSERT
+semantics) wrote 38 DXF/SVG fixtures with analytic expectations; 13/38 passed
+before. Root causes: OCS coordinates read as WCS, ELLIPSE minor axis assumed +Z,
+BLOCK base point and INSERT extrusion ignored, MINSERT and tilted normals silently
+imported. Fixed in `dxf_in.rs` with refusal for tilted planes and arrays; mirrored
+inserts were already correct. SVG px/unitless = 1 mm and unitless DXF = 1 mm are
+deliberate conventions: kept, now warned in core; frontend shows no importer
+warnings at all, so ADR-0026 proposes visible warnings and an explicit unit choice.
+38/38 after, 53 real files geometry-identical, workspace 1604/0, CI all-features
+1599/0. Pipeline version unchanged. HARD STOP for human review.

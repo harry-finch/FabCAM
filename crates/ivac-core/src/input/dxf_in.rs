@@ -39,6 +39,12 @@ const MIN_DIST: f64 = 1e-4;
 /// Reserved layer that carries CAM directives in MTEXT entities.
 const CAMCFG_LAYER: &str = "_CAMCFG";
 
+/// An OCS normal counts as parallel to Z when the XY part of its unit vector
+/// is at most this. Exporters write exact `0,0,±1`; this only absorbs float
+/// noise from normalizing scaled normals. Any larger tilt is a plane a 2D CAM
+/// import cannot represent and is refused.
+const OCS_PARALLEL_TOL: f64 = 1e-9;
+
 /// Top-level entry: read a DXF file from disk and tessellate to segments.
 ///
 /// # Errors
@@ -147,11 +153,20 @@ pub fn import_drawing(
 ) -> crate::Result<ImportOutput> {
     let mut warnings = Vec::new();
 
+    let drawing_scale = unit_scale_from_drawing(drawing);
     let unit_scale = if opts.scale > 0.0 {
         opts.scale
     } else {
-        unit_scale_from_drawing(drawing).unwrap_or(1.0)
+        drawing_scale.unwrap_or(1.0)
     };
+    if opts.scale <= 0.0 && drawing_scale.is_none() {
+        // Unchanged policy (1 drawing unit = 1 mm), but never silent.
+        warnings.push(
+            "DXF drawing units are not set ($INSUNITS absent or unitless): 1 drawing unit was imported as 1 mm. \
+             Check the imported size and adjust the file transform scale if the drawing is in inches or another unit."
+                .into(),
+        );
+    }
 
     // Layer color seed: every named layer with its ACI color.
     let mut layer_colors: BTreeMap<String, i32> = BTreeMap::new();
@@ -178,6 +193,7 @@ pub fn import_drawing(
         select: select_set.as_ref(),
         cam_setup: String::new(),
         curve_error: false,
+        refusal: None,
         text_entities: Vec::new(),
         layer_intern: crate::input::intern::LayerIntern::new(),
     };
@@ -200,6 +216,11 @@ pub fn import_drawing(
         ctx.add_entity(entity, &blocks, &Transform2D::identity(), 0);
     }
 
+    if let Some(reason) = ctx.refusal.take() {
+        return Err(Error::bad_input(reason).with_hint(
+            "Flatten the drawing to the XY plane (extrusion 0,0,1) and explode MINSERT arrays in the CAD tool, then import again.",
+        ));
+    }
     if ctx.curve_error {
         return Err(Error::bad_input(
             "DXF curve cannot meet the 0.01 mm import budget or contains non-finite geometry",
@@ -273,6 +294,10 @@ struct ImportCtx<'a> {
     select: Option<&'a std::collections::HashSet<&'a str>>,
     cam_setup: String,
     curve_error: bool,
+    /// First entity whose coordinate system or array a 2D import refuses
+    /// (tilted extrusion, MINSERT). Rejects the whole import: dropping the
+    /// entity silently would remove machining geometry.
+    refusal: Option<String>,
     /// TEXT / MTEXT metadata captured during import. Emitted to
     /// `ImportOutput.text_entities` so the frontend can turn each into
     /// an editable `TextLayer` instead of consuming pre-rendered glyphs.
@@ -324,34 +349,97 @@ impl ImportCtx<'_> {
         // Intern once per entity. Every Segment this emit_* fans out
         // to clones the cached Arc<str> instead of allocating its own.
         let layer_arc = self.layer_intern.intern(&layer);
+        // Entities whose points live in their Object Coordinate System are
+        // mapped OCS → (block or world) coordinates first, then by `xform`.
+        // LINE, POINT, SPLINE, MLINE and MTEXT points are already WCS.
+        let ocs = |ctx: &mut Self, normal: &dxf::Vector, kind: &str| {
+            let t = ocs_transform(normal);
+            if t.is_none() && ctx.refusal.is_none() {
+                ctx.refusal = Some(format!(
+                    "DXF {kind} on layer '{layer}' has extrusion direction ({}, {}, {}); only planes parallel to XY (0,0,±1) can be imported",
+                    normal.x, normal.y, normal.z
+                ));
+            }
+            t.map(|t| xform.compose(&t))
+        };
         match &entity.specific {
             EntityType::Line(line) => self.emit_line(line, &layer_arc, color, xform),
-            EntityType::Circle(c) => self.emit_circle(c, &layer_arc, color, xform),
-            EntityType::Arc(a) => self.emit_arc(a, &layer_arc, color, xform),
-            EntityType::Ellipse(e) => self.emit_ellipse(e, &layer_arc, color, xform),
+            EntityType::Circle(c) => {
+                if let Some(x) = ocs(self, &c.normal, "CIRCLE") {
+                    self.emit_circle(c, &layer_arc, color, &x);
+                }
+            }
+            EntityType::Arc(a) => {
+                if let Some(x) = ocs(self, &a.normal, "ARC") {
+                    self.emit_arc(a, &layer_arc, color, &x);
+                }
+            }
+            EntityType::Ellipse(e) => {
+                // Center and major axis are WCS; the normal only orients the
+                // minor axis (normal × major), i.e. the parameter direction.
+                if let Some(o) = ocs_transform(&e.normal) {
+                    self.emit_ellipse(e, o.a, &layer_arc, color, xform);
+                } else {
+                    ocs(self, &e.normal, "ELLIPSE");
+                }
+            }
             EntityType::ModelPoint(p) => self.emit_point(p, &layer_arc, color, xform),
-            EntityType::LwPolyline(p) => self.emit_lwpolyline(p, &layer_arc, color, xform),
-            EntityType::Polyline(p) => self.emit_polyline(p, &layer_arc, color, xform),
+            EntityType::LwPolyline(p) => {
+                if let Some(x) = ocs(self, &p.extrusion_direction, "LWPOLYLINE") {
+                    self.emit_lwpolyline(p, &layer_arc, color, &x);
+                }
+            }
+            // 3D polylines (and meshes) store WCS vertices; 2D ones use OCS.
+            EntityType::Polyline(p) if p.is_3d_polyline() || p.is_3d_polygon_mesh() => {
+                self.emit_polyline(p, &layer_arc, color, xform);
+            }
+            EntityType::Polyline(p) => {
+                if let Some(x) = ocs(self, &p.normal, "POLYLINE") {
+                    self.emit_polyline(p, &layer_arc, color, &x);
+                }
+            }
             EntityType::Spline(s) => self.emit_spline(s, &layer_arc, color, xform),
             EntityType::Insert(insert) => {
+                if insert.column_count > 1 || insert.row_count > 1 {
+                    if self.refusal.is_none() {
+                        self.refusal = Some(format!(
+                            "DXF MINSERT array of block '{}' ({} x {}) on layer '{layer}' is not supported",
+                            insert.name, insert.column_count, insert.row_count
+                        ));
+                    }
+                    return;
+                }
                 let Some(block) = blocks.get(&insert.name) else {
                     self.warnings
                         .push(format!("INSERT references missing block '{}'", insert.name));
                     return;
                 };
-                let block_xform = xform.compose(&Transform2D::insert(
-                    insert.location.x,
-                    insert.location.y,
-                    insert.x_scale_factor,
-                    insert.y_scale_factor,
-                    insert.rotation.to_radians(),
-                ));
+                let Some(placed) = ocs(self, &insert.extrusion_direction, "INSERT") else {
+                    return;
+                };
+                // DXF: WCS = OCS(location + R(rotation)·S(sx, sy)·(p − base)).
+                let block_xform = placed
+                    .compose(&Transform2D::insert(
+                        insert.location.x,
+                        insert.location.y,
+                        insert.x_scale_factor,
+                        insert.y_scale_factor,
+                        insert.rotation.to_radians(),
+                    ))
+                    .compose(&Transform2D::translation(
+                        -block.base_point.x,
+                        -block.base_point.y,
+                    ));
                 for sub in &block.entities {
                     self.add_entity(sub, blocks, &block_xform, depth + 1);
                 }
             }
             EntityType::MLine(m) => self.emit_mline(m, &layer_arc, color, xform),
-            EntityType::Text(t) if !self.opts.no_text => self.emit_text(t, &layer, color, xform),
+            EntityType::Text(t) if !self.opts.no_text => {
+                if let Some(x) = ocs(self, &t.normal, "TEXT") {
+                    self.emit_text(t, &layer, color, &x);
+                }
+            }
             EntityType::MText(t) if !self.opts.no_text => self.emit_mtext(t, &layer, color, xform),
             EntityType::AttributeDefinition(_) => {
                 // Attribute definitions are template-only; ignored.
@@ -568,9 +656,12 @@ impl ImportCtx<'_> {
         }
     }
 
+    /// `normal_sign` is +1 for a +Z normal and -1 for -Z: the minor axis is
+    /// `normal × major · ratio`, so -Z reverses the parameter direction.
     fn emit_ellipse(
         &mut self,
         e: &Ellipse,
+        normal_sign: f64,
         layer: &std::sync::Arc<str>,
         color: i32,
         xform: &Transform2D,
@@ -583,8 +674,8 @@ impl ImportCtx<'_> {
             Point2::new(e.center.x, e.center.y),
             Point2::new(e.major_axis.x, e.major_axis.y),
             Point2::new(
-                -e.major_axis.y * e.minor_axis_ratio,
-                e.major_axis.x * e.minor_axis_ratio,
+                -normal_sign * e.major_axis.y * e.minor_axis_ratio,
+                normal_sign * e.major_axis.x * e.minor_axis_ratio,
             ),
             e.start_parameter,
             sweep,
@@ -811,7 +902,15 @@ impl ImportCtx<'_> {
         // The frontend turns each entry into a TextLayer (with a default
         // bundled font) so the user can rewrite the content / swap the
         // font / re-place. The pipeline renders glyphs at Generate time.
-        let rot_deg = (t.rotation + xform.rotation.to_degrees()) % 360.0;
+        let rot_deg = if xform.orientation() > 0.0 {
+            (t.rotation + xform.rotation.to_degrees()) % 360.0
+        } else {
+            // Mirrored (OCS -Z or mirrored INSERT): keep the true baseline
+            // direction. Editable text cannot itself be mirrored.
+            let a = t.rotation.to_radians();
+            let d = xform.vector(Point2::new(a.cos(), a.sin()));
+            d.y.atan2(d.x).to_degrees().rem_euclid(360.0)
+        };
         self.text_entities.push(crate::input::ImportedTextEntity {
             kind: crate::input::ImportedTextKind::Text,
             source_layer: layer.to_string(),
@@ -943,6 +1042,14 @@ impl Transform2D {
         }
     }
 
+    fn translation(tx: f64, ty: f64) -> Self {
+        Self {
+            tx,
+            ty,
+            ..Self::identity()
+        }
+    }
+
     fn insert(tx: f64, ty: f64, sx: f64, sy: f64, rot: f64) -> Self {
         let cos_r = rot.cos();
         let sin_r = rot.sin();
@@ -1006,6 +1113,32 @@ impl Transform2D {
         // Legacy editable TEXT size approximation; curves use the full matrix.
         (self.a * self.d - self.b * self.c).abs().sqrt()
     }
+}
+
+/// OCS → parent coordinates for an entity normal, by the DXF Arbitrary Axis
+/// Algorithm restricted to planes parallel to XY: for N = (0, 0, s),
+/// Ax = Wy × N = (s, 0, 0) and Ay = N × Ax = (0, 1, 0), so +Z is the identity
+/// and -Z mirrors X (which also reverses arc direction and bulges). `None` for a
+/// zero, non-finite or tilted normal. Elevation (OCS Z) is ignored, as for
+/// every 2D import.
+fn ocs_transform(n: &dxf::Vector) -> Option<Transform2D> {
+    let len = (n.x * n.x + n.y * n.y + n.z * n.z).sqrt();
+    if !len.is_finite() || len == 0.0 {
+        return None;
+    }
+    if (n.x / len).hypot(n.y / len) > OCS_PARALLEL_TOL {
+        return None;
+    }
+    Some(if n.z > 0.0 {
+        Transform2D::identity()
+    } else {
+        Transform2D {
+            a: -1.0,
+            // The +X baseline maps to -X; legacy text rotation reads this.
+            rotation: std::f64::consts::PI,
+            ..Transform2D::identity()
+        }
+    })
 }
 
 /// dxf-rs surfaces line numbers in its `Display` text but not as a
@@ -1183,6 +1316,7 @@ mod audit_six {
             select: None,
             cam_setup: String::new(),
             curve_error: false,
+            refusal: None,
             text_entities: vec![],
             layer_intern: crate::input::intern::LayerIntern::new(),
         };
@@ -1290,6 +1424,31 @@ mod audit_six {
             }
         }
     }
+    #[test]
+    fn text_in_negative_z_ocs_keeps_position_and_baseline() {
+        let text = |normal: dxf::Vector| {
+            let mut d = Drawing::new();
+            d.add_entity(Entity::new(EntityType::Text(Text {
+                location: dxf::Point::new(5., 5., 0.),
+                text_height: 2.,
+                value: "A".into(),
+                rotation: 30.,
+                normal,
+                ..Default::default()
+            })));
+            let out = import_drawing(&d, "t.dxf".into(), &ImportOptions::default()).unwrap();
+            let t = out.text_entities[0].clone();
+            (t.origin, t.rotation_deg)
+        };
+        let (origin, rot) = text(dxf::Vector::z_axis());
+        assert_eq!(origin, (5., 5.));
+        assert!((rot - 30.).abs() < 1e-9);
+        // OCS -Z mirrors X: (5, 5) -> (-5, 5); the 30° baseline points at 150°.
+        let (origin, rot) = text(dxf::Vector::new(0., 0., -1.));
+        assert_eq!(origin, (-5., 5.));
+        assert!((rot - 150.).abs() < 1e-9, "{rot}");
+    }
+
     #[test]
     fn invalid_spline_has_visible_fallback_diagnostic() {
         let mut d = Drawing::new();

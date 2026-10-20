@@ -1,0 +1,545 @@
+{
+ "ocs_arc_pz": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_arc_nz": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: arc start [15.0, 0.0] != [-15.0, 0.0]"
+ },
+ "ocs_arc_nz_scaled_normal": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: arc start [15.0, 0.0] != [-15.0, 0.0]"
+ },
+ "ocs_circle_nz": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 17.0,
+   "min_y": 7.0,
+   "max_x": 23.0,
+   "max_y": 13.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected circle about [-20.0, 10.0], got CIRCLE {'x': 20.0, 'y': 10.0}"
+ },
+ "ocs_lwpoly_pz": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 10.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_lwpoly_nz": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 10.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [0.0, 0.0]->[-10.0, 0.0], got LINE [0.0, 0.0]->[10.0, 0.0]"
+ },
+ "ocs_polyline2d_nz": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 10.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [0.0, 0.0]->[-10.0, 0.0], got LINE [0.0, 0.0]->[10.0, 0.0]"
+ },
+ "line_nz_is_wcs": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 1.0,
+   "min_y": 2.0,
+   "max_x": 5.0,
+   "max_y": 2.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ellipse_quarter_pz": {
+  "exit": 0,
+  "segments": 22,
+  "bbox": {
+   "min_x": 2.8327694488239896e-15,
+   "min_y": 0.0,
+   "max_x": 10.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ellipse_quarter_nz": {
+  "exit": 0,
+  "segments": 22,
+  "bbox": {
+   "min_x": 2.8327694488239896e-15,
+   "min_y": 0.0,
+   "max_x": 10.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "curve never reached its expected end"
+ },
+ "ocs_reject_y": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "expected refusal, import succeeded"
+ },
+ "ocs_reject_tilted": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "expected refusal, import succeeded"
+ },
+ "ocs_reject_zero": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "expected refusal, import succeeded"
+ },
+ "ocs_reject_lwpoly_tilted": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 10.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "expected refusal, import succeeded"
+ },
+ "block_base_point": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 100.0,
+   "min_y": 100.0,
+   "max_x": 110.0,
+   "max_y": 100.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [0, 0]->[10, 0], got LINE [100.0, 100.0]->[110.0, 100.0]"
+ },
+ "block_base_rot_scale": {
+  "exit": 0,
+  "segments": 3,
+  "bbox": {
+   "min_x": 36.0,
+   "min_y": 30.0,
+   "max_x": 40.0,
+   "max_y": 50.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [50.0, 20.0]->[50.0, 40.0], got LINE [40.0, 30.0]->[40.0, 50.0]"
+ },
+ "block_mirror_x": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": -15.0,
+   "min_y": -5.38104152014172e-17,
+   "max_x": -10.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_mirror_y_rotated": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": 30.0,
+   "min_y": -8.660254037844387,
+   "max_x": 46.16025403784438,
+   "max_y": 5.669872981077803
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [28.26794919243112, -0.9999999999999999]->[36.92820323027551, 3.9999999999999996], got LINE [30.0, 0.0]->[38.66025403784439, 4.999999999999999]"
+ },
+ "block_nested": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 118.0,
+   "min_y": 102.0,
+   "max_x": 118.0,
+   "max_y": 106.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [120.0, 100.0]->[120.0, 104.0], got LINE [118.0, 102.0]->[118.0, 106.0]"
+ },
+ "block_multiple_occurrences": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 5.0,
+   "min_y": 5.0,
+   "max_x": 60.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [0, 0]->[5, 0], got LINE [5.0, 5.0]->[10.0, 5.0]"
+ },
+ "block_insert_ocs_nz": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: expected line [-10.0, 0.0]->[-15.0, 0.0], got LINE [10.0, 0.0]->[15.0, 0.0]"
+ },
+ "block_entity_ocs_inside": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 110.0,
+   "min_y": 0.0,
+   "max_x": 115.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: arc start [115.0, 0.0] != [85.0, 0.0]"
+ },
+ "block_combined_ocs": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 20.0,
+   "min_y": 10.0,
+   "max_x": 25.0,
+   "max_y": 15.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "segment 0: arc start [25.0, 10.0] != [8.0, 10.0]"
+ },
+ "block_minsert_refused": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 5.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "expected refusal, import succeeded"
+ },
+ "dxf_units_inch": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 25.4,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 25.4,
+  "status": "PASS",
+  "reason": null
+ },
+ "dxf_units_absent": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 1.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "no 'unit' warning (warnings: [])"
+ },
+ "dxf_units_unitless": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 1.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "FAIL",
+  "reason": "no 'unit' warning (warnings: [])"
+ },
+ "svg_mm": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 50.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 100.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_mm_px_viewbox": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 3.814697265625e-06,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 50.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 99.99999618530273,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_cm": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 50.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 100.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_in": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 50.79999923706055,
+   "max_y": 25.399999618530273
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 50.79999923706055,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_pt": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 25.399999618530273,
+   "max_y": 25.399999618530273
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 25.399999618530273,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_px": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 96.0,
+   "max_y": 96.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 96.0,
+  "status": "FAIL",
+  "reason": "no 'unit' warning (warnings: [])"
+ },
+ "svg_unitless": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 96.0,
+   "max_y": 96.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 96.0,
+  "status": "FAIL",
+  "reason": "no 'unit' warning (warnings: [])"
+ },
+ "svg_viewbox_only": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 100.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 100.0,
+  "status": "FAIL",
+  "reason": "no 'unit' warning (warnings: [])"
+ },
+ "svg_group_transform": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 90.0,
+   "max_x": 20.0,
+   "max_y": 100.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 10.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_inkscape_a4": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 210.0,
+   "max_y": 297.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 210.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_illustrator_pt_as_px": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 595.280029296875,
+   "max_y": 841.8900146484375
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 595.280029296875,
+  "status": "FAIL",
+  "reason": "no 'unit' warning (warnings: [])"
+ }
+}

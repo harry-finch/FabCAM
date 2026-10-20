@@ -1,0 +1,517 @@
+{
+ "ocs_arc_pz": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_arc_nz": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": -15.0,
+   "min_y": -5.38104152014172e-17,
+   "max_x": -10.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_arc_nz_scaled_normal": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": -15.0,
+   "min_y": -5.38104152014172e-17,
+   "max_x": -10.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_circle_nz": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": -23.0,
+   "min_y": 7.0,
+   "max_x": -17.0,
+   "max_y": 13.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_lwpoly_pz": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 15.0,
+   "max_y": 10.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_lwpoly_nz": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": -15.0,
+   "min_y": 0.0,
+   "max_x": 0.0,
+   "max_y": 10.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_polyline2d_nz": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": -15.0,
+   "min_y": 0.0,
+   "max_x": 0.0,
+   "max_y": 10.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "line_nz_is_wcs": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 1.0,
+   "min_y": 2.0,
+   "max_x": 5.0,
+   "max_y": 2.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ellipse_quarter_pz": {
+  "exit": 0,
+  "segments": 22,
+  "bbox": {
+   "min_x": 2.8327694488239896e-15,
+   "min_y": 0.0,
+   "max_x": 10.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ellipse_quarter_nz": {
+  "exit": 0,
+  "segments": 22,
+  "bbox": {
+   "min_x": 2.8327694488239896e-15,
+   "min_y": -5.0,
+   "max_x": 10.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_reject_y": {
+  "exit": 1,
+  "error": "Error: import /Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/import-correctness/ocs_reject_y.dxf\n\nCaused by:\n    DXF ARC on layer '0' has extrusion direction (0, 1, 0); only planes parallel to XY (0,0,\u00b11) can be imported (hint: Flatten the drawing to the XY plane (extrusion 0,0,1) and explode MINSERT arrays in the CAD tool, then import again.)",
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_reject_tilted": {
+  "exit": 1,
+  "error": "Error: import /Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/import-correctness/ocs_reject_tilted.dxf\n\nCaused by:\n    DXF ARC on layer '0' has extrusion direction (0.6, 0, 0.8); only planes parallel to XY (0,0,\u00b11) can be imported (hint: Flatten the drawing to the XY plane (extrusion 0,0,1) and explode MINSERT arrays in the CAD tool, then import again.)",
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_reject_zero": {
+  "exit": 1,
+  "error": "Error: import /Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/import-correctness/ocs_reject_zero.dxf\n\nCaused by:\n    DXF ARC on layer '0' has extrusion direction (0, 0, 0); only planes parallel to XY (0,0,\u00b11) can be imported (hint: Flatten the drawing to the XY plane (extrusion 0,0,1) and explode MINSERT arrays in the CAD tool, then import again.)",
+  "status": "PASS",
+  "reason": null
+ },
+ "ocs_reject_lwpoly_tilted": {
+  "exit": 1,
+  "error": "Error: import /Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/import-correctness/ocs_reject_lwpoly_tilted.dxf\n\nCaused by:\n    DXF LWPOLYLINE on layer '0' has extrusion direction (0, 0.6, 0.8); only planes parallel to XY (0,0,\u00b11) can be imported (hint: Flatten the drawing to the XY plane (extrusion 0,0,1) and explode MINSERT arrays in the CAD tool, then import again.)",
+  "status": "PASS",
+  "reason": null
+ },
+ "block_base_point": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 10.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_base_rot_scale": {
+  "exit": 0,
+  "segments": 3,
+  "bbox": {
+   "min_x": 46.0,
+   "min_y": 20.0,
+   "max_x": 50.0,
+   "max_y": 40.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_mirror_x": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": -15.0,
+   "min_y": -5.38104152014172e-17,
+   "max_x": -10.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_mirror_y_rotated": {
+  "exit": 0,
+  "segments": 9,
+  "bbox": {
+   "min_x": 28.26794919243112,
+   "min_y": -9.660254037844387,
+   "max_x": 44.4282032302755,
+   "max_y": 4.6698729810778055
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_nested": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 120.0,
+   "min_y": 100.0,
+   "max_x": 120.0,
+   "max_y": 104.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_multiple_occurrences": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 55.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_insert_ocs_nz": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": -15.0,
+   "min_y": 0.0,
+   "max_x": -10.0,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_entity_ocs_inside": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 85.0,
+   "min_y": -5.38104152014172e-17,
+   "max_x": 90.0,
+   "max_y": 5.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_combined_ocs": {
+  "exit": 0,
+  "segments": 2,
+  "bbox": {
+   "min_x": 3.0,
+   "min_y": 10.0,
+   "max_x": 8.0,
+   "max_y": 15.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "block_minsert_refused": {
+  "exit": 1,
+  "error": "Error: import /Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/import-correctness/block_minsert_refused.dxf\n\nCaused by:\n    DXF MINSERT array of block 'B' (3 x 1) on layer '0' is not supported (hint: Flatten the drawing to the XY plane (extrusion 0,0,1) and explode MINSERT arrays in the CAD tool, then import again.)",
+  "status": "PASS",
+  "reason": null
+ },
+ "dxf_units_inch": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 25.4,
+   "max_y": 0.0
+  },
+  "warnings": [],
+  "unit_scale": 25.4,
+  "status": "PASS",
+  "reason": null
+ },
+ "dxf_units_absent": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 1.0,
+   "max_y": 0.0
+  },
+  "warnings": [
+   "DXF drawing units are not set ($INSUNITS absent or unitless): 1 drawing unit was imported as 1 mm. Check the imported size and adjust the file transform scale if the drawing is in inches or another unit."
+  ],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "dxf_units_unitless": {
+  "exit": 0,
+  "segments": 1,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 1.0,
+   "max_y": 0.0
+  },
+  "warnings": [
+   "DXF drawing units are not set ($INSUNITS absent or unitless): 1 drawing unit was imported as 1 mm. Check the imported size and adjust the file transform scale if the drawing is in inches or another unit."
+  ],
+  "unit_scale": 1.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_mm": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 50.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 100.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_mm_px_viewbox": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 3.814697265625e-06,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 50.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 99.99999618530273,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_cm": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 50.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 100.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_in": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 50.79999923706055,
+   "max_y": 25.399999618530273
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 50.79999923706055,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_pt": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 25.399999618530273,
+   "max_y": 25.399999618530273
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 25.399999618530273,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_px": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 96.0,
+   "max_y": 96.0
+  },
+  "warnings": [
+   "SVG size is not in physical units (width='96px', height='96px'): 1 SVG user unit (px) was imported as 1 mm. CSS defines 1 px = 1/96 in (0.2646 mm) and many design tools export 72 px per inch; check the imported size and adjust the file transform scale if needed."
+  ],
+  "unit_scale": 1.0,
+  "width_mm": 96.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_unitless": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 96.0,
+   "max_y": 96.0
+  },
+  "warnings": [
+   "SVG size is not in physical units (width='96', height='96'): 1 SVG user unit (px) was imported as 1 mm. CSS defines 1 px = 1/96 in (0.2646 mm) and many design tools export 72 px per inch; check the imported size and adjust the file transform scale if needed."
+  ],
+  "unit_scale": 1.0,
+  "width_mm": 96.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_viewbox_only": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 100.0,
+   "max_y": 100.0
+  },
+  "warnings": [
+   "SVG size is not in physical units (width='absent', height='absent'): 1 SVG user unit (px) was imported as 1 mm. CSS defines 1 px = 1/96 in (0.2646 mm) and many design tools export 72 px per inch; check the imported size and adjust the file transform scale if needed."
+  ],
+  "unit_scale": 1.0,
+  "width_mm": 100.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_group_transform": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 10.0,
+   "min_y": 90.0,
+   "max_x": 20.0,
+   "max_y": 100.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 10.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_inkscape_a4": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 210.0,
+   "max_y": 297.0
+  },
+  "warnings": [],
+  "unit_scale": 1.0,
+  "width_mm": 210.0,
+  "status": "PASS",
+  "reason": null
+ },
+ "svg_illustrator_pt_as_px": {
+  "exit": 0,
+  "segments": 4,
+  "bbox": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 595.280029296875,
+   "max_y": 841.8900146484375
+  },
+  "warnings": [
+   "SVG size is not in physical units (width='595.28px', height='841.89px'): 1 SVG user unit (px) was imported as 1 mm. CSS defines 1 px = 1/96 in (0.2646 mm) and many design tools export 72 px per inch; check the imported size and adjust the file transform scale if needed."
+  ],
+  "unit_scale": 1.0,
+  "width_mm": 595.280029296875,
+  "status": "PASS",
+  "reason": null
+ }
+}

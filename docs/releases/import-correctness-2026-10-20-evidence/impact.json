@@ -1,0 +1,660 @@
+{
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/01-poche-imbrication-3.dxf": {
+  "geometry_identical": true,
+  "segments": 12,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 60.0,
+   "max_y": 60.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/01-poche-imbrication-3.svg": {
+  "geometry_identical": true,
+  "segments": 12,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 60.0,
+   "max_y": 60.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/02-xor-trois-identiques.dxf": {
+  "geometry_identical": true,
+  "segments": 12,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 50.0,
+   "max_y": 50.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/02-xor-trois-identiques.svg": {
+  "geometry_identical": true,
+  "segments": 12,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 50.0,
+   "max_y": 50.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/03-percage-quatre-points.dxf": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 20.0,
+   "min_y": 20.0,
+   "max_x": 60.0,
+   "max_y": 60.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/04-attaches-rectangle-30x20.dxf": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 30.0,
+   "max_y": 20.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/04-attaches-rectangle-30x20.svg": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 30.0,
+   "max_y": 20.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/05-union-disjointe-attaches.dxf": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 60.0,
+   "max_y": 20.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/05-union-disjointe-attaches.svg": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 60.0,
+   "max_y": 20.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/06-union-intersection-attaches-refus.dxf": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 30.0,
+   "max_y": 20.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/06-union-intersection-attaches-refus.svg": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 30.0,
+   "max_y": 20.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/07-poche-cercle-et-trait.dxf": {
+  "geometry_identical": true,
+  "segments": 7,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 40.0,
+   "max_y": 40.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/07-poche-cercle-et-trait.svg": {
+  "geometry_identical": true,
+  "segments": 69,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 40.0,
+   "max_y": 40.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/08-reference-percage-concave-refus.dxf": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 10.0,
+   "max_y": 10.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/08-reference-percage-concave-refus.svg": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 10.0,
+   "max_y": 10.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/09-geometrie-gap-0p05.dxf": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 50.0,
+   "max_y": 50.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/09-geometrie-gap-0p05.svg": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 50.0,
+   "max_y": 50.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/10-cercle-arc-rayon2.dxf": {
+  "geometry_identical": true,
+  "segments": 9,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 18.0,
+   "max_x": 12.0,
+   "max_y": 22.000000000000004
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/10-cercle-arc-rayon2.svg": {
+  "geometry_identical": true,
+  "segments": 64,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 18.0,
+   "max_x": 12.0,
+   "max_y": 22.0
+  },
+  "error_after": null
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/11-HATCH-dans-BLOCK-refus.dxf": {
+  "geometry_identical": true,
+  "segments": 0,
+  "new_warnings": [],
+  "bbox_after": null,
+  "error_after": "    DXF HATCH inside BLOCK definitions is not supported. (hint: Explode block instances in your CAD tool and export their HATCH boundaries as top-level geometry before importing.)"
+ },
+ "external:Validation-V1-beta3-2026-10-18/dessins/regressions/12-HATCH-top-level-10x10.dxf": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [
+   "DXF drawing units are not set ($INSUNITS absent or unitless): 1 drawing unit was imported "
+  ],
+  "bbox_after": {
+   "min_x": 0.0,
+   "min_y": 0.0,
+   "max_x": 10.0,
+   "max_y": 10.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A0_baseline_app-icon.svg": {
+  "geometry_identical": true,
+  "segments": 497,
+  "new_warnings": [
+   "SVG size is not in physical units (width='128', height='128'): 1 SVG user unit (px) was im"
+  ],
+  "bbox_after": {
+   "min_x": 4.0,
+   "min_y": 4.0,
+   "max_x": 124.0,
+   "max_y": 124.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A0_baseline_lockup.svg": {
+  "geometry_identical": true,
+  "segments": 317,
+  "new_warnings": [
+   "SVG size is not in physical units (width='322', height='80'): 1 SVG user unit (px) was imp"
+  ],
+  "bbox_after": {
+   "min_x": 12.0,
+   "min_y": 16.0,
+   "max_x": 60.0,
+   "max_y": 64.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A0_baseline_symbol.svg": {
+  "geometry_identical": true,
+  "segments": 317,
+  "new_warnings": [
+   "SVG size is not in physical units (width='64', height='64'): 1 SVG user unit (px) was impo"
+  ],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 8.0,
+   "max_x": 56.0,
+   "max_y": 56.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A1_optical_balance_app-icon.svg": {
+  "geometry_identical": true,
+  "segments": 496,
+  "new_warnings": [
+   "SVG size is not in physical units (width='128', height='128'): 1 SVG user unit (px) was im"
+  ],
+  "bbox_after": {
+   "min_x": 4.0,
+   "min_y": 4.0,
+   "max_x": 124.0,
+   "max_y": 124.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A1_optical_balance_lockup.svg": {
+  "geometry_identical": true,
+  "segments": 316,
+  "new_warnings": [
+   "SVG size is not in physical units (width='322', height='80'): 1 SVG user unit (px) was imp"
+  ],
+  "bbox_after": {
+   "min_x": 12.0,
+   "min_y": 16.0,
+   "max_x": 60.0,
+   "max_y": 64.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A1_optical_balance_symbol.svg": {
+  "geometry_identical": true,
+  "segments": 316,
+  "new_warnings": [
+   "SVG size is not in physical units (width='64', height='64'): 1 SVG user unit (px) was impo"
+  ],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 8.0,
+   "max_x": 56.0,
+   "max_y": 56.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A1_optical_balance_symbol_mono-dark.svg": {
+  "geometry_identical": true,
+  "segments": 316,
+  "new_warnings": [
+   "SVG size is not in physical units (width='64', height='64'): 1 SVG user unit (px) was impo"
+  ],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 8.0,
+   "max_x": 56.0,
+   "max_y": 56.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A1_optical_balance_symbol_mono-light.svg": {
+  "geometry_identical": true,
+  "segments": 316,
+  "new_warnings": [
+   "SVG size is not in physical units (width='64', height='64'): 1 SVG user unit (px) was impo"
+  ],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 8.0,
+   "max_x": 56.0,
+   "max_y": 56.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A2_defined_entry_app-icon.svg": {
+  "geometry_identical": true,
+  "segments": 497,
+  "new_warnings": [
+   "SVG size is not in physical units (width='128', height='128'): 1 SVG user unit (px) was im"
+  ],
+  "bbox_after": {
+   "min_x": 4.0,
+   "min_y": 4.0,
+   "max_x": 124.0,
+   "max_y": 124.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A2_defined_entry_lockup.svg": {
+  "geometry_identical": true,
+  "segments": 317,
+  "new_warnings": [
+   "SVG size is not in physical units (width='322', height='80'): 1 SVG user unit (px) was imp"
+  ],
+  "bbox_after": {
+   "min_x": 12.0,
+   "min_y": 16.0,
+   "max_x": 60.0,
+   "max_y": 64.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A2_defined_entry_symbol.svg": {
+  "geometry_identical": true,
+  "segments": 317,
+  "new_warnings": [
+   "SVG size is not in physical units (width='64', height='64'): 1 SVG user unit (px) was impo"
+  ],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 8.0,
+   "max_x": 56.0,
+   "max_y": 56.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A2_defined_entry_symbol_mono-dark.svg": {
+  "geometry_identical": true,
+  "segments": 317,
+  "new_warnings": [
+   "SVG size is not in physical units (width='64', height='64'): 1 SVG user unit (px) was impo"
+  ],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 8.0,
+   "max_x": 56.0,
+   "max_y": 56.0
+  },
+  "error_after": null
+ },
+ "external:logo/FabCAM_A_optical_precision/A2_defined_entry_symbol_mono-light.svg": {
+  "geometry_identical": true,
+  "segments": 317,
+  "new_warnings": [
+   "SVG size is not in physical units (width='64', height='64'): 1 SVG user unit (px) was impo"
+  ],
+  "bbox_after": {
+   "min_x": 8.0,
+   "min_y": 8.0,
+   "max_x": 56.0,
+   "max_y": 56.0
+  },
+  "error_after": null
+ },
+ "docs/releases/consolidation-2026-10-18-evidence/block-hatch.dxf": {
+  "geometry_identical": true,
+  "segments": 0,
+  "new_warnings": [],
+  "bbox_after": null,
+  "error_after": "    DXF HATCH inside BLOCK definitions is not supported. (hint: Explode block instances in your CAD tool and export their HATCH boundaries as top-level geometry before importing.)"
+ },
+ "docs/shopbot-modernization/perf1/requests/moderate.dxf": {
+  "geometry_identical": true,
+  "segments": 256,
+  "new_warnings": [
+   "DXF drawing units are not set ($INSUNITS absent or unitless): 1 drawing unit was imported "
+  ],
+  "bbox_after": {
+   "min_x": 7.0,
+   "min_y": 7.0,
+   "max_x": 283.0,
+   "max_y": 139.0
+  },
+  "error_after": null
+ },
+ "docs/shopbot-modernization/perf1/requests/moderate.svg": {
+  "geometry_identical": true,
+  "segments": 8192,
+  "new_warnings": [
+   "SVG size is not in physical units (width='300', height='180'): 1 SVG user unit (px) was im"
+  ],
+  "bbox_after": {
+   "min_x": 7.0,
+   "min_y": 41.0,
+   "max_x": 283.0,
+   "max_y": 173.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/circle_d50.dxf": {
+  "geometry_identical": true,
+  "segments": 2,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 35.0,
+   "min_y": 35.0,
+   "max_x": 85.0,
+   "max_y": 85.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/circle_d50.svg": {
+  "geometry_identical": true,
+  "segments": 192,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 35.0,
+   "min_y": 35.0,
+   "max_x": 85.0,
+   "max_y": 85.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/concave_L_shape.dxf": {
+  "geometry_identical": true,
+  "segments": 6,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 110.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/concave_L_shape.svg": {
+  "geometry_identical": true,
+  "segments": 6,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 110.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/multiple_closed_contours.dxf": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 40.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/multiple_closed_contours.svg": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 40.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/open_polyline.dxf": {
+  "geometry_identical": true,
+  "segments": 2,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 60.0,
+   "max_y": 40.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/open_polyline.svg": {
+  "geometry_identical": true,
+  "segments": 2,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 60.0,
+   "max_y": 40.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/rectangle_100x50.dxf": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 60.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/rectangle_100x50.svg": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 60.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/rectangle_with_hole.dxf": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 60.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/rectangle_with_hole.svg": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 60.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/rectangle_with_island.dxf": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 110.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/rectangle_with_island.svg": {
+  "geometry_identical": true,
+  "segments": 8,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 110.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/square_100.dxf": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 110.0
+  },
+  "error_after": null
+ },
+ "tests/fixtures/shopbot-m1/square_100.svg": {
+  "geometry_identical": true,
+  "segments": 4,
+  "new_warnings": [],
+  "bbox_after": {
+   "min_x": 10.0,
+   "min_y": 10.0,
+   "max_x": 110.0,
+   "max_y": 110.0
+  },
+  "error_after": null
+ }
+}

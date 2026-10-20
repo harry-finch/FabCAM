@@ -1,0 +1,748 @@
+[
+ {
+  "name": "ocs_arc_pz",
+  "file": "ocs_arc_pz.dxf",
+  "chains": [
+   {
+    "arc": {
+     "center": [
+      10.0,
+      0.0
+     ],
+     "start": [
+      15.0,
+      0.0
+     ],
+     "end": [
+      10.0,
+      5.0
+     ],
+     "ccw": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "ocs_arc_nz",
+  "file": "ocs_arc_nz.dxf",
+  "chains": [
+   {
+    "arc": {
+     "center": [
+      -10.0,
+      0.0
+     ],
+     "start": [
+      -15.0,
+      0.0
+     ],
+     "end": [
+      -10.0,
+      5.0
+     ],
+     "ccw": false
+    }
+   }
+  ]
+ },
+ {
+  "name": "ocs_arc_nz_scaled_normal",
+  "file": "ocs_arc_nz_scaled_normal.dxf",
+  "chains": [
+   {
+    "arc": {
+     "center": [
+      -10.0,
+      0.0
+     ],
+     "start": [
+      -15.0,
+      0.0
+     ],
+     "end": [
+      -10.0,
+      5.0
+     ],
+     "ccw": false
+    }
+   }
+  ]
+ },
+ {
+  "name": "ocs_circle_nz",
+  "file": "ocs_circle_nz.dxf",
+  "chains": [
+   {
+    "circle": {
+     "center": [
+      -20.0,
+      10.0
+     ],
+     "r": 3
+    }
+   }
+  ]
+ },
+ {
+  "name": "ocs_lwpoly_pz",
+  "file": "ocs_lwpoly_pz.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      10.0,
+      0.0
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      10.0,
+      5.0
+     ],
+     "start": [
+      10.0,
+      0.0
+     ],
+     "end": [
+      10.0,
+      10.0
+     ],
+     "ccw": true
+    }
+   },
+   {
+    "line": [
+     [
+      10.0,
+      10.0
+     ],
+     [
+      0.0,
+      10.0
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      -3.75,
+      5.0
+     ],
+     "start": [
+      0.0,
+      10.0
+     ],
+     "end": [
+      0.0,
+      0.0
+     ],
+     "ccw": false
+    }
+   }
+  ]
+ },
+ {
+  "name": "ocs_lwpoly_nz",
+  "file": "ocs_lwpoly_nz.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      -10.0,
+      0.0
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      -10.0,
+      5.0
+     ],
+     "start": [
+      -10.0,
+      0.0
+     ],
+     "end": [
+      -10.0,
+      10.0
+     ],
+     "ccw": false
+    }
+   },
+   {
+    "line": [
+     [
+      -10.0,
+      10.0
+     ],
+     [
+      0.0,
+      10.0
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      3.75,
+      5.0
+     ],
+     "start": [
+      0.0,
+      10.0
+     ],
+     "end": [
+      0.0,
+      0.0
+     ],
+     "ccw": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "ocs_polyline2d_nz",
+  "file": "ocs_polyline2d_nz.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      -10.0,
+      0.0
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      -10.0,
+      5.0
+     ],
+     "start": [
+      -10.0,
+      0.0
+     ],
+     "end": [
+      -10.0,
+      10.0
+     ],
+     "ccw": false
+    }
+   },
+   {
+    "line": [
+     [
+      -10.0,
+      10.0
+     ],
+     [
+      0.0,
+      10.0
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      3.75,
+      5.0
+     ],
+     "start": [
+      0.0,
+      10.0
+     ],
+     "end": [
+      0.0,
+      0.0
+     ],
+     "ccw": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "line_nz_is_wcs",
+  "file": "line_nz_is_wcs.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      1,
+      2
+     ],
+     [
+      5,
+      2
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "name": "ellipse_quarter_pz",
+  "file": "ellipse_quarter_pz.dxf",
+  "chains": [
+   {
+    "curve": {
+     "center": [
+      0,
+      0
+     ],
+     "u": [
+      10,
+      0
+     ],
+     "v": [
+      0.0,
+      5.0
+     ],
+     "start": [
+      10.0,
+      0.0
+     ],
+     "end": [
+      6.123233995736766e-16,
+      5.0
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "name": "ellipse_quarter_nz",
+  "file": "ellipse_quarter_nz.dxf",
+  "chains": [
+   {
+    "curve": {
+     "center": [
+      0,
+      0
+     ],
+     "u": [
+      10,
+      0
+     ],
+     "v": [
+      0.0,
+      -5.0
+     ],
+     "start": [
+      10.0,
+      0.0
+     ],
+     "end": [
+      6.123233995736766e-16,
+      -5.0
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "name": "ocs_reject_y",
+  "file": "ocs_reject_y.dxf",
+  "error": "extrusion"
+ },
+ {
+  "name": "ocs_reject_tilted",
+  "file": "ocs_reject_tilted.dxf",
+  "error": "extrusion"
+ },
+ {
+  "name": "ocs_reject_zero",
+  "file": "ocs_reject_zero.dxf",
+  "error": "extrusion"
+ },
+ {
+  "name": "ocs_reject_lwpoly_tilted",
+  "file": "ocs_reject_lwpoly_tilted.dxf",
+  "error": "extrusion"
+ },
+ {
+  "name": "block_base_point",
+  "file": "block_base_point.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0,
+      0
+     ],
+     [
+      10,
+      0
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "name": "block_base_rot_scale",
+  "file": "block_base_rot_scale.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      50.0,
+      20.0
+     ],
+     [
+      50.0,
+      40.0
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      50.0,
+      20.0
+     ],
+     "start": [
+      50.0,
+      24.0
+     ],
+     "end": [
+      46.0,
+      20.0
+     ],
+     "ccw": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "block_mirror_x",
+  "file": "block_mirror_x.dxf",
+  "chains": [
+   {
+    "arc": {
+     "center": [
+      -10.0,
+      0.0
+     ],
+     "start": [
+      -15.0,
+      0.0
+     ],
+     "end": [
+      -10.0,
+      5.0
+     ],
+     "ccw": false
+    }
+   }
+  ]
+ },
+ {
+  "name": "block_mirror_y_rotated",
+  "file": "block_mirror_y_rotated.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      28.26794919243112,
+      -0.9999999999999999
+     ],
+     [
+      36.92820323027551,
+      3.9999999999999996
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      39.42820323027551,
+      -0.3301270189221941
+     ],
+     "start": [
+      36.92820323027551,
+      3.9999999999999996
+     ],
+     "end": [
+      41.92820323027551,
+      -4.660254037844387
+     ],
+     "ccw": false
+    }
+   },
+   {
+    "line": [
+     [
+      41.92820323027551,
+      -4.660254037844387
+     ],
+     [
+      33.26794919243112,
+      -9.660254037844387
+     ]
+    ]
+   },
+   {
+    "arc": {
+     "center": [
+      27.520353928239476,
+      -7.205127018922193
+     ],
+     "start": [
+      33.26794919243112,
+      -9.660254037844387
+     ],
+     "end": [
+      28.26794919243112,
+      -0.9999999999999999
+     ],
+     "ccw": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "block_nested",
+  "file": "block_nested.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      120.0,
+      100.0
+     ],
+     [
+      120.0,
+      104.0
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "name": "block_multiple_occurrences",
+  "file": "block_multiple_occurrences.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0,
+      0
+     ],
+     [
+      5,
+      0
+     ]
+    ]
+   },
+   {
+    "line": [
+     [
+      50,
+      0
+     ],
+     [
+      55,
+      0
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "name": "block_insert_ocs_nz",
+  "file": "block_insert_ocs_nz.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      -10.0,
+      0.0
+     ],
+     [
+      -15.0,
+      0.0
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "name": "block_entity_ocs_inside",
+  "file": "block_entity_ocs_inside.dxf",
+  "chains": [
+   {
+    "arc": {
+     "center": [
+      90.0,
+      0.0
+     ],
+     "start": [
+      85.0,
+      0.0
+     ],
+     "end": [
+      90.0,
+      5.0
+     ],
+     "ccw": false
+    }
+   }
+  ]
+ },
+ {
+  "name": "block_combined_ocs",
+  "file": "block_combined_ocs.dxf",
+  "chains": [
+   {
+    "arc": {
+     "center": [
+      3.0,
+      10.0
+     ],
+     "start": [
+      8.0,
+      10.0
+     ],
+     "end": [
+      3.0,
+      15.0
+     ],
+     "ccw": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "block_minsert_refused",
+  "file": "block_minsert_refused.dxf",
+  "error": "MINSERT"
+ },
+ {
+  "name": "dxf_units_inch",
+  "file": "dxf_units_inch.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0,
+      0
+     ],
+     [
+      25.4,
+      0
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "name": "dxf_units_absent",
+  "file": "dxf_units_absent.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   }
+  ],
+  "warning": "unit"
+ },
+ {
+  "name": "dxf_units_unitless",
+  "file": "dxf_units_unitless.dxf",
+  "chains": [
+   {
+    "line": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   }
+  ],
+  "warning": "unit"
+ },
+ {
+  "name": "svg_mm",
+  "file": "svg_mm.svg",
+  "width_mm": 100
+ },
+ {
+  "name": "svg_mm_px_viewbox",
+  "file": "svg_mm_px_viewbox.svg",
+  "width_mm": 100
+ },
+ {
+  "name": "svg_cm",
+  "file": "svg_cm.svg",
+  "width_mm": 100
+ },
+ {
+  "name": "svg_in",
+  "file": "svg_in.svg",
+  "width_mm": 50.8
+ },
+ {
+  "name": "svg_pt",
+  "file": "svg_pt.svg",
+  "width_mm": 25.4
+ },
+ {
+  "name": "svg_px",
+  "file": "svg_px.svg",
+  "width_mm": 96,
+  "warning": "unit"
+ },
+ {
+  "name": "svg_unitless",
+  "file": "svg_unitless.svg",
+  "width_mm": 96,
+  "warning": "unit"
+ },
+ {
+  "name": "svg_viewbox_only",
+  "file": "svg_viewbox_only.svg",
+  "width_mm": 100,
+  "warning": "unit"
+ },
+ {
+  "name": "svg_group_transform",
+  "file": "svg_group_transform.svg",
+  "width_mm": 10
+ },
+ {
+  "name": "svg_inkscape_a4",
+  "file": "svg_inkscape_a4.svg",
+  "width_mm": 210
+ },
+ {
+  "name": "svg_illustrator_pt_as_px",
+  "file": "svg_illustrator_pt_as_px.svg",
+  "width_mm": 595.28,
+  "warning": "unit"
+ }
+]

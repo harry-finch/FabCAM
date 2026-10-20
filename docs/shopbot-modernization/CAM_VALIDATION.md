@@ -217,3 +217,13 @@ No installer or physical qualification inferred.
 | GC-COMMENT | Hostile tool/op/group/pause/label text never changes executable LinuxCNC/GRBL lines | Pass: `tests/comment_safety.rs`, unit and GRBL rewriter tests; provenance resolved |
 | REL-PEDANTIC | `pre-release.sh` pedantic Clippy gate | Pass under the documented `[workspace.lints]` policy |
 
+## 2026-10-20 — Import correctness (ivac-feder)
+
+[Results](../releases/IMPORT_CORRECTNESS_RESULTS_2026_10_20.md). Software scope only; no third-party CAD export available.
+
+| ID | Evidence required | Current status |
+| --- | --- | --- |
+| IMP-OCS | DXF OCS ±Z for ARC/CIRCLE/LWPOLYLINE/POLYLINE/ELLIPSE/TEXT/INSERT; tilted refused | Pass: analytic fixtures, `tests/import_correctness.rs` |
+| IMP-BLOCK | Base point, rotation, scale, mirror, nested, repeated, combined OCS; MINSERT refused | Pass: analytic fixtures |
+| IMP-UNITS | SVG mm/cm/in/pt exact; px/unitless/viewBox and unitless DXF warned | Pass in core; UI display pending ADR-0026 |
+
