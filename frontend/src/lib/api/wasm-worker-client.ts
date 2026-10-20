@@ -194,10 +194,10 @@ export class WasmWorkerClient implements WiacClient {
     return this.call('version', []);
   }
 
-  async importFile(file: File): Promise<ImportResponse> {
+  async importFile(file: File, _format?: string, scale?: number): Promise<ImportResponse> {
     const buf = await file.arrayBuffer();
     // Transfer (not copy) the file bytes into the worker.
-    return this.call('importBytes', [file.name, new Uint8Array(buf)], { transfer: [buf] });
+    return this.call('importBytes', [file.name, new Uint8Array(buf), scale], { transfer: [buf] });
   }
 
   generate(request: GenerateRequest): Promise<GenerateResponse> {

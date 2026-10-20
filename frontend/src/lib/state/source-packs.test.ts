@@ -73,7 +73,8 @@ describe('FS3.7 source packs and private project boundary', () => {
     expect(NORMALIZED_MATERIALS.some((m) => m.identity.id.includes('sienci'))).toBe(false);
   });
   it('saves a guarded summary and opens without private source content', () => {
-    const file = structuredClone(fixture) as ProjectFile;
+    // A real saved project from before unit status existed (legacy source shape).
+    const file = structuredClone(fixture) as unknown as ProjectFile;
     const applied = file.operations![0].appliedCutting!;
     delete applied.proposal;
     applied.knowledge = {

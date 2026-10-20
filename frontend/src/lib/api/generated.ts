@@ -1467,8 +1467,20 @@ export interface components {
             text_entities?: components["schemas"]["ImportedTextEntity"][];
             /** Format: double */
             unit_scale: number;
+            /**
+             * @description What the file itself declares, e.g. `$INSUNITS = Inches` or `width='96px', height='96px'`. Empty for legacy saved sources.
+             * @default
+             */
+            unit_source: string;
+            /**
+             * @description How the source size was interpreted (ADR-0026). Absent in sources saved before 2026-10-20, which read back as `unknown`.
+             * @default unknown
+             */
+            unit_status: components["schemas"]["ImportUnitStatus"];
             warnings: string[];
         };
+        /** @description Interpretation of the source size; `unit_scale` is the factor applied (mm per source unit for DXF and for SVG user units without physical size). */
+        ImportUnitStatus: "unknown" | "declared" | "physical" | "assumed" | "explicit";
         ImportedObject: {
             bbox: components["schemas"]["BBox"];
             closed: boolean;

@@ -225,9 +225,12 @@ export async function reimportFromPath(p: ProjectState, path: string): Promise<b
     return false;
   }
   let after: ImportResponse;
+  // A confirmed unit choice (ADR-0026) is part of the source: reload with it.
+  const previous = p.data.imports[idx].source;
+  const scale = previous.unit_status === 'explicit' ? previous.unit_scale : null;
   try {
     const { invoke } = await import('@tauri-apps/api/core');
-    after = await invoke<ImportResponse>('import_path', { path });
+    after = await invoke<ImportResponse>('import_path', { path, scale });
   } catch (e) {
     p.setError(`reload: ${e instanceof Error ? e.message : String(e)}`);
     return false;
@@ -344,6 +347,8 @@ export function appendImportedSegments(
       segments: [],
       unit_scale: 1,
       warnings: [],
+      unit_status: 'unknown',
+      unit_source: '',
       objects: [],
       object_meta: [],
     },

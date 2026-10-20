@@ -41,6 +41,8 @@ export function surfaceSizingView(
     format: base?.format ?? 'authored',
     unit_scale: base?.unit_scale ?? 1,
     warnings: base?.warnings ?? [],
+    unit_status: base?.unit_status ?? 'unknown',
+    unit_source: base?.unit_source ?? '',
     layers: base?.layers ?? [],
     segments: base?.segments ?? [],
     objects: base?.objects ?? [],

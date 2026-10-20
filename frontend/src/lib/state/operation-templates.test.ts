@@ -203,6 +203,8 @@ describe('UX4 reusable operation templates', () => {
         format: 'svg',
         unit_scale: 1,
         warnings: [],
+        unit_status: 'unknown',
+        unit_source: '',
         segments: [],
         objects: [],
         object_meta: [],

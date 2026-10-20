@@ -52,6 +52,8 @@ function imported(segments: Segment[]): ImportResponse {
     layers: [{ name: '0', color: 7, segment_count: segments.length }],
     unit_scale: 1,
     warnings: [],
+    unit_status: 'unknown',
+    unit_source: '',
     objects: segments.map(() => 1),
     object_meta: [],
   };

@@ -235,9 +235,17 @@ pub fn version() -> VersionResponse {
 /// multipart endpoint; the desktop shell can hand a real OS path so we
 /// avoid an upload round-trip.
 #[tauri::command]
-pub async fn import_path(path: String) -> Result<ImportOutput, String> {
+pub async fn import_path(path: String, scale: Option<f64>) -> Result<ImportOutput, String> {
     let path = PathBuf::from(path);
-    let opts = ImportOptions::default();
+    // Explicit source-unit choice (ADR-0026), mm per source unit.
+    let scale = match scale {
+        Some(v) => ivac_core::input::checked_import_scale(v).map_err(serialize_error)?,
+        None => 0.0,
+    };
+    let opts = ImportOptions {
+        scale,
+        ..ImportOptions::default()
+    };
     tokio::task::spawn_blocking(move || ivac_core::input::import_path(&path, &opts))
         .await
         .map_err(|e| internal(format!("join error: {e}")))?

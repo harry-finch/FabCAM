@@ -40,7 +40,7 @@ export type WasmModule = {
   listPosts?: () => unknown;
   inspectPost?: (script: string, filename?: string) => unknown;
   version: () => VersionResponse;
-  importBytes: (filename: string, bytes: Uint8Array) => ImportResponse;
+  importBytes: (filename: string, bytes: Uint8Array, scale?: number) => ImportResponse;
   generate: (request: GenerateRequest) => GenerateResponse;
   generateStreaming?: (
     request: GenerateRequest,
@@ -108,10 +108,10 @@ export class WasmWiacClient implements WiacClient {
     return m.version();
   }
 
-  async importFile(file: File): Promise<ImportResponse> {
+  async importFile(file: File, _format?: string, scale?: number): Promise<ImportResponse> {
     const m = await loadModule();
     const bytes = new Uint8Array(await file.arrayBuffer());
-    return m.importBytes(file.name, bytes);
+    return m.importBytes(file.name, bytes, scale);
   }
 
   async generate(request: GenerateRequest): Promise<GenerateResponse> {

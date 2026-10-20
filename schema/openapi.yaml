@@ -3301,6 +3301,15 @@ components:
         unit_scale:
           format: double
           type: number
+        unit_source:
+          default: ''
+          description: What the file itself declares, e.g. `$INSUNITS = Inches` or `width='96px', height='96px'`. Empty for legacy saved sources.
+          type: string
+        unit_status:
+          allOf:
+          - $ref: '#/components/schemas/ImportUnitStatus'
+          default: unknown
+          description: How the source size was interpreted (ADR-0026). Absent in sources saved before 2026-10-20, which read back as `unknown`.
         warnings:
           items:
             type: string
@@ -3314,6 +3323,29 @@ components:
       - unit_scale
       - warnings
       type: object
+    ImportUnitStatus:
+      description: Interpretation of the source size; `unit_scale` is the factor applied (mm per source unit for DXF and for SVG user units without physical size).
+      oneOf:
+      - description: Saved before units were recorded; scale as stored.
+        enum:
+        - unknown
+        type: string
+      - description: DXF `$INSUNITS` declares a length unit.
+        enum:
+        - declared
+        type: string
+      - description: SVG root `width` and `height` carry physical units (mm, cm, in, pt, pc, Q).
+        enum:
+        - physical
+        type: string
+      - description: 'No reliable unit: the legacy 1 unit = 1 mm convention was assumed.'
+        enum:
+        - assumed
+        type: string
+      - description: The caller supplied an explicit scale (a user decision).
+        enum:
+        - explicit
+        type: string
     ImportedObject:
       properties:
         bbox:

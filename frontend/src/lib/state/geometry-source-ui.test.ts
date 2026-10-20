@@ -40,6 +40,8 @@ const entry = (filename: string, format: string, layer: string, id: number): Imp
     bbox: { min_x: 0, min_y: 0, max_x: 10, max_y: 0 },
     unit_scale: 1,
     warnings: [],
+    unit_status: 'unknown',
+    unit_source: '',
   },
 });
 function wire(op: OpEntry) {

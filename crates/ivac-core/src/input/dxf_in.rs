@@ -159,6 +159,20 @@ pub fn import_drawing(
     } else {
         drawing_scale.unwrap_or(1.0)
     };
+    let unit_source = format!(
+        "$INSUNITS = {}",
+        match drawing_scale {
+            Some(_) => format!("{:?}", drawing.header.default_drawing_units),
+            None => "absent or unitless".into(),
+        }
+    );
+    let unit_status = if opts.scale > 0.0 {
+        crate::input::ImportUnitStatus::Explicit
+    } else if drawing_scale.is_some() {
+        crate::input::ImportUnitStatus::Declared
+    } else {
+        crate::input::ImportUnitStatus::Assumed
+    };
     if opts.scale <= 0.0 && drawing_scale.is_none() {
         // Unchanged policy (1 drawing unit = 1 mm), but never silent.
         warnings.push(
@@ -250,6 +264,8 @@ pub fn import_drawing(
         objects,
         object_meta,
         text_entities,
+        unit_status,
+        unit_source,
     })
 }
 
@@ -1335,6 +1351,8 @@ mod audit_six {
             objects,
             object_meta,
             text_entities: vec![],
+            unit_status: crate::input::ImportUnitStatus::Declared,
+            unit_source: String::new(),
         }
     }
     fn chord_distance(p: Point2, s: &Segment) -> f64 {

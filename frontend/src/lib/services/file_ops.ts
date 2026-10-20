@@ -30,6 +30,7 @@ import type { ImportResponse } from '../api/types';
 import type { MachineSettings, ToolEntry } from '../state/project.svelte';
 import { migrateMachineSettings } from '../state/project-types';
 import { t } from '../i18n';
+import { reviewImport } from '../state/import-review';
 
 /// Clear the Rust-side process-global pipeline cache when a
 /// project replace flow runs (open file, open project, load sample,
@@ -76,6 +77,23 @@ export async function resetDocument(open: boolean): Promise<boolean> {
     return true;
   } finally {
     switchingDocument = false;
+  }
+}
+
+/// Import summary gate (ADR-0026) for the open/add-drawing flows. The
+/// loading overlay is lifted while the user reviews, then restored; a
+/// cancelled review returns null and the caller commits nothing.
+async function reviewWhileIdle(
+  result: ImportResponse,
+  rescale: (scale: number) => Promise<ImportResponse>,
+): Promise<ImportResponse | null> {
+  const message = project.loadingMessage;
+  project.loading = false;
+  try {
+    return await reviewImport(result, rescale);
+  } finally {
+    project.loading = true;
+    project.loadingMessage = message;
   }
 }
 
@@ -426,7 +444,11 @@ export async function loadFromPath(path: string) {
   project.error = null;
   try {
     const { invoke } = await import('@tauri-apps/api/core');
-    const result = await invoke<ImportResponse>('import_path', { path });
+    const imported = await invoke<ImportResponse>('import_path', { path, scale: null });
+    const result = await reviewWhileIdle(imported, (scale) =>
+      invoke<ImportResponse>('import_path', { path, scale }),
+    );
+    if (!result) return;
     await clearPipelineCacheOnReplace();
     await commitDocumentLoad(project, async () => {
       project.clearProject();
@@ -458,7 +480,11 @@ export async function addDrawingPath(path: string) {
   project.error = null;
   try {
     const { invoke } = await import('@tauri-apps/api/core');
-    const result = await invoke<ImportResponse>('import_path', { path });
+    const imported = await invoke<ImportResponse>('import_path', { path, scale: null });
+    const result = await reviewWhileIdle(imported, (scale) =>
+      invoke<ImportResponse>('import_path', { path, scale }),
+    );
+    if (!result) return;
     await commitDocumentLoad(project, async () => {
       project.addImported(result, path);
       await project.convertImportedTextEntities();
@@ -513,7 +539,10 @@ export async function loadFile(file: File) {
   project.loadingMessage = pathToLoadingMessage(file.name);
   project.error = null;
   try {
-    const result = await client.importFile(file);
+    const result = await reviewWhileIdle(await client.importFile(file), (scale) =>
+      client.importFile(file, undefined, scale),
+    );
+    if (!result) return;
     await clearPipelineCacheOnReplace();
     await commitDocumentLoad(project, async () => {
       project.clearProject();
@@ -541,7 +570,10 @@ export async function addDrawingFile(file: File) {
   project.loadingMessage = pathToLoadingMessage(file.name);
   project.error = null;
   try {
-    const result = await client.importFile(file);
+    const result = await reviewWhileIdle(await client.importFile(file), (scale) =>
+      client.importFile(file, undefined, scale),
+    );
+    if (!result) return;
     await commitDocumentLoad(project, async () => {
       project.addImported(result);
       await project.convertImportedTextEntities();

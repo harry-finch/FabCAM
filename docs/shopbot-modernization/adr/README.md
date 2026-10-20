@@ -60,4 +60,4 @@ is superseded by named tracks in ROADMAP.
 - [ADR-0024 — Full-program simulation qualification](ADR-0024-full-program-simulation-qualification.md): architecture approved; local implementation and software evidence complete, human checkpoint review pending.
 
 - [ADR-0025 — Movement tool provenance](ADR-0025-movement-tool-provenance.md): PROPOSED, Phase A only; nullable generated tool references, immutable bindings and emitted-intent verification. Human approval required before implementation.
-- [ADR-0026 — Explicit import units](ADR-0026-explicit-import-units.md): PROPOSED; surface importer warnings and let the user choose units for unitless DXF / non-physical SVG. Human decision required before implementation.
+- [ADR-0026 — Explicit import units](ADR-0026-explicit-import-units.md): authorized and implemented locally (2026-10-20); importer warnings shown in an import summary and an explicit, persisted unit choice for unitless DXF / non-physical SVG. Human acceptance pending.

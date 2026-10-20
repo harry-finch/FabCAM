@@ -48,13 +48,13 @@ export class TauriWiacClient implements WiacClient {
    * Most call sites should use `importFromPath` directly when running
    * inside Tauri (gated by `isTauri()`).
    */
-  async importFile(file: File, _format?: string): Promise<ImportResponse> {
+  async importFile(file: File, _format?: string, scale?: number): Promise<ImportResponse> {
     // Prefer the path attribute when present (e.g. drag-and-drop in Tauri
     // surfaces the absolute path on `File.path` in some setups). Fallback:
     // write an ArrayBuffer to a temp file via tauri-plugin-fs and import.
     const path = (file as File & { path?: string }).path;
     if (typeof path === 'string' && path.length > 0) {
-      return this.importFromPath(path);
+      return this.importFromPath(path, scale);
     }
     const { tempDir } = await import('@tauri-apps/api/path');
     const { writeFile } = await import('@tauri-apps/plugin-fs');
@@ -64,11 +64,11 @@ export class TauriWiacClient implements WiacClient {
     const fullpath = await join(dir, fname);
     const data = new Uint8Array(await file.arrayBuffer());
     await writeFile(fullpath, data);
-    return this.importFromPath(fullpath);
+    return this.importFromPath(fullpath, scale);
   }
 
-  importFromPath(path: string): Promise<ImportResponse> {
-    return invoke<ImportResponse>('import_path', { path });
+  importFromPath(path: string, scale?: number): Promise<ImportResponse> {
+    return invoke<ImportResponse>('import_path', { path, scale: scale ?? null });
   }
 
   async generate(request: GenerateRequest): Promise<GenerateResponse> {

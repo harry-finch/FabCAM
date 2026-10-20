@@ -124,9 +124,17 @@ pub fn inspect_post(script: &str, filename: Option<String>) -> Result<JsValue, J
 /// contents as a Uint8Array and provides the filename so the Rust core
 /// can match the format detector.
 #[wasm_bindgen(js_name = importBytes)]
-pub fn import_bytes(filename: &str, bytes: &[u8]) -> Result<JsValue, JsValue> {
+pub fn import_bytes(filename: &str, bytes: &[u8], scale: Option<f64>) -> Result<JsValue, JsValue> {
     guard(|| {
-        let opts = ImportOptions::default();
+        // Explicit source-unit choice (ADR-0026), mm per source unit.
+        let scale = match scale {
+            Some(v) => ivac_core::input::checked_import_scale(v).map_err(structured_error_to_js)?,
+            None => 0.0,
+        };
+        let opts = ImportOptions {
+            scale,
+            ..ImportOptions::default()
+        };
         let out = ivac_core::input::import_bytes(filename, bytes, &opts)
             .map_err(structured_error_to_js)?;
         serde_wasm_bindgen::to_value(&out).map_err(into_js_error)

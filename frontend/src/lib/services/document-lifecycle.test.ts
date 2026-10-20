@@ -250,6 +250,44 @@ describe('Atelier project lifecycle through shared file services', () => {
     expect(io.project.documentName).toBe('old.ivac-project.json');
     expect(io.project.gen.generated).toEqual({ gcode: 'old output' });
   });
+  it('ADR-0026: unit choices survive save and reopen; legacy sources keep their scale', () => {
+    const base = {
+      format: 'svg',
+      segments: [],
+      layers: [],
+      objects: [],
+      object_meta: [],
+      bbox: { min_x: 0, min_y: 0, max_x: 25.4, max_y: 12.7 },
+      warnings: [],
+    };
+    const explicit = {
+      ...base,
+      filename: 'chosen.svg',
+      unit_scale: 25.4 / 96,
+      unit_status: 'explicit' as const,
+      unit_source: "width='96px', height='48px'",
+    };
+    // Saved before units were recorded: no unit fields at all.
+    const legacy = { ...base, filename: 'old.svg', unit_scale: 1 };
+    io.project.data.imports = [
+      { id: 1, source: explicit, fileTransform: identityFileTransform(), lastImportPath: '/a.svg' },
+      {
+        id: 2,
+        source: legacy as unknown as typeof explicit,
+        fileTransform: identityFileTransform(),
+        lastImportPath: null,
+      },
+    ];
+    const saved = JSON.parse(JSON.stringify(io.project.snapshot()));
+    io.project.clearProject();
+    io.project.restore(saved);
+    const [a, b] = io.project.data.imports;
+    expect(a.source).toMatchObject({ unit_status: 'explicit', unit_scale: 25.4 / 96 });
+    expect(a.source.bbox).toEqual(explicit.bbox);
+    expect(b.source.unit_status).toBeUndefined();
+    expect(b.source.unit_scale).toBe(1);
+    expect(b.source.bbox).toEqual(base.bbox);
+  });
   it('add drawing uses additive entry and keeps existing operations', async () => {
     io.project.data.operations = [
       { id: 12, name: 'existing' },

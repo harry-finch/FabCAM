@@ -225,5 +225,5 @@ No installer or physical qualification inferred.
 | --- | --- | --- |
 | IMP-OCS | DXF OCS ±Z for ARC/CIRCLE/LWPOLYLINE/POLYLINE/ELLIPSE/TEXT/INSERT; tilted refused | Pass: analytic fixtures, `tests/import_correctness.rs` |
 | IMP-BLOCK | Base point, rotation, scale, mirror, nested, repeated, combined OCS; MINSERT refused | Pass: analytic fixtures |
-| IMP-UNITS | SVG mm/cm/in/pt exact; px/unitless/viewBox and unitless DXF warned | Pass in core; UI display pending ADR-0026 |
+| IMP-UNITS | SVG mm/cm/in/pt exact; px/unitless/viewBox and unitless DXF warned | Pass: core + import summary UI ([ADR-0026 results](../releases/IMPORT_UNITS_WARNINGS_RESULTS_2026_10_20.md)); human acceptance pending |
 

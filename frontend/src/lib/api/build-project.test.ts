@@ -22,6 +22,8 @@ function fakeImport(): ImportResponse {
     segments: [],
     unit_scale: 1,
     warnings: [],
+    unit_status: 'unknown',
+    unit_source: '',
   };
 }
 

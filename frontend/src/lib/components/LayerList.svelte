@@ -13,6 +13,9 @@
   import { isIdentityFileTransform, project } from '../state/project.svelte';
   import { Throttle } from '../state/throttle';
   import { t } from '../i18n';
+  import { importReview } from '../state/import-review';
+  import { importantWarningCount, unitStatus } from '../state/import-units';
+  import { TriangleAlert } from '@lucide/svelte';
   import { onDestroy } from 'svelte';
 
   // Throttle the live file-transform spinbox edits: each edit
@@ -241,6 +244,8 @@
       {#each project.data.imports as entry (entry.id)}
         {@const xfActive = !isIdentityFileTransform(entry.fileTransform)}
         {@const transformOpen = openTransforms.has(entry.id)}
+        {@const warnCount = importantWarningCount(entry.source.warnings)}
+        {@const assumed = unitStatus(entry.source) === 'assumed'}
         <div class="import-card">
           <div class="import-head">
             <span class="import-filename" title={entry.source.filename}
@@ -262,6 +267,22 @@
                 },
               )}</span
             >
+            {#if warnCount > 0 || assumed}
+              <button
+                type="button"
+                class="import-warn"
+                onclick={() => importReview.show(entry.source)}
+                title={warnCount > 0
+                  ? t('drawings.import_warnings', { n: warnCount })
+                  : t('drawings.units_assumed')}
+                aria-label={warnCount > 0
+                  ? t('drawings.import_warnings', { n: warnCount })
+                  : t('drawings.units_assumed')}
+                ><TriangleAlert size={12} aria-hidden="true" />{#if warnCount > 0}<span
+                    >{warnCount}</span
+                  >{/if}</button
+              >
+            {/if}
             {#if project.data.imports.length > 1}
               <button
                 type="button"
@@ -602,14 +623,13 @@
     /* Active host limits long content; short lists retain natural height. */
     overflow-y: auto;
   }
-  /* Each imported document has a filename/count row. Preserve the existing
-     remove action availability: only shown when several imports exist. */
+  /* Imported document row: filename, counts, warnings, remove (2+ imports). */
   .import-card {
     margin: 0.1rem 0 0.4rem;
   }
   .import-head {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
     align-items: center;
     gap: 0.4rem;
     padding: 0.18rem 0.2rem 0.15rem;
@@ -626,6 +646,23 @@
     color: var(--text-muted);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+  }
+  .import-warn {
+    display: inline-flex;
+    justify-self: start;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0 0.3rem;
+    border: 1px solid color-mix(in srgb, var(--warn) 50%, transparent);
+    border-radius: 3px;
+    background: var(--warn-bg);
+    color: var(--warn);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    cursor: pointer;
+  }
+  .import-warn:hover {
+    border-color: var(--warn);
   }
   .import-remove {
     background: transparent;

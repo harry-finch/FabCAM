@@ -2544,3 +2544,15 @@ deliberate conventions: kept, now warned in core; frontend shows no importer
 warnings at all, so ADR-0026 proposes visible warnings and an explicit unit choice.
 38/38 after, 53 real files geometry-identical, workspace 1604/0, CI all-features
 1599/0. Pipeline version unchanged. HARD STOP for human review.
+
+## 2026-10-20 — ADR-0026: explicit import units and visible warnings
+
+Scope ivac-feder, authorized bounded implementation. Importer result gains
+`unit_status`/`unit_source`; transports expose the existing `ImportOptions.scale`
+(validated 1e-6..1e6, refused on physical SVG). Open/add flows gate on an import
+summary (grouped, counted warnings; live size; unit choice) before commit; the
+confirmed choice is an explicit re-import, so the stored result stays the single
+scale record for save, reopen and Tauri reload. Browser smoke caught a sidebar row
+wrap caused by the new badge; fixed. Units of a committed source still need a
+re-open. HARD STOP for human acceptance.
+

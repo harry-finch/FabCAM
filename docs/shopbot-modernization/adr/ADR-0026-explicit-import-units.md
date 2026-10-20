@@ -1,6 +1,6 @@
 # ADR-0026: Explicit import units for unitless DXF and non-physical SVG
 
-Status: **PROPOSED — human decision required; not implemented**
+Status: **AUTHORIZED for bounded implementation (2026-10-20); implemented locally — human UX/architecture acceptance pending**
 Date: 2026-10-20
 Scope: import correctness checkpoint ivac-feder; evidence in
 [import correctness results](../../releases/IMPORT_CORRECTNESS_RESULTS_2026_10_20.md).
@@ -58,3 +58,30 @@ Fixtures `svg_px`, `svg_unitless`, `svg_viewbox_only`, `svg_illustrator_pt_as_px
 `dxf_units_absent`, `dxf_units_unitless` (tests/fixtures/import-correctness) with
 each choice; save/reopen/reimport round trip; visible warning UI review.
 **HARD STOP: human decision required before implementation.**
+
+## Implementation record (2026-10-20, ivac-feder)
+
+Results: [import units and warnings](../../releases/IMPORT_UNITS_WARNINGS_RESULTS_2026_10_20.md).
+
+**Proposed vs implemented.** Both proposals are implemented. Differences: the
+summary opens *before* the source is committed (so a cancelled import changes
+nothing and DXF text entities are created at the chosen size); it opens only for
+assumed units or importer warnings, not for clean physical/declared imports. The
+proposed separate `ImportEntry` field was not needed: the single authoritative
+record is the stored importer result — `unit_scale` plus the new
+`unit_status`/`unit_source` — so there is no second scale representation.
+
+**Persisted user decision.** Confirming the summary re-imports the same bytes or
+path with an explicit `ImportOptions.scale` (also for 1 unit = 1 mm), producing
+`unit_status = explicit`. Save/reopen keeps it; Tauri source reload passes the
+same scale; other statuses reload without one. The importer refuses an explicit
+scale on an SVG with a physical size (no double conversion) and any scale that is
+not finite within 10⁻⁶–10⁶ mm per unit.
+
+**Remaining assumptions.** Default stays 1 unit = 1 mm; nothing infers 72 dpi.
+Sources saved earlier read as `unknown` and keep their geometry and scale.
+
+**Still unsupported.** Changing the units of an already committed source (re-open
+or re-add the file instead); a browser session cannot re-read a saved source.
+MINSERT, tilted entities and HATCH-in-block remain refused or limited.
+

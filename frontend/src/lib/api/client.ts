@@ -28,7 +28,9 @@ export interface WiacClient {
   feedsSpeeds?(request: FsCamRequest): Promise<FsCamResponse>;
   health(): Promise<boolean>;
   version(): Promise<VersionResponse>;
-  importFile(file: File, format?: string): Promise<ImportResponse>;
+  /// `scale`: explicit mm per source unit for a source whose size is
+  /// ambiguous (ADR-0026). Omit to let the importer detect/assume units.
+  importFile(file: File, format?: string, scale?: number): Promise<ImportResponse>;
   generate(request: GenerateRequest): Promise<GenerateResponse>;
   /**
    * Streaming variant: emits {phase, fraction, message} via the supplied

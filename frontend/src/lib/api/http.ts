@@ -74,10 +74,11 @@ export class HttpWiacClient implements WiacClient {
     return (await res.json()) as VersionResponse;
   }
 
-  async importFile(file: File, format?: string): Promise<ImportResponse> {
+  async importFile(file: File, format?: string, scale?: number): Promise<ImportResponse> {
     const form = new FormData();
     form.append('file', file);
     if (format) form.append('format', format);
+    if (scale !== undefined) form.append('scale', String(scale));
     const res = await fetch(`${this.base}/import`, { method: 'POST', body: form });
     if (!res.ok) await throwHttpError('/import', res);
     return (await res.json()) as ImportResponse;
@@ -490,7 +491,7 @@ class WasmClientLazy {
     this.proxy = {
       health: () => ensure().then((c) => c.health()),
       version: () => ensure().then((c) => c.version()),
-      importFile: (file, format) => ensure().then((c) => c.importFile(file, format)),
+      importFile: (file, format, scale) => ensure().then((c) => c.importFile(file, format, scale)),
       generate: (req) => ensure().then((c) => c.generate(req)),
       generateStream: (req, cb) =>
         ensure().then((c) => (c.generateStream ? c.generateStream(req, cb) : c.generate(req))),
@@ -560,7 +561,7 @@ class TauriClientLazy {
     this.proxy = {
       health: () => ensure().then((c) => c.health()),
       version: () => ensure().then((c) => c.version()),
-      importFile: (file, format) => ensure().then((c) => c.importFile(file, format)),
+      importFile: (file, format, scale) => ensure().then((c) => c.importFile(file, format, scale)),
       generate: (req) => ensure().then((c) => c.generate(req)),
       generateStream: (req, cb) =>
         ensure().then((c) => (c.generateStream ? c.generateStream(req, cb) : c.generate(req))),

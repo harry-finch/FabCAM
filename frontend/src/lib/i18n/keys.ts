@@ -282,6 +282,8 @@ export type MsgKey =
   | "dialog.unsaved.dont_save"
   | "dialog.unsaved.save_continue"
   | "dialog.unsaved.title"
+  | "drawings.import_warnings"
+  | "drawings.units_assumed"
   | "error.code.cps_post_failed"
   | "error.code.cps_selection_missing"
   | "error.code.cps_unavailable"
@@ -572,6 +574,49 @@ export type MsgKey =
   | "genbar.time.toolchange"
   | "genbar.time.total"
   | "help.key.middle_drag"
+  | "import.review.cancel"
+  | "import.review.close"
+  | "import.review.confirm"
+  | "import.review.confirm_units"
+  | "import.review.detected"
+  | "import.review.geometry"
+  | "import.review.geometry_segments"
+  | "import.review.geometry_value"
+  | "import.review.no_warnings"
+  | "import.review.scale"
+  | "import.review.scale_value"
+  | "import.review.size"
+  | "import.review.size_value"
+  | "import.review.title"
+  | "import.review.type"
+  | "import.review.warning_count"
+  | "import.review.warnings"
+  | "import.units.choice.custom"
+  | "import.units.choice.inch"
+  | "import.units.choice.mm"
+  | "import.units.choice.px72"
+  | "import.units.choice.px96"
+  | "import.units.custom_invalid"
+  | "import.units.custom_label"
+  | "import.units.legend"
+  | "import.units.legend_hint"
+  | "import.units.note"
+  | "import.units.source_unknown"
+  | "import.units.status.assumed"
+  | "import.units.status.declared"
+  | "import.units.status.explicit"
+  | "import.units.status.physical"
+  | "import.units.status.unknown"
+  | "import.units.status_hint.assumed"
+  | "import.units.status_hint.declared"
+  | "import.units.status_hint.explicit"
+  | "import.units.status_hint.physical"
+  | "import.units.status_hint.unknown"
+  | "import.warn.geometry"
+  | "import.warn.info"
+  | "import.warn.missing_block"
+  | "import.warn.units"
+  | "import.warn.unsupported"
   | "layers.add"
   | "layers.add.open_file"
   | "layers.add.open_file.title"
@@ -2616,6 +2661,8 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "dialog.unsaved.dont_save",
   "dialog.unsaved.save_continue",
   "dialog.unsaved.title",
+  "drawings.import_warnings",
+  "drawings.units_assumed",
   "error.code.cps_post_failed",
   "error.code.cps_selection_missing",
   "error.code.cps_unavailable",
@@ -2906,6 +2953,49 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "genbar.time.toolchange",
   "genbar.time.total",
   "help.key.middle_drag",
+  "import.review.cancel",
+  "import.review.close",
+  "import.review.confirm",
+  "import.review.confirm_units",
+  "import.review.detected",
+  "import.review.geometry",
+  "import.review.geometry_segments",
+  "import.review.geometry_value",
+  "import.review.no_warnings",
+  "import.review.scale",
+  "import.review.scale_value",
+  "import.review.size",
+  "import.review.size_value",
+  "import.review.title",
+  "import.review.type",
+  "import.review.warning_count",
+  "import.review.warnings",
+  "import.units.choice.custom",
+  "import.units.choice.inch",
+  "import.units.choice.mm",
+  "import.units.choice.px72",
+  "import.units.choice.px96",
+  "import.units.custom_invalid",
+  "import.units.custom_label",
+  "import.units.legend",
+  "import.units.legend_hint",
+  "import.units.note",
+  "import.units.source_unknown",
+  "import.units.status.assumed",
+  "import.units.status.declared",
+  "import.units.status.explicit",
+  "import.units.status.physical",
+  "import.units.status.unknown",
+  "import.units.status_hint.assumed",
+  "import.units.status_hint.declared",
+  "import.units.status_hint.explicit",
+  "import.units.status_hint.physical",
+  "import.units.status_hint.unknown",
+  "import.warn.geometry",
+  "import.warn.info",
+  "import.warn.missing_block",
+  "import.warn.units",
+  "import.warn.unsupported",
   "layers.add",
   "layers.add.open_file",
   "layers.add.open_file.title",

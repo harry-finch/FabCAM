@@ -74,7 +74,11 @@ ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
         post({
           id,
           type: 'result',
-          value: m.importBytes(args[0] as string, args[1] as Uint8Array),
+          value: m.importBytes(
+            args[0] as string,
+            args[1] as Uint8Array,
+            args[2] as number | undefined,
+          ),
         });
         break;
       case 'generate':

@@ -10,6 +10,18 @@ Welcome offers New project, Open project, Import SVG/DXF, recent projects and an
 
 Import SVG or DXF, inspect units/scale and drawing bounds, and select the required geometry/layers. Existing import and editing behavior is unchanged. Do not assume imported artwork has machining-safe dimensions.
 
+When a file does not say what one drawing unit measures (DXF without `$INSUNITS`,
+SVG sized in `px` or without a size), or the importer skipped something, an
+**Import summary** opens before anything is added: it shows the units found in
+the file, the resulting drawing size in mm and grouped import warnings. Choose
+the drawing units (1 unit = 1 mm by default, 96 or 72 dpi pixels, inch or a
+custom mm-per-unit value), check the size, then import. The choice is saved with
+the project and reused when the source is reloaded. Files with declared or
+physical units (DXF `$INSUNITS`, SVG in mm/cm/in/pt) import at their true size
+without a choice. A warning badge next to an imported file reopens its summary.
+Tilted 3D DXF entities and MINSERT arrays are refused; flatten or explode them
+in the CAD tool first.
+
 ## 3. Configure stock and work origin
 
 Set stock dimensions and placement, work-origin reference and fixture obstacles. These declare job intent; they do not establish physical machine zero. Nonzero work-origin Z is currently rejected in the bounded qualified setup. Work-origin/stock/geometry dragging remains deferred; fixture interaction has its own supported controls.

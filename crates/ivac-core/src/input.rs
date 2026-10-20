@@ -82,6 +82,53 @@ pub struct ImportOutput {
     /// Generate. Empty for formats that don't carry text entities (SVG).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub text_entities: Vec<ImportedTextEntity>,
+    /// How the source size was interpreted (ADR-0026). Absent in sources
+    /// saved before 2026-10-20, which read back as `unknown`.
+    #[serde(default)]
+    pub unit_status: ImportUnitStatus,
+    /// What the file itself declares, e.g. `$INSUNITS = Inches` or
+    /// `width='96px', height='96px'`. Empty for legacy saved sources.
+    #[serde(default)]
+    pub unit_source: String,
+}
+
+/// Interpretation of the source size; `unit_scale` is the factor applied
+/// (mm per source unit for DXF and for SVG user units without physical size).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ImportUnitStatus {
+    /// Saved before units were recorded; scale as stored.
+    #[default]
+    Unknown,
+    /// DXF `$INSUNITS` declares a length unit.
+    Declared,
+    /// SVG root `width` and `height` carry physical units (mm, cm, in, pt, pc, Q).
+    Physical,
+    /// No reliable unit: the legacy 1 unit = 1 mm convention was assumed.
+    Assumed,
+    /// The caller supplied an explicit scale (a user decision).
+    Explicit,
+}
+
+/// Bounds for an explicit, user-chosen import scale (mm per source unit).
+/// Covers micrometre to metre source units with margin; anything outside is
+/// almost certainly a typo.
+pub const EXPLICIT_SCALE_RANGE: (f64, f64) = (1e-6, 1e6);
+
+/// Validate an explicit import scale supplied by a transport.
+///
+/// # Errors
+///
+/// `Error::bad_input` for a non-finite, zero, negative or out-of-range scale.
+pub fn checked_import_scale(scale: f64) -> Result<f64> {
+    let (lo, hi) = EXPLICIT_SCALE_RANGE;
+    if scale.is_finite() && (lo..=hi).contains(&scale) {
+        Ok(scale)
+    } else {
+        Err(crate::Error::bad_input(format!(
+            "import scale {scale} mm per unit is invalid; use a finite value between {lo} and {hi}"
+        )))
+    }
 }
 
 /// Metadata for a TEXT / MTEXT entity captured during import. Carries
@@ -234,6 +281,7 @@ pub(crate) fn summarize_layers(
 pub(crate) fn register_schemas(map: &mut crate::schema::SchemaMap) {
     crate::schema::insert::<ImportedTextEntity>(map, "ImportedTextEntity");
     crate::schema::insert::<ImportedTextKind>(map, "ImportedTextKind");
+    crate::schema::insert::<ImportUnitStatus>(map, "ImportUnitStatus");
     crate::schema::insert::<text::RenderTextRequest>(map, "RenderTextRequest");
     crate::schema::insert::<text::RenderTextResponse>(map, "RenderTextResponse");
     crate::schema::insert::<text::RenderTextLayerResponse>(map, "RenderTextLayerResponse");

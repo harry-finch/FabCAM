@@ -110,6 +110,8 @@ export function augmentWithStockOutline(
       segments: segs,
       unit_scale: 1,
       warnings: [],
+      unit_status: 'unknown',
+      unit_source: '',
     } as ImportResponse;
   }
   return {

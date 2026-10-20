@@ -135,6 +135,7 @@
   import { i18n, resolveLocale, t } from './lib/i18n';
   import { workspace } from './lib/state/workspace.svelte';
   import ConfirmPrompt from './lib/components/ConfirmPrompt.svelte';
+  import ImportReviewDialog from './lib/components/ImportReviewDialog.svelte';
   import {
     addDrawing,
     resetDocument,
@@ -1469,6 +1470,7 @@
     <C open={reportOpen} onClose={() => (reportOpen = false)} />
   {/if}
   <ConfirmPrompt />
+  <ImportReviewDialog />
 
   <footer
     class:footer-pick={modalStatusHint != null}

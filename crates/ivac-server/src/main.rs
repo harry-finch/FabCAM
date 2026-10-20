@@ -187,6 +187,8 @@ struct ImportResponse<'a> {
     bbox: &'a ivac_core::BBox,
     unit_scale: f64,
     warnings: &'a [String],
+    unit_status: ivac_core::input::ImportUnitStatus,
+    unit_source: &'a str,
 }
 
 // `GenerateRequest` and `GenerateResponse` types live in
@@ -230,6 +232,7 @@ async fn import(
     let mut filename = String::new();
     let mut bytes: Vec<u8> = Vec::new();
     let mut format_hint: Option<String> = None;
+    let mut scale: Option<f64> = None;
     while let Some(field) = multipart.next_field().await? {
         let name = field.name().unwrap_or("").to_string();
         if name == "file" {
@@ -237,6 +240,14 @@ async fn import(
             bytes = field.bytes().await?.to_vec();
         } else if name == "format" {
             format_hint = Some(field.text().await?);
+        } else if name == "scale" {
+            // Explicit source-unit choice (ADR-0026), mm per source unit.
+            let text = field.text().await?;
+            let value = text.trim().parse::<f64>().map_err(|_| {
+                AppError::bad_request("scale must be a number (mm per source unit)")
+            })?;
+            scale =
+                Some(ivac_core::input::checked_import_scale(value).map_err(AppError::from_core)?);
         }
     }
     if bytes.is_empty() {
@@ -259,11 +270,11 @@ async fn import(
     // The format is a validated hint, never part of a filesystem path.
     let import_name = format!("upload.{suffix}");
     let result = tokio::task::spawn_blocking(move || {
-        let mut result = ivac_core::input::import_bytes(
-            &import_name,
-            &bytes,
-            &ivac_core::ImportOptions::default(),
-        )?;
+        let opts = ivac_core::ImportOptions {
+            scale: scale.unwrap_or(0.0),
+            ..ivac_core::ImportOptions::default()
+        };
+        let mut result = ivac_core::input::import_bytes(&import_name, &bytes, &opts)?;
         result.filename = filename;
         Ok::<_, ivac_core::Error>(result)
     })
@@ -278,6 +289,8 @@ async fn import(
         bbox: &result.bbox,
         unit_scale: result.unit_scale,
         warnings: &result.warnings,
+        unit_status: result.unit_status,
+        unit_source: &result.unit_source,
     };
     Ok(Json(serde_json::to_value(resp).unwrap()))
 }

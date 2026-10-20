@@ -178,3 +178,117 @@ fn explicit_scale_silences_unit_ambiguity() {
         assert!(out.warnings.is_empty(), "{file}: {:?}", out.warnings);
     }
 }
+
+/// ADR-0026 unit contract: status, declared source, explicit scale and the
+/// refusal that prevents converting a physical SVG twice.
+#[test]
+fn unit_status_and_explicit_scale_contract() {
+    use ivac_core::input::{checked_import_scale, ImportUnitStatus as S};
+    let import = |file: &str, scale: f64| {
+        import_path(
+            &dir().join(file),
+            &ImportOptions {
+                scale,
+                ..ImportOptions::default()
+            },
+        )
+    };
+    let width = |o: &ivac_core::ImportOutput| o.bbox.max_x - o.bbox.min_x;
+    for (file, status, source) in [
+        ("svg_mm.svg", S::Physical, "width='100mm', height='50mm'"),
+        ("svg_px.svg", S::Assumed, "width='96px', height='96px'"),
+        ("svg_unitless.svg", S::Assumed, "width='96', height='96'"),
+        (
+            "svg_viewbox_only.svg",
+            S::Assumed,
+            "width='absent', height='absent'",
+        ),
+        ("dxf_units_inch.dxf", S::Declared, "$INSUNITS = Inches"),
+        (
+            "dxf_units_absent.dxf",
+            S::Assumed,
+            "$INSUNITS = absent or unitless",
+        ),
+        (
+            "dxf_units_unitless.dxf",
+            S::Assumed,
+            "$INSUNITS = absent or unitless",
+        ),
+    ] {
+        let out = import(file, 0.0).unwrap();
+        assert_eq!(
+            (out.unit_status, out.unit_source.as_str()),
+            (status, source),
+            "{file}"
+        );
+    }
+    // Explicit choices on ambiguous sources: 96 px at 96 dpi is one inch.
+    let px96 = import("svg_px.svg", 25.4 / 96.).unwrap();
+    assert_eq!(px96.unit_status, S::Explicit);
+    assert!((width(&px96) - 25.4).abs() < 1e-9 && px96.warnings.is_empty());
+    let pt72 = import("svg_illustrator_pt_as_px.svg", 25.4 / 72.).unwrap();
+    assert!(
+        (width(&pt72) - 210.0).abs() < 0.01,
+        "A4 width {}",
+        width(&pt72)
+    );
+    let inch = import("dxf_units_absent.dxf", 25.4).unwrap();
+    assert_eq!(inch.unit_status, S::Explicit);
+    assert!((width(&inch) - 25.4).abs() < 1e-9);
+    // A physical SVG never takes a second factor.
+    let err = import("svg_mm.svg", 25.4 / 96.).unwrap_err();
+    assert!(err.message.contains("twice"), "{}", err.message);
+    assert!((width(&import("svg_mm.svg", 0.0).unwrap()) - 100.0).abs() < 1e-9);
+    // Transport validation of explicit scales.
+    for bad in [0.0, -1.0, f64::NAN, f64::INFINITY, 1e-7, 1e7] {
+        assert!(checked_import_scale(bad).is_err(), "{bad}");
+    }
+    for good in [1e-6, 25.4 / 96., 1.0, 25.4, 1e6] {
+        assert_eq!(
+            checked_import_scale(good).unwrap().to_bits(),
+            good.to_bits()
+        );
+    }
+}
+
+/// Sources saved before 2026-10-20 have no unit fields; they read back as
+/// `unknown` with their stored scale untouched.
+#[test]
+fn legacy_saved_source_reads_as_unknown_units() {
+    let legacy = serde_json::json!({
+        "filename": "old.svg", "format": "svg", "segments": [], "layers": [],
+        "bbox": {"min_x": 0.0, "min_y": 0.0, "max_x": 10.0, "max_y": 5.0},
+        "unit_scale": 1.0, "warnings": []
+    });
+    let out: ivac_core::ImportOutput = serde_json::from_value(legacy).unwrap();
+    assert_eq!(out.unit_status, ivac_core::input::ImportUnitStatus::Unknown);
+    assert_eq!(out.unit_source, "");
+    assert!((out.unit_scale - 1.0).abs() < f64::EPSILON);
+}
+
+/// The frontend groups importer warnings by these exact shapes
+/// (`frontend/src/lib/state/import-units.ts`); keep them in sync.
+#[test]
+fn warning_texts_match_the_frontend_classifier() {
+    let solid = "0\nSOLID\n8\nHATCHING\n10\n0.0\n20\n0.0\n30\n0.0\n11\n1.0\n21\n0.0\n31\n0.0\n12\n0.0\n22\n1.0\n32\n0.0\n13\n1.0\n23\n1.0\n33\n0.0\n";
+    let dxf = format!(
+        "0\nSECTION\n2\nHEADER\n9\n$INSUNITS\n70\n4\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n{solid}{solid}\
+         0\nINSERT\n8\n0\n2\nGHOST\n10\n0.0\n20\n0.0\n30\n0.0\n\
+         0\nLINE\n8\n0\n10\n0.0\n20\n0.0\n30\n0.0\n11\n5.0\n21\n0.0\n31\n0.0\n0\nENDSEC\n0\nEOF\n"
+    );
+    let out =
+        ivac_core::input::import_bytes("w.dxf", dxf.as_bytes(), &ImportOptions::default()).unwrap();
+    assert_eq!(
+        out.warnings,
+        [
+            "unsupported entity SOLID on layer 'HATCHING'",
+            "unsupported entity SOLID on layer 'HATCHING'",
+            "INSERT references missing block 'GHOST'",
+        ]
+    );
+    assert_eq!(
+        out.segments.len(),
+        1,
+        "the supported LINE is still imported"
+    );
+}

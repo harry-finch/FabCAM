@@ -66,10 +66,34 @@ pub fn import_svg_bytes(
     })?;
 
     let unit_scale = if opts.scale > 0.0 { opts.scale } else { 1.0 };
-    let warnings: Vec<String> = if opts.scale > 0.0 {
-        Vec::new()
+    let size = svg_declared_size(bytes);
+    let physical = size.as_ref().is_some_and(|s| s.physical);
+    let unit_source = size.as_ref().map_or_else(
+        || "size not readable".to_string(),
+        |s| format!("width='{}', height='{}'", s.width, s.height),
+    );
+    // usvg already converted a physical size to mm; another factor would
+    // convert twice. An explicit scale only applies to user units.
+    if physical && opts.scale > 0.0 {
+        return Err(Error::bad_input(format!(
+            "SVG declares a physical size ({unit_source}); an explicit import scale would convert it twice"
+        )));
+    }
+    let unit_status = if opts.scale > 0.0 {
+        super::ImportUnitStatus::Explicit
+    } else if physical {
+        super::ImportUnitStatus::Physical
     } else {
-        svg_size_ambiguity(bytes).into_iter().collect()
+        super::ImportUnitStatus::Assumed
+    };
+    let warnings: Vec<String> = if unit_status == super::ImportUnitStatus::Assumed {
+        vec![format!(
+            "SVG size is not in physical units ({unit_source}): 1 SVG user unit (px) was imported as 1 mm. \
+             CSS defines 1 px = 1/96 in (0.2646 mm) and many design tools export 72 px per inch; \
+             check the imported size and choose the source units if needed."
+        )]
+    } else {
+        Vec::new()
     };
     let mut ctx = SvgCtx {
         segments: Vec::new(),
@@ -102,6 +126,8 @@ pub fn import_svg_bytes(
         objects,
         object_meta,
         text_entities: Vec::new(),
+        unit_status,
+        unit_source,
     })
 }
 
@@ -109,12 +135,18 @@ pub fn import_svg_bytes(
 /// `dpi = 25.4` usvg converts them exactly to millimetres.
 const PHYSICAL_UNITS: [&str; 6] = ["mm", "cm", "in", "pt", "pc", "Q"];
 
-/// Explain the size assumption when the root `width`/`height` are missing or
-/// not physical (`px`, unitless, `%`, `em`): user units then import 1:1 as
-/// millimetres, while CSS defines 1 px = 1/96 in and many design tools export
-/// at 72 px/in. `None` when both are physical or the document cannot be read
-/// (usvg reports parse errors itself).
-fn svg_size_ambiguity(bytes: &[u8]) -> Option<String> {
+/// Root `width`/`height` as written, and whether both carry physical units.
+/// When not (`px`, unitless, `%`, `em`, absent) user units import 1:1 as mm
+/// unless the caller chooses a scale; CSS defines 1 px = 1/96 in and many
+/// design tools export at 72 px/in. `None` when the text cannot be read
+/// (usvg reports parse errors itself; an unreadable size counts as ambiguous).
+struct SvgDeclaredSize {
+    width: String,
+    height: String,
+    physical: bool,
+}
+
+fn svg_declared_size(bytes: &[u8]) -> Option<SvgDeclaredSize> {
     let text = std::str::from_utf8(bytes).ok()?;
     let doc = usvg::roxmltree::Document::parse(text).ok()?;
     let root = doc.root_element();
@@ -122,16 +154,11 @@ fn svg_size_ambiguity(bytes: &[u8]) -> Option<String> {
     let physical =
         |v: Option<&str>| v.is_some_and(|v| PHYSICAL_UNITS.iter().any(|u| v.ends_with(u)));
     let (w, h) = (attr("width"), attr("height"));
-    if physical(w) && physical(h) {
-        return None;
-    }
-    Some(format!(
-        "SVG size is not in physical units (width='{}', height='{}'): 1 SVG user unit (px) was imported as 1 mm. \
-         CSS defines 1 px = 1/96 in (0.2646 mm) and many design tools export 72 px per inch; \
-         check the imported size and adjust the file transform scale if needed.",
-        w.unwrap_or("absent"),
-        h.unwrap_or("absent")
-    ))
+    Some(SvgDeclaredSize {
+        width: w.unwrap_or("absent").to_string(),
+        height: h.unwrap_or("absent").to_string(),
+        physical: physical(w) && physical(h),
+    })
 }
 
 struct SvgCtx {

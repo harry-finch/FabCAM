@@ -35,6 +35,8 @@ export function drawingImport(
     format: 'edited',
     unit_scale: 1,
     warnings: [],
+    unit_status: 'unknown',
+    unit_source: '',
     bbox: e.bbox,
     segments: e.segments,
     objects: e.membership.map((id) => ids.get(key(id)) ?? 0),
