@@ -424,8 +424,11 @@ git commit -am "chore: release v0.3.0"
 git tag v0.3.0 && git push --follow-tags
 ```
 
-The tag push triggers `release-desktop.yml` (desktop bundles → draft
-pre-release). For the Android APKs, delete
+Only after separate publication authorization, a tag push triggers
+`release-desktop.yml` for qualified desktop **artifacts only**, not a draft or
+public release. SEC1 manual promotion remains disabled pending approval-protection
+acceptance. The commands above are historical versioning examples, not authorization.
+For the separately scoped Android APKs, delete
 `crates/ivac-tauri/gen/android/app/tauri.properties` (so the version
 refreshes), build them locally, and attach them to the draft out-of-band
 (see the Android section above).
@@ -529,3 +532,27 @@ optional cleanup warning. Failure to remove a staging name after final publicati
 must not be reported as an unpublished file. CLI pair export continues after a
 first-side cleanup warning; any second-side publication failure is explicitly
 partial, preserves existing destinations and never triggers destructive rollback.
+
+### SEC1 strict software qualification
+
+`scripts/pre-release.sh` is mandatory/fail-closed: absent wasm-pack, cargo-deny or
+Chromium fails, generator failures propagate, version consistency is checked, and
+pedantic Clippy includes all features. Its green result qualifies software only.
+WASM sizes use portable byte counts and deterministic gzip; no macOS stat wrapper
+is required. Optional external FANUC oracles and ignored bounded TEST1 worker
+entrypoints remain explicitly separate from mandatory gate success; TEST1 is run
+through its dedicated watchdog workflow.
+
+CI is reusable and records every mandatory job result plus the exact source SHA
+and workflow run ID. Both candidate and tag builds depend on this qualification;
+only artifacts are uploaded. The V1 artifact matrix is macOS arm64 DMG, Windows
+x64 NSIS and Ubuntu amd64 DEB. Older universal macOS and additional packaging
+formats are not inferred qualified by this V1 path.
+
+`promote-desktop-draft.yml` is deliberately disabled (`if: false`) and contains no
+release command. Its prepared verifier selects an explicit run, validates protected
+reviewer configuration, source/version/run identity and checksums, and only copies
+verified installer bytes. Activation and the actual draft-publication step require
+a separate human checkpoint proving the protected environment works (required
+reviewers, self-review prevention and no administrator bypass). No environment or
+GitHub setting was configured by SEC1. Merely naming an environment is insufficient.

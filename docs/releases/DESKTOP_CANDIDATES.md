@@ -1,5 +1,15 @@
 # Desktop candidates — preparation checkpoint
 
+**SEC1 update (2026-10-20):** both manual and tag-triggered builds now call the
+shared mandatory CI qualification at the same source SHA. Both produce only the
+three V1 candidate formats (macOS arm64 DMG, Windows x64 NSIS, Ubuntu amd64 DEB).
+The old universal/tag-release path below is historical, not active. Manifests bind
+source SHA and qualification run ID; current version is beta.3/pipeline63. Manual
+draft promotion is explicitly disabled and has no publish step until protected
+human approval is proven operational. See [strict qualification](../BUILDING.md#sec1-strict-software-qualification).
+The dated preparation and old candidate evidence below retain their original scope.
+
+
 > 2026-10-19 — **Consolidation UX A–D terminée, candidats BLOQUÉS** (beta.3/pipeline62). [Bilan et preuves](UX_V1_CONSOLIDATION_2026_10_19.md). Core1204, frontend1387/1 SKIP +10 Node, intégration59 et TEST1 optimisé256/256 PASS. Un correctif clavier local ; défaut sécurité lecture/export **ivac-3xqtb** et réserve chargement/format **ivac-52tpd** soumis sans correction. Revues **ivac-amibd / ivac-he4lt OPEN**. Candidats existants beta.3/pipeline61 inchangés. Aucun commit/push/publication ni nouveau candidat. **HARD STOP pour validation.** Les notices antérieures sont historiques.
 
 2026-10-16 · FabCAM 0.9.0-beta.1 · ivac-2p53v.

@@ -306,7 +306,7 @@ fn reject_cps_path(req: &GenerateRequest) -> Result<(), AppError> {
             ivac_core::pipeline::CpsPostSource::Path { .. }
         ) {
             return Err(AppError::bad_request(
-                "cps_post.source \"path\" is CLI-only — send the script inline or use a bundled id",
+                "External CPS posts are unavailable in V1; select a bundled post",
             ));
         }
     }
@@ -961,7 +961,7 @@ mod tests {
             assert!(body_json(resp).await["message"]
                 .as_str()
                 .unwrap()
-                .contains("CLI-only"));
+                .contains("External CPS"));
         }
     }
 

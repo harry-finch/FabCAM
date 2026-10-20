@@ -1,0 +1,37 @@
+name: Promote verified desktop draft (disabled pending human protection acceptance)
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Exact qualified 40-character source SHA
+        type: string
+        required: true
+      build_run_id:
+        description: Explicit successful candidate or tag artifact run ID
+        type: string
+        required: true
+permissions:
+  contents: read
+  actions: read
+jobs:
+  promotion:
+    # SEC1: intentionally non-activatable by input/variable. Remove only after
+    # separate human review proves environment protection operational.
+    if: ${{ false }}
+    environment: release-promotion
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.source_sha }}
+      - name: Verify protected environment, exact run and all artifact bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          BUILD_RUN: ${{ inputs.build_run_id }}
+        run: python3 scripts/sec1-release.py fetch --sha "$SOURCE_SHA" --run "$BUILD_RUN" --directory selected-artifacts
+      # No publish command is installed until the protection acceptance checkpoint.
+      # This workflow deliberately cannot create tags or GitHub releases.

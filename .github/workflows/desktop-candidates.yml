@@ -3,6 +3,7 @@ name: Desktop test candidates
 # Explicit developer/tester artifacts only: no tag, release, signing request or deployment.
 on:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -12,7 +13,10 @@ env:
   RUSTFLAGS: -D warnings
 
 jobs:
+  qualification:
+    uses: ./.github/workflows/ci.yml
   candidate:
+    needs: qualification
     name: ${{ matrix.os }} / ${{ matrix.target }}
     runs-on: ${{ matrix.runner }}
     strategy:

@@ -1,5 +1,13 @@
 # Windows code signing via SignPath Foundation
 
+**SEC1 current workflow boundary (2026-10-20):** the active V1 workflows produce
+qualified-source test artifacts only. They do not request SignPath signing or create
+GitHub releases. The manual promotion workflow remains disabled until human approval
+protection is operationally accepted. The SignPath/tag-release wiring described below
+is a historical/future setup reference, not an active or authorized path. macOS
+community ad-hoc signing and the explicit absence of Apple notarization are unchanged.
+
+
 > macOS V1 uses [REL1-B1 community distribution](releases/v1-stabilization-campaign/REL1_B_PLAN.md): valid ad-hoc signing, checksums and clean-install qualification. Developer ID/notarization are optional post-V1. The Windows policy below is unchanged.
 
 > **Status: planned, not yet set up.** This is a TODO / runbook for a

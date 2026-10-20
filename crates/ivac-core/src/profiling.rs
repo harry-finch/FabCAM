@@ -32,6 +32,7 @@ pub struct Span {
     start_ns: u128,
 }
 impl Span {
+    #[must_use]
     pub fn enter(name: &'static str) -> Self {
         SESSION.with(|s| {
             let mut s = s.borrow_mut();
@@ -84,6 +85,7 @@ pub fn reset() {
         s.origin = Instant::now();
     });
 }
+#[must_use]
 pub fn take() -> Vec<Record> {
     SESSION.with(|s| {
         let mut s = s.borrow_mut();

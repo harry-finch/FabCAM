@@ -444,7 +444,7 @@ impl PipelineError {
                     "post_processor \"cps\" requires a cps_post selection".to_string(),
                 )
                 .with_code(ErrorCode::CpsSelectionMissing)
-                .with_hint("Pick a bundled post or supply a .cps script in cps_post."),
+                .with_hint("Select a bundled post in cps_post; external CPS posts are unavailable in V1."),
             ),
             PipelineError::CpsUnavailable => Some(
                 Structured::unsupported(
@@ -896,7 +896,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
                         &resolved.id,
                         &program,
                         &overrides,
-                        cancel.map(|token| token.shared_flag())
+                        cancel.map(CancelToken::shared_flag).as_ref()
                     )
                 )
                 .map_err(cps_post_error)?;

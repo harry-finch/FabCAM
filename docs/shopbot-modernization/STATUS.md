@@ -1,7 +1,9 @@
 # FabCAM — current status
 
-NUMSAFE3 checkpoint **2026-10-20**, beta.3 / pipeline63;
-[implementation, tested source and handoff](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md).
+SEC1 remediation checkpoint **2026-10-20**, beta.3 / pipeline63;
+[implementation, frozen-source qualification and handoff](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md).
+20/20 local software gates, 1662 reported Rust PASS and 1460 frontend PASS.
+Promotion is disabled; remote CI and approval protection have not been exercised.
 [Documentation index](../README.md) · [Release plan](../releases/RELEASE_ROADMAP.md) ·
 [V1 readiness](../releases/V1_READINESS.md) · [Reconciliation and FS matrix](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md).
 
@@ -9,6 +11,7 @@ NUMSAFE3 checkpoint **2026-10-20**, beta.3 / pipeline63;
 
 | Area | Current disposition | Qualification / next decision |
 |---|---|---|
+| SEC1 | Bundled-only CPS, accurate publication/cleanup reporting, shared exact-SHA qualification implemented | [Results](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md); human review `ivac-1mqti` OPEN; no remote CI, installer or physical claim |
 | NUMSAFE3 | Implemented with approved specialized budgets and transactional program exports; existing two-sided names are refused | [Results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md); 16/16 gates, 1654 Rust tests, 256 TEST1, 136 byte-identical outputs; human review `ivac-zulb3` OPEN |
 | NUMSAFE / NUMSAFE2 | Implemented, approved engineering commits `e1a0c95` / `2c6e4e1`; tracker `ivac-knphk` / `ivac-o9gwj` CLOSED | [Numeric/runtime results](../releases/NUMERICAL_RUNTIME_SAFETY_RESULTS_2026_10_20.md), [1000-pass limits](../releases/NUMSAFE2_PASS_LIMITS_RESULTS_2026_10_20.md); retain streaming, cancellation and specialized-loop limits |
 | FS0–FS3.9 | Architecture, independent engine, data, CAM integration, ownership, source packs, authoring and bounded adaptation already delivered | [Actual FS matrix](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md#feeds--speeds-milestone-matrix): software reviews accepted within recorded scope; FS3 usability superseded by accepted FS3.5; FS4 physical qualification deferred/nonblocking |
@@ -27,8 +30,8 @@ The earlier integration remains recorded in
 [reconciliation](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md#integrated-validation).
 Historical NUMSAFE2 reports record 16 green gates and 136 byte-identical valid programs;
 those observations retain their tested source and do not imply installed-platform acceptance.
-The current run qualifies a scoped macOS `stat` compatibility wrapper; pre-existing
-size-gate portability defect `ivac-5yxyu` stays OPEN.
+The historical NUMSAFE3 run used a scoped `stat` wrapper. SEC1 now fixes the
+portable fail-closed size gate and qualifies it without that wrapper; see its report.
 
 Existing [beta.3 candidates](../releases/beta3-delivery-2026-10-18/README.md) are
 **`db5bde5` / pipeline61**, with three builds and bounded macOS smoke. They do not
@@ -38,8 +41,8 @@ acceptance remain pending. [M4 evidence](M4_VALIDATION.md) stays bounded and his
 
 ## Remaining gates and next action
 
-NUMSAFE3 engineering (`ivac-fh2av`) is qualified; **HARD STOP for human review**
-`ivac-zulb3`. [Resource/export results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md)
+SEC1 engineering (`ivac-dqlol`) is qualified locally; **HARD STOP for human review**
+`ivac-1mqti`. NUMSAFE3 review `ivac-zulb3` remains independent. [Resource/export results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md)
 record the approved budgets, new-only pair contract, commits and remaining limits.
 No push, installer packaging, publication or hardware operation was authorized.
 

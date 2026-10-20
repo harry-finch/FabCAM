@@ -2,18 +2,9 @@
 #
 # Local pre-release ritual (bb8q).
 #
-# This repo has no git remote, so the ci.yml in .github/workflows/ never
-# fires. This script is the local stand-in: run it before tagging a
-# release (or before handing an AppImage to a tester) and only ship if
-# every step is green. It mirrors ci.yml step-for-step, just on whatever
-# OS the dev is on (vs ci.yml's ubuntu/macos/windows matrix).
-#
-# Usage:  scripts/pre-release.sh
-# Exit:   0 on full pass, 1 on the first failure.
-#
-# Optional gates that need extra tooling (wasm-pack, cargo-deny) are
-# skipped with a note if the binary isn't on PATH; install them if you
-# care about parity with the CI yml for a release.
+# Mandatory local software qualification; never permission to publish.
+# Missing required tools are failures. Installed-platform and hardware acceptance
+# remain separate. Run with the pinned toolchain and a complete environment.
 
 # Note: NO `set -e`. We want every gate to run even when an earlier one
 # fails — a release checklist is more useful when it reports the full
@@ -21,7 +12,7 @@
 # final exit status reflects whether any gate failed.
 set -uo pipefail
 
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 
 # ANSI colours; degrade gracefully on dumb terminals.
 if [[ -t 1 ]]; then
@@ -47,7 +38,8 @@ step() {
 skip() {
   local name="$1" reason="$2"
   printf "%s━━ %s (skipped: %s)%s\n" "$D" "$name" "$reason" "$N"
-  steps+=("${Y}-${N} $name ${D}(skipped: $reason)${N}")
+  steps+=("${R}✗${N} $name ${D}(mandatory gate skipped: $reason)${N}")
+  fail=1
 }
 
 #───────────── Rust workspace ─────────────
@@ -61,25 +53,19 @@ step "cargo fmt --check"      cargo fmt --all -- --check
 # allows, so re-apply exactly that documented allow-list (root Cargo.toml)
 # after it. Keep both lists in sync.
 step "cargo clippy -Dwarnings (with pedantic)" \
-  cargo clippy --workspace --all-targets -- -W clippy::pedantic \
+  cargo clippy --locked --workspace --all-targets --all-features -- -W clippy::pedantic \
     -A clippy::module_name_repetitions -A clippy::missing_errors_doc \
     -A clippy::missing_panics_doc -A clippy::too_many_lines \
     -A clippy::too_many_arguments -A clippy::similar_names \
     -A clippy::many_single_char_names -A clippy::field_reassign_with_default \
     -A clippy::items_after_statements -D warnings
-# waud: prefer cargo-nextest when installed (parallel test-binary
-# execution, ~30-60 % faster wall time on multi-binary workspaces).
-# Falls through to plain `cargo test` when nextest isn't on PATH, so
-# a developer without it installed isn't blocked.
-if command -v cargo-nextest >/dev/null 2>&1; then
-  step "cargo nextest run (ci profile)" \
-    cargo nextest run --workspace --all-features --profile ci --run-ignored all
-else
-  step "cargo test --workspace"  cargo test --workspace --all-features
-fi
-step "xtask schema-check"      cargo run --quiet -p xtask -- schema-check
+# Stable suite regardless of developer-installed optional runners. The ignored
+# TEST1 worker is exercised separately by its watchdog, not without its inputs.
+step "cargo test --workspace" cargo test --locked --workspace --all-features
+step "xtask schema-check"      cargo run --locked --quiet -p xtask -- schema-check
 # Docs: README.md and README_de.md must stay structurally in sync
 # (same heading skeleton + reciprocal language links).
+step "xtask version-check" cargo run --locked --quiet -p xtask -- version-check
 step "readme parity"           scripts/check-readme-parity.sh
 
 #───────────── Frontend ─────────────
@@ -88,13 +74,14 @@ step "readme parity"           scripts/check-readme-parity.sh
 # `steps+=` append (the array lives in the parent), so the final summary
 # would silently lose every frontend step entry.
 
-pushd frontend >/dev/null
+pushd frontend >/dev/null || exit 1
 
 step "pnpm install"            pnpm install --frozen-lockfile
 
 # Codegen drift guard: regenerate generated.ts from the YAML; the diff
 # must be empty. Pairs with the rust xtask schema-check above.
 step "codegen drift"           bash -c '
+  set -euo pipefail
   pnpm run codegen >/dev/null
   git diff --exit-code -- src/lib/api/generated.ts
 '
@@ -102,6 +89,7 @@ step "codegen drift"           bash -c '
 # i18n keys drift guard: regenerate keys.ts from messages/en.json; the
 # typed MsgKey union must stay in sync with the base catalog.
 step "i18n keys drift"         bash -c '
+  set -euo pipefail
   pnpm run i18n:codegen >/dev/null
   git diff --exit-code -- src/lib/i18n/keys.ts
 '
@@ -115,9 +103,9 @@ step "pnpm run check"          pnpm run check
 step "pnpm run test"           pnpm run test
 step "pnpm run build"          pnpm run build
 
-popd >/dev/null
+popd >/dev/null || exit 1
 
-#───────────── Optional gates ─────────────
+#───────────── Required tooling gates ─────────────
 
 if command -v wasm-pack >/dev/null 2>&1; then
   step "wasm-pack build (web)"   wasm-pack build crates/ivac-wasm --target web --release
@@ -145,6 +133,15 @@ else
   skip "ui smoke (headless)"     "no chromium on PATH"
 fi
 
+step "CLI trust and transactional export" bash -c '
+  set -euo pipefail
+  cargo build --locked -p ivac-cli
+  python3 scripts/sec1-cli-check.py
+  python3 scripts/numsafe3-cli-check.py
+'
+step "SEC1 release boundary regressions" python3 scripts/sec1-release.test.py
+step "candidate identity regressions" node --test scripts/collect-desktop-candidate.test.mjs
+
 #───────────── Summary ─────────────
 
 echo
@@ -153,7 +150,7 @@ for s in "${steps[@]}"; do echo "  $s"; done
 echo
 
 if (( fail == 0 )); then
-  echo "${G}all gates green — ok to release${N}"
+  echo "${G}mandatory software gates passed — publication and platform acceptance remain separate${N}"
   exit 0
 else
   echo "${R}pre-release: failures above. Fix before tagging / shipping.${N}"

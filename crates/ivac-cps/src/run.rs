@@ -476,7 +476,7 @@ pub fn run_bundled(
     id: &str,
     program: &ir::Program,
     properties: &serde_json::Value,
-    cancel: Option<Arc<AtomicBool>>,
+    cancel: Option<&Arc<AtomicBool>>,
 ) -> Result<PostOutput, PostError> {
     let post = crate::library::bundled(id).ok_or(PostError::UntrustedPost)?;
     let object = properties
@@ -496,7 +496,7 @@ pub fn run_bundled(
         program,
         properties,
         RunLimits::default(),
-        cancel.as_ref(),
+        cancel,
     )
 }
 

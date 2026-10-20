@@ -106,7 +106,7 @@ fn request(c: &Case, shape: u32, v: bool) -> PipelineRequest {
             source: CpsPostSource::Bundled {
                 id: "shopbot".into(),
             },
-            properties: Default::default(),
+            properties: std::collections::BTreeMap::default(),
         }),
     }
 }
@@ -178,6 +178,8 @@ fn a1(c: &Case) -> Result<(), String> {
         "deleted_binding",
     )
 }
+// Exact comparisons identify the explicitly inserted endpoint samples.
+#[allow(clippy::float_cmp)]
 fn a2(c: &Case) -> Result<(), String> {
     let radius = 1. + f64::from((c.seed % 99) as u32);
     let start = f64::from(c.index) * 0.27;
@@ -250,14 +252,14 @@ fn b1(c: &Case) -> Result<(), String> {
             continue;
         };
         let m = &cut;
-        witnessed |= (m.b[2] - depth).abs() < 0.000051;
+        witnessed |= (m.b[2] - depth).abs() < 0.000_051;
         if shape == 1 {
             let min = oracle::segment_distance([24., 24.], [m.a[0], m.a[1]], [m.b[0], m.b[1]]);
             let max = (m.a[0] - 24.)
                 .hypot(m.a[1] - 24.)
                 .max((m.b[0] - 24.).hypot(m.b[1] - 24.));
             if (c.index / 4) % 2 == 0 {
-                insist(min >= 11. - 0.010001, "circle_outside_sweep")?;
+                insist(min >= 11. - 0.010_001, "circle_outside_sweep")?;
             } else {
                 insist(max <= 9. + 0.0001, "circle_inside_sweep")?;
             }
@@ -268,7 +270,7 @@ fn b1(c: &Case) -> Result<(), String> {
                     &oracle::rect_edges([10., 10.], [w, 30.]),
                     1.,
                     1.,
-                    0.010001,
+                    0.010_001,
                 )?;
             }
             for p in [m.a, m.b] {
@@ -330,13 +332,13 @@ fn b2(c: &Case) -> Result<(), String> {
     let r = run(req, "vcarve")?;
     let moves = oracle::decode(&r.gcode)?;
     let mut witnessed = false;
-    let allowance = 0.0002 + 0.0000317 + 2_f64.sqrt() * 0.00005 + tangent * 0.00005 + 1e-8;
+    let allowance = 0.0002 + 0.000_031_7 + 2_f64.sqrt() * 0.00005 + tangent * 0.00005 + 1e-8;
     for m in &moves {
         let Some(cut) = oracle::below_surface(m) else {
             continue;
         };
         let m = &cut;
-        witnessed |= (m.b[2] - depth).abs() <= 0.00005011;
+        witnessed |= (m.b[2] - depth).abs() <= 0.000_050_11;
         for p in [m.a, m.b] {
             // Generated outer contours are convex and CCW. Signed half planes
             // prevent a distance-only oracle from accepting paths outside stock.
@@ -483,6 +485,8 @@ fn d2(c: &Case) -> Result<(), String> {
     let r = result.map_err(|e| e.to_string())?;
     for m in oracle::decode(&r.gcode)? {
         if m.rapid {
+            // Exact unchanged XY is the safety oracle; a tolerance would weaken it.
+            #[allow(clippy::float_cmp)]
             let vertical = m.a[0] == m.b[0] && m.a[1] == m.b[1];
             insist(
                 (vertical && m.b[2] >= m.a[2] && m.b[2] > top) || (m.a[2] > top && m.b[2] > top),

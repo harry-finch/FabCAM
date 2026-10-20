@@ -10,7 +10,7 @@
   import { t } from '../i18n/i18n.svelte';
   import { defaultClient } from '../api/http';
   import type { CpsPostConfig } from '../state/project-types';
-  import type { PostListEntry, PostMeta } from '../api/types';
+  import type { PostListEntry } from '../api/types';
   import {
     formControls,
     sparseProperties,
@@ -29,7 +29,7 @@
   const client = defaultClient();
 
   let bundled = $state<PostListEntry[]>([]);
-  let meta = $state<PostMeta | null>(null);
+  const meta = $derived(selectionMetadata(value, bundled));
   let loadError = $state<string | null>(null);
 
   // Load the bundled library once; a transport without CPS support
@@ -51,11 +51,6 @@
     return () => {
       cancelled = true;
     };
-  });
-
-  // Never inspect external source, including on automatic project/form mounting.
-  $effect(() => {
-    meta = selectionMetadata(value, bundled);
   });
 
   const controls = $derived<PropertyControl[]>(

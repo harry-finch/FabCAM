@@ -50,11 +50,18 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     if (!state.fresh) throw new Error(`WASM package is not verified: ${state.reason}`);
     const version = JSON.parse(readFileSync(join(root, 'crates/ivac-tauri/tauri.conf.json'), 'utf8')).version;
     const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+    if (process.env.GITHUB_REF?.startsWith('refs/tags/') && process.env.GITHUB_REF !== `refs/tags/v${version}`) {
+      throw new Error('Release tag does not match application version');
+    }
+    const commit = git('rev-parse', 'HEAD');
+    if (process.env.GITHUB_ACTIONS === 'true' && (commit !== process.env.GITHUB_SHA || git('status', '--porcelain', '--untracked-files=no'))) {
+      throw new Error('Candidate source must be the clean qualified workflow SHA');
+    }
     const manifest = collectCandidate({
       platform, target, version,
       bundleDir: suppliedBundleDir ? resolve(suppliedBundleDir) : join(root, 'target', target, 'release/bundle'),
       outputDir: join(root, 'dist-test/desktop-candidates', platform),
-      provenance: { commit: git('rev-parse', 'HEAD'), dirty: !!git('status', '--porcelain'),
+      provenance: { commit, dirty: !!git('status', '--porcelain', '--untracked-files=no'), qualification_run_id: process.env.GITHUB_RUN_ID ?? null, workflow: process.env.GITHUB_WORKFLOW ?? null,
         built_on: process.platform, collected_at: new Date().toISOString(),
         wasm: JSON.parse(readFileSync(join(root, 'crates/ivac-wasm/pkg/.fabcam-build.json'), 'utf8')),
       },

@@ -1,6 +1,8 @@
 # FabCAM V1 readiness
 
-Snapshot **2026-10-20**, NUMSAFE3 software checkpoint, beta.3/pipeline63.
+Snapshot **2026-10-20**, SEC1 software checkpoint, beta.3/pipeline63.
+[SEC1 frozen-source results](SEC1_REMEDIATION_RESULTS_2026_10_20.md): 20/20 local gates;
+CPS external execution refused; promotion disabled, remote workflows not run.
 [Current implementation receipt](NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md#final-qualification-receipt);
 previous integrated engineering source **`2c6e4e1`** is retained below.
 [Reconciliation](PROJECT_STATE_RECONCILIATION_2026_10_20.md) records the tested integration revision.
@@ -18,6 +20,7 @@ The task's human decision must be recorded separately from implementation comple
 
 | Gate | Current disposition | Required next evidence / decision |
 |---|---|---|
+| SEC1 `ivac-dqlol` / review `ivac-1mqti` | SEC1-01/04/08 implemented and locally qualified; source-bound workflow verification tested offline | [Results](SEC1_REMEDIATION_RESULTS_2026_10_20.md); remote CI, operational human protection and any promotion activation remain separate |
 | NUMSAFE3 `ivac-fh2av` / review `ivac-zulb3` | Approved budgets implemented; frozen-source 16/16 gates, 1654 Rust tests, 256 TEST1 and 136 byte-identical outputs | [Report](NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md); human review OPEN; no pair-atomic, universal latency, installed-platform or physical claim |
 | NUMSAFE / NUMSAFE2 `ivac-knphk` / `ivac-o9gwj` | CLOSED; accepted and committed as `e1a0c95` / `2c6e4e1` | [NUMSAFE](NUMERICAL_RUNTIME_SAFETY_RESULTS_2026_10_20.md), [NUMSAFE2](NUMSAFE2_PASS_LIMITS_RESULTS_2026_10_20.md); retain streaming partial-file, specialized-loop and mid-op cancellation limits |
 | Import / ADR-0026 `ivac-feder` | In progress; implemented in inspected source, [correctness](IMPORT_CORRECTNESS_RESULTS_2026_10_20.md) / [UX](IMPORT_UNITS_WARNINGS_RESULTS_2026_10_20.md) evidence recorded | Human UX/architecture acceptance; retain unit/legacy/refusal boundaries |
@@ -26,7 +29,7 @@ The task's human decision must be recorded separately from implementation comple
 | UX D `ivac-he4lt` / consolidation `ivac-amibd` | Separate human reviews OPEN | Review [D](UX_V1_LOT_D_2026_10_19.md) / [consolidation](UX_V1_CONSOLIDATION_2026_10_19.md) with the later ADR-0024 corrections, not as two still-unfixed defects |
 | Large pocket `ivac-53ky9` / cancellation `ivac-42ylx` | Conditional reserves OPEN | Representative packaged-runtime measurements; no unlimited-size or universal200ms guarantee; freezes/OOM/wrong output/partial success remain blocking observations |
 | Combined-source software gate | [Integrated validation](PROJECT_STATE_RECONCILIATION_2026_10_20.md#integrated-validation) owns exact commit, exit status and gate results | Passing software tests does not accept native installers or physical machining |
-| Release-gate portability `ivac-5yxyu` | Pre-existing macOS WASM-size false green confirmed; qualified run uses a byte-length-verified external compatibility wrapper | Portable fail-closed script follow-up remains OPEN; no script/security change here |
+| Release-gate portability `ivac-5yxyu` | SEC1 portable byte counts, checked gzip/measurement failures and invalid-budget refusal qualified without wrapper | [SEC1 results](SEC1_REMEDIATION_RESULTS_2026_10_20.md); historical receipts retain their original environment |
 | Candidate freshness / CI | Existing [beta.3 artifacts](beta3-delivery-2026-10-18/README.md): db5bde5/pipeline61 | Separately authorized matching builds and integrity records after source/human gates; no new candidates created here |
 | Clean installation / runtime | Current-source macOS/Windows11/Ubuntu qualification not established here | Real clean-download/install/upgrade/runtime records, actual OS versions and data preservation; CI build is not desktop acceptance |
 | ShopBot workshop / physical | No current release-level physical qualification inferred | [Operator protocol](beta3-delivery-2026-10-18/PROTOCOLE-V1.md), controller preview, supervised air/material tests and measurements; retain bounded M4 evidence |

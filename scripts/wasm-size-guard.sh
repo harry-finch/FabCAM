@@ -14,7 +14,7 @@
 # for.
 set -uo pipefail
 
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 
 # Measured 2026-07-29 on this tree: 1542 KiB gzipped (baseline 1314 →
 # 2856 with cps). The budget sits just above that so this script works
@@ -30,13 +30,17 @@ cd "$(dirname "$0")/.."
 BUDGET_KB="${WASM_CPS_BUDGET_KB:-1700}"
 
 if ! command -v wasm-pack >/dev/null 2>&1; then
-  echo "SKIP: wasm-pack not on PATH (cargo install wasm-pack)"
-  exit 0
+  echo "FAIL: mandatory wasm-pack is not on PATH"
+  exit 1
 fi
 
+if [[ ! "$BUDGET_KB" =~ ^[0-9]+$ ]] || (( ${#BUDGET_KB} > 7 )); then
+  echo "FAIL: WASM_CPS_BUDGET_KB must be a bounded nonnegative integer"
+  exit 1
+fi
 OUT_BASE="target/wasm-size-guard"
-rm -rf "$OUT_BASE"
-mkdir -p "$OUT_BASE"
+rm -rf "$OUT_BASE" || exit 1
+mkdir -p "$OUT_BASE" || exit 1
 
 build() {
   local label="$1"
@@ -53,9 +57,13 @@ build() {
     echo "FAIL: no .wasm produced for $label"
     return 1
   fi
-  gzip -9 -c "$wasm" >"$wasm.gz"
-  RAW=$(stat -c %s "$wasm")
-  GZ=$(stat -c %s "$wasm.gz")
+  gzip -n -9 -c "$wasm" >"$wasm.gz" || return 1
+  RAW=$(wc -c <"$wasm") || return 1
+  GZ=$(wc -c <"$wasm.gz") || return 1
+  RAW="${RAW//[[:space:]]/}"
+  GZ="${GZ//[[:space:]]/}"
+  [[ "$RAW" =~ ^[0-9]+$ && "$GZ" =~ ^[0-9]+$ ]] || return 1
+  (( RAW > 0 && GZ > 0 )) || return 1
   return 0
 }
 
@@ -79,7 +87,7 @@ printf '%-24s %10s %10s\n' "with cps" "$(kib $CPS_RAW)" "$(kib $CPS_GZ)"
 printf '%-24s %10s %10s\n' "delta" "$(kib $DELTA_RAW)" "$DELTA_GZ_KB"
 printf '%-24s %10s %10s\n\n' "budget (gzip)" "" "$BUDGET_KB"
 
-if (( DELTA_GZ_KB > BUDGET_KB )); then
+if (( DELTA_GZ > 10#$BUDGET_KB * 1024 )); then
   echo "FAIL: cps adds ${DELTA_GZ_KB} KiB gzipped, over the ${BUDGET_KB} KiB budget."
   echo "      Either shrink the runtime or keep cps off by default for wasm"
   echo "      (the UI hides the option via the post-cps capability probe)."

@@ -2631,3 +2631,18 @@ output names, with explicit partial-publication errors and no pair-atomic claim.
 retain initial audit, policy approval, tests and limitations. Separate logical
 commits authorized only after qualification; no push, package, release or hardware.
 Human review is the next gate, not authorization to start another checkpoint.
+
+
+## 2026-10-20 — SEC1 remediation
+
+Approved bundled-only V1 CPS policy implemented before evaluation across application
+entrypoints, preserving external project settings and internal unit-only runtime
+regressions. Native export now distinguishes successful publication with cleanup
+warnings from errors before publication; pair no-clobber and partial-state reporting
+remain intact. Shared CI qualification binds source SHA and candidate manifests;
+tags upload artifacts only. Manual promotion stays disabled with no publication step.
+
+Frozen local gate: 20/20 PASS, 1662 reported Rust tests, 1460 frontend tests, TEST1
+256/256. Existing optional/ignored cases and all platform/physical limits are recorded
+in [the SEC1 report](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md). Human review
+`ivac-1mqti` remains open. Scoped commits only; no push, tag, packaging or publication.
