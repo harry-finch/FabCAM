@@ -128,6 +128,73 @@ describe('WasmWorkerClient', () => {
   });
 });
 
+/// NUMSAFE: a Rust panic in wasm32 is a WebAssembly trap; the instance is
+/// undefined afterwards and must never serve another request.
+describe('WasmWorkerClient fatal recovery', () => {
+  const TRAP = 'RuntimeError: unreachable';
+  function spawner(
+    onRequest: (w: number, req: WorkerRequest, post: (r: WorkerResponse) => void) => void,
+  ) {
+    const workers: FakeWorker[] = [];
+    const factory = () => {
+      const n = workers.length;
+      const w = new FakeWorker((req, post) => onRequest(n, req, post));
+      workers.push(w);
+      return w;
+    };
+    return { workers, factory };
+  }
+
+  it('a fatal trap terminates the worker; the next valid request runs on a fresh one', async () => {
+    const ok = { gcode: 'G0 X0', stats: { offset_count: 1 } };
+    const { workers, factory } = spawner((w, req, post) => {
+      if (w === 0) post({ id: req.id, type: 'error', error: TRAP, fatal: true });
+      else post({ id: req.id, type: 'result', value: ok });
+    });
+    const client = new WasmWorkerClient(factory);
+    await expect(client.generate(REQ)).rejects.toThrow(/unreachable/);
+    expect(workers[0].terminated).toBe(true);
+    await expect(client.generate(REQ)).resolves.toEqual(ok);
+    expect(workers).toHaveLength(2);
+  });
+
+  it('work queued on a trapped worker is rejected, never resolved', async () => {
+    const { workers, factory } = spawner((_w, req, post) => {
+      // First request traps; the queued one would answer from the
+      // poisoned instance if it were still alive.
+      if (req.method === 'generate') post({ id: req.id, type: 'error', error: TRAP, fatal: true });
+      else post({ id: req.id, type: 'result', value: 'stale' });
+    });
+    const client = new WasmWorkerClient(factory);
+    const first = client.generate(REQ);
+    const queued = client.version();
+    await expect(first).rejects.toThrow(/unreachable/);
+    await expect(queued).rejects.toThrow();
+    expect(workers[0].terminated).toBe(true);
+  });
+
+  it('a recoverable API error keeps the worker', async () => {
+    const { workers, factory } = spawner((_w, req, post) => {
+      post({ id: req.id, type: 'error', error: 'bad input: depth' });
+    });
+    const client = new WasmWorkerClient(factory);
+    await expect(client.generate(REQ)).rejects.toThrow(/bad input/);
+    await expect(client.generate(REQ)).rejects.toThrow(/bad input/);
+    expect(workers).toHaveLength(1);
+    expect(workers[0].terminated).toBe(false);
+  });
+
+  it('stops respawning after repeated traps without a success (bounded)', async () => {
+    const { workers, factory } = spawner((_w, req, post) => {
+      post({ id: req.id, type: 'error', error: TRAP, fatal: true });
+    });
+    const client = new WasmWorkerClient(factory);
+    for (let i = 0; i < 3; i++) await expect(client.generate(REQ)).rejects.toThrow();
+    await expect(client.generate(REQ)).rejects.toThrow(/reload/i);
+    expect(workers).toHaveLength(3);
+  });
+});
+
 describe('toCloneable (Proxy → structured-clone-safe)', () => {
   it('de-proxies a Svelte-$state-like Proxy into a plain deep clone', () => {
     const target = { a: 1, nested: { b: [2, 3] } };

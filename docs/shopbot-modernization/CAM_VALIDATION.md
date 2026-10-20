@@ -227,3 +227,16 @@ No installer or physical qualification inferred.
 | IMP-BLOCK | Base point, rotation, scale, mirror, nested, repeated, combined OCS; MINSERT refused | Pass: analytic fixtures |
 | IMP-UNITS | SVG mm/cm/in/pt exact; px/unitless/viewBox and unitless DXF warned | Pass: core + import summary UI ([ADR-0026 results](../releases/IMPORT_UNITS_WARNINGS_RESULTS_2026_10_20.md)); human acceptance pending |
 
+## 2026-10-20 — NUMSAFE (ivac-knphk)
+
+[Results](../releases/NUMERICAL_RUNTIME_SAFETY_RESULTS_2026_10_20.md). Software scope; no machine run.
+
+| ID | Evidence required | Current status |
+| --- | --- | --- |
+| NUM-FINITE | Non-finite coordinate/arc/dwell/axis value never emitted; whole program refused (buffered, streamed, cached) | Pass: `tests/numsafe.rs`, LinuxCNC + GRBL + HPGL + CPS recorder |
+| NUM-FEED | Zero or missing cutting/plunge feed refused, never inherited | Pass: `tests/numsafe.rs` (LinuxCNC, GRBL, grbl.cps, ShopBot) |
+| NUM-PARAM | Non-finite depth/step list/clearance/tool diameter refused before planning | Pass; finite extreme pass counts deferred (NS-6b) |
+| NUM-STL | STL grid ≤ 16 M cells, finite cell and vertices, refused before allocation | Pass: native tests + WASM Node reproduction |
+| NUM-WASM | Trapped instance never reused; next request on a fresh worker; bounded | Pass: vitest (scripted worker); no forced browser trap |
+| NUM-IDENTITY | Valid programs unchanged | Pass: 136 programs byte-identical to `94cdd6b` |
+

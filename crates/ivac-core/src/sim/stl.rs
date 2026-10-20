@@ -681,6 +681,14 @@ pub enum StlError {
     /// coordinate that isn't a float).
     #[error("STL ASCII parse error: {0}")]
     BadAscii(String),
+    /// A vertex coordinate is NaN or infinite (NUMSAFE): it would size or
+    /// sample the surface grid with non-finite values.
+    #[error("STL vertex coordinate is not finite (facet {0})")]
+    NonFinite(usize),
+    /// The requested surface grid cannot be allocated safely (NUMSAFE):
+    /// invalid cell size, or more cells than the resource budget.
+    #[error("STL surface grid refused: {0}")]
+    Grid(String),
 }
 
 /// Parse a binary or ASCII STL byte stream into its triangle list.
@@ -699,8 +707,20 @@ pub enum StlError {
 /// # Errors
 ///
 /// Returns [`StlError`] when the bytes are neither a well-formed binary STL
-/// of the claimed length nor parseable ASCII.
+/// of the claimed length nor parseable ASCII, or when a vertex coordinate is
+/// NaN or infinite ([`StlError::NonFinite`]).
 pub fn parse_stl(bytes: &[u8]) -> Result<Vec<StlTriangle>, StlError> {
+    let tris = parse_stl_unchecked(bytes)?;
+    if let Some(i) = tris
+        .iter()
+        .position(|t| t.iter().flatten().any(|c| !c.is_finite()))
+    {
+        return Err(StlError::NonFinite(i));
+    }
+    Ok(tris)
+}
+
+fn parse_stl_unchecked(bytes: &[u8]) -> Result<Vec<StlTriangle>, StlError> {
     if bytes.len() >= 84 {
         let count = u32::from_le_bytes([bytes[80], bytes[81], bytes[82], bytes[83]]) as usize;
         if count

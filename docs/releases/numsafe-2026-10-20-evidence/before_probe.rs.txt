@@ -1,0 +1,57 @@
+//! NUMSAFE before-probe on HEAD 94cdd6b (HEAD API only). Prints behaviour.
+mod common;
+use common::{build_project, closed_rectangle, endmill_tool, op_single_pass, stock_at_origin};
+use ivac_core::cam::surface::SurfaceField;
+use ivac_core::pipeline::{run_pipeline, stream_gcode_to_writer, PipelineRequest, PostProcessorKind};
+use ivac_core::project::{ContourParams, OpKind, ProfileParams, Project, ToolOffset};
+use std::sync::{Arc, Mutex};
+
+fn project() -> Project {
+    let stock = stock_at_origin(100., 100., 18.);
+    let mut op = op_single_pass(1, "numsafe", OpKind::Profile { offset: ToolOffset::Outside, contour: ContourParams::default(), profile: ProfileParams::default() }, 1, -2.);
+    op.params.step = Some(-1.);
+    op.params.fast_move_z = 5.;
+    build_project(&stock, vec![endmill_tool(1, 6.)], op, closed_rectangle(20., 20., 40., 40.))
+}
+#[derive(Clone)]
+struct Shared(Arc<Mutex<Vec<u8>>>);
+impl std::io::Write for Shared {
+    fn write(&mut self, b: &[u8]) -> std::io::Result<usize> { self.0.lock().unwrap().extend_from_slice(b); Ok(b.len()) }
+    fn flush(&mut self) -> std::io::Result<()> { Ok(()) }
+}
+fn show(label: &str, p: Project, post: PostProcessorKind) {
+    let req = |p: Project| PipelineRequest { project: p, post_processor: Some(post), cps_post: None };
+    match run_pipeline(req(p.clone()), |_, _, _| {}) {
+        Err(e) => println!("BEFORE {label} {post:?} buffered: ERR {e}"),
+        Ok(r) => {
+            let w: Vec<_> = r.warnings.iter().map(|w| w.kind.clone()).collect();
+            let motion: Vec<_> = r.gcode.lines().filter(|l| l.starts_with('G') && !l.starts_with("G2") && !l.starts_with("G4") && !l.starts_with("G9") && !l.starts_with("G5") && !l.starts_with("G17") || l.starts_with('F')).take(9).collect();
+            println!("BEFORE {label} {post:?} buffered: OK warnings={w:?} first={motion:?}");
+        }
+    }
+    let buf = Arc::new(Mutex::new(Vec::new()));
+    let r = stream_gcode_to_writer(req(p), Box::new(Shared(buf.clone())));
+    let text = String::from_utf8(buf.lock().unwrap().clone()).unwrap();
+    let z0 = text.lines().any(|l| l == "G0 Z0");
+    println!("BEFORE {label} {post:?} streamed: {} has_G0_Z0={z0}", if r.is_ok() { "OK" } else { "ERR" });
+}
+#[test]
+fn before() {
+    for post in [PostProcessorKind::Linuxcnc, PostProcessorKind::Grbl] {
+        let mut p = project(); p.stock = None; p.operations[0].params.fast_move_z = f64::NAN;
+        show("nan_clearance_no_stock", p, post);
+        let mut p = project(); p.tools[0].feed_rate = 0; show("tool_feed_0", p, post);
+        let mut p = project(); p.tools[0].plunge_rate = 0; show("tool_plunge_0", p, post);
+        let mut p = project(); p.operations[0].params.feed_rate_override = Some(0); show("op_feed_override_0", p, post);
+        let mut p = project(); p.tools[0].diameter = f64::NAN; show("tool_diameter_nan", p, post);
+    }
+    let quad = "solid t\nfacet normal 0 0 1\nouter loop\nvertex 0 0 1\nvertex 10 0 1\nvertex 10 10 1\nendloop\nendfacet\nfacet normal 0 0 1\nouter loop\nvertex 0 0 1\nvertex 10 10 1\nvertex 0 10 1\nendloop\nendfacet\nendsolid t\n";
+    let r = SurfaceField::from_stl_capped(quad.as_bytes(), 4001).map(|f| f.map(|f| (f.cols, f.rows, f.z.len())));
+    println!("BEFORE stl max_dim=4001: {r:?} (allocated)");
+    let bad = quad.replacen("vertex 0 0 1", "vertex inf 0 1", 1);
+    let r = SurfaceField::from_stl_capped(bad.as_bytes(), 64).map(|f| f.map(|f| (f.cols, f.rows, f.cell)));
+    println!("BEFORE stl inf vertex: {r:?}");
+    let bad = quad.replacen("vertex 0 0 1", "vertex nan 0 1", 1);
+    let r = SurfaceField::from_stl_capped(bad.as_bytes(), 64).map(|f| f.map(|f| (f.cols, f.rows, f.cell)));
+    println!("BEFORE stl nan vertex: {r:?}");
+}

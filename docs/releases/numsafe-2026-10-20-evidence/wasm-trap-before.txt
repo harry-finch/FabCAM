@@ -1,0 +1,17 @@
+OK   baseline fromStl(10mm, 4) {"cols":4,"rows":4}
+OK   version() {"version":"0.9.0-beta.3","transport":"wasm","capabilities":["movement-tool-prov
+panicked at crates/ivac-core/src/cam/surface.rs:255:31:
+index out of bounds: the len is 1 but the index is 1
+FAIL fromStl max_dim=u32::MAX RuntimeError unreachable
+OK   version() after trap {"version":"0.9.0-beta.3","transport":"wasm","capabilities":["movement-tool-prov
+OK   fromStl(10mm, 4) after trap {"cols":4,"rows":4}
+panicked at crates/ivac-core/src/cam/surface.rs:255:31:
+index out of bounds: the len is 1 but the index is 1
+FAIL repeat trap #0 RuntimeError unreachable
+panicked at crates/ivac-core/src/cam/surface.rs:255:31:
+index out of bounds: the len is 1 but the index is 1
+FAIL repeat trap #1 RuntimeError unreachable
+panicked at crates/ivac-core/src/cam/surface.rs:255:31:
+index out of bounds: the len is 1 but the index is 1
+FAIL repeat trap #2 RuntimeError unreachable
+OK   fromStl(10mm, 4) after 4 traps {"cols":4,"rows":4}

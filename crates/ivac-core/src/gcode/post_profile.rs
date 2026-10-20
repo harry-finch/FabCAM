@@ -204,6 +204,11 @@ pub fn format_axis_value(format: &str, value: f64) -> String {
     // dozen chars; 64 is comfortably past that. (Hoisted to fn top —
     // clippy::items_after_statements.)
     const MAX_FIELD: usize = 64;
+    // NUMSAFE: `%d` would round NaN to 0; record the fault instead (the
+    // pipeline refuses the program) and keep the text visibly invalid.
+    if !super::numeric_guard::finite(value, "axis word") {
+        return format!("{value}");
+    }
     if format.is_empty() {
         return format!("{value:.3}");
     }
@@ -425,7 +430,10 @@ pub fn substitute(template: &str, ctx: &TokenCtx) -> String {
         ("<unit>", unit.to_string()),
         ("<t>", ctx.tool_number.to_string()),
         ("<n>", ctx.tool_name.clone()),
-        ("<d>", format!("{:.3}", ctx.tool_diameter)),
+        ("<d>", {
+            super::numeric_guard::finite(ctx.tool_diameter, "<d> tool diameter");
+            format!("{:.3}", ctx.tool_diameter)
+        }),
         ("<f>", ctx.feed.to_string()),
         ("<s>", ctx.spindle.to_string()),
         ("<op>", ctx.op_name.clone()),

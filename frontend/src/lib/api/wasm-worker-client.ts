@@ -31,6 +31,7 @@ import type {
   VersionResponse,
 } from './types';
 import type { WorkerMethod, WorkerRequest, WorkerResponse } from './wasm-worker-protocol';
+import { MAX_CONSECUTIVE_FATAL, WasmFatalError } from './wasm-fatal';
 
 /// The slice of the DOM `Worker` API this client uses. Narrowed to an
 /// interface so unit tests can inject a fake without a real worker / wasm.
@@ -77,6 +78,8 @@ export class WasmWorkerClient implements WiacClient {
   private worker: WorkerLike | null = null;
   private readonly pending = new Map<number, Pending>();
   private nextId = 1;
+  /// Fatal failures since the last successful answer (NUMSAFE bound).
+  private consecutiveFatal = 0;
 
   constructor(factory: WorkerFactory = defaultFactory) {
     this.factory = factory;
@@ -89,7 +92,7 @@ export class WasmWorkerClient implements WiacClient {
     if (!this.worker) {
       const w = this.factory();
       w.onmessage = (ev: MessageEvent) => this.onMessage((ev as MessageEvent<WorkerResponse>).data);
-      w.onerror = () => this.failAll(new Error('wasm worker crashed'));
+      w.onerror = () => this.discardAfterFatal(new WasmFatalError('wasm worker crashed'));
       this.worker = w;
     }
     return this.worker;
@@ -103,10 +106,20 @@ export class WasmWorkerClient implements WiacClient {
         entry.onEvent?.(msg.event);
         break;
       case 'result':
+        this.consecutiveFatal = 0;
         this.settle(msg.id, () => entry.resolve(msg.value));
         break;
       case 'error':
-        this.settle(msg.id, () => entry.reject(new Error(msg.error)));
+        if (msg.fatal) {
+          // The instance trapped: this request failed, and nothing else
+          // queued on that worker may be answered by it.
+          this.settle(msg.id, () => entry.reject(new WasmFatalError(msg.error)));
+          this.discardAfterFatal(
+            new WasmFatalError('request interrupted: the wasm engine stopped and was restarted'),
+          );
+        } else {
+          this.settle(msg.id, () => entry.reject(new Error(msg.error)));
+        }
         break;
       case 'cancelled':
         this.settle(msg.id, () => entry.reject(new CancelledError()));
@@ -137,10 +150,22 @@ export class WasmWorkerClient implements WiacClient {
     this.rejectAll(() => new CancelledError());
   }
 
-  /// Worker error: reject every in-flight call and drop the worker so
-  /// the next call respawns.
-  private failAll(err: Error) {
+  /// Fatal worker failure (trap or crash): terminate it, reject every
+  /// in-flight call, and let the next call respawn — at most
+  /// `MAX_CONSECUTIVE_FATAL` times without an intervening success.
+  private discardAfterFatal(err: Error) {
+    this.consecutiveFatal += 1;
+    const dead = this.worker;
     this.worker = null;
+    if (dead) {
+      dead.onmessage = null;
+      dead.onerror = null;
+      try {
+        dead.terminate();
+      } catch {
+        /* already gone */
+      }
+    }
     this.rejectAll(() => err);
   }
 
@@ -162,6 +187,13 @@ export class WasmWorkerClient implements WiacClient {
       transfer?: Transferable[];
     } = {},
   ): Promise<T> {
+    if (this.consecutiveFatal >= MAX_CONSECUTIVE_FATAL) {
+      return Promise.reject(
+        new WasmFatalError(
+          'the in-browser CAM engine stopped repeatedly; reload the page to start it again',
+        ),
+      );
+    }
     const worker = this.ensureWorker();
     const id = this.nextId++;
     return new Promise<T>((resolve, reject) => {

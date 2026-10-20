@@ -131,6 +131,7 @@ pub mod grbl;
 pub mod hpgl;
 pub(crate) mod leads;
 pub mod linuxcnc;
+pub mod numeric_guard;
 mod order;
 pub mod post_profile;
 pub mod preview;
@@ -662,6 +663,9 @@ pub struct CapturedPostState {
 /// Format a dwell value for `G4 P` — strip trailing zeros so the line
 /// stays readable. Mirrors the `LinuxCNC` post's number formatting.
 fn fmt_dwell(v: f64) -> String {
+    if !numeric_guard::finite(v, "dwell") {
+        return format!("{v}");
+    }
     let s = format!("{v:.4}");
     let trimmed = s.trim_end_matches('0').trim_end_matches('.');
     if trimmed.is_empty() {
@@ -1401,15 +1405,12 @@ pub fn fmt_num(v: f64, sep: char) -> String {
 /// `PostProfile::decimal_places_inch`. mm-mode defaults remain at 4.
 #[must_use]
 pub fn fmt_num_dp(v: f64, sep: char, decimals: u8) -> String {
-    // Non-finite backstop: a NaN/inf coordinate would otherwise format as
-    // the literal `NaN`/`inf`, emitting a syntactically invalid word
-    // (`XNaN`, `Xinf`) that a controller rejects — potentially mid-program.
-    // Geometry upstream is responsible for finiteness; this leaf formatter
-    // is the last line of defence, so it snaps to a clean `0` rather than
-    // ever letting poison output reach the listing (cf. the signed-zero
-    // snap just below).
-    if !v.is_finite() {
-        return "0".into();
+    // Non-finite backstop (NUMSAFE): never substitute a value. Snapping
+    // NaN/inf to `0` turned an invalid coordinate into a real move to zero.
+    // Record the fault so the pipeline refuses the whole program (and a
+    // streaming sink stops writing); the text itself stays visibly invalid.
+    if !numeric_guard::finite(v, "number") {
+        return format!("{v}");
     }
     // Suppress signed-zero: any value with magnitude < 0.5 * 10^-N
     // (half-ULP of the N-decimal output) would round to "0" anyway —
@@ -1614,14 +1615,23 @@ mod tests {
     }
 
     #[test]
-    fn fmt_num_non_finite_never_emits_poison() {
-        // A NaN/inf coordinate must never format as `NaN`/`inf` — that
-        // emits a syntactically invalid word (`XNaN`) a controller rejects
-        // mid-program. The leaf formatter snaps non-finite to a clean "0".
-        assert_eq!(fmt_num(f64::NAN, '.'), "0");
-        assert_eq!(fmt_num(f64::INFINITY, '.'), "0");
-        assert_eq!(fmt_num(f64::NEG_INFINITY, '.'), "0");
-        assert_eq!(fmt_num_dp(f64::NAN, ',', 6), "0");
+    fn fmt_num_non_finite_is_recorded_never_zeroed() {
+        // NUMSAFE: a NaN/inf coordinate used to format as a clean `0`, i.e.
+        // a real move to zero. It is now recorded as an output fault (the
+        // pipeline refuses the program) and never rendered as a number.
+        for v in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+            numeric_guard::reset();
+            let s = fmt_num_dp(v, ',', 6);
+            assert_ne!(s, "0");
+            assert!(s.parse::<f64>().map_or(true, |p| !p.is_finite()), "{s}");
+            let fault = numeric_guard::take().expect("fault recorded");
+            assert_eq!(fault.kind, numeric_guard::OutputFaultKind::NonFinite);
+        }
+        // Finite values are untouched and record nothing.
+        numeric_guard::reset();
+        assert_eq!(fmt_num(-0.000_04, '.'), "0");
+        assert_eq!(fmt_num(12.345_67, '.'), "12.3457");
+        assert!(numeric_guard::take().is_none());
     }
 
     fn square_offset() -> PolylineOffset {

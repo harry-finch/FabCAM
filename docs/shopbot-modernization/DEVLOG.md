@@ -2556,3 +2556,17 @@ scale record for save, reopen and Tauri reload. Browser smoke caught a sidebar r
 wrap caused by the new badge; fixed. Units of a committed source still need a
 re-open. HARD STOP for human acceptance.
 
+## 2026-10-20 — NUMSAFE: numerical and runtime safety (ivac-knphk)
+
+Phase 0 split the uncommitted import work into two validated local commits
+(`d30863d` DXF correctness, `94cdd6b` ADR-0026), authorized by the user, not
+pushed. Audit reproductions on HEAD: a NaN clearance without stock emitted
+`G0 Z0` traverses; zero cutting/plunge feeds let cuts inherit the other modal F
+(critical warning only, not on CLI/server); `max_dim = u32::MAX` trapped the WASM
+instance; NaN depth looped forever; NaN tool diameter offset by 0.005 mm. Fixes
+record the first output fault (thread-local, checked per op before caching, sink
+stops streaming), refuse non-finite setup values, bound and validate the STL grid,
+and quarantine/recycle a trapped worker. Valid output byte-identical on a 136-
+program corpus. ShopBot audited only. Deferred: pass-count ceiling, ShopBot pause
+UX. HARD STOP for human review.
+

@@ -156,6 +156,14 @@ impl StreamState {
     /// current-op `tail`. On the first io error, record it and stop writing
     /// (bookkeeping still advances).
     fn push(&mut self, line: String) {
+        // NUMSAFE: once a value that must not reach a machine is recorded,
+        // stop writing — the faulty line (and everything after it) never
+        // reaches the file; the pipeline then refuses the program.
+        if self.err.is_none() && super::numeric_guard::is_set() {
+            self.err = Some(io::Error::other(
+                "machine output refused: invalid numeric value or feed",
+            ));
+        }
         if self.err.is_none() {
             if let Err(e) = write_separated_line(&mut self.writer, !self.wrote_any, &line) {
                 self.err = Some(e);

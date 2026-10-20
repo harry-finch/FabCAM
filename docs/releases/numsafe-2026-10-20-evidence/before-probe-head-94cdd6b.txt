@@ -1,0 +1,23 @@
+BEFORE nan_clearance_no_stock Linuxcnc buffered: OK warnings=["stock_origin_outside_geometry_bbox"] first=["G0 Z0", "G0 Z0", "F1200", "G0 X20 Y17 Z0", "F200", "G1 Z0", "F1200", "F200", "G1 Z-1"]
+BEFORE nan_clearance_no_stock Linuxcnc streamed: OK has_G0_Z0=true
+BEFORE tool_feed_0 Linuxcnc buffered: OK warnings=["zero_rate_emitted"] first=["G0 Z5", "G0 Z5", "G0 X20 Y17 Z5", "F200", "G1 Z0", "G1 Z-1", "G1 Y40", "G1 X40", "G1 Y20"]
+BEFORE tool_feed_0 Linuxcnc streamed: OK has_G0_Z0=false
+BEFORE tool_plunge_0 Linuxcnc buffered: OK warnings=["zero_rate_emitted"] first=["G0 Z5", "G0 Z5", "F1200", "G0 X20 Y17 Z5", "G1 Z0", "G1 Z-1", "G1 Y40", "G1 X40", "G1 Y20"]
+BEFORE tool_plunge_0 Linuxcnc streamed: OK has_G0_Z0=false
+BEFORE op_feed_override_0 Linuxcnc buffered: OK warnings=["zero_rate_emitted"] first=["G0 Z5", "G0 Z5", "G0 X20 Y17 Z5", "F200", "G1 Z0", "G1 Z-1", "G1 Y40", "G1 X40", "G1 Y20"]
+BEFORE op_feed_override_0 Linuxcnc streamed: OK has_G0_Z0=false
+BEFORE tool_diameter_nan Linuxcnc buffered: OK warnings=[] first=["G0 Z5", "G0 Z5", "F1200", "G0 X20 Y19.995 Z5", "F200", "G1 Z0", "F1200", "F200", "G1 Z-1"]
+BEFORE tool_diameter_nan Linuxcnc streamed: OK has_G0_Z0=false
+BEFORE nan_clearance_no_stock Grbl buffered: OK warnings=["stock_origin_outside_geometry_bbox"] first=["G0 Z0", "G0 Z0", "F1200", "G0 X20 Y17 Z0", "F200", "G1 Z0", "F1200", "F200", "G1 Z-1"]
+BEFORE nan_clearance_no_stock Grbl streamed: OK has_G0_Z0=true
+BEFORE tool_feed_0 Grbl buffered: OK warnings=["zero_rate_emitted"] first=["G0 Z5", "G0 Z5", "G0 X20 Y17 Z5", "F200", "G1 Z0", "G1 Z-1", "G1 Y40", "G1 X40", "G1 Y20"]
+BEFORE tool_feed_0 Grbl streamed: OK has_G0_Z0=false
+BEFORE tool_plunge_0 Grbl buffered: OK warnings=["zero_rate_emitted"] first=["G0 Z5", "G0 Z5", "F1200", "G0 X20 Y17 Z5", "G1 Z0", "G1 Z-1", "G1 Y40", "G1 X40", "G1 Y20"]
+BEFORE tool_plunge_0 Grbl streamed: OK has_G0_Z0=false
+BEFORE op_feed_override_0 Grbl buffered: OK warnings=["zero_rate_emitted"] first=["G0 Z5", "G0 Z5", "G0 X20 Y17 Z5", "F200", "G1 Z0", "G1 Z-1", "G1 Y40", "G1 X40", "G1 Y20"]
+BEFORE op_feed_override_0 Grbl streamed: OK has_G0_Z0=false
+BEFORE tool_diameter_nan Grbl buffered: OK warnings=[] first=["G0 Z5", "G0 Z5", "F1200", "G0 X20 Y19.995 Z5", "F200", "G1 Z0", "F1200", "F200", "G1 Z-1"]
+BEFORE tool_diameter_nan Grbl streamed: OK has_G0_Z0=false
+BEFORE stl max_dim=4001: Ok(Some((4001, 4001, 16008001))) (allocated)
+BEFORE stl inf vertex: Ok(None)
+BEFORE stl nan vertex: Ok(Some((64, 64, 0.15625)))

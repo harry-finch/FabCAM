@@ -194,6 +194,7 @@ impl Post {
         i: Option<f64>,
         j: Option<f64>,
     ) {
+        self.require_feed("arc move");
         let body = self.coords(x, y, z);
         let i = i
             .and_then(|v| self.fmt_axis('I', v))
@@ -204,6 +205,15 @@ impl Post {
             .map(|s| format!(" {s}"))
             .unwrap_or_default();
         self.write(format!("{g} {body}{i}{j}").trim().to_string());
+    }
+
+    /// NUMSAFE: a cutting move needs an explicit positive feed in this
+    /// program. Without one the controller would use whatever F it last
+    /// held (or halt); record a fault so the pipeline refuses the program.
+    fn require_feed(&self, what: &str) {
+        if self.state.last_rate.is_none() {
+            super::numeric_guard::record(super::numeric_guard::OutputFaultKind::MissingFeed, what);
+        }
     }
 
     fn coords(&mut self, x: Option<f64>, y: Option<f64>, z: Option<f64>) -> String {
@@ -361,15 +371,16 @@ impl PostProcessor for Post {
         }
     }
     fn feedrate(&mut self, rate: u32) {
-        // Never emit F0. LinuxCNC raises "negative or zero feed
-        // rate" and halts; GRBL returns error:11. A default-constructed
-        // or misconfigured tool with rate_v=0 or rate_h=0 can reach
-        // this path even when pipeline validation tries to catch it.
-        // Skip and leave the modal F at whatever the prior cut set —
-        // worse than a perfect F-anchor, but better than killing the
-        // program at the first G1. The upstream pipeline warning
-        // (`zero_feed_rate_attempt`) lets the user fix the root cause.
+        // Never emit F0 (LinuxCNC halts, GRBL error:11), and never skip it
+        // either (NUMSAFE): skipping let the following cut inherit whatever
+        // F was modal — e.g. the plunge feed — silently. A zero commanded
+        // feed means the tool/op rates resolved to 0; record a fault so the
+        // pipeline refuses the program (`zero_rate_emitted` says which op).
         if rate == 0 {
+            super::numeric_guard::record(
+                super::numeric_guard::OutputFaultKind::ZeroFeed,
+                "F0 commanded",
+            );
             return;
         }
         if self.state.last_rate != Some(rate) {
@@ -716,6 +727,7 @@ impl PostProcessor for Post {
     fn linear(&mut self, x: Option<f64>, y: Option<f64>, z: Option<f64>) {
         let body = self.coords(x, y, z);
         if !body.is_empty() {
+            self.require_feed("G1 move");
             self.write(format!("G1 {body}"));
         }
     }
@@ -771,6 +783,7 @@ impl PostProcessor for Post {
             String::new()
         };
         let g = if dwell_sec > 0.0 { "G82" } else { "G81" };
+        self.require_feed("canned drill cycle");
         let body = self.coords(Some(x), Some(y), Some(z));
         self.write(format!("{g} {body} R{}{dwell}", self.fmt_len(r)));
         // Canned cycles leave Z at R after each cycle, but the post state
@@ -786,6 +799,7 @@ impl PostProcessor for Post {
         } else {
             String::new()
         };
+        self.require_feed("canned drill cycle");
         let body = self.coords(Some(x), Some(y), Some(z));
         self.write(format!(
             "G83 {body} R{} Q{}{dwell}",
@@ -811,6 +825,7 @@ impl PostProcessor for Post {
         } else {
             String::new()
         };
+        self.require_feed("canned drill cycle");
         let body = self.coords(Some(x), Some(y), Some(z));
         self.write(format!(
             "G73 {body} R{} Q{}{dwell}",
@@ -1097,6 +1112,8 @@ mod tests {
         // sink unit tests; here we drive through the PostProcessor API.
         streaming.unit(UnitSystem::Mm);
         streaming.program_start();
+        // A cutting move needs an established feed (NUMSAFE).
+        streaming.feedrate(600);
         let marker = streaming.out_lines_count();
         streaming.move_to(Some(1.0), Some(2.0), Some(3.0));
         streaming.linear(Some(4.0), Some(5.0), Some(6.0));
@@ -1111,6 +1128,7 @@ mod tests {
         let mut buffered = Post::new();
         buffered.unit(UnitSystem::Mm);
         buffered.program_start();
+        buffered.feedrate(600);
         let bmarker = buffered.out_lines_count();
         buffered.move_to(Some(1.0), Some(2.0), Some(3.0));
         buffered.linear(Some(4.0), Some(5.0), Some(6.0));

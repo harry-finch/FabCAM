@@ -1,0 +1,54 @@
+//! NUMSAFE output-identity probe (scratch only, identical in HEAD and patched trees).
+mod common;
+use common::{build_project, endmill_tool, op_single_pass, stock_at_origin};
+use ivac_core::input::{import_path, ImportOptions};
+use ivac_core::pipeline::{run_pipeline, CpsPostSelection, CpsPostSource, PipelineRequest, PostProcessorKind};
+use ivac_core::project::{ContourParams, OpKind, PocketParams, PocketStrategy, ProfileParams, ToolOffset};
+use std::path::PathBuf;
+
+fn out_dir() -> PathBuf { PathBuf::from(std::env::var("NUMSAFE_OUT").expect("NUMSAFE_OUT")) }
+fn shopbot() -> Option<CpsPostSelection> {
+    Some(CpsPostSelection { source: CpsPostSource::Bundled { id: "shopbot".into() }, properties: Default::default() })
+}
+fn dump(name: &str, req: PipelineRequest) {
+    let text = match run_pipeline(req, |_, _, _| {}) {
+        Ok(r) => r.gcode,
+        Err(e) => format!("ERROR: {e}\n"),
+    };
+    std::fs::write(out_dir().join(name), text).unwrap();
+}
+#[test]
+fn dump_outputs() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
+    std::fs::create_dir_all(out_dir()).unwrap();
+    let posts: [(&str, PostProcessorKind); 4] = [("linuxcnc", PostProcessorKind::Linuxcnc), ("grbl", PostProcessorKind::Grbl), ("hpgl", PostProcessorKind::Hpgl), ("shopbot", PostProcessorKind::Cps)];
+    for name in ["profile", "vcarve"] {
+        let req: PipelineRequest = serde_json::from_str(&std::fs::read_to_string(root.join(format!("test1/{name}.request.json"))).unwrap()).unwrap();
+        for (tag, kind) in posts {
+            let mut r = req.clone();
+            r.post_processor = Some(kind);
+            r.cps_post = if kind == PostProcessorKind::Cps { shopbot() } else { None };
+            dump(&format!("test1-{name}.{tag}"), r);
+        }
+    }
+    let mut entries: Vec<_> = std::fs::read_dir(root.join("shopbot-m1")).unwrap().map(|e| e.unwrap().path()).filter(|p| p.extension().is_some_and(|e| e == "dxf" || e == "svg")).collect();
+    entries.sort();
+    for path in entries {
+        let imported = import_path(&path, &ImportOptions::default()).unwrap();
+        let stock = stock_at_origin(300., 300., 18.);
+        let kinds = [
+            ("profile", OpKind::Profile { offset: ToolOffset::Outside, contour: ContourParams::default(), profile: ProfileParams::default() }),
+            ("pocket", OpKind::Pocket { strategy: PocketStrategy::Cascade, contour: ContourParams::default(), pocket: PocketParams::default() }),
+        ];
+        for (opname, kind) in kinds {
+            let mut op = op_single_pass(1, opname, kind, 1, -3.);
+            op.params.step = Some(-1.);
+            op.params.fast_move_z = 5.;
+            let project = build_project(&stock, vec![endmill_tool(1, 6.)], op, imported.segments.clone());
+            for (tag, post) in posts {
+                let file = path.file_name().unwrap().to_string_lossy().to_string();
+                dump(&format!("m1-{file}-{opname}.{tag}"), PipelineRequest { project: project.clone(), post_processor: Some(post), cps_post: if post == PostProcessorKind::Cps { shopbot() } else { None } });
+            }
+        }
+    }
+}

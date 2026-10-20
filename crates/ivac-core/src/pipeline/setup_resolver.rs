@@ -1215,17 +1215,17 @@ mod tests {
         assert_eq!(resolve_tool_rates(&t, PassKind::Drill), (8_000, 50, 200));
     }
 
-    /// When the resolved tool rates contain a zero — feed, plunge,
-    /// or spindle — the pipeline emits a `zero_rate_emitted` warning so
-    /// the critical gate blocks F0 / S0 from shipping silently.
+    /// A zero cutting feed used to emit a program whose cut silently
+    /// inherited the modal plunge F (critical warning only, bypassable by
+    /// preference and absent on CLI/server). NUMSAFE refuses the program.
     #[test]
-    fn zero_feed_rate_emits_warning() {
+    fn zero_feed_rate_is_refused() {
         let mut tool = endmill(1, 3.0);
         tool.feed_rate = 0; // misconfig: user forgot the feed
         let mut op = profile_op(1, 1, ToolOffset::Outside);
         op.params.step = Some(-1.0);
         op.params.depth = -1.0;
-        let resp = run_pipeline(
+        let err = run_pipeline(
             PipelineRequest {
                 project: project_with(vec![op], vec![tool]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
@@ -1233,11 +1233,10 @@ mod tests {
             },
             |_, _, _| {},
         )
-        .unwrap();
+        .expect_err("zero cutting feed must not produce a program");
         assert!(
-            resp.warnings.iter().any(|w| w.kind == "zero_rate_emitted"),
-            "expected zero_rate_emitted warning, got {:?}",
-            resp.warnings
+            matches!(&err, PipelineError::RefusedOutput(1, d) if d.contains("zero feed")),
+            "{err:?}"
         );
     }
 

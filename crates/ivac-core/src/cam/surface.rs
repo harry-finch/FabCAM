@@ -34,6 +34,12 @@ use crate::sim::dexel::DexelField;
 /// top, i.e. "no relief here, don't cut below the surface".
 pub const SURFACE_TOP_Z: f32 = 0.0;
 
+/// Cell budget for a rasterized STL surface (NUMSAFE). Same ceiling as the
+/// raster op's materialized pixel grid (`MAX_RASTER_PIXELS`): two f32 buffers
+/// of this size stay well inside native and WASM memory. The UI asks for a
+/// 256-cell long side (65 536 cells at most).
+pub const MAX_SURFACE_CELLS: u64 = 16_000_000;
+
 /// How a carved simulation cell deviates from the target surface — the
 /// per-cell class behind the red/green deviation overlay
 /// ([`SurfaceField::deviation_of`]). The discriminants are the stable wire
@@ -168,10 +174,32 @@ impl SurfaceField {
     ///
     /// # Panics
     ///
-    /// Panics if `cell <= 0`.
+    /// Panics if `cell` is not finite and positive or the grid would exceed
+    /// [`MAX_SURFACE_CELLS`]; transports use [`SurfaceField::try_from_mesh`]
+    /// through `from_stl` / `from_stl_capped`, which return an error instead.
     #[must_use]
     pub fn from_mesh(tris: &[[[f32; 3]; 3]], cell: f64) -> Option<Self> {
-        assert!(cell > 0.0, "SurfaceField cell size must be > 0");
+        Self::try_from_mesh(tris, cell).expect("SurfaceField grid within the cell budget")
+    }
+
+    /// [`SurfaceField::from_mesh`] with the grid size checked before any
+    /// allocation (NUMSAFE): `cell` must be finite and positive and the grid
+    /// at most [`MAX_SURFACE_CELLS`]. Resolution is never reduced silently.
+    ///
+    /// # Errors
+    ///
+    /// [`crate::sim::stl::StlError::Grid`] for an invalid cell or an
+    /// over-budget grid.
+    pub fn try_from_mesh(
+        tris: &[[[f32; 3]; 3]],
+        cell: f64,
+    ) -> Result<Option<Self>, crate::sim::stl::StlError> {
+        use crate::sim::stl::StlError;
+        if !cell.is_finite() || cell <= 0.0 {
+            return Err(StlError::Grid(format!(
+                "cell size {cell} mm must be finite and above zero"
+            )));
+        }
 
         // XY bounding box over every vertex.
         let mut min_x = f64::INFINITY;
@@ -188,11 +216,24 @@ impl SurfaceField {
         }
         // Empty, or the whole mesh collapses to a line/point in XY.
         if !min_x.is_finite() || max_x <= min_x || max_y <= min_y {
-            return None;
+            return Ok(None);
         }
 
-        let cols = (((max_x - min_x) / cell).ceil() as u32).max(1);
-        let rows = (((max_y - min_y) / cell).ceil() as u32).max(1);
+        // Size in f64 first: `as u32` saturates and `cols * rows` wrapped
+        // on 32-bit WASM (an u32::MAX max_dim allocated one cell, then
+        // indexed past it and trapped the instance).
+        let cols_f = ((max_x - min_x) / cell).ceil().max(1.0);
+        let rows_f = ((max_y - min_y) / cell).ceil().max(1.0);
+        #[allow(clippy::cast_precision_loss)] // 1.6e7 is exact in f64
+        let budget = MAX_SURFACE_CELLS as f64;
+        let cells = cols_f * rows_f;
+        if !cells.is_finite() || cells > budget {
+            return Err(StlError::Grid(format!(
+                "{cols_f} × {rows_f} cells at {cell} mm exceeds the {MAX_SURFACE_CELLS}-cell limit; lower the resolution"
+            )));
+        }
+        let cols = cols_f as u32;
+        let rows = rows_f as u32;
         let cols_us = cols as usize;
         let rows_us = rows as usize;
         // Max Z per cell; NEG_INFINITY marks "no triangle covered this cell".
@@ -267,7 +308,7 @@ impl SurfaceField {
             .fold(f32::NEG_INFINITY, f32::max);
         if !global_max.is_finite() {
             // Every triangle was degenerate in XY — nothing got covered.
-            return None;
+            return Ok(None);
         }
         let z: Vec<f32> = buf
             .iter()
@@ -279,7 +320,13 @@ impl SurfaceField {
                 }
             })
             .collect();
-        Some(Self::new(Point2::new(min_x, min_y), cell, cols, rows, z))
+        Ok(Some(Self::new(
+            Point2::new(min_x, min_y),
+            cell,
+            cols,
+            rows,
+            z,
+        )))
     }
 
     /// Parse an STL byte stream (binary or ASCII) and rasterize it into a
@@ -292,7 +339,7 @@ impl SurfaceField {
     /// Returns [`crate::sim::stl::StlError`] if the bytes are not a valid STL.
     pub fn from_stl(bytes: &[u8], cell: f64) -> Result<Option<Self>, crate::sim::stl::StlError> {
         let tris = crate::sim::stl::parse_stl(bytes)?;
-        Ok(Self::from_mesh(&tris, cell))
+        Self::try_from_mesh(&tris, cell)
     }
 
     /// Like [`SurfaceField::from_stl`], but sizes the grid from a cell-count
@@ -332,7 +379,7 @@ impl SurfaceField {
             return Ok(None);
         }
         let cell = (max_x - min_x).max(max_y - min_y) / max_dim;
-        Ok(Self::from_mesh(&tris, cell))
+        Self::try_from_mesh(&tris, cell)
     }
 
     /// Target Z at cell `(ix, iy)`. Returns [`SURFACE_TOP_Z`] for indices

@@ -341,6 +341,14 @@ pub enum PipelineError {
     FixtureCollision(Box<DiagnosticPreview>),
     #[error("operation #{0}: unsafe clearance: {1}")]
     UnsafeClearance(u32, String),
+    /// NUMSAFE: a value that must never reach a machine (non-finite number,
+    /// zero or missing cutting feed) was about to be emitted. Op id 0 is the
+    /// program header/footer.
+    #[error("operation #{0}: machine output refused: {1}. No program generated.")]
+    RefusedOutput(u32, String),
+    /// NUMSAFE: an operation parameter that drives motion is not finite.
+    #[error("operation #{0}: invalid numeric parameter: {1}. No program generated.")]
+    NonFiniteParameter(u32, String),
     #[error("operation #{0}: Stufenfase rim chamfer requires milling mode")]
     NonMillingChamfer(u32),
     #[error("drawing: {0}")]
@@ -404,6 +412,8 @@ impl PipelineError {
             PipelineError::Cancelled => None,
             PipelineError::UnsupportedCpsMotion(id, kind) => Some(Structured::misconfigured(format!("{kind} cannot be emitted by the CPS route; disable the operation or choose a supported post.")).with_param("op_id", *id).with_param("kind", kind.as_str()).with_hint("No program generated. Saved operation retained.")),
             PipelineError::UnsafeClearance(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Set clearance above the declared stock top in the same work frame. No output generated; saved values were not changed.")),
+            PipelineError::RefusedOutput(id, detail) => Some(Structured::misconfigured(self.to_string()).with_param("op_id", *id).with_param("detail", detail.as_str()).with_hint("Check this operation's tool feeds and plunge rates (they must be above zero) and its depths and geometry. Nothing was exported; saved values were not changed.")),
+            PipelineError::NonFiniteParameter(id, detail) => Some(Structured::misconfigured(self.to_string()).with_param("op_id", *id).with_param("detail", detail.as_str()).with_hint("Enter a finite number for this parameter. Nothing was exported; saved values were not changed.")),
             PipelineError::Drawing(message) => Some(Structured::misconfigured(message.clone()).with_hint("Review edited drawing and source bindings; no output generated.")),
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
             PipelineError::Waterline(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Repair open or ambiguous mesh slices, or change the slice levels. No output generated.")),
@@ -2320,6 +2330,52 @@ fn emit_program_only_op<P: PostProcessor>(
 // through path, which has nothing left to hand back). Keeping finalization
 // with the caller is what lets one emit loop serve both modes (ivac-3j1p).
 #[allow(clippy::too_many_lines)]
+/// NUMSAFE: refuse the program if the post recorded an output fault while
+/// emitting `op_id` (0 = program header/footer). Checked at every op boundary,
+/// before a fresh op body can be stored in the op cache.
+fn refuse_faulty_output(op_id: u32) -> Result<(), PipelineError> {
+    crate::gcode::numeric_guard::take().map_or(Ok(()), |fault| {
+        Err(PipelineError::RefusedOutput(op_id, fault.to_string()))
+    })
+}
+
+/// NUMSAFE: the shared motion core (Z schedule, offsets, plunge) must never
+/// see a non-finite depth, step, clearance or tool diameter. A NaN depth made
+/// the Z schedule loop without bound; a NaN diameter silently offset by a
+/// near-zero radius (`effective_diameter` floors NaN to 0.01 mm), so the raw
+/// tool entry is checked too. JSON transports cannot carry NaN, so this
+/// guards the Rust API and derived values; finite values pass unchanged.
+fn require_finite_setup(
+    op_id: u32,
+    setup: &Setup,
+    tool: Option<&crate::project::ToolEntry>,
+) -> Result<(), PipelineError> {
+    let m = &setup.mill;
+    let raw_tool = tool.map_or([0.0; 2], |t| [t.diameter, t.wear_offset_mm]);
+    let named = [
+        ("tool diameter", raw_tool[0]),
+        ("tool wear offset", raw_tool[1]),
+        ("depth", m.depth),
+        ("start depth", m.start_depth),
+        ("step", m.step),
+        ("through depth", m.through_depth),
+        ("clearance Z", m.fast_move_z),
+        ("resolved tool diameter", setup.tool.diameter),
+    ];
+    let bad = named
+        .into_iter()
+        .chain(m.finish_step.map(|v| ("finish step", v)))
+        .chain(m.depth_list.iter().map(|&v| ("depth list entry", v)))
+        .find(|(_, v)| !v.is_finite());
+    match bad {
+        Some((name, v)) => Err(PipelineError::NonFiniteParameter(
+            op_id,
+            format!("{name} = {v}"),
+        )),
+        None => Ok(()),
+    }
+}
+
 fn run_per_op<P, F>(
     project: &Project,
     objects: &[VcObject],
@@ -2353,6 +2409,8 @@ where
     // scaffold emission site in this loop. `false` for every dialect
     // post, keeping their output byte-identical.
     let owns_scaffold = post.capabilities().owns_scaffold;
+    // A record left by an earlier run that stopped mid-emit must not leak in.
+    crate::gcode::numeric_guard::reset();
     if owns_scaffold {
         post.begin_program(&cps_ctx::build_program_ctx(project, header_setup));
     } else {
@@ -2363,6 +2421,7 @@ where
             .map(|o| o.tool_id);
         emit_program_begin_with_preload(header_setup, post, preload);
     }
+    refuse_faulty_output(0)?;
     let gcode_progress = |emitted: usize, total: usize| -> f64 {
         let denom = total.max(1) as f64;
         GCODE_PROGRESS_START + GCODE_PROGRESS_SPAN * (emitted as f64 / denom)
@@ -2519,6 +2578,7 @@ where
             } else {
                 emit_program_only_op(op, project, post, warnings, &state_before_reset);
             }
+            refuse_faulty_output(op.id)?;
             emitted_ops += 1;
             progress(
                 "gcode",
@@ -2565,6 +2625,7 @@ where
         if let (Some(c), Some(key)) = (cache, cache_key) {
             if let Some(cached) = c.get(key) {
                 let internal_swap = apply_cached_op(post, &cached, warnings, &mut last_pos, stats);
+                refuse_faulty_output(op.id)?;
                 // Close the section opened above. (The CPS dispatch arm
                 // passes no cache, so this path is theoretical for the
                 // recorder — kept symmetric so a future cached
@@ -2596,6 +2657,11 @@ where
         // mark, so they're never double-counted (they run on both paths).
         let warn_start = warnings.len();
         let mut setup = synthesize_op_setup(op, project, warnings)?;
+        require_finite_setup(
+            op.id,
+            &setup,
+            project.tools.iter().find(|t| t.id == op.tool_id),
+        )?;
         resolve_auto_helix_radius(op, objects, &mut setup, warnings);
         // Dispatch to the per-kind driver. Specialty drivers (VCarve /
         // Thread / Halfpipe / ReliefMill) emit XYZ blocks directly and
@@ -2617,6 +2683,8 @@ where
             s.0 += closed_count_emitted;
             s.1 += offset_count_emitted;
         }
+        // Before the body can be cached: a refused op must never be replayed.
+        refuse_faulty_output(op.id)?;
         // A streaming post whose bounded per-op tee overflowed on this op (an
         // oversized op — e.g. a whole-program raster body) no longer holds the
         // full body to clone, and an O(op) cache entry is exactly what the
@@ -2663,6 +2731,7 @@ where
     } else {
         emit_program_end(header_setup, post);
     }
+    refuse_faulty_output(0)?;
     Ok(())
 }
 

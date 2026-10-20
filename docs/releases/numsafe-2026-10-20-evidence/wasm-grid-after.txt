@@ -1,0 +1,9 @@
+OK   baseline fromStl(10mm, 4) {"cols":4,"rows":4}
+OK   version() {"version":"0.9.0-beta.3","transport":"wasm","capabilities":["movement-tool-prov
+FAIL fromStl max_dim=u32::MAX Object STL surface grid refused: 4294967295 × 4294967295 cells at 0.0000000023283064370807974 mm exceeds the 16000000-cell limit; lower the resolution
+OK   version() after trap {"version":"0.9.0-beta.3","transport":"wasm","capabilities":["movement-tool-prov
+OK   fromStl(10mm, 4) after trap {"cols":4,"rows":4}
+FAIL repeat trap #0 Object STL surface grid refused: 4294967295 × 4294967295 cells at 0.0000000023283064370807974 mm exceeds the 16000000-cell limit; lower the resolution
+FAIL repeat trap #1 Object STL surface grid refused: 4294967295 × 4294967295 cells at 0.0000000023283064370807974 mm exceeds the 16000000-cell limit; lower the resolution
+FAIL repeat trap #2 Object STL surface grid refused: 4294967295 × 4294967295 cells at 0.0000000023283064370807974 mm exceeds the 16000000-cell limit; lower the resolution
+OK   fromStl(10mm, 4) after 4 traps {"cols":4,"rows":4}

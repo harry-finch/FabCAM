@@ -38,5 +38,7 @@ export interface WorkerRequest {
 export type WorkerResponse =
   | { id: number; type: 'event'; event: PipelineEvent }
   | { id: number; type: 'result'; value: unknown }
-  | { id: number; type: 'error'; error: string }
+  /// `fatal`: the wasm instance trapped (NUMSAFE); the client discards the
+  /// worker and never trusts another answer from it.
+  | { id: number; type: 'error'; error: string; fatal?: boolean }
   | { id: number; type: 'cancelled' };

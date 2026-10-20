@@ -410,6 +410,15 @@ impl PostProcessor for CpsRecorder {
     }
 
     fn feedrate(&mut self, rate: u32) {
+        // NUMSAFE: same rule as the dialect posts — a zero commanded feed is
+        // refused by the pipeline before any .cps post runs (the bundled
+        // grbl.cps rendered it as `F0`).
+        if rate == 0 {
+            super::numeric_guard::record(
+                super::numeric_guard::OutputFaultKind::ZeroFeed,
+                "F0 commanded",
+            );
+        }
         self.feed = rate;
     }
 
@@ -465,6 +474,7 @@ impl PostProcessor for CpsRecorder {
     fn move_to(&mut self, x: Option<f64>, y: Option<f64>, z: Option<f64>) {
         let before = self.position();
         let (x, y, z) = self.resolve(x, y, z);
+        guard_xyz(x, y, z, "rapid");
         if (before.x, before.y, before.z) == (x, y, z) {
             return; // dialect posts delta-suppress this too
         }
@@ -497,6 +507,8 @@ impl PostProcessor for CpsRecorder {
     fn linear(&mut self, x: Option<f64>, y: Option<f64>, z: Option<f64>) {
         let before = self.position();
         let (x, y, z) = self.resolve(x, y, z);
+        guard_xyz(x, y, z, "linear move");
+        self.guard_feed("linear move");
         if (before.x, before.y, before.z) == (x, y, z) {
             return;
         }
@@ -674,6 +686,9 @@ impl CpsRecorder {
             z: start.z,
         };
         let (x, y, z) = self.resolve(x, y, z);
+        guard_xyz(x, y, z, "arc end");
+        guard_xyz(center.x, center.y, center.z, "arc center");
+        self.guard_feed("arc move");
         self.push(ir::Record::Circular {
             clockwise,
             center,
@@ -684,7 +699,34 @@ impl CpsRecorder {
     }
 }
 
+impl CpsRecorder {
+    /// NUMSAFE: a cutting record needs a positive feed (see the dialect
+    /// posts' `require_feed`).
+    fn guard_feed(&self, what: &str) {
+        if self.feed == 0 {
+            super::numeric_guard::record(super::numeric_guard::OutputFaultKind::MissingFeed, what);
+        }
+    }
+}
+
+/// NUMSAFE: record a non-finite coordinate before it enters the IR.
+fn guard_xyz(x: f64, y: f64, z: f64, what: &str) {
+    for v in [x, y, z] {
+        if !super::numeric_guard::finite(v, what) {
+            return;
+        }
+    }
+}
+
 fn cycle_params(z: f64, r: f64, rate_v: u32) -> std::collections::BTreeMap<String, f64> {
+    // NUMSAFE: canned cycles carry their own plunge feed and depths.
+    if rate_v == 0 {
+        super::numeric_guard::record(
+            super::numeric_guard::OutputFaultKind::ZeroFeed,
+            "drill cycle F0",
+        );
+    }
+    guard_xyz(z, r, 0.0, "drill cycle");
     std::collections::BTreeMap::from([
         ("clearance".to_owned(), r),
         ("retract".to_owned(), r),

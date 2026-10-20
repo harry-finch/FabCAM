@@ -35,6 +35,10 @@ impl Post {
     }
 
     fn fmt_xy(x: f64, y: f64) -> (i64, i64) {
+        // NUMSAFE: `as i64` saturates NaN to 0; record it so the program is
+        // refused instead of plotting to the origin.
+        super::numeric_guard::finite(x * 40.0, "HPGL X");
+        super::numeric_guard::finite(y * 40.0, "HPGL Y");
         ((x * 40.0).round() as i64, (y * 40.0).round() as i64)
     }
 
@@ -296,6 +300,21 @@ impl PostProcessor for Post {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// NUMSAFE: `as i64` saturated NaN to 0, i.e. a pen move to the origin.
+    #[test]
+    fn non_finite_coordinate_is_recorded_not_plotted_at_origin() {
+        crate::gcode::numeric_guard::reset();
+        let mut post = Post::new();
+        post.move_to(Some(10.0), Some(10.0), None);
+        assert!(crate::gcode::numeric_guard::take().is_none());
+        post.move_to(Some(f64::NAN), Some(10.0), None);
+        let fault = crate::gcode::numeric_guard::take().expect("recorded");
+        assert_eq!(
+            fault.kind,
+            crate::gcode::numeric_guard::OutputFaultKind::NonFinite
+        );
+    }
 
     #[test]
     fn hpgl_circle_renders_as_polygon() {

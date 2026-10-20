@@ -1,6 +1,7 @@
 import type { DrawingRequest, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest } from './types';
 import { notificationError } from './error-notification';
+import { isFatalWasmError } from './wasm-fatal';
 // Web Worker host for the wasm CAM client. Runs the blocking
 // pipeline OFF the main thread so the UI stays responsive, and streams
 // per-op events back via postMessage as they are produced — postMessage
@@ -59,8 +60,17 @@ function errText(err: unknown): string {
   return typeof normalized === 'string' ? normalized : JSON.stringify(normalized);
 }
 
+// Set once the instance traps (NUMSAFE). From then on this worker answers
+// every queued request with a fatal error and never calls into wasm again;
+// the client terminates it and starts a fresh one.
+let trapped: string | null = null;
+
 ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
   const { id, method, args } = e.data;
+  if (trapped) {
+    post({ id, type: 'error', error: `wasm engine stopped: ${trapped}`, fatal: true });
+    return;
+  }
   try {
     const m = await loadModule();
     switch (method) {
@@ -150,6 +160,11 @@ ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
         post({ id, type: 'error', error: `unknown method: ${String(method)}` });
     }
   } catch (err) {
-    post({ id, type: 'error', error: errText(err) });
+    if (isFatalWasmError(err)) {
+      trapped = errText(err);
+      post({ id, type: 'error', error: trapped, fatal: true });
+    } else {
+      post({ id, type: 'error', error: errText(err) });
+    }
   }
 };

@@ -1,3 +1,4 @@
+import { isFatalWasmError, WasmFatalError } from './wasm-fatal';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // WASM implementation of WiacClient. Loads the ivac-wasm pkg lazily so it
@@ -65,6 +66,56 @@ export type WasmModule = {
 
 let modPromise: Promise<WasmModule> | null = null;
 
+/// NUMSAFE: set when the main-thread instance traps. wasm-bindgen cannot
+/// re-instantiate it in this realm, so every later call refuses with an
+/// explicit error instead of running on an undefined instance.
+let mainThreadFatal: WasmFatalError | null = null;
+
+/// Request/response exports routed through the trap guard. The simulator's
+/// classes are not wrapped (it owns its own instance lifecycle).
+const GUARDED_EXPORTS = new Set([
+  'healthz',
+  'version',
+  'importBytes',
+  'generate',
+  'generateTwoSided',
+  'generateStreaming',
+  'renderText',
+  'renderTextLayer',
+  'captureLabPreset',
+  'validateSourcePack',
+  'feedsSpeeds',
+  'evaluateDrawing',
+  'generateDrawing',
+  'cornerRelief',
+  'computeHelixRadius',
+  'fromStl',
+  'listPosts',
+  'inspectPost',
+]);
+
+function guardModule(wasm: WasmModule): WasmModule {
+  const guarded: Record<string, unknown> = { ...(wasm as unknown as Record<string, unknown>) };
+  for (const name of GUARDED_EXPORTS) {
+    const f = guarded[name];
+    if (typeof f !== 'function') continue;
+    guarded[name] = (...args: unknown[]) => {
+      if (mainThreadFatal) throw mainThreadFatal;
+      try {
+        return (f as (...a: unknown[]) => unknown)(...args);
+      } catch (err) {
+        if (isFatalWasmError(err)) {
+          mainThreadFatal = new WasmFatalError(
+            'the in-browser CAM engine stopped after a fatal error; reload the page to start it again',
+          );
+        }
+        throw err;
+      }
+    };
+  }
+  return guarded as unknown as WasmModule;
+}
+
 async function loadModule(): Promise<WasmModule> {
   if (!modPromise) {
     modPromise = (async () => {
@@ -75,7 +126,7 @@ async function loadModule(): Promise<WasmModule> {
       if (typeof wasm.default === 'function') {
         await wasm.default();
       }
-      return wasm;
+      return guardModule(wasm);
     })();
   }
   return modPromise;

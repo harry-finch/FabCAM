@@ -1,0 +1,5 @@
+   × WasmWorkerClient fatal recovery > a fatal trap terminates the worker; the next valid request runs on a fresh one 2ms
+   × WasmWorkerClient fatal recovery > work queued on a trapped worker is rejected, never resolved 1ms
+   × WasmWorkerClient fatal recovery > stops respawning after repeated traps without a success (bounded) 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  3 failed | 11 passed (14)
