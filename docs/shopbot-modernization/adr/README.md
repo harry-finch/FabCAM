@@ -1,63 +1,44 @@
 # Architectural decisions
 
-- [ADR-0012: FabCAM product identity](ADR-0012-fabcam-product-identity.md) — public name and preserved upstream/compatibility contracts; implementation human review pending.
+[Documentation index](../../README.md) · [Fork architecture](../ARCHITECTURE.md) ·
+[Current gates](../../releases/V1_READINESS.md).
 
-Use `.agents/skills/project-documentation/assets/ADR-TEMPLATE.md`; include
-context, alternatives, evidence, decision, compatibility and validation impact.
+All 26 decisions are indexed below. The recorded state is quoted from each ADR,
+including historical pending-review wording. An accepted architecture, implemented
+code, software evidence and human checkpoint acceptance are separate states.
+Use current readiness/explicit acceptance records to resolve later dispositions;
+this index does not approve, revoke or rewrite a decision.
 
-- [ADR-0001 — ShopBot CPS](ADR-0001-shopbot-cps.md): implemented and approved
-  through M2; no native post or new IR.
-- [ADR-0002 — Feeds & Speeds boundary](ADR-0002-feeds-speeds-boundary.md): implemented through the approved FS0–FS3 foundation; pure milling engine and explicit CAM/persistence boundary.
+Use the [versioned ADR template](../../../.agents/skills/project-documentation/assets/ADR-TEMPLATE.md).
+Include context, alternatives, evidence, compatibility, validation and approval.
+Preserve accepted reasoning and history; future WJ semantics require their own
+qualification. M0–M4 are retained; later work uses named tracks, not global M5.
 
-Future WJ architecture qualification must assess explicit waterjet semantics
-before implementation and record significant decisions. Global M5 numbering
-is superseded by named tracks in ROADMAP.
-
-- [ADR-0005 — Source packs and cutting knowledge](ADR-0005-source-packs-and-cutting-knowledge.md): implemented FS3.7, human approval pending; shared schema/engine, explicit taxonomy, conservative reconciliation and private-safe storage/projects.
-
-- [ADR-0006 — Local preset authoring and validation](ADR-0006-local-preset-authoring-and-validation.md): implemented FS3.8, human approval pending; resolved-value capture, inactive Draft, later validation, immutable private history.
-
-- [ADR-0007 — ShopBot resolved preview](ADR-0007-shopbot-resolved-preview.md): UX1 final preview/simulation follows emitted XYZ; generic intent preserved, post resolution explicit, no universal capability framework.
-
-- [ADR-0008 — Work-origin frames](ADR-0008-work-origin-frames.md): CAM2 single-sided
-  XY normalization before CAM, drawing display and compatible stock persistence;
-  explicit Z/two-sided limits, human review pending.
-
-- [ADR-0009 — Job intent and physical setup](ADR-0009-job-intent-machine-setup.md):
-  accepted future design direction, implementation deferred; standalone FabCAM /
-  FabSBP, independent XY/Z intent, explicit metadata and reusable profiles.
-
-- [ADR-0010 — Depth-scoped remaining material](ADR-0010-depth-scoped-remaining-material.md):
-  CAM4 A/B bounded per-pocket diagnostic, final path provenance, additive response,
-  explicit unsupported context and fresh drawing-frame overlay; human review pending.
-
-- [ADR-0011: Bounded cutting-reference adaptation](ADR-0011-bounded-cutting-reference-adaptation.md) — FS3.9; human approval pending.
-
-- [ADR-0013 — Persistent CAD corner relief](ADR-0013-persistent-corner-relief.md): accepted source-preserving modifier, pure geometry evaluator and normal CAM boundary; CAD1 bounded continuation accepted for UX3 (ivac-7r7r).
-
-- [ADR-0014 — Explicit planar surfacing](ADR-0014-explicit-planar-surfacing.md):
-  operation-owned raster rectangle, shared XYZ emission, scoped edge diagnostics
-  and guarded v6; implemented locally, UX3 continuation accepted ivac-k4z3.
-
-- [ADR-0015 — Reusable operation templates](ADR-0015-reusable-operation-templates.md):
-  bounded local recipes, explicit destination binding and independent manual-value
-  operations; UX4 implemented locally; UX4.1 software review ivac-si5w accepted, superseding ivac-51gg.
-
-- [ADR-0016 — Command palette owner dispatch](ADR-0016-command-palette-owner-dispatch.md):
-  accepted UX5 design ivac-2zh9; owner-bound palette implemented with origin-aware
-  tools/templates and existing guards; human software review ivac-txve.
-
-- [ADR-0017 — V-Carve continuous planner](ADR-0017-vcarve-continuous-planner.md): approved architecture, bounded software implementation; human review pending.
-
-- [ADR-0021 — Edited drawing contract](ADR-0021-edited-drawing-contract.md): GEOM1 approved architecture with mandatory refinements; stable bindings, Rust evaluation and guarded v7, bounded implementation under final software review.
-
-- [ADR-0022 — Versioned holding-tab width](ADR-0022-versioned-tab-width.md):
-  user-approved explicit conversion; legacy saved motion retained, physical
-  material width for new Profile/Pocket operations; software review pending.
-
-- [ADR-0023 — milling program publication guard](ADR-0023-milling-program-publication-guard.md): PROPOSED, human approval required; common fixture-collision rejection, explicit model completeness and bounded direct-stream policy.
-
-- [ADR-0024 — Full-program simulation qualification](ADR-0024-full-program-simulation-qualification.md): architecture approved; local implementation and software evidence complete, human checkpoint review pending.
-
-- [ADR-0025 — Movement tool provenance](ADR-0025-movement-tool-provenance.md): PROPOSED, Phase A only; nullable generated tool references, immutable bindings and emitted-intent verification. Human approval required before implementation.
-- [ADR-0026 — Explicit import units](ADR-0026-explicit-import-units.md): authorized and implemented locally (2026-10-20); importer warnings shown in an import summary and an explicit, persisted unit choice for unitless DXF / non-physical SVG. Human acceptance pending.
+| ADR | Decision | Recorded state in the decision document |
+|---|---|---|
+| [ADR-0001](ADR-0001-shopbot-cps.md) | ADR-0001: ShopBot MVP through the existing CPS recorder/runtime | Accepted for the approved M2 implementation; milestone review pending |
+| [ADR-0002](ADR-0002-feeds-speeds-boundary.md) | ADR-0002: Milling recommendation boundary and explicit applied parameters | Accepted — FS0 user approval on 2026-10-12; pure FS1 implementation authorized |
+| [ADR-0003](ADR-0003-feeds-speeds-data-ownership.md) | ADR-0003: FS domain snapshots, scoped data and applied operation authority | Accepted — user approved FS0 on 2026-10-12; integration remains FS3 |
+| [ADR-0004](ADR-0004-manual-operation-cutting-and-source-settings.md) | ADR-0004: Manual operation cutting values and global recommendation sources | Proposed — FS3.5 implementation authorized; human checkpoint review pending |
+| [ADR-0005](ADR-0005-source-packs-and-cutting-knowledge.md) | ADR-0005: Generic source packs and deterministic cutting knowledge | Implemented under explicitly authorized FS3.7; human checkpoint approval pending |
+| [ADR-0006](ADR-0006-local-preset-authoring-and-validation.md) | ADR-0006: Local preset capture and human validation | Implemented for FS3.8; human approval pending |
+| [ADR-0007](ADR-0007-shopbot-resolved-preview.md) | ADR-0007: Bundled ShopBot resolved preview from emitted XYZ | Implemented in UX1; human review pending (ivac-cb64) |
+| [ADR-0008](ADR-0008-work-origin-frames.md) | ADR-0008: Generic work coordinates and drawing-frame display | Implemented, human review pending (CAM2/UX2) |
+| [ADR-0009](ADR-0009-job-intent-machine-setup.md) | ADR-0009: Job intent versus physical machine setup | Accepted design direction; implementation DEFERRED |
+| [ADR-0010](ADR-0010-depth-scoped-remaining-material.md) | ADR-0010: Depth-scoped remaining-material diagnostics | Implemented for bounded CAM4 A/B; human review pending |
+| [ADR-0011](ADR-0011-bounded-cutting-reference-adaptation.md) | ADR-0011: Bounded normalized cutting-reference adaptation | Implemented under authorized FS3.9; human checkpoint approval pending |
+| [ADR-0012](ADR-0012-fabcam-product-identity.md) | ADR-0012: FabCAM product identity with stable compatibility identifiers | Accepted identity policy; local implementation awaiting human review |
+| [ADR-0013](ADR-0013-persistent-corner-relief.md) | ADR-0013: Persistent CAD corner relief before CAM evaluation | Accepted architecture by user on 2026-10-14; software qualified; human CAD1 review pending |
+| [ADR-0014](ADR-0014-explicit-planar-surfacing.md) | ADR-0014: Explicit planar surfacing operation | Implemented locally; human UX3 review pending (ivac-k4z3) |
+| [ADR-0015](ADR-0015-reusable-operation-templates.md) | ADR-0015: Reusable operation templates with explicit rebinding | Accepted within bounded UX4.1 software handoff; ivac-si5w approved 2026-10-14 (supersedes ivac-51gg) |
+| [ADR-0016](ADR-0016-command-palette-owner-dispatch.md) | ADR-0016: Command palette dispatch through existing action owners | Accepted by the user (ivac-2zh9); implemented locally, software review ivac-txve pending |
+| [ADR-0017](ADR-0017-vcarve-continuous-planner.md) | ADR-0017: V-Carve-only continuous pass planner | Architecture approved by user; implemented locally, software review pending |
+| [ADR-0018](ADR-0018-bounded-shopbot-post-reuse.md) | Bounded process-local ShopBot post result reuse | 2026-10-15. Accepted implementation direction by user authorization of PERF1-B |
+| [ADR-0019](ADR-0019-remaining-material-kernel-reuse.md) | Bounded reuse of the remaining-material planar kernel | 2026-10-15. PERF1-B2 authorized after user acceptance of B1. |
+| [ADR-0020](ADR-0020-cooperative-cps-cancellation.md) | Connect cooperative CPS cancellation to the existing host probe | 2026-10-15. User accepted PERF1-B2 and authorized the proposed cancellation work. |
+| [ADR-0021](ADR-0021-edited-drawing-contract.md) | ADR-0021: Source-preserving drawing edits and stable CAM bindings | Accepted in principle — mandatory refinements formalized before implementation |
+| [ADR-0022](ADR-0022-versioned-tab-width.md) | ADR-0022: Versioned holding-tab width | Architecture approved by user; implementation awaiting human review |
+| [ADR-0023](ADR-0023-milling-program-publication-guard.md) | Validate milling programs before executable publication | ACCEPTED — implemented locally, human review pending — approved by user on 2026-10-18, 2026-10-18. |
+| [ADR-0024](ADR-0024-full-program-simulation-qualification.md) | Full-program simulation qualification independent of playback | APPROVED architecture by the user — 2026-10-19; implemented locally, checkpoint review pending |
+| [ADR-0025](ADR-0025-movement-tool-provenance.md) | ADR-0025: Explicit movement tool provenance and emitted-intent verification | APPROVED by the user — 2026-10-19; implemented locally; checkpoint review pending |
+| [ADR-0026](ADR-0026-explicit-import-units.md) | ADR-0026: Explicit import units for unitless DXF and non-physical SVG | AUTHORIZED for bounded implementation (2026-10-20); implemented locally — human UX/architecture acceptance pending |

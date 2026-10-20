@@ -80,7 +80,7 @@ Unsupported topology/toolpaths refuse rather than silently convert. No new ShopB
 geometry, syntax, machine-control/zero-setting or tool database in this plan.
 
 Use [$professional-workshop-ui](../../.agents/skills/professional-workshop-ui/SKILL.md)
-and [$cam-ux-ui](../../../.agents/skills/cam-ux-ui/SKILL.md) for compact paired setup,
+and [$cam-ux-ui](../../.agents/skills/cam-ux-ui/SKILL.md) for compact paired setup,
 clear part/depth labels, useful section view and progressive disclosure. Keep normal
 workspace controls usable; advanced fit parameters explain their geometric meaning.
 FabCAM remains standalone; future FabSBP may consume separately approved setup

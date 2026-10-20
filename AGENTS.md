@@ -10,9 +10,9 @@ Use named future tracks: FS (Feeds & Speeds), UX (milling workflow), CAD
 (geometry preparation), WJ (ProtoMAX/waterjet), VINYL (drag knife, lower priority).
 Priority: FS foundation → priority milling UX/CAM improvements → WJ → VINYL.
 Every milestone ends at human approval; recording a roadmap does not authorize
-starting FS0 or implementing any later milestone.
+restarting completed FS0 or implementing any later milestone.
 
-The future FS assistant is milling-specific, independent of UI and toolpath
+The existing FS assistant is milling-specific, independent of UI and toolpath
 geometry generation, and independently testable. An adapter supplies CAM
 context; accepted or manually edited parameters are explicitly persisted.
 Post-processors must not call the engine dynamically. Manual overrides remain
@@ -28,89 +28,43 @@ M4 publication approval does not authorize publication of subsequent work.
 No automatic merge, PR, upstream sync or force-push. A reviewable documentation
 handoff may remain uncommitted pending approval.
 
+## Navigation and authority
 
-This project uses **bd** (beads) for issue tracking. Run `bd prime` for full workflow context.
+Start with the [documentation index](docs/README.md), [current STATUS](docs/shopbot-modernization/STATUS.md)
+and [V1 readiness](docs/releases/V1_READINESS.md). The single release plan is
+[RELEASE_ROADMAP](docs/releases/RELEASE_ROADMAP.md); the track ROADMAP links historical
+milestone contracts. Dated reports preserve their tested source and limits.
+Accepted ADRs and qualification evidence must not be silently rewritten.
 
-## Quick Reference
+Use relevant versioned skills in `.agents/skills/`; read their `SKILL.md` and
+referenced contracts. A host-provided skill catalogue can point outside this repo:
+inspect the supplied path and note any divergence instead of overwriting either copy.
+Use [CONTRIBUTING](docs/CONTRIBUTING.md) for extension recipes and [BUILDING](docs/BUILDING.md)
+for toolchain/setup. Significant architecture changes follow the ADR workflow.
 
-```bash
-bd ready              # Find available work
-bd show <id>          # View issue details
-bd update <id> --claim  # Claim work atomically
-bd close <id>         # Complete work
-```
+## Git and parallel-work boundaries
 
-> **Local-only repo:** there is no git remote configured, so there is
-> no `git push` / `bd dolt push` step. Commits + bd data live locally
-> (see Session Completion below).
+`origin` is the FabCAM fork, `upstream` is ivaCAM; inspect `git remote -v` rather
+than assuming a remote is absent. Do not change remotes during ordinary tasks.
+Commits require explicit task authorization; push, merge, rebase, reset, clean,
+history rewriting and publication require their own authorization. Never infer
+publication permission from an accepted milestone or a passing test suite.
 
-## Non-Interactive Shell Commands
+When another agent has unfinished changes, prefer an isolated branch/worktree
+from the agreed committed revision. Preserve the primary checkout and local-only
+evidence; do not stage, stash, clean, restore or commit another agent's work.
+A clean isolated branch does not imply that all qualification evidence is in Git.
+Record the inspected revision and what must be resynchronized after parallel work.
 
-**ALWAYS use non-interactive flags** with file operations to avoid hanging on confirmation prompts.
+## Tracking and handoff
 
-Shell commands like `cp`, `mv`, and `rm` may be aliased to include `-i` (interactive) mode on some systems, causing the agent to hang indefinitely waiting for y/n input.
+Use `bd` for task tracking; run `bd prime` for the installed workflow. Typical
+commands: `bd ready`, `bd show <id>`, `bd update <id> --claim`, `bd close <id>`.
+Do not create Markdown task lists as a substitute for issue tracking. Preserve
+other active tasks and do not close human-review gates merely because code is done.
 
-**Use these forms instead:**
-```bash
-# Force overwrite without prompting
-cp -f source dest           # NOT: cp source dest
-mv -f source dest           # NOT: mv source dest
-rm -f file                  # NOT: rm file
-
-# For recursive operations
-rm -rf directory            # NOT: rm -r directory
-cp -rf source dest          # NOT: cp -r source dest
-```
-
-**Other commands that may prompt:**
-- `scp` - use `-o BatchMode=yes` for non-interactive
-- `ssh` - use `-o BatchMode=yes` to fail instead of prompting
-- `apt-get` - use `-y` flag
-- `brew` - use `HOMEBREW_NO_AUTO_UPDATE=1` env var
-
-<!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
-## Beads Issue Tracker
-
-This project uses **bd (beads)** for issue tracking. Run `bd prime` to see full workflow context and commands.
-
-### Quick Reference
-
-```bash
-bd ready              # Find available work
-bd show <id>          # View issue details
-bd update <id> --claim  # Claim work
-bd close <id>         # Complete work
-```
-
-### Rules
-
-- Use `bd` for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
-- Run `bd prime` for detailed command reference and session close protocol
-- Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files
-
-## Session Completion
-
-**This repo is local-only — there is no git remote configured. Skip
-the push step until a remote is added** (`git remote -v` is empty, and
-bd memory `audit-2026-05-22-fitness` confirms "Issues are saved locally
-only"). Do NOT spend cycles trying to push to a remote that doesn't
-exist.
-
-**MANDATORY WORKFLOW (local-only variant):**
-
-1. **File issues for remaining work** — Create bd issues for anything
-   that needs follow-up
-2. **Run quality gates** (if code changed) — Tests, linters, builds
-3. **Update issue status** — Close finished work, update in-progress
-   items via `bd close <id>` / `bd update <id> --claim`
-4. **Commit locally** — Every logical change should land as its own
-   commit on `main`. NEVER stop with uncommitted work in the working
-   tree.
-5. **Verify** — `git status` shows a clean working tree; `bd list
-   --status=in_progress` is empty or accurately reflects active work
-6. **Hand off** — Provide a brief context summary for the next session
-
-**IF A REMOTE IS LATER ADDED:** restore the push step
-(`git pull --rebase && git push`) between steps 4 and 5. Until then,
-treat local commits as authoritative.
-<!-- END BEADS INTEGRATION (block edited locally — ivac-uqvd / ci5i; bd init may regenerate, re-apply the no-remote workflow if so) -->
+Before handoff: review your scoped diff; run checks appropriate to the change;
+commit only reviewed authorized files when commits are requested; report commit IDs,
+remaining changes, evidence limits and the next human decision. Leave unrelated
+uncommitted work untouched. Do not push automatically. Every milestone ends at the
+requested human checkpoint / HARD STOP; do not start a subsequent milestone.

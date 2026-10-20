@@ -6,9 +6,13 @@ beta.3/pipeline61. Les candidats et captures proviennent de `db5bde5` ; les diff
 commitées depuis ce candidat ne concernent que la documentation. Les modifications
 MCP1/documentaires déjà présentes sont conservées, sans extension de leur périmètre.
 
-Références détaillées conservées : [demande](../../../FabCAM%20—%20V1%20UX%20Audit%20Consolidation%20%26%20Polish.md),
-[audit Argon complet](../../../audit-argon_UX.md),
-[galerie native](../../../Captures-FabCAM-beta3-2026-10-18/GALERIE.html).
+Références d'origine : demande `FabCAM — V1 UX Audit Consolidation & Polish.md`
+et `audit-argon_UX.md`. Ces deux entrées locales externes ne sont pas présentes
+au snapshot documentaire `94cdd6b` ; leurs contenus ne sont pas recréés ici.
+La galerie native est une preuve locale hors Git, décrite dans
+[l'inventaire de livraison](beta3-delivery-2026-10-18/README.md)
+(`Captures-FabCAM-beta3-2026-10-18/GALERIE.html`, à côté du checkout primaire).
+Les constats et empreintes de cette analyse historique restent conservés ci-dessous.
 Les sept groupes couvrant01–62 et toutes les remarques Stéphane ont été lus.
 [Empreintes et limites de l'analyse](ux-polish-2026-10-19/phase0-evidence.json).
 Trois images originales07/27/54 ont aussi été inspectées directement ; pas de nouvelle

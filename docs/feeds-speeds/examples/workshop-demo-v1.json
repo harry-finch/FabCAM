@@ -1,0 +1,316 @@
+{
+  "manifest": {
+    "identity": {
+      "id": "fabcam-guide-synthetic",
+      "revision": "1"
+    },
+    "schema_version": 1,
+    "name": "DEMO ONLY \u2014 FabCAM synthetic workshop",
+    "publisher": "FabCAM contributors",
+    "source_url": null,
+    "origin": "Original synthetic documentation example; not transcribed from manufacturer or private workshop data.",
+    "license": "GPL-3.0-or-later",
+    "license_url": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "attribution": "FabCAM contributors. Synthetic numbers and fictitious identities for software demonstration only; no manufacturer endorsement or physical trial.",
+    "visibility": "private",
+    "distribution": "local_only",
+    "redistributable": true,
+    "transformation_permitted": true,
+    "default_evidence": "reference_data",
+    "notes": "SYNTHETIC DEMONSTRATION ONLY. Three illustrative records; reference_data/theoretical are schema categories, NOT measured safety evidence. No Tested/Validated records. Do not apply to a real machining job."
+  },
+  "dataset": {
+    "format_version": 1,
+    "description": "SYNTHETIC demonstration dataset; no machine limits or physical machining trial claimed.",
+    "license": "GPL-3.0-or-later",
+    "machines": [
+      {
+        "identity": {
+          "id": "guide-demo-router",
+          "revision": "1"
+        },
+        "label": "DEMO ONLY \u2014 fictitious router",
+        "notes": "Synthetic identity. No hardware or machine limits claimed."
+      }
+    ],
+    "materials": [
+      {
+        "identity": {
+          "id": "guide-demo-mdf",
+          "revision": "1"
+        },
+        "label": "DEMO ONLY \u2014 fictitious MDF stock",
+        "notes": "Synthetic identity, not a material-grade qualification or universal MDF equivalence."
+      }
+    ],
+    "tools": [
+      {
+        "identity": {
+          "id": "guide-demo-flat-6mm-2f",
+          "revision": "1"
+        },
+        "label": "DEMO ONLY \u2014 fictitious 6 mm 2-flute flat endmill",
+        "cutting_family": "flat_endmill",
+        "diameter_mm": 6,
+        "flute_count": 2,
+        "max_rpm": null,
+        "notes": "Illustrative geometry only; no manufacturer limits, coating or helix asserted."
+      }
+    ],
+    "profile_set": {
+      "schema_version": 1,
+      "identity": {
+        "id": "fabcam-guide-synthetic",
+        "revision": "1"
+      },
+      "machine_families": [],
+      "material_families": [],
+      "profiles": [
+        {
+          "identity": {
+            "id": "guide-demo-pocket-reference",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "FabCAM documentation: docs/feeds-speeds/CUSTOM_DATA_SOURCES.md; synthetic example pocket-reference",
+            "author": "FabCAM contributors",
+            "date": "2026-10-20",
+            "permission_or_license": "GPL-3.0-or-later; see repository LICENSE. Original synthetic values, no third-party cutting table.",
+            "notes": "SYNTHETIC SOFTWARE DEMONSTRATION ONLY. No manufacturer claim, machine use, trial or physical validation. Do not use these numbers to machine material.",
+            "evidence_record": null
+          },
+          "aggressiveness": "prudent",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-router",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "guide-demo-flat-6mm-2f",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6,
+              "max": 6
+            },
+            "flute_count": 2,
+            "operation": "pocket",
+            "doc_mm": {
+              "min": 1,
+              "max": 1
+            },
+            "engagement": {
+              "kind": "nominal",
+              "ratio": {
+                "min": 0.5,
+                "max": 0.5
+              }
+            },
+            "entry": "ramp",
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 12000,
+            "feed_mm_min": 600,
+            "plunge_mm_min": 120,
+            "doc_mm": 1,
+            "stepover_ratio": 0.5
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "guide-demo-slot-reference",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "FabCAM documentation: docs/feeds-speeds/CUSTOM_DATA_SOURCES.md; synthetic example slot-reference",
+            "author": "FabCAM contributors",
+            "date": "2026-10-20",
+            "permission_or_license": "GPL-3.0-or-later; see repository LICENSE. Original synthetic values, no third-party cutting table.",
+            "notes": "SYNTHETIC SOFTWARE DEMONSTRATION ONLY. No manufacturer claim, machine use, trial or physical validation. Do not use these numbers to machine material.",
+            "evidence_record": null
+          },
+          "aggressiveness": "prudent",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-router",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "guide-demo-flat-6mm-2f",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6,
+              "max": 6
+            },
+            "flute_count": 2,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 0.5,
+              "max": 0.5
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": "ramp",
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 12000,
+            "feed_mm_min": 480,
+            "plunge_mm_min": 120,
+            "doc_mm": 0.5,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "guide-demo-pocket-theory",
+            "revision": "1"
+          },
+          "category": "theoretical",
+          "evidence": "theoretical",
+          "source": {
+            "reference": "FabCAM documentation: docs/feeds-speeds/CUSTOM_DATA_SOURCES.md; synthetic example pocket-theory",
+            "author": "FabCAM contributors",
+            "date": "2026-10-20",
+            "permission_or_license": "GPL-3.0-or-later; see repository LICENSE. Original synthetic values, no third-party cutting table.",
+            "notes": "SYNTHETIC SOFTWARE DEMONSTRATION ONLY. No manufacturer claim, machine use, trial or physical validation. Do not use these numbers to machine material.",
+            "evidence_record": null
+          },
+          "aggressiveness": "normal",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-router",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "guide-demo-flat-6mm-2f",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6,
+              "max": 6
+            },
+            "flute_count": 2,
+            "operation": "pocket",
+            "doc_mm": {
+              "min": 1,
+              "max": 1
+            },
+            "engagement": {
+              "kind": "nominal",
+              "ratio": {
+                "min": 0.5,
+                "max": 0.5
+              }
+            },
+            "entry": "ramp",
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 12000,
+            "feed_mm_min": 720,
+            "plunge_mm_min": 120,
+            "doc_mm": 1,
+            "stepover_ratio": 0.5
+          },
+          "reductions": []
+        }
+      ]
+    }
+  },
+  "records": [
+    {
+      "profile": {
+        "id": "guide-demo-pocket-reference",
+        "revision": "1"
+      },
+      "source_record_id": "synthetic-pocket-reference",
+      "original_classification": "SYNTHETIC DEMONSTRATION: invented flat-endmill pocket prudent record; NOT measured data",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": null,
+        "material": null,
+        "coating": null,
+        "shape": null
+      }
+    },
+    {
+      "profile": {
+        "id": "guide-demo-slot-reference",
+        "revision": "1"
+      },
+      "source_record_id": "synthetic-slot-reference",
+      "original_classification": "SYNTHETIC DEMONSTRATION: invented flat-endmill full_slot prudent record; NOT measured data",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": null,
+        "material": null,
+        "coating": null,
+        "shape": null
+      }
+    },
+    {
+      "profile": {
+        "id": "guide-demo-pocket-theory",
+        "revision": "1"
+      },
+      "source_record_id": "synthetic-pocket-theory",
+      "original_classification": "SYNTHETIC DEMONSTRATION: invented flat-endmill pocket normal record; NOT measured data",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": null,
+        "material": null,
+        "coating": null,
+        "shape": null
+      }
+    }
+  ]
+}

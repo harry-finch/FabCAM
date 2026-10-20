@@ -1,5 +1,38 @@
 # Engineering log
 
+## 2026-10-20 — Git integration and project-state reconciliation
+
+Four approved engineering commits synchronized to origin/main through `2c6e4e1`.
+Documentation commits `a90cb64`, `d63aa89`, `744774d` integrated without rewriting
+history. STATUS conflict resolved using compact navigation plus the newer NUMSAFE2
+state. FS0–FS3.9 delivery/acceptance reconciled against code, reports and tracker;
+FS3 review was superseded by accepted FS3.5, FS4 remains deferred. Open human gates
+and old candidate identity preserved. [Full reconciliation and integrated checks](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md).
+No CAM/schema/test/security change, evidence disposition, packaging or hardware.
+HARD STOP after synchronization and report; no next milestone authorized.
+
+## 2026-10-20 — Practical custom cutting-data source guide
+
+[Workshop guide](../feeds-speeds/CUSTOM_DATA_SOURCES.md) covers actual local preset
+capture/review/backup and generic JSON authoring/import. Two original synthetic
+source-pack revisions pass the actual Rust loader and six matching contexts; six
+negative controls and the revision pair pass, plus 50 existing pack/lab/adaptation
+regressions. UI behavior/labels checked against source; historical capture image
+marked as such, no new machine trial or live GUI claim. Generic/Sorbonne authoring,
+export, identity and storage limits are explicit. [Validation](../feeds-speeds/VALIDATION_2026_10_20.md).
+No application/production/registry change; NUMSAFE and local evidence preserved.
+Documentation commit only, review ivac-7w1e1 OPEN; HARD STOP, no push/merge/publication.
+
+## 2026-10-20 — Documentation consolidation checkpoint
+
+Documentation branch based on `94cdd6b`; paused/uncommitted NUMSAFE excluded.
+Current STATUS/readiness and central index replace accumulated checkpoint banners;
+previous wording remains in linked historical copies. ADR index completed without
+editing decisions; shared agent/onboarding instructions and portable links clarified.
+[Inventory, validation and retention proposal](../releases/DOCUMENTATION_CHECKPOINT_2026_10_20.md).
+No qualification evidence moved/deleted, no policy/production/test/schema change.
+Documentation commits only; no push/merge/publication. Human HARD STOP after review.
+
 > 2026-10-19 — **Software release-gate script green (maintenance, uncommitted)**: [closure report](../../V1_RELEASE_GATE_CLOSURE_2026_10_19.md). `scripts/pre-release.sh` exits 0 with all 16 gates (Node 24, pnpm 10.34.7, Rust 1.88, cargo-deny 0.20.2, headless Chrome; Rust 1609/0/1 ignored, frontend 1438 + 1 skip). Four documented *unmaintained* advisory exceptions (no vulnerabilities); UI smoke rewritten for the Atelier shell; README parity restored. This is a software gate only: native installers, platform acceptance, human reviews (e.g. ivac-3i00w, ivac-b0js3) and physical ShopBot qualification remain open, and nothing is authorized for publication. Supersedes the earlier 'README parity red; cargo-deny unavailable' remark. No CAM/post/output/schema change.
 
 > 2026-10-19 — **ADR-0025 implemented locally, human review pending**: [movement-tool provenance results](../releases/MULTI_TOOL_PROVENANCE_RESULTS_2026_10_19.md). Pipeline63; immutable per-move tool bindings, independent native intent manifest/cache replay, bounded ShopBot emitted-intent validation, shared playback/full-program resolver. Existing post guards, manual assumptions and advanced two-sided exclusions retained. No performance optimization, commit, push or publication. **HARD STOP before any next checkpoint.**

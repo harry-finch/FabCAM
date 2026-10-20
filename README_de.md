@@ -8,6 +8,8 @@ Aktuelle Entwicklungsversion: siehe [Versionspolitik und Release-Status](docs/re
 
 ![FabCAM A1 Optical Balance](assets/branding/fabcam/source/fabcam-a1-app-icon.svg)
 
+[Dokumentationsübersicht](docs/README.md) — aktueller Status, V1-Freigaben, Architektur, Entwicklung und Qualifikationsnachweise.
+
 ## Überblick
 
 FabCAM bereitet 2D-Zeichnungen für CNC-Bearbeitung vor: Geometrie, Rohmaterial, Werkzeuge, Operationen, Schnittwerte, Vorschau und Maschinenausgabe. Der aktuelle Schwerpunkt liegt auf Fräsabläufen in Werkstätten und Fablabs einschließlich eines begrenzten ShopBot-OpenSBP-Umfangs. FabCAM ist eine aktiv entwickelte Weiterentwicklung von [ivaCAM](https://github.com/aalarchiv/ivacam), keine pauschale Produktionsfreigabe.

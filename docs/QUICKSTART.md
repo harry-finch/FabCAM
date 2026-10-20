@@ -36,6 +36,10 @@ Select geometry and configure profile, pocket or drilling operations. Inspect de
 
 Manual cutting values remain authoritative. Feeds & Speeds recommends from traceable data; Apply is explicit. Imported ReferenceData and derived matches are not physical lab evidence. Local preset capture starts as Draft unless actual trial evidence is supplied. FS4 physical validation remains deferred.
 
+Build your own local presets or import a versioned JSON source using the
+[custom cutting-data guide](feeds-speeds/CUSTOM_DATA_SOURCES.md), including synthetic
+examples, evidence levels, backups and current UI limitations.
+
 ## 6. Generate and inspect
 
 Generate the program, inspect 2D/3D preview and warnings, and verify work frame, stock, clearances and fixtures. Critical errors can block export; changes can make the preview stale. Bounded remaining-material analysis is a per-pocket/depth diagnostic, not an implemented cleanup operation or complete machine simulation.

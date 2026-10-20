@@ -82,7 +82,7 @@ locations before moving them. Preserve shortcut consistency and drawing space.
 
 Canonical visual language: repository-local
 [$professional-workshop-ui](../../../.agents/skills/professional-workshop-ui/SKILL.md)
-plus [$cam-ux-ui](../../../../.agents/skills/cam-ux-ui/SKILL.md).
+plus [$cam-ux-ui](../../../.agents/skills/cam-ux-ui/SKILL.md).
 Use those rules rather than copying a new token/style specification into this plan.
 The review must check compact spacing, restrained dark desktop surfaces, coherent
 type, small consistent Lucide icons (existing `@lucide/svelte`), subtle semantic

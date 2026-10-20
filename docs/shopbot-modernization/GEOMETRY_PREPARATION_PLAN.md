@@ -88,7 +88,7 @@ depends on actual issue and intended use; harmless findings are not export block
 ## UX, palette and future waterjet
 
 Canonical [$professional-workshop-ui](../../.agents/skills/professional-workshop-ui/SKILL.md)
-governs visuals; [$cam-ux-ui](../../../.agents/skills/cam-ux-ui/SKILL.md) adds CAM rules.
+governs visuals; [$cam-ux-ui](../../.agents/skills/cam-ux-ui/SKILL.md) adds CAM rules.
 Use a Drawing/Geometry menu, compact 2D/contextual tools or post-import review entry,
 not individual Pocket/Profile inspectors or a separate full CAD workspace. Preserve
 shell density, numeric precision, selection/focus and contextual disclosure.

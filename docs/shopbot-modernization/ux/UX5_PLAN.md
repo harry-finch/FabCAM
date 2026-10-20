@@ -167,7 +167,7 @@ restore previous workspace focus; on navigation/another dialog transfer focus to
 the meaningful destination, with fallback if the prior element disappeared.
 
 Use canonical [$professional-workshop-ui](../../../.agents/skills/professional-workshop-ui/SKILL.md)
-plus [$cam-ux-ui](../../../../.agents/skills/cam-ux-ui/SKILL.md).
+plus [$cam-ux-ui](../../../.agents/skills/cam-ux-ui/SKILL.md).
 Review a compact upper-center floating dialog, autofocus field, short scrollable
 results, small Lucide icons, concise category/context text, useful shortcut hints,
 visible keyboard selection and one-line disabled reasons. Reuse shared tokens and
