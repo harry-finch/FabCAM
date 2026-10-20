@@ -1,5 +1,11 @@
 # SEC1 remediation — implementation and qualification
 
+**Final engineering source: `d7b36381a531d55c86ea9d39f490417e8b1eb525`.**
+Local qualification: 20/20 gates; 1662 reported Rust PASS, 1460 frontend PASS,
+256 TEST1 cases and 136 byte-identical outputs. Remote workflows were not run;
+promotion is disabled. Human gate: `ivac-1mqti`.
+
+
 2026-10-20. **The preparation below is historical; approved implementation and
 qualification follow in the later sections.**
 Inspected source: `6043bfefcca7b455e58eab7c980970f885ab6695`.
@@ -307,3 +313,18 @@ probe source was removed afterwards. All **963 frozen source fingerprints** rema
 unchanged. Local-only logs, TEST1 summary, source fingerprints and SHA-256 receipt
 are in `dist-test/sec1-remediation-2026-10-20/receipt.json`; no evidence files from
 prior checkpoints were removed or staged.
+
+
+## Scoped commit record
+
+| Batch | Commit |
+| --- | --- |
+| A — bundled-only CPS execution | `5e789e5c9bdaeab2708b440cfdb51f1a24c477b9` |
+| B — publication/cleanup reporting | `b3489216cc485e0fd978ef3ecbc62b48be608bc8` |
+| C — strict source-revision qualification and integrated lint follow-ups | `d7b36381a531d55c86ea9d39f490417e8b1eb525` |
+
+A final documentation-only receipt records these hashes after the implementation
+commits. Source fingerprint comparison confirms no tested production source changed
+when creating the commits. Engineering issue `ivac-dqlol` and portability defect
+`ivac-5yxyu` are complete; human gate `ivac-1mqti` remains OPEN. Untracked prior
+reports/evidence and the separate documentation worktree remain untouched.
