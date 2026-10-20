@@ -125,6 +125,8 @@ jobs:
         run: pnpm run lint
       - name: type-check
         run: pnpm run check
+      - name: Prepare verified WASM package for frontend tests
+        run: node scripts/ensure-wasm-fresh.mjs
       - name: test
         # Includes the i18n coverage gates (locale parity, no-empty,
         # placeholder parity, no-dead-keys, hardcoded-string guard) from
