@@ -160,8 +160,25 @@ pub fn pocket_zigzag(
     stride: f64,
     tool_diameter: f64,
 ) -> Vec<Vec<Segment>> {
+    pocket_zigzag_bounded(boundary, islands, stride, tool_diameter, None, None)
+        .expect("unbounded pocket raster must advance")
+}
+
+/// Raster with an optional retained-point budget and cooperative cancellation.
+///
+/// # Errors
+/// Refuses budget exhaustion, cancellation or non-progressing coordinates.
+#[allow(clippy::too_many_lines)]
+pub fn pocket_zigzag_bounded(
+    boundary: &[Point2],
+    islands: &[Vec<Point2>],
+    stride: f64,
+    tool_diameter: f64,
+    mut remaining: Option<&mut usize>,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Result<Vec<Vec<Segment>>, String> {
     if boundary.len() < 3 || stride <= 0.0 {
-        return Vec::new();
+        return Ok(Vec::new());
     }
     // Previously clamped stride.max(0.1) silently, so a 0.05 mm
     // mirror-finish raster was bumped to 0.1 mm — user-set scallop
@@ -177,7 +194,7 @@ pub fn pocket_zigzag(
             s.borrow_mut()
                 .push(ZigzagStrideDegenerate { stride_mm: stride });
         });
-        return Vec::new();
+        return Ok(Vec::new());
     }
     let (min_y, max_y) = boundary
         .iter()
@@ -201,6 +218,12 @@ pub fn pocket_zigzag(
     let mut outer: Vec<f64> = Vec::new();
     let mut island_xs: Vec<f64> = Vec::new();
     while y <= max_y - tool_r + 1e-9 {
+        if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+            return Err("cancelled".into());
+        }
+        if !y.is_finite() || y + stride <= y {
+            return Err("raster step cannot advance Y".into());
+        }
         horizontal_crossings_into(boundary, y, min_x, max_x, &mut outer);
         // Per-island crossings at this Y. Each island's crossings come
         // in even-odd pairs (entry/exit of the island interior). We
@@ -329,9 +352,11 @@ pub fn pocket_zigzag(
             }
             if let Some(prev) = prev_end {
                 if prev.distance(a) > 1e-6 {
+                    charge_points(&mut remaining, if current.is_empty() { 2 } else { 1 })?;
                     current.push(Segment::line(prev, a, "0", 7));
                 }
             }
+            charge_points(&mut remaining, if current.is_empty() { 2 } else { 1 })?;
             current.push(Segment::line(a, b, "0", 7));
             prev_end = Some(b);
         }
@@ -340,7 +365,7 @@ pub fn pocket_zigzag(
     if !current.is_empty() {
         chains.push(current);
     }
-    chains
+    Ok(chains)
 }
 
 /// Raster a geometrically eroded center domain, preserving split components
@@ -1105,3 +1130,12 @@ pub(crate) fn bridge_crosses_any_island(a: Point2, b: Point2, islands: &[Vec<Poi
 }
 
 // ─── conversions ────────────────────────────────────────────────────────────
+
+fn charge_points(remaining: &mut Option<&mut usize>, count: usize) -> Result<(), String> {
+    if let Some(left) = remaining {
+        **left = left
+            .checked_sub(count)
+            .ok_or("specialized operation exceeds 1000000 retained XYZ points")?;
+    }
+    Ok(())
+}

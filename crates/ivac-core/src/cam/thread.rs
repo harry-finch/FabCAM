@@ -170,13 +170,64 @@ pub fn helix_waypoints_with_density(
     start_angle_rad: f64,
     spindle: crate::project::tool::SpindleDirection,
 ) -> Vec<(f64, f64, f64)> {
+    helix_waypoints_checked(
+        center,
+        radius,
+        top_z,
+        bottom_z,
+        pitch_mm,
+        climb,
+        internal,
+        tool_radius,
+        steps_per_rev,
+        start_angle_rad,
+        spindle,
+        None,
+    )
+    .expect("bounded thread geometry")
+}
+
+/// Bounded helix with cancellation. Geometry is identical within the budget.
+///
+/// # Errors
+/// Refuses invalid counts, excess geometry or cancellation before publication.
+#[allow(clippy::too_many_arguments)]
+pub fn helix_waypoints_checked(
+    center: Point2,
+    radius: f64,
+    top_z: f64,
+    bottom_z: f64,
+    pitch_mm: f64,
+    climb: bool,
+    internal: bool,
+    tool_radius: f64,
+    steps_per_rev: usize,
+    start_angle_rad: f64,
+    spindle: crate::project::tool::SpindleDirection,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Result<Vec<(f64, f64, f64)>, String> {
+    if ![
+        center.x,
+        center.y,
+        radius,
+        top_z,
+        bottom_z,
+        pitch_mm,
+        tool_radius,
+        start_angle_rad,
+    ]
+    .iter()
+    .all(|v| v.is_finite())
+    {
+        return Err("Thread requires finite geometry parameters".into());
+    }
     use crate::project::tool::SpindleDirection;
     if radius <= 0.0 || pitch_mm <= 0.0 || steps_per_rev < 4 {
-        return Vec::new();
+        return Ok(Vec::new());
     }
     let dz = bottom_z - top_z;
     if dz.abs() < 1e-9 {
-        return Vec::new();
+        return Ok(Vec::new());
     }
     // Even when |dz| < pitch, we still need at least one full
     // revolution at the configured pitch. The previous formula
@@ -191,9 +242,13 @@ pub fn helix_waypoints_with_density(
     // exactly at bottom_z so the caller gets full-depth coverage even
     // if the Z range isn't an exact multiple of pitch.
     let revolutions = (dz.abs() / pitch_mm).max(1.0);
-    let total_steps = (revolutions * steps_per_rev as f64).ceil() as usize;
+    let count = (revolutions * steps_per_rev as f64).ceil();
+    if !count.is_finite() || count > (super::resource_limits::MAX_SPECIALIZED_POINTS - 2) as f64 {
+        return Err("Thread exceeds 1000000 retained XYZ points".into());
+    }
+    let total_steps = count as usize;
     if total_steps == 0 {
-        return Vec::new();
+        return Ok(Vec::new());
     }
     let mut out = Vec::with_capacity(total_steps + 2);
     let two_pi = std::f64::consts::TAU;
@@ -211,6 +266,9 @@ pub fn helix_waypoints_with_density(
     };
     let dir: f64 = if ccw { 1.0 } else { -1.0 };
     for i in 0..=total_steps {
+        if i % 256 == 0 && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+            return Err("cancelled".into());
+        }
         let t = i as f64 / total_steps as f64;
         // Anchor at `start_angle_rad` so the cutter enters at
         // the caller-chosen angular position. Default 0 starts at
@@ -245,7 +303,7 @@ pub fn helix_waypoints_with_density(
         }
     };
     out.push((retract_x, retract_y, rz));
-    out
+    Ok(out)
 }
 
 #[cfg(test)]

@@ -32,6 +32,7 @@ pub mod inscribed;
 pub mod offsets;
 pub mod planar_surface;
 pub mod raster;
+pub mod resource_limits;
 pub mod setup;
 pub mod source_combine;
 pub mod spatial;

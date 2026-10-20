@@ -48,7 +48,11 @@ pub(in crate::pipeline) fn waterline_would_emit(op: &Op, project: &Project) -> b
 /// level reproduces the marching-squares iso-contour of the height field — the
 /// solid outline the waterline core then area-clears.
 #[allow(clippy::many_single_char_names)] // z/a/b/c/d are cell-quad corner values
-fn heightgrid_skin(source: &ReliefSource, z: &[f32]) -> Vec<[[f32; 3]; 3]> {
+fn heightgrid_skin(
+    source: &ReliefSource,
+    z: &[f32],
+    cancel: Option<&CancelToken>,
+) -> Result<Vec<[[f32; 3]; 3]>, String> {
     let cols = source.cols;
     let rows = source.rows;
     let cell = source.cell;
@@ -61,11 +65,16 @@ fn heightgrid_skin(source: &ReliefSource, z: &[f32]) -> Vec<[[f32; 3]; 3]> {
             z[(iy as usize) * (cols as usize) + (ix as usize)],
         ]
     };
-    let mut tris = Vec::with_capacity(
-        2 * (cols.saturating_sub(1) as usize) * (rows.saturating_sub(1) as usize),
-    );
+    if crate::pipeline::cancelled(cancel) {
+        return Err("cancelled".into());
+    }
+    let count = crate::cam::resource_limits::mesh_triangles(cols, rows)?;
+    let mut tris = Vec::with_capacity(count);
     for iy in 0..rows.saturating_sub(1) {
         for ix in 0..cols.saturating_sub(1) {
+            if ix % 256 == 0 && crate::pipeline::cancelled(cancel) {
+                return Err("cancelled".into());
+            }
             let a = vert(ix, iy);
             let b = vert(ix + 1, iy);
             let c = vert(ix + 1, iy + 1);
@@ -74,7 +83,7 @@ fn heightgrid_skin(source: &ReliefSource, z: &[f32]) -> Vec<[[f32; 3]; 3]> {
             tris.push([a, c, d]);
         }
     }
-    tris
+    Ok(tris)
 }
 
 /// Emit a waterline-roughing op. No-op (with a warning) when the source is
@@ -148,6 +157,17 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
         return Ok(());
     }
 
+    crate::cam::resource_limits::mesh_triangles(source.cols, source.rows)
+        .map_err(|detail| PipelineError::Waterline(op.id, detail))?;
+    if ![source.cell, source.origin.x, source.origin.y]
+        .iter()
+        .all(|v| v.is_finite())
+    {
+        return Err(PipelineError::Waterline(
+            op.id,
+            "non-finite heightgrid placement".into(),
+        ));
+    }
     let tool_diameter = tool.diameter;
     if tool_diameter <= 0.0 {
         return Ok(());
@@ -180,7 +200,16 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
     // the deepest cell is the model floor. z_levels steps strictly below the
     // top, so a grazing slice on the flat top is never taken.
     let (mut zmin, mut zmax) = (f32::INFINITY, f32::NEG_INFINITY);
-    for &v in z {
+    for (index, &v) in z.iter().enumerate() {
+        if index % 1024 == 0 && crate::pipeline::cancelled(cancel) {
+            return Err(PipelineError::Cancelled);
+        }
+        if !v.is_finite() {
+            return Err(PipelineError::Waterline(
+                op.id,
+                "non-finite heightgrid value".into(),
+            ));
+        }
         zmin = zmin.min(v);
         zmax = zmax.max(v);
     }
@@ -216,7 +245,15 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
         return Ok(());
     }
 
-    let tris = heightgrid_skin(source, z);
+    let map_error = |message| {
+        if crate::pipeline::cancelled(cancel) {
+            PipelineError::Cancelled
+        } else {
+            PipelineError::Waterline(op.id, message)
+        }
+    };
+    crate::cam::waterline::checked_z_levels(top_z, bottom_z, *z_step_mm).map_err(map_error)?;
+    let tris = heightgrid_skin(source, z, cancel).map_err(map_error)?;
     let chains = waterline_rough_cancellable(
         &tris,
         tool_diameter,
@@ -271,7 +308,7 @@ mod audit_09_10 {
                 z: vec![-1., -2., -3., -4.],
             },
         };
-        let tris = heightgrid_skin(&src, &[-1., -2., -3., -4.]);
+        let tris = heightgrid_skin(&src, &[-1., -2., -3., -4.], None).unwrap();
         assert_eq!(tris[0][0], [11., 21., -1.]);
         assert_eq!(tris[0][2], [13., 23., -4.]);
     }

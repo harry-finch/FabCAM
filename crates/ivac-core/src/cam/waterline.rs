@@ -265,15 +265,32 @@ pub fn z_levels(top_z: f64, bottom_z: f64, step: f64) -> Vec<f64> {
     if step <= 0.0 || step.is_nan() || top_z <= bottom_z {
         return Vec::new();
     }
+    checked_z_levels(top_z, bottom_z, step).expect("bounded Waterline levels")
+}
+
+/// Bounded depth schedule; rejects invalid, non-progressing or excessive levels.
+///
+/// # Errors
+/// Returns a diagnostic before more than 1000 levels can be allocated.
+pub fn checked_z_levels(top_z: f64, bottom_z: f64, step: f64) -> Result<Vec<f64>, String> {
+    if ![top_z, bottom_z, step].iter().all(|v| v.is_finite()) || step <= 0.0 {
+        return Err("Waterline requires finite heights and a positive step".into());
+    }
+    if top_z <= bottom_z {
+        return Ok(Vec::new());
+    }
     let mut levels = Vec::new();
     let mut z = top_z - step;
     // Stop a hair above the floor; the exact-floor pass is appended once.
     while z > bottom_z + step * 1e-6 {
+        if levels.len() >= super::MAX_DEPTH_PASSES - 1 || z - step >= z {
+            return Err("Waterline exceeds 1000 depth levels or its step cannot advance Z".into());
+        }
         levels.push(z);
         z -= step;
     }
     levels.push(bottom_z);
-    levels
+    Ok(levels)
 }
 
 /// One solid region of a Z-level cross-section: an outer boundary loop with the
@@ -484,14 +501,41 @@ pub fn waterline_rough_cancellable(
             "Waterline requires finite heights, positive tool diameter, stride and step".into(),
         );
     }
+    let mut remaining = super::resource_limits::MAX_SPECIALIZED_POINTS;
     let mut out = Vec::new();
-    for z in z_levels(top_z, bottom_z, z_step) {
+    for z in checked_z_levels(top_z, bottom_z, z_step)? {
         if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
             return Err("cancelled".into());
         }
         let loops =
             slice_mesh_cancellable(tris, z, cancel).map_err(|e| format!("Z={z:.6} mm: {e}"))?;
-        for chain in clear_level(&loops, tool_diameter, stride) {
+        let mut cleared = Vec::new();
+        for region in nest_loops(&loops) {
+            let rings = super::offsets::boundary_offset_inward(
+                &region.boundary,
+                &region.holes,
+                tool_diameter * 0.5,
+            );
+            let holes: Vec<_> = rings
+                .iter()
+                .filter(|r| super::offsets::signed_area(r) < 0.0)
+                .cloned()
+                .collect();
+            for ring in rings
+                .iter()
+                .filter(|r| super::offsets::signed_area(r) > 0.0)
+            {
+                cleared.extend(super::offsets::pocket_zigzag_bounded(
+                    ring,
+                    &holes,
+                    stride,
+                    0.0,
+                    Some(&mut remaining),
+                    cancel,
+                )?);
+            }
+        }
+        for chain in cleared {
             out.push(RoughChain {
                 z,
                 path: chain_to_polyline(&chain),

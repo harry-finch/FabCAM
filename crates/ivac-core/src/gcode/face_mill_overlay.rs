@@ -259,17 +259,40 @@ pub fn apply_whirl_to_polyline(
     params: WhirlParams,
     state: &mut WhirlState,
 ) -> Vec<(f64, f64, f64)> {
+    apply_whirl_to_polyline_checked(
+        points,
+        params,
+        state,
+        crate::cam::resource_limits::MAX_SPECIALIZED_POINTS,
+        None,
+    )
+    .expect("bounded specialized whirling geometry")
+}
+
+/// Bounded thread overlay, preserving the existing orbital phase calculation.
+///
+/// # Errors
+/// Refuses excessive points, non-progressing steps or cancellation.
+pub fn apply_whirl_to_polyline_checked(
+    points: &[(f64, f64, f64)],
+    params: WhirlParams,
+    state: &mut WhirlState,
+    max_points: usize,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Result<Vec<(f64, f64, f64)>, String> {
     if params.radius <= 0.0 || params.stepover <= 0.0 || points.len() < 2 {
-        return Vec::new();
+        return Ok(Vec::new());
     }
     let steps = steps_for_radius(params.radius);
     let stride = params.stepover / f64::from(steps);
     if !stride.is_finite() || stride <= 1e-6 {
-        return Vec::new();
+        return Ok(Vec::new());
     }
     let dir = if params.climb { 1.0 } else { -1.0 };
     let step_rad = std::f64::consts::TAU / f64::from(steps);
 
+    let limit = max_points.min(crate::cam::resource_limits::MAX_SPECIALIZED_POINTS);
+    crate::cam::resource_limits::check_count(Some(1), limit, "Thread whirling points")?;
     let mut out: Vec<(f64, f64, f64)> = Vec::new();
     let (sx, sy, sz) = points[0];
     out.push(stamp(
@@ -294,6 +317,18 @@ pub fn apply_whirl_to_polyline(
         // path (mirrors walk_chord's stride residual semantics).
         let mut travelled = state.consumed_since_last_step;
         while travelled + stride <= len {
+            if out.len() % 256 == 0 && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled)
+            {
+                return Err("cancelled".into());
+            }
+            crate::cam::resource_limits::check_count(
+                out.len().checked_add(1),
+                limit,
+                "Thread whirling points",
+            )?;
+            if !len.is_finite() || travelled + stride <= travelled {
+                return Err("Thread whirling cannot advance".into());
+            }
             travelled += stride;
             state.angle += step_rad;
             let t = travelled / len;
@@ -309,7 +344,7 @@ pub fn apply_whirl_to_polyline(
         }
         state.consumed_since_last_step = travelled - len;
     }
-    out
+    Ok(out)
 }
 
 #[allow(clippy::too_many_arguments)]

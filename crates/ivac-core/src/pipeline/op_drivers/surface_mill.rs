@@ -103,6 +103,21 @@ pub(in crate::pipeline) fn run_relief_op<P: PostProcessor>(
         _ => radius,
     };
 
+    crate::cam::surface_mill::check_relief_work(
+        radius,
+        corner_radius,
+        source.cell,
+        source.grid.len(),
+        cancel,
+    )
+    .map_err(|detail| {
+        if crate::pipeline::cancelled(cancel) {
+            PipelineError::Cancelled
+        } else {
+            PipelineError::RefusedOutput(op.id, detail)
+        }
+    })?;
+
     // Resolve the source into a target field plus the tip Z window
     // [z_floor, z_top] the drop-cutter clamps to. The two grid kinds map
     // depth differently:
@@ -177,8 +192,15 @@ pub(in crate::pipeline) fn run_relief_op<P: PostProcessor>(
         z_top_mm: z_top,
     };
 
-    let polylines =
-        surface_mill_cancellable(&field, &params, cancel).ok_or(PipelineError::Cancelled)?;
+    let polylines = surface_mill_cancellable(&field, &params, cancel)
+        .map_err(|detail| {
+            if crate::pipeline::cancelled(cancel) {
+                PipelineError::Cancelled
+            } else {
+                PipelineError::RefusedOutput(op.id, detail)
+            }
+        })?
+        .ok_or(PipelineError::Cancelled)?;
     if polylines.is_empty() {
         return Ok(());
     }

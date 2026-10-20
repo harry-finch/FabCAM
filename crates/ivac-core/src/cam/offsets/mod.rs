@@ -111,7 +111,7 @@ pub fn take_offset_diagnostics() -> OffsetDiagnostics {
     }
 }
 
-fn signed_area(pts: &[Point2]) -> f64 {
+pub(super) fn signed_area(pts: &[Point2]) -> f64 {
     if pts.len() < 3 {
         return 0.0;
     }

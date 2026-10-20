@@ -148,24 +148,38 @@ fn target_signed(field: &SurfaceField, ix: i64, iy: i64) -> f32 {
 /// profile ([`tip_drop_offset`]).
 #[cfg(test)]
 fn tip_kernel(radius_mm: f64, corner_radius_mm: f64, cell: f64) -> Vec<(i32, i32, f32)> {
-    tip_kernel_cancellable(radius_mm, corner_radius_mm, cell, None).expect("no token")
+    tip_kernel_cancellable(radius_mm, corner_radius_mm, cell, None)
+        .expect("bounded footprint")
+        .expect("no token")
 }
+
+type Footprint = Vec<(i32, i32, f32)>;
 
 fn tip_kernel_cancellable(
     radius_mm: f64,
     corner_radius_mm: f64,
     cell: f64,
     cancel: Option<&crate::cancel::CancelToken>,
-) -> Option<Vec<(i32, i32, f32)>> {
-    let kr = (radius_mm / cell).ceil() as i32;
-    let mut k = Vec::with_capacity(((2 * kr + 1) * (2 * kr + 1)) as usize);
+) -> Result<Option<Footprint>, String> {
+    let extent = (radius_mm / cell).ceil();
+    if !cell.is_finite() || cell <= 0.0 || !extent.is_finite() || !(0.0..=1000.0).contains(&extent)
+    {
+        return Err("Relief footprint exceeds 1000000 entries or has invalid cell/radius".into());
+    }
+    let kr = extent as i32;
+    let mut k = Vec::new();
     for dy in -kr..=kr {
         if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
-            return None;
+            return Ok(None);
         }
         for dx in -kr..=kr {
             let dmm = (((dx as f64) * cell).powi(2) + ((dy as f64) * cell).powi(2)).sqrt();
             if dmm <= radius_mm {
+                super::resource_limits::check_count(
+                    k.len().checked_add(1),
+                    super::resource_limits::MAX_RELIEF_FOOTPRINT,
+                    "Relief footprint entries",
+                )?;
                 k.push((
                     dx,
                     dy,
@@ -174,7 +188,27 @@ fn tip_kernel_cancellable(
             }
         }
     }
-    Some(k)
+    Ok(Some(k))
+}
+
+/// Validate the footprint and evaluation budgets before cloning an input grid.
+///
+/// # Errors
+/// Refuses invalid or excessive resources, or cancellation.
+pub fn check_relief_work(
+    radius: f64,
+    corner: f64,
+    cell: f64,
+    cells: usize,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Result<(), String> {
+    let footprint = tip_kernel_cancellable(radius, corner, cell, cancel)?.ok_or("cancelled")?;
+    super::resource_limits::check_count(
+        cells.checked_mul(footprint.len()),
+        super::resource_limits::MAX_RELIEF_EVALUATIONS,
+        "Relief cell × footprint evaluations",
+    )?;
+    Ok(())
 }
 
 /// Compute the "dropped" field: tip Z at every cell such that a tool of
@@ -194,6 +228,7 @@ pub fn drop_cutter(
     corner_radius_mm: f64,
 ) -> SurfaceField {
     drop_cutter_cancellable(field, tool_radius_mm, corner_radius_mm, None)
+        .expect("bounded Relief resources")
         .expect("no cancellation token")
 }
 
@@ -204,16 +239,22 @@ pub fn drop_cutter_cancellable(
     tool_radius_mm: f64,
     corner_radius_mm: f64,
     cancel: Option<&crate::cancel::CancelToken>,
-) -> Option<SurfaceField> {
+) -> Result<Option<SurfaceField>, String> {
     if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
-        return None;
+        return Ok(None);
     }
     assert!(tool_radius_mm > 0.0, "tool radius must be > 0");
-    let mut kernel: Vec<_> =
+    let Some(footprint) =
         tip_kernel_cancellable(tool_radius_mm, corner_radius_mm, field.cell, cancel)?
-            .into_iter()
-            .enumerate()
-            .collect();
+    else {
+        return Ok(None);
+    };
+    super::resource_limits::check_count(
+        field.z.len().checked_mul(footprint.len()),
+        super::resource_limits::MAX_RELIEF_EVALUATIONS,
+        "Relief cell × footprint evaluations",
+    )?;
+    let mut kernel: Vec<_> = footprint.into_iter().enumerate().collect();
     kernel.sort_by(|a, b| a.1 .2.total_cmp(&b.1 .2));
     let z_max = field.z.iter().copied().fold(SURFACE_TOP_Z, f32::max);
     let cols = field.cols as i64;
@@ -221,11 +262,11 @@ pub fn drop_cutter_cancellable(
     let mut out = vec![SURFACE_TOP_Z; field.z.len()];
     for iy in 0..rows {
         if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
-            return None;
+            return Ok(None);
         }
         for ix in 0..cols {
             if ix % 64 == 0 && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
-                return None;
+                return Ok(None);
             }
             let mut best = f32::NEG_INFINITY;
             let mut best_index = usize::MAX;
@@ -233,7 +274,7 @@ pub fn drop_cutter_cancellable(
                 if poll_index % 1024 == 0
                     && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled)
                 {
-                    return None;
+                    return Ok(None);
                 }
                 // Strict comparison and original tie order preserve signed zero.
                 if z_max - off < best {
@@ -248,13 +289,13 @@ pub fn drop_cutter_cancellable(
             out[(iy * cols + ix) as usize] = best;
         }
     }
-    Some(SurfaceField::new(
+    Ok(Some(SurfaceField::new(
         field.origin,
         field.cell,
         field.cols,
         field.rows,
         out,
-    ))
+    )))
 }
 
 /// Effective stepover: explicit override (if positive) else the scallop
@@ -278,18 +319,37 @@ fn effective_stepover(field: &SurfaceField, p: &SurfaceMillParams) -> f64 {
 /// Axis sample positions from `lo` to `hi` (inclusive of both ends) spaced
 /// by `step`. Always includes `hi` as the final position so the far edge is
 /// covered even when `step` doesn't divide the span evenly.
-fn axis_positions(lo: f64, hi: f64, step: f64) -> Vec<f64> {
+fn axis_positions(
+    lo: f64,
+    hi: f64,
+    step: f64,
+    cancel: Option<&crate::cancel::CancelToken>,
+) -> Result<Vec<f64>, String> {
+    if ![lo, hi, step].iter().all(|v| v.is_finite()) || step <= 0.0 {
+        return Err("invalid Relief sampling axis".into());
+    }
     if hi <= lo + 1e-9 {
-        return vec![lo];
+        return Ok(vec![lo]);
     }
     let mut v = Vec::new();
     let mut p = lo;
     while p < hi - 1e-9 {
+        if v.len() % 256 == 0 && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+            return Err("cancelled".into());
+        }
+        if p + step <= p {
+            return Err("Relief sampling step cannot advance".into());
+        }
+        super::resource_limits::check_count(
+            v.len().checked_add(2),
+            super::resource_limits::MAX_SPECIALIZED_POINTS,
+            "Relief axis points",
+        )?;
         v.push(p);
         p += step;
     }
     v.push(hi);
-    v
+    Ok(v)
 }
 
 /// Generate gouge-free ball-nose finishing scanlines over the target
@@ -307,21 +367,41 @@ fn axis_positions(lo: f64, hi: f64, step: f64) -> Vec<f64> {
 /// Panics if `params.tool_radius_mm <= 0`.
 #[must_use]
 pub fn surface_mill(field: &SurfaceField, params: &SurfaceMillParams) -> Vec<Vec<(f64, f64, f64)>> {
-    surface_mill_cancellable(field, params, None).expect("no cancellation token")
+    surface_mill_cancellable(field, params, None)
+        .expect("bounded Relief resources")
+        .expect("no cancellation token")
 }
+
+pub type SurfacePaths = Vec<Vec<(f64, f64, f64)>>;
 
 pub fn surface_mill_cancellable(
     field: &SurfaceField,
     params: &SurfaceMillParams,
     cancel: Option<&crate::cancel::CancelToken>,
-) -> Option<Vec<Vec<(f64, f64, f64)>>> {
-    assert!(params.tool_radius_mm > 0.0, "tool radius must be > 0");
-    let dropped = drop_cutter_cancellable(
-        field,
+) -> Result<Option<SurfacePaths>, String> {
+    if ![
         params.tool_radius_mm,
         params.corner_radius_mm,
-        cancel,
-    )?;
+        params.scallop_height_mm,
+        params.along_step_mm,
+        params.z_floor_mm,
+        params.z_top_mm,
+        field.cell,
+        field.origin.x,
+        field.origin.y,
+    ]
+    .iter()
+    .all(|v| v.is_finite())
+        || params.tool_radius_mm <= 0.0
+        || field.cell <= 0.0
+        || params.z_floor_mm > params.z_top_mm
+        || params.stepover_mm.is_some_and(|v| !v.is_finite())
+    {
+        return Err("invalid Relief parameters".into());
+    }
+    if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
+        return Ok(None);
+    }
     let step = effective_stepover(field, params);
     let along = params.along_step_mm.max(field.cell * 0.25).max(1e-3);
 
@@ -334,42 +414,76 @@ pub fn surface_mill_cancellable(
 
     let clamp_z = |z: f32| -> f64 { (z as f64).clamp(params.z_floor_mm, params.z_top_mm) };
 
+    let (across, along_count) = match params.direction {
+        ScanDirection::AlongX => (
+            axis_positions(y0, y1, step, cancel)?.len(),
+            axis_positions(x0, x1, along, cancel)?.len(),
+        ),
+        ScanDirection::AlongY => (
+            axis_positions(x0, x1, step, cancel)?.len(),
+            axis_positions(y0, y1, along, cancel)?.len(),
+        ),
+    };
+    super::resource_limits::check_count(
+        across.checked_mul(along_count),
+        super::resource_limits::MAX_SPECIALIZED_POINTS,
+        "Relief retained XYZ points",
+    )?;
+    let Some(dropped) = drop_cutter_cancellable(
+        field,
+        params.tool_radius_mm,
+        params.corner_radius_mm,
+        cancel,
+    )?
+    else {
+        return Ok(None);
+    };
     let mut polylines = Vec::new();
     match params.direction {
         ScanDirection::AlongX => {
-            for (k, &y) in axis_positions(y0, y1, step).iter().enumerate() {
+            for (k, &y) in axis_positions(y0, y1, step, cancel)?.iter().enumerate() {
                 if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
-                    return None;
+                    return Ok(None);
                 }
-                let mut xs = axis_positions(x0, x1, along);
+                let mut xs = axis_positions(x0, x1, along, cancel)?;
                 if k % 2 == 1 {
                     xs.reverse();
                 }
-                let poly = xs
-                    .into_iter()
-                    .map(|x| (x, y, clamp_z(dropped.sample(x, y))))
-                    .collect();
+                let mut poly = Vec::with_capacity(xs.len());
+                for (index, x) in xs.into_iter().enumerate() {
+                    if index % 256 == 0
+                        && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled)
+                    {
+                        return Ok(None);
+                    }
+                    poly.push((x, y, clamp_z(dropped.sample(x, y))));
+                }
                 polylines.push(poly);
             }
         }
         ScanDirection::AlongY => {
-            for (k, &x) in axis_positions(x0, x1, step).iter().enumerate() {
+            for (k, &x) in axis_positions(x0, x1, step, cancel)?.iter().enumerate() {
                 if cancel.is_some_and(crate::cancel::CancelToken::is_cancelled) {
-                    return None;
+                    return Ok(None);
                 }
-                let mut ys = axis_positions(y0, y1, along);
+                let mut ys = axis_positions(y0, y1, along, cancel)?;
                 if k % 2 == 1 {
                     ys.reverse();
                 }
-                let poly = ys
-                    .into_iter()
-                    .map(|y| (x, y, clamp_z(dropped.sample(x, y))))
-                    .collect();
+                let mut poly = Vec::with_capacity(ys.len());
+                for (index, y) in ys.into_iter().enumerate() {
+                    if index % 256 == 0
+                        && cancel.is_some_and(crate::cancel::CancelToken::is_cancelled)
+                    {
+                        return Ok(None);
+                    }
+                    poly.push((x, y, clamp_z(dropped.sample(x, y))));
+                }
                 polylines.push(poly);
             }
         }
     }
-    Some(polylines)
+    Ok(Some(polylines))
 }
 
 #[cfg(test)]
@@ -682,6 +796,8 @@ mod audit_09_10 {
         let f = SurfaceField::new(crate::geometry::Point2::new(0., 0.), 1., 2, 2, vec![-1.; 4]);
         let token = crate::cancel::CancelToken::new();
         token.cancel();
-        assert!(drop_cutter_cancellable(&f, 1., 1., Some(&token)).is_none());
+        assert!(drop_cutter_cancellable(&f, 1., 1., Some(&token))
+            .unwrap()
+            .is_none());
     }
 }

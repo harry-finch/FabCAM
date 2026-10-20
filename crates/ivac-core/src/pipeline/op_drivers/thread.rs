@@ -140,6 +140,14 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
     // behaviour (full engagement in one revolution).
     const THREAD_START_RADIUS_FRAC: f64 = 0.75;
     let n_passes = radial_passes.max(1);
+    let map_error = |message| {
+        if cancelled(cancel) {
+            PipelineError::Cancelled
+        } else {
+            PipelineError::RefusedOutput(op.id, message)
+        }
+    };
+    let mut retained = 0usize;
     let mut polylines: Vec<Vec<(f64, f64, f64)>> = Vec::new();
     let mut emitted = 0usize;
     let mut tightest: Option<f64> = None;
@@ -238,7 +246,19 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
         // across radial passes (resetting it would stamp a flat spot
         // at every pass boundary).
         let mut whirl_state = crate::gcode::face_mill_overlay::WhirlState::default();
+        let per_pass = (((bottom_z - top_z).abs() / pitch_mm).max(1.0) * 64.0).ceil() + 19.0;
+        let total = per_pass * f64::from(n_passes);
+        if !total.is_finite()
+            || total > (crate::cam::resource_limits::MAX_SPECIALIZED_POINTS - retained) as f64
+        {
+            return Err(map_error(
+                "Thread exceeds 1000000 retained XYZ points across passes".into(),
+            ));
+        }
         for pass in 0..n_passes {
+            if cancelled(cancel) {
+                return Err(PipelineError::Cancelled);
+            }
             let frac = if n_passes == 1 {
                 1.0
             } else {
@@ -252,7 +272,7 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
             if pass_radius <= 0.05 {
                 continue;
             }
-            let mut path = crate::cam::thread::helix_waypoints(
+            let mut path = crate::cam::thread::helix_waypoints_checked(
                 center,
                 pass_radius,
                 top_z,
@@ -261,9 +281,12 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
                 climb,
                 internal,
                 tool_radius,
+                64,
                 start_angle_rad,
                 setup.tool.spindle_direction,
-            );
+                cancel,
+            )
+            .map_err(map_error)?;
             // Optional whirling (trochoidal) engagement overlay on the
             // helix — a whirling-tagged thread mill softens per-tooth
             // chipload on hard material by orbiting the centerline.
@@ -296,7 +319,7 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
                     }
                     orbit = max_orbit;
                 }
-                let whirled = crate::gcode::face_mill_overlay::apply_whirl_to_polyline(
+                let whirled = crate::gcode::face_mill_overlay::apply_whirl_to_polyline_checked(
                     &path,
                     crate::gcode::face_mill_overlay::WhirlParams {
                         radius: orbit,
@@ -305,7 +328,10 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
                         climb,
                     },
                     &mut whirl_state,
-                );
+                    crate::cam::resource_limits::MAX_SPECIALIZED_POINTS - retained - 17,
+                    cancel,
+                )
+                .map_err(map_error)?;
                 if whirled.len() >= 2 {
                     path = whirled;
                 }
@@ -339,6 +365,12 @@ pub(in crate::pipeline) fn run_thread_op<P: PostProcessor>(
                 let mut combined = leadin;
                 combined.extend(path);
                 tightest = Some(tightest.map_or(pass_radius, |r| r.min(pass_radius)));
+                retained = crate::cam::resource_limits::check_count(
+                    retained.checked_add(combined.len()),
+                    crate::cam::resource_limits::MAX_SPECIALIZED_POINTS,
+                    "Thread retained XYZ points",
+                )
+                .map_err(map_error)?;
                 polylines.push(combined);
                 emitted += 1;
             }
