@@ -1567,27 +1567,24 @@ fn v1_freeze_pocket_rpm_matrix() {
                 );
                 let signature = result
                     .as_ref()
-                    .map_or_else(|e| e.to_string(), |r| r.gcode.clone());
+                    .map_or_else(ToString::to_string, |r| r.gcode.clone());
                 if let Some(ref previous) = previous {
                     assert_eq!(previous, &signature);
                 }
                 previous = Some(signature);
-                match expected {
-                    Some(reason) => {
-                        let error = result.unwrap_err().to_string();
-                        assert!(error.contains(reason), "{name} lab={lab}: {error}");
-                        if reason == "spindleSpeed" {
-                            assert!(error.contains("settings were kept"), "{error}");
-                            assert!(error.contains("rough/finish RPM"), "{error}");
-                        }
+                if let Some(reason) = expected {
+                    let error = result.unwrap_err().to_string();
+                    assert!(error.contains(reason), "{name} lab={lab}: {error}");
+                    if reason == "spindleSpeed" {
+                        assert!(error.contains("settings were kept"), "{error}");
+                        assert!(error.contains("rough/finish RPM"), "{error}");
                     }
-                    None => {
-                        let output = result.unwrap_or_else(|e| panic!("{name} lab={lab}: {e}"));
-                        assert!(!output.gcode.is_empty());
-                        if finish_id == Some(2) {
-                            assert!(output.gcode.contains("Load tool 2"));
-                            assert!(output.gcode.contains(&format!("at {second_rpm} RPM")));
-                        }
+                } else {
+                    let output = result.unwrap_or_else(|e| panic!("{name} lab={lab}: {e}"));
+                    assert!(!output.gcode.is_empty());
+                    if finish_id == Some(2) {
+                        assert!(output.gcode.contains("Load tool 2"));
+                        assert!(output.gcode.contains(&format!("at {second_rpm} RPM")));
                     }
                 }
             }
