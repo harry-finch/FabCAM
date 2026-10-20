@@ -118,8 +118,8 @@ named refinements; detailed historical acceptance criteria remain linked below.
 | Existing item | Category | Disposition and rationale | Remaining cost / dependency |
 | --- | --- | --- | --- |
 | M0–M4 foundation | V1 REQUIRED | Retain; core geometry/post/machine evidence, narrowly scoped physical baseline | Integration + new workshop evidence; medium |
-| FS0/FS1/FS2/FS3/FS3.5 | V1 REQUIRED | Retain engine/data/manual-value persistence; usable conservative assistance | Acceptance/persistence review; low–medium |
-| FS3.6, FS3.7, FS3.8, FS3.9, FS3.9.1 | V1 REQUIRED | Retain bounded existing UX, provenance, approximate matching, private packs and presets; close relevant reviews, no dataset expansion | Existing human gates; medium verification |
+| FS0/FS1/FS2/FS3/FS3.5 | V1 REQUIRED | Retain engine/data/manual-value persistence; usable conservative assistance | Delivered software accepted; integrated persistence/platform checks remain |
+| FS3.6, FS3.7, FS3.8, FS3.9, FS3.9.1 | V1 REQUIRED | Retain bounded existing UX, provenance, approximate matching, private packs and presets; bounded software reviews accepted 2026-10-18, no dataset expansion | Integrated/platform verification; no physical evidence inferred |
 | FS3.9 sensitivity follow-up | EXPERIMENTAL / RESEARCH | Preserve audit; continuity/math changes not required for ordinary workflow | Separate evidence/approval |
 | FS4 minimal selected trials | V1 REQUIRED | Required before recommending real ShopBot use of selected settings; software work remains unblocked | Lab/operator; medium, physical |
 | FS4 exhaustive coverage | POST-V1.5 | No comprehensive material/tool database requirement | High, ongoing evidence |
@@ -137,8 +137,8 @@ named refinements; detailed historical acceptance criteria remain linked below.
 | V-Carve A1–A4 / final diagnostics | V1 CONDITIONAL | Include bounded groove/spine modes as limited; no arbitrary clearing promise | Text reopen triage + physical sample if advertised; medium |
 | Advanced V-Carve / paired inlays | EXPERIMENTAL / RESEARCH | Current coverage partial; paired fit unqualified, defer to 2.0+ | High geometry + physical evidence |
 | PERF1-A/B1/B2 | V1 REQUIRED | Retain measured exact-input reuse; representative performance acceptance | RC measurement; medium |
-| CPS cancellation improvement | V1 CONDITIONAL | Retain safe result suppression; 200 ms target missed is not automatically unsafe | ivac-nh6q review; stronger boundary may be costly |
-| GEOM1 | V1 REQUIRED | Bounded repairs already implemented; common import failures justify inclusion | Human acceptance + integrated checks, no rewrite |
+| CPS cancellation improvement | V1 CONDITIONAL | Retain safe result suppression; 200 ms target missed is not automatically unsafe | ivac-nh6q accepted 2026-10-18; ivac-42ylx latency reserve remains |
+| GEOM1 | V1 REQUIRED | Bounded repairs already implemented; common import failures justify inclusion | Accepted 2026-10-18; integrated checks remain, no rewrite |
 | GEOM2-A1 precise dimensions | V1 CONDITIONAL | Existing scale is usable; include only for demonstrated exact-size need | Low–medium with ADR-0021 compatibility proof |
 | GEOM2-A full transforms | POST-V1.5 | Existing whole-file transforms suffice initially | Shared editing audit; medium–high |
 | GEOM2-B basic drawing | POST-V1.5 | External CAD/import sufficient | Qualified transforms/source creation; high |
@@ -153,6 +153,11 @@ named refinements; detailed historical acceptance criteria remain linked below.
 | FabSBP job metadata/shared profiles/setup automation | POST-V1.5 | Apps independently useful; controller responsibility stays separate | Explicit cross-project contracts |
 | Future measurements / background tracing / advanced automation | POST-V1.5 | Existing selected bounds and external CAD suffice | Individually scoped; no new milestone invented |
 | Open correctness/build/persistence issues | TECHNICAL DEBT / DEFECT | Severity by supported-workflow impact, never hidden by feature labels | Triage table in V1 scope |
+
+FS4 is deferred/nonblocking for current software development; that does not waive
+this approved plan's minimal physical evidence requirement **before recommending
+selected settings for real ShopBot use**. No FS4 trial or new dataset expansion is
+authorized here. Physical recommendation claims remain restricted until that gate.
 
 ## FabCAM 1.5 — ProtoMAX Waterjet
 

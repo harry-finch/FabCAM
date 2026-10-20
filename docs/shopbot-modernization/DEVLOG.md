@@ -8,8 +8,11 @@ history. STATUS conflict resolved using compact navigation plus the newer NUMSAF
 state. FS0–FS3.9 delivery/acceptance reconciled against code, reports and tracker;
 FS3 review was superseded by accepted FS3.5, FS4 remains deferred. Open human gates
 and old candidate identity preserved. [Full reconciliation and integrated checks](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md).
-No CAM/schema/test/security change, evidence disposition, packaging or hardware.
-HARD STOP after synchronization and report; no next milestone authorized.
+Full qualified pre-release rerun: exit 0, 16 gates PASS; Rust 1635/0/1 ignored,
+frontend 1458/1 skip. Initial macOS `stat` false-green measurement preserved and tracked
+as ivac-5yxyu; scoped byte-length-checked external shim supplies valid rerun sizes.
+8211 original local proofs hash-unchanged. No CAM/schema/test/security change, evidence
+disposition, packaging or hardware. HARD STOP; no next milestone authorized.
 
 ## 2026-10-20 — Practical custom cutting-data source guide
 

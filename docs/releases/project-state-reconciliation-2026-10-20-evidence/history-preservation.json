@@ -1,0 +1,22 @@
+[
+  {
+    "snapshot": "docs/shopbot-modernization/history/STATUS_2026_10_20.md",
+    "source": "94cdd6b:docs/shopbot-modernization/STATUS.md",
+    "wording_preserved": true
+  },
+  {
+    "snapshot": "docs/shopbot-modernization/history/ROADMAP_2026_10_20.md",
+    "source": "94cdd6b:docs/shopbot-modernization/ROADMAP.md",
+    "wording_preserved": true
+  },
+  {
+    "snapshot": "docs/releases/history/V1_REMAINING_SNAPSHOT_2026_10_20.md",
+    "source": "94cdd6b:docs/releases/V1_REMAINING_2026_10_18.md",
+    "wording_preserved": true
+  },
+  {
+    "snapshot": "docs/releases/history/RELEASE_CHECKPOINTS_2026_10_20.md",
+    "source": "94cdd6b:docs/releases/RELEASE_ROADMAP.md",
+    "wording_preserved": true
+  }
+]

@@ -18,10 +18,13 @@ Integration checkpoint **2026-10-20**; source **`2c6e4e1`**, beta.3 / pipeline63
 
 ## Software gate and candidates
 
-The integrated `scripts/pre-release.sh` result and exact tested commit are recorded in
+Integrated `scripts/pre-release.sh`: **exit 0, 16/16 gates PASS** in the qualified
+macOS environment; Rust 1635 PASS/1 ignored, frontend 1458 PASS/1 skip. Exact tested source and environment are recorded in
 [reconciliation](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md#integrated-validation).
 Historical NUMSAFE2 reports record 16 green gates and 136 byte-identical valid programs;
 those observations retain their tested source and do not imply installed-platform acceptance.
+The current run qualifies a scoped macOS `stat` compatibility wrapper; pre-existing
+size-gate portability defect `ivac-5yxyu` stays OPEN.
 
 Existing [beta.3 candidates](../releases/beta3-delivery-2026-10-18/README.md) are
 **`db5bde5` / pipeline61**, with three builds and bounded macOS smoke. They do not

@@ -1,0 +1,34 @@
+{
+  "initial_source": "2c6e4e11ac3d8bc9e8d3b959ffa76c6e50c6669a",
+  "original_untracked_files": 8211,
+  "original_untracked_bytes": 586210786,
+  "sorted_path_sha256_manifest_digest": "3605e2f853f242579624a2664cd553a276d307e095658563e05ee241166a914c",
+  "preservation_check": {
+    "missing": 0,
+    "altered": 0
+  },
+  "retention_policy_changed": false,
+  "manifest_encoding": "Sorted original relative paths, each followed by NUL + lowercase SHA256(content) + LF; SHA256 of UTF-8 concatenation",
+  "groups": {
+    "docs/releases/tool-provenance-implementation-evidence": 4169,
+    "docs/releases/ux-consolidation-2026-10-19-evidence": 2501,
+    "docs/releases/ux-safety-load-2026-10-19-evidence": 1541
+  },
+  "external_kits": [
+    {
+      "path": "../Captures-FabCAM-beta3-2026-10-18",
+      "files": 68,
+      "bytes": 38851043
+    },
+    {
+      "path": "../Validation-V1-2a3fe56",
+      "files": 112,
+      "bytes": 65685164
+    },
+    {
+      "path": "../Validation-V1-beta3-2026-10-18",
+      "files": 115,
+      "bytes": 67071112
+    }
+  ]
+}

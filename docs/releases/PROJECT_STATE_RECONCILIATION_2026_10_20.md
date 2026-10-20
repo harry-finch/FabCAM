@@ -106,7 +106,9 @@ No row claims measured cutting suitability, FS4 evidence, or V1 release acceptan
 The [2026-10-18 acceptance](ACCEPTANCE_CANDIDATES_2026_10_18.md) also records FS3.6,
 FS3.9.1 and related review IDs (`ivac-anp0`, `ivac-vgu4`); historical report OPEN headers
 do not reopen those decisions. **FS4 remains DEFERRED / NONBLOCKING**, not authorized
-here. A source/data revision never recalculates saved applied/manual values silently.
+here. This is a software-development disposition, not removal of the approved release
+plan's minimal selected trials before recommending real ShopBot cutting settings.
+A source/data revision never recalculates saved applied/manual values silently.
 Aggressiveness and evidence remain separate; original source attribution/licensing,
 missing-data refusals and unsupported operation/tool/process coverage remain intact.
 
@@ -168,13 +170,104 @@ is still required for retention changes, evidence moves/deletion or external arc
 
 ## Integrated validation
 
-Pending execution on the merged source. This section will record the exact commit,
-full script exit status, tools, every gate and skips/failures before final push.
-No green claim is made until the entire script exits 0.
+The compared engineering tree is **2c6e4e11ac3d8bc9e8d3b959ffa76c6e50c6669a**.
+Both full runs started with HEAD **f814c2697ee9c1faabe210820a7ea6cdd9bed14c**,
+plus documentation-only follow-ups described here. No runtime/test/schema/script
+file differs; the final documentation receipt does not change the tested software.
+
+### Pre-existing macOS gate defect — ivac-5yxyu
+
+The first full script exited **0**, but `wasm-size-guard.sh` called unsupported
+macOS `stat -c %s` four times, then treated empty measurements as a zero-byte delta
+and reported PASS. This **is not accepted as complete gate evidence**, despite the
+script's exit status. Original raw log: [first run](project-state-reconciliation-2026-10-20-evidence/pre-release.log).
+The problem exists unchanged at `2c6e4e1`; no production/script correction is made here.
+New issue **ivac-5yxyu OPEN** records the portable/fail-closed maintenance follow-up.
+
+For the qualified rerun only, a scoped external PATH entry supplies the exact GNU
+`stat -c %s <file>` invocation via native `/usr/bin/stat -f %z`. The
+[wrapper source](project-state-reconciliation-2026-10-20-evidence/macos-stat-wrapper.sh.txt)
+is retained as evidence, not installed into the repository scripts or user tools.
+Its output was independently checked against Python byte lengths for zero/one/1024/
+1048577-byte files with spaces and all generated WASM/gzip artifacts:
+[controls](project-state-reconciliation-2026-10-20-evidence/stat-compatibility-validation.json).
+Real measured gzip sizes are 1940417 and 3565228 bytes, delta1624811 bytes (~1587 KiB),
+within the existing 1700 KiB budget. The full script is rerun, not merely the size step.
+A default macOS run without this environment qualification retains the known defect.
+
+### Qualified full-run result
+
+**Second complete run: exit 0, 16/16 gates PASS, no gate skipped.**
+[Raw qualified log](project-state-reconciliation-2026-10-20-evidence/pre-release-qualified.log) ·
+[Machine-readable receipt](project-state-reconciliation-2026-10-20-evidence/qualification.json).
+
+| Gate group | Observed result |
+|---|---|
+| Rust formatting / pedantic Clippy | PASS, warnings denied |
+| `cargo test --workspace --all-features` | **1635 passed, 0 failed, 1 ignored**; 53 result blocks including doctests |
+| xtask schema-check / README parity | PASS; both README files share 12 headings |
+| pnpm frozen install / API codegen / i18n drift | PASS; generated files unchanged |
+| Frontend lint / check | PASS; Svelte 0 errors / 0 warnings |
+| Frontend tests | **1458 passed, 1 skipped**,163 files |
+| Frontend build / wasm-pack | PASS; existing chunk-size/dynamic-import warnings retained |
+| WASM CPS size guard | PASS with qualified `stat` wrapper:1587 KiB gzip delta,1700 KiB budget |
+| cargo-deny | PASS under existing committed advisory policy; no policy/dependency edits |
+| Headless Chrome UI smoke | PASS, tabs and120-tool search/sort/paging/selection; no page exceptions |
+
+Tools: Node 24.21.0,pnpm 10.34.7,Rust 1.88.0,wasm-pack 0.15.0,cargo-deny 0.20.2;
+Chrome exec wrapper already documented in BUILDING plus the byte-length-qualified
+`stat` shim described above. PATH includes the pinned Node/pnpm/Cargo tools and
+cached wasm-bindgen 0.2.120/wasm-opt binaries; `RUSTC_WRAPPER=''`.
+Recreate the scoped `stat` wrapper from its retained source before reproducing the
+qualified run on macOS. No user/global tool or production script was modified.
+
+Additional checks: `cargo run --quiet -p xtask -- version-check` exits0 (beta.3
+aligned); relative Markdown paths/anchors checked with no missing/escaping targets;
+26 ADRs indexed and byte-unchanged versus 2c6e4e1; four historical copies preserve their
+original text after reversing relocation links and ignoring EOF newline counts
+([comparison](project-state-reconciliation-2026-10-20-evidence/history-preservation.json)).
+Guide helper `python3 docs/feeds-speeds/examples/validate_examples.py` passes both
+actual-loader packs,6 matching contexts,6 negative controls and the revision pair.
+
+Documentation/source whitespace checks excluding the two verbatim terminal logs
+pass. The default cached whitespace check flags renderer trailing spaces in those
+raw logs; their original bytes are deliberately preserved, not presented as a clean
+raw-log formatting check. No whitespace policy is changed. The initial engineering range
+`73b66bb..2c6e4e1` already contains an extra blank EOF in ADR-0026; it was recorded,
+not silently changed in an immutable decision. All engineering source, tests,
+schemas, scripts, deny policy, ignore policy and original local evidence register
+remain identical to 2c6e4e1. No installed-platform or physical result is inferred;
+no new native packaging, manual desktop campaign or controller run was performed.
 
 ## Final Git state and checkpoint
 
-The final merge/report commit IDs and remote alignment will be recorded after
-validation. Original commits are preserved; documentation worktree/branch stays
-available. No new functional work, package, tag, Release or hardware operation.
-**HARD STOP after this checkpoint.**
+- Engineering synchronized: the four commits above, through **2c6e4e1**.
+- Documentation merge: **f814c2697ee9c1faabe210820a7ea6cdd9bed14c**,
+  parents 2c6e4e1 and 744774d; a90cb64,d63aa89,744774d remain original ancestors.
+- Final reviewed documentation/qualification receipt is the commit titled
+  `docs: record integrated qualification and reconciliation checkpoint`.
+  Its exact hash is available with
+  `git log -1 --format=%H --grep='^docs: record integrated qualification and reconciliation checkpoint$'`;
+  the handoff records that hash and actual push result. This receipt changes
+  documentation/evidence only; tested engineering tree remains 2c6e4e1.
+- Target **origin/main**, `https://github.com/harry-finch/FabCAM.git`.
+  Pre-push fetch confirmed origin still 2c6e4e1,0 remote-only commits; synchronization
+  uses an ordinary fast-forward push. After success, `main` and `origin/main`
+  identify the receipt commit. If push/alignment fails, retain local commits and
+  HARD STOP; never force or rewrite history.
+- Documentation worktree/branch remains clean at 744774d as original reviewed source;
+  historical feature/shopbot-mvp remains c9d3f3b. No worktree is reset or removed.
+- **8211 original untracked evidence files unchanged by SHA-256**,586210786bytes;
+  [inventory/digest](project-state-reconciliation-2026-10-20-evidence/local-evidence-inventory.json).
+  One additional local-only redundant copy of the first raw run is retained at
+  `project-state-reconciliation-2026-10-20-evidence/pre-release-first-run.log`;
+  identical authoritative bytes are committed as `pre-release.log`. Thus remaining
+  untracked qualification files total 8212; no source changes remain uncommitted.
+- Tracker synchronization notes appended without changing old history or closing
+  human gates. `ivac-5yxyu` is the newly confirmed gate-portability follow-up; its
+  implementation is not started here. Retention proposal still requires approval.
+
+**HARD STOP after this checkpoint.** Remaining decisions are the listed human reviews,
+release-gate portability maintenance, separately authorized matching candidates and
+actual platform/workshop qualification. No FS0,FS4 or other functional milestone,
+package,tag,Release or hardware operation is launched.

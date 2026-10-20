@@ -1,0 +1,58 @@
+[
+  {
+    "case_bytes": 0,
+    "stat_bytes": 0,
+    "pass": true
+  },
+  {
+    "case_bytes": 1,
+    "stat_bytes": 1,
+    "pass": true
+  },
+  {
+    "case_bytes": 1024,
+    "stat_bytes": 1024,
+    "pass": true
+  },
+  {
+    "case_bytes": 1048577,
+    "stat_bytes": 1048577,
+    "pass": true
+  },
+  {
+    "artifact": "target/wasm-size-guard/baseline/ivac_wasm_bg.wasm",
+    "stat_bytes": 5273267,
+    "python_bytes": 5273267,
+    "pass": true
+  },
+  {
+    "artifact": "target/wasm-size-guard/baseline/ivac_wasm_bg.wasm.d.ts",
+    "stat_bytes": 4449,
+    "python_bytes": 4449,
+    "pass": true
+  },
+  {
+    "artifact": "target/wasm-size-guard/baseline/ivac_wasm_bg.wasm.gz",
+    "stat_bytes": 1940417,
+    "python_bytes": 1940417,
+    "pass": true
+  },
+  {
+    "artifact": "target/wasm-size-guard/cps/ivac_wasm_bg.wasm",
+    "stat_bytes": 10441615,
+    "python_bytes": 10441615,
+    "pass": true
+  },
+  {
+    "artifact": "target/wasm-size-guard/cps/ivac_wasm_bg.wasm.d.ts",
+    "stat_bytes": 4585,
+    "python_bytes": 4585,
+    "pass": true
+  },
+  {
+    "artifact": "target/wasm-size-guard/cps/ivac_wasm_bg.wasm.gz",
+    "stat_bytes": 3565228,
+    "python_bytes": 3565228,
+    "pass": true
+  }
+]

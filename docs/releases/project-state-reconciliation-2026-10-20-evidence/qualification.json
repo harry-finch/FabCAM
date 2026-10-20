@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-20",
+  "head_at_full_runs": "f814c2697ee9c1faabe210820a7ea6cdd9bed14c",
+  "engineering_source": "2c6e4e11ac3d8bc9e8d3b959ffa76c6e50c6669a",
+  "working_changes_during_run": "documentation only; production/tests/schema/scripts unchanged",
+  "command": [
+    "bash",
+    "scripts/pre-release.sh"
+  ],
+  "qualified_run_exit_code": 0,
+  "qualified_run_passed_gates": [
+    "cargo fmt --check",
+    "cargo clippy -Dwarnings (with pedantic)",
+    "cargo test --workspace",
+    "xtask schema-check",
+    "readme parity",
+    "pnpm install",
+    "codegen drift",
+    "i18n keys drift",
+    "pnpm run lint",
+    "pnpm run check",
+    "pnpm run test",
+    "pnpm run build",
+    "wasm-pack build (web)",
+    "wasm cps size guard",
+    "cargo-deny check",
+    "ui smoke (headless)"
+  ],
+  "skipped_gates": [],
+  "rust_tests": {
+    "passed": 1635,
+    "failed": 0,
+    "ignored": 1
+  },
+  "frontend_tests": {
+    "passed": 1458,
+    "skipped": 1,
+    "test_files_passed": 163
+  },
+  "svelte_check": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "tools": {
+    "node": "24.21.0",
+    "pnpm": "10.34.7",
+    "rustc": "1.88.0",
+    "cargo_deny": "0.20.2",
+    "wasm_pack": "0.15.0"
+  },
+  "environment": {
+    "RUSTC_WRAPPER": "",
+    "macos_stat_wrapper": "/tmp/fabcam-reconciliation-tools/stat (scoped PATH only; source retained)",
+    "chrome_wrapper": "/Users/mugen/.local/chrome-shim/google-chrome",
+    "wasm_bindgen": "wasm-bindgen-cargo-install-0.2.120",
+    "wasm_opt": "wasm-opt-50385c9e73ccee70"
+  },
+  "wasm_gzip_bytes": {
+    "baseline": 1940417,
+    "cps": 3565228,
+    "delta": 1624811,
+    "budget_kib": 1700
+  },
+  "first_run": {
+    "exit_code": 0,
+    "accepted_as_full_gate": false,
+    "reason": "pre-existing macOS stat incompatibility yielded empty size measurements and false zero delta",
+    "issue": "ivac-5yxyu"
+  },
+  "guide_loader_validation": {
+    "packs": 2,
+    "matching_contexts_passed": 6,
+    "negative_controls_passed": 6,
+    "revision_pair_passed": true
+  },
+  "version_check": "0.9.0-beta.3 matches tauri.conf.json; exit 0",
+  "readme_parity": {
+    "headings": 12,
+    "pass": true
+  },
+  "adr_index": {
+    "files": 26,
+    "all_indexed": true,
+    "original_decisions_unchanged": true
+  },
+  "markdown_paths": {
+    "checked": 1818,
+    "missing": 0,
+    "scope": "root and docs Markdown inline relative links outside fenced code"
+  },
+  "markdown_anchors": {
+    "checked": 26,
+    "unresolved": 0,
+    "escaping_repository": 0
+  },
+  "history_snapshots_preserved": 4,
+  "whitespace": {
+    "documentation_and_source_excluding_verbatim_logs": "PASS",
+    "default_cached_diff_check": "renderer trailing spaces in two raw terminal logs; original bytes retained",
+    "historical_engineering_range": "pre-existing ADR-0026 extra EOF newline retained"
+  }
+}
