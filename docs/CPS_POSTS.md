@@ -12,6 +12,8 @@ to immutable source. Legacy source-taking APIs fail closed. Engine internals and
 arbitrary-script regression probes are accessible only inside crate unit tests;
 there is no production feature switch. JSON properties cannot supply JS source.
 
+[V1 policy and future confinement roadmap](releases/SEC1_FOLLOWUP_ROADMAP.md).
+
 ## Historical authoring reference (not an available V1 workflow)
 
 FabCAM runs Autodesk-`.cps`-compatible post-processors: ES5 JavaScript

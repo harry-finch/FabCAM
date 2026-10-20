@@ -49,6 +49,9 @@ The [2026-10-18 acceptance record](ACCEPTANCE_CANDIDATES_2026_10_18.md) is prese
 
 ## Deferred and conditional scope
 
+[SEC1-01–09 disposition matrix](SEC1_FOLLOWUP_ROADMAP.md) retains conditional
+security boundaries and post-V1 hardening; existing human gates remain independent.
+
 Developer ID/notarization, AUDIT3, FS4, PERF2, TIME2, broader GEOM-CORE, ProtoMAX/WJ,
 VINYL and unsupported advanced/two-sided variants retain their existing status in
 [the release plan](RELEASE_ROADMAP.md). UX8 is bounded/conditional. GEOM1/FS acceptance is recorded in the [2026-10-18 decision](ACCEPTANCE_CANDIDATES_2026_10_18.md);

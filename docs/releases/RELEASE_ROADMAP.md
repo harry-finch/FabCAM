@@ -63,6 +63,18 @@ OpenSBP, persistence, a tested desktop package, docs and workshop evidence.
 Keep already delivered surfacing, tabs/leads, dogbones and V-Carve within their
 explicit matrices; broader variants are not blanket release blockers.
 
+## Security follow-up and approved V1 CPS boundary
+
+**V1 supports bundled trusted CPS execution only.** Imported/custom CPS must be
+refused before inspection or generation while preserving legacy project data and
+clear unsupported-post diagnostics. Bundled ShopBot keeps its existing qualified
+subset; future custom execution awaits separately reviewed confinement.
+[SEC1 disposition and acceptance matrix](SEC1_FOLLOWUP_ROADMAP.md) accounts for
+SEC1-01–09, including pending SEC1-01/04/08 verification and existing `ivac-5yxyu`.
+The separate post-V1 security track covers confinement, desktop authority/CSP,
+service resource governance and reproducibility; it does not delay native OMX V1.5
+by default or turn independent UX/data enhancements into V1 blockers.
+
 ## V1 acceptance matrix
 
 Use the [V1 matrix](FABCAM_V1_SCOPE.md#v1-acceptance-matrix) as the review sheet.

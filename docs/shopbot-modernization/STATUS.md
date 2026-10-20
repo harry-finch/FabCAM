@@ -41,6 +41,10 @@ acceptance remain pending. [M4 evidence](M4_VALIDATION.md) stays bounded and his
 
 ## Remaining gates and next action
 
+[SEC1 follow-up matrix](../releases/SEC1_FOLLOWUP_ROADMAP.md) separates locally
+qualified SEC1-01/04/08 from deferred hardening and custom CPS confinement.
+V1-FREEZE integration is authorized; final freeze/candidate approval remains pending.
+
 SEC1 engineering (`ivac-dqlol`) is qualified locally; **HARD STOP for human review**
 `ivac-1mqti`. NUMSAFE3 review `ivac-zulb3` remains independent. [Resource/export results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md)
 record the approved budgets, new-only pair contract, commits and remaining limits.

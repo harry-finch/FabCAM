@@ -2646,3 +2646,30 @@ Frozen local gate: 20/20 PASS, 1662 reported Rust tests, 1460 frontend tests, TE
 256/256. Existing optional/ignored cases and all platform/physical limits are recorded
 in [the SEC1 report](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md). Human review
 `ivac-1mqti` remains open. Scoped commits only; no push, tag, packaging or publication.
+
+
+## 2026-10-20 — SEC1 roadmap and V1 scope reconciliation
+
+Documentation-only checkpoint `ivac-pknlj`, isolated from SEC1 implementation at
+`6043bfe`. Recorded maintainer-approved bundled-only V1 CPS policy and mapped all
+nine [SEC1 findings](../releases/SEC1_FOLLOWUP_ROADMAP.md) to conditional V1 gates
+or separate post-V1 security work. SEC1-01/04/08 remain pending verification;
+`ivac-5yxyu`, `ivac-q1nz1` and human gates reused. Custom CPS confinement is planned,
+not implemented or imposed on ProtoMAX V1.5. Existing illustration and source-pack
+guide preserved; missing stock-color/terminology UX recorded as planned. No source,
+configuration, schema, tests, accepted ADR or historical evidence changed; no push,
+merge, publication or implementation authorized. Audit report integration remains
+an explicit local-evidence dependency before portable publication of its links.
+Scoped diff/whitespace review passed; 9/9 SEC1 rows, 207 local links and their
+anchors checked, with the separate unchanged audit dependency verified by hash.
+No production tests rerun for this documentation-only change.
+
+
+## 2026-10-20 — V1-FREEZE Option A reconciliation
+
+Option A explicitly approved. Integrated 7e1c24b onto eb747eb in isolated
+freeze branch, retaining newer SEC1 results and production CPS policy. Earlier
+reconciliation pending-state statements describe its inspected 6043bfe, not current
+engineering status. SEC1-01/04/08 locally qualified; human review ivac-1mqti OPEN.
+No accepted ADR or historical report/evidence rewritten; FS guide already integrated.
+No freeze approval, push, installer, promotion or hardware action.
