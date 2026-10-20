@@ -1492,3 +1492,181 @@ fn cam4_pocket_residual_tracks_emitted_path_and_work_origin() {
     );
     assert!(unsupported.remaining_material[0].regions.is_empty());
 }
+
+/// V1 freeze: exercise actual Pocket CAM and section boundaries, not synthetic IR.
+#[test]
+fn v1_freeze_pocket_rpm_matrix() {
+    for lab in [false, true] {
+        for (name, finish_id, rough_rpm, wall_rpm, second_rpm, expected) in [
+            ("single_equal", None, 17000, 17000, 17000, None),
+            (
+                "single_different",
+                None,
+                17000,
+                10000,
+                10000,
+                Some("spindleSpeed"),
+            ),
+            (
+                "same_id_different",
+                Some(1),
+                17000,
+                10000,
+                10000,
+                Some("spindleSpeed"),
+            ),
+            ("two_tools_equal", Some(2), 17000, 17000, 17000, None),
+            ("two_tools_different", Some(2), 17000, 10000, 10000, None),
+            (
+                "two_tools_finish_override",
+                Some(2),
+                17000,
+                17000,
+                10000,
+                None,
+            ),
+        ] {
+            let mut p = project("square", "svg");
+            p.operations[0].kind = OpKind::Pocket {
+                strategy: PocketStrategy::Cascade,
+                contour: ContourParams::default(),
+                pocket: PocketParams::default(),
+            };
+            p.operations[0].params.depth = -0.5;
+            p.operations[0].params.step = Some(-0.5);
+            p.tools[0].diameter = 16.0;
+            p.tools[0].speed = rough_rpm;
+            p.tools[0].speed_finish = Some(wall_rpm);
+            let mut finish = endmill_tool(2, 8.0);
+            finish.speed = second_rpm;
+            finish.speed_finish = Some(second_rpm);
+            p.tools.push(finish);
+            p.operations[0].finish_tool_id = finish_id;
+            let expected = if lab && finish_id == Some(2) {
+                Some("tool changes unsupported")
+            } else {
+                expected
+            };
+            let mut previous = None;
+            for _ in 0..2 {
+                let result = run_pipeline(
+                    PipelineRequest {
+                        project: p.clone(),
+                        post_processor: Some(PostProcessorKind::Cps),
+                        cps_post: Some(CpsPostSelection {
+                            source: CpsPostSource::Bundled {
+                                id: "shopbot".into(),
+                            },
+                            properties: BTreeMap::from([(
+                                "labSpindle1Control".into(),
+                                ivac_core::pipeline::CpsParamValue::Bool(lab),
+                            )]),
+                        }),
+                    },
+                    |_, _, _| {},
+                );
+                let signature = result
+                    .as_ref()
+                    .map_or_else(|e| e.to_string(), |r| r.gcode.clone());
+                if let Some(ref previous) = previous {
+                    assert_eq!(previous, &signature);
+                }
+                previous = Some(signature);
+                match expected {
+                    Some(reason) => {
+                        let error = result.unwrap_err().to_string();
+                        assert!(error.contains(reason), "{name} lab={lab}: {error}");
+                        if reason == "spindleSpeed" {
+                            assert!(error.contains("settings were kept"), "{error}");
+                            assert!(error.contains("rough/finish RPM"), "{error}");
+                        }
+                    }
+                    None => {
+                        let output = result.unwrap_or_else(|e| panic!("{name} lab={lab}: {e}"));
+                        assert!(!output.gcode.is_empty());
+                        if finish_id == Some(2) {
+                            assert!(output.gcode.contains("Load tool 2"));
+                            assert!(output.gcode.contains(&format!("at {second_rpm} RPM")));
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn v1_freeze_shopbot_machine_strategy_boundary() {
+    for strategy in [
+        ToolChangeStrategy::Atc,
+        ToolChangeStrategy::ManualM6Prompt,
+        ToolChangeStrategy::Ignore,
+    ] {
+        let mut p = project("square", "svg");
+        p.machine.tool_change = strategy;
+        assert!(post(p).unwrap_err().to_string().contains("manual_m0_pause"));
+    }
+}
+
+#[test]
+fn v1_freeze_separate_sections_allow_distinct_manual_rpm() {
+    let mut p = project("square", "svg");
+    p.operations[0].params.depth = -0.5;
+    p.tools[0].speed = 17000;
+    p.tools[0].speed_finish = Some(17000);
+    let mut second_tool = endmill_tool(2, 6.0);
+    second_tool.speed = 10000;
+    p.tools.push(second_tool);
+    let mut second_op = p.operations[0].clone();
+    second_op.id = 2;
+    second_op.tool_id = 2;
+    p.operations.push(second_op);
+    let result = post(p).unwrap();
+    assert!(result.gcode.contains("at 17000 RPM"));
+    assert!(result.gcode.contains("at 10000 RPM"));
+    assert!(result.gcode.contains("Load tool 2"));
+}
+
+#[test]
+fn v1_freeze_pocket_without_wall_ring_does_not_change_tools_or_rpm() {
+    for lab in [false, true] {
+        let mut p = project("square", "svg");
+        p.operations[0].kind = OpKind::Pocket {
+            strategy: PocketStrategy::Cascade,
+            contour: ContourParams::default(),
+            pocket: PocketParams {
+                pocket_nocontour: true,
+                ..PocketParams::default()
+            },
+        };
+        p.operations[0].params.depth = -0.5;
+        p.operations[0].params.step = Some(-0.5);
+        p.operations[0].finish_tool_id = Some(2);
+        p.tools[0].diameter = 16.0;
+        p.tools[0].speed = 17000;
+        p.tools[0].speed_finish = Some(10000);
+        let mut finish = endmill_tool(2, 8.0);
+        finish.speed = 10000;
+        p.tools.push(finish);
+        let result = run_pipeline(
+            PipelineRequest {
+                project: p,
+                post_processor: Some(PostProcessorKind::Cps),
+                cps_post: Some(CpsPostSelection {
+                    source: CpsPostSource::Bundled {
+                        id: "shopbot".into(),
+                    },
+                    properties: BTreeMap::from([(
+                        "labSpindle1Control".into(),
+                        ivac_core::pipeline::CpsParamValue::Bool(lab),
+                    )]),
+                }),
+            },
+            |_, _, _| {},
+        )
+        .unwrap();
+        assert!(!result.gcode.contains("Load tool 2"));
+        assert!(!result.gcode.contains("at 10000 RPM"));
+        assert!(!result.gcode.contains("TR,10000"));
+    }
+}

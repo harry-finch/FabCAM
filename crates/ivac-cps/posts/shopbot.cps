@@ -174,6 +174,9 @@ function preflight() {
         if (r.command != COMMAND_STOP && r.command != COMMAND_OPTIONAL_STOP)
           fail("unsupported command " + getCommandStringId(r.command));
         break;
+      case "spindleSpeed":
+        fail("operation " + s.id + ": unsupported record spindleSpeed (intra-section RPM/direction change). Use equal rough/finish RPM explicitly for a single tool, or separately qualified manual tool/section boundaries. Tool and cutting settings were kept");
+        break;
       default: fail("unsupported record " + r.kind);
       }
     }
