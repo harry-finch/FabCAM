@@ -1,6 +1,9 @@
 # Feeds & Speeds Assistant — planning contract
 
-Status: FS0/FS1 approved; [FS2 data handoff](FS2_QUALIFICATION.md) ready for human review.
+Practical workshop tutorial: [Create your own cutting-data sources](../../feeds-speeds/CUSTOM_DATA_SOURCES.md)
+(local presets, external JSON, validated synthetic examples, backup and limitations).
+
+Historical FS0–FS2 checkpoint: FS0/FS1 approved; [FS2 data handoff](FS2_QUALIFICATION.md) ready for human review.
 An initial external reference dataset is separately supplied; CAM/UI integration remains unstarted.
 This document preserves the user's planning requirements. Qualified design
 proposals and source audit are in [FS0_QUALIFICATION](FS0_QUALIFICATION.md) and

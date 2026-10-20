@@ -1,6 +1,8 @@
 # FabCAM — current status
 
-Documentation checkpoint: **2026-10-20**, work `ivac-lgudk`; human review **ivac-yg3sm OPEN**.
+Documentation checkpoint: **2026-10-20**; consolidation review **ivac-yg3sm OPEN**.
+[Custom cutting-data guide](../feeds-speeds/CUSTOM_DATA_SOURCES.md) reviewed against source;
+loader-validated synthetic examples, human guide review **ivac-7w1e1 OPEN**.
 [Documentation index](../README.md) · [Release plan](../releases/RELEASE_ROADMAP.md) ·
 [V1 readiness and gates](../releases/V1_READINESS.md) · [Historical reports](../releases/HISTORY.md).
 
@@ -13,7 +15,7 @@ Documentation checkpoint: **2026-10-20**, work `ivac-lgudk`; human review **ivac
 - **NUMSAFE `ivac-knphk`: paused by the user, unfinished/uncommitted changes present**
   in the primary checkout. No completion or qualification is inferred. Reinspect
   its final source, evidence and human decision before updating this snapshot.
-- Current authorized action: documentation consolidation/review only. No new CAM
+- Current authorized action: documentation authoring/consolidation review only. No new CAM
   milestone, package, push, merge, release or physical trial is authorized here.
 
 ## Implemented versus qualified

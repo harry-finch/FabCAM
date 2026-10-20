@@ -1,5 +1,17 @@
 # Engineering log
 
+## 2026-10-20 — Practical custom cutting-data source guide
+
+[Workshop guide](../feeds-speeds/CUSTOM_DATA_SOURCES.md) covers actual local preset
+capture/review/backup and generic JSON authoring/import. Two original synthetic
+source-pack revisions pass the actual Rust loader and six matching contexts; six
+negative controls and the revision pair pass, plus 50 existing pack/lab/adaptation
+regressions. UI behavior/labels checked against source; historical capture image
+marked as such, no new machine trial or live GUI claim. Generic/Sorbonne authoring,
+export, identity and storage limits are explicit. [Validation](../feeds-speeds/VALIDATION_2026_10_20.md).
+No application/production/registry change; NUMSAFE and local evidence preserved.
+Documentation commit only, review ivac-7w1e1 OPEN; HARD STOP, no push/merge/publication.
+
 ## 2026-10-20 — Documentation consolidation checkpoint
 
 Documentation branch based on `94cdd6b`; paused/uncommitted NUMSAFE excluded.
