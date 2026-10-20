@@ -80,11 +80,20 @@ fn inline_posts_and_property_refusals_cannot_reuse_bundled_result() {
     b = a.clone();
     b["cps_post"]["source"] = json!({"kind":"inline", "filename":"shopbot.cps",
         "script":ivac_cps::library::bundled("shopbot").unwrap().source});
-    let reference = run(&b, None).unwrap();
+    assert!(run(&b, None)
+        .unwrap_err()
+        .to_string()
+        .contains("External CPS"));
     #[cfg(feature = "profiling")]
     crate::profiling::reset();
-    assert_eq!(run(&b, Some(&cache)).unwrap(), reference);
-    assert_eq!(run(&b, Some(&cache)).unwrap(), reference);
+    assert!(run(&b, Some(&cache))
+        .unwrap_err()
+        .to_string()
+        .contains("External CPS"));
+    assert!(run(&b, Some(&cache))
+        .unwrap_err()
+        .to_string()
+        .contains("External CPS"));
     #[cfg(feature = "profiling")]
     assert_eq!(hits(), 0);
     b["cps_post"]["source"]["script"] = json!("throw new Error('changed script');");

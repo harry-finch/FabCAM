@@ -1,4 +1,18 @@
-# Writing and testing a `.cps` post for FabCAM
+# CPS posts in FabCAM V1
+
+**V1 executes only the compiled bundled registry (`grbl`, `shopbot`).** External
+CPS inspection and execution are refused before JavaScript evaluation, including
+renamed/modified posts and byte-identical external copies. Existing projects
+retain their external settings but cannot generate with them. Select a bundled
+post explicitly; FabCAM never substitutes one silently. Custom runtime support
+is deferred until a confined runtime is qualified.
+
+Production APIs `run::inspect_bundled` and `run::run_bundled` resolve registry IDs
+to immutable source. Legacy source-taking APIs fail closed. Engine internals and
+arbitrary-script regression probes are accessible only inside crate unit tests;
+there is no production feature switch. JSON properties cannot supply JS source.
+
+## Historical authoring reference (not an available V1 workflow)
 
 FabCAM runs Autodesk-`.cps`-compatible post-processors: ES5 JavaScript
 files that declare config globals, user properties, and entry-point

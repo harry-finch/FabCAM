@@ -1,5 +1,6 @@
 use ivac_cps::engine::{Engine, PRELUDE};
-fn main() {
+#[test]
+fn property_binding_probe() {
     let mut text = String::new();
     for (_, src) in PRELUDE {
         text.push_str(src);

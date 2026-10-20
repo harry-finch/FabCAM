@@ -7,6 +7,8 @@
 //! runtime needs lives in the JS prelude ([`PRELUDE`]); the public
 //! execution API is [`crate::run_post`] / [`crate::inspect_post`].
 
+#[cfg(test)]
+use boa_engine::JsNativeError;
 use std::path::Path;
 use std::sync::{
     atomic::{AtomicBool, Ordering},
@@ -23,7 +25,7 @@ struct AbortProbe {
 use boa_engine::gc::{Gc, GcRefCell};
 use boa_engine::object::ObjectInitializer;
 use boa_engine::property::Attribute;
-use boa_engine::{Context, JsError, JsNativeError, JsString, JsValue, NativeFunction, Source};
+use boa_engine::{Context, JsError, JsString, JsValue, NativeFunction, Source};
 
 /// Shared NC-output sink `__ivac.emit` appends to. Entries are raw text
 /// CHUNKS (the prelude's `write` may send partial lines); join them
@@ -51,10 +53,7 @@ impl EmitBuffer {
     pub fn len(&self) -> usize {
         self.ends.len()
     }
-    #[must_use]
-    pub fn is_empty(&self) -> bool {
-        self.ends.is_empty()
-    }
+    #[cfg(test)]
     pub fn clear(&mut self) {
         self.text.clear();
         self.ends.clear();
@@ -63,6 +62,7 @@ impl EmitBuffer {
     pub fn concat(&self) -> String {
         self.text.clone()
     }
+    #[cfg(test)]
     fn chunks(&self) -> Vec<String> {
         let mut start = 0;
         self.ends
@@ -256,6 +256,7 @@ impl Engine {
     ///
     /// Returns the engine error of the first prelude module that fails
     /// to parse or evaluate.
+    #[cfg(test)]
     pub fn eval_prelude(&mut self) -> Result<(), JsError> {
         for (name, source) in PRELUDE {
             self.eval_named(name, source)?;
@@ -284,6 +285,7 @@ impl Engine {
     ///
     /// Returns a `TypeError` when the global is missing or not
     /// callable, or the thrown value when the call itself throws.
+    #[cfg(test)]
     pub fn call_global(&mut self, name: &str, args: &[JsValue]) -> Result<JsValue, JsError> {
         let value = self
             .context
@@ -299,6 +301,7 @@ impl Engine {
 
     /// Raw chunks collected by `__ivac.emit` so far.
     #[must_use]
+    #[cfg(test)]
     pub fn output(&self) -> Vec<String> {
         self.sink.borrow().chunks()
     }
@@ -317,6 +320,7 @@ impl Engine {
     /// A second handle to the emit sink (tests register extra host
     /// functions over it; `Gc` handles are cheap clones).
     #[must_use]
+    #[cfg(test)]
     pub fn sink(&self) -> EmitSink {
         self.sink.clone()
     }

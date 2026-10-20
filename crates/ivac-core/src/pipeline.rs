@@ -868,8 +868,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
                 return Err(PipelineError::Cancelled);
             }
             let overrides = cps_properties_json(&selection.properties);
-            // Only audited bundled ShopBot is deterministic. Inline/path posts,
-            // even with identical text or names, must execute normally.
+            // Only audited bundled ShopBot is memoized; external sources are refused.
             let memo_key = cache.and_then(|_| {
                 if matches!(&selection.source, CpsPostSource::Bundled { id } if id == "shopbot") {
                     crate::profile_measure!(
@@ -893,21 +892,12 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
                 crate::profile_count!("post.cps_cache_miss", 1);
                 let output = crate::profile_measure!(
                     "post.cps",
-                    match cancel {
-                        Some(token) => ivac_cps::run_post_cancellable(
-                            &resolved.source,
-                            &resolved.name,
-                            &program,
-                            &overrides,
-                            token.shared_flag()
-                        ),
-                        None => ivac_cps::run_post(
-                            &resolved.source,
-                            &resolved.name,
-                            &program,
-                            &overrides
-                        ),
-                    }
+                    ivac_cps::run::run_bundled(
+                        &resolved.id,
+                        &program,
+                        &overrides,
+                        cancel.map(|token| token.shared_flag())
+                    )
                 )
                 .map_err(cps_post_error)?;
                 if cancelled(cancel) {
@@ -1126,6 +1116,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
 /// Resolved `.cps` script text + display name for diagnostics.
 #[cfg(feature = "cps")]
 struct ResolvedCpsSource {
+    id: String,
     name: String,
     source: String,
 }
@@ -1135,28 +1126,18 @@ fn resolve_cps_source(selection: &CpsPostSelection) -> Result<ResolvedCpsSource,
     match &selection.source {
         CpsPostSource::Bundled { id } => ivac_cps::library::bundled(id)
             .map(|post| ResolvedCpsSource {
+                id: post.id.to_string(),
                 name: format!("{}.cps", post.id),
                 source: post.source.to_string(),
             })
             .ok_or_else(|| PipelineError::CpsPostFailed {
                 message: format!("unknown bundled post \"{id}\""),
             }),
-        CpsPostSource::Inline { script, filename } => Ok(ResolvedCpsSource {
-            name: filename.clone().unwrap_or_else(|| "inline.cps".to_string()),
-            source: script.clone(),
-        }),
-        // CLI-only convenience; the server rejects Path selections at
-        // the route boundary (cps.8).
-        CpsPostSource::Path { path } => std::fs::read_to_string(path)
-            .map(|source| ResolvedCpsSource {
-                name: std::path::Path::new(path)
-                    .file_name()
-                    .map_or_else(|| path.clone(), |n| n.to_string_lossy().into_owned()),
-                source,
+        CpsPostSource::Inline { .. } | CpsPostSource::Path { .. } => {
+            Err(PipelineError::CpsPostFailed {
+                message: ivac_cps::PostError::UntrustedPost.to_string(),
             })
-            .map_err(|e| PipelineError::CpsPostFailed {
-                message: format!("cannot read post file {path}: {e}"),
-            }),
+        }
     }
 }
 

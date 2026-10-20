@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { formControls, sparseProperties, cpsSelectionKey, toCpsPostRequest } from './cps-post-form';
+import {
+  formControls,
+  sparseProperties,
+  cpsSelectionKey,
+  toCpsPostRequest,
+  selectionMetadata,
+} from './cps-post-form';
 import type { PostMeta } from '../api/types';
 
 const meta = {
@@ -150,4 +156,23 @@ describe('toCpsPostRequest', () => {
     expect(toCpsPostRequest({ source: 'bundled', properties: {} })).toBeUndefined();
     expect(toCpsPostRequest({ source: 'file', filename: 'x.cps', properties: {} })).toBeUndefined();
   });
+});
+
+it('inspector mounting preserves external project settings without returning executable metadata', () => {
+  const saved = {
+    source: 'file' as const,
+    bundledId: 'shopbot',
+    filename: 'shopbot.cps',
+    script: 'while(true){}',
+    properties: { foo: 1 },
+  };
+  const before = JSON.stringify(saved);
+  expect(selectionMetadata(saved, [{ id: 'shopbot', meta }])).toBeNull();
+  expect(JSON.stringify(saved)).toBe(before);
+  expect(
+    selectionMetadata({ source: 'bundled', bundledId: 'shopbot' }, [{ id: 'shopbot', meta }]),
+  ).toBe(meta);
+  expect(
+    selectionMetadata({ source: 'bundled', bundledId: 'missing' }, [{ id: 'shopbot', meta }]),
+  ).toBeNull();
 });

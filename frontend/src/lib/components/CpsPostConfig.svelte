@@ -4,17 +4,19 @@
   // the dialog's draft (`onchange`) so undo/cancel behave like every
   // other machine setting.
   //
-  // A bundled post is referenced by id (its script ships in the
-  // binary); an opened file embeds its SCRIPT so a saved project stays
-  // self-contained. `properties` stays SPARSE — only values differing
-  // from the post's own defaults are stored, so a post updating its
-  // defaults doesn't leave stale values behind.
+  // V1 executes compiled bundled posts only. External settings are retained
+  // for compatibility but never inspected on mount or silently replaced.
 
   import { t } from '../i18n/i18n.svelte';
   import { defaultClient } from '../api/http';
   import type { CpsPostConfig } from '../state/project-types';
   import type { PostListEntry, PostMeta } from '../api/types';
-  import { formControls, sparseProperties, type PropertyControl } from './cps-post-form';
+  import {
+    formControls,
+    sparseProperties,
+    selectionMetadata,
+    type PropertyControl,
+  } from './cps-post-form';
 
   let {
     value,
@@ -29,7 +31,6 @@
   let bundled = $state<PostListEntry[]>([]);
   let meta = $state<PostMeta | null>(null);
   let loadError = $state<string | null>(null);
-  let busy = $state(false);
 
   // Load the bundled library once; a transport without CPS support
   // simply reports the error (the option is hidden upstream anyway).
@@ -52,38 +53,9 @@
     };
   });
 
-  /// Resolve the metadata for the current selection: a bundled post's
-  /// metadata rides the listing; a file's comes from inspecting its
-  /// embedded script.
+  // Never inspect external source, including on automatic project/form mounting.
   $effect(() => {
-    const selection = value;
-    let cancelled = false;
-    void (async () => {
-      if (!selection) {
-        meta = null;
-        return;
-      }
-      if (selection.source === 'bundled') {
-        meta = bundled.find((e) => e.id === selection.bundledId)?.meta ?? null;
-        return;
-      }
-      if (!selection.script || !client.inspectPost) {
-        meta = null;
-        return;
-      }
-      try {
-        const inspected = await client.inspectPost(selection.script, selection.filename);
-        if (!cancelled) meta = inspected;
-      } catch (e) {
-        if (!cancelled) {
-          meta = null;
-          loadError = e instanceof Error ? e.message : String(e);
-        }
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
+    meta = selectionMetadata(value, bundled);
   });
 
   const controls = $derived<PropertyControl[]>(
@@ -93,61 +65,6 @@
   function selectBundled(id: string) {
     loadError = null;
     onchange(id ? { source: 'bundled', bundledId: id, properties: {} } : undefined);
-  }
-
-  async function openFile() {
-    if (!client.inspectPost) return;
-    loadError = null;
-    busy = true;
-    try {
-      const opened = await pickCpsFile();
-      if (!opened) return;
-      // Inspect before storing so a broken script surfaces its parse
-      // error here instead of at generate time.
-      const inspected = await client.inspectPost(opened.script, opened.filename);
-      meta = inspected;
-      onchange({
-        source: 'file',
-        filename: opened.filename,
-        script: opened.script,
-        properties: {},
-      });
-    } catch (e) {
-      loadError = e instanceof Error ? e.message : String(e);
-    } finally {
-      busy = false;
-    }
-  }
-
-  /// Tauri gets a native dialog; the browser falls back to a hidden
-  /// `<input type=file>`.
-  async function pickCpsFile(): Promise<{ filename: string; script: string } | null> {
-    const { isTauri } = await import('../api/env');
-    if (isTauri()) {
-      const { open } = await import('@tauri-apps/plugin-dialog');
-      const path = await open({
-        multiple: false,
-        filters: [{ name: 'CPS post', extensions: ['cps'] }],
-      });
-      if (typeof path !== 'string') return null;
-      const { readTextFile } = await import('@tauri-apps/plugin-fs');
-      const script = await readTextFile(path);
-      return { filename: path.split(/[\\/]/).pop() ?? 'post.cps', script };
-    }
-    return new Promise((resolve) => {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = '.cps,text/plain';
-      input.onchange = () => {
-        const file = input.files?.[0];
-        if (!file) {
-          resolve(null);
-          return;
-        }
-        void file.text().then((script) => resolve({ filename: file.name, script }));
-      };
-      input.click();
-    });
   }
 
   function setProperty(name: string, next: boolean | number | string) {
@@ -176,13 +93,17 @@
   </label>
 
   <div class="row">
-    <button type="button" onclick={openFile} disabled={busy}>
+    <button type="button" disabled title={t('machine.cps.external_unavailable')}>
       {t('machine.cps.open_file')}
     </button>
     {#if value?.source === 'file'}
       <span class="filename" title={value.filename}>{value.filename}</span>
     {/if}
   </div>
+
+  {#if value?.source === 'file'}
+    <p class="err">{t('machine.cps.external_unavailable')}</p>
+  {/if}
 
   {#if loadError}
     <p class="err">{loadError}</p>

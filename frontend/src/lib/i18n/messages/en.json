@@ -357,6 +357,7 @@
   "machine.cps.post.title": "Which .cps post-processor generates this machine's G-code. Bundled posts ship with FabCAM; \"Open .cps file\" embeds your own into the project.",
   "machine.cps.properties": "Post properties",
   "machine.cps.unsupported": "This build does not support .cps post-processors.",
+  "machine.cps.external_unavailable": "External CPS posts are unavailable in FabCAM V1. Settings are preserved; select a bundled post to generate.",
   "machine.decimal_sep": "Decimal separator",
   "machine.decimal_sep.comma": "comma (,)",
   "machine.decimal_sep.period": "period (.)",

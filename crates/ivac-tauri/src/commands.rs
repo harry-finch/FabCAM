@@ -137,14 +137,11 @@ pub async fn list_posts() -> Result<serde_json::Value, String> {
             let entries = ivac_cps::library::BUNDLED
                 .iter()
                 .map(|post| {
-                    ivac_cps::inspect_post_with_limits(
-                        post.source,
-                        &format!("{}.cps", post.id),
-                        inspection_limits(),
-                    )
-                    .map(|meta| ivac_cps::meta::PostListEntry {
-                        id: post.id.to_string(),
-                        meta,
+                    ivac_cps::run::inspect_bundled(post.id, inspection_limits()).map(|meta| {
+                        ivac_cps::meta::PostListEntry {
+                            id: post.id.to_string(),
+                            meta,
+                        }
                     })
                 })
                 .collect::<Result<Vec<_>, _>>()
@@ -757,4 +754,21 @@ pub async fn publish_program_file(
     })
     .await
     .map_err(|e| e.to_string())?
+}
+
+#[cfg(all(test, feature = "cps"))]
+mod sec1_tests {
+    #[tokio::test]
+    async fn external_inspection_refuses_before_evaluation() {
+        for script in [
+            "while(true){}",
+            "throw new Error('EXECUTED')",
+            ivac_cps::library::bundled("shopbot").unwrap().source,
+        ] {
+            let error = super::inspect_post(script.into(), Some("shopbot.cps".into()))
+                .await
+                .unwrap_err();
+            assert!(error.contains("External CPS"), "{error}");
+        }
+    }
 }

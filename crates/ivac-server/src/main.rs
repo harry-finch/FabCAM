@@ -334,14 +334,11 @@ async fn list_posts() -> Result<Json<Vec<ivac_cps::meta::PostListEntry>>, AppErr
         ivac_cps::library::BUNDLED
             .iter()
             .map(|post| {
-                ivac_cps::inspect_post_with_limits(
-                    post.source,
-                    &format!("{}.cps", post.id),
-                    server_cps_limits(),
-                )
-                .map(|meta| ivac_cps::meta::PostListEntry {
-                    id: post.id.to_string(),
-                    meta,
+                ivac_cps::run::inspect_bundled(post.id, server_cps_limits()).map(|meta| {
+                    ivac_cps::meta::PostListEntry {
+                        id: post.id.to_string(),
+                        meta,
+                    }
                 })
             })
             .collect::<Result<Vec<_>, _>>()
@@ -877,7 +874,7 @@ mod tests {
         assert!(list.iter().any(|e| e["id"] == "grbl"));
         assert!(list[0]["meta"]["properties"].is_array());
 
-        // POST /posts/inspect happy path: the bundled grbl source.
+        // Even an exact external copy of bundled source is refused.
         let inspect = || Router::new().route("/posts/inspect", post(inspect_post_handler));
         let happy = serde_json::json!({
             "script": ivac_cps::library::bundled("grbl").unwrap().source,
@@ -887,9 +884,11 @@ mod tests {
             .oneshot(post_json("/posts/inspect", &happy))
             .await
             .unwrap();
-        assert_eq!(resp.status(), StatusCode::OK);
-        let meta = body_json(resp).await;
-        assert_eq!(meta["extension"], "gcode");
+        assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
+        assert!(body_json(resp).await["message"]
+            .as_str()
+            .unwrap()
+            .contains("External CPS"));
 
         // Malformed JS → 400 with the parse position in the message.
         let broken = serde_json::json!({"script": "var x = ;"});
@@ -919,7 +918,7 @@ mod tests {
             body["message"]
                 .as_str()
                 .unwrap_or_default()
-                .contains("budget"),
+                .contains("External CPS"),
             "got: {body}"
         );
     }

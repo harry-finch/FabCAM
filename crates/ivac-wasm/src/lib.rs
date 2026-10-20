@@ -94,12 +94,12 @@ pub fn list_posts() -> Result<JsValue, JsValue> {
         let entries = ivac_cps::library::BUNDLED
             .iter()
             .map(|post| {
-                ivac_cps::inspect_post(post.source, &format!("{}.cps", post.id)).map(|meta| {
-                    ivac_cps::meta::PostListEntry {
+                ivac_cps::run::inspect_bundled(post.id, ivac_cps::RunLimits::default()).map(
+                    |meta| ivac_cps::meta::PostListEntry {
                         id: post.id.to_string(),
                         meta,
-                    }
-                })
+                    },
+                )
             })
             .collect::<Result<Vec<_>, _>>()
             .map_err(|e| into_js_error(format!("bundled post failed inspection: {e}")))?;

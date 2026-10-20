@@ -2,7 +2,7 @@
 // unit-test under the logic-only vitest config (same split as
 // error-display.ts).
 
-import type { PostMeta } from '../api/types';
+import type { PostMeta, PostListEntry } from '../api/types';
 
 export type PropertyValue = boolean | number | string;
 
@@ -123,4 +123,15 @@ export function toCpsPostRequest(
     source: { kind: 'inline', script: config.script, filename: config.filename },
     properties: config.properties,
   };
+}
+
+/// Metadata lookup used when the inspector mounts. External source is data only;
+/// this function has no evaluator and never mutates the saved selection.
+export function selectionMetadata(
+  selection: { source: 'bundled' | 'file'; bundledId?: string } | undefined,
+  posts: PostListEntry[],
+): PostMeta | null {
+  return selection?.source === 'bundled'
+    ? (posts.find((entry) => entry.id === selection.bundledId)?.meta ?? null)
+    : null;
 }

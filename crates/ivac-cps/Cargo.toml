@@ -1,4 +1,6 @@
 [package]
+# Runtime probes are unit-only; no arbitrary-source API in production.
+autotests = false
 name = "ivac-cps"
 version.workspace = true
 edition.workspace = true
@@ -38,3 +40,7 @@ criterion = { version = "0.5", default-features = false, features = ["plotters",
 [[bench]]
 name = "post_bench"
 harness = false
+
+[[test]]
+name = "v1_trust"
+path = "tests/v1_trust.rs"

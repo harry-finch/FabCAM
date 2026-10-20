@@ -91,9 +91,6 @@ fn program_with(records: usize) -> Program {
 }
 
 fn bench_post(c: &mut Criterion) {
-    let script = ivac_cps::library::bundled("grbl")
-        .expect("bundled grbl")
-        .source;
     let overrides = serde_json::json!({});
     let mut group = c.benchmark_group("run_post");
     // A 300k-record run takes seconds; keep the sample count low so the
@@ -107,7 +104,8 @@ fn bench_post(c: &mut Criterion) {
             &program,
             |b, program| {
                 b.iter(|| {
-                    ivac_cps::run_post(script, "grbl.cps", program, &overrides).expect("post runs")
+                    ivac_cps::run::run_bundled("grbl", program, &overrides, None)
+                        .expect("post runs")
                 });
             },
         );

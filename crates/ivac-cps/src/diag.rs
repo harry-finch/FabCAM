@@ -40,6 +40,10 @@ impl Diagnostic {
 /// Failure surface of [`crate::run_post`] / [`crate::inspect_post`].
 #[derive(Debug, thiserror::Error)]
 pub enum PostError {
+    /// V1 never evaluates externally supplied source.
+    #[error("External CPS posts are unavailable in FabCAM V1; select a bundled post. Settings are preserved.")]
+    UntrustedPost,
+
     /// The `.cps` source failed to parse. boa's message carries
     /// `line N, col M`; `source_name` is attached here because parse
     /// errors don't carry the path themselves.

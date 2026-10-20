@@ -296,6 +296,7 @@ pub fn run_post_with_limits(
     properties: &serde_json::Value,
     limits: RunLimits,
 ) -> Result<PostOutput, PostError> {
+    reject_external()?;
     run_post_inner(script, script_name, program, properties, limits, None)
 }
 
@@ -314,6 +315,7 @@ pub fn run_post_cancellable(
     properties: &serde_json::Value,
     cancel: Arc<AtomicBool>,
 ) -> Result<PostOutput, PostError> {
+    reject_external()?;
     run_post_inner(
         script,
         script_name,
@@ -430,6 +432,15 @@ pub fn inspect_post_with_limits(
     script_name: &str,
     limits: RunLimits,
 ) -> Result<PostMeta, PostError> {
+    reject_external()?;
+    inspect_inner(script, script_name, limits)
+}
+
+fn inspect_inner(
+    script: &str,
+    script_name: &str,
+    limits: RunLimits,
+) -> Result<PostMeta, PostError> {
     let mut engine = Engine::new();
     apply_limits(&mut engine, limits);
     let map = eval_bundled(&mut engine, script, script_name)?;
@@ -442,6 +453,51 @@ pub fn inspect_post_with_limits(
         .map_err(|e| PostError::Contract(e.to_string()))?
         .ok_or_else(|| PostError::Contract("inspect returned undefined".into()))?;
     serde_json::from_value(meta).map_err(|e| PostError::Contract(e.to_string()))
+}
+
+// Arbitrary-source regression probes exist only in this crate's unit-test binary.
+// No feature flag, transport parameter or environment variable can enable them.
+fn reject_external() -> Result<(), PostError> {
+    if cfg!(test) {
+        Ok(())
+    } else {
+        Err(PostError::UntrustedPost)
+    }
+}
+
+/// Inspect immutable application-bundled source, selected only by registry ID.
+pub fn inspect_bundled(id: &str, limits: RunLimits) -> Result<PostMeta, PostError> {
+    let post = crate::library::bundled(id).ok_or(PostError::UntrustedPost)?;
+    inspect_inner(post.source, &format!("{}.cps", post.id), limits)
+}
+
+/// Execute immutable application-bundled source; caller properties are JSON data.
+pub fn run_bundled(
+    id: &str,
+    program: &ir::Program,
+    properties: &serde_json::Value,
+    cancel: Option<Arc<AtomicBool>>,
+) -> Result<PostOutput, PostError> {
+    let post = crate::library::bundled(id).ok_or(PostError::UntrustedPost)?;
+    let object = properties
+        .as_object()
+        .ok_or_else(|| PostError::Contract("post properties must be an object".into()))?;
+    if object.iter().any(|(key, value)| {
+        matches!(key.as_str(), "__proto__" | "constructor" | "prototype")
+            || !(value.is_boolean() || value.is_number() || value.is_string())
+    }) {
+        return Err(PostError::Contract(
+            "post properties must be primitive values with safe names".into(),
+        ));
+    }
+    run_post_inner(
+        post.source,
+        &format!("{}.cps", post.id),
+        program,
+        properties,
+        RunLimits::default(),
+        cancel.as_ref(),
+    )
 }
 
 #[cfg(test)]

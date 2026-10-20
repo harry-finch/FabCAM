@@ -688,6 +688,7 @@ export type MsgKey =
   | "machine.capabilities"
   | "machine.capabilities.legend_title"
   | "machine.capabilities.primary_title"
+  | "machine.cps.external_unavailable"
   | "machine.cps.open_file"
   | "machine.cps.post"
   | "machine.cps.post.none"
@@ -3067,6 +3068,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "machine.capabilities",
   "machine.capabilities.legend_title",
   "machine.capabilities.primary_title",
+  "machine.cps.external_unavailable",
   "machine.cps.open_file",
   "machine.cps.post",
   "machine.cps.post.none",

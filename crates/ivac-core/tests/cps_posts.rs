@@ -182,17 +182,20 @@ fn fanuc_refs_snapshot() {
         eprintln!("SKIP: FANUC oracle not present at {}", path.display());
         return;
     };
-    let response = run_cps(
-        legacy_post_fixture(),
-        CpsPostSource::Inline {
-            script,
-            filename: Some("fanuc.cps".into()),
+    let err = run_pipeline(
+        PipelineRequest {
+            project: legacy_post_fixture(),
+            post_processor: Some(PostProcessorKind::Cps),
+            cps_post: Some(selection(CpsPostSource::Inline {
+                script,
+                filename: Some("fanuc.cps".into()),
+            })),
         },
-    );
-    assert_eq!(response.output_extension.as_deref(), Some("nc"));
-    // Canned cycles stay canned for FANUC (peck drill → G83).
-    assert!(response.gcode.contains("G83"), "{}", response.gcode);
-    assert_digest("cps_fanuc", &response.gcode, 0xe140_d3c5_6872_3b27);
+        |_, _, _| {},
+    )
+    .expect_err("external oracle is not a V1 application post");
+    assert!(err.to_string().contains("External CPS"));
+    // Runtime FANUC goldens remain in ivac-cps unit-only tests.
 }
 
 /// Geometry parity: re-interpreting the bundled post's TEXT lands on
@@ -270,4 +273,32 @@ fn two_sided_cps_refuses_unqualified_output() {
         Err(ivac_core::pipeline::PipelineError::WorkOrigin(message))
             if message.contains("two-sided CPS output")
     ));
+}
+
+#[test]
+fn external_sources_are_refused_without_reading_or_evaluating() {
+    for source in [
+        CpsPostSource::Inline {
+            script: "while(true){}".into(),
+            filename: Some("shopbot.cps".into()),
+        },
+        CpsPostSource::Inline {
+            script: ivac_cps::library::bundled("shopbot").unwrap().source.into(),
+            filename: Some("shopbot.cps".into()),
+        },
+        CpsPostSource::Path {
+            path: "/nonexistent/shopbot.cps".into(),
+        },
+    ] {
+        let request = PipelineRequest {
+            project: fixture_project(),
+            post_processor: Some(PostProcessorKind::Cps),
+            cps_post: Some(selection(source)),
+        };
+        let saved = serde_json::to_value(&request).unwrap();
+        let restored = serde_json::from_value(saved.clone()).unwrap();
+        let error = run_pipeline(restored, |_, _, _| {}).expect_err("must refuse");
+        assert!(error.to_string().contains("External CPS"), "{error}");
+        assert_eq!(serde_json::to_value(&request).unwrap(), saved);
+    }
 }

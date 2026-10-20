@@ -312,7 +312,7 @@ fn cmd_posts(mut args: impl Iterator<Item = String>) -> Result<()> {
         None => {
             println!("{:<12} {:<28} {:<8}", "ID", "DESCRIPTION", "EXT");
             for post in ivac_cps::library::BUNDLED {
-                let meta = ivac_cps::inspect_post(post.source, &format!("{}.cps", post.id))
+                let meta = ivac_cps::run::inspect_bundled(post.id, ivac_cps::RunLimits::default())
                     .map_err(|e| {
                         anyhow::anyhow!("bundled post {} failed inspection: {e}", post.id)
                     })?;

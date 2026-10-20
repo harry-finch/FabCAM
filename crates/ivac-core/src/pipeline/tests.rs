@@ -7944,15 +7944,15 @@ mod cps_seam {
     /// response carries the post's declared extension.
     #[cfg(feature = "cps")]
     #[test]
-    fn cps_with_selection_runs_the_post() {
+    fn cps_external_selection_is_refused_before_execution() {
         let mut selection = inline_selection();
         selection.source = CpsPostSource::Inline {
             script: "extension = \"tap\";\nfunction onOpen() { writeln(\"HELLO\"); }".into(),
             filename: Some("mini.cps".into()),
         };
-        let resp = run_pipeline(cps_request(Some(selection)), |_, _, _| {}).expect("post must run");
-        assert_eq!(resp.gcode, "HELLO\n");
-        assert_eq!(resp.output_extension.as_deref(), Some("tap"));
+        let err =
+            run_pipeline(cps_request(Some(selection)), |_, _, _| {}).expect_err("external post");
+        assert!(err.to_string().contains("External CPS"));
     }
 
     /// An unknown bundled id is a structured post failure.
