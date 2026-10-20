@@ -26,7 +26,7 @@ The task's human decision must be recorded separately from implementation comple
 | Candidate freshness / CI | Existing [beta.3 artifacts](beta3-delivery-2026-10-18/README.md): db5bde5/pipeline61 | Separately authorized matching builds and integrity records after source/human gates; no new candidates created here |
 | Clean installation / runtime | Current-source macOS/Windows11/Ubuntu qualification not established here | Real clean-download/install/upgrade/runtime records, actual OS versions and data preservation; CI build is not desktop acceptance |
 | ShopBot workshop / physical | No current release-level physical qualification inferred | [Operator protocol](beta3-delivery-2026-10-18/PROTOCOLE-V1.md), controller preview, supervised air/material tests and measurements; retain bounded M4 evidence |
-| Documentation checkpoint `ivac-lgudk` | This consolidation awaits human review | Review source snapshot, navigation and proposed retention options; no evidence disposition implicitly accepted |
+| Documentation review `ivac-yg3sm` | This consolidation awaits human review | Review source snapshot, navigation and proposed retention options; no evidence disposition implicitly accepted |
 | RC / V1 / publication | No release or publication authorization | Exact supported matrix, reviewed evidence/limits, explicit RC/V1 decision and separate publication approval |
 
 ## Closed earlier checkpoints, retained limits

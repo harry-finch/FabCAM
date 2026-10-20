@@ -45,7 +45,7 @@ full geometry/machine/operation inspector unification is later UX work.
 
 For new or significantly modified FabCAM UI, normally use both
 [$professional-workshop-ui](../../../.agents/skills/professional-workshop-ui/SKILL.md)
-and [$cam-ux-ui](../../../../.agents/skills/cam-ux-ui/SKILL.md).
+and [$cam-ux-ui](../../../.agents/skills/cam-ux-ui/SKILL.md).
 The installed Professional Workshop UI skill owns shared desktop visual language;
 CAM UX owns manufacturing workflows/interaction/safety. Keep them separate and
 reuse current tokens/components; this policy introduces no current UI restyling.

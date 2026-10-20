@@ -1,5 +1,15 @@
 # Engineering log
 
+## 2026-10-20 — Documentation consolidation checkpoint
+
+Documentation branch based on `94cdd6b`; paused/uncommitted NUMSAFE excluded.
+Current STATUS/readiness and central index replace accumulated checkpoint banners;
+previous wording remains in linked historical copies. ADR index completed without
+editing decisions; shared agent/onboarding instructions and portable links clarified.
+[Inventory, validation and retention proposal](../releases/DOCUMENTATION_CHECKPOINT_2026_10_20.md).
+No qualification evidence moved/deleted, no policy/production/test/schema change.
+Documentation commits only; no push/merge/publication. Human HARD STOP after review.
+
 > 2026-10-19 — **Software release-gate script green (maintenance, uncommitted)**: [closure report](../../V1_RELEASE_GATE_CLOSURE_2026_10_19.md). `scripts/pre-release.sh` exits 0 with all 16 gates (Node 24, pnpm 10.34.7, Rust 1.88, cargo-deny 0.20.2, headless Chrome; Rust 1609/0/1 ignored, frontend 1438 + 1 skip). Four documented *unmaintained* advisory exceptions (no vulnerabilities); UI smoke rewritten for the Atelier shell; README parity restored. This is a software gate only: native installers, platform acceptance, human reviews (e.g. ivac-3i00w, ivac-b0js3) and physical ShopBot qualification remain open, and nothing is authorized for publication. Supersedes the earlier 'README parity red; cargo-deny unavailable' remark. No CAM/post/output/schema change.
 
 > 2026-10-19 — **ADR-0025 implemented locally, human review pending**: [movement-tool provenance results](../releases/MULTI_TOOL_PROVENANCE_RESULTS_2026_10_19.md). Pipeline63; immutable per-move tool bindings, independent native intent manifest/cache replay, bounded ShopBot emitted-intent validation, shared playback/full-program resolver. Existing post guards, manual assumptions and advanced two-sided exclusions retained. No performance optimization, commit, push or publication. **HARD STOP before any next checkpoint.**

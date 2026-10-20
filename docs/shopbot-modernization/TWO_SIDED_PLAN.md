@@ -83,7 +83,7 @@ Keep ShopBot syntax in post/adapter layers; generic geometry remains machine-neu
 No OpenSBP command additions or capability changes in this documentation task.
 
 Use [$professional-workshop-ui](../../.agents/skills/professional-workshop-ui/SKILL.md)
-and [$cam-ux-ui](../../../.agents/skills/cam-ux-ui/SKILL.md): compact Machining setup,
+and [$cam-ux-ui](../../.agents/skills/cam-ux-ui/SKILL.md): compact Machining setup,
 Single/Two-sided, A/B, X/Y flip, registration and per-side XY/Z with progressive
 disclosure. Show reference edge/line, physical turning motion, final B orientation
 and registration correspondence; avoid unexplained “Flip horizontal”. Reuse current

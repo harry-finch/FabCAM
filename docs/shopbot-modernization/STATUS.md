@@ -1,6 +1,6 @@
 # FabCAM — current status
 
-Documentation checkpoint: **2026-10-20**, `ivac-lgudk`; human review required.
+Documentation checkpoint: **2026-10-20**, work `ivac-lgudk`; human review **ivac-yg3sm OPEN**.
 [Documentation index](../README.md) · [Release plan](../releases/RELEASE_ROADMAP.md) ·
 [V1 readiness and gates](../releases/V1_READINESS.md) · [Historical reports](../releases/HISTORY.md).
 

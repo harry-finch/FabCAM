@@ -1,5 +1,9 @@
 # ShopBot modernization
 
+This is the detailed fork/history index. Start with the [central documentation index](../README.md),
+[current STATUS](STATUS.md) and [V1 readiness](../releases/V1_READINESS.md);
+older pending-review statements below belong to their dated checkpoints.
+
 ## Release planning — approved roadmap
 
 - [FabCAM 1.0 / 1.5 / 2.0+ roadmap and approval decisions](../releases/RELEASE_ROADMAP.md)

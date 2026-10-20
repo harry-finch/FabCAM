@@ -8,6 +8,8 @@ Current development version: see the [version policy and release status](docs/re
 
 ![FabCAM A1 Optical Balance](assets/branding/fabcam/source/fabcam-a1-app-icon.svg)
 
+[Documentation index](docs/README.md) — current status, V1 readiness, architecture, development and qualification evidence.
+
 ## Overview
 
 FabCAM prepares drawings for CNC machining through a compact desktop workflow: geometry, stock, tools, operations, cutting parameters, preview and machine output. The current focus is milling in workshops and fablabs, including bounded ShopBot OpenSBP support. It is an actively developed fork of [ivaCAM](https://github.com/aalarchiv/ivacam), not a claim of universal production readiness.

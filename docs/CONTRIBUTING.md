@@ -12,11 +12,26 @@ header.
 
 ## Read this first
 
-[`ARCHITECTURE.md`](./ARCHITECTURE.md) is the 2-page map: layer diagram,
-data flow (one user click traced end-to-end), the named patterns this
-codebase reaches for, and the anti-patterns to avoid. Skim it before
-touching multiple layers — most "where do I even start" friction is
-answered there.
+Start with the [documentation index](README.md), [current STATUS](shopbot-modernization/STATUS.md)
+and [V1 readiness](releases/V1_READINESS.md). [General architecture](ARCHITECTURE.md)
+explains layers and data flow; [fork contracts](shopbot-modernization/ARCHITECTURE.md)
+and [ADRs](shopbot-modernization/adr/README.md) record compatibility and decisions.
+[AGENTS](../AGENTS.md) is the shared agent/Git/human-approval contract; CLAUDE points
+there rather than defining a second workflow.
+
+## Parallel work and documentation
+
+Inspect Git state before changing files. If another agent has unfinished work,
+use an authorized isolated branch/worktree and preserve its changes and local-only
+evidence. Stage explicit reviewed paths; never commit another agent's files.
+Do not infer qualification of uncommitted work from the branch's historical tests.
+
+STATUS owns current state, RELEASE_ROADMAP owns release priorities, V1_READINESS
+owns acceptance/blocker dispositions, DEVLOG owns history and dated reports own
+exact evidence. See [document roles](README.md#canonical-document-responsibilities).
+A milestone owner updates the relevant contract/result together; human acceptance,
+platform acceptance and physical qualification remain separate. Evidence deletion,
+relocation or retention changes require explicit approval.
 
 ## Repository layout
 
@@ -52,8 +67,8 @@ PRs.
 
 ## Toolchain
 
-- Rust: pinned via `rust-toolchain.toml` (currently 1.88.0)
-- Node: LTS 20+
+- Rust: pinned via [`rust-toolchain.toml`](../rust-toolchain.toml) (1.88.0 at this snapshot)
+- Node: use `.nvmrc` (24 at this snapshot); see [BUILDING](BUILDING.md) for setup
 - pnpm ≥ 10 (lockfile committed)
 - `wasm-pack` 0.14+ (for the WASM crate; `cargo install wasm-pack --locked`)
 - `tauri-cli` 2.x (for desktop bundles; `cargo install tauri-cli --version "^2" --locked`)
