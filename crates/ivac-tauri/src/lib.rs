@@ -211,6 +211,7 @@ fn run_app() -> tauri::Result<()> {
         })
         .invoke_handler(tauri::generate_handler![
             commands::healthz,
+            commands::publish_program_file,
             commands::version,
             commands::import_path,
             commands::generate,

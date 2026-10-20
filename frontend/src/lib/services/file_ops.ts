@@ -795,7 +795,7 @@ export async function exportGeneratedGcode(
   const filename = `${base}${twoSided ? `-${side}` : ''}.${ext}`;
   if (isTauri()) {
     const { save } = await import('@tauri-apps/plugin-dialog');
-    const { writeTextFile } = await import('@tauri-apps/plugin-fs');
+    const { invoke } = await import('@tauri-apps/api/core');
     const path = await save({
       defaultPath: filename,
       filters: [{ name: ext.toUpperCase(), extensions: [ext] }],
@@ -811,7 +811,7 @@ export async function exportGeneratedGcode(
         return;
       }
       try {
-        await writeTextFile(path, text);
+        await invoke('publish_program_file', { path, text });
       } catch (e) {
         project.setError(`save: ${notificationText(e)}`);
       }

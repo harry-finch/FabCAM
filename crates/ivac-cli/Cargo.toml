@@ -23,6 +23,7 @@ default = ["cps"]
 cps = ["ivac-core/cps", "dep:ivac-cps"]
 
 [dependencies]
+ivac-file-export = { path = "../ivac-file-export" }
 ivac-core = { workspace = true }
 ivac-cps = { workspace = true, optional = true }
 anyhow = { workspace = true }

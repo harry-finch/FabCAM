@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/ivac-file-export",
     "crates/ivac-feeds-speeds",
     "crates/ivac-core",
     "crates/ivac-cps",

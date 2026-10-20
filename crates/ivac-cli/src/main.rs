@@ -396,11 +396,13 @@ fn cmd_stream(args: impl Iterator<Item = String>) -> Result<()> {
 
     // Destination: a file if --output was given, else stdout. Both buffered —
     // the streaming sink issues one write per emitted line.
+    let staged = output
+        .as_ref()
+        .map(|out| ivac_file_export::StagedFile::new(out))
+        .transpose()?;
     let (writer, dest): (Box<dyn std::io::Write + Send>, String) = match &output {
         Some(out) => {
-            let f = std::fs::File::create(out).with_context(|| {
-                i18n::tp("cli.err.output", &[("path", &out.display().to_string())])
-            })?;
+            let f = staged.as_ref().context("missing staged output")?.writer()?;
             (
                 Box::new(std::io::BufWriter::new(f)),
                 out.display().to_string(),
@@ -415,6 +417,10 @@ fn cmd_stream(args: impl Iterator<Item = String>) -> Result<()> {
     let outcome = ivac_core::pipeline::stream_gcode_to_writer(request, writer).map_err(|e| {
         anyhow::anyhow!(i18n::tp("cli.err.streaming", &[("detail", &e.to_string())]))
     })?;
+
+    if let Some(staged) = staged {
+        staged.publish(false)?;
+    }
 
     // Summary + warnings to stderr — stdout stays pure g-code.
     eprintln!(
@@ -443,14 +449,37 @@ fn cmd_stream_two_sided(
     output: Option<PathBuf>,
 ) -> Result<()> {
     let base = output.context(i18n::t("cli.err.two_sided_needs_output"))?;
+    let front_path = side_path(&base, "front");
+    let back_path = side_path(&base, "back");
+    ivac_file_export::require_new(&[&front_path, &back_path])?;
     let two =
         ivac_core::pipeline::run_pipeline_two_sided(request, |_p, _f, _m| {}).map_err(|e| {
             anyhow::anyhow!(i18n::tp("cli.err.streaming", &[("detail", &e.to_string())]))
         })?;
 
-    write_program(&side_path(&base, "front"), &two.front)?;
+    let mut front = ivac_file_export::StagedFile::new(&front_path)?;
+    front.write_all(two.front.gcode.as_bytes())?;
+    front.finish()?;
+    let back = two
+        .back
+        .as_ref()
+        .map(|program| -> std::io::Result<_> {
+            let mut staged = ivac_file_export::StagedFile::new(&back_path)?;
+            staged.write_all(program.gcode.as_bytes())?;
+            staged.finish()?;
+            Ok(staged)
+        })
+        .transpose()?;
+    // Both complete programs are staged before either final name is created.
+    front.publish(true)?;
+    if let Some(back) = back {
+        back.publish(true).with_context(|| format!(
+            "Partial publication: {} was created, but {} was not published. No existing destination was overwritten; choose a fresh output base.",
+            front_path.display(), back_path.display()))?;
+    }
+    report_program(&front_path, &two.front);
     if let Some(back) = &two.back {
-        write_program(&side_path(&base, "back"), back)?;
+        report_program(&back_path, back);
     }
     Ok(())
 }
@@ -470,12 +499,7 @@ fn side_path(base: &std::path::Path, side: &str) -> PathBuf {
 }
 
 /// Write one program's gcode to `path` and print the standard done summary.
-fn write_program(
-    path: &std::path::Path,
-    resp: &ivac_core::pipeline::PipelineResponse,
-) -> Result<()> {
-    std::fs::write(path, &resp.gcode)
-        .with_context(|| i18n::tp("cli.err.output", &[("path", &path.display().to_string())]))?;
+fn report_program(path: &std::path::Path, resp: &ivac_core::pipeline::PipelineResponse) {
     eprintln!(
         "{}",
         i18n::tp(
@@ -490,7 +514,6 @@ fn write_program(
     for w in &resp.warnings {
         eprintln!("  ! {}", w.message);
     }
-    Ok(())
 }
 
 /// Build per-object offsets from imported segments.

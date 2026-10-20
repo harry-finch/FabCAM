@@ -2592,6 +2592,7 @@ dependencies = [
  "anyhow",
  "ivac-core",
  "ivac-cps",
+ "ivac-file-export",
  "serde",
  "serde_json",
  "tracing",
@@ -2646,6 +2647,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "ivac-file-export"
+version = "0.9.0-beta.3"
+dependencies = [
+ "tempfile",
+]
+
+[[package]]
 name = "ivac-server"
 version = "0.9.0-beta.3"
 dependencies = [
@@ -2671,6 +2679,7 @@ dependencies = [
  "anyhow",
  "ivac-core",
  "ivac-cps",
+ "ivac-file-export",
  "libc",
  "log",
  "notify",

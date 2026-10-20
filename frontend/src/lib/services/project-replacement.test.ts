@@ -31,6 +31,12 @@ vi.mock('@tauri-apps/plugin-dialog', () => ({
   },
 }));
 vi.mock('@tauri-apps/plugin-fs', () => ({ writeTextFile: io.write }));
+vi.mock('@tauri-apps/api/core', () => ({
+  invoke: (command: string, args: { path: string; text: string }) => {
+    expect(command).toBe('publish_program_file');
+    return io.write(args.path, args.text);
+  },
+}));
 const file = JSON.parse(
   readFileSync(
     new URL(

@@ -734,3 +734,27 @@ mod audit_15_16_tool {
         assert_eq!(value["auto_fix"]["suggested_tool_id"], 7, "{value}");
     }
 }
+
+/// Write a fully qualified frontend export through the native transactional sink.
+/// Keeps the FS plugin's dialog-granted destination scope.
+#[tauri::command]
+pub async fn publish_program_file(
+    app: tauri::AppHandle,
+    path: PathBuf,
+    text: String,
+) -> Result<(), String> {
+    use tauri_plugin_fs::FsExt;
+    let path = ivac_file_export::destination(&path).map_err(|e| e.to_string())?;
+    if !app.fs_scope().is_allowed(&path) {
+        return Err("export destination is outside the granted filesystem scope".into());
+    }
+    tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
+        let mut staged = ivac_file_export::StagedFile::new(&path).map_err(|e| e.to_string())?;
+        staged
+            .write_all(text.as_bytes())
+            .map_err(|e| e.to_string())?;
+        staged.publish(false).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}

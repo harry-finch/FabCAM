@@ -501,3 +501,25 @@ Use the actual version/path and a new evidence destination. Universal packages r
 never changes quarantine or signs the mounted app. Existing evidence is not overwritten.
 Local structural verification does not qualify clean installation; use the
 [REL1-B1 clean-host protocol](releases/v1-stabilization-campaign/REL1_B1_CLEAN_INSTALL.md).
+
+
+## Transactional program export (NUMSAFE3)
+
+`ivac stream-gcode request.json --output job.ngc` stages output beside its
+final destination and replaces a regular, non-read-only file only after generation
+and flushing succeed. Failed generation preserves the previous file. Desktop
+**Save program** uses the same native file utility after existing qualification
+checks. Directory, symlink and read-only destinations are refused.
+
+For `--two-sided --output job.ngc`, **both** `job.front.ngc` and `job.back.ngc`
+must be new names; choose a fresh base for each attempt. Both programs are
+prepared before publication. Publication is atomic per file where supported,
+not for the pair: a second publication error can leave the new front file and
+is explicitly reported as a failure. Existing pairs are never overwritten.
+Filesystems without the required rename/hard-link capability fail closed.
+
+These guarantees do not apply to bytes already sent to stdout/HTTP, browser
+filesystem handling, power loss or forced process termination. CLI streaming
+retains its documented lack of preview-derived warnings. See the
+[NUMSAFE3 report](releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md) for
+software evidence, operating-system limits and remaining qualification gates.

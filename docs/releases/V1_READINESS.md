@@ -1,6 +1,8 @@
 # FabCAM V1 readiness
 
-Snapshot **2026-10-20**, integrated engineering source **`2c6e4e1`**, beta.3/pipeline63.
+Snapshot **2026-10-20**, NUMSAFE3 software checkpoint, beta.3/pipeline63.
+[Current implementation receipt](NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md#final-qualification-receipt);
+previous integrated engineering source **`2c6e4e1`** is retained below.
 [Reconciliation](PROJECT_STATE_RECONCILIATION_2026_10_20.md) records the tested integration revision.
 [STATUS](../shopbot-modernization/STATUS.md) · [Release plan](RELEASE_ROADMAP.md) ·
 [Accepted V1 scope/matrix](FABCAM_V1_SCOPE.md) · [Report history](HISTORY.md).
@@ -16,6 +18,7 @@ The task's human decision must be recorded separately from implementation comple
 
 | Gate | Current disposition | Required next evidence / decision |
 |---|---|---|
+| NUMSAFE3 `ivac-fh2av` / review `ivac-zulb3` | Approved budgets implemented; frozen-source 16/16 gates, 1654 Rust tests, 256 TEST1 and 136 byte-identical outputs | [Report](NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md); human review OPEN; no pair-atomic, universal latency, installed-platform or physical claim |
 | NUMSAFE / NUMSAFE2 `ivac-knphk` / `ivac-o9gwj` | CLOSED; accepted and committed as `e1a0c95` / `2c6e4e1` | [NUMSAFE](NUMERICAL_RUNTIME_SAFETY_RESULTS_2026_10_20.md), [NUMSAFE2](NUMSAFE2_PASS_LIMITS_RESULTS_2026_10_20.md); retain streaming partial-file, specialized-loop and mid-op cancellation limits |
 | Import / ADR-0026 `ivac-feder` | In progress; implemented in inspected source, [correctness](IMPORT_CORRECTNESS_RESULTS_2026_10_20.md) / [UX](IMPORT_UNITS_WARNINGS_RESULTS_2026_10_20.md) evidence recorded | Human UX/architecture acceptance; retain unit/legacy/refusal boundaries |
 | Export/load ADR-0024 `ivac-3i00w` | Human review OPEN; two engineering defects closed | Review [results](UX_SAFETY_LOAD_RESULTS_2026_10_19.md), full-program authority and limitations; no return to playback-dependent qualification |

@@ -2617,3 +2617,17 @@ motion; pecks, half-pipe and V-Carve levels checked before allocation; supplied
 invalid steps refused, omitted steps unchanged. Valid output byte-identical.
 Waterline/relief/thread step loops not reviewed. HARD STOP.
 
+
+
+## 2026-10-20 — NUMSAFE3 specialized budgets and transactional program files
+
+Maintainer approved 1000 Waterline levels, 2M mesh triangles, 1M Relief footprint
+entries, 100M Relief evaluations and 1M retained specialized XYZ points. Added
+checked preflight/growth refusal and cooperative cancellation without changing
+valid sampling or ShopBot scope. Native CLI/desktop program export shares a
+transactional file utility; two-sided CLI stages both sides and requires new
+output names, with explicit partial-publication errors and no pair-atomic claim.
+[Report and qualification](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md)
+retain initial audit, policy approval, tests and limitations. Separate logical
+commits authorized only after qualification; no push, package, release or hardware.
+Human review is the next gate, not authorization to start another checkpoint.
