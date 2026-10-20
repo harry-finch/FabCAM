@@ -346,6 +346,16 @@ pub enum PipelineError {
     /// program header/footer.
     #[error("operation #{0}: machine output refused: {1}. No program generated.")]
     RefusedOutput(u32, String),
+    /// NUMSAFE2: an explicitly supplied depth per pass is unusable (zero,
+    /// positive, non-finite or below 1e-9 mm). Omitted values keep their
+    /// documented default; invalid supplied ones never become a
+    /// full-depth single pass.
+    #[error("operation #{0}: invalid depth per pass: {1}. No program generated.")]
+    InvalidStep(u32, String),
+    /// NUMSAFE2: the operation would need more depth passes (or pecks per
+    /// hole) than [`crate::cam::MAX_DEPTH_PASSES`].
+    #[error("operation #{0}: {1}. No program generated.")]
+    PassLimit(u32, String),
     /// NUMSAFE: an operation parameter that drives motion is not finite.
     #[error("operation #{0}: invalid numeric parameter: {1}. No program generated.")]
     NonFiniteParameter(u32, String),
@@ -413,6 +423,8 @@ impl PipelineError {
             PipelineError::UnsupportedCpsMotion(id, kind) => Some(Structured::misconfigured(format!("{kind} cannot be emitted by the CPS route; disable the operation or choose a supported post.")).with_param("op_id", *id).with_param("kind", kind.as_str()).with_hint("No program generated. Saved operation retained.")),
             PipelineError::UnsafeClearance(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Set clearance above the declared stock top in the same work frame. No output generated; saved values were not changed.")),
             PipelineError::RefusedOutput(id, detail) => Some(Structured::misconfigured(self.to_string()).with_param("op_id", *id).with_param("detail", detail.as_str()).with_hint("Check this operation's tool feeds and plunge rates (they must be above zero) and its depths and geometry. Nothing was exported; saved values were not changed.")),
+            PipelineError::InvalidStep(id, detail) => Some(Structured::misconfigured(self.to_string()).with_param("op_id", *id).with_param("detail", detail.as_str()).with_hint("Enter a positive depth per pass, or clear it to use the tool's default step. Nothing was exported; saved values were not changed.")),
+            PipelineError::PassLimit(id, detail) => Some(Structured::misconfigured(self.to_string()).with_param("op_id", *id).with_param("detail", detail.as_str()).with_param("limit", crate::cam::MAX_DEPTH_PASSES).with_hint("Increase the depth per pass (or peck step), or reduce the depth range. Nothing was exported; saved values were not changed.")),
             PipelineError::NonFiniteParameter(id, detail) => Some(Structured::misconfigured(self.to_string()).with_param("op_id", *id).with_param("detail", detail.as_str()).with_hint("Enter a finite number for this parameter. Nothing was exported; saved values were not changed.")),
             PipelineError::Drawing(message) => Some(Structured::misconfigured(message.clone()).with_hint("Review edited drawing and source bindings; no output generated.")),
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
@@ -2334,9 +2346,48 @@ fn emit_program_only_op<P: PostProcessor>(
 /// emitting `op_id` (0 = program header/footer). Checked at every op boundary,
 /// before a fresh op body can be stored in the op cache.
 fn refuse_faulty_output(op_id: u32) -> Result<(), PipelineError> {
+    use crate::gcode::numeric_guard::OutputFaultKind;
     crate::gcode::numeric_guard::take().map_or(Ok(()), |fault| {
-        Err(PipelineError::RefusedOutput(op_id, fault.to_string()))
+        Err(if fault.kind == OutputFaultKind::PassLimit {
+            PipelineError::PassLimit(op_id, fault.detail)
+        } else {
+            PipelineError::RefusedOutput(op_id, fault.to_string())
+        })
     })
+}
+
+/// NUMSAFE2: an explicitly supplied depth per pass must be usable. Only
+/// omitted values (`None` on the op and, when the op inherits, on its tool)
+/// keep the documented `step_unspecified` default; a supplied zero,
+/// positive, non-finite or sub-1e-9 mm value is refused instead of
+/// silently becoming a single full-depth pass (or a 1 mm default). Kinds
+/// that never read the step (drill, thread, T-slot, dovetail) are exempt,
+/// matching the editor that hides the field for them.
+fn require_valid_explicit_step(
+    op: &Op,
+    tool: Option<&crate::project::ToolEntry>,
+) -> Result<(), PipelineError> {
+    if matches!(
+        op.kind,
+        OpKind::Drill { .. }
+            | OpKind::Thread { .. }
+            | OpKind::TSlot { .. }
+            | OpKind::Dovetail { .. }
+    ) {
+        return Ok(());
+    }
+    let supplied = match (op.params.step, tool.and_then(|t| t.default_step)) {
+        (Some(v), _) => Some(("depth per pass", v)),
+        (None, Some(v)) => Some(("tool default step", v)),
+        (None, None) => None,
+    };
+    match supplied {
+        Some((name, v)) if !(v.is_finite() && v <= -1e-9) => Err(PipelineError::InvalidStep(
+            op.id,
+            format!("{name} = {v:?} (must be a finite depth of at least 0.000000001 mm, stored negative)"),
+        )),
+        _ => Ok(()),
+    }
 }
 
 /// NUMSAFE: the shared motion core (Z schedule, offsets, plunge) must never
@@ -2662,6 +2713,7 @@ where
             &setup,
             project.tools.iter().find(|t| t.id == op.tool_id),
         )?;
+        require_valid_explicit_step(op, project.tools.iter().find(|t| t.id == op.tool_id))?;
         resolve_auto_helix_radius(op, objects, &mut setup, warnings);
         // Dispatch to the per-kind driver. Specialty drivers (VCarve /
         // Thread / Halfpipe / ReliefMill) emit XYZ blocks directly and

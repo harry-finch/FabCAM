@@ -219,6 +219,13 @@ pub(in crate::pipeline) fn run_halfpipe_op<P: PostProcessor>(
             // above-surface gaps. Push each one as a separate cut
             // block so the caller G0-rapids between them at safe Z.
             // Per-tool lead-in angle override (0.0 ⇒ default 10°).
+            // NUMSAFE2: `ratchet_emit` allocates one level per `dpp` down to
+            // the axis floor; bound it before allocating.
+            let deepest = z_axis
+                .iter()
+                .map(|&(_, _, z, _)| -z)
+                .fold(0.0_f64, f64::max);
+            super::vcarve::check_depth_levels(op.id, deepest, dpp)?;
             for p in crate::cam::vcarve_emit::ratchet_emit_with_lead_in(
                 &z_axis,
                 dpp,

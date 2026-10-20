@@ -1,0 +1,46 @@
+//! NUMSAFE2 before-probe (HEAD API only). Prints behaviour.
+mod common;
+use common::{build_project, closed_rectangle, endmill_tool, op_single_pass, points, stock_at_origin, vbit_tool};
+use ivac_core::pipeline::{run_pipeline, PipelineRequest, PostProcessorKind};
+use ivac_core::project::{ContourParams, DrillCycle, OpKind, ProfileParams, Project, ToolOffset, VCarveParams};
+use ivac_core::{Point2, Segment};
+use std::time::Instant;
+fn profile(depth: f64, step: Option<f64>) -> Project {
+    let mut op = op_single_pass(1, "p", OpKind::Profile { offset: ToolOffset::Outside, contour: ContourParams::default(), profile: ProfileParams::default() }, 1, depth);
+    op.params.step = step; op.params.fast_move_z = 5.;
+    build_project(&stock_at_origin(100., 100., 18.), vec![endmill_tool(1, 6.)], op, closed_rectangle(20., 20., 40., 40.))
+}
+fn show(label: &str, p: Project, post: PostProcessorKind) {
+    let t = Instant::now();
+    let r = run_pipeline(PipelineRequest { project: p, post_processor: Some(post), cps_post: None }, |_, _, _| {});
+    let dt = t.elapsed().as_secs_f64();
+    match r {
+        Ok(r) => {
+            let zs: std::collections::BTreeSet<i64> = r.toolpath.iter().filter(|s| matches!(format!("{:?}", s.kind).as_str(), "Cut" | "Arc")).map(|s| (s.to.z * 1e4).round() as i64).collect();
+            println!("BEFORE {label}: OK {dt:.3}s lines={} cut_levels={} deepest={:?} warnings={:?}", r.gcode.lines().count(), zs.len(), zs.iter().next().map(|z| *z as f64 / 1e4), r.warnings.iter().map(|w| w.kind.clone()).collect::<Vec<_>>())
+        }
+        Err(e) => println!("BEFORE {label}: ERR {dt:.3}s {}", format!("{e}").chars().take(160).collect::<String>()),
+    }
+}
+#[test]
+fn before() {
+    use PostProcessorKind::{Grbl, Linuxcnc};
+    for (l, s) in [("step 0", 0.), ("step +1", 1.), ("step NaN", f64::NAN), ("step -inf", f64::NEG_INFINITY), ("step -1e-12", -1e-12)] {
+        show(&format!("profile 10 mm {l}"), profile(-10., Some(s)), Linuxcnc);
+    }
+    show("profile 10 mm step omitted", profile(-10., None), Linuxcnc);
+    let mut p = profile(-10., None); p.tools[0].default_step = Some(0.); show("profile tool default_step 0", p, Linuxcnc);
+    show("profile 1001 passes", profile(-1001., Some(-1.)), Linuxcnc);
+    show("profile 50000 passes", profile(-50000., Some(-1.)), Linuxcnc);
+    show("profile 200000 passes", profile(-200000., Some(-1.)), Grbl);
+    let drill = |depth: f64, q: f64| { let mut p = profile(depth, Some(-1.)); p.segments = points(&[(50., 50.)]); p.operations[0].kind = OpKind::Drill { cycle: DrillCycle::Peck { peck_step_mm: q, dwell_sec: 0. }, chamfer_after_width_mm: None, pattern: None, spot_first: None }; p };
+    show("drill 1001 pecks (GRBL expands)", drill(-1000.5, 1.), Grbl);
+    show("drill 100000 pecks (GRBL expands)", drill(-10., 1e-4), Grbl);
+    let pts = [(0., 0.), (20., 0.), (20., 10.), (0., 10.)];
+    let segs: Vec<Segment> = (0..4).map(|i| Segment::line(Point2::new(pts[i].0, pts[i].1), Point2::new(pts[(i + 1) % 4].0, pts[(i + 1) % 4].1), "0", 7)).collect();
+    for (l, step) in [("vcarve step NaN", f64::NAN), ("vcarve step 0", 0.), ("vcarve 1112 levels", -0.0009)] {
+        let mut op = op_single_pass(1, "v", OpKind::VCarve { carve: VCarveParams::default() }, 1, -1.);
+        op.params.step = Some(step);
+        show(l, build_project(&stock_at_origin(30., 20., 10.), vec![vbit_tool(1, 6., 90., 0.)], op, segs.clone()), Linuxcnc);
+    }
+}

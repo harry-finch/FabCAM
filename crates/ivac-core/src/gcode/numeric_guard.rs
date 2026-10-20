@@ -20,6 +20,9 @@ pub enum OutputFaultKind {
     ZeroFeed,
     /// A cutting move was emitted before any feed was established.
     MissingFeed,
+    /// NUMSAFE2: more depth passes or pecks than `cam::MAX_DEPTH_PASSES`;
+    /// nothing of the over-budget block is emitted.
+    PassLimit,
 }
 
 /// First fault seen since the last [`reset`].
@@ -78,6 +81,7 @@ impl std::fmt::Display for OutputFault {
             OutputFaultKind::NonFinite => "non-finite value",
             OutputFaultKind::ZeroFeed => "zero feed rate",
             OutputFaultKind::MissingFeed => "cutting move without a feed rate",
+            OutputFaultKind::PassLimit => "pass limit",
         };
         write!(f, "{what} ({})", self.detail)
     }

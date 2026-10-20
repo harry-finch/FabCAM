@@ -2570,3 +2570,14 @@ and quarantine/recycle a trapped worker. Valid output byte-identical on a 136-
 program corpus. ShopBot audited only. Deferred: pass-count ceiling, ShopBot pause
 UX. HARD STOP for human review.
 
+## 2026-10-20 — NUMSAFE2: bounded pass scheduling and step contract (ivac-o9gwj)
+
+Reproduced on `e1a0c95`: 200 000 profile passes generated (2.2 M lines), 100 000
+pecks expanded, V-Carve 1112 levels, and explicit 0/positive/NaN steps silently cut
+10 mm in one pass (V-Carve fell back to 1 mm). The maintainer chose a 1000-pass
+budget (existing planar contract). `build_z_schedule` stops at the bound with the
+same arithmetic (exact 1000/1001 boundary); `emit_offset` pre-checks before any
+motion; pecks, half-pipe and V-Carve levels checked before allocation; supplied
+invalid steps refused, omitted steps unchanged. Valid output byte-identical.
+Waterline/relief/thread step loops not reviewed. HARD STOP.
+

@@ -239,4 +239,6 @@ No installer or physical qualification inferred.
 | NUM-STL | STL grid ≤ 16 M cells, finite cell and vertices, refused before allocation | Pass: native tests + WASM Node reproduction |
 | NUM-WASM | Trapped instance never reused; next request on a fresh worker; bounded | Pass: vitest (scripted worker); no forced browser trap |
 | NUM-IDENTITY | Valid programs unchanged | Pass: 136 programs byte-identical to `94cdd6b` |
+| NUM-PASSES | ≤ 1000 depth passes / pecks per hole / V-Carve and half-pipe levels; refused before motion; boundary exact | Pass: `tests/numsafe2.rs` + unit tests (ivac-o9gwj) |
+| NUM-STEP | Supplied invalid depth per pass refused; omitted step keeps documented default | Pass: `tests/numsafe2.rs` |
 

@@ -34,6 +34,14 @@ pub(super) fn emit_offset<P: PostProcessor>(
     if offset.segments.is_empty() {
         return;
     }
+    // NUMSAFE2: refuse an over-budget depth schedule before any motion of
+    // this offset (entry rapid, plunge to start depth) is emitted.
+    if !collapses_to_single_pass(setup) {
+        if let Err(detail) = depth_plan(setup) {
+            super::numeric_guard::record(super::numeric_guard::OutputFaultKind::PassLimit, detail);
+            return;
+        }
+    }
     if setup.machine.comments {
         post.separation();
         post.comment(&format!(
@@ -419,6 +427,66 @@ fn emit_single_pass<P: PostProcessor>(
     );
 }
 
+/// Plot-mode / drag-knife / plasma collapse the whole Z schedule to one pass.
+fn collapses_to_single_pass(setup: &Setup) -> bool {
+    setup.machine.plot_mode_z
+        || setup.machine.mode == MachineMode::Drag
+        || setup.machine.mode == MachineMode::Plasma
+}
+
+/// The per-pass Z schedule of a multi-pass cut and the values it derives
+/// from (shared by `emit_offset`'s pre-check and `multi_pass`).
+struct DepthPlan {
+    total_depth: f64,
+    schedule: Vec<f64>,
+}
+
+/// Build the Z schedule. `depth_list` (when non-empty) wins as an explicit
+/// list; otherwise step + `finish_step` + `through_depth` derive a step-down
+/// sequence ending at depth - `through_depth`. NUMSAFE2: `Err` with a
+/// diagnostic when it needs more than [`crate::cam::MAX_DEPTH_PASSES`]
+/// passes; the step is never enlarged and the depth never changed.
+fn depth_plan(setup: &Setup) -> Result<DepthPlan, String> {
+    let nominal_depth = setup.mill.depth;
+    let total_depth = nominal_depth - setup.mill.through_depth.max(0.0);
+    let step_raw = if setup.mill.step.abs() < 1e-9 {
+        total_depth
+    } else if setup.mill.step > 0.0 {
+        -setup.mill.step
+    } else {
+        setup.mill.step
+    };
+    // Normalize finish_step at the call boundary — reject negative / zero /
+    // non-finite values so z_schedule sees a clean positive magnitude.
+    let finish_step = setup.mill.finish_step.and_then(|f| {
+        if f.is_finite() && f.abs() > 1e-9 {
+            Some(f.abs())
+        } else {
+            None
+        }
+    });
+    let max_passes = crate::cam::MAX_DEPTH_PASSES;
+    let schedule = build_z_schedule(
+        setup.mill.start_depth,
+        total_depth,
+        step_raw,
+        finish_step,
+        &setup.mill.depth_list,
+        max_passes,
+    )
+    .map_err(|seen| {
+        format!(
+            "the depth schedule needs more than {max_passes} passes ({seen}+ counted; start {:?} mm, final {total_depth:?} mm, step {:?} mm)",
+            setup.mill.start_depth,
+            step_raw.abs()
+        )
+    })?;
+    Ok(DepthPlan {
+        total_depth,
+        schedule,
+    })
+}
+
 // multi_pass walks the Z schedule with per-pass tab handling, helix
 // state, and ramp planning. Splitting would scatter the per-pass state
 // (helix-entry plan, ramp-length tracking) across multiple helpers.
@@ -450,45 +518,22 @@ fn multi_pass<P: PostProcessor>(
     // ONE pass at the cut depth (no descent / helix / ramp / tabs) — see
     // [`emit_single_pass`]. `tabs` is meaningless on these single-pass
     // paths; it's consumed by the multi-pass schedule walk below.
-    if setup.machine.plot_mode_z
-        || setup.machine.mode == MachineMode::Drag
-        || setup.machine.mode == MachineMode::Plasma
-    {
+    if collapses_to_single_pass(setup) {
         emit_single_pass(setup, segments, rate_v, rate_h, straight_lead, post);
         return true;
     }
-    // Build the Z schedule. depth_list (when non-empty) wins as an
-    // explicit list; otherwise use step + finish_step + through_depth
-    // to derive a step-down sequence ending at depth - through_depth.
-    let nominal_depth = setup.mill.depth;
-    let total_depth = nominal_depth - setup.mill.through_depth.max(0.0);
-    let step_raw = if setup.mill.step.abs() < 1e-9 {
-        total_depth
-    } else if setup.mill.step > 0.0 {
-        -setup.mill.step
-    } else {
-        setup.mill.step
-    };
-    // Normalize finish_step at the call boundary — reject
-    // negative / zero / non-finite values so z_schedule sees a clean
-    // positive magnitude. The schedule builder also abs()-then-filters
-    // internally, but normalizing here makes the contract explicit and
-    // lets the next reader spot a sign-bug without reading three
-    // files.
-    let finish_step = setup.mill.finish_step.and_then(|f| {
-        if f.is_finite() && f.abs() > 1e-9 {
-            Some(f.abs())
-        } else {
-            None
-        }
-    });
-    let z_schedule = build_z_schedule(
-        setup.mill.start_depth,
+    let DepthPlan {
         total_depth,
-        step_raw,
-        finish_step,
-        &setup.mill.depth_list,
-    );
+        schedule: z_schedule,
+    } = match depth_plan(setup) {
+        Ok(plan) => plan,
+        Err(detail) => {
+            // Unreachable after emit_offset's pre-check; kept so a future
+            // caller can't bypass the budget.
+            super::numeric_guard::record(super::numeric_guard::OutputFaultKind::PassLimit, detail);
+            return true;
+        }
+    };
     let tabs_z = total_depth + setup.tabs.height.abs();
     let tab_radius = setup.tabs.width.max(0.0) * 0.5;
     // Ramp profile only applies when tab_type=Ramp. ramp_length is the

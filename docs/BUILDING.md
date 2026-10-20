@@ -29,7 +29,9 @@ the desktop bundle is produced by Tauri 2.
 > Corepack, so install pnpm locally: `npm install --prefix ~/.local/pnpm-10 pnpm@10.34.7`
 > and put `~/.local/pnpm-10/node_modules/.bin` on `PATH`. `scripts/pre-release.sh` runs the
 > UI smoke gate only if `chromium`, `chromium-browser` or `google-chrome` is on `PATH`
-> (on macOS, symlink the Google Chrome binary as `google-chrome` in a directory on `PATH`).
+> (on macOS, use an `exec` wrapper script named `google-chrome` on `PATH`, e.g.
+> `printf '#!/bin/sh\nexec "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" "$@"\n'`;
+> a plain symlink makes Chrome abort at launch).
 
 ### Linux (Debian/Ubuntu)
 

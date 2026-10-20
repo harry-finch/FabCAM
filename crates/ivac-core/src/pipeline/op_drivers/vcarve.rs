@@ -220,6 +220,10 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
         rings.extend(holes.iter().map(Vec::as_slice));
         for target in targets {
             crate::profile_count!("vcarve.target_points", target.len());
+            // NUMSAFE2: depth levels are bounded before planning (the plan's
+            // own sweep/point budgets stay as qualified).
+            let deepest = target.iter().map(|p| -p.2).fold(0.0_f64, f64::max);
+            check_depth_levels(op.id, deepest, dpp)?;
             vcarve_validate::check_envelope(&target, &rings, tip_r, tan)
                 .map_err(|e| invalid(&e))?;
             let path = vcarve_plan::plan(&target, dpp, angle).map_err(|e| invalid(&e))?;
@@ -747,5 +751,54 @@ mod tests {
         assert_eq!(carve.carve_max_width_mm, Some(4.0));
         assert!(carve.multi_pass_refine);
         assert_eq!(back.params.depth, -8.0);
+    }
+}
+
+/// NUMSAFE2: `ceil(depth / depth_per_pass)` levels must fit the shared
+/// depth-pass budget ([`crate::cam::MAX_DEPTH_PASSES`]); shared with the
+/// half-pipe driver, which ratchets the same way.
+pub(in crate::pipeline) fn check_depth_levels(
+    op_id: u32,
+    depth_mm: f64,
+    depth_per_pass_mm: f64,
+) -> Result<(), PipelineError> {
+    let levels = (depth_mm / depth_per_pass_mm).ceil();
+    let max = crate::cam::MAX_DEPTH_PASSES;
+    #[allow(clippy::cast_precision_loss)] // 1000 is exact in f64
+    if levels.is_finite() && levels <= max as f64 {
+        Ok(())
+    } else {
+        Err(PipelineError::PassLimit(
+            op_id,
+            format!(
+                "{depth_mm:?} mm at {depth_per_pass_mm:?} mm per pass needs {levels:?} depth levels, more than the {max}-pass limit"
+            ),
+        ))
+    }
+}
+
+#[cfg(test)]
+mod numsafe2_tests {
+    use super::*;
+
+    #[test]
+    fn depth_levels_budget_boundary_and_non_finite() {
+        assert!(check_depth_levels(1, 10.0, 0.01).is_ok()); // 1000 levels
+        assert!(check_depth_levels(1, 10.0, 0.009_99).is_err()); // 1002
+        assert!(check_depth_levels(1, 0.0, 0.1).is_ok());
+        for (depth, dpp) in [
+            (f64::INFINITY, 1.0),
+            (1.0, 0.0),
+            (f64::NAN, 1.0),
+            (1e300, 1e-300),
+        ] {
+            assert!(
+                matches!(
+                    check_depth_levels(7, depth, dpp),
+                    Err(PipelineError::PassLimit(7, _))
+                ),
+                "{depth}/{dpp}"
+            );
+        }
     }
 }

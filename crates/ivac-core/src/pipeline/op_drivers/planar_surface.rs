@@ -119,7 +119,7 @@ pub(in crate::pipeline) fn validate_planar_surface(
     }
     let passes = (m.depth / m.step).ceil();
     if !passes.is_finite()
-        || passes > 1000.0
+        || passes > crate::cam::MAX_DEPTH_PASSES as f64
         || passes * raster.lines.len() as f64 > MAX_SURFACE_LINES as f64
     {
         return Err(invalid(

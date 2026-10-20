@@ -17,6 +17,12 @@ use serde::{Deserialize, Serialize};
 use crate::geometry::{Point2, Segment, SegmentKind};
 use crate::math;
 
+/// Depth-pass budget per operation (NUMSAFE2): Z passes of the shared
+/// schedule, drill pecks per hole, half-pipe and V-Carve depth levels. Same
+/// ceiling as planar surfacing's long-standing 1000-depth-pass contract;
+/// requests above it are refused, never resampled to a larger step.
+pub const MAX_DEPTH_PASSES: usize = 1000;
+
 pub mod chaining;
 pub mod chamfer;
 pub mod flip;

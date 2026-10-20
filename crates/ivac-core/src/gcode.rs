@@ -973,6 +973,28 @@ pub fn emit_drill_block<P: PostProcessor>(
         .start_depth
         .max(stock_top_z + DRILL_R_CLEARANCE_MM);
     let fast_z = setup.mill.fast_move_z;
+    // NUMSAFE2: pecks per hole = ceil((R - Z) / Q) must stay within the
+    // depth-pass budget (the GRBL default expansion and .cps posts expand
+    // every peck into moves). Refused before any hole is emitted; the peck
+    // step is never enlarged.
+    if let crate::project::DrillCycle::Peck { peck_step_mm, .. }
+    | crate::project::DrillCycle::ChipBreak { peck_step_mm, .. } = cycle
+    {
+        let q = peck_step_mm.abs();
+        let pecks = ((r - z) / q).ceil();
+        let max = crate::cam::MAX_DEPTH_PASSES;
+        #[allow(clippy::cast_precision_loss)] // 1000 is exact in f64
+        let over = q > 1e-9 && (!pecks.is_finite() || pecks > max as f64);
+        if over && !matches!(setup.machine.mode, MachineMode::Laser) {
+            numeric_guard::record(
+                numeric_guard::OutputFaultKind::PassLimit,
+                format!(
+                    "each hole needs {pecks:?} pecks of {q:?} mm from R {r:?} mm to Z {z:?} mm, more than the {max}-pass limit"
+                ),
+            );
+            return;
+        }
+    }
     // Laser-aware tool-on. Drilling under a laser is an unusual
     // workflow (you'd be ablating spots) but it should at least fire
     // the beam — better than the previous "mode != Mill" gate that
