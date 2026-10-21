@@ -1,0 +1,81 @@
+{
+  "starting_head": "5dbdfcf1cdf7ec9454ca83f40423dc464a6ba503",
+  "branch": "FabCAM-v1.1",
+  "preservation": {
+    "inventoried_files": 11277,
+    "missing": [],
+    "changed": [
+      "frontend/src/lib/components/MaterialBrowser.svelte",
+      "frontend/src/lib/components/MaterialPicker.svelte",
+      "frontend/src/lib/i18n/keys.ts",
+      "frontend/src/lib/i18n/messages/de.json",
+      "frontend/src/lib/i18n/messages/en.json"
+    ]
+  },
+  "browser": {
+    "url": "http://127.0.0.1:18813/?api=wasm",
+    "backend": "WASM",
+    "fixture": "synthetic-catalog.json",
+    "fixture_final_state": "installed but disabled; other sources retained",
+    "console_errors": [],
+    "stock_field_y_before_and_after_open": 284.890625,
+    "desktop_panel": {
+      "width": 440,
+      "left": 830.40625,
+      "top": 141.2734375,
+      "border_px": 1
+    },
+    "narrow_680x800": {
+      "left": 230.40625,
+      "top": 8,
+      "width": 440,
+      "height": 387.390625,
+      "placement": "above"
+    },
+    "resize_620x700": {
+      "left": 170.40625,
+      "top": 335.921875,
+      "width": 440,
+      "height": 356.078125,
+      "placement": "below"
+    },
+    "pagination_counts": [
+      30,
+      30,
+      6
+    ],
+    "selected_fixture_identity": "mat1-ui-59@1",
+    "job_identity_before_and_after_adaptation": "material/plastic.pmma.cast@1",
+    "adaptation_identity": "material/metal.aluminium.6061@1",
+    "no_enabled_sources_result_count": 19,
+    "existing_source_enablement_restored": true
+  },
+  "checks": {
+    "vitest_pass": 1538,
+    "vitest_skipped_existing": 1,
+    "vitest_files": 175,
+    "wasm_guard_pass": 10,
+    "svelte_errors": 0,
+    "svelte_warnings": 0,
+    "lint": "PASS",
+    "freshness_and_production_build": "PASS"
+  },
+  "limits": [
+    "Browser/WASM only; native Tauri fallback and assistive technologies not manually exercised.",
+    "No cutting, output/export, native installer or physical machine qualification."
+  ],
+  "source_sha256": {
+    "frontend/src/lib/components/MaterialBrowser.svelte": "be353c0251cb0294eb4c0426731bbbf41d0b7a1abbb394f830ee6338b21cbe2b",
+    "frontend/src/lib/components/MaterialPicker.svelte": "f10c2e5ddb792735a16ce995a47bdc4db85fa488f06b4e41d4180ee0c57bbfdf",
+    "frontend/src/lib/i18n/keys.ts": "c45f167fa7e6debab0f66f90f0f5d120dabf280f9a946cf8dd6e25f625596a68",
+    "frontend/src/lib/i18n/messages/de.json": "2e805847d51f144b696120f4fe58106f10a8e8b95187ab5d2cb38fdd15c35833",
+    "frontend/src/lib/i18n/messages/en.json": "0e7d436c26def39ed668c237bab8725d7fa69777aebfb83acbec1d1680e80b34",
+    "frontend/src/lib/components/AnchoredPopover.svelte": "19159be49fb635e929df5730a714499e885e8d25cfa39824bc4074d94da6a7ce",
+    "frontend/src/lib/components/anchored-popover.ts": "f47a846c9848b071679cae7f8d8bd6a853041d41334d247c126e14d75c069e4c",
+    "frontend/src/lib/components/anchored-popover.test.ts": "6fb5c0b7cde33c90f255be18437b4ebdda6444c9b047f071c0b873d9749d9122",
+    "frontend/src/lib/components/material-browser-focus.ts": "0f336b82b4c28b2489b7e352ca73a23915d9601ad79e8e81505ce821bef908fa",
+    "frontend/src/lib/components/material-browser-focus.test.ts": "817773a0380e50ecd14536282197c998811e1ef0c07eef4ad60771d39a3d7833",
+    "frontend/src/lib/state/material-picker-presentation.ts": "3e58d29cc7578e0e4b89aa9fd9206925f72ed22a9e5143dab76c832176d06119",
+    "frontend/src/lib/state/material-picker-presentation.test.ts": "f8d33b4df756120256052a476a22c2f3c78b0a469eb1b244cd9355f3aeb1f1d7"
+  }
+}

@@ -3,6 +3,12 @@
   import { tick } from 'svelte';
   import { project } from '../state/project.svelte';
   import type { MaterialIdentity } from '../state/project-types';
+  import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
+  import { materialOptions, materialIdentityKey } from '../state/material-presentation';
+  import { materialPickerLabel } from '../state/material-picker-presentation';
+  import MaterialBrowser from './MaterialBrowser.svelte';
+  import AnchoredPopover from './AnchoredPopover.svelte';
+  import { t } from '../i18n';
   let {
     value,
     onchange,
@@ -12,113 +18,195 @@
     context?: 'job' | 'preset';
     onchange: (value: MaterialIdentity | undefined) => void;
   } = $props();
-  import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
-  import {
-    materialOptions,
-    materialIdentityKey,
-    materialDisplay,
-  } from '../state/material-presentation';
-  import MaterialBrowser from './MaterialBrowser.svelte';
-  import { t } from '../i18n';
+  const id = $props.id();
+  let browsing = $state(false),
+    custom = $state(false),
+    customName = $state('');
+  let trigger = $state<HTMLButtonElement>();
   $effect(() => {
     void project.data.settings.feedsSpeedsSources;
     void recommendationSources.refresh();
   });
   const materials = $derived(materialOptions(recommendationSources.rows, value));
-  let browsing = $state(false);
-  let trigger: HTMLButtonElement;
-  async function closeBrowser() {
-    browsing = false;
-    await tick();
-    trigger?.focus();
-  }
-  let custom = $state(false);
   const selected = $derived(
     value ? materials.find((m) => m.key === materialIdentityKey(value)) : undefined,
   );
+  const label = $derived(
+    value
+      ? materialPickerLabel(
+          value,
+          (value.label && value.label !== value.id
+            ? value.label
+            : selected?.labels.find((label) => label !== value.id)) || value.id,
+          t,
+        )
+      : t('mat.choose'),
+  );
+  async function closeBrowser(restoreFocus = true) {
+    browsing = false;
+    await tick();
+    if (restoreFocus && trigger?.isConnected) trigger.focus();
+  }
 </script>
 
 <div class="props">
   <div class="material">
-    <span>{t('fs.material')}</span>
+    <span id={`${id}-label`}>{t('fs.material')}</span>
     <button
       type="button"
-      class="inspector-action"
+      class="inspector-action trigger"
       bind:this={trigger}
+      aria-labelledby={`${id}-label ${id}-value`}
+      aria-haspopup="dialog"
+      aria-controls={browsing ? `${id}-popup` : undefined}
       aria-expanded={browsing}
-      onclick={() => (browsing = !browsing)}
-      title={value ? `${value.id} @${value.revision}` : undefined}
-    >
-      {value
-        ? materialDisplay(value, value.label || selected?.labels[0] || value.id, t)
-        : t('mat.choose')}
-    </button>
-  </div>
-  {#if browsing}
-    <MaterialBrowser
-      options={materials}
-      onclose={closeBrowser}
-      selected={value}
-      onselect={(item) => {
-        onchange({ ...item.identity, label: item.labels[0] });
-        custom = false;
-        void closeBrowser();
+      onclick={() => {
+        if (browsing) void closeBrowser();
+        else {
+          custom = false;
+          browsing = true;
+        }
       }}
-    />
-    <div class="actions">
-      <button
-        type="button"
-        class="inspector-action"
-        onclick={() => {
-          onchange(undefined);
-          browsing = false;
-        }}>{t('cad1.clear')}</button
-      >
-      <button
-        type="button"
-        class="inspector-action"
-        onclick={() => {
-          custom = true;
-          browsing = false;
-        }}>{t('fs35.other_material')}</button
-      >
-    </div>
-  {/if}
-  {#if custom}<label class="material"
-      ><span>{t('fs35.material_name')}</span><input
-        type="text"
-        value={value?.id ?? ''}
-        onchange={(e) => {
-          const name = e.currentTarget.value.trim();
-          if (name) onchange({ id: name, revision: 'job-1', label: name });
-        }}
-      /></label
+      title={[
+        label,
+        value ? `${value.id} @${value.revision}` : '',
+        t(context === 'job' ? 'fs35.job_material' : 'preset2.material_help'),
+      ]
+        .filter(Boolean)
+        .join('\n')}
+      ><span id={`${id}-value`}>{label}</span><span aria-hidden="true">▾</span></button
     >
-    <p>{t('fs35.custom_material_help')}</p>{/if}
-  <p>{t(context === 'job' ? 'fs35.job_material' : 'preset2.material_help')}</p>
+  </div>
+  {#if browsing && trigger}
+    <AnchoredPopover
+      anchor={trigger}
+      id={`${id}-popup`}
+      label={t('fs.material')}
+      onClose={closeBrowser}
+    >
+      {#if custom}
+        <form
+          class="custom-form"
+          onsubmit={(event) => {
+            event.preventDefault();
+            const name = customName.trim();
+            if (!name) return;
+            onchange({ id: name, revision: 'job-1', label: name });
+            void closeBrowser();
+          }}
+        >
+          <label>{t('fs35.material_name')}<input type="text" bind:value={customName} /></label>
+          <p>{t('fs35.custom_material_help')}</p>
+          <button type="submit" class="inspector-action" disabled={!customName.trim()}
+            >{t('mat.use_custom')}</button
+          >
+        </form>
+      {:else}
+        <MaterialBrowser
+          options={materials}
+          selected={value}
+          selectedLabel={value ? label : undefined}
+          onclose={closeBrowser}
+          onselect={(item) => {
+            onchange({ ...item.identity, label: item.labels[0] });
+            void closeBrowser();
+          }}
+        />
+      {/if}
+      <p class="scope" title={t('mat.help')}>
+        {t(context === 'job' ? 'mat.job_scope' : 'preset2.material_help')}
+      </p>
+      <div class="actions">
+        {#if custom}<button type="button" class="inspector-action" onclick={() => (custom = false)}
+            >{t('mat.back')}</button
+          >
+        {:else}
+          <button
+            type="button"
+            class="inspector-action"
+            onclick={() => {
+              onchange(undefined);
+              void closeBrowser();
+            }}>{t('cad1.clear')}</button
+          >
+          <button
+            type="button"
+            class="inspector-action"
+            onclick={async () => {
+              customName = value?.id ?? '';
+              custom = true;
+              await tick();
+              trigger?.ownerDocument.getElementById(`${id}-popup`)?.querySelector('input')?.focus();
+            }}>{t('fs35.other_material')}</button
+          >
+        {/if}
+        <button type="button" class="inspector-action close" onclick={() => void closeBrowser()}
+          >{t('common.cancel')}</button
+        >
+      </div>
+    </AnchoredPopover>
+  {/if}
 </div>
 
 <style>
   .material {
     display: grid;
-    grid-template-columns: 6rem 1fr;
-    gap: 0.5rem;
-    margin: 0.5rem 0;
-    font-size: 0.85rem;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--ui-space-2);
+    align-items: center;
+    margin: var(--ui-space-1) 0;
+    font-size: var(--inspector-font-field);
   }
-  button {
+  .trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ui-space-1);
     width: 100%;
     min-width: 0;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    text-align: left;
+  }
+  .trigger span:first-child {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .actions {
     display: flex;
-    gap: var(--ui-space-2);
-    margin-top: var(--ui-space-2);
+    align-items: center;
+    gap: var(--ui-space-1);
+    flex: none;
+  }
+  .actions button {
+    min-width: 0;
+  }
+  .close {
+    margin-left: auto;
   }
   p {
-    font-size: 0.75rem;
+    margin: 0;
     color: var(--text-muted);
+    font-size: var(--inspector-font-meta);
+    line-height: 1.35;
+  }
+  .scope {
+    flex: none;
+  }
+  .custom-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-2);
+    min-height: 0;
+    overflow: auto;
+  }
+  .custom-form label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-1);
+    font-size: var(--inspector-font-meta);
+  }
+  .custom-form input {
+    width: 100%;
+    min-width: 0;
   }
 </style>

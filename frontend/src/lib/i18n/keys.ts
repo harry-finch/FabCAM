@@ -799,15 +799,22 @@ export type MsgKey =
   | "mat.6061"
   | "mat.7075"
   | "mat.aluminium"
+  | "mat.back"
   | "mat.birch"
   | "mat.broad"
   | "mat.builtin"
   | "mat.cast"
   | "mat.choose"
+  | "mat.current_only"
+  | "mat.custom_unknown"
   | "mat.extruded"
+  | "mat.filters"
+  | "mat.filters_active"
+  | "mat.generic"
   | "mat.hardwood"
   | "mat.hdpe"
   | "mat.help"
+  | "mat.job_scope"
   | "mat.mdf"
   | "mat.metal"
   | "mat.original"
@@ -819,7 +826,9 @@ export type MsgKey =
   | "mat.poplar"
   | "mat.pvc"
   | "mat.softwood"
+  | "mat.source_category"
   | "mat.unknown"
+  | "mat.use_custom"
   | "mat.wood"
   | "menu.aria.more_actions"
   | "menu.aria.trigger"
@@ -3331,15 +3340,22 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "mat.6061",
   "mat.7075",
   "mat.aluminium",
+  "mat.back",
   "mat.birch",
   "mat.broad",
   "mat.builtin",
   "mat.cast",
   "mat.choose",
+  "mat.current_only",
+  "mat.custom_unknown",
   "mat.extruded",
+  "mat.filters",
+  "mat.filters_active",
+  "mat.generic",
   "mat.hardwood",
   "mat.hdpe",
   "mat.help",
+  "mat.job_scope",
   "mat.mdf",
   "mat.metal",
   "mat.original",
@@ -3351,7 +3367,9 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "mat.poplar",
   "mat.pvc",
   "mat.softwood",
+  "mat.source_category",
   "mat.unknown",
+  "mat.use_custom",
   "mat.wood",
   "menu.aria.more_actions",
   "menu.aria.trigger",

@@ -1,0 +1,836 @@
+{
+  "manifest": {
+    "identity": {
+      "id": "mat1-popover-demo",
+      "revision": "1"
+    },
+    "schema_version": 1,
+    "name": "MAT1 UI ONLY — long synthetic catalog",
+    "publisher": "FabCAM contributors",
+    "source_url": null,
+    "origin": "Original synthetic documentation example; not transcribed from manufacturer or private workshop data.",
+    "license": "GPL-3.0-or-later",
+    "license_url": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "attribution": "FabCAM contributors. Synthetic numbers and fictitious identities for software demonstration only; no manufacturer endorsement or physical trial.",
+    "visibility": "private",
+    "distribution": "local_only",
+    "redistributable": true,
+    "transformation_permitted": true,
+    "default_evidence": "reference_data",
+    "notes": "SYNTHETIC DEMONSTRATION ONLY. Three illustrative records; reference_data/theoretical are schema categories, NOT measured safety evidence. No Tested/Validated records. Do not apply to a real machining job."
+  },
+  "dataset": {
+    "format_version": 1,
+    "description": "SYNTHETIC demonstration dataset; no machine limits or physical machining trial claimed.",
+    "license": "GPL-3.0-or-later",
+    "machines": [
+      {
+        "identity": {
+          "id": "guide-demo-router",
+          "revision": "1"
+        },
+        "label": "DEMO ONLY — fictitious router",
+        "notes": "Synthetic identity. No hardware or machine limits claimed."
+      }
+    ],
+    "materials": [
+      {
+        "identity": {
+          "id": "guide-demo-mdf",
+          "revision": "1"
+        },
+        "label": "DEMO ONLY — fictitious MDF stock",
+        "notes": "Synthetic identity, not a material-grade qualification or universal MDF equivalence."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-00",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-01",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-02",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-03",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-04",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-05",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-06",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-07",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-08",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-09",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-10",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-11",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-12",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-13",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-14",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-15",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-16",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-17",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-18",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-19",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-20",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-21",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-22",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-23",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-24",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-25",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-26",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-27",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-28",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-29",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-30",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-31",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-32",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-33",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-34",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-35",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-36",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-37",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-38",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-39",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-40",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-41",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-42",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-43",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-44",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-45",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-46",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-47",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-48",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-49",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-50",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-51",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-52",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-53",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-54",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-55",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-56",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-57",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-58",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-59",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-60",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-61",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-62",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-63",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      },
+      {
+        "identity": {
+          "id": "mat1-ui-64",
+          "revision": "1"
+        },
+        "label": "UI DEMO — Homonymous extremely long material label for viewport and identity checks",
+        "notes": "Synthetic UI test only; no machining claim."
+      }
+    ],
+    "tools": [
+      {
+        "identity": {
+          "id": "guide-demo-flat-6mm-2f",
+          "revision": "1"
+        },
+        "label": "DEMO ONLY — fictitious 6 mm 2-flute flat endmill",
+        "cutting_family": "flat_endmill",
+        "diameter_mm": 6,
+        "flute_count": 2,
+        "max_rpm": null,
+        "notes": "Illustrative geometry only; no manufacturer limits, coating or helix asserted."
+      }
+    ],
+    "profile_set": {
+      "schema_version": 1,
+      "identity": {
+        "id": "mat1-popover-demo",
+        "revision": "1"
+      },
+      "machine_families": [],
+      "material_families": [],
+      "profiles": [
+        {
+          "identity": {
+            "id": "guide-demo-pocket-reference",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "FabCAM documentation: docs/feeds-speeds/CUSTOM_DATA_SOURCES.md; synthetic example pocket-reference",
+            "author": "FabCAM contributors",
+            "date": "2026-10-20",
+            "permission_or_license": "GPL-3.0-or-later; see repository LICENSE. Original synthetic values, no third-party cutting table.",
+            "notes": "SYNTHETIC SOFTWARE DEMONSTRATION ONLY. No manufacturer claim, machine use, trial or physical validation. Do not use these numbers to machine material.",
+            "evidence_record": null
+          },
+          "aggressiveness": "prudent",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-router",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "guide-demo-flat-6mm-2f",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6,
+              "max": 6
+            },
+            "flute_count": 2,
+            "operation": "pocket",
+            "doc_mm": {
+              "min": 1,
+              "max": 1
+            },
+            "engagement": {
+              "kind": "nominal",
+              "ratio": {
+                "min": 0.5,
+                "max": 0.5
+              }
+            },
+            "entry": "ramp",
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 12000,
+            "feed_mm_min": 600,
+            "plunge_mm_min": 120,
+            "doc_mm": 1,
+            "stepover_ratio": 0.5
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "guide-demo-slot-reference",
+            "revision": "1"
+          },
+          "category": "reference",
+          "evidence": "reference_data",
+          "source": {
+            "reference": "FabCAM documentation: docs/feeds-speeds/CUSTOM_DATA_SOURCES.md; synthetic example slot-reference",
+            "author": "FabCAM contributors",
+            "date": "2026-10-20",
+            "permission_or_license": "GPL-3.0-or-later; see repository LICENSE. Original synthetic values, no third-party cutting table.",
+            "notes": "SYNTHETIC SOFTWARE DEMONSTRATION ONLY. No manufacturer claim, machine use, trial or physical validation. Do not use these numbers to machine material.",
+            "evidence_record": null
+          },
+          "aggressiveness": "prudent",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-router",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "guide-demo-flat-6mm-2f",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6,
+              "max": 6
+            },
+            "flute_count": 2,
+            "operation": "full_slot",
+            "doc_mm": {
+              "min": 0.5,
+              "max": 0.5
+            },
+            "engagement": {
+              "kind": "full_width"
+            },
+            "entry": "ramp",
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 12000,
+            "feed_mm_min": 480,
+            "plunge_mm_min": 120,
+            "doc_mm": 0.5,
+            "stepover_ratio": null
+          },
+          "reductions": []
+        },
+        {
+          "identity": {
+            "id": "guide-demo-pocket-theory",
+            "revision": "1"
+          },
+          "category": "theoretical",
+          "evidence": "theoretical",
+          "source": {
+            "reference": "FabCAM documentation: docs/feeds-speeds/CUSTOM_DATA_SOURCES.md; synthetic example pocket-theory",
+            "author": "FabCAM contributors",
+            "date": "2026-10-20",
+            "permission_or_license": "GPL-3.0-or-later; see repository LICENSE. Original synthetic values, no third-party cutting table.",
+            "notes": "SYNTHETIC SOFTWARE DEMONSTRATION ONLY. No manufacturer claim, machine use, trial or physical validation. Do not use these numbers to machine material.",
+            "evidence_record": null
+          },
+          "aggressiveness": "normal",
+          "scope": {
+            "machine": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-router",
+                "revision": "1"
+              }
+            },
+            "material": {
+              "kind": "exact",
+              "identity": {
+                "id": "guide-demo-mdf",
+                "revision": "1"
+              }
+            },
+            "tool": {
+              "id": "guide-demo-flat-6mm-2f",
+              "revision": "1"
+            },
+            "cutting_family": "flat_endmill",
+            "diameter_mm": {
+              "min": 6,
+              "max": 6
+            },
+            "flute_count": 2,
+            "operation": "pocket",
+            "doc_mm": {
+              "min": 1,
+              "max": 1
+            },
+            "engagement": {
+              "kind": "nominal",
+              "ratio": {
+                "min": 0.5,
+                "max": 0.5
+              }
+            },
+            "entry": "ramp",
+            "thickness_mm": null
+          },
+          "data": {
+            "kind": "exact_values",
+            "rpm": 12000,
+            "feed_mm_min": 720,
+            "plunge_mm_min": 120,
+            "doc_mm": 1,
+            "stepover_ratio": 0.5
+          },
+          "reductions": []
+        }
+      ]
+    }
+  },
+  "records": [
+    {
+      "profile": {
+        "id": "guide-demo-pocket-reference",
+        "revision": "1"
+      },
+      "source_record_id": "synthetic-pocket-reference",
+      "original_classification": "SYNTHETIC DEMONSTRATION: invented flat-endmill pocket prudent record; NOT measured data",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": null,
+        "material": null,
+        "coating": null,
+        "shape": null
+      }
+    },
+    {
+      "profile": {
+        "id": "guide-demo-slot-reference",
+        "revision": "1"
+      },
+      "source_record_id": "synthetic-slot-reference",
+      "original_classification": "SYNTHETIC DEMONSTRATION: invented flat-endmill full_slot prudent record; NOT measured data",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": null,
+        "material": null,
+        "coating": null,
+        "shape": null
+      }
+    },
+    {
+      "profile": {
+        "id": "guide-demo-pocket-theory",
+        "revision": "1"
+      },
+      "source_record_id": "synthetic-pocket-theory",
+      "original_classification": "SYNTHETIC DEMONSTRATION: invented flat-endmill pocket normal record; NOT measured data",
+      "material_taxon": null,
+      "tool": {
+        "family": "flat_endmill",
+        "helix": null,
+        "material": null,
+        "coating": null,
+        "shape": null
+      }
+    }
+  ]
+}

@@ -2256,5 +2256,14 @@
   "mat.broad": "Breite Quellenkategorie",
   "mat.original": "Originalnamen und Quellen",
   "mat.builtin": "Normalisierter Katalog",
-  "mat.help": "Suchen oder filtern, dann ein konkretes Material auswählen. Ähnliche Namen bedeuten keine kompatiblen Schnittwerte."
+  "mat.help": "Suchen oder filtern, dann ein konkretes Material auswählen. Ähnliche Namen bedeuten keine kompatiblen Schnittwerte.",
+  "mat.source_category": "Weichholz / weiches Sperrholz / MDF",
+  "mat.generic": "Allgemein",
+  "mat.custom_unknown": "Eigenes / nicht verfügbares Material",
+  "mat.filters": "Filter",
+  "mat.filters_active": "Filter aktiv",
+  "mat.use_custom": "Dieses Material verwenden",
+  "mat.back": "Zurück zu Materialien",
+  "mat.job_scope": "Auftragsmaterial · gilt für alle Operationen.",
+  "mat.current_only": "Eigene oder nicht verfügbare Quelle"
 }

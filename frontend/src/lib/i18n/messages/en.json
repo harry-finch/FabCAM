@@ -2527,5 +2527,14 @@
   "mat.broad": "Broad source category",
   "mat.original": "Original names and sources",
   "mat.builtin": "Normalized catalog",
-  "mat.help": "Search or filter, then select an exact material. Similar names do not imply compatible cutting values."
+  "mat.help": "Search or filter, then select an exact material. Similar names do not imply compatible cutting values.",
+  "mat.source_category": "Softwood / soft plywood / MDF",
+  "mat.generic": "Generic",
+  "mat.custom_unknown": "Custom / unavailable material",
+  "mat.filters": "Filters",
+  "mat.filters_active": "Filters active",
+  "mat.use_custom": "Use this material",
+  "mat.back": "Back to materials",
+  "mat.job_scope": "Job material · applies to all operations.",
+  "mat.current_only": "Custom or unavailable source"
 }

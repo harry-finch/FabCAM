@@ -294,3 +294,140 @@ No push, merge, rebase, installer, V1 change, publication or physical operation.
 of the selector with workshop materials. Optional user-defined local classification
 is a separate future roadmap item, not implemented. Parameter-scaling research also
 remains separate and unstarted.
+
+## Compact picker UX refinement — 2026-10-21
+
+This follow-up supersedes the **inline selector layout** described above, not its
+classification or qualification boundaries. Starting HEAD:
+`5dbdfcf1cdf7ec9454ca83f40423dc464a6ba503` on `FabCAM-v1.1`. The accepted MAT-1
+implementation `13b8a95e021817e046174e8b3a8145e8ef8c3862` and PRESET-1/2/3 commits
+remain ancestors. This checkpoint is software-qualified and awaits human UX acceptance.
+
+### Implementation and ownership
+
+The collapsed Material row now contains only its label and a concise selected value.
+The original identity/revision and context remain in the trigger tooltip. A 440px
+anchored panel opens with search focused; results scroll internally, with at most 30
+rows per page. Filters are disclosed on demand with an active-filter indication.
+Rows use two truncated lines with exact identity, revision, original names and every
+source occurrence available in their tooltip. Provenance remains visible on the
+second line. The selected material is also named above search even when its row is
+outside the visible scroll area. Generic and broad-category captions are display-only.
+
+Existing `MaterialBrowser`, shared controlled aliases/taxonomy, translations and
+`handleModalKey` are reused. `AnchoredPopover.svelte` and `anchored-popover.ts` add a
+small dependency-free positioning/lifecycle primitive. Existing absolute popup
+clamping is confined to an offset parent; existing custom Modal/BottomSheet containers
+can be transformed or clipped. The new primitive uses the native Popover top layer,
+with native `dialog.showModal()` fallback, keeping the panel owned by its original
+Svelte/context tree. It flips above/below, clamps to an 8px viewport inset, and uses a
+bounded centered placement if neither anchored side has enough space. ResizeObserver,
+viewport resize and scroll listeners reposition it; a hidden/unmounted trigger closes
+it. No new popup dependency, portal framework or responsive-layout redesign.
+
+`material-picker-presentation.ts` provides picker-only concise captions and bounded
+paging, reusing the original `material-presentation.ts` unchanged. No classification,
+synonym, matching, identity/revision, persistence, data-source, Rust, schema, numerical,
+output, dependency, security-policy or release-workflow changes.
+
+Keyboard arrows/Home/End move focus; Enter/Space explicitly choose a result. Search,
+filters and pagination only change view state. Escape and outside clicks close the
+picker and restore its trigger focus. Tab is trapped locally. Key handling runs
+through Svelte, so child navigation handlers run before propagation is stopped; this
+corrects a conflict found during replay with native event interception. Outside-click
+dismissal consumes the click, avoiding accidental Stock collapse or parent-dialog
+closure. Choosing another material opens an explicit custom-name form; typing alone
+does not assign it. Existing clear/custom callbacks are retained.
+
+Stock still invokes `setMaterialCommand` through the unchanged JobMaterial callback;
+Undo/Redo and generation-context invalidation retain their authoritative path.
+Duplicate & adapt still changes only its draft. No preset filters or PRESET-3
+compatibility/apply logic changed.
+
+### Qualification and visual evidence
+
+Evidence is isolated in [mat1-popover-2026-10-21-evidence](mat1-popover-2026-10-21-evidence/receipt.json).
+The receipt contains source SHA-256 fingerprints, viewport measurements, test counts
+and preservation inventory results. All final source checks ran after the last source
+edit. The Vite development title retains the starting revision; fingerprints bind the
+dirty source under review. The production build was checked separately.
+
+| Check | Result / limit |
+|---|---|
+| Full frontend tests | **1538 PASS, 1 existing skip**, 175 files; 10 WASM package guard tests PASS |
+| Svelte / TypeScript | **0 errors, 0 warnings** |
+| ESLint / Prettier | PASS |
+| WASM freshness + production build | PASS; existing dynamic-import/chunk/plugin-timing notices retained |
+| Material/preset regressions | Approved taxonomy, aliases, source availability, identities, preset capture/adaptation/library/apply and generation freshness tests PASS in full suite |
+| New targeted tests | 26 tests: concise captions/paging (12), popup bounds/lifecycle/focus/Escape/outside dismissal (12), replacement-row focus (2) |
+| Browser/WASM | Disposable `simple.dxf` project at local port 18813; no browser console errors |
+| Preservation | 11,277 original files inventoried; none missing, only the five intended existing frontend files changed before this report append; unrelated untracked evidence retained |
+
+Browser replay covered aluminium and `acrylique`; Generic/Cast/Extruded remain distinct.
+ArrowDown, End, ArrowUp, Enter and Space were exercised, including rows replaced by
+filtering. One-result and empty searches did not choose a material. Exact Cast
+selection, trigger focus restoration, Undo and Redo were checked. Source filtering
+showed the broad Sienci category without narrowing it. Stock Thickness stayed at the
+same screen Y coordinate (284.890625) before/after opening: the selector no longer
+expands the inspector inline.
+
+The public synthetic documentation example was extended with 65 distinct homonymous
+long-label identities in a disposable imported pack. Its 66 catalog entries rendered
+30/30/6 rows across three pages; choosing the first row of page three retained exact
+`mat1-ui-59@1`. Disabling its source retained the current material with its human label,
+exact tooltip and “Custom or unavailable source” caption. The synthetic pack remains
+installed **disabled** only in the test browser origin. No private native source was
+imported. The browser also retained all 19 normalized catalog entries with every source
+disabled; original source enablement was restored afterward. Same-identity
+multiple-source aggregation and empty-source behavior are additionally covered by
+unit regressions.
+
+A custom-name submission and Undo were replayed. Unknown labels equal to their raw
+identity intentionally use the generic “Custom / unavailable material” caption; the
+original name/identity remains in the tooltip. No identity is inferred or silently
+reclassified. This conservative caption is a remaining human UX consideration.
+
+Duplicate & adapt replay selected Aluminium 6061 in its local form while the job
+remained PMMA Cast. Escape and a click outside the child closed only the child;
+the adaptation dialog stayed open. Its existing context/eligibility warnings and
+inactive-Draft rules remained intact. The adaptation was cancelled without saving.
+
+At 1280×720 the open panel was 440px wide and escaped the inspector to the left.
+At 680×800 it flipped above the drawer trigger (left 230.40625, top 8, height
+387.390625). Resizing within narrow layout to 620×700 moved it below and kept it
+inside viewport margins. Crossing the desktop/narrow breakpoint discarded only the
+transient popup; the selected material remained. Nested adaptation placement reached
+bottom Y=712 in a 720px viewport, preserving its 8px inset. No inspector/drawer clipping
+was visible. Tiny 320px viewports and centered-placement bounds are unit-tested,
+not a claim of full manual mobile acceptance.
+
+| Before | After |
+|---|---|
+| ![Original collapsed inspector](mat1-popover-2026-10-21-evidence/before-collapsed.png) | ![Compact collapsed inspector](mat1-popover-2026-10-21-evidence/after-collapsed-final.png) |
+| ![Large inline browser](mat1-popover-2026-10-21-evidence/before-open.png) | ![Anchored compact browser](mat1-popover-2026-10-21-evidence/after-open-final.png) |
+| ![Original narrow browser](mat1-popover-2026-10-21-evidence/before-narrow.png) | ![Popover above narrow drawer](mat1-popover-2026-10-21-evidence/after-narrow-final.png) |
+
+Additional captures: [aluminium](mat1-popover-2026-10-21-evidence/after-aluminium-final.png),
+[acrylique keyboard focus](mat1-popover-2026-10-21-evidence/after-acrylique.png),
+[broad category/filters](mat1-popover-2026-10-21-evidence/after-broad-filters.png),
+[long homonymous rows](mat1-popover-2026-10-21-evidence/after-long.png),
+[disabled source](mat1-popover-2026-10-21-evidence/after-disabled.png),
+[nested adaptation selector](mat1-popover-2026-10-21-evidence/after-adapt-open.png),
+[local adaptation result](mat1-popover-2026-10-21-evidence/after-adapt.png).
+
+### Local checkpoint and human gate
+
+One focused local UX commit contains this refinement, tests, report and only these
+new evidence files. Its exact hash is given in the final handoff; retrieve it from
+`git log -1 --format=%H -- frontend/src/lib/components/AnchoredPopover.svelte`.
+A commit cannot embed its own final hash. No push, merge, rebase or publication.
+
+Browser/WASM evidence does not qualify native Tauri/WebKit fallback rendering,
+assistive-technology behavior, physical machining, ShopBot or a release installer.
+The native-dialog fallback lifecycle is unit-tested; manual native-platform acceptance
+remains outstanding. No safety or component budgets were weakened.
+
+**HARD STOP: human MAT-1 UX acceptance (`ivac-9ilje`) remains open.** Review compactness,
+labels/provenance and the two selection contexts using workshop materials. No next
+feature started. User-defined local classification and parameter scaling remain
+separately deferred.
