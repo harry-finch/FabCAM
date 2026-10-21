@@ -187,9 +187,36 @@ fn source_write_lock(dir: &Path, id: &str) -> Result<LabWriteLock, String> {
 // owned argument is the transport/command contract.
 #[allow(clippy::needless_pass_by_value)]
 fn save_lab(dir: &Path, json: &str, expected: Option<String>) -> Result<String, String> {
+    save_lab_guarded(dir, json, expected, None)
+}
+#[derive(serde::Deserialize)]
+pub struct SourceRevision {
+    id: String,
+    revision: String,
+}
+fn save_lab_guarded(
+    dir: &Path,
+    json: &str,
+    expected: Option<String>,
+    source: Option<SourceRevision>,
+) -> Result<String, String> {
     prepare_directory(dir)?;
     let pack = ivac_core::feeds_speeds::validate_source_pack_json(json)?;
-    let _lock = source_write_lock(dir, &pack.manifest.identity.id)?;
+    let mut ids = vec![pack.manifest.identity.id.as_str()];
+    if let Some(ref guard) = source {
+        ids.push(&guard.id);
+    }
+    ids.sort_unstable();
+    ids.dedup();
+    let _locks = ids
+        .into_iter()
+        .map(|id| source_write_lock(dir, id))
+        .collect::<Result<Vec<_>, _>>()?;
+    if let Some(ref guard) = source {
+        if head_revision(dir, &guard.id)?.as_deref() != Some(guard.revision.as_str()) {
+            return Err("Source changed; reopen and review the copy again".into());
+        }
+    }
     if !is_lab_pack_id(&pack.manifest.identity.id)
         || serde_json::to_value(pack.manifest.visibility).map_err(|e| e.to_string())? != "private"
         || serde_json::to_value(pack.manifest.distribution).map_err(|e| e.to_string())?
@@ -197,6 +224,17 @@ fn save_lab(dir: &Path, json: &str, expected: Option<String>) -> Result<String, 
     {
         return Err("Only private local presets can be authored".into());
     }
+    let head = head_revision(dir, &pack.manifest.identity.id)?;
+    if head != expected
+        || head
+            .as_ref()
+            .is_some_and(|v| v >= &pack.manifest.identity.revision)
+    {
+        return Err("Presets changed; reopen and retry".into());
+    }
+    store_locked(dir, json)
+}
+fn head_revision(dir: &Path, id: &str) -> Result<Option<String>, String> {
     let mut candidates = std::fs::read_dir(dir)
         .map_err(|e| e.to_string())?
         .collect::<Result<Vec<_>, _>>()
@@ -204,7 +242,7 @@ fn save_lab(dir: &Path, json: &str, expected: Option<String>) -> Result<String, 
     candidates.retain(|e| {
         e.file_name()
             .to_string_lossy()
-            .starts_with(&format!("{}@", pack.manifest.identity.id))
+            .starts_with(&format!("{id}@"))
             && e.path().extension().is_some_and(|v| v == "json")
     });
     candidates.sort_by_key(std::fs::DirEntry::file_name);
@@ -224,14 +262,7 @@ fn save_lab(dir: &Path, json: &str, expected: Option<String>) -> Result<String, 
     } else {
         None
     };
-    if head != expected
-        || head
-            .as_ref()
-            .is_some_and(|v| v >= &pack.manifest.identity.revision)
-    {
-        return Err("Presets changed; reopen and retry".into());
-    }
-    store_locked(dir, json)
+    Ok(head)
 }
 #[tauri::command]
 // owned argument is the transport/command contract.
@@ -242,6 +273,18 @@ pub fn save_lab_pack(
     expected_revision: Option<String>,
 ) -> Result<String, String> {
     save_lab(&root(&app)?, &json, expected_revision)
+}
+
+// Separate command fails closed when the installed native backend predates guarded copying.
+#[tauri::command]
+#[allow(clippy::needless_pass_by_value)]
+pub fn save_adapted_lab_pack(
+    app: tauri::AppHandle,
+    json: String,
+    expected_revision: Option<String>,
+    source_guard: Option<SourceRevision>,
+) -> Result<String, String> {
+    save_lab_guarded(&root(&app)?, &json, expected_revision, source_guard)
 }
 
 // Only validated ids are accepted, never a caller-provided filesystem path.
@@ -293,6 +336,83 @@ pub fn remove_source_pack(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn adapted_copy_checks_source_and_destination_under_shared_locks() {
+        let tmp = tempfile::tempdir().unwrap();
+        let dir = tmp.path().canonicalize().unwrap();
+        let mut pack: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+        ))
+        .unwrap();
+        pack["manifest"]["visibility"] = serde_json::json!("private");
+        pack["manifest"]["distribution"] = serde_json::json!("local_only");
+        pack["records"] = serde_json::json!([]);
+        pack["dataset"]["profile_set"]["profiles"] = serde_json::json!([]);
+        let source = "lab-00000000-0000-4000-8000-000000000001";
+        let target = "lab-00000000-0000-4000-8000-000000000002";
+        for id in [source, target] {
+            pack["manifest"]["identity"] =
+                serde_json::json!({"id":id,"revision":"0000000000000001"});
+            save_lab(&dir, &pack.to_string(), None).unwrap();
+        }
+        pack["manifest"]["identity"] =
+            serde_json::json!({"id":target,"revision":"0000000000000002"});
+        let guard = |revision: &str| {
+            Some(SourceRevision {
+                id: source.into(),
+                revision: revision.into(),
+            })
+        };
+        // Stale source and stale destination both leave exactly the original two files.
+        assert!(save_lab_guarded(
+            &dir,
+            &pack.to_string(),
+            Some("0000000000000001".into()),
+            guard("0000000000000000")
+        )
+        .is_err());
+        assert!(
+            save_lab_guarded(&dir, &pack.to_string(), None, guard("0000000000000001")).is_err()
+        );
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 2);
+        let lock = source_write_lock(&dir, source).unwrap();
+        assert!(save_lab_guarded(
+            &dir,
+            &pack.to_string(),
+            Some("0000000000000001".into()),
+            guard("0000000000000001")
+        )
+        .is_err());
+        drop(lock);
+        save_lab_guarded(
+            &dir,
+            &pack.to_string(),
+            Some("0000000000000001".into()),
+            guard("0000000000000001"),
+        )
+        .unwrap();
+        // Same-pack source/destination uses one lock and still compares the pinned head.
+        pack["manifest"]["identity"] =
+            serde_json::json!({"id":source,"revision":"0000000000000002"});
+        save_lab_guarded(
+            &dir,
+            &pack.to_string(),
+            Some("0000000000000001".into()),
+            guard("0000000000000001"),
+        )
+        .unwrap();
+        pack["manifest"]["identity"] =
+            serde_json::json!({"id":target,"revision":"0000000000000003"});
+        assert!(save_lab_guarded(
+            &dir,
+            &pack.to_string(),
+            Some("0000000000000002".into()),
+            guard("0000000000000001")
+        )
+        .is_err());
+        assert!(!dir.join(format!("{target}@0000000000000003.json")).exists());
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 4);
+    }
     #[test]
     fn removal_checks_head_and_removes_all_revisions_only_for_the_selected_id() {
         let tmp = tempfile::tempdir().unwrap();
