@@ -833,6 +833,8 @@ export interface components {
             /** Format: uint32 */
             op_id: number;
             project: components["schemas"]["Project"];
+            /** @description Absent preserves automatic recommendation; present pins an original eligible record. */
+            selected_record?: components["schemas"]["FsSelectedRecord"] | null;
         };
         FsCamResponse: {
             /** @description Native op with authoritative geometry/rates only on explicit Apply. */
@@ -1265,6 +1267,12 @@ export interface components {
             actual: string;
             field: string;
             required: string;
+        };
+        /** @description Exact, transient source selection. Never persisted as a replacement source pack. */
+        FsSelectedRecord: {
+            pack: components["schemas"]["FsIdentity"];
+            profile: components["schemas"]["FsIdentity"];
+            record_id: string;
         };
         FsSource: {
             author: string;

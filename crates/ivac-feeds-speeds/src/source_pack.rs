@@ -686,19 +686,78 @@ pub fn recommend_packs_checked(
     recommend_packs_traced(packs, request, None)
 }
 
+/// Exact, transient source selection. Never persisted as a replacement source pack.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[cfg_attr(feature = "schema", schemars(rename = "FsSelectedRecord"))]
+#[serde(deny_unknown_fields)]
+pub struct SelectedRecord {
+    pub pack: Identity,
+    pub record_id: String,
+    pub profile: Identity,
+}
+
+pub fn recommend_selected_record(
+    packs: &[SourcePack],
+    request: &FeedsSpeedsRequest,
+    selected: &SelectedRecord,
+) -> Result<KnowledgeResult, String> {
+    resolve_packs(packs, request, None, Some(selected)).map_err(|e| e.to_string())
+}
+
+pub(crate) fn recommend_packs_traced(
+    packs: &[SourcePack],
+    request: &FeedsSpeedsRequest,
+    trace: Option<&mut Vec<MatchingTrace>>,
+) -> Result<KnowledgeResult, SourcePackError> {
+    resolve_packs(packs, request, trace, None)
+}
+
 // value is range-checked or bounded above; float casts saturate; operand is non-negative by construction (validated, clamped or saturating); exact equality is the contract (parsed words, configured/identity values); a tolerance would change behaviour.
 #[allow(
     clippy::cast_possible_truncation,
     clippy::cast_sign_loss,
     clippy::float_cmp
 )]
-pub(crate) fn recommend_packs_traced(
+fn resolve_packs(
     packs: &[SourcePack],
     request: &FeedsSpeedsRequest,
     mut trace: Option<&mut Vec<MatchingTrace>>,
+    selected: Option<&SelectedRecord>,
 ) -> Result<KnowledgeResult, SourcePackError> {
     if packs.len() > 32 {
         return Err(SourcePackError::TooManyPacks { maximum: 32 });
+    }
+    if let Some(selected) = selected {
+        let matches: Vec<_> = packs
+            .iter()
+            .filter(|p| p.manifest.identity == selected.pack)
+            .flat_map(|p| {
+                p.records
+                    .iter()
+                    .filter(|r| {
+                        r.source_record_id == selected.record_id && r.profile == selected.profile
+                    })
+                    .map(move |r| (p, r))
+            })
+            .collect();
+        if matches.len() != 1 {
+            return Err(SourcePackError::InvalidPack {
+                message: "Selected record missing, ambiguous or revision changed".into(),
+            });
+        }
+        let (pack, record) = matches[0];
+        if pack.manifest.distribution == Distribution::ExternalReference
+            || record
+                .lab
+                .as_ref()
+                .is_some_and(|lab| lab.state == LabState::Draft || !lab.enabled || lab.deleted)
+        {
+            return Err(SourcePackError::InvalidPack {
+                message: "Selected record unavailable: reference-only, Draft, disabled or deleted"
+                    .into(),
+            });
+        }
     }
     let preflight = Engine::new(ProfileSet {
         schema_version: DOMAIN_SCHEMA_VERSION,
@@ -729,6 +788,13 @@ pub(crate) fn recommend_packs_traced(
             });
         }
         for origin in &pack.records {
+            if selected.is_some_and(|s| {
+                s.pack != pack.manifest.identity
+                    || s.record_id != origin.source_record_id
+                    || s.profile != origin.profile
+            }) {
+                continue;
+            }
             let eligible = pack.manifest.distribution != Distribution::ExternalReference
                 && !origin
                     .lab
@@ -768,7 +834,7 @@ pub(crate) fn recommend_packs_traced(
                 }
             }
             let mut derivation = None;
-            if !crate::matching::matches(&p, &r, &set) {
+            if selected.is_none() && !crate::matching::matches(&p, &r, &set) {
                 if let Some((adapted, detail)) = adapt_profile(pack, origin, original, &p, &r, &set)
                 {
                     p = adapted;
@@ -781,7 +847,11 @@ pub(crate) fn recommend_packs_traced(
                     .as_ref()
                     .is_some_and(|m| taxon_matches(t, m))
             });
-            let mut rejected = derived_rejections(pack, origin, &p, &r, &set);
+            let mut rejected = if selected.is_some() {
+                crate::matching::mismatches(&p, &r, &set)
+            } else {
+                derived_rejections(pack, origin, &p, &r, &set)
+            };
             if taxonomy_mismatch {
                 rejected.retain(|m| m.field != "material");
                 rejected.push(ScopeMismatch {
@@ -915,7 +985,9 @@ pub(crate) fn recommend_packs_traced(
             }
         }
     }
-    add_interpolations(&mut candidates, request);
+    if selected.is_none() {
+        add_interpolations(&mut candidates, request);
+    }
     if candidates.is_empty() {
         refusals.sort_by(|a, b| {
             a.mismatches

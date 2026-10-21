@@ -368,3 +368,86 @@ fn typed_errors_preserve_legacy_api_and_rank_array_contract() {
         .windows(2)
         .all(|q| q[0].rank_cost() < q[1].rank_cost()));
 }
+
+fn selection(p: &SourcePack) -> SelectedRecord {
+    SelectedRecord {
+        pack: p.manifest.identity.clone(),
+        record_id: p.records[0].source_record_id.clone(),
+        profile: p.records[0].profile.clone(),
+    }
+}
+#[test]
+fn explicit_selection_pins_original_even_when_recommended_prefers_another() {
+    let a = synthetic("a", 1000.0, None);
+    let b = synthetic("b", 2000.0, None);
+    let r = request(&a);
+    let chosen = selection(&b);
+    let packs = [a, b.clone()];
+    let (_, auto) = available(recommend_packs(&packs, &r).unwrap());
+    assert_eq!(auto.summary.selected_pack.id, "a");
+    let (manual, info) = available(recommend_selected_record(&packs, &r, &chosen).unwrap());
+    assert_eq!(manual.parameters.feed_mm_min, 2000);
+    assert_eq!(info.summary.selected_pack, b.manifest.identity);
+    assert_eq!(info.records.len(), 1);
+    assert_eq!(info.records[0].origin, b.records[0]);
+    assert!(info.records[0].derivation.is_none());
+}
+#[test]
+fn selected_single_source_equals_recommended_and_does_not_mutate_request() {
+    let p = pack();
+    let r = request(&p);
+    let before = serde_json::to_value(&r).unwrap();
+    let auto = recommend_packs(&[p.clone()], &r).unwrap();
+    let explicit = recommend_selected_record(&[p.clone()], &r, &selection(&p)).unwrap();
+    assert_eq!(
+        serde_json::to_value(auto.recommendation).unwrap(),
+        serde_json::to_value(explicit.recommendation).unwrap()
+    );
+    assert_eq!(before, serde_json::to_value(r).unwrap());
+}
+#[test]
+fn selected_unknown_revision_identity_and_ineligible_never_fall_back() {
+    let p = pack();
+    for dimension in 0..5 {
+        let mut selected = selection(&p);
+        match dimension {
+            0 => selected.record_id.push_str("missing"),
+            1 => selected.pack.revision.push_str("missing"),
+            2 => selected.profile.revision.push_str("missing"),
+            3 => selected.pack.id.push_str("missing"),
+            _ => selected.profile.id.push_str("missing"),
+        }
+        assert!(recommend_selected_record(&[p.clone()], &request(&p), &selected).is_err());
+    }
+    let mut external = p.clone();
+    external.manifest.distribution = Distribution::ExternalReference;
+    assert!(recommend_selected_record(&[external], &request(&p), &selection(&p)).is_err());
+}
+#[test]
+fn selected_incompatible_context_never_adapts_or_substitutes() {
+    let p = pack();
+    for dimension in 0..5 {
+        let mut r = request(&p);
+        match dimension {
+            0 => r.machine.identity.as_mut().unwrap().id.push_str("missing"),
+            1 => r.material.identity = Some(taxon_identity("metal.aluminium.6061")),
+            2 => {
+                r.tool.identity = Some(Identity {
+                    id: "missing".into(),
+                    revision: "1".into(),
+                })
+            }
+            3 => r.tool.diameter_mm = 100.0,
+            _ => r.tool.flute_count = 8,
+        }
+        let result = recommend_selected_record(&[p.clone()], &r, &selection(&p)).unwrap();
+        assert!(
+            matches!(
+                result.recommendation,
+                FeedsSpeedsRecommendation::Unavailable { .. }
+            ),
+            "dimension {dimension}"
+        );
+        assert!(result.explanation.is_none());
+    }
+}

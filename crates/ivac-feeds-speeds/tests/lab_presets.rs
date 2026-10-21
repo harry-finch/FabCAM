@@ -388,3 +388,52 @@ fn named_lab_pack_roundtrip_keeps_priority_without_reclassifying_generic_lab_sou
         public.manifest.identity.id
     );
 }
+
+#[test]
+fn explicit_tested_validated_and_unavailable_lab_records() {
+    let mut p = lab_pack();
+    let selected = SelectedRecord {
+        pack: p.manifest.identity.clone(),
+        record_id: p.records[0].source_record_id.clone(),
+        profile: p.records[0].profile.clone(),
+    };
+    let r = request(&p);
+    assert!(matches!(
+        recommend_selected_record(&[p.clone()], &r, &selected)
+            .unwrap()
+            .recommendation,
+        FeedsSpeedsRecommendation::Available { .. }
+    ));
+    p.records[0].lab.as_mut().unwrap().state = LabState::Validated;
+    p.dataset.profile_set.profiles[0].evidence = Evidence::Validated;
+    p.dataset.profile_set.profiles[0]
+        .source
+        .evidence_record
+        .as_mut()
+        .unwrap()
+        .validation_criteria_reference = Some(LAB_VALIDATION_POLICY.into());
+    p.records[0].lab.as_mut().unwrap().review = Some(LabReview {
+        policy: LAB_VALIDATION_POLICY.into(),
+        reviewed_at: "2026-10-12T09:00:00Z".into(),
+        notes: "SOFTWARE ONLY".into(),
+        acceptable_finish_and_behavior: true,
+        no_overheating_chatter_or_overload: true,
+        suitable_for_lab_use: true,
+    });
+    assert!(matches!(
+        recommend_selected_record(&[p.clone()], &r, &selected)
+            .unwrap()
+            .recommendation,
+        FeedsSpeedsRecommendation::Available { .. }
+    ));
+    for kind in 0..3 {
+        let mut unavailable = p.clone();
+        let lab = unavailable.records[0].lab.as_mut().unwrap();
+        match kind {
+            0 => lab.enabled = false,
+            1 => lab.deleted = true,
+            _ => lab.state = LabState::Draft,
+        }
+        assert!(recommend_selected_record(&[unavailable], &r, &selected).is_err());
+    }
+}

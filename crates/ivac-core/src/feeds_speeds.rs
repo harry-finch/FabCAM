@@ -73,6 +73,9 @@ pub struct FsCamRequest {
     pub project: Project,
     pub op_id: u32,
     pub dataset_json: String,
+    /// Absent preserves automatic recommendation; present pins an original eligible record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub selected_record: Option<fs::SelectedRecord>,
     pub aggressiveness: fs::Aggressiveness,
     /// False previews only; true explicitly applies. Never called by generation.
     pub apply: bool,
@@ -274,7 +277,12 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
             },
             request.aggressiveness,
         )?;
-        let result = fs::recommend_packs(&collection.source_packs, &r)?;
+        let result = match &request.selected_record {
+            Some(selected) => {
+                fs::recommend_selected_record(&collection.source_packs, &r, selected)?
+            }
+            None => fs::recommend_packs(&collection.source_packs, &r)?,
+        };
         (
             r,
             result.recommendation,
@@ -282,6 +290,9 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
             result.explanation,
         )
     } else {
+        if request.selected_record.is_some() {
+            return Err("Explicit record selection requires source packs".into());
+        }
         let loaded = fs::load_dataset_json(&request.dataset_json).map_err(|e| e.to_string())?;
         let r = cam_request(
             &request.project,
@@ -719,8 +730,74 @@ mod tests {
         assert_eq!(c.feed_mm_min, 4000);
         assert_eq!(c.rpm, 17000);
     }
+    #[test]
+    fn explicit_record_preview_apply_reopen_and_legacy_request_contract() {
+        let p = fixture();
+        let pack = fs::load_source_pack_json(include_str!(
+            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+        ))
+        .unwrap();
+        let selector = fs::SelectedRecord {
+            pack: pack.manifest.identity.clone(),
+            record_id: pack.records[0].source_record_id.clone(),
+            profile: pack.records[0].profile.clone(),
+        };
+        let mut request = FsCamRequest {
+            project: p.clone(),
+            op_id: 1,
+            dataset_json: serde_json::to_string(&fs::PackCollection {
+                source_packs: vec![pack],
+            })
+            .unwrap(),
+            selected_record: None,
+            aggressiveness: fs::Aggressiveness::Prudent,
+            apply: true,
+        };
+        let legacy = serde_json::to_value(&request).unwrap();
+        assert!(legacy.get("selected_record").is_none());
+        let old: FsCamRequest = serde_json::from_value(legacy).unwrap();
+        let recommended = feeds_speeds(old).unwrap();
+        request.selected_record = Some(selector);
+        let explicit = feeds_speeds(request.clone()).unwrap();
+        assert_eq!(
+            serde_json::to_value(&explicit.applied_op).unwrap(),
+            serde_json::to_value(&recommended.applied_op).unwrap()
+        );
+        request.apply = false;
+        let preview = feeds_speeds(request.clone()).unwrap();
+        assert!(preview.applied_op.is_none());
+        assert_eq!(
+            serde_json::to_value(preview.recommendation).unwrap(),
+            serde_json::to_value(explicit.recommendation).unwrap()
+        );
+        let mut saved = p.clone();
+        saved.operations[0] = explicit.applied_op.unwrap();
+        let reopened: Project =
+            serde_json::from_str(&serde_json::to_string(&saved).unwrap()).unwrap();
+        assert_eq!(
+            serde_json::to_value(saved).unwrap(),
+            serde_json::to_value(reopened).unwrap()
+        );
+        let before = serde_json::to_value(&request.project).unwrap();
+        request.apply = true;
+        request
+            .selected_record
+            .as_mut()
+            .unwrap()
+            .profile
+            .revision
+            .push_str("stale");
+        assert!(feeds_speeds(request.clone()).is_err());
+        assert_eq!(before, serde_json::to_value(&request.project).unwrap());
+        request.dataset_json = DATA.into();
+        assert!(feeds_speeds(request)
+            .unwrap_err()
+            .contains("requires source packs"));
+    }
+
     fn action(p: &Project, apply: bool) -> FsCamResponse {
         feeds_speeds(FsCamRequest {
+            selected_record: None,
             project: p.clone(),
             op_id: 1,
             dataset_json: DATA.into(),
@@ -757,6 +834,7 @@ mod tests {
         .unwrap();
         let before = serde_json::to_string(&p).unwrap();
         let preview = feeds_speeds(FsCamRequest {
+            selected_record: None,
             project: p.clone(),
             op_id: 1,
             dataset_json: data.clone(),
@@ -767,6 +845,7 @@ mod tests {
         assert!(preview.applied_op.is_none());
         assert_eq!(serde_json::to_string(&p).unwrap(), before);
         let applied = feeds_speeds(FsCamRequest {
+            selected_record: None,
             project: p.clone(),
             op_id: 1,
             dataset_json: data,
@@ -803,6 +882,7 @@ mod tests {
             profile.source.notes = "PRIVATE-DERIVED-SENTINEL".into();
         }
         let result = feeds_speeds(FsCamRequest {
+            selected_record: None,
             project: p,
             op_id: 1,
             dataset_json: serde_json::to_string(&fs::PackCollection {
@@ -829,7 +909,13 @@ mod tests {
         for profile in &mut pack.dataset.profile_set.profiles {
             profile.source.notes = "PRIVATE-DATA-SENTINEL".into();
         }
-        let result = feeds_speeds(FsCamRequest {
+        let selected = fs::SelectedRecord {
+            pack: pack.manifest.identity.clone(),
+            record_id: pack.records[0].source_record_id.clone(),
+            profile: pack.records[0].profile.clone(),
+        };
+        let request = FsCamRequest {
+            selected_record: None,
             project: p.clone(),
             op_id: 1,
             dataset_json: serde_json::to_string(&fs::PackCollection {
@@ -838,8 +924,17 @@ mod tests {
             .unwrap(),
             aggressiveness: fs::Aggressiveness::Prudent,
             apply: true,
+        };
+        let result = feeds_speeds(request.clone()).unwrap();
+        let explicit = feeds_speeds(FsCamRequest {
+            selected_record: Some(selected),
+            ..request
         })
         .unwrap();
+        assert_eq!(
+            serde_json::to_value(&result.applied_op).unwrap(),
+            serde_json::to_value(explicit.applied_op).unwrap()
+        );
         let next = result.applied_op.unwrap();
         let json = serde_json::to_string(&next).unwrap();
         assert!(!json.contains("PRIVATE-DATA-SENTINEL"));
@@ -876,6 +971,7 @@ mod tests {
         ))
         .unwrap();
         let result = feeds_speeds(FsCamRequest {
+            selected_record: None,
             project: p,
             op_id: 1,
             dataset_json: serde_json::to_string(&fs::PackCollection {
@@ -1234,6 +1330,7 @@ mod tests {
             fs::Engagement::Nominal { ratio: 0.4 }
         );
         let result = feeds_speeds(FsCamRequest {
+            selected_record: None,
             project: p.clone(),
             op_id: 1,
             dataset_json: data.to_string(),

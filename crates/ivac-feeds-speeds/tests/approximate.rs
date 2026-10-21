@@ -452,3 +452,23 @@ fn tool_classification_index_ignores_absence_but_rejects_conflict() {
         .unwrap_err()
         .contains("Conflicting classifications"));
 }
+
+#[test]
+fn explicit_selection_refuses_reference_adaptation_that_recommended_still_supports() {
+    let p = pack();
+    let r = request(&p, 6.0);
+    let (_, recommendation) = available(recommend_packs(&[p.clone()], &r).unwrap());
+    assert!(recommendation.records[0].derivation.is_some());
+    let selected = SelectedRecord {
+        pack: p.manifest.identity.clone(),
+        record_id: p.records[0].source_record_id.clone(),
+        profile: p.records[0].profile.clone(),
+    };
+    let result = recommend_selected_record(&[p], &r, &selected).unwrap();
+    assert!(matches!(
+        result.recommendation,
+        FeedsSpeedsRecommendation::Unavailable { .. }
+    ));
+    assert!(result.explanation.is_none());
+    assert!(!result.scope_rejections.is_empty());
+}

@@ -1601,6 +1601,11 @@ components:
           type: integer
         project:
           $ref: '#/components/schemas/Project'
+        selected_record:
+          anyOf:
+          - $ref: '#/components/schemas/FsSelectedRecord'
+          - type: 'null'
+          description: Absent preserves automatic recommendation; present pins an original eligible record.
       required:
       - aggressiveness
       - apply
@@ -2808,6 +2813,21 @@ components:
       - actual
       - field
       - required
+      type: object
+    FsSelectedRecord:
+      additionalProperties: false
+      description: Exact, transient source selection. Never persisted as a replacement source pack.
+      properties:
+        pack:
+          $ref: '#/components/schemas/FsIdentity'
+        profile:
+          $ref: '#/components/schemas/FsIdentity'
+        record_id:
+          type: string
+      required:
+      - pack
+      - profile
+      - record_id
       type: object
     FsSource:
       additionalProperties: false
