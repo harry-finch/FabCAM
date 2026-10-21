@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { trialEligible } from '../state/experimental-recipe';
   import { materialFamilyKeys, type MaterialFamily } from '../state/material-presentation';
   import PresetOperationPicker from './PresetOperationPicker.svelte';
   let using = $state<PresetRow>();
@@ -137,7 +138,7 @@
       type="button"
       disabled={!selected || recommendationSources.loading}
       onclick={() => (using = selected ? JSON.parse(JSON.stringify(selected)) : undefined)}
-      >{t('preset3.use')}</button
+      >{selected && trialEligible(selected) ? t('trial.use') : t('preset3.use')}</button
     >
     <button
       type="button"

@@ -1588,7 +1588,9 @@ export type MsgKey =
   | "preset2.after"
   | "preset2.before"
   | "preset2.choose_tool"
+  | "preset2.context_warning"
   | "preset2.differences"
+  | "preset2.edit_help"
   | "preset2.field"
   | "preset2.field_diameter"
   | "preset2.field_flutes"
@@ -1596,17 +1598,21 @@ export type MsgKey =
   | "preset2.field_material"
   | "preset2.field_tool"
   | "preset2.help"
+  | "preset2.identities"
   | "preset2.machine"
   | "preset2.material_help"
   | "preset2.ownership"
   | "preset2.problem_geometry"
   | "preset2.problem_identity"
+  | "preset2.problem_limits"
   | "preset2.problem_machine"
   | "preset2.problem_material"
   | "preset2.problem_process"
   | "preset2.problem_rights"
   | "preset2.problem_source"
   | "preset2.problem_tool"
+  | "preset2.problem_values"
+  | "preset2.recipe"
   | "preset2.reductions"
   | "preset2.review"
   | "preset2.save"
@@ -1614,6 +1620,8 @@ export type MsgKey =
   | "preset2.stale"
   | "preset2.title"
   | "preset2.values"
+  | "preset2.warn_machine"
+  | "preset2.warn_material"
   | "preset3.browse"
   | "preset3.choose"
   | "preset3.compatible"
@@ -1736,6 +1744,7 @@ export type MsgKey =
   | "selector.checking"
   | "selector.compatibility"
   | "selector.compatible"
+  | "selector.copy_only"
   | "selector.filtered"
   | "selector.filtered_selection"
   | "selector.filters"
@@ -1748,6 +1757,7 @@ export type MsgKey =
   | "selector.na"
   | "selector.no_changes"
   | "selector.retained"
+  | "selector.selected_preset"
   | "selector.title"
   | "selector.unavailable"
   | "settings.appearance.language"
@@ -2202,6 +2212,19 @@ export type MsgKey =
   | "tools.whirl.z_wobble.title"
   | "tools.z_shift"
   | "tools.z_shift.title"
+  | "trial.acknowledge"
+  | "trial.context"
+  | "trial.derived"
+  | "trial.full_width_help"
+  | "trial.modified"
+  | "trial.ready"
+  | "trial.review_required"
+  | "trial.source_evidence"
+  | "trial.source_missing"
+  | "trial.status"
+  | "trial.technical"
+  | "trial.unknown_name"
+  | "trial.use"
   | "ux1.entry.compatibility"
   | "ux1.entry.helix"
   | "ux1.entry.leads"
@@ -4129,7 +4152,9 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "preset2.after",
   "preset2.before",
   "preset2.choose_tool",
+  "preset2.context_warning",
   "preset2.differences",
+  "preset2.edit_help",
   "preset2.field",
   "preset2.field_diameter",
   "preset2.field_flutes",
@@ -4137,17 +4162,21 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "preset2.field_material",
   "preset2.field_tool",
   "preset2.help",
+  "preset2.identities",
   "preset2.machine",
   "preset2.material_help",
   "preset2.ownership",
   "preset2.problem_geometry",
   "preset2.problem_identity",
+  "preset2.problem_limits",
   "preset2.problem_machine",
   "preset2.problem_material",
   "preset2.problem_process",
   "preset2.problem_rights",
   "preset2.problem_source",
   "preset2.problem_tool",
+  "preset2.problem_values",
+  "preset2.recipe",
   "preset2.reductions",
   "preset2.review",
   "preset2.save",
@@ -4155,6 +4184,8 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "preset2.stale",
   "preset2.title",
   "preset2.values",
+  "preset2.warn_machine",
+  "preset2.warn_material",
   "preset3.browse",
   "preset3.choose",
   "preset3.compatible",
@@ -4277,6 +4308,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "selector.checking",
   "selector.compatibility",
   "selector.compatible",
+  "selector.copy_only",
   "selector.filtered",
   "selector.filtered_selection",
   "selector.filters",
@@ -4289,6 +4321,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "selector.na",
   "selector.no_changes",
   "selector.retained",
+  "selector.selected_preset",
   "selector.title",
   "selector.unavailable",
   "settings.appearance.language",
@@ -4743,6 +4776,19 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "tools.whirl.z_wobble.title",
   "tools.z_shift",
   "tools.z_shift.title",
+  "trial.acknowledge",
+  "trial.context",
+  "trial.derived",
+  "trial.full_width_help",
+  "trial.modified",
+  "trial.ready",
+  "trial.review_required",
+  "trial.source_evidence",
+  "trial.source_missing",
+  "trial.status",
+  "trial.technical",
+  "trial.unknown_name",
+  "trial.use",
   "ux1.entry.compatibility",
   "ux1.entry.helix",
   "ux1.entry.leads",

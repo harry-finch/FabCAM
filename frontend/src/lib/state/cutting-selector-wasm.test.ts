@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs';
+import { adaptationFixture } from './preset-adaptation.fixture';
+import { duplicatePresetAsDraft } from './preset-adaptation';
 import { expect, it } from 'vitest';
 import reference from '../../../../data/feeds-speeds/packs/sienci-longmill.v1.json';
 import { buildProject } from '../api/build-project';
@@ -84,5 +86,30 @@ it('real WASM accepts legacy and selected requests with identical authoritative 
     profile: { ...request.selected_record.profile, revision: 'missing' },
   };
   expect(() => wasm.feedsSpeeds(request)).toThrow();
+  expect(JSON.stringify(project)).toBe(before);
+  const recipe = adaptationFixture();
+  recipe.target.machine.fsIdentity = null;
+  recipe.target.material = { id: 'material/wood.plywood', revision: '1', label: 'Plywood' };
+  const draft = duplicatePresetAsDraft(
+    recipe.destination,
+    recipe.row,
+    recipe.target,
+    {
+      name: 'SOFTWARE ONLY editable recipe',
+      reviewed: true,
+      ownershipConfirmed: false,
+      notes: '',
+      data: { ...recipe.row.profile.data, rpm: 12000, doc_mm: 0.5 },
+    },
+    '2026-10-21T16:00:00.000Z',
+    'manual-recipe',
+  );
+  request.dataset_json = JSON.stringify({ source_packs: [draft] });
+  request.selected_record = {
+    pack: draft.manifest.identity,
+    record_id: draft.records[0].source_record_id,
+    profile: draft.records[0].profile,
+  };
+  expect(() => wasm.feedsSpeeds(request)).toThrow(/Draft, disabled/);
   expect(JSON.stringify(project)).toBe(before);
 });

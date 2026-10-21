@@ -1,5 +1,9 @@
 <script lang="ts">
   import { untrack } from 'svelte';
+  import { suggestMachineName } from '../state/tool_naming';
+  import { materialPickerLabel } from '../state/material-picker-presentation';
+  import RecipeValuesEditor from './RecipeValuesEditor.svelte';
+  import { recipeInputs, recipeData } from '../state/recipe-values';
   import Modal from './Modal.svelte';
   import MaterialPicker from './MaterialPicker.svelte';
   import LabPackCreate from './LabPackCreate.svelte';
@@ -14,6 +18,7 @@
   import type { MaterialIdentity, MachineSettings, ToolEntry } from '../state/project-types';
   import {
     adaptationProblems,
+    adaptationWarnings,
     adaptationDifferences,
     duplicatePresetAsDraft,
     localCopyAttestation,
@@ -48,13 +53,18 @@
     ownershipConfirmed = $state(false),
     busy = $state(false),
     error = $state('');
+  let inputs = $state(recipeInputs(source.profile.data));
+  const editedData = $derived(recipeData(source.profile.data, inputs));
   const previous = $derived(packs.find((p) => p.manifest.identity.id === destination));
   const target = $derived({
     machine,
     tool: tools[Number(toolIndex)] && toolIndex !== '' ? tools[Number(toolIndex)] : undefined,
     material,
   });
-  const problems = $derived(adaptationProblems(source, target, ownershipConfirmed));
+  const warnings = $derived(adaptationWarnings(source, target));
+  const problems = $derived(
+    editedData ? adaptationProblems(source, target, ownershipConfirmed, editedData) : ['values'],
+  );
   const differences = $derived(adaptationDifferences(source, target));
   const stale = $derived(machineFingerprint !== JSON.stringify(project.data.machine));
   const problemKeys: Record<string, MsgKey> = {
@@ -66,17 +76,39 @@
     geometry: 'preset2.problem_geometry',
     rights: 'preset2.problem_rights',
     source: 'preset2.problem_source',
+    values: 'preset2.problem_values',
+    limits: 'preset2.problem_limits',
   };
   // Any edit invalidates the explicit review of the previous form values.
   const formFingerprint = $derived(
-    JSON.stringify({ destination, toolIndex, material, name, notes, ownershipConfirmed }),
+    JSON.stringify({ destination, toolIndex, material, name, notes, ownershipConfirmed, inputs }),
   );
   $effect(() => {
     void formFingerprint;
     reviewed = false;
   });
+  // Presentation only: exact values remain in tooltips and the identity disclosure.
+  function differenceLabel(field: string, side: 'before' | 'after', exact: string): string {
+    if (field === 'diameter' || field === 'flutes' || exact === '—') return exact;
+    if (side === 'after') {
+      if (field === 'machine') return machine.name?.trim() || suggestMachineName(machine);
+      if (field === 'tool') return target.tool?.name || '—';
+      if (material) return materialPickerLabel(material, material.label || '', t);
+    }
+    const entries =
+      field === 'machine'
+        ? source.pack.dataset.machines
+        : field === 'tool'
+          ? source.pack.dataset.tools
+          : source.pack.dataset.materials;
+    const entry = entries.find((item) => `${item.identity.id}@${item.identity.revision}` === exact);
+    if (field === 'material' && entry) return materialPickerLabel(entry.identity, entry.label, t);
+    return entry && entry.label !== entry.identity.id
+      ? entry.label
+      : t(`preset2.field_${field}` as MsgKey);
+  }
   async function save() {
-    if (!previous || stale || problems.length || !reviewed || busy) return;
+    if (!previous || !editedData || stale || problems.length || !reviewed || busy) return;
     busy = true;
     error = '';
     try {
@@ -112,7 +144,7 @@
         previous,
         source,
         target,
-        { name, reviewed, ownershipConfirmed, notes },
+        { name, reviewed, ownershipConfirmed, notes, data: editedData },
         new Date().toISOString(),
         `preset-${crypto.randomUUID()}`,
       );
@@ -140,87 +172,125 @@
   width="720px"
   maxHeight="90vh"
 >
-  <header>
-    <h2 id="preset-copy-title">{t('preset2.title')}</h2>
-    <p>{source.name} · {source.pack.manifest.name} @{source.pack.manifest.identity.revision}</p>
-  </header>
-  <p class="notice">{t('preset2.help')}</p>
-  <div class="copy-form">
-    <fieldset disabled={busy}>
-      <label
-        >{t('v11.pack_choose')}<select bind:value={destination}
-          ><option value="">{t('v11.pack_choose')}</option
-          >{#each packs as pack (pack.manifest.identity.id)}<option
-              value={pack.manifest.identity.id}>{pack.manifest.name}</option
-            >{/each}</select
-        ></label
+  <div class="copy-dialog" aria-busy={busy}>
+    <header>
+      <h2 id="preset-copy-title">{t('preset2.title')}</h2>
+      <p
+        class="source"
+        title={`${source.name} · ${source.pack.manifest.identity.id}@${source.pack.manifest.identity.revision}`}
       >
-      <LabPackCreate
-        onCreated={(pack) => {
-          packs = [...packs, pack];
-          destination = pack.manifest.identity.id;
-        }}
-      />
-      <label>{t('fs38.name')}<input bind:value={name} maxlength="100" required /></label>
-      <p>
-        {t('preset2.machine')}:
-        <strong>{machine.name || machine.fsLocalIdentity?.id || '—'}</strong>
+        {source.name} · {source.pack.manifest.name}
       </p>
-      <label
-        >{t('presets.tool')}<select bind:value={toolIndex}
-          ><option value="">{t('preset2.choose_tool')}</option
-          >{#each tools as tool, index (index)}<option value={String(index)}
-              >{tool.name} · Ø{tool.diameter} mm · {tool.flutes} {t('tools.col.flutes')}</option
-            >{/each}</select
-        ></label
-      >
-      <MaterialPicker value={material} context="preset" onchange={(value) => (material = value)} />
-      <h3>{t('preset2.values')}</h3>
-      <p class="values">
-        {source.profile.data.rpm} rpm · {source.profile.data.kind === 'exact_values'
-          ? `${source.profile.data.feed_mm_min} mm/min`
-          : `${source.profile.data.chipload_mm_tooth} mm/tooth`} · {source.profile.data
-          .plunge_mm_min} mm/min · DOC {source.profile.data.doc_mm} mm · {source.profile.data
-          .stepover_ratio == null
-          ? '—'
-          : `${source.profile.data.stepover_ratio * 100}%`}
-      </p>
-      <h3>{t('preset2.differences')}</h3>
-      <div class="table-scroll">
-        <table>
-          <thead
-            ><tr
-              ><th>{t('preset2.field')}</th><th>{t('preset2.before')}</th><th
-                >{t('preset2.after')}</th
-              ></tr
-            ></thead
-          ><tbody
-            >{#each differences as difference (difference.field)}<tr
-                ><th>{t(`preset2.field_${difference.field}` as MsgKey)}</th><td
-                  >{difference.before}</td
-                ><td>{difference.after}</td></tr
-              >{/each}</tbody
+    </header>
+    <div class="copy-content">
+      <p class="notice">{t('preset2.help')}</p>
+      <fieldset disabled={busy}>
+        <label class="field-row"
+          ><span>{t('v11.pack_choose')}</span><select bind:value={destination}
+            ><option value="">{t('v11.pack_choose')}</option
+            >{#each packs as pack (pack.manifest.identity.id)}<option
+                value={pack.manifest.identity.id}>{pack.manifest.name}</option
+              >{/each}</select
+          ></label
+        >
+        <div class="pack-create">
+          <LabPackCreate
+            onCreated={(pack) => {
+              packs = [...packs, pack];
+              destination = pack.manifest.identity.id;
+            }}
+          />
+        </div>
+        <label class="field-row"
+          ><span>{t('fs38.name')}</span><input bind:value={name} maxlength="100" required /></label
+        >
+        <div
+          class="field-row machine"
+          title={machine.fsLocalIdentity
+            ? `${machine.fsLocalIdentity.id}@${machine.fsLocalIdentity.revision}`
+            : undefined}
+        >
+          <span title={t('preset2.machine')}>{t('preset2.field_machine')}</span><span
+            >{machine.name?.trim() || suggestMachineName(machine)}</span
           >
-        </table>
-      </div>
-      {#if source.profile.reductions.length}<p class="notice">{t('preset2.reductions')}</p>{/if}
-      {#if localCopyAttestation(source)}<label class="check"
-          ><input type="checkbox" bind:checked={ownershipConfirmed} />{t(
-            'preset2.ownership',
-          )}</label
-        >{/if}
-      <label>{t('fs38.observations')}<textarea bind:value={notes} rows="2"></textarea></label>
-      {#if problems.length}<ul class="problems">
-          {#each problems as problem (problem)}<li>{t(problemKeys[problem])}</li>{/each}
-        </ul>{/if}
-      {#if stale}<p role="alert">{t('preset2.stale')}</p>{/if}
-      <label class="check"
-        ><input type="checkbox" bind:checked={reviewed} />{t('preset2.review')}</label
-      >
-    </fieldset>
-    {#if error}<p role="alert">{error}</p>{/if}
+        </div>
+        <label class="field-row"
+          ><span>{t('presets.tool')}</span><select bind:value={toolIndex}
+            ><option value="">{t('preset2.choose_tool')}</option
+            >{#each tools as tool, index (index)}<option value={String(index)}
+                >{tool.name} · Ø{tool.diameter} mm · {tool.flutes} {t('tools.col.flutes')}</option
+              >{/each}</select
+          ></label
+        >
+        <MaterialPicker
+          value={material}
+          context="preset"
+          onchange={(value) => (material = value)}
+        />
+        <h3>{t('preset2.values')}</h3>
+        <RecipeValuesEditor source={source.profile.data} bind:inputs />
+        <p>{t('preset2.edit_help')}</p>
+        <h3>{t('preset2.differences')}</h3>
+        <div class="table-scroll">
+          <table>
+            <thead
+              ><tr
+                ><th>{t('preset2.field')}</th><th>{t('preset2.before')}</th><th
+                  >{t('preset2.after')}</th
+                ></tr
+              ></thead
+            ><tbody
+              >{#each differences as difference (difference.field)}<tr
+                  ><th>{t(`preset2.field_${difference.field}` as MsgKey)}</th><td
+                    title={difference.before}
+                    >{differenceLabel(difference.field, 'before', difference.before)}</td
+                  ><td title={difference.after}
+                    >{differenceLabel(difference.field, 'after', difference.after)}</td
+                  ></tr
+                >{/each}</tbody
+            >
+          </table>
+        </div>
+        <details class="identities">
+          <summary>{t('preset2.identities')}</summary>
+          <dl>
+            {#each differences as difference (difference.field)}
+              <dt>{t(`preset2.field_${difference.field}` as MsgKey)}</dt>
+              <dd>{difference.before} → {difference.after}</dd>
+            {/each}
+          </dl>
+        </details>
+        {#if source.profile.reductions.length}<p class="notice">{t('preset2.reductions')}</p>{/if}
+        {#if localCopyAttestation(source)}<label class="check"
+            ><input type="checkbox" bind:checked={ownershipConfirmed} />{t(
+              'preset2.ownership',
+            )}</label
+          >{/if}
+        <label class="field-row observations"
+          ><span>{t('fs38.observations')}</span><textarea bind:value={notes} rows="2"
+          ></textarea></label
+        >
+        {#if warnings.length}<div class="warnings">
+            <p>{t('preset2.context_warning')}</p>
+            <ul>
+              {#each warnings as warning (warning)}<li>
+                  {t(warning === 'machine' ? 'preset2.warn_machine' : 'preset2.warn_material')}
+                </li>{/each}
+            </ul>
+          </div>{/if}
+        {#if problems.length}<ul class="problems">
+            {#each problems as problem (problem)}<li>{t(problemKeys[problem])}</li>{/each}
+          </ul>{/if}
+        {#if stale}<p role="alert">{t('preset2.stale')}</p>{/if}
+        <label class="check"
+          ><input type="checkbox" bind:checked={reviewed} />{t('preset2.review')}</label
+        >
+      </fieldset>
+      {#if error}<p role="alert">{error}</p>{/if}
+    </div>
     <footer>
       <button type="button" disabled={busy} onclick={onClose}>{t('common.cancel')}</button><button
+        class="primary"
         type="button"
         onclick={() => void save()}
         disabled={busy || stale || problems.length > 0 || !previous || !name.trim() || !reviewed}
@@ -231,96 +301,205 @@
 </Modal>
 
 <style>
-  header {
-    border-bottom: 1px solid var(--border);
-    padding-bottom: var(--ui-space-2);
-  }
-  h2 {
-    margin: 0;
-    font-size: 1rem;
-  }
-  h3 {
+  .copy-dialog {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(90vh - 2px);
+    min-width: 0;
     font-size: var(--inspector-font-field);
-    margin: var(--ui-space-3) 0 var(--ui-space-1);
+    line-height: 1.4;
   }
-  p {
-    margin: var(--ui-space-1) 0;
+  .copy-dialog header,
+  .copy-dialog footer {
+    flex: none;
+    padding: var(--ui-space-3);
+    background: var(--bg-panel);
+  }
+  .copy-dialog header {
+    border-bottom: 1px solid var(--border);
+  }
+  .copy-dialog footer {
+    border-top: 1px solid var(--border);
+  }
+  .copy-dialog h2 {
+    margin: 0 0 var(--ui-space-1);
+    font-size: var(--inspector-font-field);
+    font-weight: 600;
+  }
+  .copy-dialog h3 {
+    margin: var(--ui-space-2) 0 0;
+    font-size: var(--inspector-font-meta);
+    font-weight: 600;
+    color: var(--text-section);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .copy-dialog p {
+    margin: 0;
     font-size: var(--inspector-font-meta);
     color: var(--text-muted);
   }
-  .notice,
-  .problems {
-    background: var(--bg-elevated);
+  .source {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .copy-content {
+    overflow: auto;
+    min-height: 0;
     padding: var(--ui-space-3);
-    font-size: var(--inspector-font-meta);
+    display: grid;
+    gap: var(--ui-space-3);
   }
-  .problems {
-    padding-left: 2rem;
-  }
-  fieldset {
-    border: 0;
-    padding: 0;
-    min-width: 0;
+  .copy-dialog fieldset {
     display: grid;
     gap: var(--ui-space-2);
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
   }
-  label {
-    display: grid;
-    gap: var(--ui-space-1);
+  .copy-dialog label,
+  .copy-dialog .field-row {
     font-size: var(--inspector-font-field);
+    min-width: 0;
   }
-  input,
-  select,
-  textarea,
-  button {
+  .field-row {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--ui-space-2);
+  }
+  .machine span:last-child {
+    overflow-wrap: anywhere;
+  }
+  .pack-create {
+    padding-left: calc(6rem + var(--ui-space-2));
+    min-width: 0;
+  }
+  .copy-dialog input:not([type='checkbox']),
+  .copy-dialog select,
+  .copy-dialog textarea {
     color: var(--text);
     background: var(--bg-input);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 6px;
+    padding: var(--ui-space-1) var(--ui-space-2);
     font: inherit;
     min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: var(--inspector-control-height);
   }
-  .check {
+  .copy-dialog .check {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     gap: var(--ui-space-2);
+    line-height: 1.4;
   }
-  .check input {
-    flex: none;
+  /* Inspector descendant rules also reach nested modals. Never stretch an attestation. */
+  .copy-dialog .check input[type='checkbox'] {
+    flex: 0 0 13px;
+    width: 13px;
+    height: 13px;
+    min-width: 13px;
+    min-height: 13px;
+    padding: 0;
+    margin: 2px 0 0;
+    accent-color: var(--accent);
   }
-  .table-scroll {
-    overflow: auto;
-  }
-  table {
+  .copy-dialog table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
     font-size: var(--inspector-font-meta);
   }
-  th,
-  td {
+  .copy-dialog th,
+  .copy-dialog td {
     text-align: left;
     border-bottom: 1px solid var(--border);
-    padding: var(--ui-space-2);
+    padding: var(--ui-space-1) var(--ui-space-2);
+    overflow-wrap: anywhere;
+    vertical-align: top;
+  }
+  .copy-dialog thead th:first-child {
+    width: 22%;
+  }
+  .copy-dialog tbody th {
+    font-weight: 500;
+  }
+  .warnings {
+    border-left: 2px solid var(--warn);
+    padding-left: var(--ui-space-2);
+    font-size: var(--inspector-font-meta);
+    color: var(--text-muted);
+  }
+  .warnings ul {
+    margin: var(--ui-space-1) 0 0;
+    padding-left: var(--ui-space-4);
+  }
+  .identities {
+    font-size: var(--inspector-font-meta);
+    color: var(--text-muted);
+    min-width: 0;
+  }
+  .identities summary {
+    cursor: pointer;
+    min-height: 24px;
+  }
+  .identities dl {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--ui-space-1) var(--ui-space-2);
+  }
+  .identities dd {
+    margin: 0;
     overflow-wrap: anywhere;
   }
-  .values {
-    font-variant-numeric: tabular-nums;
+  .problems {
+    margin: 0;
+    padding: var(--ui-space-2) var(--ui-space-2) var(--ui-space-2) var(--ui-space-5);
+    border-left: 2px solid var(--warn);
+    font-size: var(--inspector-font-meta);
+    color: var(--text-muted);
   }
-  footer {
+  .copy-dialog footer {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     gap: var(--ui-space-2);
-    margin-top: var(--ui-space-3);
   }
-  button {
+  .copy-dialog button {
     cursor: pointer;
+    font-size: var(--inspector-font-field);
+    color: var(--text);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--ui-space-1) var(--ui-space-2);
+    min-height: var(--inspector-control-height);
   }
-  button:disabled {
-    opacity: 0.45;
+  .copy-dialog button.primary {
+    background: var(--accent-tint);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .copy-dialog button:hover:not(:disabled) {
+    background: var(--bg-elevated);
+  }
+  .copy-dialog button:disabled {
+    opacity: 0.5;
     cursor: default;
   }
-  [role='alert'] {
+  .copy-dialog [role='alert'] {
     color: var(--danger);
+  }
+  @media (max-width: 480px) {
+    .field-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--ui-space-1);
+    }
+    .pack-create {
+      padding-left: 0;
+    }
   }
 </style>

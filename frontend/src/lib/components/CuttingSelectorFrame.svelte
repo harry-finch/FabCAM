@@ -8,12 +8,14 @@
     busy,
     children,
     footer,
+    selection,
   }: {
     onClose: () => void;
     context: string;
     busy: boolean;
     children: Snippet;
     footer: Snippet;
+    selection?: Snippet;
   } = $props();
 </script>
 
@@ -27,6 +29,7 @@
     <header>
       <h4 id="cutting-recommendation-title">{t('selector.title')}</h4>
       <p title={context}>{context}</p>
+      {#if selection}{@render selection()}{/if}
     </header>
     <div class="content">{@render children()}</div>
     <footer>{@render footer()}</footer>

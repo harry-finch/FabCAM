@@ -1,49 +1,20 @@
 import { describe, it, expect } from 'vitest';
-import reference from '../../../../data/feeds-speeds/packs/sienci-longmill.v3.json';
-import { defaultProjectMachine, defaultProjectTools } from './project-defaults';
-import { createLabPack } from './lab-presets';
-import { presetRows } from './preset-library';
-import type { SourcePack } from './feeds-speeds-sources';
+import { adaptationFixture } from './preset-adaptation.fixture';
 import {
   adaptationProblems,
+  adaptationWarnings,
   adaptationDifferences,
   duplicatePresetAsDraft,
   localCopyAttestation,
-  type AdaptTarget,
 } from './preset-adaptation';
 const now = '2026-10-21T10:00:00.000Z';
-export function adaptationFixture() {
-  const pack = structuredClone(reference) as unknown as SourcePack;
-  const row = presetRows(
-    [pack],
-    new Set([`${pack.manifest.identity.id}@${pack.manifest.identity.revision}`]),
-    true,
-  )[0];
-  const machine = defaultProjectMachine();
-  machine.fsIdentity = { id: 'sienci-longmill-mk2-reference', revision: '1' };
-  const tool = defaultProjectTools()[0];
-  tool.fsLocalIdentity = { id: 'physical-tool', revision: '1' };
-  tool.diameter = 6.35;
-  tool.flutes = 1;
-  const target: AdaptTarget = {
-    machine,
-    tool,
-    material: { id: 'material/wood.mdf', revision: '1', label: 'MDF' },
-  };
-  const destination = createLabPack(
-    'SOFTWARE ONLY workshop',
-    '2026-10-20T10:00:00.000Z',
-    'lab-00000000-0000-4000-8000-000000000001',
-  );
-  return { row, target, destination };
-}
 const form = {
   name: 'SOFTWARE ONLY copy',
   reviewed: true,
   ownershipConfirmed: false,
   notes: 'Not a physical trial',
 };
-describe('PRESET-2 strict independent draft copying', () => {
+describe('Independent inactive recipe authoring', () => {
   it('preserves values/license/provenance, clears evidence, and leaves inputs unchanged', () => {
     const { row, target, destination } = adaptationFixture();
     const before = JSON.stringify({ row, target, destination });
@@ -97,8 +68,8 @@ describe('PRESET-2 strict independent draft copying', () => {
       { id: 'material/wood.mdf', revision: '2' },
       { id: 'material/wood.mdf.invented', revision: '1' },
     ])
-      expect(adaptationProblems(row, { ...target, material }, false)).toContain('material');
-    expect(adaptationProblems(row, target, false)).not.toContain('material');
+      expect(adaptationWarnings(row, { ...target, material })).toContain('material');
+    expect(adaptationWarnings(row, target)).not.toContain('material');
   });
   it('blocks generic unlicensed references and requires deliberate local authorship authorization', () => {
     const { row, target, destination } = adaptationFixture();
@@ -151,7 +122,8 @@ describe('PRESET-2 strict independent draft copying', () => {
     expect(adaptationProblems(row, laser, false)).toContain('process');
     const other = structuredClone(target);
     other.machine.fsIdentity = { id: 'other', revision: '1' };
-    expect(adaptationProblems(row, other, false)).toContain('machine');
+    expect(adaptationWarnings(row, other)).toContain('machine');
+    expect(adaptationProblems(row, other, false)).not.toContain('machine');
     const ball = structuredClone(target);
     ball.tool!.kind = 'ball_nose';
     expect(adaptationProblems(row, ball, false)).toContain('tool');
@@ -176,6 +148,16 @@ describe('PRESET-2 strict independent draft copying', () => {
     });
     const copy = duplicatePresetAsDraft(destination, row, target, form, now, 'new-id');
     expect(copy.dataset.tools[0].max_rpm).toBe(20000);
+    expect(() =>
+      duplicatePresetAsDraft(
+        destination,
+        row,
+        target,
+        { ...form, data: { ...row.profile.data, rpm: 21000 } },
+        now,
+        'over-limit',
+      ),
+    ).toThrow('tool limit');
     target.tool!.diameter = 3;
     expect(() => duplicatePresetAsDraft(destination, row, target, form, now, 'new-id')).toThrow();
   });

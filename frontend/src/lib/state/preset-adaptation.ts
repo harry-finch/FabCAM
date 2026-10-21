@@ -1,4 +1,5 @@
-/** ADR-0028: explicit copy only. No recommendation, scaling, source or operation mutation. */
+/** ADR-0029: manually authored inactive recipe; no automatic scaling or operation mutation. */
+import { recipeProblems, type RecipeData } from './recipe-values';
 import type { components } from '../api/generated';
 import type { PresetRow } from './preset-library';
 import type { MachineSettings, ToolEntry, MaterialIdentity } from './project-types';
@@ -22,7 +23,9 @@ export type AdaptProblem =
   | 'tool'
   | 'geometry'
   | 'rights'
-  | 'source';
+  | 'source'
+  | 'values'
+  | 'limits';
 const same = (a?: Identity | null, b?: Identity | null) =>
   !!a && !!b && a.id === b.id && a.revision === b.revision;
 const complete = (v?: Identity | null) =>
@@ -67,10 +70,11 @@ export function adaptedToolFamily(tool: ToolEntry): S['FsCuttingFamily'] | undef
         ? 'v_bit'
         : undefined;
 }
-export function adaptationProblems(
+function contextIssues(
   row: PresetRow,
   target: AdaptTarget,
   ownershipConfirmed: boolean,
+  data: RecipeData = row.profile.data,
 ): AdaptProblem[] {
   const { machine, tool, material } = target;
   const out: AdaptProblem[] = [];
@@ -133,10 +137,27 @@ export function adaptationProblems(
     (tool.fluteLengthMm != null &&
       (!Number.isFinite(tool.fluteLengthMm) ||
         tool.fluteLengthMm <= 0 ||
-        tool.fluteLengthMm < row.profile.data.doc_mm))
+        tool.fluteLengthMm < data.doc_mm))
   )
     out.push('geometry');
   return [...new Set(out)];
+}
+/** Different source applicability is review information for an inactive recipe, not permission to apply it. */
+export function adaptationWarnings(row: PresetRow, target: AdaptTarget): AdaptProblem[] {
+  return contextIssues(row, target, true).filter((p) => p === 'machine' || p === 'material');
+}
+export function adaptationProblems(
+  row: PresetRow,
+  target: AdaptTarget,
+  ownershipConfirmed: boolean,
+  data: RecipeData = row.profile.data,
+): AdaptProblem[] {
+  return [
+    ...contextIssues(row, target, ownershipConfirmed, data).filter(
+      (p) => p !== 'machine' && p !== 'material',
+    ),
+    ...recipeProblems(data, row.profile.scope.operation, target.machine),
+  ];
 }
 export type AdaptDifference = {
   field: 'machine' | 'material' | 'tool' | 'diameter' | 'flutes';
@@ -186,11 +207,18 @@ export function duplicatePresetAsDraft(
   previous: SourcePack,
   row: PresetRow,
   target: AdaptTarget,
-  form: { name: string; reviewed: boolean; ownershipConfirmed: boolean; notes: string },
+  form: {
+    name: string;
+    reviewed: boolean;
+    ownershipConfirmed: boolean;
+    notes: string;
+    data?: RecipeData;
+  },
   now: string,
   id: string,
 ): SourcePack {
-  const problems = adaptationProblems(row, target, form.ownershipConfirmed);
+  const data = form.data ?? row.profile.data;
+  const problems = adaptationProblems(row, target, form.ownershipConfirmed, data);
   if (problems.length) throw new Error(`Cannot adapt preset: ${problems.join(', ')}`);
   if (!form.reviewed || !form.name.trim())
     throw new Error('Review copied values and provide a name');
@@ -199,6 +227,11 @@ export function duplicatePresetAsDraft(
   const tool = target.tool!;
   const material = target.material!;
   const machine = target.machine;
+  const toolLimit = previous.dataset.tools.find((entry) =>
+    same(entry.identity, tool.fsLocalIdentity),
+  )?.max_rpm;
+  if (toolLimit != null && data.rpm > toolLimit)
+    throw new Error('Recipe RPM exceeds the recorded tool limit');
   const clone = <T>(v: T): T => JSON.parse(JSON.stringify(v)) as T;
   const profile = clone(row.profile);
   const source = {
@@ -220,9 +253,13 @@ export function duplicatePresetAsDraft(
     data: clone(row.profile.data),
     reductions: clone(row.profile.reductions),
     changes: adaptationDifferences(row, target),
+    authoredData: clone(data),
+    applicabilityWarnings: adaptationWarnings(row, target),
+    authoring: 'manual-inactive-recipe-1',
     ownershipConfirmed: localCopyAttestation(row) && form.ownershipConfirmed,
   };
   profile.identity = { id, revision: p.manifest.identity.revision };
+  profile.data = clone(data);
   profile.category = 'theoretical';
   profile.evidence = 'theoretical';
   profile.scope = {
@@ -235,6 +272,12 @@ export function duplicatePresetAsDraft(
       max: tool.diameter - (tool.wearOffsetMm ?? 0),
     },
     flute_count: tool.flutes,
+    doc_mm: { min: data.doc_mm, max: data.doc_mm },
+    thickness_mm: null,
+    engagement:
+      profile.scope.engagement.kind === 'nominal' && data.stepover_ratio != null
+        ? { kind: 'nominal', ratio: { min: data.stepover_ratio, max: data.stepover_ratio } }
+        : profile.scope.engagement,
   };
   // Reference reductions are not silently recalculated or represented as target-qualified rules.
   profile.reductions = [];
@@ -288,9 +331,9 @@ export function duplicatePresetAsDraft(
       job_reference: '',
       observations: form.notes,
       detailed_notes:
-        'Source values, licensing and context are retained in source provenance; no physical evidence is inherited.',
+        'Source values, licensing and context are retained in source provenance; manual values and context changes are recorded; no physical evidence is inherited.',
       finishing_context:
-        'Copied values and context require a new physical trial; no parameters were calculated or applied.',
+        'Manually authored recipe requires a new physical trial; no parameters were automatically calculated or applied.',
       enabled: false,
       deleted: false,
       review: null,

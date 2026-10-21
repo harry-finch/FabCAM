@@ -43,6 +43,7 @@
     <p>{t('v11.pack_private')}</p>
     <div class="actions">
       <button
+        class="btn-secondary"
         type="button"
         disabled={busy}
         onclick={() => {
@@ -50,15 +51,24 @@
           error = '';
         }}>{t('common.cancel')}</button
       >
-      <button type="submit" disabled={busy || !name.trim()}>{t('v11.pack_create')}</button>
+      <button class="btn-primary" type="submit" disabled={busy || !name.trim()}
+        >{t('v11.pack_create')}</button
+      >
     </div>
     {#if error}<p role="alert">{error}</p>{/if}
   </form>
 {:else}
-  <button type="button" onclick={() => (open = true)}>{t('v11.pack_create')}</button>
+  <button class="btn-secondary" type="button" onclick={() => (open = true)}
+    >{t('v11.pack_create')}</button
+  >
 {/if}
 
 <style>
+  button {
+    font-size: var(--inspector-font-field);
+    padding: var(--ui-space-1) var(--ui-space-2);
+    min-height: var(--inspector-control-height);
+  }
   form {
     display: grid;
     gap: var(--ui-space-2);

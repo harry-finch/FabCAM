@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { notificationText } from '../api/error-notification';
+  import { trialEligible } from '../state/experimental-recipe';
   import { untrack } from 'svelte';
   import Modal from './Modal.svelte';
   import FeedsSpeedsSection from './op_properties/FeedsSpeedsSection.svelte';
@@ -12,6 +14,7 @@
   import type { PresetRow } from '../state/preset-library';
   import { t } from '../i18n';
   let { row, onClose }: { row: PresetRow; onClose: () => void } = $props();
+  const trial = untrack(() => trialEligible(row));
   const selected = untrack(() => recordSelection(row));
   let ids = $state<number[]>([]),
     busy = $state(true),
@@ -44,7 +47,14 @@
       error = '';
       void (async () => {
         try {
-          if (!snapshot || !selected || unavailableRecord(row)) return;
+          if (!snapshot || !selected || (unavailableRecord(row) && !trial)) return;
+          if (trial) {
+            if (!cancelled)
+              ids = snapshot.operations
+                .filter((op) => op.kind.type === 'profile' || op.kind.type === 'pocket')
+                .map((op) => op.id);
+            return;
+          }
           const client = cuttingKnowledgeClient();
           const dataset = packCollection(recommendationSources.rows);
           const compatible: number[] = [];
@@ -57,13 +67,15 @@
               selected_record: selected,
               aggressiveness: row.profile.aggressiveness,
               apply: false,
+              experimental_trial: trial,
             });
             if (cancelled) return;
-            if (result.recommendation.status === 'available') compatible.push(op.id);
+            if (result.recommendation.status === 'available' || result.trial)
+              compatible.push(op.id);
           }
           if (!cancelled) ids = compatible;
         } catch (e) {
-          if (!cancelled) error = String(e);
+          if (!cancelled) error = notificationText(e);
         } finally {
           if (!cancelled) busy = false;
         }
@@ -79,6 +91,7 @@
   <FeedsSpeedsSection
     op={operation}
     initialSelection={selected}
+    initialTrial={trial}
     initialAggressiveness={row.profile.aggressiveness}
     selectorOnly
     {onClose}

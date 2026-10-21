@@ -1,4 +1,10 @@
 <script lang="ts">
+  import { notificationText } from '../../api/error-notification';
+  import { trialEligible } from '../../state/experimental-recipe';
+  import ExperimentalRecipeStatus from './ExperimentalRecipeStatus.svelte';
+  import CuttingSelectorActions from '../CuttingSelectorActions.svelte';
+  import SelectedRecipeContext from '../SelectedRecipeContext.svelte';
+  import TrialComparison from '../TrialComparison.svelte';
   import { materialDisplay, materialOptions } from '../../state/material-presentation';
   import './op-properties.css';
   import { rejectionReason, scopeField, evidence } from '../../state/cutting-selector-labels';
@@ -49,12 +55,14 @@
   let {
     op,
     initialSelection,
+    initialTrial = false,
     initialAggressiveness = 'prudent',
     selectorOnly = false,
     onClose,
   }: {
     op: OpEntry;
     initialSelection?: SelectedRecord;
+    initialTrial?: boolean;
     initialAggressiveness?: S['FsAggressiveness'];
     selectorOnly?: boolean;
     onClose?: () => void;
@@ -65,9 +73,11 @@
   let selectedRecord = $state<SelectedRecord | undefined>(untrack(() => initialSelection));
   let selectedUnavailable = $state(false);
   let selectedMode = $state<S['FsAggressiveness']>(untrack(() => initialAggressiveness));
+  let trial = $state(untrack(() => initialTrial));
+  let trialAcknowledged = $state(false);
   let overwriteAcknowledged = $state(false);
 
-  function selectPreset(row: PresetRow) {
+  function selectPreset(row: PresetRow, forTrial = false) {
     requests.cancel();
     responses = [];
     error = '';
@@ -76,7 +86,9 @@
     selectedRecord = recordSelection(row);
     selectedMode = row.profile.aggressiveness;
     mode = selectedMode;
-    selectedUnavailable = unavailableRecord(row);
+    trial = forTrial && trialEligible(row);
+    selectedUnavailable = unavailableRecord(row) && !trial;
+    trialAcknowledged = false;
     overwriteAcknowledged = false;
   }
   let labCapture = $state<LabCapture | null>(null);
@@ -99,7 +111,7 @@
       labCapture = c;
       error = '';
     } catch (e) {
-      error = String(e);
+      error = notificationText(e);
     }
   }
   function knowledgeName(id: string) {
@@ -197,6 +209,7 @@
       discovery,
       selectedRecord,
       selectedUnavailable,
+      trial,
       project.data.settings.feedsSpeedsSources,
     ]),
   );
@@ -213,7 +226,7 @@
   );
   const previewStale = $derived(responses.length > 0 && responseKey !== key);
   const suggestions = $derived(
-    responses.filter((s) => s.result.recommendation.status === 'available'),
+    responses.filter((s) => s.result.recommendation.status === 'available' || !!s.result.trial),
   );
   const accepted = $derived(op.appliedCutting?.proposal);
   function sourceName(id: string): string {
@@ -308,6 +321,7 @@
   async function calculate(captured = key) {
     if (discovery === 'browse' && (!selectedRecord || selectedUnavailable)) return;
     overwriteAcknowledged = false;
+    trialAcknowledged = false;
     if (!wire || !api.feedsSpeeds) {
       error = t('fs.unavailable_build');
       return;
@@ -337,6 +351,7 @@
             dataset_json: contents,
             aggressiveness: mode,
             apply: false,
+            experimental_trial: trial,
             selected_record: discovery === 'browse' ? selectedRecord : undefined,
           }),
         },
@@ -347,7 +362,7 @@
         responseKey = captured;
       }
     } catch (e) {
-      if (review && requests.owns(revision) && captured === key) error = String(e);
+      if (review && requests.owns(revision) && captured === key) error = notificationText(e);
     } finally {
       if (requests.owns(revision)) busy = false;
     }
@@ -375,8 +390,8 @@
           captured === key &&
           operation === op &&
           project.data.operations.includes(operation),
-        requiresAcknowledgement: hasManual,
-        acknowledged: overwriteAcknowledged,
+        requiresAcknowledgement: hasManual || trial,
+        acknowledged: (!hasManual || overwriteAcknowledged) && (!trial || trialAcknowledged),
         validate: () =>
           api.feedsSpeeds!({
             project: wire!,
@@ -384,6 +399,8 @@
             dataset_json: source.contents,
             aggressiveness: mode,
             apply: true,
+            experimental_trial: trial,
+            trial_acknowledged: trialAcknowledged,
             selected_record: discovery === 'browse' ? selectedRecord : undefined,
           }),
         commit: (result) => {
@@ -414,7 +431,7 @@
         },
       });
     } catch (e) {
-      if (review && requests.owns(revision) && captured === key) error = String(e);
+      if (review && requests.owns(revision) && captured === key) error = notificationText(e);
     } finally {
       if (requests.owns(revision)) busy = false;
     }
@@ -426,15 +443,27 @@
   function origin(field: (typeof fields)[number]) {
     return field === 'rpm' ? 'rpm' : field === 'feed_mm_min' ? 'feed' : 'plunge';
   }
+  const applyBlocked = $derived(
+    busy ||
+      previewStale ||
+      !suggestions.length ||
+      !!error ||
+      (hasManual && !overwriteAcknowledged) ||
+      (trial && !trialAcknowledged),
+  );
 </script>
 
 <section class="cutting-section" class:props={selectorOnly} aria-label={t('fs35.cutting')}>
   {#if !selectorOnly}
     <h3>{t('fs35.cutting')}</h3>
+    <ExperimentalRecipeStatus {op} />
     {#if op.appliedCutting && (!main || (op.kind === 'pocket' && !secondary))}<p role="alert">
         {t('fs35.missing_rates')}
       </p>{/if}
-    {#if originView.shared}<p class="source-meta" role="status">
+    {#if originView.shared && !op.appliedCutting?.experimental_recipe}<p
+        class="source-meta"
+        role="status"
+      >
         {t(
           originView.shared === 'recommendation'
             ? 'fs391.applied_values'
@@ -533,6 +562,8 @@
           bind:this={reviewTrigger}
           onclick={() => {
             fullWidth = op.fsFullWidth ?? false;
+            if (trial) selectedUnavailable = true;
+            trial = false;
             discovery = 'recommended';
             selectedRecord = undefined;
             overwriteAcknowledged = false;
@@ -566,6 +597,15 @@
       context={`${op.kind === 'profile' ? t('fs35.profile') : t('fs35.pocket')} · Ø${tool ? displayNumber(tool.diameter, 3) : '—'} mm · ${tool?.flutes ?? '—'}F · ${materialLabel} · ${project.data.machine.name ?? ''}`}
       {busy}
     >
+      {#snippet selection()}
+        {#if discovery === 'browse' && selectedRecord}<SelectedRecipeContext
+            source={selectedRecord}
+            operation={op.name}
+            {trial}
+            {error}
+            blocked={applyBlocked}
+          />{/if}
+      {/snippet}
       <div class="discovery" aria-label={t('preset3.choose')}>
         <button
           type="button"
@@ -573,6 +613,8 @@
           title={t('fs35.suggest')}
           aria-pressed={discovery === 'recommended'}
           onclick={() => {
+            if (trial) selectedUnavailable = true;
+            trial = false;
             discovery = 'recommended';
             responses = [];
             error = '';
@@ -592,7 +634,8 @@
       </div>
       {#if discovery === 'browse'}<PresetBrowser
           selected={selectedRecord}
-          onselect={selectPreset}
+          onselect={(row) => selectPreset(row)}
+          ontrial={(row) => selectPreset(row, true)}
           compatibility={busy
             ? 'checking'
             : previewStale || error || !attempted
@@ -601,12 +644,13 @@
                 ? 'compatible'
                 : 'incompatible'}
         />
-        {#if selectedUnavailable}<p role="status">{t('preset3.unavailable')}</p>{/if}
       {/if}
-      <p class="source-meta">{t('selector.job_material')}</p>
-      {#if op.kind === 'profile'}<label class="check-row"
-          ><input type="checkbox" bind:checked={fullWidth} />{t('fs.full_width')}</label
-        >{/if}
+      {#if discovery === 'recommended' || (selectedRecord && !selectedUnavailable)}
+        <p class="source-meta">{t('selector.job_material')}</p>
+        {#if op.kind === 'profile'}<label class="check-row" title={t('trial.full_width_help')}
+            ><input type="checkbox" bind:checked={fullWidth} />{t('fs.full_width')}</label
+          >{/if}
+      {/if}
       {#if discovery === 'recommended'}<label class="inspector-field mode-field"
           ><span>{t('fs.mode')}</span><select bind:value={mode}>
             <option value="prudent">{t('fs.prudent')}</option><option value="normal"
@@ -621,7 +665,11 @@
       {:else if !recommendationSources.rows.length}<p role="status">
           {t('fs35.sources_disabled')}
         </p>{/if}
-      {#if !project.data.material}<p role="status">{t('selector.material_missing')}</p>{/if}
+      {#if !project.data.material && (discovery === 'recommended' || (selectedRecord && !selectedUnavailable))}<p
+          role="status"
+        >
+          {t('selector.material_missing')}
+        </p>{/if}
       {#if attempted && !busy && !suggestions.length && !error && !previewStale}
         <div
           class="no-match"
@@ -677,6 +725,18 @@
       {/if}
 
       {#each suggestions as source (source.id)}
+        {#if source.result.trial && !previewStale}
+          <TrialComparison
+            preview={source.result.trial}
+            current={[
+              main?.rpm,
+              main?.feed_mm_min,
+              main?.plunge_mm_min,
+              doc,
+              op.kind === 'pocket' ? (1 - overlap) * 100 : undefined,
+            ]}
+          />
+        {/if}
         {#if source.result.recommendation.status === 'available' && !previewStale}
           {#if discovery === 'browse'}<p role="status">{t('preset3.compatible')}</p>{/if}
           {@const proposal = source.result.recommendation.recommendation}
@@ -787,24 +847,17 @@
             'preset3.overwrite',
           )}</label
         >{/if}
+      {#if trial && suggestions.length && !previewStale}<label class="check-row"
+          ><input type="checkbox" bind:checked={trialAcknowledged} />{t('trial.acknowledge')}</label
+        >{/if}
       {#snippet footer()}
-        <div class="recommendation-footer">
-          <button type="button" class="inspector-action" onclick={cancelReview}
-            >{t('common.cancel')}</button
-          >
-          <button
-            type="button"
-            class="inspector-action primary"
-            disabled={busy ||
-              previewStale ||
-              !suggestions.length ||
-              !!error ||
-              (hasManual && !overwriteAcknowledged)}
-            onclick={() => {
-              if (suggestions[0]) void apply(suggestions[0]);
-            }}>{t('selector.apply')}</button
-          >
-        </div>
+        <CuttingSelectorActions
+          blocked={applyBlocked}
+          onCancel={cancelReview}
+          onApply={() => {
+            if (suggestions[0]) void apply(suggestions[0]);
+          }}
+        />
       {/snippet}
     </CuttingSelectorFrame>
   {/if}
@@ -932,11 +985,5 @@
   .caution-copy {
     color: var(--text-muted);
     font-size: var(--inspector-font-meta);
-  }
-  .recommendation-footer {
-    display: flex;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: var(--ui-space-2);
   }
 </style>
