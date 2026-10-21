@@ -1,3 +1,4 @@
+import { withLocalIdentity } from './cutting-identities';
 /// Default tool seeding per machine mode. Pure-logic so vitest covers
 /// it without the rune runtime.
 ///
@@ -42,58 +43,70 @@ export function defaultKindForMode(mode: MachineMode): ToolKind {
 export function defaultToolForMode(mode: MachineMode, id: number): ToolEntry {
   switch (mode) {
     case 'mill':
-      return {
-        id,
-        name: '3mm endmill',
-        kind: 'endmill',
-        diameter: 3,
-        flutes: 2,
-        speed: 18000,
-        plungeRate: 100,
-        feedRate: 800,
-        coolant: 'off',
-      };
+      return withLocalIdentity<ToolEntry>(
+        {
+          id,
+          name: '3mm endmill',
+          kind: 'endmill',
+          diameter: 3,
+          flutes: 2,
+          speed: 18000,
+          plungeRate: 100,
+          feedRate: 800,
+          coolant: 'off',
+        },
+        'tool',
+      );
     case 'laser':
-      return {
-        id,
-        name: '0.15mm laser',
-        kind: 'laser_beam',
-        diameter: 0.15,
-        flutes: 0,
-        speed: 0,
-        plungeRate: 0,
-        feedRate: 1000,
-        coolant: 'off',
-        kerfMm: 0.15,
-      };
+      return withLocalIdentity<ToolEntry>(
+        {
+          id,
+          name: '0.15mm laser',
+          kind: 'laser_beam',
+          diameter: 0.15,
+          flutes: 0,
+          speed: 0,
+          plungeRate: 0,
+          feedRate: 1000,
+          coolant: 'off',
+          kerfMm: 0.15,
+        },
+        'tool',
+      );
     case 'drag':
-      return {
-        id,
-        name: 'drag knife',
-        kind: 'drag_knife',
-        diameter: 0.9,
-        flutes: 0,
-        speed: 0,
-        plungeRate: 0,
-        feedRate: 800,
-        coolant: 'off',
-        dragoff: 0.25,
-      };
+      return withLocalIdentity<ToolEntry>(
+        {
+          id,
+          name: 'drag knife',
+          kind: 'drag_knife',
+          diameter: 0.9,
+          flutes: 0,
+          speed: 0,
+          plungeRate: 0,
+          feedRate: 800,
+          coolant: 'off',
+          dragoff: 0.25,
+        },
+        'tool',
+      );
     case 'plasma':
-      return {
-        id,
-        name: '1.5mm plasma torch',
-        kind: 'plasma_torch',
-        diameter: 1.5,
-        flutes: 0,
-        speed: 0,
-        plungeRate: 0,
-        feedRate: 2000,
-        coolant: 'off',
-        kerfMm: 1.5,
-        pierceHeightMm: 3.8,
-        cutHeightMm: 1.5,
-        pierceDelaySec: 0.5,
-      };
+      return withLocalIdentity<ToolEntry>(
+        {
+          id,
+          name: '1.5mm plasma torch',
+          kind: 'plasma_torch',
+          diameter: 1.5,
+          flutes: 0,
+          speed: 0,
+          plungeRate: 0,
+          feedRate: 2000,
+          coolant: 'off',
+          kerfMm: 1.5,
+          pierceHeightMm: 3.8,
+          cutHeightMm: 1.5,
+          pierceDelaySec: 0.5,
+        },
+        'tool',
+      );
   }
 }

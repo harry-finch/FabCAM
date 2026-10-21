@@ -80,10 +80,10 @@ describe('assessModeSwitch', () => {
     expect(a!.seedOffer).toBe(true);
   });
 
-  it('the engraver dual-compatibility keeps drag machines quiet', () => {
+  it('switching a rotary engraver to a drag machine reports the incompatible operation', () => {
     const tools = [tool(1, 'engraver')];
     const ops = [op(1, 1, 'engrave')];
-    expect(assessModeSwitch({ mode: 'drag' }, ops, tools)).toBeNull();
+    expect(assessModeSwitch({ mode: 'drag' }, ops, tools)?.affectedOpIds).toEqual([1]);
   });
 
   it('judges against the effective capability set, not just the primary mode', () => {

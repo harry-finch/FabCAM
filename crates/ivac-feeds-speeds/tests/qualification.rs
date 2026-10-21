@@ -23,6 +23,7 @@ fn request() -> FeedsSpeedsRequest {
         schema_version: DOMAIN_SCHEMA_VERSION,
         dataset: id("dataset"),
         machine: MachineSnapshot {
+            local_identity: None,
             identity: Some(id("machine")),
             rpm_min: Some(100),
             rpm_max: Some(3000),
@@ -34,6 +35,7 @@ fn request() -> FeedsSpeedsRequest {
             thickness_mm: Some(18.0),
         },
         tool: ToolSnapshot {
+            local_identity: None,
             identity: Some(id("tool")),
             cutting_family: CuttingFamily::FlatEndmill,
             diameter_mm: 6.0,

@@ -119,7 +119,9 @@ it('CPS -> LinuxCNC -> CPS and reopen preserve authored settings, tools and unkn
   const authored = JSON.parse(JSON.stringify(snapshotProject(io.project)));
   restoreProject(io.project, structuredClone(file));
   expect(io.project.data.machine.cpsPost).toBeUndefined();
-  expect(io.project.data.tools).toEqual(authored.tools);
+  const definitions = (tools: import('../state/project-types').ToolEntry[]) =>
+    tools.map(({ fsLocalIdentity: _identity, ...tool }) => tool);
+  expect(definitions(io.project.data.tools)).toEqual(definitions(authored.tools));
   restoreProject(io.project, authored);
   expect(snapshotProject(io.project)).toEqual(authored);
   expect(io.project.history.clear).toHaveBeenCalledTimes(3);

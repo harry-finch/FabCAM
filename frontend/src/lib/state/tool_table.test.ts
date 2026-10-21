@@ -50,7 +50,7 @@ describe('matchesToolFilter', () => {
     // The engraver's dual compatibility shows under both machines.
     const engraver = tool(4, 'engraver', 'engraver');
     expect(matchesToolFilter(engraver, { ...EMPTY_TOOL_VIEW, mode: 'mill' })).toBe(true);
-    expect(matchesToolFilter(engraver, { ...EMPTY_TOOL_VIEW, mode: 'drag' })).toBe(true);
+    expect(matchesToolFilter(engraver, { ...EMPTY_TOOL_VIEW, mode: 'drag' })).toBe(false);
   });
 });
 

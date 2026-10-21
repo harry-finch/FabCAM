@@ -209,7 +209,7 @@
     </details>
   {/if}
   <p class="meta">{t('fs38.backup_help')}</p>
-  <button class="inspector-action" disabled={busy} onclick={backup}>{t('fs38.export')}</button>
+  <button class="inspector-action" disabled={busy} onclick={backup}>{t('v11.pack_export')}</button>
   {#if error}<p role="alert">{error}</p>{/if}
 </details>
 {#if reviewPack}

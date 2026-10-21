@@ -1,3 +1,4 @@
+import { withLocalIdentity } from './cutting-identities';
 /// Machine-profile helpers — pure logic between the workspace store
 /// (which persists profiles per-user) and the project (which holds the
 /// working copy + a profile reference). Rune-free so vitest covers it
@@ -53,8 +54,10 @@ export function profileFromCurrent(
   return {
     id,
     name: profileNameFor(machine, existing),
-    machine: JSON.parse(JSON.stringify(machine)) as MachineSettings,
-    tools: JSON.parse(JSON.stringify(tools)) as ToolEntry[],
+    machine: withLocalIdentity(JSON.parse(JSON.stringify(machine)) as MachineSettings, 'machine'),
+    tools: (JSON.parse(JSON.stringify(tools)) as ToolEntry[]).map((t) =>
+      withLocalIdentity(t, 'tool'),
+    ),
   };
 }
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import OperationToolPicker from '../OperationToolPicker.svelte';
   import { Settings2 } from '@lucide/svelte';
   import { project } from '../../state/project.svelte';
   import type { PlanarSurfaceOp } from '../../state/op_types';
@@ -64,17 +65,7 @@
 <label class="row"
   ><span>{t('opprops.tool')}</span>
   <div class="tool-cell">
-    <select
-      value={op.toolId}
-      onchange={(e) => project.updateOperation(op.id, { toolId: Number(e.currentTarget.value) })}
-    >
-      {#if !flatTools.some((tool) => tool.id === op.toolId)}<option value={op.toolId}
-          >{t('surface.choose_flat')}</option
-        >{/if}
-      {#each flatTools as tool (tool.id)}<option value={tool.id}
-          >{tool.name} · Ø{effectiveDiameterMm(tool)} mm</option
-        >{/each}
-    </select>
+    <OperationToolPicker {op} />
     <button
       type="button"
       class="tool-edit"

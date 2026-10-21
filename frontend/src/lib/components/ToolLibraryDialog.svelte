@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { withLocalIdentity } from '../state/cutting-identities';
   import {
     project,
     type ToolEntry,
@@ -148,14 +149,14 @@
         return;
       }
       if (mode === 'replace') pendingImport = next;
-      else dd.draft = next;
+      else dd.draft = next.map((t) => withLocalIdentity(t, 'tool'));
     } finally {
       importing = false;
     }
   }
   function acceptImport() {
     if (!pendingImport || conflict) return;
-    dd.draft = pendingImport;
+    dd.draft = pendingImport.map((t) => withLocalIdentity(t, 'tool'));
     selectedId = pendingImport[0]?.id ?? null;
     pendingImport = null;
     clearFilters();

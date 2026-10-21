@@ -1,6 +1,7 @@
 //! Deliberate milling proposal/application adapter. Generation only reads saved rates.
 use crate::project::{MachineMode, Op, OpKind, PassKind, Project, ToolEntry, ToolKind};
 use ivac_feeds_speeds as fs;
+pub use ivac_feeds_speeds::{is_lab_pack_id, safe_pack_id};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -8,6 +9,9 @@ use serde::{Deserialize, Serialize};
 #[serde(deny_unknown_fields)]
 pub struct FsContext {
     pub machine_identity: Option<fs::Identity>,
+    /// Physical lab identity, independent of reference-pack compatibility.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub machine_local_identity: Option<fs::Identity>,
     pub tools: Vec<FsToolBinding>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
@@ -15,6 +19,8 @@ pub struct FsContext {
 pub struct FsToolBinding {
     pub tool_id: u32,
     pub identity: fs::Identity,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub local_identity: Option<fs::Identity>,
     pub max_rpm: Option<u32>,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
@@ -141,6 +147,10 @@ pub fn cam_request(
         schema_version: fs::DOMAIN_SCHEMA_VERSION,
         dataset,
         machine: fs::MachineSnapshot {
+            local_identity: project
+                .fs_context
+                .as_ref()
+                .and_then(|v| v.machine_local_identity.clone()),
             identity: project
                 .fs_context
                 .as_ref()
@@ -156,6 +166,7 @@ pub fn cam_request(
             thickness_mm: project.stock.as_ref().map(|v| v.thickness_mm),
         },
         tool: fs::ToolSnapshot {
+            local_identity: binding.and_then(|b| b.local_identity.clone()),
             identity: binding.map(|b| b.identity.clone()),
             cutting_family: if tool.kind == ToolKind::Endmill {
                 fs::CuttingFamily::FlatEndmill
@@ -497,7 +508,7 @@ pub fn capture_lab_preset(project: &Project, op_id: u32) -> Result<FsLabCapture,
         .iter()
         .find(|op| op.id == op_id)
         .ok_or("Operation is missing")?;
-    let request = cam_request(
+    let mut request = cam_request(
         project,
         op,
         fs::Identity {
@@ -510,11 +521,30 @@ pub fn capture_lab_preset(project: &Project, op_id: u32) -> Result<FsLabCapture,
             .and_then(|a| a.proposal.as_ref())
             .map_or(fs::Aggressiveness::Prudent, |p| p.aggressiveness),
     )?;
-    if request.machine.identity.is_none()
-        || request.material.identity.is_none()
-        || request.tool.identity.is_none()
-    {
-        return Err("Set stable machine, material and tool identities in Machine, Stock and Tool library before saving a reusable lab preset".into());
+    // Captures belong to this physical lab machine/tool, never to a reference model.
+    request.use_local_identities();
+    let mut missing = Vec::new();
+    if request.machine.identity.is_none() {
+        missing.push("Machine: save the machine in the Machine workspace".to_string());
+    }
+    if request.material.identity.is_none() {
+        missing.push(
+            "Material: choose a material in Stock or the cutting recommendation dialog".to_string(),
+        );
+    }
+    if request.tool.identity.is_none() {
+        let name = project
+            .tools
+            .iter()
+            .find(|t| t.id == op.tool_id)
+            .map_or_else(|| format!("#{}", op.tool_id), |t| t.name.clone());
+        missing.push(format!("Tool '{name}': save the tool in Tool library"));
+    }
+    if !missing.is_empty() {
+        return Err(format!(
+            "Cannot save preset. Missing setup:\n- {}",
+            missing.join("\n- ")
+        ));
     }
     let tool = project
         .tools
@@ -577,14 +607,40 @@ mod tests {
             operations: vec![op],
             material: Some(doc.materials[0].identity.clone()),
             fs_context: Some(FsContext {
+                machine_local_identity: None,
                 machine_identity: Some(doc.machines[0].identity.clone()),
                 tools: vec![FsToolBinding {
+                    local_identity: None,
                     tool_id: 1,
                     identity: doc.tools[0].identity.clone(),
                     max_rpm: None,
                 }],
             }),
             ..Project::default()
+        }
+    }
+    #[test]
+    fn lab_capture_names_only_missing_identities() {
+        for (machine, material, tool) in [
+            (true, false, false),
+            (false, true, false),
+            (false, false, true),
+            (true, true, true),
+        ] {
+            let mut p = fixture();
+            if machine {
+                p.fs_context.as_mut().unwrap().machine_identity = None;
+            }
+            if material {
+                p.material = None;
+            }
+            if tool {
+                p.fs_context.as_mut().unwrap().tools.clear();
+            }
+            let error = capture_lab_preset(&p, p.operations[0].id).unwrap_err();
+            assert_eq!(error.contains("Machine:"), machine);
+            assert_eq!(error.contains("Material:"), material);
+            assert_eq!(error.contains("Tool '"), tool);
         }
     }
     #[test]
@@ -619,6 +675,29 @@ mod tests {
         project.fs_context = None;
         assert!(capture_lab_preset(&project, project.operations[0].id).is_err());
     }
+    #[test]
+    fn capture_uses_physical_identities_without_replacing_reference_links() {
+        let mut p = fixture();
+        let local_machine = fs::Identity {
+            id: "physical-lab-machine".into(),
+            revision: "1".into(),
+        };
+        let local_tool = fs::Identity {
+            id: "physical-lab-tool".into(),
+            revision: "1".into(),
+        };
+        let context = p.fs_context.as_mut().unwrap();
+        context.machine_local_identity = Some(local_machine.clone());
+        context.tools[0].local_identity = Some(local_tool.clone());
+        let before = serde_json::to_string(&p).unwrap();
+        let capture = capture_lab_preset(&p, p.operations[0].id).unwrap();
+        assert_eq!(capture.request.machine.identity, Some(local_machine));
+        assert_eq!(capture.request.tool.identity, Some(local_tool));
+        assert_eq!(serde_json::to_string(&p).unwrap(), before);
+        let roundtrip: Project = serde_json::from_str(&before).unwrap();
+        assert_eq!(serde_json::to_string(&roundtrip).unwrap(), before);
+    }
+
     #[test]
     fn lab_capture_uses_applied_manual_slot_instead_of_original_recommendation() {
         let mut project = fixture();

@@ -596,7 +596,7 @@ impl ToolKind {
     /// authority mirrored by `TOOL_COMPATIBLE_MODES` in
     /// `frontend/src/lib/state/tool_family.ts`; keep the two in sync.
     /// Mill kinds are rotating cutters that need a spindle; the
-    /// engraver doubles as a drag-engraving point on a Drag machine.
+    /// engraver is a rotating cutter requiring a milling spindle.
     /// A mode switch never mutates the library — incompatible tools
     /// are filtered from pickers and flagged at generate time, not
     /// deleted.
@@ -612,7 +612,7 @@ impl ToolKind {
             | ToolKind::FormProfile
             | ToolKind::Kegel
             | ToolKind::ThreadMill => &[MachineMode::Mill],
-            ToolKind::Engraver => &[MachineMode::Mill, MachineMode::Drag],
+            ToolKind::Engraver => &[MachineMode::Mill],
             ToolKind::DragKnife => &[MachineMode::Drag],
             ToolKind::LaserBeam => &[MachineMode::Laser],
             ToolKind::PlasmaTorch => &[MachineMode::Plasma],
@@ -775,7 +775,7 @@ mod tests {
             (ToolKind::Endmill, &[Mill]),
             (ToolKind::BallNose, &[Mill]),
             (ToolKind::VBit, &[Mill]),
-            (ToolKind::Engraver, &[Mill, Drag]),
+            (ToolKind::Engraver, &[Mill]),
             (ToolKind::DragKnife, &[Drag]),
             (ToolKind::Drill, &[Mill]),
             (ToolKind::LaserBeam, &[Laser]),
@@ -793,7 +793,7 @@ mod tests {
                 "compatible-modes mismatch for {kind:?}"
             );
         }
-        assert!(ToolKind::Engraver.compatible_with_mode(Drag));
+        assert!(!ToolKind::Engraver.compatible_with_mode(Drag));
         assert!(!ToolKind::Endmill.compatible_with_mode(Plasma));
         assert!(ToolKind::PlasmaTorch.compatible_with_mode(Plasma));
         assert!(!ToolKind::PlasmaTorch.compatible_with_mode(Mill));

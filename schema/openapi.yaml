@@ -1636,6 +1636,11 @@ components:
           anyOf:
           - $ref: '#/components/schemas/FsIdentity'
           - type: 'null'
+        machine_local_identity:
+          anyOf:
+          - $ref: '#/components/schemas/FsIdentity'
+          - type: 'null'
+          description: Physical lab identity, independent of reference-pack compatibility.
         tools:
           items:
             $ref: '#/components/schemas/FsToolBinding'
@@ -2298,6 +2303,11 @@ components:
           anyOf:
           - $ref: '#/components/schemas/FsIdentity'
           - type: 'null'
+        local_identity:
+          anyOf:
+          - $ref: '#/components/schemas/FsIdentity'
+          - type: 'null'
+          description: Physical lab identity; reference compatibility remains in `identity`.
         max_feed_mm_min:
           format: uint32
           minimum: 0.0
@@ -2844,6 +2854,10 @@ components:
       properties:
         identity:
           $ref: '#/components/schemas/FsIdentity'
+        local_identity:
+          anyOf:
+          - $ref: '#/components/schemas/FsIdentity'
+          - type: 'null'
         max_rpm:
           format: uint32
           minimum: 0.0
@@ -2898,6 +2912,11 @@ components:
           anyOf:
           - $ref: '#/components/schemas/FsIdentity'
           - type: 'null'
+        local_identity:
+          anyOf:
+          - $ref: '#/components/schemas/FsIdentity'
+          - type: 'null'
+          description: Physical lab identity; reference compatibility remains in `identity`.
         max_rpm:
           format: uint32
           minimum: 0.0

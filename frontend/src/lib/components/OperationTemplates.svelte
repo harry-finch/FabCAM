@@ -16,7 +16,8 @@
     templateBindingProblem,
     templateToolDifferences,
   } from '../state/operation-template-ui';
-  import { addOperationCommand } from '../state/commands';
+  import { workingToolChoices } from '../state/tool_inventory';
+  import { addOperationCommand, addToolCommand } from '../state/commands';
   import { computeFootprint } from '../sim/footprint';
   import { t, type MsgKey } from '../i18n';
   import Modal from './Modal.svelte';
@@ -51,9 +52,12 @@
   const current = $derived(
     project.data.operations.find((op) => op.id === project.sel.selectedOpId),
   );
-  const tools = $derived(
-    project.data.tools.filter((tool) => tool.kind === 'endmill' && !tool.whirl),
-  );
+  const tools = $derived.by(() => {
+    void workspace.version;
+    return workingToolChoices(project.data.tools, workspace.get().tool_inventory).filter(
+      (tool) => tool.kind === 'endmill' && !tool.whirl,
+    );
+  });
   const drawingIds = $derived(
     (project.transformedImport?.object_meta ?? []).map((object) => object.id),
   );
@@ -65,7 +69,7 @@
     nextId: nextDrawingOperationId(project.data.operations, project.data.drawing),
     toolId: Number(toolId),
     finishToolId: finishId ? Number(finishId) : undefined,
-    tools: project.data.tools,
+    tools,
     objectIds: source === 'selected' ? selectionIds : source === 'drawing' ? drawingIds : [],
     availableObjectIds: availableIds,
     mode: project.data.machine.mode,
@@ -285,7 +289,20 @@
     try {
       if (problem) throw new Error(problem);
       const op = instantiateTemplate(template!, binding);
-      project.history.exec(addOperationCommand(op), project.target());
+      project.history.beginTransaction('Create operation from template');
+      try {
+        for (const tool of tools.filter(
+          (tool) =>
+            (tool.id === op.toolId || ('finishToolId' in op && tool.id === op.finishToolId)) &&
+            !project.data.tools.some((t) => t.id === tool.id),
+        ))
+          project.history.exec(addToolCommand(tool), project.target());
+        project.history.exec(addOperationCommand(op), project.target());
+        project.history.commitTransaction();
+      } catch (e) {
+        project.history.cancelTransaction(project.target());
+        throw e;
+      }
       project.sel.selectedOpId = op.id;
       onCreated();
       open = false;
@@ -412,7 +429,10 @@
               </select></label
             >
             <label class="row"
-              ><span>{t('templates.tool')}</span><select bind:value={toolId}>
+              ><span>{t('templates.tool')}</span><select
+                bind:value={toolId}
+                title={t('v11.tool_auto')}
+              >
                 <option value="">{t('templates.tool_placeholder')}</option>
                 {#each tools as tool (tool.id)}<option value={String(tool.id)}
                     >{tool.name} · Ø{tool.diameter} {t('machine.unit.mm')}</option
@@ -420,7 +440,10 @@
               </select></label
             >
             {#if template.finishTool}<label class="row"
-                ><span>{t('templates.finish_tool')}</span><select bind:value={finishId}>
+                ><span>{t('templates.finish_tool')}</span><select
+                  bind:value={finishId}
+                  title={t('v11.tool_auto')}
+                >
                   <option value="">{t('templates.tool_placeholder')}</option>
                   {#each tools as tool (tool.id)}<option
                       value={String(tool.id)}

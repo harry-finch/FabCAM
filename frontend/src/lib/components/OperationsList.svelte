@@ -36,6 +36,13 @@
   let sectionHeaderHeight = $state(0);
   let addButton: HTMLButtonElement;
   let pickerOpen = $state(false);
+  $effect(() => {
+    if (!active) pickerOpen = false;
+  });
+  function toggleSection() {
+    pickerOpen = false;
+    onActivate();
+  }
   let dragId = $state<number | null>(null);
   let dragOverId = $state<number | null>(null);
 
@@ -369,14 +376,14 @@
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div
     class="group-head sidebar-section-head"
-    bind:clientHeight={sectionHeaderHeight}
-    onclick={onActivate}
+    bind:offsetHeight={sectionHeaderHeight}
+    onclick={toggleSection}
   >
     <button
       class="caret-btn"
       onclick={(e) => {
         e.stopPropagation();
-        onActivate();
+        toggleSection();
       }}
       title={active ? t('oplist.collapse.title') : t('oplist.expand.title')}
       aria-label={active ? t('oplist.collapse.aria') : t('oplist.activate.aria')}
@@ -411,7 +418,7 @@
       title={t('oplist.add.title')}
       aria-label={t('oplist.add.aria')}
     >
-      +
+      {t('oplist.add')}
     </button>
   </div>
   <!-- Dialog is a sibling: its clicks cannot toggle the section header. -->
@@ -467,7 +474,7 @@
         <div
           class="row"
           class:active-context={selected}
-          style:top={selected ? `${sectionHeaderHeight}px` : undefined}
+          style:top={selected ? `calc(${sectionHeaderHeight}px + var(--ui-space-1))` : undefined}
           ondragover={(e) => onDragOver(e, op.id)}
           ondrop={(e) => onDrop(e, op.id)}
           onclick={() => selectOp(op.id)}
@@ -779,10 +786,11 @@
     color: var(--text);
     border: 1px solid var(--border);
     border-radius: 3px;
-    padding: 0.05rem 0.5rem;
-    font-size: 0.95rem;
-    line-height: 1;
+    padding: 0 0.4rem;
+    font-size: 0.72rem;
+    line-height: 1.2;
     cursor: pointer;
+    min-height: 0;
   }
   .add-btn:hover {
     background: color-mix(in srgb, var(--accent) 14%, var(--bg-elevated));

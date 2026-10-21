@@ -5,6 +5,7 @@ import type { ToolEntry } from './project-types';
 
 const tool = (id: number, diameter = 6): ToolEntry => ({
   id,
+  fsLocalIdentity: { id: `physical-tool-${id}`, revision: '1' },
   name: `Tool ${id}`,
   kind: 'endmill',
   diameter,

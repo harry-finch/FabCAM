@@ -160,10 +160,6 @@
     font-size: 0.74rem;
     color: var(--text-muted);
   }
-  .context-tab:not(.active) {
-    /* Context keeps its existing navigation action, with a quiet group cue. */
-    border-inline-start-color: var(--border);
-  }
   .machine-limitation {
     display: inline-flex;
     align-items: center;

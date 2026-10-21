@@ -82,6 +82,20 @@ pub struct RecordOrigin {
     pub adaptation: Option<AdaptationScope>,
 }
 pub const LAB_PACK_ID: &str = "sorbonne-fablab";
+/// Legacy Sorbonne packs and new named lab packs share the same authoring contract.
+pub fn is_lab_pack_id(id: &str) -> bool {
+    id == LAB_PACK_ID
+        || id.strip_prefix("lab-").is_some_and(|uuid| {
+            uuid.len() == 36
+                && uuid.bytes().enumerate().all(|(i, b)| {
+                    if [8, 13, 18, 23].contains(&i) {
+                        b == b'-'
+                    } else {
+                        b.is_ascii_digit() || (b'a'..=b'f').contains(&b)
+                    }
+                })
+        })
+}
 pub const LAB_VALIDATION_POLICY: &str = "sorbonne-local-validation-1";
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[cfg_attr(feature = "schema", schemars(rename = "FsLabState"))]
@@ -159,11 +173,11 @@ fn valid_lab_date(value: &str) -> bool {
     year > 0 && day > 0 && day <= max
 }
 fn validate_lab(pack: &SourcePack, profile: &Profile, lab: &LabPreset) -> Result<(), String> {
-    if pack.manifest.identity.id != LAB_PACK_ID
+    if !is_lab_pack_id(&pack.manifest.identity.id)
         || pack.manifest.visibility != Visibility::Private
         || pack.manifest.distribution != Distribution::LocalOnly
     {
-        return Err("Lab presets require the private local Sorbonne pack".into());
+        return Err("Lab presets require the private local preset pack".into());
     }
     if lab.name.trim().is_empty()
         || !valid_lab_date(&lab.created_at)
@@ -232,7 +246,7 @@ fn validate_lab(pack: &SourcePack, profile: &Profile, lab: &LabPreset) -> Result
                         .and_then(|r| r.validation_criteria_reference.as_deref())
                         != Some(LAB_VALIDATION_POLICY)
                 {
-                    return Err("Sorbonne validation review criteria are incomplete".into());
+                    return Err("Lab validation review criteria are incomplete".into());
                 }
             } else if lab.review.is_some() {
                 return Err("Tested preset cannot carry a validated review".into());
@@ -410,7 +424,7 @@ fn validate_pack_policy(pack: &SourcePack) -> Result<(), String> {
     {
         return Err("External references cannot supply executable cutting records".into());
     }
-    if m.identity.id == LAB_PACK_ID
+    if is_lab_pack_id(&m.identity.id)
         && (m.visibility != Visibility::Private
             || m.distribution != Distribution::LocalOnly
             || m.identity.revision.len() != 16
@@ -418,7 +432,7 @@ fn validate_pack_policy(pack: &SourcePack) -> Result<(), String> {
             || pack.records.iter().any(|r| r.lab.is_none()))
     {
         return Err(
-            "Sorbonne pack requires private local authoring records and a monotonic revision"
+            "Local preset pack requires private local authoring records and a monotonic revision"
                 .into(),
         );
     }
@@ -742,6 +756,9 @@ pub(crate) fn recommend_packs_traced(
                 profiles: Vec::new(),
             };
             let mut r = request.clone();
+            if origin.lab.is_some() {
+                r.use_local_identities();
+            }
             r.dataset = set.identity.clone();
             if let (Some(taxon), Some(identity)) = (&origin.material_taxon, &r.material.identity) {
                 if taxon_matches(taxon, identity) {

@@ -16,6 +16,7 @@ pub fn request(p: &SourcePack, d: f64) -> FeedsSpeedsRequest {
         schema_version: 1,
         dataset: p.dataset.profile_set.identity.clone(),
         machine: MachineSnapshot {
+            local_identity: None,
             identity: Some(Identity {
                 id: "machine/fablab-router".into(),
                 revision: "1".into(),
@@ -30,6 +31,7 @@ pub fn request(p: &SourcePack, d: f64) -> FeedsSpeedsRequest {
             thickness_mm: Some(12.0),
         },
         tool: ToolSnapshot {
+            local_identity: None,
             identity: s.scope.tool.clone(),
             cutting_family: CuttingFamily::FlatEndmill,
             diameter_mm: d,

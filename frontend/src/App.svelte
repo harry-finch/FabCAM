@@ -1966,6 +1966,16 @@
     overflow: visible;
     height: auto;
   }
+  /* Section hosts own the dividers; nested panels must not double them. */
+  .sidebar > div + div {
+    border-top: 1px solid var(--border);
+  }
+  .sidebar :global(.ops),
+  .sidebar :global(.layers),
+  .sidebar :global(.text-panel) {
+    border: 0;
+    padding: 0.4rem 0.6rem 0.5rem;
+  }
   /* Narrow layout: lift the sidebar out of the (now single-column) grid
      and float it over the canvas as a full-screen overlay. The accordion
      inside is unchanged — only its host box changes. Hidden until the
@@ -2025,7 +2035,6 @@
     background: var(--bg-panel);
     padding: var(--stock-header-padding) 0.6rem 0.5rem;
     overflow: visible;
-    border-bottom: 1px solid var(--border);
   }
   .stock-host.active {
     overflow: auto;

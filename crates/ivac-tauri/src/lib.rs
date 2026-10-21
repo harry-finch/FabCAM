@@ -228,6 +228,7 @@ fn run_app() -> tauri::Result<()> {
             commands::feeds_speeds_cmd,
             source_packs::import_source_pack,
             source_packs::save_lab_pack,
+            source_packs::remove_source_pack,
             source_packs::list_source_packs,
             commands::rasterize_stl_cmd,
             commands::read_workspace_file,

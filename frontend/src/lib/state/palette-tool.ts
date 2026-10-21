@@ -8,6 +8,7 @@ export function assignmentProblem(
   op: OpEntry | undefined,
   tool: ToolEntry | undefined,
   modes: readonly MachineMode[],
+  preserveCuttingValues = false,
 ):
   | 'palette.select_operation'
   | 'palette.stock_tool'
@@ -26,6 +27,7 @@ export function assignmentProblem(
   )
     return 'palette.incompatible';
   if (
+    !preserveCuttingValues &&
     op.appliedCutting &&
     (!operationRates(op, tool, 'rough') ||
       (op.kind === 'pocket' &&

@@ -844,6 +844,8 @@ export interface components {
         };
         FsContext: {
             machine_identity?: components["schemas"]["FsIdentity"] | null;
+            /** @description Physical lab identity, independent of reference-pack compatibility. */
+            machine_local_identity?: components["schemas"]["FsIdentity"] | null;
             tools: components["schemas"]["FsToolBinding"][];
         };
         /** @description Each profile supplies its own mode/operation-specific values. No hidden factors. */
@@ -1084,6 +1086,8 @@ export interface components {
         FsLabState: "draft" | "tested" | "validated";
         FsMachineSnapshot: {
             identity?: components["schemas"]["FsIdentity"] | null;
+            /** @description Physical lab identity; reference compatibility remains in `identity`. */
+            local_identity?: components["schemas"]["FsIdentity"] | null;
             /** Format: uint32 */
             max_feed_mm_min?: number | null;
             /** Format: uint32 */
@@ -1277,6 +1281,7 @@ export interface components {
         };
         FsToolBinding: {
             identity: components["schemas"]["FsIdentity"];
+            local_identity?: components["schemas"]["FsIdentity"] | null;
             /** Format: uint32 */
             max_rpm?: number | null;
             /** Format: uint32 */
@@ -1296,6 +1301,8 @@ export interface components {
             /** Format: uint8 */
             flute_count: number;
             identity?: components["schemas"]["FsIdentity"] | null;
+            /** @description Physical lab identity; reference compatibility remains in `identity`. */
+            local_identity?: components["schemas"]["FsIdentity"] | null;
             /** Format: uint32 */
             max_rpm?: number | null;
         };

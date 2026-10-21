@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { effectiveModes } from '../../state/tool_family';
+  import { toolFitsOperation } from '../../state/operation-tool';
+  import OperationToolPicker from '../OperationToolPicker.svelte';
   /// Drill op-properties fieldset. Shown only when op.kind === 'drill'.
   /// Owns the drill-cycle picker (G81 / G83 / G73), peck-step + dwell
   /// inputs, and the Stufenfase chamfer-after-width field.
@@ -137,7 +140,10 @@
           patch('spotFirst', undefined);
           return;
         }
-        const firstTool = project.data.tools[0]?.id ?? op.toolId;
+        const firstTool =
+          project.data.tools.find((tool) =>
+            toolFitsOperation(op, tool, effectiveModes(project.data.machine), 'spotToolId'),
+          )?.id ?? 0;
         patch('spotFirst', {
           spotDepthMm: op.spotFirst?.spotDepthMm ?? -0.5,
           spotToolId: op.spotFirst?.spotToolId ?? firstTool,
@@ -169,17 +175,7 @@
       </label>
       <label class="row">
         <span>{t('ops.drill.spot_tool.label')}</span>
-        <select
-          value={op.spotFirst.spotToolId}
-          onchange={(e) => {
-            const id = parseInt((e.currentTarget as HTMLSelectElement).value, 10);
-            if (op.spotFirst) patch('spotFirst', { ...op.spotFirst, spotToolId: id });
-          }}
-        >
-          {#each project.data.tools as t (t.id)}
-            <option value={t.id}>{t.id}: {t.name}</option>
-          {/each}
-        </select>
+        <OperationToolPicker {op} slot="spotToolId" />
       </label>
     </details>
   {/if}

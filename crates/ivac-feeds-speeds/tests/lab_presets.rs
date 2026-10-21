@@ -47,6 +47,7 @@ fn request(p: &SourcePack) -> FeedsSpeedsRequest {
         schema_version: 1,
         dataset: p.dataset.profile_set.identity.clone(),
         machine: MachineSnapshot {
+            local_identity: None,
             identity: Some(p.dataset.machines[0].identity.clone()),
             rpm_min: None,
             rpm_max: None,
@@ -58,6 +59,7 @@ fn request(p: &SourcePack) -> FeedsSpeedsRequest {
             thickness_mm: None,
         },
         tool: ToolSnapshot {
+            local_identity: None,
             identity: s.tool.clone(),
             cutting_family: s.cutting_family,
             diameter_mm: 6.35,
@@ -234,4 +236,155 @@ fn sorbonne_validated_record_precedes_tested_record_without_ui_ranking() {
     let selected = result.explanation.unwrap().summary;
     assert_eq!(selected.evidence, Evidence::Validated);
     assert_eq!(selected.selected_record, "sorbonne-validated-software");
+}
+
+#[test]
+fn lab_and_reference_identities_coexist_with_lab_priority_and_reference_fallback() {
+    let mut lab = lab_pack();
+    let mut r = request(&lab);
+    let public = load_source_pack_json(include_str!(
+        "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+    ))
+    .unwrap();
+    let machine = Identity {
+        id: "lab-machine-physical-a".into(),
+        revision: "1".into(),
+    };
+    let tool = Identity {
+        id: "lab-tool-physical-a".into(),
+        revision: "1".into(),
+    };
+    let mut machine_row = lab.dataset.machines[0].clone();
+    machine_row.identity = machine.clone();
+    lab.dataset.machines.push(machine_row);
+    let mut tool_row = lab
+        .dataset
+        .tools
+        .iter()
+        .find(|t| Some(&t.identity) == r.tool.identity.as_ref())
+        .unwrap()
+        .clone();
+    tool_row.identity = tool.clone();
+    lab.dataset.tools.push(tool_row);
+    let profile = &mut lab.dataset.profile_set.profiles[0];
+    profile.scope.machine = IdentitySelector::Exact {
+        identity: machine.clone(),
+    };
+    profile.scope.tool = Some(tool.clone());
+    r.machine.local_identity = Some(machine.clone());
+    r.tool.local_identity = Some(tool.clone());
+    validate_source_pack(&lab).unwrap();
+
+    for packs in [
+        vec![public.clone(), lab.clone()],
+        vec![lab.clone(), public.clone()],
+    ] {
+        let result = recommend_packs(&packs, &r).unwrap();
+        let summary = result.explanation.unwrap().summary;
+        assert_eq!(summary.selected_pack.id, LAB_PACK_ID);
+        assert!(summary.local_only);
+        let FeedsSpeedsRecommendation::Available { recommendation } = result.recommendation else {
+            panic!("expected lab recommendation")
+        };
+        assert_eq!(
+            recommendation.provenance.request.machine.identity,
+            Some(machine.clone())
+        );
+        assert_eq!(
+            recommendation.provenance.request.tool.identity,
+            Some(tool.clone())
+        );
+    }
+    // Physical entities with the same official model must not inherit this trial.
+    for changed in ["machine", "tool"] {
+        let mut other = r.clone();
+        let identity = Identity {
+            id: "different-physical-entity".into(),
+            revision: "1".into(),
+        };
+        if changed == "machine" {
+            other.machine.local_identity = Some(identity);
+        } else {
+            other.tool.local_identity = Some(identity);
+        }
+        let result = recommend_packs(&[public.clone(), lab.clone()], &other).unwrap();
+        let summary = result.explanation.unwrap().summary;
+        assert_eq!(summary.selected_pack, public.manifest.identity);
+        assert!(!summary.local_only);
+    }
+    // Removing the reference leaves the local trial available.
+    let mut local_only = r.clone();
+    local_only.machine.identity = None;
+    local_only.tool.identity = None;
+    assert_eq!(
+        recommend_packs(&[lab.clone()], &local_only)
+            .unwrap()
+            .explanation
+            .unwrap()
+            .summary
+            .selected_pack
+            .id,
+        LAB_PACK_ID
+    );
+    // Disabling local data leaves the reference usable with both links retained.
+    lab.records[0].lab.as_mut().unwrap().enabled = false;
+    assert_eq!(
+        recommend_packs(&[public.clone(), lab], &r)
+            .unwrap()
+            .explanation
+            .unwrap()
+            .summary
+            .selected_pack,
+        public.manifest.identity
+    );
+    // Empty physical identities are rejected even when a valid reference exists.
+    r.machine.local_identity.as_mut().unwrap().id.clear();
+    assert!(matches!(
+        recommend_packs(&[public], &r).unwrap().recommendation,
+        FeedsSpeedsRecommendation::Unavailable {
+            reason: UnavailableReason::InvalidRequest { .. }
+        }
+    ));
+}
+
+#[test]
+fn named_lab_pack_preserves_validation_and_empty_creation_contract() {
+    let mut p = lab_pack();
+    p.manifest.identity.id = "lab-00000000-0000-4000-8000-000000000001".into();
+    p.manifest.name = "Fablab X / Atelier ébénisterie".into();
+    assert!(load_source_pack_json(&serde_json::to_string(&p).unwrap()).is_ok());
+    p.manifest.visibility = Visibility::Public;
+    assert!(load_source_pack_json(&serde_json::to_string(&p).unwrap()).is_err());
+    p.manifest.visibility = Visibility::Private;
+    p.records[0].lab.as_mut().unwrap().physically_tested = false;
+    assert!(load_source_pack_json(&serde_json::to_string(&p).unwrap()).is_err());
+    p.records.clear();
+    p.dataset.profile_set.profiles.clear();
+    assert!(load_source_pack_json(&serde_json::to_string(&p).unwrap()).is_ok());
+    p.manifest.identity.revision = "not-a-monotonic-revision".into();
+    assert!(load_source_pack_json(&serde_json::to_string(&p).unwrap()).is_err());
+}
+
+#[test]
+fn named_lab_pack_roundtrip_keeps_priority_without_reclassifying_generic_lab_sources() {
+    assert!(!is_lab_pack_id("lab-external-reference"));
+    let mut p = lab_pack();
+    p.manifest.identity.id = "lab-00000000-0000-4000-8000-000000000001".into();
+    let p = load_source_pack_json(&serde_json::to_string(&p).unwrap()).unwrap();
+    let public = load_source_pack_json(include_str!(
+        "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+    ))
+    .unwrap();
+    let result = recommend_packs(&[public.clone(), p.clone()], &request(&p)).unwrap();
+    assert_eq!(
+        result.explanation.unwrap().summary.selected_pack.id,
+        p.manifest.identity.id
+    );
+    let mut disabled = p.clone();
+    disabled.records[0].lab.as_mut().unwrap().enabled = false;
+    let result = recommend_packs(&[public.clone(), disabled], &request(&p)).unwrap();
+    assert_eq!(
+        result.explanation.unwrap().summary.selected_pack.id,
+        public.manifest.identity.id
+    );
 }

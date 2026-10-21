@@ -1,4 +1,5 @@
 <script lang="ts">
+  import OperationToolPicker from './OperationToolPicker.svelte';
   /// Operation properties panel — bound to project.sel.selectedOpId. Shows
   /// the kind-specific parameters of the selected op plus a tool picker
   /// fed from project.data.tools. Edits are pushed straight back through
@@ -19,11 +20,8 @@
   import { defaultClient } from '../api/http';
   import type { HelixRadiusResponse } from '../api/types';
   import { prettyOpKind } from '../state/project-types';
-  import { formatLength } from '../cam/units';
   import { formatExpectedToolKinds, isToolKindAcceptable } from '../state/op_tool_constraint';
-  import { effectiveModes, machineModesLabel } from '../state/tool_family';
   import { effectiveDiameterHint } from '../state/tool_wear';
-  import { partitionToolsForModes } from '../state/tool_picker';
   import { t } from '../i18n';
   import FeedsSpeedsSection from './op_properties/FeedsSpeedsSection.svelte';
   import VCarveCompatibility from './op_properties/VCarveCompatibility.svelte';
@@ -99,13 +97,6 @@
       ? null
       : (project.data.operations.find((o) => o.id === project.sel.selectedOpId) ?? null),
   );
-
-  /// Library split for the tool pickers: tools the machine's effective
-  /// mode set can run first; the rest stay selectable under a labelled
-  /// "incompatible" group so a machine-mode switch never strands an op
-  /// on an invisible tool.
-  const machineModes = $derived(effectiveModes(project.data.machine));
-  const toolParts = $derived(partitionToolsForModes(project.data.tools, machineModes));
 
   /// Resolve the assigned tool's defaultStep for the current op so the
   /// Step / pass input can fall back to it. null when no assignment.
@@ -210,26 +201,6 @@
 </script>
 
 <aside class="props" class:embedded>
-  {#snippet toolOptions(disabledId: number | null)}
-    <!-- Mode-compatible tools first; incompatible ones stay selectable
-         under a labelled group (visible-and-explained, never hidden). -->
-    {#each toolParts.compatible as t (t.id)}
-      <option value={t.id} disabled={disabledId === t.id} title={t.comment ?? ''}
-        >#{t.id} {t.name} ({formatLength(t.diameter, project.data.machine.unit)})</option
-      >
-    {/each}
-    {#if toolParts.incompatible.length > 0}
-      <optgroup
-        label={t('opprops.tool.incompatible_group', { modes: machineModesLabel(machineModes) })}
-      >
-        {#each toolParts.incompatible as t (t.id)}
-          <option value={t.id} disabled={disabledId === t.id} title={t.comment ?? ''}
-            >#{t.id} {t.name} ({formatLength(t.diameter, project.data.machine.unit)})</option
-          >
-        {/each}
-      </optgroup>
-    {/if}
-  {/snippet}
   {#if !embedded}
     <h3>{t('opprops.title')}</h3>
   {/if}
@@ -276,13 +247,7 @@
     <label class="row" title={t('opprops.tool.title.relief')}>
       <span>{t('opprops.tool')}</span>
       <div class="tool-cell">
-        <select
-          value={op.toolId}
-          onchange={(e) =>
-            patch('toolId', parseInt((e.currentTarget as HTMLSelectElement).value, 10))}
-        >
-          {@render toolOptions(null)}
-        </select>
+        <OperationToolPicker {op} />
         <button
           type="button"
           class="tool-edit"
@@ -322,13 +287,7 @@
     <label class="row" title={t('opprops.tool.title.default')}>
       <span>{t('opprops.tool')}</span>
       <div class="tool-cell">
-        <select
-          value={op.toolId}
-          onchange={(e) =>
-            patch('toolId', parseInt((e.currentTarget as HTMLSelectElement).value, 10))}
-        >
-          {@render toolOptions(null)}
-        </select>
+        <OperationToolPicker {op} />
         <button
           type="button"
           class="tool-edit"
@@ -368,13 +327,7 @@
     <label class="row" title={t('opprops.tool.title.raster')}>
       <span>{t('opprops.tool')}</span>
       <div class="tool-cell">
-        <select
-          value={op.toolId}
-          onchange={(e) =>
-            patch('toolId', parseInt((e.currentTarget as HTMLSelectElement).value, 10))}
-        >
-          {@render toolOptions(null)}
-        </select>
+        <OperationToolPicker {op} />
         <button
           type="button"
           class="tool-edit"
@@ -417,13 +370,7 @@
     >
       <span>{t('opprops.tool')}</span>
       <div class="tool-cell">
-        <select
-          value={op.toolId}
-          onchange={(e) =>
-            patch('toolId', parseInt((e.currentTarget as HTMLSelectElement).value, 10))}
-        >
-          {@render toolOptions(null)}
-        </select>
+        <OperationToolPicker {op} />
         <button
           type="button"
           class="tool-edit"
@@ -451,16 +398,7 @@
       >
         <span>{t('opprops.finish_tool')}</span>
         <div class="tool-cell">
-          <select
-            value={op.finishToolId ?? ''}
-            onchange={(e) => {
-              const raw = (e.currentTarget as HTMLSelectElement).value;
-              patch('finishToolId', raw === '' ? undefined : parseInt(raw, 10));
-            }}
-          >
-            <option value="">{t('opprops.finish_tool.same_as_rough')}</option>
-            {@render toolOptions(op.toolId)}
-          </select>
+          <OperationToolPicker {op} slot="finishToolId" />
         </div>
       </label>
     {/if}

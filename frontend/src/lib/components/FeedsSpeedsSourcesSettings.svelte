@@ -3,34 +3,74 @@
   onMount(() => {
     void recommendationSources.refresh(true);
   });
+  import LabPackCreate from './LabPackCreate.svelte';
   import LabPresetManager from './LabPresetManager.svelte';
-  import { currentLocalPacks, LAB_PACK_ID } from '../state/lab-presets';
+  import { currentLocalPacks, isLabPackId } from '../state/lab-presets';
   import { project } from '../state/project.svelte';
   import {
     packReference,
     type SourceSettings,
     type SourcePack,
   } from '../state/feeds-speeds-sources';
-  import { importLocalPack, MAX_PACK_BYTES } from '../state/feeds-speeds-pack-store';
+  import {
+    removeLocalSource,
+    importLocalPack,
+    MAX_PACK_BYTES,
+  } from '../state/feeds-speeds-pack-store';
   import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
   import { t } from '../i18n';
+  import { confirmStore } from '../state/confirm.svelte';
   function evidenceSummary(pack: SourcePack) {
-    return [...new Set(pack.dataset.profile_set.profiles.map((p) => p.evidence))]
-      .map((value) =>
-        t(
-          value === 'reference_data'
-            ? 'fs35.reference'
-            : value === 'tested'
-              ? 'fs35.tested'
-              : value === 'validated'
-                ? 'fs35.validated'
-                : 'fs35.theoretical',
-        ),
-      )
-      .join(' / ');
+    return (
+      [...new Set(pack.dataset.profile_set.profiles.map((p) => p.evidence))]
+        .map((value) =>
+          t(
+            value === 'reference_data'
+              ? 'fs35.reference'
+              : value === 'tested'
+                ? 'fs35.tested'
+                : value === 'validated'
+                  ? 'fs35.validated'
+                  : 'fs35.theoretical',
+          ),
+        )
+        .join(' / ') || t('v11.pack_empty')
+    );
   }
   let error = $state('');
   let importing = $state(false);
+  let removing = $state(false);
+  async function removeSource(pack: SourcePack) {
+    const id = pack.manifest.identity.id;
+    const head = recommendationSources.local
+      .filter((p) => p.manifest.identity.id === id)
+      .map((p) => p.manifest.identity.revision)
+      .sort()
+      .at(-1);
+    if (!head || removing) return;
+    const accepted = await confirmStore.ask({
+      title: t('v11.source_remove'),
+      body: t('v11.source_remove_help', { name: pack.manifest.name }),
+      primaryLabel: t('v11.source_remove'),
+      cancelLabel: t('common.cancel'),
+      danger: true,
+    });
+    if (!accepted) return;
+    removing = true;
+    try {
+      await removeLocalSource(id, head);
+      const latest = project.data.settings.feedsSpeedsSources;
+      project.updateSettings({
+        feedsSpeedsSources: { ...latest, local: (latest.local ?? []).filter((r) => r.id !== id) },
+      });
+      error = '';
+    } catch (e) {
+      error = String(e);
+    } finally {
+      await recommendationSources.refresh(true);
+      removing = false;
+    }
+  }
   $effect(() => {
     void project.data.settings.feedsSpeedsSources;
     void recommendationSources.refresh();
@@ -53,6 +93,7 @@
 <h3>{t('fs35.sources')}</h3>
 <p>{t('fs37.sources_help')}</p>
 <h4>{t('fs37.built_in')}</h4>
+<p class="meta">{t('v11.source_bundled')}</p>
 {#each recommendationSources.builtins as pack (pack.manifest.identity.id)}
   <label
     ><input
@@ -81,7 +122,8 @@
   </details>
 {/each}
 <h4>{t('fs37.local')}</h4>
-{#each currentLocalPacks(recommendationSources.local) as pack (pack.manifest.identity.id === LAB_PACK_ID ? LAB_PACK_ID : pack.manifest.identity.id + '@' + pack.manifest.identity.revision)}
+<LabPackCreate />
+{#each currentLocalPacks(recommendationSources.local) as pack (isLabPackId(pack.manifest.identity.id) ? pack.manifest.identity.id : pack.manifest.identity.id + '@' + pack.manifest.identity.revision)}
   <label
     ><input
       type="checkbox"
@@ -113,13 +155,16 @@
     <p>{pack.manifest.attribution}</p>
     <p>{pack.manifest.notes}</p>
   </details>
-  {#if pack.manifest.identity.id === LAB_PACK_ID}<LabPresetManager {pack} />{/if}
+  <button type="button" disabled={removing || importing} onclick={() => removeSource(pack)}
+    >{t('v11.source_remove')}</button
+  >
+  {#if isLabPackId(pack.manifest.identity.id)}<LabPresetManager {pack} />{/if}
 {/each}
 {#if !recommendationSources.local.length}<p class="meta">{t('fs37.no_local')}</p>{/if}
 <label class="import"
   >{t('fs37.import')}<input
     type="file"
-    disabled={importing}
+    disabled={importing || removing}
     accept=".json,application/json"
     onchange={async (e) => {
       const input = e.currentTarget;
@@ -133,7 +178,7 @@
           ...settings,
           local: [
             ...(settings.local ?? []).filter(
-              (r) => pack.manifest.identity.id !== LAB_PACK_ID || r.id !== LAB_PACK_ID,
+              (r) => !isLabPackId(pack.manifest.identity.id) || r.id !== pack.manifest.identity.id,
             ),
             packReference(pack),
           ],

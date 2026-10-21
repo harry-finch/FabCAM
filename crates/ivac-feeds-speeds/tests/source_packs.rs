@@ -9,6 +9,7 @@ fn request(p: &SourcePack) -> FeedsSpeedsRequest {
         schema_version: 1,
         dataset: p.dataset.profile_set.identity.clone(),
         machine: MachineSnapshot {
+            local_identity: None,
             identity: Some(p.dataset.machines[0].identity.clone()),
             rpm_min: None,
             rpm_max: None,
@@ -20,6 +21,7 @@ fn request(p: &SourcePack) -> FeedsSpeedsRequest {
             thickness_mm: None,
         },
         tool: ToolSnapshot {
+            local_identity: None,
             identity: profile.scope.tool.clone(),
             cutting_family: CuttingFamily::FlatEndmill,
             diameter_mm: 6.35,

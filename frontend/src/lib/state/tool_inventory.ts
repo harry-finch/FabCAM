@@ -45,8 +45,8 @@ export function stockTool(
 ): ToolEntry | null {
   const clone = JSON.parse(JSON.stringify(inventoryTool)) as ToolEntry;
   const existing = stocked.find((t) => t.id === inventoryTool.id);
+  if (stockedCopy(inventoryTool, stocked)) return null;
   if (existing) {
-    if (JSON.stringify(existing) === JSON.stringify(inventoryTool)) return null;
     clone.id = stocked.reduce((m, t) => Math.max(m, t.id), 0) + 1;
   }
   return clone;
@@ -57,4 +57,31 @@ export function stockTool(
 /// inventory). Runs the legacy-term migrations like a project load.
 export function seedInventoryFromProject(projectTools: readonly ToolEntry[]): ToolEntry[] {
   return (JSON.parse(JSON.stringify(projectTools)) as ToolEntry[]).map(migrateLegacyToolTerms);
+}
+
+/** Resolve an identical stocked copy, including a previously remapped id collision. */
+export function stockedCopy(tool: ToolEntry, stocked: readonly ToolEntry[]): ToolEntry | undefined {
+  const sameId = stocked.find((t) => t.id === tool.id);
+  const signature = (t: ToolEntry) =>
+    JSON.stringify(
+      Object.entries(JSON.parse(JSON.stringify(t)) as ToolEntry)
+        .filter(([key]) => key !== 'id')
+        .sort(([a], [b]) => a.localeCompare(b)),
+    );
+  if (!sameId) return undefined;
+  if (signature(sameId) === signature(tool)) return sameId;
+  return stocked.find((t) => signature(t) === signature(tool));
+}
+
+/** Preview the choices without stocking anything until the operation draft is accepted. */
+export function workingToolChoices(
+  stocked: readonly ToolEntry[],
+  inventory: readonly ToolEntry[],
+): ToolEntry[] {
+  const choices = [...stocked];
+  for (const tool of inventory) {
+    const added = stockTool(tool, choices);
+    if (added) choices.push(added);
+  }
+  return choices;
 }

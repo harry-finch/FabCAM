@@ -91,3 +91,12 @@ it('refuses whirling tools for planar surfacing', () => {
   });
   expect(assignmentProblem(op, { ...tool, whirl: true }, ['mill'])).toBe('palette.incompatible');
 });
+
+it('permits inventory assignment through the value-preserving selection command', () => {
+  const op = profile();
+  op.appliedCutting = { slots: [], context_key: 'manual', doc_origin: 'manual' };
+  expect(assignmentProblem(op, { ...tool, id: 99 }, ['mill'], true)).toBeUndefined();
+  expect(assignmentProblem(op, { ...tool, kind: 'drag_knife' }, ['mill'], true)).toBe(
+    'palette.incompatible',
+  );
+});

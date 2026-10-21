@@ -1,3 +1,4 @@
+import { withLocalIdentity } from './cutting-identities';
 import {
   defaultProjectTools,
   defaultProjectMachine,
@@ -250,14 +251,26 @@ export function restoreProject(p: ProjectState, file: ProjectFile) {
   }
   p.data.stock = { ...defaultProjectStock(), ...file.stock };
   p.data.tools = Array.isArray(file.tools)
-    ? file.tools.map(migrateLegacyToolTerms)
+    ? file.tools.map((t) =>
+        withLocalIdentity(
+          migrateLegacyToolTerms(t),
+          'tool',
+          file.fsContext?.tools.find((b) => b.tool_id === t.id)?.identity,
+          file.fsContext?.tools.find((b) => b.tool_id === t.id)?.local_identity,
+        ),
+      )
     : defaultProjectTools();
   // A full document owns its machine, including inactive/unknown authored keys.
   // Missing legacy dialect means LinuxCNC, not the previously used workspace post.
   p.data.machine = {
     ...defaultProjectMachine(),
     gcodeDialect: 'linuxcnc',
-    ...migrateMachineSettings(file.machine ?? {}),
+    ...withLocalIdentity(
+      migrateMachineSettings(file.machine ?? {}),
+      'machine',
+      file.fsContext?.machine_identity,
+      file.fsContext?.machine_local_identity,
+    ),
   };
   if (Array.isArray(file.operations)) p.data.operations = file.operations;
   p.data.fixtures = Array.isArray(file.fixtures) ? file.fixtures : [];

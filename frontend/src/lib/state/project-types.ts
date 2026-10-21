@@ -160,6 +160,8 @@ export interface FormProfileSample {
 export interface ToolEntry {
   /** Explicit reference compatibility, never inferred from physical dimensions. */
   fsIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
+  /** Stable lab identity, independent of the selected reference pack. */
+  fsLocalIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
   id: number;
   name: string;
   kind: ToolKind;
@@ -347,6 +349,8 @@ export function migrateMachineSettings(raw: unknown): MachineSettings {
 export interface MachineSettings {
   /** Explicit source-machine compatibility, separate from the physical machine. */
   fsIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
+  /** Stable lab identity, independent of the selected reference pack. */
+  fsLocalIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
   /// Free-text identifier for this machine ("Shop CNC",
   /// "Garage MPCNC"). Surfaces in the MachineDialog header + the
   /// .ivac-machine.json save file. Empty by default.

@@ -34,6 +34,7 @@ fn main() {
                 schema_version: 1,
                 dataset: pack.dataset.profile_set.identity.clone(),
                 machine: MachineSnapshot {
+                    local_identity: None,
                     identity: Some(Identity {
                         id: "machine/fablab-router".into(),
                         revision: "1".into(),
@@ -48,6 +49,7 @@ fn main() {
                     thickness_mm: Some(12.0),
                 },
                 tool: ToolSnapshot {
+                    local_identity: None,
                     identity: pack.dataset.profile_set.profiles[0].scope.tool.clone(),
                     cutting_family: CuttingFamily::FlatEndmill,
                     diameter_mm: d,

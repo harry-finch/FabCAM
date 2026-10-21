@@ -1,4 +1,5 @@
 // Installation-local packs. Never use the HTTP client or include packs in project saves.
+import { isLabPackId } from './lab-presets';
 import { invoke } from '@tauri-apps/api/core';
 import { WasmWiacClient } from '../api/wasm';
 import { TauriWiacClient } from '../api/tauri';
@@ -28,11 +29,14 @@ export async function readLocalPacks(): Promise<string[]> {
         req = store.getAllKeys();
       req.onsuccess = () => {
         const keys = req.result.map(String);
-        const labHead = keys
-          .filter((k) => k.startsWith('sorbonne-fablab@'))
-          .sort()
-          .at(-1);
-        const selected = keys.filter((k) => !k.startsWith('sorbonne-fablab@') || k === labHead);
+        const heads = new Map<string, string>();
+        for (const key of keys.sort()) {
+          const id = key.split('@')[0];
+          if (isLabPackId(id)) heads.set(id, key);
+        }
+        const selected = keys.filter(
+          (key) => !isLabPackId(key.split('@')[0]) || heads.get(key.split('@')[0]) === key,
+        );
         const rows: string[] = [];
         for (const key of selected) {
           const item = store.get(key);
@@ -64,25 +68,25 @@ export async function importLocalPack(json: string): Promise<SourcePack> {
           new Set([...count.result.map((k) => String(k).split('@')[0]), pack.manifest.identity.id])
             .size > 32 ||
           count.result.length >= 512 ||
-          (pack.manifest.identity.id !== 'sorbonne-fablab' &&
-            count.result.filter((k) => !String(k).startsWith('sorbonne-fablab@')).length >= 32)
+          (!isLabPackId(pack.manifest.identity.id) &&
+            count.result.filter((k) => !isLabPackId(String(k).split('@')[0])).length >= 32)
         ) {
           tx.abort();
           reject(new Error('At most 512 installed source revisions supported'));
           return;
         }
         if (
-          pack.manifest.identity.id === 'sorbonne-fablab' &&
+          isLabPackId(pack.manifest.identity.id) &&
           count.result.some(
             (k) =>
-              String(k).startsWith('sorbonne-fablab@') &&
+              String(k).startsWith(`${pack.manifest.identity.id}@`) &&
               String(k).split('@')[1] >= pack.manifest.identity.revision,
           )
         ) {
           tx.abort();
           reject(
             new Error(
-              'This or a newer Sorbonne revision is already installed; current knowledge was kept',
+              'This or a newer preset pack revision is already installed; current knowledge was kept',
             ),
           );
           return;
@@ -118,11 +122,11 @@ export async function commitLabPack(
   const json = JSON.stringify(pack);
   const checked = await validatePack(json);
   if (
-    checked.manifest.identity.id !== 'sorbonne-fablab' ||
+    !isLabPackId(checked.manifest.identity.id) ||
     checked.manifest.distribution !== 'local_only' ||
     checked.manifest.visibility !== 'private'
   )
-    throw new Error('Only private Sorbonne presets can be authored');
+    throw new Error('Only private local presets can be authored');
   if (native())
     return JSON.parse(
       await invoke<string>('save_lab_pack', { json, expectedRevision }),
@@ -137,7 +141,7 @@ export async function commitLabPack(
       req.onsuccess = () => {
         const rows = req.result.map(String);
         const versions = rows
-          .filter((key) => key.startsWith('sorbonne-fablab@'))
+          .filter((key) => key.startsWith(`${checked.manifest.identity.id}@`))
           .map((key) => key.split('@')[1])
           .sort();
         const head = versions.at(-1) ?? null;
@@ -145,7 +149,7 @@ export async function commitLabPack(
           head !== expectedRevision ||
           (head !== null && checked.manifest.identity.revision <= head)
         ) {
-          reason = new Error('Sorbonne presets changed in another window; reopen and retry');
+          reason = new Error('Presets changed in another window; reopen and retry');
           tx.abort();
           return;
         }
@@ -169,4 +173,35 @@ export async function commitLabPack(
     db.close();
   }
   return checked;
+}
+
+/** Remove an installation-local source and its entire history. Applied project values are separate. */
+export async function removeLocalSource(id: string, expectedHead: string): Promise<void> {
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,99}$/.test(id)) throw new Error('Invalid source id');
+  if (native()) return invoke<void>('remove_source_pack', { id, expectedHead });
+  const db = await database();
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction('packs', 'readwrite'),
+        store = tx.objectStore('packs'),
+        req = store.getAllKeys();
+      let reason: Error | undefined;
+      req.onsuccess = () => {
+        const keys = req.result
+          .map(String)
+          .filter((key) => key.startsWith(`${id}@`))
+          .sort();
+        if (keys.at(-1) !== `${id}@${expectedHead}`) {
+          reason = new Error('Source changed in another window; refresh and retry');
+          tx.abort();
+          return;
+        }
+        for (const key of keys) store.delete(key);
+      };
+      tx.oncomplete = () => resolve();
+      tx.onerror = tx.onabort = () => reject(reason ?? tx.error);
+    });
+  } finally {
+    db.close();
+  }
 }

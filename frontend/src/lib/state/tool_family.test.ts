@@ -83,19 +83,19 @@ describe('tool_family capability table', () => {
   it('mirrors the Rust ToolKind::compatible_modes() table', () => {
     // Mirror of crates/ivac-core/src/project/tool.rs — if this changes,
     // update the Rust table (and vice versa).
-    expect(TOOL_COMPATIBLE_MODES.engraver).toEqual(['mill', 'drag']);
+    expect(TOOL_COMPATIBLE_MODES.engraver).toEqual(['mill']);
     expect(TOOL_COMPATIBLE_MODES.plasma_torch).toEqual(['plasma']);
     expect(TOOL_COMPATIBLE_MODES.laser_beam).toEqual(['laser']);
     expect(TOOL_COMPATIBLE_MODES.drag_knife).toEqual(['drag']);
     for (const k of ALL_KINDS) {
-      expect(TOOL_COMPATIBLE_MODES[k].length, `no modes for ${k}`).toBeGreaterThan(0);
+      expect(TOOL_COMPATIBLE_MODES[k].length, `one manufacturing process for ${k}`).toBe(1);
     }
     expect(toolCompatibleWithMode('endmill', 'mill')).toBe(true);
     expect(toolCompatibleWithMode('endmill', 'plasma')).toBe(false);
-    expect(toolCompatibleWithMode('engraver', 'drag')).toBe(true);
+    expect(toolCompatibleWithMode('engraver', 'drag')).toBe(false);
     expect(kindsForMode('plasma')).toEqual(['plasma_torch']);
     expect(kindsForMode('laser')).toEqual(['laser_beam']);
-    expect(kindsForMode('drag')).toEqual(['engraver', 'drag_knife']);
+    expect(kindsForMode('drag')).toEqual(['drag_knife']);
     expect(kindsForMode('mill')).not.toContain('plasma_torch');
     expect(kindsForMode('mill')).not.toContain('laser_beam');
     expect(kindsForMode('mill')).not.toContain('drag_knife');

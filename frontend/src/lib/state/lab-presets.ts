@@ -7,14 +7,23 @@ export type LabMetadata = S['FsLabPreset'];
 export type LabReview = S['FsLabReview'];
 export const LAB_PACK_ID = 'sorbonne-fablab';
 export const LAB_POLICY = 'sorbonne-local-validation-1';
-export function newestLabPack(packs: SourcePack[]): SourcePack | undefined {
+// Reserved local-authoring namespace; display names are independent of stable IDs.
+export function isLabPackId(id: string): boolean {
+  return (
+    id === LAB_PACK_ID ||
+    /^lab-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id)
+  );
+}
+export function newestLabPack(packs: SourcePack[], id = LAB_PACK_ID): SourcePack | undefined {
   return packs
-    .filter((p) => p.manifest.identity.id === LAB_PACK_ID)
+    .filter((p) => p.manifest.identity.id === id)
     .sort((a, b) => b.manifest.identity.revision.localeCompare(a.manifest.identity.revision))[0];
 }
 export function currentLocalPacks(packs: SourcePack[]): SourcePack[] {
-  const head = newestLabPack(packs);
-  return packs.filter((p) => p.manifest.identity.id !== LAB_PACK_ID || p === head);
+  return packs.filter(
+    (p) =>
+      !isLabPackId(p.manifest.identity.id) || p === newestLabPack(packs, p.manifest.identity.id),
+  );
 }
 // Source packs are validated JSON data. JSON cloning also accepts Svelte proxy-backed props.
 function cloneJson<T>(value: T): T {
@@ -37,7 +46,9 @@ function exact(n: number): S['FsRange'] {
 export function captureScope(c: LabCapture): S['FsProfileScope'] {
   const r = c.request;
   if (!r.machine.identity || !r.material.identity || !r.tool.identity)
-    throw new Error('Stable machine, material and tool identities are required');
+    throw new Error(
+      `Missing preset identities: ${[!r.machine.identity && 'machine (Machine settings)', !r.material.identity && 'material (Stock)', !r.tool.identity && 'tool (Tool library)'].filter(Boolean).join(', ')}`,
+    );
   if (
     !r.operation.doc_mm ||
     ![c.rpm, c.feed_mm_min, c.plunge_mm_min, r.tool.diameter_mm, r.tool.flute_count].every(
@@ -92,13 +103,13 @@ export type CaptureForm = {
   physically_tested: boolean;
   no_critical_failure: boolean;
 };
-function emptyPack(version: string): SourcePack {
+function emptyPack(version: string, id = LAB_PACK_ID, name = 'Sorbonne Fablab'): SourcePack {
   return {
     manifest: {
-      identity: { id: LAB_PACK_ID, revision: version },
+      identity: { id, revision: version },
       schema_version: 2,
-      name: 'Sorbonne Fablab',
-      publisher: 'Sorbonne Fablab local operators',
+      name,
+      publisher: `${name} local operators`,
       origin: 'Operator-authored local machining records',
       license: 'Private local records; no public redistribution license granted',
       license_url: null,
@@ -113,14 +124,14 @@ function emptyPack(version: string): SourcePack {
     },
     dataset: {
       format_version: 1,
-      description: 'Sorbonne Fablab local machining presets',
+      description: `${name} local machining presets`,
       license: 'Private local records; no public redistribution license granted',
       machines: [],
       materials: [],
       tools: [],
       profile_set: {
         schema_version: 1,
-        identity: { id: LAB_PACK_ID, revision: version },
+        identity: { id, revision: version },
         machine_families: [],
         material_families: [],
         profiles: [],
@@ -134,11 +145,11 @@ function revisionPack(previous: SourcePack | undefined, now: string) {
   if (!Number.isFinite(Date.parse(now))) throw new Error('Invalid revision date');
   if (
     previous &&
-    (previous.manifest.identity.id !== LAB_PACK_ID ||
+    (!isLabPackId(previous.manifest.identity.id) ||
       previous.manifest.visibility !== 'private' ||
       previous.manifest.distribution !== 'local_only')
   )
-    throw new Error('Only the private Sorbonne pack may be authored');
+    throw new Error('Only private local preset packs may be authored');
   if (previous && version <= previous.manifest.identity.revision)
     throw new Error('Revision must follow the installed revision; retry');
   const p = previous ? cloneJson(previous) : emptyPack(version);
@@ -147,6 +158,15 @@ function revisionPack(previous: SourcePack | undefined, now: string) {
   p.dataset.profile_set.identity.revision = version;
   return p;
 }
+export function createLabPack(name: string, now: string, id: string): SourcePack {
+  if (!name.trim() || name.trim().length > 100)
+    throw new Error('Pack name must contain 1–100 characters');
+  if (!isLabPackId(id) || id === LAB_PACK_ID || id.length > 100)
+    throw new Error('Invalid local pack identity');
+  const pack = revisionPack(undefined, now);
+  return emptyPack(pack.manifest.identity.revision, id, name.trim());
+}
+
 function retainPrevious(p: SourcePack, record: SourcePack['records'][number]) {
   const old = p.dataset.profile_set.profiles.find(
     (v) => v.identity.id === record.profile.id && v.identity.revision === record.profile.revision,
@@ -248,8 +268,8 @@ export function saveCapturedPreset(
     },
     reductions: [],
     source: {
-      reference: `${LAB_PACK_ID}/${identity.id}@${identity.revision}`,
-      author: form.operator.trim() || 'Sorbonne Fablab operator (not named)',
+      reference: `${p.manifest.identity.id}/${identity.id}@${identity.revision}`,
+      author: form.operator.trim() || `${p.manifest.name} operator (not named)`,
       date: form.tested_at || now.slice(0, 10),
       permission_or_license: p.manifest.license,
       notes: form.observations,
@@ -352,7 +372,7 @@ export function revisePreset(
 
 export function labHasRevision(pack: SourcePack, revision: string): boolean {
   return (
-    pack.manifest.identity.id === LAB_PACK_ID &&
+    isLabPackId(pack.manifest.identity.id) &&
     (pack.manifest.identity.revision === revision ||
       pack.records.some(
         (r) =>

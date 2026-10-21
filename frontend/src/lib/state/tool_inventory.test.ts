@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { seedInventoryFromProject, stockTool, syncStockedFromInventory } from './tool_inventory';
+import {
+  seedInventoryFromProject,
+  stockTool,
+  syncStockedFromInventory,
+  workingToolChoices,
+} from './tool_inventory';
 import type { ToolEntry } from './project-types';
 
 const tool = (id: number, name: string, diameter = 3): ToolEntry => ({
@@ -68,4 +73,15 @@ describe('seedInventoryFromProject', () => {
     expect(inv[0].diameter).toBe(3);
     expect(inv).toHaveLength(1);
   });
+});
+
+it('prepares library choices with distinct collision ids without mutating either collection', () => {
+  const stocked = [tool(1, 'legacy')],
+    inventory = [tool(1, 'library'), tool(2, 'second')];
+  const choices = workingToolChoices(stocked, inventory);
+  expect(choices.map((t) => t.id)).toEqual([1, 2, 3]);
+  expect(choices.map((t) => t.name)).toEqual(['legacy', 'library', 'second']);
+  expect(stocked).toHaveLength(1);
+  expect(inventory[1].id).toBe(2);
+  expect(workingToolChoices(choices, inventory)).toHaveLength(3);
 });

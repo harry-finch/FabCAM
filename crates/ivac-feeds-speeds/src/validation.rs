@@ -62,8 +62,10 @@ pub(crate) fn request_issues(r: &FeedsSpeedsRequest) -> Vec<ValidationIssue> {
     c.identity(&r.dataset, "dataset");
     for (field, identity) in [
         ("machine.identity", &r.machine.identity),
+        ("machine.local_identity", &r.machine.local_identity),
         ("material.identity", &r.material.identity),
         ("tool.identity", &r.tool.identity),
+        ("tool.local_identity", &r.tool.local_identity),
     ] {
         if let Some(identity) = identity {
             c.identity(identity, field);

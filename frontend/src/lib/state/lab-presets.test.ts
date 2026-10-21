@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
+  createLabPack,
+  currentLocalPacks,
+  isLabPackId,
+  labHasRevision,
   captureScope,
   saveCapturedPreset,
   revisePreset,
@@ -234,4 +238,49 @@ it('detects duplicates after Rust JSON normalization changes property order', ()
   const next = saveCapturedPreset(p, c, form, later, 'unused', 'sorbonne-order');
   expect(next.records).toHaveLength(1);
   expect(next.records[0].lab_history).toHaveLength(1);
+});
+
+describe('named lab preset packs', () => {
+  it('creates an empty private pack with an independent identity and free display name', () => {
+    const p = createLabPack(
+      '  Fablab X / Atelier ébénisterie  ',
+      now,
+      'lab-00000000-0000-4000-8000-000000000001',
+    );
+    expect(p.manifest.name).toBe('Fablab X / Atelier ébénisterie');
+    expect(p.manifest.identity.id).toBe('lab-00000000-0000-4000-8000-000000000001');
+    expect(p.manifest).toMatchObject({
+      visibility: 'private',
+      distribution: 'local_only',
+      redistributable: false,
+    });
+    expect(p.dataset.profile_set.identity).toEqual(p.manifest.identity);
+    expect(p.records).toEqual([]);
+    expect(() => createLabPack(' ', now, 'lab-test')).toThrow();
+    expect(() => createLabPack('X', now, '../outside')).toThrow();
+    expect(() => createLabPack('X', now, 'sorbonne-fablab')).toThrow();
+  });
+  it('keeps independent pack heads, provenance and histories alongside the legacy pack', () => {
+    const x = createLabPack('Fablab X', now, 'lab-00000000-0000-4000-8000-000000000001');
+    const y = createLabPack('Fablab Y', now, 'lab-00000000-0000-4000-8000-000000000002');
+    const savedX = saveCapturedPreset(x, capture(), form, later, 'preset-x');
+    const savedY = saveCapturedPreset(y, capture(), form, later, 'preset-y');
+    const legacy = saved();
+    const current = currentLocalPacks([x, savedX, legacy, y, savedY]);
+    expect(current).toEqual([savedX, legacy, savedY]);
+    expect(savedX.dataset.profile_set.profiles[0].source.reference).toContain(
+      'lab-00000000-0000-4000-8000-000000000001/',
+    );
+    expect(savedY.records[0].profile.id).toBe('preset-y');
+    expect(x.records).toHaveLength(0);
+    expect(isLabPackId('sorbonne-fablab')).toBe(true);
+    expect(isLabPackId('sienci-longmill')).toBe(false);
+    expect(isLabPackId('lab-external-reference')).toBe(false);
+    expect(newestLabPack(current, 'lab-00000000-0000-4000-8000-000000000002')).toBe(savedY);
+    const revised = revisePreset(savedX, 'preset-x', '2026-10-12T10:00:00Z', {
+      notes: 'Updated X',
+    });
+    expect(labHasRevision(revised, savedX.manifest.identity.revision)).toBe(true);
+    expect(savedY.records[0].lab?.observations).toBe(form.observations);
+  });
 });

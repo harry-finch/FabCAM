@@ -159,8 +159,7 @@ export const KIND_DISPLAY_LABELS: Record<ToolKind, string> = {
 /// Tool kind → machine modes it can physically run on. Mirror of
 /// `ToolKind::compatible_modes()` in Rust
 /// (crates/ivac-core/src/project/tool.rs); keep the two in sync. Mill
-/// kinds are rotating cutters that need a spindle; the engraver doubles
-/// as a drag-engraving point on a Drag machine. Drives the tool-picker
+/// kinds, including engravers, are rotating cutters that need a spindle. Drives the tool-picker
 /// / library filtering and the mode-switch notice — a mode switch never
 /// mutates the library, incompatible tools are only filtered (with a
 /// visible "N hidden" row) and flagged at generate time.
@@ -168,7 +167,7 @@ export const TOOL_COMPATIBLE_MODES: Record<ToolKind, readonly MachineMode[]> = {
   endmill: ['mill'],
   ball_nose: ['mill'],
   v_bit: ['mill'],
-  engraver: ['mill', 'drag'],
+  engraver: ['mill'],
   drag_knife: ['drag'],
   drill: ['mill'],
   laser_beam: ['laser'],

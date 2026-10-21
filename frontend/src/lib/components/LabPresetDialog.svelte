@@ -1,9 +1,11 @@
 <script lang="ts">
+  import LabPackCreate from './LabPackCreate.svelte';
   import Modal from './Modal.svelte';
   import { t } from '../i18n';
   import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
   import {
-    newestLabPack,
+    currentLocalPacks,
+    isLabPackId,
     closePresets,
     saveCapturedPreset,
     type LabCapture,
@@ -23,7 +25,13 @@
     currentFingerprint: string;
     onClose: () => void;
   } = $props();
-  const previous = newestLabPack(recommendationSources.local);
+  // Pin inspected revisions: concurrent changes must fail closed on save.
+  const initialPacks = currentLocalPacks(recommendationSources.local).filter((p) =>
+    isLabPackId(p.manifest.identity.id),
+  );
+  let packs = $state(initialPacks);
+  let destination = $state(initialPacks.length === 1 ? initialPacks[0].manifest.identity.id : '');
+  const previous = $derived(packs.find((p) => p.manifest.identity.id === destination));
   const duplicates = $derived(closePresets(previous, capture));
   let updateId = $state('');
   function initialForm(): CaptureForm {
@@ -44,6 +52,10 @@
     busy = $state(false);
   const stale = $derived(fingerprint !== currentFingerprint);
   async function save() {
+    if (!previous) {
+      error = t('v11.pack_choose');
+      return;
+    }
     if (stale) {
       error = t('fs38.stale');
       return;
@@ -56,7 +68,7 @@
         capture,
         form,
         new Date().toISOString(),
-        `sorbonne-${crypto.randomUUID()}`,
+        `preset-${crypto.randomUUID()}`,
         updateId || undefined,
       );
       await persistLabPack(pack, previous?.manifest.identity.revision ?? null);
@@ -78,7 +90,22 @@
 >
   <div class="capture">
     <header><h2 id="lab-preset-title">{t('fs38.save_title')}</h2></header>
-    <p class="meta">{t('fs38.destination')}: {t('fs38.sorbonne')} · {t('fs37.local_only')}</p>
+    <label
+      >{t('fs38.destination')}
+      <select bind:value={destination} disabled={busy} onchange={() => (updateId = '')}>
+        <option value="">{t('v11.pack_choose')}</option>
+        {#each packs as pack (pack.manifest.identity.id)}<option value={pack.manifest.identity.id}
+            >{pack.manifest.name}</option
+          >{/each}
+      </select>
+    </label>
+    <LabPackCreate
+      onCreated={(pack) => {
+        packs = [...packs, pack];
+        destination = pack.manifest.identity.id;
+        updateId = '';
+      }}
+    />
     <form
       onsubmit={(e) => {
         e.preventDefault();
@@ -172,7 +199,7 @@
         <button type="button" disabled={busy} onclick={onClose}>{t('common.cancel')}</button><button
           class="primary"
           type="submit"
-          disabled={busy || stale}>{t('fs38.save')}</button
+          disabled={busy || stale || !previous}>{t('fs38.save')}</button
         >
       </footer>
     </form>

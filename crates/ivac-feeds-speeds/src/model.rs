@@ -83,6 +83,9 @@ pub enum Engagement {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct MachineSnapshot {
+    /// Physical lab identity; reference compatibility remains in `identity`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub local_identity: Option<Identity>,
     pub identity: Option<Identity>,
     pub rpm_min: Option<u32>,
     pub rpm_max: Option<u32>,
@@ -105,6 +108,9 @@ pub struct MaterialSnapshot {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ToolSnapshot {
+    /// Physical lab identity; reference compatibility remains in `identity`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub local_identity: Option<Identity>,
     pub identity: Option<Identity>,
     pub cutting_family: CuttingFamily,
     pub diameter_mm: f64,
@@ -136,6 +142,19 @@ pub struct FeedsSpeedsRequest {
     pub tool: ToolSnapshot,
     pub operation: OperationContext,
     pub aggressiveness: Aggressiveness,
+}
+
+impl FeedsSpeedsRequest {
+    /// Legacy requests retain their single identity. New lab records use only the
+    /// physical identity, so a shared reference model cannot transfer lab trials.
+    pub fn use_local_identities(&mut self) {
+        if let Some(id) = &self.machine.local_identity {
+            self.machine.identity = Some(id.clone());
+        }
+        if let Some(id) = &self.tool.local_identity {
+            self.tool.identity = Some(id.clone());
+        }
+    }
 }
 
 /// Inclusive range with explicit units in its containing field name.

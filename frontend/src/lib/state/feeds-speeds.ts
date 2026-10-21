@@ -155,11 +155,25 @@ export function referenceContext(
   old?: S['FsContext'],
 ): S['FsContext'] {
   return {
-    machine_identity: machine.fsIdentity !== undefined ? machine.fsIdentity : old?.machine_identity,
+    machine_identity:
+      machine.fsIdentity !== undefined
+        ? machine.fsIdentity
+        : machine.fsLocalIdentity
+          ? null
+          : old?.machine_identity,
+    machine_local_identity: machine.fsLocalIdentity ?? old?.machine_local_identity,
     tools: tools.flatMap((tool) => {
       const binding = old?.tools.find((b) => b.tool_id === tool.id);
-      const identity = tool.fsIdentity !== undefined ? tool.fsIdentity : binding?.identity;
-      return identity ? [{ tool_id: tool.id, identity, max_rpm: binding?.max_rpm }] : [];
+      const local_identity = tool.fsLocalIdentity ?? binding?.local_identity;
+      const identity =
+        (tool.fsIdentity !== undefined
+          ? tool.fsIdentity
+          : tool.fsLocalIdentity
+            ? null
+            : binding?.identity) ?? local_identity;
+      return identity
+        ? [{ tool_id: tool.id, identity, local_identity, max_rpm: binding?.max_rpm }]
+        : [];
     }),
   };
 }

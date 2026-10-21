@@ -17,6 +17,7 @@
   } from '../state/palette-catalog';
   import { buildSearchIndex, searchIndex, parseSearch } from '../state/palette-search';
   import { assignmentProblem } from '../state/palette-tool';
+  import { selectOperationToolCommand } from '../state/operation-tool';
   import { effectiveModes } from '../state/tool_family';
   import type { ToolEntry } from '../state/project-types';
   let { shell }: { shell: PaletteShell } = $props();
@@ -94,14 +95,6 @@
     project.data.operations.find((op) => op.id === project.sel.selectedOpId),
   );
   const assignReason = $derived.by(() => {
-    const stocked =
-      detail?.origin === 'project'
-        ? currentTool
-        : currentTool &&
-          project.data.tools.find(
-            (tool) =>
-              tool.id === currentTool.id && JSON.stringify(tool) === JSON.stringify(currentTool),
-          );
     return paletteBusy()
       ? t('palette.busy')
       : !project.documentActive
@@ -109,8 +102,9 @@
         : (() => {
             const reason = assignmentProblem(
               operation,
-              stocked,
+              currentTool,
               effectiveModes(project.data.machine),
+              true, // The shared selection command preserves the saved cutting values.
             );
             return reason ? t(reason) : undefined;
           })();
@@ -249,7 +243,10 @@
       error = assignReason ?? t('palette.changed');
       return;
     }
-    project.updateOperation(operation.id, { toolId: target.tool.id });
+    project.history.exec(
+      selectOperationToolCommand(operation.id, 'toolId', target.tool, target.origin),
+      project.target(),
+    );
     restoreFocus = false;
     open = false;
     shell.navigate('project');

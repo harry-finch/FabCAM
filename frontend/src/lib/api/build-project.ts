@@ -886,7 +886,10 @@ export function buildProject(state: ProjectStateView): WireProject | null {
     ...(state.material
       ? { material: { id: state.material.id, revision: state.material.revision } }
       : {}),
-    ...(state.fsContext || state.machine.fsIdentity || state.tools.some((t) => t.fsIdentity)
+    ...(state.fsContext ||
+    state.machine.fsIdentity ||
+    state.machine.fsLocalIdentity ||
+    state.tools.some((t) => t.fsIdentity || t.fsLocalIdentity)
       ? { fs_context: referenceContext(state.machine, state.tools, state.fsContext) }
       : {}),
     machine: buildMachine(state.machine),

@@ -5,14 +5,17 @@ export function hasFeedsSpeedsData(value: {
   material?: unknown;
   fsContext?: unknown;
   operations?: OpEntry[];
-  machine?: { fsIdentity?: unknown };
-  tools?: { fsIdentity?: unknown }[];
+  machine?: { fsIdentity?: unknown; fsLocalIdentity?: unknown };
+  tools?: { fsIdentity?: unknown; fsLocalIdentity?: unknown }[];
 }): boolean {
   return (
     !!value.material ||
     !!value.fsContext ||
     value.machine?.fsIdentity !== undefined ||
-    !!value.tools?.some((tool) => tool.fsIdentity !== undefined) ||
+    value.machine?.fsLocalIdentity !== undefined ||
+    !!value.tools?.some(
+      (tool) => tool.fsIdentity !== undefined || tool.fsLocalIdentity !== undefined,
+    ) ||
     !!value.operations?.some((op) => op.appliedCutting || op.fsFullWidth)
   );
 }

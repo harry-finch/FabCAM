@@ -314,7 +314,6 @@ export type MsgKey =
   | "fs.invalid_data"
   | "fs.material"
   | "fs.mode"
-  | "fs.no_match"
   | "fs.normal"
   | "fs.plunge"
   | "fs.positive"
@@ -357,7 +356,6 @@ export type MsgKey =
   | "fs35.recalculate"
   | "fs35.recommendation"
   | "fs35.reference"
-  | "fs35.reference_match"
   | "fs35.saved_material"
   | "fs35.schedule"
   | "fs35.select_material"
@@ -419,7 +417,6 @@ export type MsgKey =
   | "fs38.actual_values"
   | "fs38.backup_help"
   | "fs38.confirm_promotion"
-  | "fs38.create_identity"
   | "fs38.created"
   | "fs38.delete"
   | "fs38.delete_help"
@@ -432,11 +429,9 @@ export type MsgKey =
   | "fs38.duplicate"
   | "fs38.engagement"
   | "fs38.evidence"
-  | "fs38.export"
   | "fs38.full_width"
   | "fs38.history"
   | "fs38.identity"
-  | "fs38.identity_help"
   | "fs38.job_reference"
   | "fs38.manage"
   | "fs38.name"
@@ -455,7 +450,6 @@ export type MsgKey =
   | "fs38.search"
   | "fs38.select_preset"
   | "fs38.show_deleted"
-  | "fs38.sorbonne"
   | "fs38.stale"
   | "fs38.success_confirm"
   | "fs38.test_date"
@@ -829,6 +823,7 @@ export type MsgKey =
   | "modeswitch.dismiss.title"
   | "modeswitch.none"
   | "oplist.activate.aria"
+  | "oplist.add"
   | "oplist.add.aria"
   | "oplist.add.title"
   | "oplist.collapse.aria"
@@ -1013,7 +1008,6 @@ export type MsgKey =
   | "opprops.title"
   | "opprops.tool"
   | "opprops.tool.edit"
-  | "opprops.tool.incompatible_group"
   | "opprops.tool.mismatch"
   | "opprops.tool.mismatch.title"
   | "opprops.tool.title.default"
@@ -2286,6 +2280,40 @@ export type MsgKey =
   | "uxd.playback.path"
   | "uxd.stl"
   | "uxd.stl_source"
+  | "v11.identity_automatic"
+  | "v11.identity_machine"
+  | "v11.identity_tool"
+  | "v11.lab_identity_help"
+  | "v11.lab_machine"
+  | "v11.lab_priority"
+  | "v11.lab_tool"
+  | "v11.missing_machine"
+  | "v11.missing_material"
+  | "v11.missing_tool"
+  | "v11.no_reference"
+  | "v11.pack_choose"
+  | "v11.pack_create"
+  | "v11.pack_empty"
+  | "v11.pack_export"
+  | "v11.pack_name"
+  | "v11.pack_private"
+  | "v11.pack_reference"
+  | "v11.preset_missing"
+  | "v11.reference_help"
+  | "v11.reference_independent"
+  | "v11.saved_source_lab"
+  | "v11.saved_source_pack"
+  | "v11.source_bundled"
+  | "v11.source_lab"
+  | "v11.source_pack"
+  | "v11.source_remove"
+  | "v11.source_remove_help"
+  | "v11.this_machine"
+  | "v11.this_tool"
+  | "v11.tool_auto"
+  | "v11.tool_choose"
+  | "v11.tool_library"
+  | "v11.tool_project"
   | "warn.chamfer_non_vbit"
   | "warn.chamfer_width_clamped_to_reach"
   | "warn.compression_transition_above_cut"
@@ -2694,7 +2722,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs.invalid_data",
   "fs.material",
   "fs.mode",
-  "fs.no_match",
   "fs.normal",
   "fs.plunge",
   "fs.positive",
@@ -2737,7 +2764,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.recalculate",
   "fs35.recommendation",
   "fs35.reference",
-  "fs35.reference_match",
   "fs35.saved_material",
   "fs35.schedule",
   "fs35.select_material",
@@ -2799,7 +2825,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs38.actual_values",
   "fs38.backup_help",
   "fs38.confirm_promotion",
-  "fs38.create_identity",
   "fs38.created",
   "fs38.delete",
   "fs38.delete_help",
@@ -2812,11 +2837,9 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs38.duplicate",
   "fs38.engagement",
   "fs38.evidence",
-  "fs38.export",
   "fs38.full_width",
   "fs38.history",
   "fs38.identity",
-  "fs38.identity_help",
   "fs38.job_reference",
   "fs38.manage",
   "fs38.name",
@@ -2835,7 +2858,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs38.search",
   "fs38.select_preset",
   "fs38.show_deleted",
-  "fs38.sorbonne",
   "fs38.stale",
   "fs38.success_confirm",
   "fs38.test_date",
@@ -3209,6 +3231,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "modeswitch.dismiss.title",
   "modeswitch.none",
   "oplist.activate.aria",
+  "oplist.add",
   "oplist.add.aria",
   "oplist.add.title",
   "oplist.collapse.aria",
@@ -3393,7 +3416,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "opprops.title",
   "opprops.tool",
   "opprops.tool.edit",
-  "opprops.tool.incompatible_group",
   "opprops.tool.mismatch",
   "opprops.tool.mismatch.title",
   "opprops.tool.title.default",
@@ -4666,6 +4688,40 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "uxd.playback.path",
   "uxd.stl",
   "uxd.stl_source",
+  "v11.identity_automatic",
+  "v11.identity_machine",
+  "v11.identity_tool",
+  "v11.lab_identity_help",
+  "v11.lab_machine",
+  "v11.lab_priority",
+  "v11.lab_tool",
+  "v11.missing_machine",
+  "v11.missing_material",
+  "v11.missing_tool",
+  "v11.no_reference",
+  "v11.pack_choose",
+  "v11.pack_create",
+  "v11.pack_empty",
+  "v11.pack_export",
+  "v11.pack_name",
+  "v11.pack_private",
+  "v11.pack_reference",
+  "v11.preset_missing",
+  "v11.reference_help",
+  "v11.reference_independent",
+  "v11.saved_source_lab",
+  "v11.saved_source_pack",
+  "v11.source_bundled",
+  "v11.source_lab",
+  "v11.source_pack",
+  "v11.source_remove",
+  "v11.source_remove_help",
+  "v11.this_machine",
+  "v11.this_tool",
+  "v11.tool_auto",
+  "v11.tool_choose",
+  "v11.tool_library",
+  "v11.tool_project",
   "warn.chamfer_non_vbit",
   "warn.chamfer_width_clamped_to_reach",
   "warn.compression_transition_above_cut",

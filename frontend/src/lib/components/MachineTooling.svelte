@@ -9,7 +9,7 @@
   import { Plus } from '@lucide/svelte';
   import { project } from '../state/project.svelte';
   import { workspace } from '../state/workspace.svelte';
-  import { stockTool } from '../state/tool_inventory';
+  import { stockTool, stockedCopy } from '../state/tool_inventory';
   import { t } from '../i18n';
   import {
     effectiveModes,
@@ -29,8 +29,9 @@
   let adding = $state(false);
   const shownInventory = $derived.by(() => {
     const q = filter.trim().toLowerCase();
-    if (q === '') return inventory;
-    return inventory.filter((t) =>
+    const compatible = inventory.filter((t) => toolCompatibleWithAnyMode(t.kind, machineModes));
+    if (q === '') return compatible;
+    return compatible.filter((t) =>
       `${t.name} ${KIND_DISPLAY_LABELS[t.kind]}`.toLowerCase().includes(q),
     );
   });
@@ -41,8 +42,7 @@
 
   function alreadyStocked(id: number): boolean {
     const inv = inventory.find((t) => t.id === id);
-    const st = stocked.find((t) => t.id === id);
-    return inv != null && st != null && JSON.stringify(inv) === JSON.stringify(st);
+    return inv != null && stockedCopy(inv, stocked) != null;
   }
 
   function add(id: number) {

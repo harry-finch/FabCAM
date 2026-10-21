@@ -114,6 +114,8 @@
     {#if tool.kind === 'endmill'}<FeedsSpeedsCompatibility
         kind="tools"
         value={tool.fsIdentity}
+        localIdentity={tool.fsLocalIdentity}
+        onLocalChange={(identity) => onUpdateField('fsLocalIdentity', identity)}
         onChange={(identity) => onUpdateField('fsIdentity', identity)}
       />{/if}
   {/if}

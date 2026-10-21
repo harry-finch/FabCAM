@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { missingPresetIdentities } from '../../state/preset-identities';
   import { untrack, tick, onDestroy } from 'svelte';
   import Modal from '../Modal.svelte';
   import MaterialPicker from '../MaterialPicker.svelte';
@@ -18,7 +19,7 @@
   import RecommendationBasis from './RecommendationBasis.svelte';
   import LabPresetDialog from '../LabPresetDialog.svelte';
   import { captureLabPreset } from '../../state/feeds-speeds-pack-store';
-  import { LAB_PACK_ID, labHasRevision, type LabCapture } from '../../state/lab-presets';
+  import { isLabPackId, labHasRevision, type LabCapture } from '../../state/lab-presets';
   import { scopeValue } from '../../state/feeds-speeds-explanation';
   import CuttingOriginStatus from './CuttingOriginStatus.svelte';
   import { project, type OpEntry } from '../../state/project.svelte';
@@ -42,8 +43,14 @@
   let { op }: { op: OpEntry } = $props();
   let labCapture = $state<LabCapture | null>(null);
   let labFingerprint = $state('');
+  let showMissingIdentities = $state(false);
   async function openLabCapture() {
     if (!wire) return;
+    showMissingIdentities = missingIdentities.length > 0;
+    if (showMissingIdentities) {
+      error = '';
+      return;
+    }
     const fingerprint = currentLabFingerprint;
     try {
       await recommendationSources.refresh(true);
@@ -58,10 +65,9 @@
     }
   }
   function knowledgeName(id: string) {
-    if (id === LAB_PACK_ID) return t('fs38.sorbonne');
     return (
       recommendationSources.rows.find((row) => row.pack?.manifest.identity.id === id)?.pack
-        ?.manifest.publisher ?? t('fs37.references')
+        ?.manifest.name ?? t('fs37.references')
     );
   }
   let reviewTrigger = $state<HTMLButtonElement>();
@@ -128,6 +134,7 @@
       fsContext: context,
     }),
   );
+  const missingIdentities = $derived(wire ? missingPresetIdentities(wire, op.toolId) : []);
   const currentLabFingerprint = $derived(JSON.stringify([wire, op.id, project.data.machine.name]));
   const key = $derived(
     JSON.stringify([wire, mode, recommendationSources.rows.map((s) => s.contents), op.id]),
@@ -148,6 +155,13 @@
     responses.filter((s) => s.result.recommendation.status === 'available'),
   );
   const accepted = $derived(op.appliedCutting?.proposal);
+  function sourceName(id: string): string {
+    return (
+      [...recommendationSources.builtins, ...recommendationSources.local].find(
+        (p) => p.manifest.identity.id === id,
+      )?.manifest.name ?? id
+    );
+  }
   const savedKnowledge = $derived(op.appliedCutting?.knowledge);
   const originView = $derived(
     cuttingOriginPresentation([
@@ -500,9 +514,29 @@
         }}>{t('fs391.review_recommendation')}</button
       >{/if}
   </div>
+  {#if showMissingIdentities && missingIdentities.length}<div role="alert" class="identity-help">
+      {#if missingIdentities.length === 1}
+        <p>{t(`v11.missing_${missingIdentities[0]}`, { name: tool?.name ?? `#${op.toolId}` })}</p>
+      {:else}
+        <p>{t('v11.preset_missing')}</p>
+        <ul>
+          {#each missingIdentities as missing (missing)}<li>
+              {t(`v11.missing_${missing}`, { name: tool?.name ?? `#${op.toolId}` })}
+            </li>{/each}
+        </ul>
+      {/if}
+    </div>{/if}
   {#if stale}<div class="stale" role="status" title={t('fs35.kept')}>
       <strong>{t('fs35.outdated')}</strong><span>{t('fs36.kept')}</span>
     </div>{/if}
+  {#if savedKnowledge}<p class="source-meta">
+      {t(
+        isLabPackId(savedKnowledge.selected_pack.id)
+          ? 'v11.saved_source_lab'
+          : 'v11.saved_source_pack',
+        { name: sourceName(savedKnowledge.selected_pack.id) },
+      )}
+    </p>{/if}
   {#if provenanceMissing}<p class="source-meta" role="status">
       {t('fs37.provenance_missing')}
     </p>{/if}
@@ -618,6 +652,26 @@
           {#if source.result.recommendation.status === 'available' && !previewStale}
             {@const proposal = source.result.recommendation.recommendation}
             {@const derived = proposal.provenance.derivation}
+            <p class="source-meta" role="status">
+              <strong
+                >{t(
+                  isLabPackId(source.result.knowledge?.summary.selected_pack.id ?? '')
+                    ? 'v11.source_lab'
+                    : 'v11.source_pack',
+                  {
+                    name: sourceName(
+                      source.result.knowledge?.summary.selected_pack.id ??
+                        proposal.provenance.dataset.id,
+                    ),
+                  },
+                )}</strong
+              >
+            </p>
+            {#if isLabPackId(source.result.knowledge?.summary.selected_pack.id ?? '')}<p
+                class="source-meta"
+              >
+                {t('v11.lab_priority')}
+              </p>{/if}
             <dl class="suggested-values" aria-label={t('fs35.suggested')}>
               <dt>{t('fs.rpm')}</dt>
               <dd>{displayNumber(proposal.parameters.rpm)} <span>rpm</span></dd>
@@ -796,6 +850,21 @@
   />{/if}
 
 <style>
+  .identity-help {
+    grid-column: 1;
+    color: var(--text-muted);
+    font-size: var(--inspector-font-meta);
+    line-height: 1.4;
+    margin-top: var(--ui-space-2);
+  }
+  .identity-help p {
+    margin: 0;
+  }
+  .identity-help ul {
+    margin: var(--ui-space-1) 0 0;
+    padding-inline-start: 1.25rem;
+    font-size: inherit;
+  }
   .scope-reasons {
     margin: var(--ui-space-1) 0 var(--ui-space-2);
     padding-left: var(--ui-space-4);

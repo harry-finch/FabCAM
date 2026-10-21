@@ -1,4 +1,4 @@
-import { newestLabPack, LAB_PACK_ID } from './lab-presets';
+import { currentLocalPacks, isLabPackId } from './lab-presets';
 import { project } from './project.svelte';
 import {
   enabledPacks,
@@ -16,11 +16,13 @@ class RecommendationSources {
   error = $state('');
   loading = $state(false);
   private key = '';
+  private generation = 0;
   private built: Promise<SourcePack[]> | undefined;
   async refresh(force = false): Promise<void> {
     const settings = project.data.settings.feedsSpeedsSources;
     const key = JSON.stringify(settings);
     if (!force && key === this.key) return;
+    const generation = ++this.generation;
     this.key = key;
     this.loading = true;
     this.error = '';
@@ -56,6 +58,7 @@ class RecommendationSources {
       })();
       const builtins = await this.built;
       let local = (await readLocalPacks()).map((json) => JSON.parse(json) as SourcePack);
+      if (generation !== this.generation) return;
       // Migrate legacy bodies only after each validated app-local write succeeds.
       if (settings.custom.length) {
         const refs = [...(settings.local ?? [])];
@@ -74,34 +77,31 @@ class RecommendationSources {
         return this.refresh();
       }
       local = await Promise.all(local.map((p) => validatePack(JSON.stringify(p))));
-      const head = newestLabPack(local);
-      const labRef = settings.local?.find((r) => r.id === LAB_PACK_ID);
-      if (head && labRef && labRef.version !== head.manifest.identity.revision) {
-        project.updateSettings({
-          feedsSpeedsSources: {
-            ...settings,
-            local: [
-              ...(settings.local ?? []).filter((r) => r.id !== LAB_PACK_ID),
-              packReference(head, labRef.enabled),
-            ],
-          },
-        });
+      if (generation !== this.generation) return;
+      const heads = currentLocalPacks(local).filter((p) => isLabPackId(p.manifest.identity.id));
+      const refs = (settings.local ?? []).map((ref) => {
+        const head = heads.find((p) => p.manifest.identity.id === ref.id);
+        return head ? packReference(head, ref.enabled) : ref;
+      });
+      if (JSON.stringify(refs) !== JSON.stringify(settings.local ?? [])) {
+        project.updateSettings({ feedsSpeedsSources: { ...settings, local: refs } });
         this.key = '';
         return this.refresh();
       }
-      if (key === this.key) {
+      if (generation === this.generation && key === this.key) {
         this.builtins = builtins;
         this.local = local;
         this.rows = enabledPacks(settings, builtins, local);
       }
     } catch (e) {
-      if (key === this.key) {
+      if (generation === this.generation && key === this.key) {
         this.error = String(e);
         this.key = '';
         this.built = undefined;
       }
     } finally {
-      if (key === this.key || this.key === '') this.loading = false;
+      if (generation === this.generation && (key === this.key || this.key === ''))
+        this.loading = false;
     }
   }
 }

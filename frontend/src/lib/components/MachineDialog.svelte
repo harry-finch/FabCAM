@@ -525,6 +525,8 @@
       <FeedsSpeedsCompatibility
         kind="machines"
         value={draft.fsIdentity !== undefined ? draft.fsIdentity : inheritedIdentity}
+        localIdentity={draft.fsLocalIdentity}
+        onLocalChange={(identity) => (draft.fsLocalIdentity = identity)}
         onChange={(identity) => (draft.fsIdentity = identity)}
       />
     {/if}
