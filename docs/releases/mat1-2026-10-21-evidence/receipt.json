@@ -1,0 +1,18 @@
+{
+  "source_commit": "13b8a95e021817e046174e8b3a8145e8ef8c3862",
+  "baseline": "288afde",
+  "software_only": true,
+  "sha256": {
+    "before-material-picker.png": "5ac97843485a6538eb716cfe6b0762d29bf09c96c8d56544a8eb9eed4f5aabc5",
+    "after-narrow.png": "2a3622d7c495049f73aee366065b20173868544fe0905048071c5e40b764a59b",
+    "lint.log": "27db8120787d818efa12af0c97d73f156b2ee2cc178a19e247a77222062a2fe9",
+    "typecheck.log": "cd7b82b438d15dde0ee4fccc9167f84434fd4c8040117480b758b08920438435",
+    "after-broad-source.png": "a4aefe277e46ed14d10b891dccc2b60fc1e80373ad1a5f401c20862a05f5e432",
+    "feeds-speeds-tests.log": "8124dbeeaebadd5b0f3744433c2972012c5d3011d54be58f3e9af638e9fef834",
+    "after-alias-search.png": "f0df59c4b737abc7b86f9779b77ca967a85639a55d37e6034d19308ae685b758",
+    "frontend-tests.log": "0c32e400d46f67925ef07532ff01fdf50d5e0fc35bc34d2e5cd6b10e39867340",
+    "after-unknown-catalog.png": "f85df913869a67a3fac56a3f9ef93468aaf6d574b72d4dacec637b324b8c0201",
+    "build.log": "74dcc38fe00696f15924311e5ae4c31f3313ebf4ad4f69ade011a5d396561ec5"
+  },
+  "log_normalization": "Trailing whitespace and redundant blank lines at EOF removed; original logs retained in /tmp."
+}

@@ -1,5 +1,13 @@
 # Engineering log
 
+## 2026-10-21 — MAT-1 presentation and source-aware browsing
+
+Implemented approved shared classification/search and inline picker, preserving exact
+identity and matching. Source filtering, 30-row pagination and explicit ID/provenance
+keep unknown catalogs usable. Commit `13b8a95`; FS120/frontend1512 PASS, one existing
+skip; types/lint/WASM/build PASS. Synthetic long-label and narrow-layout review completed.
+[Results](../releases/FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md). HARD STOP for UX acceptance; no push.
+
 ## 2026-10-21 — MAT-1 inventory and architecture proposal
 
 Inspected `b8deaef` and actual material catalogs, native private metadata and current

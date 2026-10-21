@@ -58,12 +58,13 @@ before integration and qualify the combined V1.1 source independently.
 
 **Current checkpoint:** PRESET-1/2/3 accepted and committed locally; see the
 [integration receipt](../releases/PRESET_INTEGRATION_2026_10_21.md). No push, merge, tag, release,
-packaging or hardware operation. **HARD STOP before MAT-1 or another milestone.**
+packaging or hardware operation. MAT-1 was subsequently authorized; see the current checkpoint below.
 
-## MAT-1 architecture checkpoint — 2026-10-21
+## MAT-1 implementation checkpoint — 2026-10-21
 
-Audited integrated PRESET source at `b8deaef` on `FabCAM-v1.1`; no pending production
-overlap. [MAT-1 proposal](../releases/FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md)
-is ready for human Phase C review. Presentation/search only; no implementation or
-identity/matching change. Existing FS120/frontend39 regressions pass. HARD STOP
-before Phase D. Existing V1 and other human acceptance boundaries remain separate.
+Architecture approved; implementation `13b8a95` adds shared presentation/search only.
+[Report and screenshots](../releases/FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md).
+FS120/frontend1512 PASS (one existing locale skip); types/lint/WASM/build PASS.
+Unknown private catalogs retain source/name/ID browsing. No resolver/schema/V1 changes.
+**HARD STOP for final human UX acceptance.** Optional local classification and scaling
+remain separate future work. No push, release or hardware action.

@@ -270,10 +270,9 @@ milestone is authorized by this checkpoint.
 
 ### MAT-1 — Material Families, Variants and Synonyms
 
-**Phases A–C audited; presentation-only proposal awaiting human approval.**
+**Architecture approved; Phases D–F implemented and software-qualified, final human UX review pending.**
 [Inventory, classification/alias rules and safety boundaries](FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md).
-No Phase D implementation. Preferred approach: UI/search taxonomy metadata over existing
-records. Browse/filter/search **family → material → variant**; e.g. wood products
+Implementation `13b8a95` uses a shared nonpersistent layer over existing records. Browse/filter/search **family → material → variant**; e.g. wood products
 → plywood → birch/poplar, plastics → PMMA → cast/extruded, metals → aluminium →
 alloy. These examples do not authorize changing catalog identities. Add useful
 aliases such as acrylic/PMMA and avoid presenting every variant at the top level.
@@ -291,6 +290,12 @@ Acceptance: family/alias search reaches the correct existing records; variants
 remain distinguishable; legacy/unknown/revision-specific selections round-trip
 unchanged; filtering never changes resolver results or applied parameters. Review
 catalog coverage and accessible search UX before accepting the milestone.
+
+Optional future follow-up — **user-defined local material classification**: investigate
+a private per-installation mapping/editor only after separate authorization. Keep
+identity, resolver scopes and source rights unchanged; storage/sync/versioning and
+conflict handling require their own architecture review. Not part of MAT-1 and not
+permission to start it. Theoretical parameter scaling remains independently deferred.
 
 ### Parameter Scaling Assistant — future investigation
 
