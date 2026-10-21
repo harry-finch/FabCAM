@@ -1,73 +1,50 @@
 # FabCAM — current status
 
-User-requested v1.1 UX work is on `FabCAM-v1.1` (base `ef807cf`):
-implementation `0075317`, development launcher `b417d3c`, committed locally.
-[Changes, verification and test handoff](../releases/FABCAM_V1_1_UX_2026_10_21.md).
-The follow-up adds named private preset packs and separates automatic lab identities
-from pack references, retaining lab priority and visible provenance; [ADR-0027](adr/ADR-0027-lab-and-reference-identities.md).
-This branch does not change the V1 release qualification below.
+Snapshot **2026-10-21**, recorded on `FabCAM-v1.1` only.
+[Release plan](../releases/RELEASE_ROADMAP.md) ·
+[V1 readiness](../releases/V1_READINESS.md) ·
+[V1.1 inventory, qualification and policy](../releases/FABCAM_V1_1_ROADMAP_AND_BRANCH_2026_10_21.md).
 
-V1-FREEZE human-review checkpoint **2026-10-20**, beta.3 / pipeline63;
-[freeze scope, qualification and next decision](../releases/V1_FREEZE_READINESS_2026_10_20.md).
-SEC1 baseline:
-[implementation, frozen-source qualification and handoff](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md).
-20/20 local software gates, 1662 reported Rust PASS and 1460 frontend PASS.
-Promotion is disabled; remote CI and approval protection have not been exercised.
-[Documentation index](../README.md) · [Release plan](../releases/RELEASE_ROADMAP.md) ·
-[V1 readiness](../releases/V1_READINESS.md) · [Reconciliation and FS matrix](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md).
-
-## Implemented and accepted boundaries
-
-| Area | Current disposition | Qualification / next decision |
+| Line | Source and state | Next decision |
 |---|---|---|
-| SEC1 | Bundled-only CPS, accurate publication/cleanup reporting, shared exact-SHA qualification implemented | [Results](../releases/SEC1_REMEDIATION_RESULTS_2026_10_20.md); human review `ivac-1mqti` OPEN; no remote CI, installer or physical claim |
-| NUMSAFE3 | Implemented with approved specialized budgets and transactional program exports; existing two-sided names are refused | [Results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md); 16/16 gates, 1654 Rust tests, 256 TEST1, 136 byte-identical outputs; human review `ivac-zulb3` OPEN |
-| NUMSAFE / NUMSAFE2 | Implemented, approved engineering commits `e1a0c95` / `2c6e4e1`; tracker `ivac-knphk` / `ivac-o9gwj` CLOSED | [Numeric/runtime results](../releases/NUMERICAL_RUNTIME_SAFETY_RESULTS_2026_10_20.md), [1000-pass limits](../releases/NUMSAFE2_PASS_LIMITS_RESULTS_2026_10_20.md); retain streaming, cancellation and specialized-loop limits |
-| FS0–FS3.9 | Architecture, independent engine, data, CAM integration, ownership, source packs, authoring and bounded adaptation already delivered | [Actual FS matrix](../releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md#feeds--speeds-milestone-matrix): software reviews accepted within recorded scope; FS3 usability superseded by accepted FS3.5; FS4 physical qualification deferred/nonblocking |
-| Import / ADR-0026 | `d30863d` / `94cdd6b` implemented; [analytic](../releases/IMPORT_CORRECTNESS_RESULTS_2026_10_20.md) and [units/warnings UX](../releases/IMPORT_UNITS_WARNINGS_RESULTS_2026_10_20.md) evidence | Human checkpoint `ivac-feder` IN_PROGRESS; commit/push approval does not close it |
-| Export/load ADR-0024 | Independent full-program qualification and canonical project replacement implemented | [Results](../releases/UX_SAFETY_LOAD_RESULTS_2026_10_19.md); human review `ivac-3i00w` OPEN; underlying two engineering defects closed |
-| Movement provenance ADR-0025 | Approved architecture, implemented with [follow-up corrections](../releases/ADR0025_FOLLOWUP_RESULTS_2026_10_19.md) | `ivac-b0js3` / `ivac-b0js3.1` IN_PROGRESS; back-face fixtures/dowel registration unqualified |
-| UX A–D | A/B/C accepted; [consolidated software evidence](../releases/UX_V1_CONSOLIDATION_2026_10_19.md); later export/load defects corrected by ADR-0024 | D `ivac-he4lt` and consolidation `ivac-amibd` human reviews OPEN |
-| Documentation | Three completed documentation commits integrated; [source authoring guide](../feeds-speeds/CUSTOM_DATA_SOURCES.md) and loader-validated synthetic packs | `ivac-yg3sm` / `ivac-7w1e1` OPEN; retention remains a proposal, no evidence disposition authorized |
+| V1 stabilization / `main` | `ef807cf8250ddc4bdf795c75bb9bf9f011db9bca`; RC1-ef807cf-39492251757, beta.3/pipeline63; CI and candidate jobs succeeded | Clean-host installation/runtime and supervised ShopBot evidence, remaining human gates, explicit V1 acceptance |
+| `FabCAM-v1.1` | Base/merge-base `ef807cf`; implementation `0075317`, launcher `b417d3c`, documentation `6d4cff0`; existing changes already committed locally | Human UX acceptance `ivac-tnpyz`; frontend size failure `ivac-fpx7n`; not merge-ready |
+| New V1.1 work | PRESET-1 library, PRESET-2 Duplicate & Adapt, MAT-1 taxonomy are planned only | Review maintenance first, then authorize PRESET-1 read-only slice separately; scaling assistant remains future research |
 
-## Software gate and candidates
+RC1 [CI](https://github.com/harry-finch/FabCAM/actions/runs/39487569970) and
+[candidates](https://github.com/harry-finch/FabCAM/actions/runs/39492251757) belong to
+`ef807cf`, not the V1.1 implementation. The detailed
+[local RC1 receipt](../releases/V1_RC1_CANDIDATES_RESULTS_2026_10_20.md) is retained
+untracked; its availability in another checkout requires separate evidence transfer.
+macOS ad-hoc/non-notarized, Windows unsigned and Ubuntu unsigned-package limits
+remain; successful packaging does not establish installed or physical acceptance.
 
-V1-FREEZE [report and exact-source receipt](../releases/V1_FREEZE_READINESS_2026_10_20.md)
-own the current qualification: 1666 reported Rust passes, 1460 frontend passes,
-TEST1 256/256 and 136 byte-identical programs measured in preparation; the final
-receipt must confirm the complete 20-gate replay on its named commit. Retain the
-one ignored worker (separately watchdog-tested), locale skip and optional absent
-oracle limits. No current-source installed-platform or physical acceptance inferred.
-Historical SEC1/NUMSAFE3 receipts retain their source/environment; portable size
-checks now run without the old stat wrapper.
+V1.1 verification at `6d4cff0`: frontend **1474 PASS / 1 skip / 1 FAIL**;
+unchanged size guard rejects OperationsList 1008 and FeedsSpeedsSection 1010 lines.
+Both were within budget at RC1; the overages originate in V1.1 `0075317`.
+Targeted Rust: Feeds & Speeds 113 integration + 1 doc PASS, adapter 19 PASS,
+tool/process 6 PASS, native source packs 7 PASS. No full integrated V1.1 or
+installed-platform qualification is claimed. See the report for exact commands.
 
-Existing [beta.3 candidates](../releases/beta3-delivery-2026-10-18/README.md) are
-**`db5bde5` / pipeline61**, with three builds and bounded macOS smoke. They do not
-contain later source fixes. Current-source clean-install/runtime qualification on
-macOS, Windows11 and Ubuntu, release-level physical ShopBot qualification and V1
-acceptance remain pending. [M4 evidence](M4_VALIDATION.md) stays bounded and historical.
+Named packs, physical/reference identity separation, library-tool assignment and
+compact UI changes are implemented with bounded tests, awaiting human acceptance.
+[Existing implementation report](../releases/FABCAM_V1_1_UX_2026_10_21.md) and
+[ADR-0027](adr/ADR-0027-lab-and-reference-identities.md) retain their limitations,
+including partial native removal on I/O failure and legacy identity ambiguity.
 
-## Remaining gates and next action
+V1 qualification remains source-bound. The [readiness register](../releases/V1_READINESS.md)
+retains human review, supported/refused Pocket RPM, resource/cancellation,
+provenance, platform and workshop gates; this task closes none of them.
+[SEC1 follow-ups](../releases/SEC1_FOLLOWUP_ROADMAP.md) stay independently scoped.
+FS0–FS3.9 and M0–M4 remain delivered within recorded limits; FS4 is deferred for
+software development but physical evidence is required before real recommendation
+claims. [Historical status](history/STATUS_2026_10_20.md) and dated reports retain
+previous checkpoint facts; older no-remote-CI/candidate statements are historical.
 
-[SEC1 follow-up matrix](../releases/SEC1_FOLLOWUP_ROADMAP.md) separates locally
-qualified SEC1-01/04/08 from deferred hardening and custom CPS confinement.
-Option A documentation integration completed on `codex/v1-freeze-readiness`;
-final freeze/candidate approval `ivac-4k4qx` remains pending. The [Pocket RPM matrix](../releases/V1_POCKET_RPM_QUALIFICATION_2026_10_20.md)
-retains supported dual-tool manual sections and refuses intra-section RPM changes.
+Only demonstrated V1 acceptance-blocking defects belong on stabilization, with
+focused regression tests and renewed exact-SHA qualification. Features stay on
+`FabCAM-v1.1`; after V1 acceptance/release decisions, review any V1 hotfix delta
+before integration and qualify the combined V1.1 source independently.
 
-SEC1 engineering (`ivac-dqlol`) is qualified locally; **HARD STOP for human review**
-`ivac-1mqti`. NUMSAFE3 review `ivac-zulb3` remains independent. [Resource/export results](../releases/NUMSAFE3_RESOURCE_EXPORT_RESULTS_2026_10_20.md)
-record the approved budgets, new-only pair contract, commits and remaining limits.
-No push, installer packaging, publication or hardware operation was authorized.
-
-Review [V1 readiness](../releases/V1_READINESS.md), including open human gates,
-ShopBot RPM-transition `ivac-2zll`, conditional resource/cancellation reserves and
-unsupported/two-sided limits. Then separately authorize matching candidates and
-platform/workshop qualification. No functional milestone or release starts here.
-FS0 is complete; FS4 remains deferred. V1.5 native ProtoMAX follows accepted V1
-and its AUDIT3/OMX1/ARCH-MACH prerequisites; V2+ stays planned.
-
-**HARD STOP after this integration/documentation checkpoint.** No packaging, release,
-hardware action or evidence deletion/relocation. The [2026-10-18 acceptance](../releases/ACCEPTANCE_CANDIDATES_2026_10_18.md)
-and [historical status](history/STATUS_2026_10_20.md) preserve earlier decisions.
-M0–M4 baseline remains `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1`.
+**HARD STOP after planning and local documentation commits.** No PRESET/MAT
+implementation, extraction, push, merge, tag, release, packaging or hardware action.

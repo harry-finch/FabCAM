@@ -1,5 +1,20 @@
 # Engineering log
 
+## 2026-10-21 — V1.1 roadmap and branch reconciliation
+
+Verified `FabCAM-v1.1` at `6d4cff0`, three existing local commits above RC1/main
+`ef807cf`; no tracked work required another implementation consolidation commit.
+Added planned PRESET-1/PRESET-2/MAT-1 and deferred scaling research to the canonical
+release plan, preserving identities, provenance, permissions and human gates.
+Documented V1 stabilization versus isolated V1.1 development and future reviewed
+hotfix integration. Targeted Rust suites pass; full frontend remains 1474 PASS,
+1 skip, 1 unchanged size-guard FAIL. RC1 counts 1000/941 became 1008/1010 in
+`0075317`; bounded extraction tracked as `ivac-fpx7n`, not performed here.
+[Branch report](../releases/FABCAM_V1_1_ROADMAP_AND_BRANCH_2026_10_21.md) records
+commands, limits, existing commit disposition and next human decisions. Historical
+evidence/private packs preserved; documentation-only local commit, no push or
+implementation of the new milestones. HARD STOP after planning.
+
 ## 2026-10-21 — authorized local v1.1 commits
 
 After the user reviewed the v1.1 summary, they authorized committing the completed

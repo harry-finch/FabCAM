@@ -182,6 +182,106 @@ this approved plan's minimal physical evidence requirement **before recommending
 selected settings for real ShopBot use**. No FS4 trial or new dataset expansion is
 authorized here. Physical recommendation claims remain restricted until that gate.
 
+## FabCAM 1.1 — Presets and materials UX
+
+**Status: planned feature milestones; no implementation authorized by this plan.**
+Development stays on `FabCAM-v1.1`, isolated from V1 RC qualification. The
+[branch inventory and development policy](FABCAM_V1_1_ROADMAP_AND_BRANCH_2026_10_21.md)
+distinguish existing named-pack/tool workflows from these new features. FS0–FS3.9
+remain delivered; this track does not restart them or add a prerequisite to the
+separately reviewed V1.5 ProtoMAX schedule.
+
+### PRESET-1 — Cutting Presets Library
+
+**Planned Tool/Feeds & Speeds UX enhancement.** Add a top-level **Presets** entry
+immediately after Tools. Provide a compact graphite/blue workshop **filterable
+table**, independent of the selected operation, without oversized cards or a
+mandatory material tree. Reuse source-pack storage/resolution and preserve pack
+IDs, immutable revisions and recorded physical machine/tool identities.
+
+Browse compatible enabled local and reference packs; search material, tool,
+diameter, flute count and metadata; filter source pack, material family, tool type
+and validation status. Show RPM, feed, plunge, depth per pass and stepover where
+applicable, with units and explicit unavailable values. Record details expose
+machine/tool/material context, source provenance, review status and available
+trial notes. Clearly distinguish editable local records from read-only references;
+entry points to editing must retain the existing revision/evidence safeguards.
+Browsing must not calculate, recommend or apply cutting values automatically.
+
+Acceptance: combined filters/search return the correct records; full provenance
+and revision remain visible; permissions prevent reference mutation; legacy
+Sorbonne, optional identity fields and unknown saved IDs remain readable without
+remapping; empty/no-match/disabled/incompatible-source states are understandable.
+Keyboard navigation, focus, dense-table legibility and unit presentation require
+human UX review. First proposed implementation slice: read-only browsing/details,
+with edit affordances gated by the existing local-authoring contract.
+
+### PRESET-2 — Duplicate & Adapt
+
+**Planned; depends on PRESET-1 record/provenance access and reviewed compatibility
+and copy-permission rules.** Select a compatible source → Duplicate & adapt →
+choose editable local destination → choose/create material and tool associations
+through existing identity workflows → review copied values and differences → save
+an independent **new Draft** with source-record/revision provenance.
+
+Never inherit Tested/Validated status or physical attestations. Explicitly show
+material/geometry changes and flag potentially inappropriate inherited parameters.
+Do not calculate or apply new values, mutate the source or change existing
+operations. Reference-to-local copying is permitted only where source rights allow
+transformation; private installation does not itself grant that permission.
+
+| Acceptance case | Required behavior |
+|---|---|
+| Same compatible machine/process/material/tool configuration | New Draft, independent identity, copied values reviewed, source/revision retained |
+| Different compatible cutter diameter/flutes or similar material | Explicit differences and review flags; fresh Draft, no inherited evidence or calculated values |
+| Read-only reference with copying/transformation permission | Editable local Draft; reference unchanged; attribution/provenance retained |
+| Rights absent/unknown, incompatible process/tool/machine, or missing required identity context | Refuse save as an eligible adapted preset; explain and require correction/permission; no silent coercion |
+| Source/destination revision changes, cancellation or legacy identity ambiguity | Detect stale context; re-review or cancel without partial source/operation mutation |
+
+Exact compatibility boundaries and whether to allow an incomplete draft during
+association editing require human architecture/UX review before implementation.
+
+### MAT-1 — Material Families, Variants and Synonyms
+
+**Planned; preferred first step is UI/search taxonomy metadata over existing
+records.** Browse/filter/search **family → material → variant**; e.g. wood products
+→ plywood → birch/poplar, plastics → PMMA → cast/extruded, metals → aluminium →
+alloy. These examples do not authorize changing catalog identities. Add useful
+aliases such as acrylic/PMMA and avoid presenting every variant at the top level.
+Favorites/recent materials are optional following UX validation.
+
+Preserve machining-relevant grade/condition distinctions, existing material IDs,
+source-pack compatibility and recommendation provenance. Keep thickness in stock
+properties where appropriate. Do not merge/remap IDs, rewrite imported packs,
+change the resolver or introduce persistent taxonomy/schema changes without a
+separate architecture/data-model decision and migration/rollback plan. **Explicit
+architecture checkpoint before any persistence change**; ADR-0027 is not that
+approval. Search aliases must not imply machining equivalence.
+
+Acceptance: family/alias search reaches the correct existing records; variants
+remain distinguishable; legacy/unknown/revision-specific selections round-trip
+unchanged; filtering never changes resolver results or applied parameters. Review
+catalog coverage and accessible search UX before accepting the milestone.
+
+### Parameter Scaling Assistant — future investigation
+
+**Deferred research; outside immediate V1.1 implementation.** Investigate explicit
+comparison of diameter, flute count and chip load under stated material assumptions,
+traceable source recommendations, warnings and hard limits. Audit/reuse FS3.9's
+existing bounded adaptation before proposing any additional math. No automatic
+application, automatic physical validation or promotion of source evidence.
+A separate scope/architecture and qualification decision must precede development.
+
+### Ordering and checkpoints
+
+First review bounded maintenance `ivac-fpx7n` to restore the unchanged frontend
+size gate, preserving existing UX/history/provenance. Next feature milestone is
+PRESET-1's read-only table/details slice. MAT-1's nonpersistent mapping may support
+its family filter once reviewed; it need not block basic browsing. PRESET-2 follows
+the library and the approved identity/rights/Draft contract. Each milestone ends at
+human acceptance. No component extraction or feature implementation occurs in this
+planning task; existing V1.1 UX acceptance `ivac-tnpyz` remains independent.
+
 ## FabCAM 1.5 — ProtoMAX Waterjet
 
 [Bounded scope and acceptance matrix](FABCAM_V1_5_SCOPE.md). Reuse process-independent

@@ -1,5 +1,28 @@
 # FabCAM V1 readiness
 
+## Current branch separation — 2026-10-21
+
+V1 stabilization/RC1 remains `ef807cf8250ddc4bdf795c75bb9bf9f011db9bca`,
+RC1-ef807cf-39492251757 (beta.3/pipeline63). Its
+[CI](https://github.com/harry-finch/FabCAM/actions/runs/39487569970) and
+[candidate workflow](https://github.com/harry-finch/FabCAM/actions/runs/39492251757)
+completed successfully; the retained [local RC1 receipt](V1_RC1_CANDIDATES_RESULTS_2026_10_20.md)
+is untracked evidence, not included by this documentation commit. Signing/platform
+and supervised workshop limits remain; no final V1 acceptance is recorded here.
+
+The separate `FabCAM-v1.1` branch contains feature changes beyond RC1 and has a
+known failing frontend size guard. Its [inventory and planned milestones](FABCAM_V1_1_ROADMAP_AND_BRANCH_2026_10_21.md)
+do not change V1 scope or approve any human gate. PRESET-1/PRESET-2/MAT-1 are
+planned, not V1 blockers. V1.1 requires its own combined-source qualification and
+acceptance after reviewed future hotfix reconciliation.
+
+## Historical V1-FREEZE register — retained evidence and gates
+
+The following **2026-10-20 pre-RC snapshot** preserves its original source-bound
+facts and pending decisions. Its no-remote-CI, db5bde5 freshness and pre-build
+instructions are superseded for RC1 by the exact-source receipts above; gate states
+are historical snapshots and are not closed or re-certified by this planning task.
+
 Snapshot **2026-10-20**, V1-FREEZE review checkpoint, beta.3/pipeline63.
 [Exact final source and aggregate qualification receipt](V1_FREEZE_READINESS_2026_10_20.md)
 controls freeze readiness; human freeze review `ivac-4k4qx` remains OPEN.

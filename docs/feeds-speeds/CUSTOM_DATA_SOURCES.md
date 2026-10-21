@@ -413,3 +413,13 @@ Reserved lab history can grow to the pack cap; no automatic compaction or generi
 cleanup/merge UI is supplied. Keep verified backups and seek an explicit migration
 plan rather than deleting revisions, write locks or application data to bypass a
 limit. See [storage/capture contract](../shopbot-modernization/feeds-speeds/PRESET_AUTHORING.md).
+
+## Planned library and adaptation workflows
+
+The [V1.1 release plan](../releases/RELEASE_ROADMAP.md#fabcam-11--presets-and-materials-ux)
+adds PRESET-1 cross-source browsing, PRESET-2 explicit Duplicate & Adapt into a new
+Draft, and MAT-1 material search/taxonomy. These are **planned and unavailable**;
+existing named-pack capture/review workflows above remain the implemented contract.
+Future copies must respect transformation rights, retain source/revision provenance
+and never inherit physical validation. Material aliases must preserve record IDs
+and grade distinctions; persistent taxonomy needs a separate architecture decision.
