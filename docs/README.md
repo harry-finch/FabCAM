@@ -3,6 +3,7 @@
 Start with [current STATUS](shopbot-modernization/STATUS.md), then select a route.
 This index separates product setup, engineering contracts, plans and evidence.
 Source/qualification snapshot: [V1 readiness](releases/V1_READINESS.md).
+Active branch: [v1.1 UX changes and verification](releases/FABCAM_V1_1_UX_2026_10_21.md).
 
 ## Read by task
 

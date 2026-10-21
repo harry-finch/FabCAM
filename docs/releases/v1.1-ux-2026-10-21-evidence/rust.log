@@ -1,0 +1,379 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.58s
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-ace93add107a9189)
+
+running 6 tests
+test source_packs::tests::rejects_repository_storage ... ok
+test source_packs::tests::removal_rejects_symlinks_before_deleting_any_revision ... ok
+test source_packs::tests::removal_checks_head_and_removes_all_revisions_only_for_the_selected_id ... ok
+test source_packs::tests::stores_only_valid_local_json_and_refuses_duplicate_version ... ok
+test source_packs::tests::audit_15_16_lab_rejects_variable_width_and_text_revisions ... ok
+test source_packs::tests::lab_revisions_use_compare_and_append_not_overwrite ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.03s
+
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.18s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-79e46ac25832bcaf)
+
+running 18 tests
+test feeds_speeds::tests::lab_capture_preserves_unknown_engagement_and_rejects_missing_identity ... ok
+test feeds_speeds::tests::legacy_serialization_omits_fs_fields_and_inheritance_survives ... ok
+test feeds_speeds::tests::lab_capture_reads_manual_resolved_rates_without_mutating_operation ... ok
+test feeds_speeds::tests::native_geometry_context_uses_depth_schedule_and_nominal_overlap ... ok
+test feeds_speeds::tests::lab_capture_names_only_missing_identities ... ok
+test feeds_speeds::tests::manual_slots_survive_tool_data_changes_and_context_becomes_stale ... ok
+test feeds_speeds::tests::lab_capture_uses_applied_manual_slot_instead_of_original_recommendation ... ok
+test feeds_speeds::tests::explicit_apply_can_resolve_a_changed_tool_without_live_inheritance ... ok
+test feeds_speeds::tests::pocket_uses_nominal_overlap_and_keeps_secondary_pass_origins ... ok
+test feeds_speeds::tests::rejected_scope_is_transient_and_old_responses_remain_readable ... ok
+test feeds_speeds::tests::section_metadata_reads_active_profile_pass_and_final_constraints ... ok
+test feeds_speeds::tests::public_pack_migration_preserves_single_source_values ... ok
+test feeds_speeds::tests::missing_duplicate_new_tool_and_wrong_process_roles_refuse ... ok
+test feeds_speeds::tests::private_pack_apply_saves_values_and_ids_without_record_body ... ok
+test feeds_speeds::tests::preview_is_immutable_apply_is_explicit_and_roundtrip_offline ... ok
+test feeds_speeds::tests::pipeline_uses_saved_manual_values_and_warns_on_changed_context ... ok
+test feeds_speeds::tests::manual_only_values_roundtrip_and_generate_without_recommendation_or_data ... ok
+test feeds_speeds::tests::approximate_proposal_apply_and_reopen_keep_resolved_values_authoritative ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 1173 filtered out; finished in 0.02s
+
+     Running tests/arc_sweep_parity.rs (target/debug/deps/arc_sweep_parity-3cbc3e675f7c8637)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/cad1_qualification.rs (target/debug/deps/cad1_qualification-212c25646467651b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/comment_safety.rs (target/debug/deps/comment_safety-9ecfcf840769ac17)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/cps_posts.rs (target/debug/deps/cps_posts-212548ae32dfab34)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/drawing_audit.rs (target/debug/deps/drawing_audit-d17d8918d65b66b1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+     Running tests/geom1_contract.rs (target/debug/deps/geom1_contract-54eba2d36d271409)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.00s
+
+     Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-096721e461c36be6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/golden_corpus.rs (target/debug/deps/golden_corpus-cf64412645a0472e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/hatch_safe_z.rs (target/debug/deps/hatch_safe_z-5ab9dd5b8cba3b7b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/import_correctness.rs (target/debug/deps/import_correctness-044c960f24256bff)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/numsafe.rs (target/debug/deps/numsafe-622bdf3d72e6b34f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/numsafe2.rs (target/debug/deps/numsafe2-cef7982cd2da739c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/numsafe3.rs (target/debug/deps/numsafe3-28409b8cfca9992e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/safe_z_extended.rs (target/debug/deps/safe_z_extended-f05488e3eac51203)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/shopbot_m1_qualification.rs (target/debug/deps/shopbot_m1_qualification-96074b25ed23f1a9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/shopbot_m2_post.rs (target/debug/deps/shopbot_m2_post-8d9111c6af349723)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/snapshots_drill_tabs_whirl.rs (target/debug/deps/snapshots_drill_tabs_whirl-837c0f0bc6fdb723)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/tessellation_tolerance.rs (target/debug/deps/tessellation_tolerance-0019055c13b44ec8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/test1_properties.rs (target/debug/deps/test1_properties-4db571644bc05b11)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/text_rendering.rs (target/debug/deps/text_rendering-341b6447b1a660be)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/tool_provenance.rs (target/debug/deps/tool_provenance-f71fa6c606180371)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/ux3_qualification.rs (target/debug/deps/ux3_qualification-df8da74fdcdd1ede)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ux_inspector_contracts.rs (target/debug/deps/ux_inspector_contracts-349e529e1b61e3e7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/v1_stabilization.rs (target/debug/deps/v1_stabilization-a2cd1ac60f7a1081)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/vcarve_qualification.rs (target/debug/deps/vcarve_qualification-482baa1012302397)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/volume_validation.rs (target/debug/deps/volume_validation-559f26deb51455ce)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/waterline_acceptance.rs (target/debug/deps/waterline_acceptance-80f8e9b193f81e8d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+    Blocking waiting for file lock on build directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.01s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-79e46ac25832bcaf)
+
+running 6 tests
+test project::tool::tests::effective_diameter_subtracts_wear_and_clamps ... ok
+test project::tool::tests::tool_kind_compatible_modes_matches_ts_table ... ok
+test project::tool::tests::tool_kind_family_matches_ts_table ... ok
+test project::tool::tests::tool_holder_fields_skip_when_none ... ok
+test project::tool::tests::wear_fields_round_trip_and_skip_when_default ... ok
+test project::tool::tests::holder_round_trip ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 1185 filtered out; finished in 0.02s
+
+     Running tests/arc_sweep_parity.rs (target/debug/deps/arc_sweep_parity-3cbc3e675f7c8637)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/cad1_qualification.rs (target/debug/deps/cad1_qualification-212c25646467651b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/comment_safety.rs (target/debug/deps/comment_safety-9ecfcf840769ac17)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/cps_posts.rs (target/debug/deps/cps_posts-212548ae32dfab34)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/drawing_audit.rs (target/debug/deps/drawing_audit-d17d8918d65b66b1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+     Running tests/geom1_contract.rs (target/debug/deps/geom1_contract-54eba2d36d271409)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.00s
+
+     Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-096721e461c36be6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/golden_corpus.rs (target/debug/deps/golden_corpus-cf64412645a0472e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/hatch_safe_z.rs (target/debug/deps/hatch_safe_z-5ab9dd5b8cba3b7b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/import_correctness.rs (target/debug/deps/import_correctness-044c960f24256bff)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/numsafe.rs (target/debug/deps/numsafe-622bdf3d72e6b34f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/numsafe2.rs (target/debug/deps/numsafe2-cef7982cd2da739c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/numsafe3.rs (target/debug/deps/numsafe3-28409b8cfca9992e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/safe_z_extended.rs (target/debug/deps/safe_z_extended-f05488e3eac51203)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/shopbot_m1_qualification.rs (target/debug/deps/shopbot_m1_qualification-96074b25ed23f1a9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/shopbot_m2_post.rs (target/debug/deps/shopbot_m2_post-8d9111c6af349723)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/snapshots_drill_tabs_whirl.rs (target/debug/deps/snapshots_drill_tabs_whirl-837c0f0bc6fdb723)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/tessellation_tolerance.rs (target/debug/deps/tessellation_tolerance-0019055c13b44ec8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/test1_properties.rs (target/debug/deps/test1_properties-4db571644bc05b11)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/text_rendering.rs (target/debug/deps/text_rendering-341b6447b1a660be)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/tool_provenance.rs (target/debug/deps/tool_provenance-f71fa6c606180371)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/ux3_qualification.rs (target/debug/deps/ux3_qualification-df8da74fdcdd1ede)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ux_inspector_contracts.rs (target/debug/deps/ux_inspector_contracts-349e529e1b61e3e7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/v1_stabilization.rs (target/debug/deps/v1_stabilization-a2cd1ac60f7a1081)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/vcarve_qualification.rs (target/debug/deps/vcarve_qualification-482baa1012302397)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/volume_validation.rs (target/debug/deps/volume_validation-559f26deb51455ce)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/waterline_acceptance.rs (target/debug/deps/waterline_acceptance-80f8e9b193f81e8d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+

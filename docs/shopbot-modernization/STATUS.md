@@ -1,5 +1,12 @@
 # FabCAM — current status
 
+User-requested v1.1 UX work is on `FabCAM-v1.1` (base `ef807cf`):
+implementation `0075317`, development launcher `b417d3c`, committed locally.
+[Changes, verification and test handoff](../releases/FABCAM_V1_1_UX_2026_10_21.md).
+The follow-up adds named private preset packs and separates automatic lab identities
+from pack references, retaining lab priority and visible provenance; [ADR-0027](adr/ADR-0027-lab-and-reference-identities.md).
+This branch does not change the V1 release qualification below.
+
 V1-FREEZE human-review checkpoint **2026-10-20**, beta.3 / pipeline63;
 [freeze scope, qualification and next decision](../releases/V1_FREEZE_READINESS_2026_10_20.md).
 SEC1 baseline:

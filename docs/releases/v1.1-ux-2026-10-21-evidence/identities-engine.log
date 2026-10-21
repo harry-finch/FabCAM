@@ -1,0 +1,162 @@
+   Compiling ivac-feeds-speeds v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.17s
+     Running unittests src/lib.rs (target/debug/deps/ivac_feeds_speeds-83e93907032b93cc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/approximate.rs (target/debug/deps/approximate-6ce3fdfdfbcdf285)
+
+running 21 tests
+test interpolation_does_not_inherit_one_anchors_better_doc_specificity ... ok
+test declared_parent_fallback_uses_taxonomy_graph_and_cannot_accept_invented_prefix ... ok
+test diagnostic_trace_retains_rejections_selection_and_order ... ok
+test invalid_request_and_malformed_pack_trace_do_not_panic ... ok
+test incompatible_family_flutes_operation_machine_and_material_remain_rejected ... ok
+test approximate_disagreement_remains_visible_without_averaging ... ok
+test interpolation_preserves_both_originals_and_is_deterministic ... ok
+test ambiguous_interpolation_anchor_preserves_disagreement_and_determinism ... ok
+test adaptation_taxonomy_descendants_match_and_trace_agrees ... ok
+test multiple_pack_interpolations_do_not_hide_disagreement ... ok
+test all_six_exact_rows_are_numerically_unchanged ... ok
+test machine_transfer_penalty_survives_diameter_adaptation ... ok
+test larger_diameter_caps_cutting_speed_doc_and_machine_limits ... ok
+test exact_and_near_precede_farther_and_bracket_candidates ... ok
+test router_class_cannot_become_exact_physical_trial_scope ... ok
+test no_match_reports_distance_instead_of_already_permitted_transfers ... ok
+test two_from_three_has_exact_fifty_percent_gap_and_conservative_factor ... ok
+test small_diameter_extrapolation_is_bounded_and_two_vs_three175_is_refused ... ok
+test policy_permission_and_physical_evidence_cannot_be_broadened ... ok
+test six_mm_pocket_normalizes_near_reference_and_keeps_all_transfers_explicit ... ok
+test tool_classification_index_ignores_absence_but_rejects_conflict ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/dataset.rs (target/debug/deps/dataset-fa698b6df6a8cb07)
+
+running 13 tests
+test missing_data_explains_actual_scope_without_relaxing_matching ... ok
+test external_reference_never_becomes_locally_validated_after_clamp ... ok
+test no_shopbot_or_unknown_machine_transfer ... ok
+test in_memory_validation_matches_json_validation_without_mutating_document ... ok
+test no_pocket_finish_or_unknown_doc_transfer ... ok
+test explicit_roundtrip_retains_catalog_and_source_snapshots ... ok
+test no_silent_metric_diameter_material_or_tool_transfer ... ok
+test local_trial_records_are_distinct_from_external_references ... ok
+test source_rows_transcribed_without_derating_or_chipload_recomputation ... ok
+test dangling_revisions_and_family_members_refused ... ok
+test incomplete_data_provenance_or_unearned_evidence_refused_atomically ... ok
+test catalog_duplicates_geometry_conflicts_and_hard_limit_conflicts_refused ... ok
+test schema_versions_unknown_fields_duplicate_fields_and_units_refused ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/lab_presets.rs (target/debug/deps/lab_presets-0d5cd52adb40ea21)
+
+running 9 tests
+test imported_physical_test_cannot_postdate_its_saved_revision ... ok
+test history_preserves_prior_evidence_and_rejects_changed_identity ... ok
+test draft_is_saved_but_never_supplies_recommendations ... ok
+test local_capture_round_trip_requires_successful_physical_attestation ... ok
+test public_lab_metadata_and_incomplete_validation_are_refused ... ok
+test sorbonne_validated_record_precedes_tested_record_without_ui_ranking ... ok
+test local_tested_precedence_uses_existing_resolver_and_disabled_deleted_presets_are_ignored ... ok
+test malformed_dates_and_unsupported_authoring_schema_are_rejected_without_panics ... ok
+test lab_and_reference_identities_coexist_with_lab_priority_and_reference_fallback ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/qualification.rs (target/debug/deps/qualification-dd45bb5362bfda93)
+
+running 43 tests
+test fs02_full_slot_contradiction_is_invalid ... ok
+test finish_context_requires_finish_data_and_unknowns_are_visible ... ok
+test exact_rpm_floor_reports_original_chipload_even_with_feed_cap ... ok
+test exact_feed_tracks_tool_cap_and_rounding_but_never_increases_at_rpm_floor ... ok
+test fs01_equation_units_and_profile_unknown_engagement ... ok
+test equivalent_single_member_family_and_exact_scope_are_ambiguous ... ok
+test exact_values_rpm_cap_never_increases_implicit_chipload ... ok
+test feed_saturation_reports_target_comparison_without_material_threshold_or_rpm_retuning ... ok
+test family_and_rule_authoring_errors_cannot_bypass_constructor_validation ... ok
+test fs03_pocket_preserves_nominal_ratio_and_distinction ... ok
+test fs04_inconsistent_machine_or_tool_limits_refuse ... ok
+test fs02_slot_cannot_use_profile_or_low_radial_data ... ok
+test fs04_rpm_clamps_and_chipload_target_uses_final_rpm ... ok
+test fs05_unknown_limits_are_not_invented ... ok
+test fs05_feed_and_plunge_limits_are_independent ... ok
+test fs06_unknown_material_missing_profiles_and_dataset_mismatch ... ok
+test fs08_exact_evidence_never_broadens_to_changed_context ... ok
+test fs08_exact_validated_then_tested_then_reference_precedence ... ok
+test fs08_exact_values_keep_chipload_after_rpm_clamp_and_downgrade_applicability ... ok
+test fs09_ambiguity_in_higher_tier_does_not_fall_through ... ok
+test fs09_equal_or_incomparable_scopes_are_ambiguous_in_any_order ... ok
+test fs09_all_precedence_tiers_and_mode_are_explicit ... ok
+test fs09_family_subset_containment_and_machine_membership ... ok
+test fs09_families_require_explicit_membership_and_specificity ... ok
+test fs09_inclusive_range_boundaries_and_missing_qualifiers ... ok
+test fs09_strict_containment_selects_unique_maximal_scope ... ok
+test fs07_unsupported_families_and_operations ... ok
+test fs13_validation_label_requires_scope_and_record ... ok
+test fs15_invalid_request_quantities_and_limits ... ok
+test fs13_dataset_validation_rejects_invalid_claims_and_duplicates ... ok
+test family_provenance_survives_external_dataset_loss_and_member_reordering ... ok
+test fs13_unknown_fields_and_non_milling_operations_reject_on_deserialize ... ok
+test fs15_overflow_and_unbounded_large_output_refuse ... ok
+test fs15_nonfinite_and_bad_profile_data_reject_at_construction ... ok
+test fs15_rounding_and_representability_are_explicit ... ok
+test fs16_reduction_expansion_missing_source_and_duplicates_refuse ... ok
+test fs16_aggressiveness_and_evidence_independent_no_hidden_mode_factor ... ok
+test fs15_repeated_output_and_input_immutability ... ok
+test nominal_scope_containment_selects_narrower_recipe_at_boundaries ... ok
+test fs15_limit_invariants_over_deterministic_grid ... ok
+test plunge_scales_down_for_both_data_modes_and_never_up ... ok
+test request_doc_and_nominal_stepover_cannot_be_silently_increased ... ok
+test fs13_request_profile_set_and_result_round_trip ... ok
+
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/sensitivity.rs (target/debug/deps/sensitivity-0e60139211b013a6)
+
+running 4 tests
+test ten_percent_small_tool_transition_is_continuous_with_integer_feed_rounding ... ok
+test interpolation_entry_exposes_a_larger_selection_jump ... ok
+test availability_boundaries_are_explicit_on_both_sides ... ok
+test diameter_sweep_is_order_independent_and_preserves_evidence_and_caps ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.90s
+
+     Running tests/source_packs.rs (target/debug/deps/source_packs-a6979cb655487758)
+
+running 21 tests
+test composite_sienci_is_not_all_mdf ... ok
+test derived_quantities_have_units_and_keep_original ... ok
+test duplicate_pack_ids_refused ... ok
+test classification_and_private_not_bundle ... ok
+test bundle_registry_is_explicit_and_contains_only_licensed_public_packs ... ok
+test exact_local_tested_preset_precedes_reference ... ok
+test disagreement_selects_authored_record_never_average ... ok
+test generic_material_fallback_and_exact_preference ... ok
+test missing_and_invalid_context_keep_reasons ... ok
+test floating_point_roundoff_does_not_create_false_ambiguity_but_real_doc_difference_does ... ok
+test deterministic_under_input_reordering ... ok
+test source_chipload_is_distinguished_from_derived_chipload ... ok
+test tested_cannot_use_material_fallback ... ok
+test schema_and_size_fail_closed ... ok
+test source_record_and_original_values_survive ... ok
+test identities_and_record_origins_are_required ... ok
+test typed_errors_preserve_legacy_api_and_rank_array_contract ... ok
+test noncomparable_rpm_is_ambiguous_even_when_clamps_equal ... ok
+test manifest_versions_and_required_license ... ok
+test unknown_material_taxonomy_and_tool_traits_are_rejected ... ok
+test normal_and_rapid_stay_in_authored_same_mode_records ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests ivac_feeds_speeds
+
+running 1 test
+test crates/ivac-feeds-speeds/src/lib.rs - (line 8) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+

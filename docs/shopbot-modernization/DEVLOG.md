@@ -1,5 +1,35 @@
 # Engineering log
 
+## 2026-10-21 — authorized local v1.1 commits
+
+After the user reviewed the v1.1 summary, they authorized committing the completed
+work. Implementation `0075317` includes independent lab/reference identities, named
+private preset packs, compatible library-tool assignment and sidebar/navigation polish.
+The local macOS development launcher is `b417d3c`. Documentation/ADR-0027 and scoped
+v1.1 verification evidence accompany this checkpoint. Previous uncommitted reports
+and historical local qualification archives are preserved outside these commits.
+No source changes during preparation, no push/merge/publication, and no new release
+or physical qualification. The known frontend component-size guard remains reported.
+
+## 2026-10-21 — named local preset packs
+
+User-requested v1.1 extension adds explicit creation/naming and destination selection
+for private local preset packs. Preserves the legacy Sorbonne pack, immutable history,
+physical-evidence gates, reference separation and per-pack concurrent-write protection.
+[Behavior, compatibility and checks](../releases/FABCAM_V1_1_UX_2026_10_21.md#named-preset-packs--follow-up-checkpoint-ivac-lmq9l).
+No commit, push, release or physical qualification.
+
+## 2026-10-21 — v1.1 preset and tool workflow
+
+User-requested branch `FabCAM-v1.1` from `ef807cf`. Preset setup now identifies
+each missing binding; local identities and reference matching have separate explanations.
+Operation selection automatically stocks compatible tools in the project/machine,
+including finish and spotting roles, palette assignment and template creation.
+Each tool kind maps to one manufacturing process; existing incompatible assignments
+remain visible. Local source removal includes all revisions and preserves applied
+project cutting values. [Validation and handoff](../releases/FABCAM_V1_1_UX_2026_10_21.md).
+No commit, push, version promotion, installer or physical qualification.
+
 ## 2026-10-20 — Git integration and project-state reconciliation
 
 Four approved engineering commits synchronized to origin/main through `2c6e4e1`.
@@ -2685,3 +2715,13 @@ records 1666 Rust/1460 frontend preparation passes, TEST1 256, corpus 136 exact 
 the mandatory final exact-commit receipt. Failed bootstrap/cache-layout attempts
 are retained, not counted as passing gates. Human review ivac-4k4qx and independent
 existing gates remain OPEN; no final freeze, push, installer, release or hardware.
+
+## 2026-10-21 — v1.1 independent lab/reference follow-up
+
+User requested simultaneous physical lab identity and reference-pack compatibility,
+lab priority and visible recommendation provenance, without Enable presets.
+[ADR-0027](adr/ADR-0027-lab-and-reference-identities.md) records the additive model,
+legacy migration and physical-identity separation. Existing resolver priority and
+manual-rate authority are retained. Implementation remains uncommitted on FabCAM-v1.1;
+UX review is still the next human checkpoint. Validation is recorded in the
+[v1.1 report](../releases/FABCAM_V1_1_UX_2026_10_21.md).

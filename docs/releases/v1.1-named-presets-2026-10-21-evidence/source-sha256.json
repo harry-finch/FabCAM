@@ -1,0 +1,25 @@
+{
+  "base_revision": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "branch": "FabCAM-v1.1",
+  "state": "uncommitted, with existing v1.1 changes",
+  "files": {
+    "crates/ivac-core/src/feeds_speeds.rs": "ab576ea06138ef44d1e7ed17bbae596b08b9a95e036c735ab52cfd336148f2c2",
+    "crates/ivac-feeds-speeds/src/source_pack.rs": "7214842cb69624a122ebd2b9673c5e4b1adceb2cef52eecb0cedbeee6a1b6ff8",
+    "crates/ivac-feeds-speeds/tests/lab_presets.rs": "c429035b03a3f2bdbb912d1a82cc2fd08192a7a7338fbcd8945648df2c994d47",
+    "crates/ivac-tauri/src/source_packs.rs": "8178dd750d3f733930d7e935e4639e2651e123872179aaedc95e1bec73494bef",
+    "frontend/src/lib/components/FeedsSpeedsCompatibility.svelte": "64ca8385eb7c7874187ecc5d9d3afec60e4ead422d716f60b4333770abfc7fcf",
+    "frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte": "18f2125d11b569b7fc3457be9b78009612a91e4ac39e7bcebc4359208b3eca02",
+    "frontend/src/lib/components/LabPresetDialog.svelte": "574bef6cc4333234867d952d87a51667d765bf42c81bcae6033a49b6f58ba64b",
+    "frontend/src/lib/components/LabPresetManager.svelte": "9a4309d330e9b180cfd6d663f85f9d8ff837bf555661ee2761c052554509fae4",
+    "frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte": "c33a061675182ebcc38d11281b4bc05511e77d154ae54b82a363a0d68b3a1f1c",
+    "frontend/src/lib/i18n/keys.ts": "639c974f503db68bc6616dd87098efb1c5b64ce456e1ca8b76131463db3de07f",
+    "frontend/src/lib/i18n/messages/de.json": "894590b9091e840b5f0379e49092f9ba6cd7801296bff221f4f104cbeb57dd04",
+    "frontend/src/lib/i18n/messages/en.json": "c7dabb52a4374ec565bdb1410d3bbb5e7479d56116fff4c16971cde5d877c1b4",
+    "frontend/src/lib/state/feeds-speeds-pack-store.ts": "1a6bacdc813b8a29f4ffddf7899e06a8c80e2d0f1ab16781fe41cb99d194a8a0",
+    "frontend/src/lib/state/feeds-speeds-sources.svelte.ts": "aa0d436ef201d6cdd9c8d1c37f3e2810f63ed9988bfef3c657e8c8375d80017e",
+    "frontend/src/lib/state/lab-presets-store.ts": "dcbf855543cbba7acfaf858c80da4dacf3c46fc8f18a4d2489bd51571edf45ff",
+    "frontend/src/lib/state/lab-presets.test.ts": "1361f0187ee5c4b78aa3ebf4dd38a0135a25923677aed06d3180fbad89d05577",
+    "frontend/src/lib/state/lab-presets.ts": "18b9e34a5e688af50b3ef22bb50ca1406adb8be456ab0d9c52d662d8be50511e",
+    "frontend/src/lib/components/LabPackCreate.svelte": "79270e6dd152840ef2259b8da8d3daa8de8161b171ae1b2f299d7d60fa89b9b7"
+  }
+}

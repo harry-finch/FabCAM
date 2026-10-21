@@ -1,0 +1,4 @@
+   Compiling ivac-feeds-speeds v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-server)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 13.46s

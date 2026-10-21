@@ -4,30 +4,35 @@ This guide is for fablabs and CNC milling workshops that want to keep reusable
 cutting knowledge. You can capture local presets in FabCAM, or author an external
 JSON source pack. These are different workflows with different editing tools.
 
-Checked on **2026-10-20**, application source `94cdd6b` (beta.3/pipeline63), with
-navigation from documentation branch `codex/docs-consolidation`. Paused NUMSAFE
-changes are excluded. English UI labels below come from this source; older
-screenshots and technical documents can use earlier names.
+Original guide checked on **2026-10-20**, source `94cdd6b` (beta.3/pipeline63).
+Named local preset packs updated on **2026-10-21** against the reviewed
+`FabCAM-v1.1` tree based on `ef807cf`, subsequently committed as `0075317`;
+this is not a release qualification.
+Older screenshots and technical documents can use earlier names.
 
 ## Choose your workflow
 
 | You want to… | Current route |
 |---|---|
+| Create a named preset collection | Settings → Feeds & Speeds → **+ Create preset pack**; also available in Save as preset |
 | Keep actual operation settings and trial observations | Operation → Cutting parameters → **Save as preset…** |
-| Review, disable, restore or promote a captured preset | Settings → Feeds & Speeds → Sorbonne Fablab → **Lab presets** |
+| Review, disable, restore or promote a captured preset | Settings → Feeds & Speeds → your pack → **Lab presets** |
 | Use another workshop's compatible source | Settings → Feeds & Speeds → **Import source pack…** (JSON file) |
 | Create a pack with your own publisher/catalog/records | Edit JSON externally, validate, then import; there is no generic pack-authoring wizard |
 | Change source precedence | Enable/disable sources; there is no user-defined priority order |
-| Back up captured lab presets | **Export Sorbonne source pack…** in Lab presets |
+| Back up captured lab presets | **Export preset pack…** in Lab presets |
 | Back up a generic imported source | Keep its original/versioned JSON files; no generic export button is exposed in Settings |
 
-**Current naming limitation:** the built-in capture destination is hardcoded as
-**Sorbonne Fablab**, pack ID `sorbonne-fablab`, with validation policy
-`sorbonne-local-validation-1`. Other workshops can use that local workflow, but
-cannot rename its publisher/destination or create multiple named workshop databases
-in the UI. These are application identifiers, not evidence that Sorbonne tested your
-cut. Use your own machine/tool identities and truthful trial notes. For independently
-named sources, use workflow B; do not impersonate the reserved lab pack ID.
+**Named preset packs (v1.1):** create an empty private pack with a free display name,
+then explicitly choose the destination in **Save as preset…**. Creation is also
+available in that dialog. Names (1–100 characters, including spaces/accents) are
+independent of generated stable `lab-<UUID>` identities. Multiple packs have separate
+histories and enablement. The legacy **Sorbonne Fablab** pack (`sorbonne-fablab`)
+remains usable without migration or rewriting its evidence. The retained policy key
+`sorbonne-local-validation-1` names the existing review contract; it is not an assertion
+that Sorbonne tested a cut, nor an automatic qualification of another lab.
+Use workflow B for generic reference-source authoring; the UI creates preset packs,
+not arbitrary manufacturer catalogs. No automatic merge between packs is provided.
 
 ## What the evidence labels mean
 
@@ -51,14 +56,16 @@ performed the stated trial.
 ### 1. Establish identities before capturing
 
 1. Open the actual milling project and machine you will use. In the machine editor's
-   Settings/general area, expand **Reference compatibility**.
-2. Select **Compatible reference** only if it really describes that machine/setup.
-   Otherwise choose **Create local identity** once. Record the generated ID/revision.
-   Set known machine limits accurately; leave unknown limits unknown.
+   Current project → General area, find **Cutting data and presets**.
+2. Local presets are available automatically. **Machine in your lab** identifies your
+   physical machine; reuse an existing lab entry only for that same machine. The
+   independent **Reference pack compatibility (optional)** adds recommendations from
+   a compatible catalog model. It does not replace your lab identity or local presets.
+   Apply the machine draft. Set known limits accurately; leave unknown limits unknown.
 3. Edit the operation's **project tool** through **Edit this project tool** or the
-   contextual Op. tool action. In **Process & notes**, expand **Reference compatibility**.
-   Select a genuinely compatible cutter reference or create a local identity. Apply
-   the reviewed project-tool draft. Merely editing the shop inventory does not
+   contextual Op. tool action. In **Process & notes → Cutting data and presets**,
+   its lab identity is automatic; the optional reference cutter is a separate choice.
+   Apply the reviewed project-tool draft. Merely editing the shop inventory does not
    replace a different project copy.
 4. In **Stock → Material**, choose a precise material identity, including a catalog
    entry from an enabled source where appropriate. Stock dimensions are separate.
@@ -70,12 +77,19 @@ Machine/tool display names do not determine compatibility. Keep their identity w
 renaming a label; a different physical setup/cutter needs its own identity. Sharing
 JSON with the same label but different IDs is insufficient. Share the corresponding
 project/machine/tool setup deliberately when moving knowledge between workstations.
-Creating a local identity alone does not create cutting data or a recommendation.
+Automatic identities do not create cutting data. Save a preset with the appropriate
+evidence state. Matching Tested/Validated lab presets take priority; Drafts remain
+inactive. Each suggestion displays its lab/reference source, retained after Apply.
+Legacy identities are preserved; save migrated projects to persist new identities.
 
 ### 2. Prepare and record the operation
 
 Choose the actual tool, material, operation, final depth, pass depth, entry and
-engagement. The current CAM assistant/capture adapter covers supported flat endmills
+engagement. Operation tool selectors include compatible library tools; selecting one
+adds it to the project and current machine automatically. For an operation template,
+this happens when creating the operation. Undo restores the assignment and stocking
+together. Rotary cutters require milling capability; drag knives require vinyl/drag
+capability, laser heads require laser capability, and torches require plasma capability. The current CAM assistant/capture adapter covers supported flat endmills
 in **Profile and Pocket**. A Profile explicitly confirmed as full-width becomes the
 assistant's `full_slot` context; Pocket has nominal overlap-derived engagement.
 Schema names for finishing/surfacing/engraving do not mean those operations are
@@ -130,7 +144,7 @@ it is not a new physical test or a screenshot of this documentation checkpoint.
 
 ### 5. Review and maintain presets
 
-Open **Settings → Feeds & Speeds**, find **Sorbonne Fablab**, then expand
+Open **Settings → Feeds & Speeds**, find your named pack (or the legacy **Sorbonne Fablab** pack), then expand
 **Lab presets**. Search/select the preset and inspect context, trial details and
 **Revision history**. You can edit observations with **Save notes**, disable its
 use, or make a confirmed reversible deletion and restore it. Draft cannot be enabled
@@ -156,7 +170,7 @@ Validated/Tested presets before compatible references; there is no priority slid
 Apply is always explicit. Reopening or disabling a pack does not recalculate or
 replace the cutting values already saved in a project.
 
-Use **Export Sorbonne source pack…** in Lab presets. It exports the current pack
+Use **Export preset pack…** in Lab presets. It exports the current pack
 and retained history, including observations/operator/job details. Keep a protected,
 versioned backup and associated machine/tool/project identities. A project file
 contains its actual cutting values and safe knowledge references, **not** the
@@ -171,6 +185,15 @@ Desktop data uses the application's OS-resolved `app_data_dir()/feeds-speeds/sou
 Browser data uses IndexedDB `ivac-cutting-source-packs`, store `packs`, local to the
 origin and browser profile. Changing host, port, browser profile or clearing site
 data can make it unavailable. Export first. No automatic cloud backup or sync exists.
+
+### 7. Remove an installed source
+
+In **Settings → Feeds & Speeds**, use **Delete local source…** beside an imported
+or local source. The confirmation covers every installed revision of that source,
+including local preset history. Export any required backup first. Applied cutting
+values already stored in projects remain unchanged. Native I/O failures report an
+incomplete deletion and keep the latest head when possible; refresh and retry.
+Bundled references are disabled with their checkbox because they ship with the app.
 
 ## Workflow B — author and import an external source
 
@@ -278,7 +301,9 @@ profile evidence. These category/evidence pairs matter:
   schema-2 lab workflow it also needs the full dated lab review/history metadata.
 - Tested/Validated cannot broaden through taxonomy fallback or a generic router
   transfer class. A generic external pack does **not** gain the lab manager UI by
-  adding `lab` objects: the loader reserves those for `sorbonne-fablab`.
+  adding `lab` objects: the loader reserves those for private local packs with generated `lab-<UUID>`
+  identities and the legacy `sorbonne-fablab`. These packs must satisfy the full
+  authoring/revision contract, including physical attestations; the name alone grants no evidence.
 
 Do not change an evidence string just to obtain a recommendation. When you later
 have real trial data, author its true exact scope/provenance as a new revision.

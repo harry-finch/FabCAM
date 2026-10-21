@@ -46,3 +46,4 @@ qualification. M0–M4 are retained; later work uses named tracks, not global M5
 | [ADR-0024](ADR-0024-full-program-simulation-qualification.md) | Full-program simulation qualification independent of playback | APPROVED architecture by the user — 2026-10-19; implemented locally, checkpoint review pending |
 | [ADR-0025](ADR-0025-movement-tool-provenance.md) | ADR-0025: Explicit movement tool provenance and emitted-intent verification | APPROVED by the user — 2026-10-19; implemented locally; checkpoint review pending |
 | [ADR-0026](ADR-0026-explicit-import-units.md) | ADR-0026: Explicit import units for unitless DXF and non-physical SVG | AUTHORIZED for bounded implementation (2026-10-20); implemented locally — human UX/architecture acceptance pending |
+| [ADR-0027](ADR-0027-lab-and-reference-identities.md) | Independent lab identities and reference-pack compatibility | User-authorized v1.1 follow-up, 2026-10-21; UX acceptance pending |

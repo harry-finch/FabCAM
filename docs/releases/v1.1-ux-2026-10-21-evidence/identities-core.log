@@ -1,0 +1,28 @@
+    Blocking waiting for file lock on build directory
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.21s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-79e46ac25832bcaf)
+
+running 19 tests
+test feeds_speeds::tests::lab_capture_reads_manual_resolved_rates_without_mutating_operation ... ok
+test feeds_speeds::tests::legacy_serialization_omits_fs_fields_and_inheritance_survives ... ok
+test feeds_speeds::tests::lab_capture_preserves_unknown_engagement_and_rejects_missing_identity ... ok
+test feeds_speeds::tests::lab_capture_uses_applied_manual_slot_instead_of_original_recommendation ... ok
+test feeds_speeds::tests::native_geometry_context_uses_depth_schedule_and_nominal_overlap ... ok
+test feeds_speeds::tests::manual_slots_survive_tool_data_changes_and_context_becomes_stale ... ok
+test feeds_speeds::tests::lab_capture_names_only_missing_identities ... ok
+test feeds_speeds::tests::explicit_apply_can_resolve_a_changed_tool_without_live_inheritance ... ok
+test feeds_speeds::tests::capture_uses_physical_identities_without_replacing_reference_links ... ok
+test feeds_speeds::tests::preview_is_immutable_apply_is_explicit_and_roundtrip_offline ... ok
+test feeds_speeds::tests::rejected_scope_is_transient_and_old_responses_remain_readable ... ok
+test feeds_speeds::tests::pocket_uses_nominal_overlap_and_keeps_secondary_pass_origins ... ok
+test feeds_speeds::tests::section_metadata_reads_active_profile_pass_and_final_constraints ... ok
+test feeds_speeds::tests::pipeline_uses_saved_manual_values_and_warns_on_changed_context ... ok
+test feeds_speeds::tests::missing_duplicate_new_tool_and_wrong_process_roles_refuse ... ok
+test feeds_speeds::tests::public_pack_migration_preserves_single_source_values ... ok
+test feeds_speeds::tests::manual_only_values_roundtrip_and_generate_without_recommendation_or_data ... ok
+test feeds_speeds::tests::private_pack_apply_saves_values_and_ids_without_record_body ... ok
+test feeds_speeds::tests::approximate_proposal_apply_and_reopen_keep_resolved_values_authoritative ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 1173 filtered out; finished in 0.02s
+
