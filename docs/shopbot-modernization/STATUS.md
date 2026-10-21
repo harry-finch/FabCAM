@@ -46,5 +46,9 @@ focused regression tests and renewed exact-SHA qualification. Features stay on
 `FabCAM-v1.1`; after V1 acceptance/release decisions, review any V1 hotfix delta
 before integration and qualify the combined V1.1 source independently.
 
-**HARD STOP after planning and local documentation commits.** No PRESET/MAT
-implementation, extraction, push, merge, tag, release, packaging or hardware action.
+**Current checkpoint:** [PRESET-3 audit](../releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md)
+completed on the existing PRESET-1/2 worktree. Explicit record selection requires
+an API/schema decision (`ivac-ms6rz` OPEN); implementation stopped before that change.
+Existing tests pass: frontend1488 + WASM10, FS113 + doc1, adapter19; type/build PASS.
+PRESET-2 human review remains OPEN. **HARD STOP before schema/production changes or
+another milestone.** No push, merge, tag, release, packaging or hardware action.

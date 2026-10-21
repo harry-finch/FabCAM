@@ -14,6 +14,10 @@ for acceptance criteria, blockers and human gates. This page is not a second dia
 | WJ / ProtoMAX | [V1.5 scope](../releases/FABCAM_V1_5_SCOPE.md) | Deferred process-specific qualification; no implementation permission from a plan |
 | VINYL / advanced workshop | [Future processes](FUTURE_PROCESSES.md) and [release plan](../releases/RELEASE_ROADMAP.md) | Lower-priority/deferred scope and explicit future approvals |
 
+[PRESET-3 audit](../releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md):
+existing resolver/application reused; explicit record selector requires schema decision
+`ivac-ms6rz` before implementation. PRESET-2 review remains independent; MAT-1 unstarted.
+
 ## Remaining work and dependencies
 
 [Historical V1-FREEZE integration and proposed freeze contract](../releases/V1_FREEZE_READINESS_2026_10_20.md)

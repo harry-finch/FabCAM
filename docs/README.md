@@ -5,6 +5,9 @@ This index separates product setup, engineering contracts, plans and evidence.
 Source/qualification snapshot: [V1 readiness](releases/V1_READINESS.md).
 Active branch: [v1.1 UX changes and verification](releases/FABCAM_V1_1_UX_2026_10_21.md).
 
+PRESET-3: [existing recommendation audit and schema decision](releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
+Explicit selection is not implemented; the shared application contract needs human review.
+
 ## Read by task
 
 | Need | Entry points |

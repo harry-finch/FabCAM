@@ -216,6 +216,28 @@ Keyboard navigation, focus, dense-table legibility and unit presentation require
 human UX review. First proposed implementation slice: read-only browsing/details,
 with edit affordances gated by the existing local-authoring contract.
 
+### PRESET-3 — Explicit Preset Selection and Application to CAM Operations
+
+**Phase A audit complete; schema decision `ivac-ms6rz` OPEN. No implementation.**
+[Audit, source map and regression evidence](FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
+Suggest already resolves and applies one ranked recommendation. Explicit record
+selection is missing from `FsCamRequest`; the required additive schema contract
+triggers the user's HARD STOP before implementation.
+
+Suggested UX: **Suggest** and **Choose preset** are alternative discovery modes
+feeding the same authoritative resolver/operation application command. Inspector
+and library entry points must converge on that pipeline, preserve physical versus
+reference identities and show current/proposed values before overwriting manual
+ones. No second engine, source-body filtering, automatic setup substitution or
+numerical scaling in the explicit-use flow. Drafts remain inspect/duplicate-only
+pending a different reviewed policy.
+
+Review a pinned pack/record/profile revision selector and the private provenance
+revision boundary before implementation. Then qualify both entry points, source
+freshness, deterministic ambiguity, Undo/Redo, round trips and generation/export
+invalidation. Existing PRESET-2 remains implemented with human review pending;
+its logical placement below is not permission to restart it. MAT-1 stays unstarted.
+
 ### PRESET-2 — Duplicate & Adapt
 
 **Planned; depends on PRESET-1 record/provenance access and reviewed compatibility

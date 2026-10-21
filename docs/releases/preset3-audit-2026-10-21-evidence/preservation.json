@@ -1,0 +1,13 @@
+{
+  "baseline_revision": "df6eb1f",
+  "baseline_files": 11180,
+  "missing": [],
+  "changed_existing_files": [
+    "docs/README.md",
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/DEVLOG.md",
+    "docs/shopbot-modernization/ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md"
+  ],
+  "production_code_schema_and_prior_evidence_unchanged": true
+}

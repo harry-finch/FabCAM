@@ -1,5 +1,19 @@
 # Engineering log
 
+## 2026-10-21 — PRESET-3 existing-behavior audit and schema checkpoint
+
+Audited the actual `FabCAM-v1.1` worktree at `df6eb1f` plus preserved PRESET-1/2.
+Suggest already resolves stored records, validates and applies through the existing
+Rust adapter and `applyCuttingCommand`. Explicit record pinning is absent; its API
+schema extension triggers the submitted brief's HARD STOP. Proposed one selector
+with automatic/manual discovery and one application path; no production/schema
+change or duplicate engine. Private profile-revision metadata and source freshness
+need explicit review. Gate `ivac-ms6rz` OPEN; PRESET-2 gate remains independent.
+FS113 + doc1, adapter19, frontend1488 / one existing skip, WASM10, type/build PASS.
+[Audit and receipts](../releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
+Only reviewed audit documentation is eligible for the authorized local commit;
+previous uncommitted implementation/evidence retained. No push or later milestone.
+
 ## 2026-10-21 — V1.1 roadmap and branch reconciliation
 
 Verified `FabCAM-v1.1` at `6d4cff0`, three existing local commits above RC1/main
