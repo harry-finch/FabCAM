@@ -109,3 +109,34 @@ describe('read-only cutting presets library', () => {
     expect(rangeText({ min: 3, max: 6 })).toBe('3–6');
   });
 });
+
+it('MAT-1 family/alias browsing preserves source scopes and cannot grant compatibility', () => {
+  const p = pack();
+  const before = JSON.stringify(p);
+  const rows = presetRows([p], new Set([key(p)]), true);
+  expect(
+    filterPresets(rows, {
+      ...emptyPresetFilters(),
+      query: 'contreplaqué',
+      materialFamily: 'display:wood',
+    }),
+  ).toHaveLength(2);
+  expect(rows[0].materialFamilies).toEqual([]);
+  expect(JSON.stringify(p)).toBe(before);
+  p.dataset.profile_set.profiles[0].scope.material = {
+    kind: 'exact',
+    identity: { id: 'unknown-stock', revision: '7' },
+  };
+  p.dataset.profile_set.material_families = [
+    { id: 'display:wood', members: [{ id: 'unknown-stock', revision: '7' }] },
+  ];
+  const unknown = presetRows([p], new Set([key(p)]), true);
+  expect(unknown[0].displayFamily).toBe('unknown');
+  expect(
+    filterPresets(unknown, { ...emptyPresetFilters(), materialFamily: 'display:wood' }),
+  ).toHaveLength(1);
+  expect(
+    filterPresets(unknown, { ...emptyPresetFilters(), materialFamily: 'display:unknown' })[0]
+      .profile,
+  ).toBe(p.dataset.profile_set.profiles[0]);
+});

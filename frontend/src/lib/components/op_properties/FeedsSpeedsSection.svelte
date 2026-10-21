@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { materialDisplay, materialOptions } from '../../state/material-presentation';
   import './op-properties.css';
   import { rejectionReason, scopeField, evidence } from '../../state/cutting-selector-labels';
   import PresetBrowser from '../PresetBrowser.svelte';
@@ -31,7 +32,7 @@
   import { applyCuttingCommand } from '../../state/commands';
   import { buildProject } from '../../api/build-project';
   import { cuttingKnowledgeClient } from '../../state/feeds-speeds-pack-store';
-  import { packCollection, NORMALIZED_MATERIALS } from '../../state/feeds-speeds-sources';
+  import { packCollection } from '../../state/feeds-speeds-sources';
   import type { FsCamResponse } from '../../api/types';
   import type { components } from '../../api/generated';
   import {
@@ -245,16 +246,19 @@
       ),
   );
   const materialLabel = $derived(
-    [
-      ...NORMALIZED_MATERIALS,
-      ...recommendationSources.rows.flatMap((s) => s.catalog.materials),
-    ].find(
-      (m) =>
-        m.identity.id === project.data.material?.id &&
-        m.identity.revision === project.data.material?.revision,
-    )?.label ??
-      project.data.material?.label ??
-      (project.data.material ? t('fs35.saved_material') : t('fs35.material_missing')),
+    project.data.material
+      ? materialDisplay(
+          project.data.material,
+          materialOptions(recommendationSources.rows, project.data.material).find(
+            (m) =>
+              m.identity.id === project.data.material?.id &&
+              m.identity.revision === project.data.material?.revision,
+          )?.labels[0] ||
+            project.data.material.label ||
+            project.data.material.id,
+          t,
+        )
+      : t('fs35.material_missing'),
   );
   const doc = $derived.by(() => {
     if (!op.depthList?.length) return Math.abs(op.step ?? tool?.defaultStep ?? 0);

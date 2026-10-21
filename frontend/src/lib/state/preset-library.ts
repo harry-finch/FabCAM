@@ -1,6 +1,7 @@
 /** Read-only source-record projection. Never resolves, calculates or applies cutting values. */
 import type { components } from '../api/generated';
-import { NORMALIZED_MATERIALS, type SourcePack } from './feeds-speeds-sources';
+import type { SourcePack } from './feeds-speeds-sources';
+import { materialPresentation, type MaterialFamily } from './material-presentation';
 import { currentLocalPacks } from './lab-presets';
 type S = components['schemas'];
 export type PresetRow = {
@@ -15,6 +16,7 @@ export type PresetRow = {
   machine: string;
   tool: string;
   materialFamilies: string[];
+  displayFamily: MaterialFamily;
   state: string;
   search: string;
 };
@@ -42,17 +44,10 @@ export function presetRows(
         (r) =>
           r.profile.id === profile.identity.id && r.profile.revision === profile.identity.revision,
       );
-      const normalized =
-        profile.scope.material.kind === 'exact'
-          ? NORMALIZED_MATERIALS.find(
-              (m) =>
-                profile.scope.material.kind === 'exact' &&
-                m.identity.id === profile.scope.material.identity.id &&
-                m.identity.revision === profile.scope.material.identity.revision,
-            )
-          : undefined;
-      const material =
-        normalized?.label ?? selectorLabel(profile.scope.material, pack.dataset.materials);
+      const identity =
+        profile.scope.material.kind === 'exact' ? profile.scope.material.identity : undefined;
+      const presentation = identity ? materialPresentation(identity) : undefined;
+      const material = selectorLabel(profile.scope.material, pack.dataset.materials);
       const materialFamilies =
         profile.scope.material.kind === 'family'
           ? [profile.scope.material.id]
@@ -68,7 +63,6 @@ export function presetRows(
                 )
                 .map((f) => f.id)
             : [];
-      if (normalized) materialFamilies.push(normalized.identity.id.split('.')[0]);
       // Only recorded membership/taxonomy is shown. No alias, family or cutting equivalence is inferred.
       if (record?.material_taxon) materialFamilies.push(record.material_taxon);
       const row = {
@@ -90,6 +84,7 @@ export function presetRows(
           ? identityLabel(profile.scope.tool, pack.dataset.tools)
           : profile.scope.cutting_family,
         materialFamilies: [...new Set(materialFamilies)],
+        displayFamily: presentation?.family ?? 'unknown',
         state: record?.lab?.deleted ? 'deleted' : (record?.lab?.state ?? profile.evidence),
       };
       return {
@@ -97,6 +92,7 @@ export function presetRows(
         search: JSON.stringify([
           row.name,
           row.material,
+          presentation?.aliases,
           row.machine,
           row.tool,
           `${profile.scope.flute_count ?? ''} flutes`,
@@ -143,9 +139,11 @@ export function filterPresets(rows: PresetRow[], f: PresetFilters): PresetRow[] 
       (!f.pack ||
         `${r.pack.manifest.identity.id}@${r.pack.manifest.identity.revision}` === f.pack) &&
       (!f.materialFamily ||
-        (f.materialFamily === '__unspecified'
-          ? !r.materialFamilies.length
-          : r.materialFamilies.includes(f.materialFamily))) &&
+        (f.materialFamily.startsWith('display:')
+          ? r.displayFamily === f.materialFamily.slice(8)
+          : f.materialFamily === '__unspecified'
+            ? !r.materialFamilies.length
+            : r.materialFamilies.includes(f.materialFamily))) &&
       (!f.toolFamily || r.profile.scope.cutting_family === f.toolFamily) &&
       (!f.state || r.state === f.state) &&
       (f.availability === 'all' ||

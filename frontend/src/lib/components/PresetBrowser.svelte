@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { materialFamilyKeys, type MaterialFamily } from '../state/material-presentation';
   import { t } from '../i18n';
   import { recordFocusIndex } from '../state/cutting-comparison';
   import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
@@ -49,7 +50,7 @@
   let viewportWidth = $state(1024);
   const narrow = $derived(viewportWidth <= 700);
   let filters = $state({ ...emptyPresetFilters(), availability: 'all' as const });
-  let material = $state('');
+
   let page = $state(0);
   let inspecting = $state<PresetRow>();
   let copying = $state<PresetRow>();
@@ -60,16 +61,14 @@
       true,
     ),
   );
-  const shown = $derived(
-    filterPresets(rows, filters).filter((row) => !material || row.material === material),
-  );
+  const shown = $derived(filterPresets(rows, filters));
   const pages = $derived(Math.max(1, Math.ceil(shown.length / 50)));
   const visible = $derived(
     shown.slice(Math.min(page, pages - 1) * 50, (Math.min(page, pages - 1) + 1) * 50),
   );
   $effect(() => {
     void JSON.stringify(filters);
-    void material;
+
     page = 0;
   });
   const packs = $derived([
@@ -80,7 +79,7 @@
       ]),
     ).entries(),
   ]);
-  const materials = $derived([...new Set(rows.map((r) => r.material))]);
+  const families = $derived([...new Set(rows.map((r) => `display:${r.displayFamily}`))].sort());
   const tools = $derived([...new Set(rows.map((r) => r.profile.scope.cutting_family))]);
   const states = $derived([...new Set(rows.map((r) => r.state))]);
 </script>
@@ -98,14 +97,17 @@
   >
   <details class="secondary" open={!narrow}>
     <summary
-      >{t('selector.filters')}{#if material || filters.toolFamily || filters.state}
+      >{t('selector.filters')}{#if filters.materialFamily || filters.toolFamily || filters.state}
         · {t('selector.filtered')}{/if}</summary
     >
     <div class="secondary-filters">
       <label
-        >{t('preset3.filter_material')}<select bind:value={material}
-          ><option value="">{t('presets.all')}</option>{#each materials as value (value)}<option
-              >{value}</option
+        >{t('presets.material_family')}<select bind:value={filters.materialFamily}
+          ><option value="">{t('presets.all')}</option>{#each families as value (value)}<option
+              {value}
+              >{value.startsWith('display:')
+                ? t(materialFamilyKeys[value.slice(8) as MaterialFamily])
+                : value}</option
             >{/each}</select
         ></label
       >

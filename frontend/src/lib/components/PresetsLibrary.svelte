@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { materialFamilyKeys, type MaterialFamily } from '../state/material-presentation';
   import PresetOperationPicker from './PresetOperationPicker.svelte';
   let using = $state<PresetRow>();
   import Splitter from './Splitter.svelte';
@@ -86,7 +87,7 @@
       ]),
     ).entries(),
   ]);
-  const families = $derived([...new Set(rows.flatMap((row) => row.materialFamilies))].sort());
+  const families = $derived([...new Set(rows.map((row) => `display:${row.displayFamily}`))].sort());
   const tools = $derived([...new Set(rows.map((row) => row.profile.scope.cutting_family))].sort());
   const states = $derived([...new Set(rows.map((row) => row.state))].sort());
   const filterKey = $derived(JSON.stringify(filters));
@@ -171,8 +172,11 @@
     <label
       >{t('presets.material_family')}<select bind:value={filters.materialFamily}
         ><option value="">{t('presets.all')}</option>{#each families as family (family)}<option
-            value={family}>{family}</option
-          >{/each}<option value="__unspecified">{t('presets.unspecified')}</option></select
+            value={family}
+            >{family.startsWith('display:')
+              ? t(materialFamilyKeys[family.slice(8) as MaterialFamily])
+              : family}</option
+          >{/each}</select
       ></label
     >
     <label

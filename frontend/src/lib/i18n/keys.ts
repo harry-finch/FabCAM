@@ -355,9 +355,7 @@ export type MsgKey =
   | "fs35.recalculate"
   | "fs35.recommendation"
   | "fs35.reference"
-  | "fs35.saved_material"
   | "fs35.schedule"
-  | "fs35.select_material"
   | "fs35.settings"
   | "fs35.source"
   | "fs35.source_details"
@@ -798,6 +796,31 @@ export type MsgKey =
   | "machinetool.stocked_col"
   | "machinetool.stocked_col.title"
   | "machinews.sections.aria"
+  | "mat.6061"
+  | "mat.7075"
+  | "mat.aluminium"
+  | "mat.birch"
+  | "mat.broad"
+  | "mat.builtin"
+  | "mat.cast"
+  | "mat.choose"
+  | "mat.extruded"
+  | "mat.hardwood"
+  | "mat.hdpe"
+  | "mat.help"
+  | "mat.mdf"
+  | "mat.metal"
+  | "mat.original"
+  | "mat.pc"
+  | "mat.plastic"
+  | "mat.plywood"
+  | "mat.pmma"
+  | "mat.pom"
+  | "mat.poplar"
+  | "mat.pvc"
+  | "mat.softwood"
+  | "mat.unknown"
+  | "mat.wood"
   | "menu.aria.more_actions"
   | "menu.aria.trigger"
   | "menu.exit"
@@ -1555,7 +1578,6 @@ export type MsgKey =
   | "post.tool_change"
   | "preset2.after"
   | "preset2.before"
-  | "preset2.choose_material"
   | "preset2.choose_tool"
   | "preset2.differences"
   | "preset2.field"
@@ -1587,7 +1609,6 @@ export type MsgKey =
   | "preset3.choose"
   | "preset3.compatible"
   | "preset3.current"
-  | "preset3.filter_material"
   | "preset3.none"
   | "preset3.operation"
   | "preset3.overwrite"
@@ -1639,7 +1660,6 @@ export type MsgKey =
   | "presets.tool"
   | "presets.tool_family"
   | "presets.trial"
-  | "presets.unspecified"
   | "presets.validation"
   | "preview.toolpaths.label"
   | "preview.toolpaths.tip"
@@ -2867,9 +2887,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.recalculate",
   "fs35.recommendation",
   "fs35.reference",
-  "fs35.saved_material",
   "fs35.schedule",
-  "fs35.select_material",
   "fs35.settings",
   "fs35.source",
   "fs35.source_details",
@@ -3310,6 +3328,31 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "machinetool.stocked_col",
   "machinetool.stocked_col.title",
   "machinews.sections.aria",
+  "mat.6061",
+  "mat.7075",
+  "mat.aluminium",
+  "mat.birch",
+  "mat.broad",
+  "mat.builtin",
+  "mat.cast",
+  "mat.choose",
+  "mat.extruded",
+  "mat.hardwood",
+  "mat.hdpe",
+  "mat.help",
+  "mat.mdf",
+  "mat.metal",
+  "mat.original",
+  "mat.pc",
+  "mat.plastic",
+  "mat.plywood",
+  "mat.pmma",
+  "mat.pom",
+  "mat.poplar",
+  "mat.pvc",
+  "mat.softwood",
+  "mat.unknown",
+  "mat.wood",
   "menu.aria.more_actions",
   "menu.aria.trigger",
   "menu.exit",
@@ -4067,7 +4110,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "post.tool_change",
   "preset2.after",
   "preset2.before",
-  "preset2.choose_material",
   "preset2.choose_tool",
   "preset2.differences",
   "preset2.field",
@@ -4099,7 +4141,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "preset3.choose",
   "preset3.compatible",
   "preset3.current",
-  "preset3.filter_material",
   "preset3.none",
   "preset3.operation",
   "preset3.overwrite",
@@ -4151,7 +4192,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "presets.tool",
   "presets.tool_family",
   "presets.trial",
-  "presets.unspecified",
   "presets.validation",
   "preview.toolpaths.label",
   "preview.toolpaths.tip",

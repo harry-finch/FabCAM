@@ -171,3 +171,26 @@ it('shared preset application invalidates generation identity and Undo/Redo rest
   expect(JSON.stringify(p.data.tools)).toBe(tools);
   expect(JSON.stringify(p.data.machine)).toBe(machine);
 });
+
+it('MAT-1 browsing is read-only; explicit material choice changes freshness and remains undoable', async () => {
+  const { materialOptions, filterMaterials } = await import('./material-presentation');
+  const { setMaterialCommand } = await import('./commands');
+  const p = fixture();
+  p.data.material = { id: 'legacy-private-stock', revision: '7', label: 'Original name' };
+  const original = JSON.stringify(p.data);
+  const key = generationContextKey(p, 'cps');
+  const options = materialOptions([], p.data.material);
+  filterMaterials(options, 'acrylic', 'plastic');
+  expect(JSON.stringify(p.data)).toBe(original);
+  expect(generationContextKey(p, 'cps')).toBe(key);
+  const choice = options.find((m) => m.identity.id === 'material/plastic.pmma.cast')!;
+  const command = setMaterialCommand({ ...choice.identity, label: choice.labels[0] });
+  command.apply(p.data);
+  const changed = generationContextKey(p, 'cps');
+  expect(changed).not.toBe(key);
+  command.revert(p.data);
+  expect(p.data.material).toEqual(JSON.parse(original).material);
+  expect(generationContextKey(p, 'cps')).toBe(key);
+  command.apply(p.data);
+  expect(generationContextKey(p, 'cps')).toBe(changed);
+});
