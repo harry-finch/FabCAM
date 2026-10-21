@@ -268,6 +268,25 @@ Incomplete forms cannot be saved. Local ownership authorization is explicit;
 generic references without transformation permission remain blocked. No next
 milestone is authorized by this checkpoint.
 
+### PRESET-4 — Experimental Recipe Application
+
+**Phase A audited on 2026-10-21; architecture approval pending, implementation
+not started.** [Audit and concrete persistence/API proposal](FABCAM_PRESET4_EXPERIMENTAL_RECIPES_2026_10_21.md).
+Explicit “Use for trial…” through the shared selector would apply exact authored
+values to an existing supported operation, with unchecked acknowledgment,
+Undo/Redo and persistent experimental origin. Drafts stay inactive/theoretical
+and excluded from Suggest. Existing manual/recommendation persistence cannot
+truthfully represent that origin; the brief requires **HARD STOP before the
+proposed optional experimental snapshot and guarded project format/API change**.
+No new trial application or physical qualification is claimed.
+
+After architectural approval and PRESET-4 acceptance, a separate bounded workshop
+feedback checkpoint may link actual trial configuration, program reference and
+observed outcomes to the existing capture/review workflow. Tested/Validated
+promotion remains a deliberate human evidence/review decision; application,
+generation and export never promote a recipe. This future item is not authorized
+for implementation by the current audit.
+
 ### MAT-1 — Material Families, Variants and Synonyms
 
 **Architecture approved; Phases D–F implemented and software-qualified, final human UX review pending.**

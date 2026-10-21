@@ -11,6 +11,12 @@ Snapshot **2026-10-21**, recorded on `FabCAM-v1.1` only.
 | `FabCAM-v1.1` | PRESET API `5ca5632`, guarded native copy `bed3a92`, integrated frontend `b8deaef` | PRESET-1/2/3 software/UX accepted; local commits only, no push/merge/release |
 | Next feature | MAT-1 material families, variants and synonyms remains planned | Requires a separate start instruction; no identity remapping or machining equivalence inferred |
 
+[PRESET-4 audit](../releases/FABCAM_PRESET4_EXPERIMENTAL_RECIPES_2026_10_21.md):
+manual values and existing guards verified (Rust 20/frontend 97 targeted PASS).
+**HARD STOP for architecture approval**: persistent experimental provenance needs
+an explicit project/API contract extension. Trial application is not implemented;
+Draft recommendation eligibility and all prior work remain unchanged.
+
 [PRESET integration receipt](../releases/PRESET_INTEGRATION_2026_10_21.md): frontend **1505 PASS / 1 existing skip**,
 WASM package guards **10 PASS**, source storage **8 PASS**, Feeds & Speeds
 **119 + 1 doctest PASS**, core adapter **20 PASS**; type/lint/build, native Clippy,
