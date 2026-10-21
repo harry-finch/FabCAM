@@ -352,6 +352,10 @@ components:
           type: string
         doc_origin:
           $ref: '#/components/schemas/CuttingOrigin'
+        experimental_recipe:
+          anyOf:
+          - $ref: '#/components/schemas/ExperimentalRecipe'
+          - type: 'null'
         knowledge:
           anyOf:
           - $ref: '#/components/schemas/FsKnowledgeSummary'
@@ -1366,6 +1370,24 @@ components:
       - segments
       - version
       type: object
+    ExperimentalRecipe:
+      additionalProperties: false
+      description: 'Portable allowlist: no source bodies, labels, notes, URLs or filesystem paths.'
+      properties:
+        applied_values:
+          $ref: '#/components/schemas/TrialValues'
+        kind:
+          $ref: '#/components/schemas/TrialKind'
+        source:
+          $ref: '#/components/schemas/FsSelectedRecord'
+        target:
+          $ref: '#/components/schemas/TrialTarget'
+      required:
+      - applied_values
+      - kind
+      - source
+      - target
+      type: object
     Finding:
       properties:
         contour:
@@ -1595,6 +1617,8 @@ components:
           type: boolean
         dataset_json:
           type: string
+        experimental_trial:
+          type: boolean
         op_id:
           format: uint32
           minimum: 0.0
@@ -1606,6 +1630,8 @@ components:
           - $ref: '#/components/schemas/FsSelectedRecord'
           - type: 'null'
           description: Absent preserves automatic recommendation; present pins an original eligible record.
+        trial_acknowledged:
+          type: boolean
       required:
       - aggressiveness
       - apply
@@ -1631,6 +1657,10 @@ components:
           items:
             $ref: '#/components/schemas/FsProfileRejection'
           type: array
+        trial:
+          anyOf:
+          - $ref: '#/components/schemas/TrialPreview'
+          - type: 'null'
       required:
       - recommendation
       type: object
@@ -7096,6 +7126,83 @@ components:
       - tauri
       - wasm
       type: string
+    TrialKind:
+      enum:
+      - theoretical_untested
+      type: string
+    TrialPreview:
+      additionalProperties: false
+      properties:
+        context_differences:
+          items:
+            type: string
+          type: array
+        operation:
+          $ref: '#/components/schemas/Op'
+      required:
+      - context_differences
+      - operation
+      type: object
+    TrialTarget:
+      additionalProperties: false
+      properties:
+        diameter_mm:
+          format: double
+          type: number
+        flute_count:
+          format: uint8
+          minimum: 0.0
+          type: integer
+        machine:
+          $ref: '#/components/schemas/FsIdentity'
+        material:
+          $ref: '#/components/schemas/FsIdentity'
+        operation:
+          $ref: '#/components/schemas/FsOperationKind'
+        tool:
+          $ref: '#/components/schemas/FsIdentity'
+        tool_id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - diameter_mm
+      - flute_count
+      - machine
+      - material
+      - operation
+      - tool
+      - tool_id
+      type: object
+    TrialValues:
+      additionalProperties: false
+      properties:
+        doc_mm:
+          format: double
+          type: number
+        feed_mm_min:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        plunge_mm_min:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        rpm:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        stepover_ratio:
+          format: double
+          type:
+          - number
+          - 'null'
+      required:
+      - doc_mm
+      - feed_mm_min
+      - plunge_mm_min
+      - rpm
+      type: object
     TwoSidedGenerateResponse:
       description: 'Result of a two-sided emission: the front program plus, for a genuine two-sided job, the back program. `back` is `None` for a single-sided project — the orchestrator then returns the front field unchanged from the ordinary single-program path, so single-sided callers see byte-identical output.'
       properties:

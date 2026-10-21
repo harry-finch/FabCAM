@@ -1,5 +1,7 @@
 //! Deliberate milling proposal/application adapter. Generation only reads saved rates.
+mod experimental;
 use crate::project::{MachineMode, Op, OpKind, PassKind, Project, ToolEntry, ToolKind};
+pub use experimental::{ExperimentalRecipe, TrialKind, TrialPreview, TrialTarget, TrialValues};
 use ivac_feeds_speeds as fs;
 pub use ivac_feeds_speeds::{is_lab_pack_id, safe_pack_id};
 use schemars::JsonSchema;
@@ -56,6 +58,8 @@ pub struct AppliedRateSlot {
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct AppliedCutting {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub experimental_recipe: Option<ExperimentalRecipe>,
     pub slots: Vec<AppliedRateSlot>,
     /// Optional evidence snapshot; manually entered operation rates need no proposal.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -70,6 +74,10 @@ pub struct AppliedCutting {
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct FsCamRequest {
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub experimental_trial: bool,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub trial_acknowledged: bool,
     pub project: Project,
     pub op_id: u32,
     pub dataset_json: String,
@@ -82,6 +90,8 @@ pub struct FsCamRequest {
 }
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct FsCamResponse {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub trial: Option<TrialPreview>,
     pub recommendation: fs::FeedsSpeedsRecommendation,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub knowledge: Option<fs::KnowledgeExplanation>,
@@ -257,6 +267,9 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
     if request.dataset_json.len() > 16 * 1024 * 1024 {
         return Err("Enabled source data exceeds 16 MiB".into());
     }
+    if request.experimental_trial {
+        return experimental::trial(&request);
+    }
     let op = request
         .project
         .operations
@@ -399,6 +412,7 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
         next.params.plunge_rate_override = None;
         let key = context_key(&request.project, &next);
         next.params.applied_cutting = Some(AppliedCutting {
+            experimental_recipe: None,
             slots,
             proposal: if knowledge.as_ref().is_some_and(|k| k.summary.local_only) {
                 None
@@ -423,6 +437,7 @@ pub fn feeds_speeds(request: FsCamRequest) -> Result<FsCamResponse, String> {
         None
     };
     Ok(FsCamResponse {
+        trial: None,
         recommendation,
         knowledge,
         applied_op,
@@ -473,6 +488,10 @@ pub(crate) fn validate_applied_project(
                 op.id,
                 "Saved milling rates are incompatible with this process/operation".into(),
             ));
+        }
+        if let Some(a) = &op.params.applied_cutting {
+            experimental::validate_saved(project, op, a)
+                .map_err(|e| PipelineError::AppliedCutting(op.id, e))?;
         }
         let mut ids = vec![op.tool_id];
         if let Some(id) = op.finish_tool_id.filter(|id| *id != op.tool_id) {
@@ -601,6 +620,7 @@ mod tests {
     use super::*;
     use crate::pipeline::{run_pipeline, PipelineRequest};
     const DATA: &str = include_str!("../../../data/feeds-speeds/sienci-router-reference.v1.json");
+    include!("feeds_speeds/trial_tests.rs");
     fn fixture() -> Project {
         let d = fs::load_dataset_json(DATA).unwrap();
         let doc = d.document();
@@ -743,6 +763,8 @@ mod tests {
             profile: pack.records[0].profile.clone(),
         };
         let mut request = FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             project: p.clone(),
             op_id: 1,
             dataset_json: serde_json::to_string(&fs::PackCollection {
@@ -797,6 +819,8 @@ mod tests {
 
     fn action(p: &Project, apply: bool) -> FsCamResponse {
         feeds_speeds(FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             selected_record: None,
             project: p.clone(),
             op_id: 1,
@@ -834,6 +858,8 @@ mod tests {
         .unwrap();
         let before = serde_json::to_string(&p).unwrap();
         let preview = feeds_speeds(FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             selected_record: None,
             project: p.clone(),
             op_id: 1,
@@ -845,6 +871,8 @@ mod tests {
         assert!(preview.applied_op.is_none());
         assert_eq!(serde_json::to_string(&p).unwrap(), before);
         let applied = feeds_speeds(FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             selected_record: None,
             project: p.clone(),
             op_id: 1,
@@ -882,6 +910,8 @@ mod tests {
             profile.source.notes = "PRIVATE-DERIVED-SENTINEL".into();
         }
         let result = feeds_speeds(FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             selected_record: None,
             project: p,
             op_id: 1,
@@ -915,6 +945,8 @@ mod tests {
             profile: pack.records[0].profile.clone(),
         };
         let request = FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             selected_record: None,
             project: p.clone(),
             op_id: 1,
@@ -971,6 +1003,8 @@ mod tests {
         ))
         .unwrap();
         let result = feeds_speeds(FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             selected_record: None,
             project: p,
             op_id: 1,
@@ -1330,6 +1364,8 @@ mod tests {
             fs::Engagement::Nominal { ratio: 0.4 }
         );
         let result = feeds_speeds(FsCamRequest {
+            experimental_trial: false,
+            trial_acknowledged: false,
             selected_record: None,
             project: p.clone(),
             op_id: 1,

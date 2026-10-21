@@ -147,28 +147,32 @@ export function snapshotProject(p: ProjectState): ProjectFile {
     ...p.data.serializedExtensions,
     ...(p.data.drawing ? { drawing: p.data.drawing } : {}),
     ...(p.data.cornerRelief ? { cornerRelief: p.data.cornerRelief } : {}),
-    kind: p.data.drawing
-      ? 'ivac-project-geometry'
-      : p.data.operations.some((op) => op.kind === 'planar_surface')
-        ? 'ivac-project-surfacing'
-        : p.data.cornerRelief
-          ? 'ivac-project-cad'
-          : p.data.operations.some((op) => op.appliedCutting?.knowledge)
-            ? 'ivac-project-knowledge'
-            : hasFeedsSpeedsData(p.data)
-              ? 'ivac-project-cutting'
-              : 'ivac-project',
-    version: p.data.drawing
-      ? 7
-      : p.data.operations.some((op) => op.kind === 'planar_surface')
-        ? 6
-        : p.data.cornerRelief
-          ? 5
-          : p.data.operations.some((op) => op.appliedCutting?.knowledge)
-            ? 4
-            : hasFeedsSpeedsData(p.data)
-              ? 3
-              : 1,
+    kind: p.data.operations.some((op) => op.appliedCutting?.experimental_recipe)
+      ? 'ivac-project-experimental'
+      : p.data.drawing
+        ? 'ivac-project-geometry'
+        : p.data.operations.some((op) => op.kind === 'planar_surface')
+          ? 'ivac-project-surfacing'
+          : p.data.cornerRelief
+            ? 'ivac-project-cad'
+            : p.data.operations.some((op) => op.appliedCutting?.knowledge)
+              ? 'ivac-project-knowledge'
+              : hasFeedsSpeedsData(p.data)
+                ? 'ivac-project-cutting'
+                : 'ivac-project',
+    version: p.data.operations.some((op) => op.appliedCutting?.experimental_recipe)
+      ? 8
+      : p.data.drawing
+        ? 7
+        : p.data.operations.some((op) => op.kind === 'planar_surface')
+          ? 6
+          : p.data.cornerRelief
+            ? 5
+            : p.data.operations.some((op) => op.appliedCutting?.knowledge)
+              ? 4
+              : hasFeedsSpeedsData(p.data)
+                ? 3
+                : 1,
     ...(p.data.material ? { material: p.data.material } : {}),
     ...(p.data.fsContext ? { fsContext: p.data.fsContext } : {}),
     imports: p.data.imports,

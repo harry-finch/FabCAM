@@ -35,6 +35,7 @@ pub use dataset::{
 };
 pub use engine::Engine;
 pub use model::*;
+pub use validation::request_issues;
 
 /// Domain contract revision, separate from dataset and application versions.
 pub const DOMAIN_SCHEMA_VERSION: u32 = 1;

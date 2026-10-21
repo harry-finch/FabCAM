@@ -117,3 +117,18 @@ it.each(['pending', 'failed', 'unavailable', 'stale'] as const)(
     ).toBe('unverified');
   },
 );
+
+import { trialOp } from './experimental-recipe.fixture';
+it('trial application and provenance-only edits invalidate generated export qualification', () => {
+  const p = setup();
+  const before = generationContextKey(p, 'linuxcnc');
+  p.data.operations[0].appliedCutting = trialOp().appliedCutting;
+  expect(generationContextKey(p, 'linuxcnc')).not.toBe(before);
+  expect(qualificationPhase(p, 'linuxcnc')).toBe('stale');
+  p.gen.inputContextKey = generationContextKey(p, 'linuxcnc');
+  p.gen.qualification!.key = qualificationKey(p, 'linuxcnc')!;
+  expect(qualificationPhase(p, 'linuxcnc')).toBe('current');
+  p.data.operations[0].appliedCutting!.experimental_recipe!.source.profile.revision = '2';
+  expect(qualificationKey(p, 'linuxcnc')).toBeNull();
+  expect(qualificationPhase(p, 'linuxcnc')).toBe('stale');
+});

@@ -52,7 +52,8 @@ impl Checks {
     }
 }
 
-pub(crate) fn request_issues(r: &FeedsSpeedsRequest) -> Vec<ValidationIssue> {
+#[must_use]
+pub fn request_issues(r: &FeedsSpeedsRequest) -> Vec<ValidationIssue> {
     let mut c = Checks::default();
     c.require(
         r.schema_version == DOMAIN_SCHEMA_VERSION,

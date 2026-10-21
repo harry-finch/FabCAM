@@ -1,3 +1,4 @@
+import { validateExperimentalRecipe } from './experimental-recipe';
 import { drawingInputKey } from './drawing';
 import type { OpEntry } from './op_types';
 import type { ProjectFile } from './project-types';
@@ -29,7 +30,8 @@ export function validateProjectFile(value: ProjectFile): void {
       (value.kind === 'ivac-project-knowledge' && value.version === 4) ||
       (value.kind === 'ivac-project-cad' && value.version === 5) ||
       (value.kind === 'ivac-project-surfacing' && value.version === 6) ||
-      (value.kind === 'ivac-project-geometry' && value.version === 7)
+      (value.kind === 'ivac-project-geometry' && value.version === 7) ||
+      (value.kind === 'ivac-project-experimental' && value.version === 8)
     )
   )
     throw new Error('Unsupported project format/version');
@@ -42,7 +44,7 @@ export function validateProjectFile(value: ProjectFile): void {
     throw new Error(
       'Stable or unresolved geometry bindings require guarded edited-drawing format; reselect geometry before saving',
     );
-  if ((value.version === 7) !== !!value.drawing)
+  if (value.version !== 8 && (value.version === 7) !== !!value.drawing)
     throw new Error('Edited drawing requires guarded version 7');
   if (
     value.drawing &&
@@ -106,7 +108,7 @@ export function validateProjectFile(value: ProjectFile): void {
   if (value.cornerRelief) {
     const m = value.cornerRelief;
     if (
-      (value.version !== 5 && value.version !== 6 && value.version !== 7) ||
+      (value.version !== 5 && value.version !== 6 && value.version !== 7 && value.version !== 8) ||
       m.version !== 1 ||
       typeof m.sourceKey !== 'string' ||
       !Number.isFinite(m.diameter) ||
@@ -119,7 +121,7 @@ export function validateProjectFile(value: ProjectFile): void {
       throw new Error('Invalid corner-relief project snapshot');
   } else if (value.version === 5) throw new Error('Missing corner-relief snapshot');
   const surfaces = (value.operations ?? []).filter((op) => op.kind === 'planar_surface');
-  if (value.version !== 7 && surfaces.length > 0 !== (value.version === 6))
+  if (value.version !== 7 && value.version !== 8 && surfaces.length > 0 !== (value.version === 6))
     throw new Error('Planar surfacing requires guarded project version 6');
   for (const op of surfaces) {
     const p = op.surface;
@@ -142,6 +144,12 @@ export function validateProjectFile(value: ProjectFile): void {
   for (const op of value.operations ?? []) {
     const applied = op.appliedCutting;
     if (!applied) continue;
+    if (applied.experimental_recipe) {
+      if (value.version !== 8) throw new Error('Experimental recipes require guarded version 8');
+      validateExperimentalRecipe(applied.experimental_recipe);
+      if (applied.proposal || applied.knowledge)
+        throw new Error('Experimental recipes are not recommendations');
+    }
     if (!Array.isArray(applied.slots) || typeof applied.context_key !== 'string')
       throw new Error('Incomplete applied cutting parameters');
     if (
@@ -153,7 +161,13 @@ export function validateProjectFile(value: ProjectFile): void {
     )
       throw new Error('Incomplete recommendation snapshot');
     if (applied.knowledge) {
-      if (value.version !== 4 && value.version !== 5 && value.version !== 6 && value.version !== 7)
+      if (
+        value.version !== 4 &&
+        value.version !== 5 &&
+        value.version !== 6 &&
+        value.version !== 7 &&
+        value.version !== 8
+      )
         throw new Error('Source-pack provenance requires guarded project version 4');
       const k = applied.knowledge;
       if (

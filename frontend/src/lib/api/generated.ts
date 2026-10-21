@@ -306,6 +306,7 @@ export interface components {
             /** @description Saved native context after Apply; never used to overwrite parameters. */
             context_key: string;
             doc_origin: components["schemas"]["CuttingOrigin"];
+            experimental_recipe?: components["schemas"]["ExperimentalRecipe"] | null;
             knowledge?: components["schemas"]["FsKnowledgeSummary"] | null;
             /** @description Optional evidence snapshot; manually entered operation rates need no proposal. */
             proposal?: components["schemas"]["FsRecommendation"] | null;
@@ -720,6 +721,13 @@ export interface components {
             /** Format: uint32 */
             version: number;
         };
+        /** @description Portable allowlist: no source bodies, labels, notes, URLs or filesystem paths. */
+        ExperimentalRecipe: {
+            applied_values: components["schemas"]["TrialValues"];
+            kind: components["schemas"]["TrialKind"];
+            source: components["schemas"]["FsSelectedRecord"];
+            target: components["schemas"]["TrialTarget"];
+        };
         Finding: {
             contour: components["schemas"]["Identity"];
             message: string;
@@ -830,11 +838,13 @@ export interface components {
             /** @description False previews only; true explicitly applies. Never called by generation. */
             apply: boolean;
             dataset_json: string;
+            experimental_trial?: boolean;
             /** Format: uint32 */
             op_id: number;
             project: components["schemas"]["Project"];
             /** @description Absent preserves automatic recommendation; present pins an original eligible record. */
             selected_record?: components["schemas"]["FsSelectedRecord"] | null;
+            trial_acknowledged?: boolean;
         };
         FsCamResponse: {
             /** @description Native op with authoritative geometry/rates only on explicit Apply. */
@@ -843,6 +853,7 @@ export interface components {
             recommendation: components["schemas"]["FsFeedsSpeedsRecommendation"];
             /** @description Optional transient explanation; never persisted with cutting parameters. */
             scope_rejections?: components["schemas"]["FsProfileRejection"][];
+            trial?: components["schemas"]["TrialPreview"] | null;
         };
         FsContext: {
             machine_identity?: components["schemas"]["FsIdentity"] | null;
@@ -3667,6 +3678,36 @@ export interface components {
         };
         /** @enum {string} */
         TransportKind: "python-bridge" | "rust-server" | "tauri" | "wasm";
+        /** @enum {string} */
+        TrialKind: "theoretical_untested";
+        TrialPreview: {
+            context_differences: string[];
+            operation: components["schemas"]["Op"];
+        };
+        TrialTarget: {
+            /** Format: double */
+            diameter_mm: number;
+            /** Format: uint8 */
+            flute_count: number;
+            machine: components["schemas"]["FsIdentity"];
+            material: components["schemas"]["FsIdentity"];
+            operation: components["schemas"]["FsOperationKind"];
+            tool: components["schemas"]["FsIdentity"];
+            /** Format: uint32 */
+            tool_id: number;
+        };
+        TrialValues: {
+            /** Format: double */
+            doc_mm: number;
+            /** Format: uint32 */
+            feed_mm_min: number;
+            /** Format: uint32 */
+            plunge_mm_min: number;
+            /** Format: uint32 */
+            rpm: number;
+            /** Format: double */
+            stepover_ratio?: number | null;
+        };
         /** @description Result of a two-sided emission: the front program plus, for a genuine two-sided job, the back program. `back` is `None` for a single-sided project — the orchestrator then returns the front field unchanged from the ordinary single-program path, so single-sided callers see byte-identical output. */
         TwoSidedGenerateResponse: {
             /** @description The back program — present only when the job is two-sided (stock flip registration set and at least one enabled `Back` op). Its geometry is mirrored and its header carries the flip + Z-re-zero instructions. */

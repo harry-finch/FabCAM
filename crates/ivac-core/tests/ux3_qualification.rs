@@ -217,6 +217,7 @@ fn manual_rates_persist_and_drive_shopbot_without_a_recommendation() {
     use ivac_core::feeds_speeds::*;
     let mut p = fixture(ScanDirection::AlongX);
     p.operations[0].params.applied_cutting = Some(AppliedCutting {
+        experimental_recipe: None,
         slots: [FsPass::Rough, FsPass::Finish]
             .into_iter()
             .map(|pass| AppliedRateSlot {

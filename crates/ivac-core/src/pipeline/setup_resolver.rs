@@ -207,6 +207,9 @@ pub(in crate::pipeline) fn synthesize_op_setup(
             .iter()
             .find(|o| o.id == op.id)
             .unwrap_or(op);
+        if applied.experimental_recipe.is_some() {
+            warnings.push(PipelineWarning::for_op(op.id, "experimental_recipe", "Experimental recipe · Not tested. Software checks do not establish physical qualification; manually edited values retain experimental ancestry."));
+        }
         if applied.proposal.is_some()
             && applied.context_key != crate::feeds_speeds::context_key(project, canonical)
         {
