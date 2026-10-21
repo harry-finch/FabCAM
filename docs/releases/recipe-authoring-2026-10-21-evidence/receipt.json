@@ -1,0 +1,74 @@
+{
+  "source_parent": "17581be103c374b3b11a862ac26a7e8aaa1c3ae6",
+  "branch": "FabCAM-v1.1",
+  "uncommitted": true,
+  "source_sha256": {
+    "frontend/src/lib/components/DuplicatePresetDialog.svelte": "f0d43f709e093eec6b878c967354084cd4006ebe98f05bc8f4a0ff2786b76892",
+    "frontend/src/lib/components/LabPackCreate.svelte": "9e52d4ae41d3c7ebdcac6d033ec6b2fb77398159e1e70e6431ea6dc8cae79c0e",
+    "frontend/src/lib/i18n/keys.ts": "ba08f14a789488ef84a97d8019ae52234a98a58533fddf3c0fd29705fb1ea4b5",
+    "frontend/src/lib/i18n/messages/de.json": "a660d722d5ae70c1261f1b945d8b4443fdd58e511060b343fed13d5ad796c364",
+    "frontend/src/lib/i18n/messages/en.json": "182a48db339bfb0f6d4a7323bdd4e9c86ccfcdbfb1dc4c4add79dad5566a74fd",
+    "frontend/src/lib/state/cutting-selector-wasm.test.ts": "0225fc45ea01c500d8981889d63a5ae27f428cfcd41fdbf78a2b919218a4b811",
+    "frontend/src/lib/state/preset-adaptation.test.ts": "a1eb1fbe1aad16ac487c77679b811be9857d72fe8c61dbc9e0e6fe5de5949891",
+    "frontend/src/lib/state/preset-adaptation.ts": "f25dc3de8298b1fc21c71e46e9083d06e067907dc9786451c4e2afbcdbfe2f46",
+    "frontend/src/lib/components/RecipeValuesEditor.svelte": "64cf3e0a12c9bf080eb8b4807e3fa3d5adf3cad32e9c27afbc6918b518274b51",
+    "frontend/src/lib/state/recipe-values.ts": "edd85790d8da1dafa63949044899ac2a91a987809d684ce5536a8d673c49b797",
+    "frontend/src/lib/state/recipe-values.test.ts": "90cd57b1ffc4b7d58b7342e02c3b1dd463921135732b65fb6b0cf280b3d03a55",
+    "frontend/src/lib/state/preset-adaptation.fixture.ts": "c263ecca7da2a08815fa4b0650b7071826ce7e5f18937afc343ee0a86480d6d0"
+  },
+  "frontend_pass": 1546,
+  "frontend_skip_existing": 1,
+  "frontend_files": 176,
+  "wasm_package_guards_pass": 10,
+  "check": "0 errors / 0 warnings",
+  "lint": "PASS",
+  "freshness_and_build": "PASS",
+  "browser": {
+    "url": "http://127.0.0.1:18813/?api=wasm",
+    "source_pack": "Fablab X (synthetic test origin)",
+    "source_name": "WOOD / MDF \u00b7 \u00d83 \u00b7 Profile",
+    "destination_pack": "SOFTWARE ONLY \u2014 recipe authoring QA",
+    "saved_name": "SOFTWARE ONLY \u2014 edited cross-context recipe",
+    "source": {
+      "rpm": 18000,
+      "feed": 800,
+      "plunge": 100,
+      "doc": 1,
+      "material": "MDF"
+    },
+    "saved": {
+      "rpm": 12000,
+      "feed": 650,
+      "plunge": 180,
+      "doc": 0.6,
+      "material": "Plywood \u2014 Generic",
+      "state": "Draft",
+      "inactive": true
+    },
+    "different_machine_and_material": true,
+    "save_enabled_after_review": true,
+    "zero_feed_blocks_save": true,
+    "edit_invalidates_review": true,
+    "persisted_after_reload": true,
+    "source_values_unchanged": true,
+    "nested_cancel_retains_operation_feed": 800,
+    "nested_checkbox_widths": [
+      13,
+      13
+    ],
+    "narrow_viewport": [
+      480,
+      720
+    ],
+    "narrow_dialog_width": 464,
+    "narrow_client_and_scroll_width": 462,
+    "console_errors": [],
+    "qa_pack_retained": "One synthetic inactive recipe remains only in the disposable browser origin; no native data touched."
+  },
+  "limits": [
+    "No native installed-platform qualification",
+    "No physical trial or Tested/Validated promotion",
+    "No automatic calculation, scaling, activation or CAM application",
+    "No commit, push or next milestone"
+  ]
+}

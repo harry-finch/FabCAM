@@ -270,15 +270,14 @@ milestone is authorized by this checkpoint.
 
 ### PRESET-4 — Experimental Recipe Application
 
-**Phase A audited on 2026-10-21; architecture approval pending, implementation
-not started.** [Audit and concrete persistence/API proposal](FABCAM_PRESET4_EXPERIMENTAL_RECIPES_2026_10_21.md).
-Explicit “Use for trial…” through the shared selector would apply exact authored
-values to an existing supported operation, with unchecked acknowledgment,
-Undo/Redo and persistent experimental origin. Drafts stay inactive/theoretical
-and excluded from Suggest. Existing manual/recommendation persistence cannot
-truthfully represent that origin; the brief requires **HARD STOP before the
-proposed optional experimental snapshot and guarded project format/API change**.
-No new trial application or physical qualification is claimed.
+**Implemented, software-qualified and consolidated locally; final human UX review
+pending (`ivac-jwwom`).** [Final receipt](FABCAM_PRESET4_EXPERIMENTAL_RECIPES_2026_10_21.md).
+Exact Draft application, persistent experimental ancestry, strict guarded v8, shared
+preview/acknowledgments and readable provenance are implemented. WASM absent Profile
+stepover is serialized as explicit null (`b0920ca`); strict validation/Pocket requirements
+remain unchanged. Actual save/reopen and 480px keyboard/scroll walkthrough passed.
+Recipe authoring and trial UI share coherent frontend commit `be9720a`. Drafts remain
+ineligible for Suggest. **HARD STOP**; no physical qualification or publication.
 
 After architectural approval and PRESET-4 acceptance, a separate bounded workshop
 feedback checkpoint may link actual trial configuration, program reference and

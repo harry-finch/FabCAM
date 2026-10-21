@@ -1,5 +1,190 @@
 # PRESET-4 — Experimental recipe application
 
+## Final acceptance handoff — approved WASM correction and local consolidation
+
+**2026-10-21: implementation, integrated software qualification and local consolidation
+complete. HARD STOP for final human UX acceptance (`ivac-jwwom`).** The save blocker
+recorded below is fixed under explicit user approval; that section remains historical.
+No push, merge, rebase, V1/RC change, version promotion, installer, release or hardware use.
+
+### Correction and invariant checks
+
+`ivac-wasm::feeds_speeds` now normalizes only the absent optional stepover of a successful,
+core-validated experimental **Profile** response. The typed Rust operation must be Profile
+and have an experimental baseline with `None`; the generated JS value gets explicit
+`null` in both preview and applied-operation snapshots. Native serde_json already emits
+that field as null; a native test now asserts both presence and null value.
+
+No global serializer setting, input repair, numeric conversion, recommendation logic or
+eligibility change. The strict v8 validator, schema and project serialization code are
+unchanged. Pocket is excluded from normalization and continues rejecting absent, zero,
+100% and greater-than-100% stepover. The original real-WASM regression remains and now
+asserts exact null on preview/apply, JSON round-trip, unchanged slots/source, modified
+ancestry, and rejection when the required key is removed from portable v8 data.
+
+### Finished software walkthrough
+
+Real WASM on isolated origin `127.0.0.1:5175`, disposable synthetic/public source only:
+
+- Library → Use for trial → preview with 18000 RPM, 1200 feed, 300 plunge, 2mm pass;
+  both independent acknowledgments start unchecked. Applied exact values.
+- Actual Save downloaded `project.ivac-project.json`. Byte inspection confirms guarded
+  v8, both role slots, source identities/revisions and explicit null stepover. The actual
+  downloaded file was reopened through the application file picker. Inspector shows the
+  same values, named recipe, Sienci attribution and **Experimental recipe · Not tested**.
+- After reopen, feed 1200 → 1100 displays **Modified since application**. Undo restores
+  1200/unmodified and Redo restores 1100/modified. Automated JSON reopen also verifies
+  the modified configuration retains the source and baseline.
+- Operation → Choose cutting parameters → Browse presets → keyboard Space selects the
+  Draft → Use for trial uses the shared comparison and resets both confirmations.
+- Narrow 480×720 review: dialog clientWidth=scrollWidth=462px, comparison/acknowledgments
+  scroll while selected recipe/target/status and action footer remain visible. Long names
+  truncate in the compact header with full title text; full names remain in details.
+  Keyboard Space/Tab enables Apply only after both confirmations. Tab from Apply wraps
+  inside the dialog; Escape returns focus to Choose cutting parameters.
+- At the app's desktop/phone breakpoint an open desktop inspector is reconstructed;
+  reopen the selector from the compact Operations panel. This existing responsive
+  behavior was observed, not redesigned. Both 1024px desktop and 480px compact flows
+  were inspected. No claim of broad mobile or native installed-platform acceptance.
+
+![Reopened v8 experimental inspector](evidence/preset4-polish-2026-10-21/reopened.png)
+
+![Browse trial at 480px with persistent context and two confirmations](evidence/preset4-polish-2026-10-21/browse-480.png)
+
+### Final checks (not substituted from the earlier failing receipt)
+
+| Check | Result |
+|---|---|
+| Full frontend, including real WASM and v8 malformed input | **1556 PASS, 1 existing skip**, 179 files; also repeated after the two implementation commits with identical result |
+| Node WASM package guards | **10 PASS** |
+| Svelte/TypeScript | **0 errors, 0 warnings** |
+| ESLint/Prettier + existing component-size guards | PASS; temporary review loader removed |
+| Fresh WASM package + production build | PASS; existing chunk/dynamic-import notices only |
+| `cargo test --offline -p ivac-core --all-features --lib feeds_speeds::tests` | **30 PASS**, including native null serialization and Pocket missing/invalid stepover |
+| `cargo test --offline -p ivac-wasm --all-features` | **24 PASS**, no failures; real WASM boundary is separately exercised by frontend tests |
+| `cargo clippy --offline -p ivac-wasm --all-targets --all-features` | PASS |
+| `cargo fmt --all -- --check`, scoped diff whitespace | PASS |
+
+No backend recommendation/CAM/ShopBot production code changed. The earlier full-workspace
+1692-test receipt remains historical; the final narrow correction is qualified by the
+adapter/WASM suites above plus complete frontend/integrated build, not by pretending a
+new full-workspace run occurred. Logs and saved synthetic v8 file are retained locally in
+`dist-test/preset4-polish-2026-10-21/`; [final receipt](evidence/preset4-polish-2026-10-21/final-receipt.json).
+
+### Local Git consolidation
+
+- `b0920cad6ecf84ee8aa5a66ccada609d4e8421c3` — scoped WASM null correction and native/
+  real-WASM persistence regressions.
+- `be9720a2503bf689b3a5e4e15cf0e85b2ddb5710` — approved manual recipe authoring, compact
+  browser and PRESET-4 UI/finishing consolidated as **one coherent frontend commit**.
+  They share the browser, selector and translations; no artificial intermediate partial
+  UI build was committed. New dependencies and tests were explicitly staged and reviewed.
+- Separate documentation commit contains this handoff, screenshots and authoring ADRs;
+  exact hash is provided in chat. Prior backend `d7b6531` and receipt `9ac066f` preserved.
+
+Source changes are fully committed. Concurrent MAT-1/status navigation edits and unrelated
+historical evidence remain intact outside these scoped commits. The final UX gate remains
+open: software checks do not supply human approval or physical qualification.
+
+**Next action: final human review of named provenance, experimental/modified status and
+both selector entry points. HARD STOP. No PRESET-5 or feedback-ledger work started.**
+
+---
+
+## Historical finishing-pass stop (resolved by approval and correction above)
+
+## Final UX pass — 2026-10-21, STOP on real-WASM save regression
+
+**Supersedes the completion status below: final acceptance and local consolidation
+are blocked.** Task `ivac-t3y0v`; required decision `ivac-44co0`; human UX gate
+`ivac-jwwom` stays open. No new commit was made in this finishing pass.
+
+### Presentation implemented in the preserved worktree
+
+- Exact source metadata supplies the authored recipe name. When the recorded reference
+  matches a loaded original profile exactly, display its actual publisher, full material
+  category and localized cutting mode. The original preset and the authored recipe are
+  distinct. No ID-to-name inference, private-note parsing or embedded source body.
+- Exact identities/revisions remain in expanded technical details. Missing, deleted or
+  revised recipes fall back to an explicit unavailable-source name. Disabled sources can
+  still supply labels; labels never grant trial eligibility. No schema/snapshot changes.
+- Shared compact amber Lucide flask + textual experimental badge in preview/header and
+  inspector, with the modified-since-application qualifier. Source evidence is explicitly
+  not target qualification. New interface copy is English/German.
+- Selected recipe, target operation and application state remain in the existing fixed
+  dialog header. Content and long preset lists retain their own scrolling; the existing
+  footer stays fixed. No additional sticky region or auto-scroll behavior.
+- Full-width slotting has contextual explanatory help. The two acknowledgments remain
+  separate and unchecked. Footer extraction keeps the existing component-size ceiling;
+  it was not raised or bypassed.
+
+### Actual visual replay and discovered blocker
+
+Disposable origin `127.0.0.1:5175`, real WASM, public/synthetic fixture loaded through
+an explicit temporary harness. The harness was removed from frontend sources after
+review and retained in local evidence. Desktop 1280×720 and narrow desktop 1024×720
+replayed library selection, current/proposed comparison, scrolling with context visible,
+keyboard Space/Tab confirmations, exact application, inspector status, manual feed
+1200 → 1100, Undo → 1200 and Redo → 1100. Selecting only the first acknowledgment left
+Apply disabled. No physical operation or generated program was run.
+
+**Save then failed: `Invalid experimental recipe snapshot`.** The real WASM Profile
+response represents the absent `applied_values.stepover_ratio` as JavaScript `undefined`.
+JSON serialization drops that property. The strict frontend v8 allowlist requires the
+property to exist, using `null` for no Profile stepover. The previously passing synthetic
+round-trip fixture already contained `null`, so it did not cover the actual transport
+→ portable JSON boundary. Earlier software qualification is not proof of this path.
+
+The existing real-WASM test now contains an intentional failing round-trip assertion.
+Diagnostic assertions first prove the property is omitted and that adding explicit
+`null` makes the unchanged snapshot validator accept the same data. This is test-only
+normalization, not a product fix. No production transport, validation, Rust or v8 contract
+was changed. Save/reopen walkthrough cannot be claimed complete; Browse replay, tighter
+mobile/long-label/focus coverage and final acceptance remain to finish after correction.
+
+### Qualification at this stop
+
+- Full frontend: **1555 PASS, 1 FAIL, 1 existing skip**, 179 files. The single failure is
+  the new real-WASM portable snapshot regression above. Three new provenance/presentation
+  tests pass, including source missing/deleted/revised and reopened modified ancestry.
+- Svelte/TypeScript: **0 errors, 0 warnings**.
+- ESLint/Prettier, unchanged component-size budget: PASS.
+- WASM fingerprint verification and production build: PASS; existing bundle notices.
+- No Rust/schema/serialization production changes; prior Rust evidence remains historical,
+  not rerun as a substitute for the failing frontend integration test.
+- Logs/fixtures: `dist-test/preset4-polish-2026-10-21/`. No blanket staging, commit,
+  push, merge, release or hardware operation. Existing authoring and unrelated work retained.
+
+Before (prior PRESET-4 receipt) and after:
+
+![Before final polish](evidence/preset4-polish-2026-10-21/before.png)
+
+![Selected context and readable provenance after polish](evidence/preset4-polish-2026-10-21/after-narrow.png)
+
+![Experimental ancestry retained after manual edit](evidence/preset4-polish-2026-10-21/modified.png)
+
+### Required bounded decision and consolidation plan
+
+The finishing brief explicitly prohibits changing snapshot validation/project v8 and
+requires stopping if such a boundary is implicated. Recommend authorizing a **narrow
+transport normalization of the optional Profile trial stepover to explicit `null`**,
+with strict v8 validation and mandatory Pocket stepover retained. No global serializer
+change, numeric conversion or resolver change. Re-run real WASM preview/apply → saved
+JSON → reopen and the full frontend suite before calling this qualified.
+
+After that approval/fix and remaining walkthrough: reconstruct the authoring-only baseline
+from `dist-test/preset4-2026-10-21/preexisting.patch`, review its related new files and
+qualify that coherent tree; commit approved authoring, then PRESET-4 UI with finishing
+changes, then evidence/docs. If the dependency split is not coherent, use a documented
+combined UI commit instead of staging a misleading partial build. Current backend commits
+remain `d7b6531` and report `9ac066f`; no source is promoted to V1.
+
+**HARD STOP awaiting bounded persistence/transport correction approval (`ivac-44co0`).**
+
+---
+
+## Prior implementation receipt (historical; save-path gap identified above)
+
 **2026-10-21: architecture approved, bounded implementation and software qualification complete. HARD STOP for final human UX review (`ivac-jwwom`).**
 Architecture gate `ivac-knihp` closed on explicit approval; implementation `ivac-fypr1`.
 V1 and its ShopBot qualification baseline are unchanged. No physical trial, installer,

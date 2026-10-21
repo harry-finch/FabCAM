@@ -4,6 +4,10 @@ Status: ACCEPTED for bounded implementation — user approved the strict framewo
 Date: 2026-10-21
 Track: PRESET-2, `ivac-h5nln`, branch `FabCAM-v1.1`
 
+> Follow-up 2026-10-21: [ADR-0029](ADR-0029-manual-inactive-recipes.md) supersedes
+> unchanged-value and machine/material-match restrictions for new inactive recipes,
+> following an explicit user request. The original accepted decision below is retained.
+
 ## Context
 
 The user accepted PRESET-1 and requested the next milestone. PRESET-2 is authorized

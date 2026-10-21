@@ -1,0 +1,40 @@
+{
+  "source_sha": "be9720a2503bf689b3a5e4e15cf0e85b2ddb5710",
+  "transport_sha": "b0920cad6ecf84ee8aa5a66ccada609d4e8421c3",
+  "frontend": {
+    "pass": 1556,
+    "existing_skip": 1,
+    "files": 179,
+    "repeated_after_commits": true
+  },
+  "core_adapter_all_features_pass": 30,
+  "wasm_crate_all_features_pass": 24,
+  "strict_validator_unchanged": true,
+  "schema_unchanged": true,
+  "visual_widths": [
+    1280,
+    1024,
+    480
+  ],
+  "actual_saved_v8_sha256": "e52ee366feb3280ee73ac6e6025080e961b240bc65570647b851084464b7e714",
+  "physical_qualification": false,
+  "human_ux_review": "pending",
+  "logs_sha256": {
+    "preset4-final-build.log": "7d61d75ffd66df5e355411ca74379be3e83414ac957a83500b6578c2bfa8f82b",
+    "preset4-final-lint.log": "27db8120787d818efa12af0c97d73f156b2ee2cc178a19e247a77222062a2fe9",
+    "preset4-final-tests.log": "5e0fe4961aed88f4d5d6287405b5831da9fd9473f03b94801bc21d253f4587ee",
+    "preset4-final-types.log": "cd7b82b438d15dde0ee4fccc9167f84434fd4c8040117480b758b08920438435",
+    "preset4-null-build.log": "f16cc96373e69dbf6195b4f02e0876f6406167df8c4342a53d86452ab5693aad",
+    "preset4-null-clippy.log": "e2205df3853ad52935d126435bbe25558eee80fa221fc92aa80c9349af611734",
+    "preset4-null-rust.log": "ce0de46b6f7165e250cb8774298a3178acb5b75c50c51473d2e03210743ed566",
+    "preset4-null-wasm-rust.log": "d3bcda4b8899e5aa727cce22e30e5117ac2123fedda45afd1aca3b637cbe1651",
+    "preset4-polish-build-final.log": "84bebe775a666321d09900f0a2edc4afc3c31f1301a503bb3fa21c345656f0ad",
+    "preset4-polish-check-final.log": "cd7b82b438d15dde0ee4fccc9167f84434fd4c8040117480b758b08920438435",
+    "preset4-polish-check.log": "cd7b82b438d15dde0ee4fccc9167f84434fd4c8040117480b758b08920438435",
+    "preset4-polish-lint-final.log": "27db8120787d818efa12af0c97d73f156b2ee2cc178a19e247a77222062a2fe9",
+    "preset4-polish-roundtrip.log": "4b26d9b547f094cc0188e58d556162137bb13247f66b618a6d1016b64ad966e6",
+    "preset4-polish-tests-final.log": "cb328d0ebd9cf721794553c72e3f885ec4be538fa5abe0259cd2bde6c3ad8d38",
+    "preset4-polish-tests.log": "747c6da28441c6311cbcad970e423750cf26adfdcee69884384653c2ad3cda40",
+    "preset4-postcommit-tests.log": "d1f2d9687bb8a32bcbdec0e27e747724b0abfb5d9284670efd7b43c7178155ea"
+  }
+}
