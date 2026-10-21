@@ -1,0 +1,18 @@
+   Compiling ivac-feeds-speeds v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-tauri)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 22.44s
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-ace93add107a9189)
+
+running 8 tests
+test source_packs::tests::rejects_repository_storage ... ok
+test source_packs::tests::removal_rejects_symlinks_before_deleting_any_revision ... ok
+test source_packs::tests::removal_checks_head_and_removes_all_revisions_only_for_the_selected_id ... ok
+test source_packs::tests::stores_only_valid_local_json_and_refuses_duplicate_version ... ok
+test source_packs::tests::audit_15_16_lab_rejects_variable_width_and_text_revisions ... ok
+test source_packs::tests::lab_revisions_use_compare_and_append_not_overwrite ... ok
+test source_packs::tests::named_packs_keep_independent_heads_locks_and_import_history ... ok
+test source_packs::tests::adapted_copy_checks_source_and_destination_under_shared_locks ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.10s
+

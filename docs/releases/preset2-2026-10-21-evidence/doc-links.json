@@ -1,0 +1,15 @@
+{
+  "checked_local_link_targets": 256,
+  "broken": [],
+  "scope": [
+    "docs/README.md",
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/releases/PRESET_2_DUPLICATE_ADAPT_2026_10_21.md",
+    "docs/shopbot-modernization/STATUS.md",
+    "docs/shopbot-modernization/ROADMAP.md",
+    "docs/shopbot-modernization/DEVLOG.md",
+    "docs/shopbot-modernization/adr/README.md",
+    "docs/shopbot-modernization/adr/ADR-0028-preset-duplicate-adapt.md"
+  ],
+  "anchors": "Existing anchors retained; MAT-1 heading inspected in canonical roadmap."
+}

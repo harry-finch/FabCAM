@@ -1,0 +1,8 @@
+{
+  "initial_tracked_dirty_and_untracked_file_count": 8365,
+  "missing_files": [],
+  "unexpected_changes_outside_reviewed_document_updates": [],
+  "source_file_count": 41,
+  "source_hashes_match": true,
+  "full_initial_inventory_local_only": "dist-test/preset-integration-2026-10-21/before.json"
+}

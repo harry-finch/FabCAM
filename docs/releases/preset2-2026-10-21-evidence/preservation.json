@@ -1,0 +1,26 @@
+{
+  "baseline_revision": "df6eb1f",
+  "branch": "FabCAM-v1.1",
+  "baseline_files": 11162,
+  "missing": [],
+  "changed_existing_files": [
+    "docs/shopbot-modernization/adr/ADR-0028-preset-duplicate-adapt.md",
+    "frontend/src/lib/components/PresetRecordDetails.svelte",
+    "frontend/src/lib/components/PresetsLibrary.svelte",
+    "crates/ivac-tauri/src/lib.rs",
+    "crates/ivac-tauri/src/source_packs.rs",
+    "docs/README.md",
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/DEVLOG.md",
+    "docs/shopbot-modernization/ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md",
+    "docs/shopbot-modernization/adr/README.md",
+    "frontend/src/lib/components/MaterialPicker.svelte",
+    "frontend/src/lib/i18n/keys.ts",
+    "frontend/src/lib/i18n/messages/de.json",
+    "frontend/src/lib/i18n/messages/en.json",
+    "frontend/src/lib/state/feeds-speeds-pack-store.ts",
+    "frontend/src/lib/state/lab-presets-store.ts",
+    "frontend/src/lib/state/lab-presets.ts"
+  ]
+}

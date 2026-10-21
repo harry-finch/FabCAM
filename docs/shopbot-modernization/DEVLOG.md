@@ -1,5 +1,36 @@
 # Engineering log
 
+## 2026-10-21 — MAT-1 inventory and architecture proposal
+
+Inspected `b8deaef` and actual material catalogs, native private metadata and current
+shared picker/preset filtering. Proposed nonpersistent families/variants/aliases with
+exact identity preservation, explicit broad categories and unclassified fallback.
+No source changes; FS120 and targeted frontend39 PASS.
+[Report](../releases/FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md). HARD STOP Phase C.
+
+## 2026-10-21 — Accepted PRESET-1/2/3 local integration
+
+User approved the refined selector and authorized integrating/committing all three
+preset slices without pushing. Native guarded copying committed as `bed3a92`;
+shared frontend library/copy/selector and polish committed together as `b8deaef`,
+avoiding incomplete intermediate UI/catalog states. API `5ca5632` is preserved.
+Frontend1505 + WASM10, native storage8, FS119 + doc1, core adapter20 PASS;
+type/lint/build, native Clippy, Rustfmt and schema/client reproduction PASS.
+Recorded human acceptance and reconciled stale audit-only/uncommitted statements;
+historical reports/evidence remain source-bound. Unrelated local qualification
+files retained. [Integration receipt](../releases/PRESET_INTEGRATION_2026_10_21.md). No push/merge/release;
+HARD STOP, MAT-1 unstarted; no new platform or physical qualification.
+
+## 2026-10-21 — PRESET-3 unified selector implementation
+
+Two discovery modes now share the Rust adapter, comparison and guarded operation
+command. Exact canonical record selection adds no fallback/adaptation. API committed
+as `5ca5632`; UI/tests/docs deliberately retained uncommitted until PRESET-1/2
+integration. Manual override clearing regression corrected. FS120/core1434/frontend1498
+PASS, one existing frontend skip; type/lint/schema/WASM/build PASS. Visual review
+completed; human review and cross-backend freshness limits remain explicit in the
+[report](../releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md). HARD STOP; no push.
+
 ## 2026-10-21 — PRESET-3 existing-behavior audit and schema checkpoint
 
 Audited the actual `FabCAM-v1.1` worktree at `df6eb1f` plus preserved PRESET-1/2.
@@ -13,6 +44,32 @@ FS113 + doc1, adapter19, frontend1488 / one existing skip, WASM10, type/build PA
 [Audit and receipts](../releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
 Only reviewed audit documentation is eligible for the authorized local commit;
 previous uncommitted implementation/evidence retained. No push or later milestone.
+
+## 2026-10-21 — PRESET-2 strict Duplicate & Adapt checkpoint
+
+The user accepted PRESET-1 (`ivac-0x2br` CLOSED), requested PRESET-2, then explicitly
+approved the strict ADR-0028 framework before implementation. Added a separate
+copy dialog on `FabCAM-v1.1`: complete compatible context, explicit local copy rights,
+reviewed differences, unchanged values and an independent inactive Draft. Original
+source provenance/license survives; no physical evidence is inherited. Native
+source/destination locks and one IndexedDB transaction protect pinned revisions.
+Six new pure tests; current frontend 1488 PASS / one existing skip, WASM guards10
+PASS, native storage8 PASS, type/lint/format/build and native Clippy checks pass.
+Browser reference/local copies, review invalidation and stale-window refusal replayed.
+[Report and evidence](../releases/PRESET_2_DUPLICATE_ADAPT_2026_10_21.md).
+Human checkpoint `ivac-1oe9l` OPEN. No commit/push; MAT-1/scaling/CAM unstarted.
+
+## 2026-10-21 — PRESET-1 read-only library and bounded maintenance
+
+On the user's authorization, retained branch `FabCAM-v1.1` at base `df6eb1f`.
+Restored the unchanged component-size guard by extracting two existing controls.
+Added independent Presets navigation, read-only source table, combined filters and
+provenance/trial details. Existing pack storage, evidence and applied-rate authority
+remain intact; no recommendation calculation/application or CAM/schema change.
+Frontend 1482 PASS / one existing locale skip, WASM guard10 PASS, type/lint/format/build
+checks pass. Isolated browser table/filter/keyboard/disabled-source and maintenance
+Undo/diagnostic paths replayed. [Evidence and limits](../releases/PRESET_1_READONLY_2026_10_21.md).
+Human review `ivac-0x2br` OPEN; PRESET-2/MAT-1 remain unstarted. No commit or push.
 
 ## 2026-10-21 — V1.1 roadmap and branch reconciliation
 

@@ -8,8 +8,16 @@ Snapshot **2026-10-21**, recorded on `FabCAM-v1.1` only.
 | Line | Source and state | Next decision |
 |---|---|---|
 | V1 stabilization / `main` | `ef807cf8250ddc4bdf795c75bb9bf9f011db9bca`; RC1-ef807cf-39492251757, beta.3/pipeline63; CI and candidate jobs succeeded | Clean-host installation/runtime and supervised ShopBot evidence, remaining human gates, explicit V1 acceptance |
-| `FabCAM-v1.1` | Base/merge-base `ef807cf`; implementation `0075317`, launcher `b417d3c`, documentation `6d4cff0`; existing changes already committed locally | Human UX acceptance `ivac-tnpyz`; frontend size failure `ivac-fpx7n`; not merge-ready |
-| New V1.1 work | PRESET-1 library, PRESET-2 Duplicate & Adapt, MAT-1 taxonomy are planned only | Review maintenance first, then authorize PRESET-1 read-only slice separately; scaling assistant remains future research |
+| `FabCAM-v1.1` | PRESET API `5ca5632`, guarded native copy `bed3a92`, integrated frontend `b8deaef` | PRESET-1/2/3 software/UX accepted; local commits only, no push/merge/release |
+| Next feature | MAT-1 material families, variants and synonyms remains planned | Requires a separate start instruction; no identity remapping or machining equivalence inferred |
+
+[PRESET integration receipt](../releases/PRESET_INTEGRATION_2026_10_21.md): frontend **1505 PASS / 1 existing skip**,
+WASM package guards **10 PASS**, source storage **8 PASS**, Feeds & Speeds
+**119 + 1 doctest PASS**, core adapter **20 PASS**; type/lint/build, native Clippy,
+Rust formatting and schema/client synchronization PASS. User validation closes
+PRESET-2 `ivac-1oe9l` and PRESET-3 `ivac-ms6rz` within their bounded software/UX scope.
+The earlier branch-wide identity workflow checkpoint `ivac-tnpyz` and independent
+V1/platform/physical gates are not closed by this integration.
 
 RC1 [CI](https://github.com/harry-finch/FabCAM/actions/runs/39487569970) and
 [candidates](https://github.com/harry-finch/FabCAM/actions/runs/39492251757) belong to
@@ -19,15 +27,17 @@ untracked; its availability in another checkout requires separate evidence trans
 macOS ad-hoc/non-notarized, Windows unsigned and Ubuntu unsigned-package limits
 remain; successful packaging does not establish installed or physical acceptance.
 
-V1.1 verification at `6d4cff0`: frontend **1474 PASS / 1 skip / 1 FAIL**;
+Historical V1.1 verification at `6d4cff0`: frontend **1474 PASS / 1 skip / 1 FAIL**;
 unchanged size guard rejects OperationsList 1008 and FeedsSpeedsSection 1010 lines.
-Both were within budget at RC1; the overages originate in V1.1 `0075317`.
+Both were within budget at RC1; the overages originated in V1.1 `0075317`.
+The current PRESET-1 maintenance extraction restores the unchanged guard;
+[latest checks and source limits](../releases/PRESET_1_READONLY_2026_10_21.md).
 Targeted Rust: Feeds & Speeds 113 integration + 1 doc PASS, adapter 19 PASS,
 tool/process 6 PASS, native source packs 7 PASS. No full integrated V1.1 or
 installed-platform qualification is claimed. See the report for exact commands.
 
 Named packs, physical/reference identity separation, library-tool assignment and
-compact UI changes are implemented with bounded tests, awaiting human acceptance.
+compact UI changes are implemented with bounded tests; PRESET acceptance is recorded above.
 [Existing implementation report](../releases/FABCAM_V1_1_UX_2026_10_21.md) and
 [ADR-0027](adr/ADR-0027-lab-and-reference-identities.md) retain their limitations,
 including partial native removal on I/O failure and legacy identity ambiguity.
@@ -46,9 +56,14 @@ focused regression tests and renewed exact-SHA qualification. Features stay on
 `FabCAM-v1.1`; after V1 acceptance/release decisions, review any V1 hotfix delta
 before integration and qualify the combined V1.1 source independently.
 
-**Current checkpoint:** [PRESET-3 audit](../releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md)
-completed on the existing PRESET-1/2 worktree. Explicit record selection requires
-an API/schema decision (`ivac-ms6rz` OPEN); implementation stopped before that change.
-Existing tests pass: frontend1488 + WASM10, FS113 + doc1, adapter19; type/build PASS.
-PRESET-2 human review remains OPEN. **HARD STOP before schema/production changes or
-another milestone.** No push, merge, tag, release, packaging or hardware action.
+**Current checkpoint:** PRESET-1/2/3 accepted and committed locally; see the
+[integration receipt](../releases/PRESET_INTEGRATION_2026_10_21.md). No push, merge, tag, release,
+packaging or hardware operation. **HARD STOP before MAT-1 or another milestone.**
+
+## MAT-1 architecture checkpoint — 2026-10-21
+
+Audited integrated PRESET source at `b8deaef` on `FabCAM-v1.1`; no pending production
+overlap. [MAT-1 proposal](../releases/FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md)
+is ready for human Phase C review. Presentation/search only; no implementation or
+identity/matching change. Existing FS120/frontend39 regressions pass. HARD STOP
+before Phase D. Existing V1 and other human acceptance boundaries remain separate.

@@ -1,4 +1,13 @@
-# PRESET-3 — recommendation audit and implementation boundary
+# PRESET-3 — Unified Cutting Parameters Selector
+
+**Current checkpoint (2026-10-21): selector software/UX accepted and integrated locally.**
+API `5ca56321bd7201eeda6dd5b777966c3e82882e8b` is preserved; native guard `bed3a92`
+and frontend `b8deaef` integrate PRESET-1/2/3 and the approved UX refinement.
+[Acceptance, commits and current qualification](PRESET_INTEGRATION_2026_10_21.md). No push or release;
+MAT-1 remains unstarted. Sections below retain historical source/approval snapshots;
+statements about pending review or uncommitted work are superseded by this checkpoint.
+
+## Historical Phase A audit
 
 Date: 2026-10-21. Inspected branch **FabCAM-v1.1**, HEAD **df6eb1f** plus
 existing uncommitted PRESET-1/2 implementation. Audit task `ivac-18u82`; human schema decision **`ivac-ms6rz` OPEN**.
@@ -277,3 +286,277 @@ The next V1.1 action is **human review of the minimal PRESET-3 request/provenanc
 contract**, followed by explicit implementation authorization. The new schema gate
 is separate from still-open PRESET-2 review. MAT-1 remains planned/unstarted; do not
 launch it, restart PRESET-2, or infer acceptance of existing release/workshop gates.
+
+
+## Approved implementation contract — 2026-10-21
+
+The maintainer now authorizes the minimal additive request extension. Starting HEAD
+1935878c305df02cccf526a5899207e05efc78fc on FabCAM-v1.1, with existing uncommitted
+PRESET-1/2 changes preserved in a local fingerprint/patch/byte snapshot.
+
+FsCamRequest gains optional `selected_record: FsSelectedRecord` (omitted/null means
+unchanged automatic recommendation). FsSelectedRecord uses `pack: FsIdentity`,
+`record_id: string`, `profile: FsIdentity`; both identities include id and revision.
+No source-pack, project-root or AppliedCutting/KnowledgeSummary format changes.
+Old requests deserialize unchanged; old servers reject the new field, so generated
+clients and bundled WASM/native contracts must be updated together. Existing private
+provenance retains values/pack revision/record ID without claiming full offline
+profile-revision identity. Human schema gate ivac-ms6rz remains open.
+
+Explicit selection validates original packs, requires a unique exact pack/record/
+profile match and existing eligibility, evaluates that record through the same Engine,
+and bypasses only candidate ranking, reference adaptation and interpolation. No pack
+rewriting or fallback. Existing hard machine/tool clamps still apply and are shown.
+Preview uses the loaded, validated source snapshot. Apply rereads stored sources before
+and after authoritative validation and compares source/context fingerprints before
+committing the existing atomic applyCuttingCommand. Detectable
+changes fail closed. Cross-backend read→apply is not a storage transaction; a write
+after final read remains outside the guaranteed detection window, never a live link.
+
+
+## Implementation results — 2026-10-21
+
+### Architecture and reuse
+
+The optional `selected_record` carries canonical pack and profile identities (each
+ID + revision) and the original record ID. Rust resolves that original record only,
+without rewriting source bodies, reference adaptation, interpolation or fallback.
+The absent-selector path retains existing automatic ranking and derivation. Both
+paths retain pack validation, exact compatibility, hard tool/machine clamps and the
+existing CAM adapter. OpenAPI and generated TypeScript were regenerated together.
+No pack format, persisted project schema, dependency, output contract or V1 change.
+
+The inspector now opens **Choose cutting parameters…**, with **Recommended** and
+**Browse presets** sharing the same comparison, Rust preview/apply and operation
+command. Browse reuses PRESET-1 filtering/details and PRESET-2 Duplicate & adapt.
+Library **Use in operation** offers existing compatible Profile/Pocket operations
+and opens that same selector with the original record pinned. Draft, disabled,
+deleted and external-reference records cannot be applied. Incompatible records
+remain inspectable; source context is not substituted into the operation.
+
+New small modules handle selection identity, fresh source reads and the shared
+apply lifecycle; comparison and explanatory UI were extracted from the existing
+inspector to preserve its unchanged component-size budget. Manual-value replacement
+requires acknowledgment. The existing apply command had dropped explicit undefined
+patch fields during JSON cloning, resurrecting cleared manual overrides. Its patch
+copy now preserves those fields; regression tests cover application, Undo/Redo,
+reopen and generation-context invalidation. No alternative parameter engine added.
+
+### Integrity, compatibility and privacy
+
+Apply verifies the selected source snapshot and original operation object/context,
+rechecks sources before and after Rust validation, and rejects detected modification,
+removal, cancellation or replacement without committing operation values. Stored
+cutting values remain snapshots, never live source links. Private source bodies and
+trial notes are not copied into portable projects. Existing KnowledgeSummary does
+not retain complete offline profile-revision identity; no stronger claim is made.
+
+Cross-backend reads and operation commit are not a storage transaction: a concurrent
+write after the final read can escape detection. This residual window is explicit.
+Legacy requests without the optional field keep their behavior; older backends do
+not support the new explicit selector and must be upgraded with their client.
+
+### Qualification
+
+Evidence: local `dist-test/preset3-implementation-2026-10-21/`, including logs,
+source fingerprints, baseline snapshots, screenshots and isolated UI patch.
+
+| Check | Result |
+|---|---|
+| Full `ivac-feeds-speeds` tests | 119 tests + 1 doctest PASS |
+| Full `ivac-core --all-features` tests | 1434 PASS, including existing output/ShopBot regressions |
+| Latest adapter tests after private-provenance assertion | 20 PASS |
+| Clippy, both crates/all targets/all features, warnings denied | PASS |
+| Server + Tauri compile | PASS |
+| Schema check and generated-client reproduction | PASS |
+| Frontend | 170 files, 1498 PASS, 1 pre-existing skip, 0 failures |
+| Svelte/TypeScript and lint | PASS; 0 errors / 0 warnings |
+| WASM freshness and production build | PASS; existing bundle-size/import/timing notices retained |
+
+Targeted tests cover automatic/explicit equality, lower-ranked direct selection,
+Tested/Validated eligibility, unknown/stale revisions, disabled/deleted/Draft
+refusal, incompatible context, no reference adaptation, manual acknowledgment,
+source and context races, save/reopen, privacy and output-freshness invalidation.
+A real WASM regression exercises the shared request adapter. HTTP/Tauri forwarding
+is compile-checked; no new installed-native or live HTTP runtime qualification is
+claimed. Full core tests preceded the final test-only privacy assertion, which was
+then verified in the 20-test adapter rerun. No physical cutting or export execution.
+
+Visual walkthrough used a disposable SOFTWARE ONLY project and the real WASM
+backend: inspector recommendation/comparison, manual acknowledgment, Apply,
+Undo/Redo, library entry/preselection, incompatible selection and disabled Apply,
+plus narrow and desktop layouts. The last layout pass corrected shrinking result
+rows. Screenshots are review evidence, not human UX acceptance. The final library
+screenshot shows the shared comparison before application.
+
+### Git boundary and human handoff
+
+Starting source: `1935878c305df02cccf526a5899207e05efc78fc` on `FabCAM-v1.1`.
+Focused API commit: **`5ca56321bd7201eeda6dd5b777966c3e82882e8b`** — seven files:
+Rust adapter/resolver, three Rust test files, OpenAPI and generated API types.
+
+By explicit maintainer decision, UI, command fix, frontend tests and documentation
+remain uncommitted pending PRESET-1/2 integration. The isolated UI patch is relative
+to the preserved dirty PRESET-1/2 baseline, not a standalone patch against HEAD.
+Concurrent Splitter/library resizing work was preserved and excluded from that
+patch and the API commit. No push, merge, tag, release, packaging or V1 changes.
+
+**HARD STOP:** human PRESET-3 UX/schema review remains pending (`ivac-ms6rz` open),
+independent of PRESET-2 review (`ivac-1oe9l`). Next proposed step: review this selector
+and authorize later frontend integration once PRESET-1/2 are committed. MAT-1 and
+future parameter-scaling investigation remain unstarted.
+
+## Unified selector UX refinement — 2026-10-21
+
+**Implemented and frontend/WASM-qualified; human UX acceptance pending.**
+Task `ivac-vyuab`. Source: `FabCAM-v1.1`, HEAD
+`5ca56321bd7201eeda6dd5b777966c3e82882e8b` plus the existing dirty PRESET-1/2/3 tree.
+The API commit is preserved. No Rust, schemas, source formats, tests of machine
+output, security policies, versions or release workflows were modified in this pass.
+[Source fingerprints](preset3-selector-ux-2026-10-21-evidence/source-fingerprints.json)
+and [tracked Git state](preset3-selector-ux-2026-10-21-evidence/git-status-tracked.txt)
+identify this checkpoint; these are not a clean-checkout qualification.
+
+### Problems and changes
+
+The previous selector repeated long context descriptions, used large three-line
+preset cards, exposed recommendation aggressiveness while browsing a pinned record,
+and repeated “Unchanged” in a fourth comparison column, including as a proposed
+numeric value. Its material editor applied a separate job-wide command before the
+parameter transaction.
+
+- `CuttingSelectorFrame.svelte` owns a compact context header, independently scrolling
+  content and a persistent shared footer. Width is capped at 960px and height at 85vh;
+  height remains content-driven. Measured Recommended at 1280×720: **960×562px**, with
+  content height/scroll height both 444px (no internal scrolling needed).
+- `FeedsSpeedsSection.svelte` retains preview/application ownership. Both modes use
+  the same comparison and **Cancel | Apply parameters** footer. Recommended retains
+  its mode picker; Browse restores the selected record's authored mode even after
+  visiting Recommended. Machine/tool/material context is visible in the header;
+  full labels and details remain accessible. Source headings truncate rather than
+  expanding indefinitely. Component size is **938 lines**, within the
+  unchanged 1000-line budget.
+- Material is now read-only in the selector. The explicitly authorized fallback in
+  the brief is used because the prior material action was a separate history command,
+  not part of validated parameter application. Stock remains the authoritative editor;
+  its job-wide effect is stated. Missing material blocks preview/application and points
+  to Stock. There is no new material transaction or implicit context substitution.
+- `PresetBrowser.svelte` uses compact aligned rows for record/material/tool, mode,
+  pack/status and compatibility. Search and all existing filters remain. Below 700px,
+  secondary filters are disclosed under **More filters**, with an active-filter hint.
+  Long labels truncate with complete titles/details. Arrow keys/Home/End move focus;
+  Enter/Space explicitly select. Focus movement alone never selects. Filtered-out
+  selection is retained with an explicit notice, rather than silently replaced.
+- Compatibility is authoritative only for the selected record. Other eligible rows
+  say **Check**; Draft/disabled/reference-only rows say **Inspect only**. Selected
+  rows distinguish checking, compatible and incompatible. No client-side compatibility
+  or numerical adaptation engine was introduced.
+- `CuttingParameterComparison.svelte` has exactly three columns. Changed proposed
+  values receive a restrained highlight. Profile stepover is N/A; absent optional
+  proposals retain current values, marked with an explanatory footnote; unavailable
+  values use a dash with a tooltip. A no-change summary explicitly explains the
+  provenance/origin refresh. Identical numerical values do not incorrectly disable Apply.
+- `cutting-comparison.ts` contains presentation/focus helpers, with seven new tests.
+  English/German copy was added and obsolete keys removed; generated keys were
+  regenerated. No new dependency or component-budget waiver.
+
+### Preserved application boundaries
+
+Both entry points still pin the original pack/record/profile identities and revisions,
+use the same Rust preview and authoritative Apply request, verify source snapshots
+before/after validation, and check operation/context freshness. Failures retain the
+window and diagnostic. Manual replacement requires acknowledgment; full-width slotting
+is never inferred. Undo/Redo, generation/export freshness and stored/private provenance
+remain governed by the existing application command and tests. Removing the material
+picker removes the temporary draft/pending-material state, not a required validity check.
+The documented final-read/concurrent-write residual window remains unchanged.
+
+### Visual and interaction evidence
+
+Real local browser with `?api=wasm`, disposable SOFTWARE ONLY project, no CAM generation,
+export or hardware action. Default viewport **1280×720**; narrow viewport **680×800**,
+reset afterward. The scrolling list contains **11 existing synthetic/reference records**;
+automated list coverage additionally exercises 180 long-label rows. These screenshots
+are software review evidence, not human acceptance or a physical cutting trial.
+
+| Scenario | Before | After |
+|---|---|---|
+| Recommended, desktop | [Before](preset3-selector-ux-2026-10-21-evidence/before-recommended.png) | [After](preset3-selector-ux-2026-10-21-evidence/recommended-after.png) |
+| Browse, desktop | [Before](preset3-selector-ux-2026-10-21-evidence/before-browse.png) | [After](preset3-selector-ux-2026-10-21-evidence/browse-after.png) |
+| Recommended, narrow | [Before](preset3-selector-ux-2026-10-21-evidence/before-recommended-narrow.png) | [After](preset3-selector-ux-2026-10-21-evidence/recommended-narrow-after.png) |
+| Browse, narrow | [Before](preset3-selector-ux-2026-10-21-evidence/before-browse-narrow.png) | [After](preset3-selector-ux-2026-10-21-evidence/browse-narrow-after.png) |
+| Compatible selection | [Before](preset3-selector-ux-2026-10-21-evidence/before-compatible.png) | [After](preset3-selector-ux-2026-10-21-evidence/compatible-after.png) |
+| Incompatible / disabled Apply | [Before](preset3-selector-ux-2026-10-21-evidence/before-incompatible.png) | [After](preset3-selector-ux-2026-10-21-evidence/incompatible-after.png) |
+| Manual feed 1000 → 1620 | [Before](preset3-selector-ux-2026-10-21-evidence/before-changed-manual.png) | [After](preset3-selector-ux-2026-10-21-evidence/changed-manual-after.png) |
+
+Before desktop captures were taken before edits. Remaining before captures replayed
+copies of the three original components in a temporary frontend snapshot, with only
+removed baseline translation keys restored there; current repository sources were
+not reverted. The temporary replay needed its own Vite filesystem allowance for the
+existing linked WASM package; that setup correction did not modify repository policy.
+
+Additional replayed paths: [library entry](preset3-selector-ux-2026-10-21-evidence/library-entry-after.png),
+[empty filters with retained comparison](preset3-selector-ux-2026-10-21-evidence/filter-empty-after.png),
+[full-width assumption refusal](preset3-selector-ux-2026-10-21-evidence/assumption-refused.png),
+[missing material refusal](preset3-selector-ux-2026-10-21-evidence/missing-material-after.png),
+[Undo restoring manual feed 1000](preset3-selector-ux-2026-10-21-evidence/undo-after.png),
+[Redo restoring 1620](preset3-selector-ux-2026-10-21-evidence/redo-after.png),
+[long list / End focus without selecting](preset3-selector-ux-2026-10-21-evidence/long-list-after.png),
+and [scrolled narrow view with visible footer](preset3-selector-ux-2026-10-21-evidence/browse-narrow-scrolled-after.png).
+The final two-mode/viewport replay after the reactive focus-reference correction
+reported **no console errors or warnings**. Layout measurements are retained in
+[metrics](preset3-selector-ux-2026-10-21-evidence/layout-metrics.json).
+
+### Final automated qualification
+
+| Command | Result |
+|---|---|
+| Node 24 `npm test` | **1505 PASS, 1 existing locale skip, 0 FAIL**, 171 files; **10 WASM package guards PASS** — [log](preset3-selector-ux-2026-10-21-evidence/frontend-tests.log) |
+| `npm run check` | Svelte **0 errors / 0 warnings** and node TypeScript PASS — [log](preset3-selector-ux-2026-10-21-evidence/frontend-check.log) |
+| `npm run lint` | ESLint and full Prettier PASS — [log](preset3-selector-ux-2026-10-21-evidence/frontend-lint.log) |
+| Offline `npm run build` with existing Rust/WASM toolchain PATH | PASS; existing chunk-size, dynamic-import and plugin-timing notices retained — [log](preset3-selector-ux-2026-10-21-evidence/frontend-build.log) |
+| Scoped diff / report references | `git diff --check` PASS; report local file targets checked |
+
+New tests exercise numeric/retained/N/A/unavailable/zero presentation, keyboard
+boundaries and 180-row long-label filtering without changing pinned identity.
+Existing selector, source race, acknowledgment, history, serialization and
+output-freshness tests remain in the full run. Interactive mode switching, comparison
+synchronization, filter disclosure, focus/activation, material/full-width handling,
+disabled Apply and both entry points were exercised in the actual browser; no new
+DOM test harness or automated installed-native test is claimed. Rust and physical
+qualification are the unchanged source-bound results above, not newly rerun here.
+
+### Limitations, integration and hard stop
+
+The compact list deliberately checks compatibility on selection rather than issuing
+one Rust request per visible row. Very narrow screens may scroll the list horizontally.
+Crossing the application's existing 1024px responsive boundary can unmount an
+inspector-owned dialog; the library-owned selector was used for continuous narrow
+resize review. Changing that shared responsive ownership is outside this focused pass.
+Long Browse results and expanded provenance require scrolling, while footer actions
+remain visible. Platform/font and human workshop acceptance remain open.
+
+**No files staged; no commit, push, merge, rebase or release.** The source already
+contains overlapping uncommitted PRESET-1/2/3 UI, command, test and native-storage
+changes. A standalone refinement commit would depend on uncommitted components and
+could inadvertently absorb their implementation. All were preserved. The
+[incremental component patch](preset3-selector-ux-2026-10-21-evidence/refinement-existing-components.patch)
+is relative to the actual dirty starting components, not independently applicable to HEAD.
+
+Integration plan, after the relevant human approvals:
+
+1. Review/commit the existing PRESET-1 library/navigation/layout and its tests/docs as
+   `feat(presets): add preset library`; preserve the prior table/pane resizing work.
+2. Review/commit PRESET-2 storage/copy workflow, dialogs, MaterialPicker draft-context
+   copy and tests/docs as `feat(presets): duplicate records into inactive drafts`.
+3. Review the remaining PRESET-3 selector, shared command correction, freshness tests,
+   these presentation components/helpers/translations and evidence together; commit
+   as `feat(presets): add unified cutting parameter selector`. Keep API commit
+   `5ca5632` intact; do not cherry-pick incomplete UI fragments.
+4. Review staged paths/hunks against the preserved baselines, rerun frontend/type/lint/
+   build and relevant existing native/adapter checks on the assembled source, then
+   record exact hashes. Commit sequencing itself remains to be executed separately.
+
+**HARD STOP for human UX review.** No acceptance gate was closed automatically.
+MAT-1 (material families, variants and search synonyms over existing identities)
+remains the next proposed feature milestone, unstarted and requiring authorization.

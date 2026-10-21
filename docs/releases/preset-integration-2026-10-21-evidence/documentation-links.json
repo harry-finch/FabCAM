@@ -1,0 +1,20 @@
+{
+  "files_checked": [
+    "docs/README.md",
+    "docs/releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md",
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/DEVLOG.md",
+    "docs/shopbot-modernization/ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md",
+    "docs/shopbot-modernization/adr/README.md",
+    "docs/releases/PRESETS_LAYOUT_POLISH_2026_10_21.md",
+    "docs/releases/PRESET_1_READONLY_2026_10_21.md",
+    "docs/releases/PRESET_2_DUPLICATE_ADAPT_2026_10_21.md",
+    "docs/releases/PRESET_INTEGRATION_2026_10_21.md",
+    "docs/releases/preset3-selector-ux-2026-10-21-evidence/README.md",
+    "docs/releases/presets-typography-2026-10-21-evidence/README.md",
+    "docs/shopbot-modernization/adr/ADR-0028-preset-duplicate-adapt.md"
+  ],
+  "local_file_targets_checked": 358,
+  "missing": []
+}

@@ -47,3 +47,4 @@ qualification. M0–M4 are retained; later work uses named tracks, not global M5
 | [ADR-0025](ADR-0025-movement-tool-provenance.md) | ADR-0025: Explicit movement tool provenance and emitted-intent verification | APPROVED by the user — 2026-10-19; implemented locally; checkpoint review pending |
 | [ADR-0026](ADR-0026-explicit-import-units.md) | ADR-0026: Explicit import units for unitless DXF and non-physical SVG | AUTHORIZED for bounded implementation (2026-10-20); implemented locally — human UX/architecture acceptance pending |
 | [ADR-0027](ADR-0027-lab-and-reference-identities.md) | Independent lab identities and reference-pack compatibility | User-authorized v1.1 follow-up, 2026-10-21; UX acceptance pending |
+| [ADR-0028](ADR-0028-preset-duplicate-adapt.md) | Strict preset copy permissions, compatibility and inactive Drafts | User-approved architecture 2026-10-21; implementation human review ivac-1oe9l OPEN |

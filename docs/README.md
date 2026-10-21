@@ -3,10 +3,14 @@
 Start with [current STATUS](shopbot-modernization/STATUS.md), then select a route.
 This index separates product setup, engineering contracts, plans and evidence.
 Source/qualification snapshot: [V1 readiness](releases/V1_READINESS.md).
-Active branch: [v1.1 UX changes and verification](releases/FABCAM_V1_1_UX_2026_10_21.md).
+Active branch: [v1.1 UX changes and verification](releases/FABCAM_V1_1_UX_2026_10_21.md),
+[PRESET-1 read-only library checkpoint](releases/PRESET_1_READONLY_2026_10_21.md)
+and [PRESET-2 strict-copy checkpoint](releases/PRESET_2_DUPLICATE_ADAPT_2026_10_21.md).
 
-PRESET-3: [existing recommendation audit and schema decision](releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
-Explicit selection is not implemented; the shared application contract needs human review.
+PRESET-1/2/3 are accepted and integrated locally on `FabCAM-v1.1`: library, strict
+Draft copying and the [unified selector](releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
+[Integration commits, checks and remaining boundaries](releases/PRESET_INTEGRATION_2026_10_21.md).
+No push or release; MAT-1 remains unstarted.
 
 ## Read by task
 

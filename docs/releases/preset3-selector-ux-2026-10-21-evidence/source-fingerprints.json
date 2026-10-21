@@ -1,0 +1,21 @@
+{
+  "branch": "FabCAM-v1.1",
+  "head": "5ca56321bd7201eeda6dd5b777966c3e82882e8b",
+  "files": {
+    "frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte": "633a2656bd5920761b5c029d1858ec1ae6304efe73b55115cdef785b7b95d561",
+    "frontend/src/lib/components/PresetBrowser.svelte": "0ad538f04fd7024bec64089929cdaaa3a3f65465423850bf4a76d39d3b78e215",
+    "frontend/src/lib/components/CuttingParameterComparison.svelte": "58b57ba16ec206816c6884c4db151bd827ec300b106848e4d4364f28b6714e92",
+    "frontend/src/lib/components/CuttingSelectorFrame.svelte": "a1e448cb0f7bb603579a4516d9e51243df083cef312c1e580fa5fde981f9593c",
+    "frontend/src/lib/state/cutting-comparison.ts": "dd74c3f547380cffdae7840f617bb4eb8219e3b8a069ff157ce479e6fac51a9c",
+    "frontend/src/lib/state/cutting-comparison.test.ts": "497b9ccdb669ada375f922fb1bcdb2e569f164cf0d9f6ab0b5c255165a79c5d1",
+    "frontend/src/lib/i18n/messages/en.json": "3090ebe547066ac31ea8f29fad21363eca025343d9536434c71b0180207ead37",
+    "frontend/src/lib/i18n/messages/de.json": "40cabc8a125f5fc0ff5327ee9b33587a6a42ffb3cac0652100c3d667bd3d46a4",
+    "frontend/src/lib/i18n/keys.ts": "d2de897a9b406935be46c28d8169b46133473ffdad09ba932aa07f5b94d0278e"
+  },
+  "before_files": {
+    "frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte": "84fa5e9a886d0f178cf5b88d2ee34354f2842c2be9fa421bd69f883e3793ab4b",
+    "frontend/src/lib/components/PresetBrowser.svelte": "e2f29a68afec63724c10a58f603774f6d8767e86956ef2a2271a956e6b839dbe",
+    "frontend/src/lib/components/CuttingParameterComparison.svelte": "202ae38c38ddfb8eee188ab6af9a915da9c104c17a9ee50b92968bc1d740f292"
+  },
+  "qualification": "Frontend/WASM only; no installed-platform or physical qualification."
+}

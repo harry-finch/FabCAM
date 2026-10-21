@@ -184,7 +184,13 @@ authorized here. Physical recommendation claims remain restricted until that gat
 
 ## FabCAM 1.1 — Presets and materials UX
 
-**Status: planned feature milestones; no implementation authorized by this plan.**
+**Status: PRESET-1/2/3 accepted by the user on 2026-10-21 and integrated locally
+on `FabCAM-v1.1`. Human checkpoints `ivac-0x2br`, `ivac-1oe9l` and `ivac-ms6rz`
+are closed for their bounded software/UX scope. MAT-1 remains unstarted.**
+[Integration commits, checks and limits](PRESET_INTEGRATION_2026_10_21.md).
+[PRESET-2 contract](PRESET_2_DUPLICATE_ADAPT_2026_10_21.md) ·
+[PRESET-1 historical checks](PRESET_1_READONLY_2026_10_21.md).
+This plan itself does not authorize later slices.
 Development stays on `FabCAM-v1.1`, isolated from V1 RC qualification. The
 [branch inventory and development policy](FABCAM_V1_1_ROADMAP_AND_BRANCH_2026_10_21.md)
 distinguish existing named-pack/tool workflows from these new features. FS0–FS3.9
@@ -193,7 +199,8 @@ separately reviewed V1.5 ProtoMAX schedule.
 
 ### PRESET-1 — Cutting Presets Library
 
-**Planned Tool/Feeds & Speeds UX enhancement.** Add a top-level **Presets** entry
+**Tool/Feeds & Speeds UX enhancement; first read-only slice implemented,
+accepted by the user 2026-10-21; review `ivac-0x2br` CLOSED.** Add a top-level **Presets** entry
 immediately after Tools. Provide a compact graphite/blue workshop **filterable
 table**, independent of the selected operation, without oversized cards or a
 mandatory material tree. Reuse source-pack storage/resolution and preserve pack
@@ -216,32 +223,28 @@ Keyboard navigation, focus, dense-table legibility and unit presentation require
 human UX review. First proposed implementation slice: read-only browsing/details,
 with edit affordances gated by the existing local-authoring contract.
 
-### PRESET-3 — Explicit Preset Selection and Application to CAM Operations
+### PRESET-3 — Unified Cutting Parameters Selector
 
-**Phase A audit complete; schema decision `ivac-ms6rz` OPEN. No implementation.**
-[Audit, source map and regression evidence](FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
-Suggest already resolves and applies one ranked recommendation. Explicit record
-selection is missing from `FsCamRequest`; the required additive schema contract
-triggers the user's HARD STOP before implementation.
+**Implemented, refined and accepted by the user on 2026-10-21; integrated locally.**
+[API contract, implementation and evidence](FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
+One selector offers Recommended and Browse presets, sharing authoritative Rust
+validation, comparison, explicit manual-value acknowledgment and atomic operation
+application with Undo/Redo. Library Use in operation opens the same selector.
+Explicit selection pins the original pack/record/profile revision, without fallback
+or numerical adaptation. Inspect-only sources cannot be applied.
 
-Suggested UX: **Suggest** and **Choose preset** are alternative discovery modes
-feeding the same authoritative resolver/operation application command. Inspector
-and library entry points must converge on that pipeline, preserve physical versus
-reference identities and show current/proposed values before overwriting manual
-ones. No second engine, source-body filtering, automatic setup substitution or
-numerical scaling in the explicit-use flow. Drafts remain inspect/duplicate-only
-pending a different reviewed policy.
-
-Review a pinned pack/record/profile revision selector and the private provenance
-revision boundary before implementation. Then qualify both entry points, source
-freshness, deterministic ambiguity, Undo/Redo, round trips and generation/export
-invalidation. Existing PRESET-2 remains implemented with human review pending;
-its logical placement below is not permission to restart it. MAT-1 stays unstarted.
+API commit `5ca5632` is preserved; integrated frontend `b8deaef` includes the
+compact selector, typography and adjustable library layout. Source reread
+guarantees and the residual cross-backend race window remain documented.
+[Current integration receipt](PRESET_INTEGRATION_2026_10_21.md) records acceptance and exact checks.
+MAT-1 and future parameter scaling remain unstarted; no push or release authorized.
 
 ### PRESET-2 — Duplicate & Adapt
 
-**Planned; depends on PRESET-1 record/provenance access and reviewed compatibility
-and copy-permission rules.** Select a compatible source → Duplicate & adapt →
+**Strict first slice implemented and accepted; review `ivac-1oe9l` CLOSED.**
+[ADR-0028](../shopbot-modernization/adr/ADR-0028-preset-duplicate-adapt.md) was
+explicitly accepted before implementation; [software evidence](PRESET_2_DUPLICATE_ADAPT_2026_10_21.md)
+does not establish physical or installed-platform acceptance. Select a compatible source → Duplicate & adapt →
 choose editable local destination → choose/create material and tool associations
 through existing identity workflows → review copied values and differences → save
 an independent **new Draft** with source-record/revision provenance.
@@ -260,13 +263,17 @@ transformation; private installation does not itself grant that permission.
 | Rights absent/unknown, incompatible process/tool/machine, or missing required identity context | Refuse save as an eligible adapted preset; explain and require correction/permission; no silent coercion |
 | Source/destination revision changes, cancellation or legacy identity ambiguity | Detect stale context; re-review or cancel without partial source/operation mutation |
 
-Exact compatibility boundaries and whether to allow an incomplete draft during
-association editing require human architecture/UX review before implementation.
+The user approved strict compatibility/copy rules in ADR-0028 before implementation.
+Incomplete forms cannot be saved. Local ownership authorization is explicit;
+generic references without transformation permission remain blocked. No next
+milestone is authorized by this checkpoint.
 
 ### MAT-1 — Material Families, Variants and Synonyms
 
-**Planned; preferred first step is UI/search taxonomy metadata over existing
-records.** Browse/filter/search **family → material → variant**; e.g. wood products
+**Phases A–C audited; presentation-only proposal awaiting human approval.**
+[Inventory, classification/alias rules and safety boundaries](FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md).
+No Phase D implementation. Preferred approach: UI/search taxonomy metadata over existing
+records. Browse/filter/search **family → material → variant**; e.g. wood products
 → plywood → birch/poplar, plastics → PMMA → cast/extruded, metals → aluminium →
 alloy. These examples do not authorize changing catalog identities. Add useful
 aliases such as acrylic/PMMA and avoid presenting every variant at the top level.

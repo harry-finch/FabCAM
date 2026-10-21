@@ -1,0 +1,22 @@
+{
+  "base": "df6eb1f",
+  "branch": "FabCAM-v1.1",
+  "state": "uncommitted",
+  "files": {
+    "frontend/src/App.svelte": "b3acadc29380cea88655de41d90d74f096511826f11f04e14c5157b24756989a",
+    "frontend/src/lib/components/AppNavigation.svelte": "19ff26cb0eef4dcc00874ef4ae29ee468762a84d7b6d24172d54afabe19c58dd",
+    "frontend/src/lib/components/OperationsList.svelte": "fff60e13ff5572289a3d5d662dedd30be589b751bcd7cb06ed56baa31dfb1cf7",
+    "frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte": "7d64ed7bfaa05031594959455aaf413ea242310f4e9d074589579ef2467a5e8d",
+    "frontend/src/lib/i18n/keys.ts": "baa52d88affc063ddd3d1287d35cdff0ba1f57b90c69380c84e159e5ddb9ef48",
+    "frontend/src/lib/i18n/messages/de.json": "e038268c948f5a235a7201f48f0ebcd6af39c18f1a5cf8eab93bc5d8ab7dcea6",
+    "frontend/src/lib/i18n/messages/en.json": "c9168e7f72188ea99d5ef59b50306f6b9e68d1ea25e8effb815561ac178488c6",
+    "frontend/src/lib/state/activities.test.ts": "a24e0603ef3429128e953a41859f8b04edb0f8a0acce50055d468f52706af05a",
+    "frontend/src/lib/state/activities.ts": "5adea7252fca34509dc14490da13492cd802449328e89ac03a8b3d7a8e34a98b",
+    "frontend/src/lib/components/OperationToolGrouping.svelte": "05d63535c6d591eedfee0aae2d4ca9d961b613f0c330aeac065f0b18ea2c2d27",
+    "frontend/src/lib/components/PresetRecordDetails.svelte": "21cacf21958b5dfe231b1ff43a22f0eb7c7e6e2073eadfc956c026887b557ce3",
+    "frontend/src/lib/components/PresetsLibrary.svelte": "03e398fea919401c66e959cca06c74ab25f169083ed8bf040565e719c9d12622",
+    "frontend/src/lib/components/op_properties/PresetIdentityHelp.svelte": "1dad72646e27f803b07455cf7822aa271189f0e57a37c61d3ce13beaa0ac81ad",
+    "frontend/src/lib/state/preset-library.test.ts": "a229f82d31c5bc02c773141269f5f8095a59edee13cdb89e56da0d6db8af6a42",
+    "frontend/src/lib/state/preset-library.ts": "53a8e01704d8031901f2e6a34461a9d6ea10eb2100aa506b5ef0f39371d447fe"
+  }
+}
