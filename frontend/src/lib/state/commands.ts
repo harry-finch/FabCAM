@@ -1007,8 +1007,16 @@ export function applyCuttingCommand(
       if (!oldOp) return;
       target.material = material ? clone(material) : undefined;
       target.fsContext = context ? clone(context) : undefined;
+      // Undefined is an explicit removal in this patch (legacy rate overrides).
+      // JSON cloning the whole patch drops those keys and resurrects old overrides.
+      const appliedPatch = Object.fromEntries(
+        Object.entries(patch).map(([key, value]) => [
+          key,
+          value === undefined ? undefined : clone(value),
+        ]),
+      ) as Partial<OpEntry>;
       target.operations = target.operations.map((o) =>
-        o.id === opId ? ({ ...o, ...clone(patch) } as OpEntry) : o,
+        o.id === opId ? ({ ...o, ...appliedPatch } as OpEntry) : o,
       );
       target.dirty = true;
     },

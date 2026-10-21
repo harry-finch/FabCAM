@@ -17,7 +17,7 @@ describe('activityFor / tabPaneForActivity round-trip', () => {
   });
 
   it('maps whole-screen tabs straight across, ignoring the pane', () => {
-    for (const t of ['machine', 'tools', 'settings', 'help'] as const) {
+    for (const t of ['machine', 'tools', 'presets', 'settings', 'help'] as const) {
       expect(activityFor(t, '2d')).toBe(t);
       expect(activityFor(t, '3d')).toBe(t);
     }
@@ -37,6 +37,12 @@ describe('nextActivity / prevActivity', () => {
     expect(nextActivity('project-3d')).toBe('machine');
     expect(prevActivity('machine')).toBe('project-3d');
     expect(prevActivity('project-3d')).toBe('project-2d');
+  });
+
+  it('places presets immediately after tools', () => {
+    expect(nextActivity('tools')).toBe('presets');
+    expect(prevActivity('settings')).toBe('presets');
+    expect(tabPaneForActivity('presets')).toEqual({ mainTab: 'presets', pane: null });
   });
 
   it('clamps at the ends without wrapping', () => {

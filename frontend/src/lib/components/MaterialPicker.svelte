@@ -4,8 +4,12 @@
   let {
     value,
     onchange,
-  }: { value?: MaterialIdentity; onchange: (value: MaterialIdentity | undefined) => void } =
-    $props();
+    context = 'job',
+  }: {
+    value?: MaterialIdentity;
+    context?: 'job' | 'preset';
+    onchange: (value: MaterialIdentity | undefined) => void;
+  } = $props();
   import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
   import { NORMALIZED_MATERIALS } from '../state/feeds-speeds-sources';
   import { t } from '../i18n';
@@ -46,7 +50,8 @@
           : undefined,
       );
     }}
-    ><option value="null">{t('fs35.select_material')}</option
+    ><option value="null"
+      >{t(context === 'job' ? 'fs35.select_material' : 'preset2.choose_material')}</option
     >{#each materials as item (JSON.stringify(item.identity))}<option
         value={JSON.stringify(item.identity)}>{item.label}</option
       >{/each}{#if value && !materials.some((m) => JSON.stringify(m.identity) === selected)}<option
@@ -65,7 +70,7 @@
     /></label
   >
   <p>{t('fs35.custom_material_help')}</p>{/if}
-<p>{t('fs35.job_material')}</p>
+<p>{t(context === 'job' ? 'fs35.job_material' : 'preset2.material_help')}</p>
 
 <style>
   .material {

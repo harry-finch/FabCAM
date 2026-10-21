@@ -1,22 +1,27 @@
 <script lang="ts">
+  import './op-properties.css';
+  import { rejectionReason, scopeField, evidence } from '../../state/cutting-selector-labels';
+  import PresetBrowser from '../PresetBrowser.svelte';
+  import CuttingParameterComparison from '../CuttingParameterComparison.svelte';
+  import {
+    recordSelection,
+    unavailableRecord,
+    applyReviewedCutting,
+    type SelectedRecord,
+  } from '../../state/cutting-selector';
+  import { freshCuttingSources } from '../../state/cutting-selector-sources';
+  import type { PresetRow } from '../../state/preset-library';
+  import PresetIdentityHelp from './PresetIdentityHelp.svelte';
   import { missingPresetIdentities } from '../../state/preset-identities';
   import { untrack, tick, onDestroy } from 'svelte';
-  import Modal from '../Modal.svelte';
-  import MaterialPicker from '../MaterialPicker.svelte';
-  import type { MaterialIdentity } from '../../state/project-types';
-  import { setMaterialCommand } from '../../state/commands';
-  let draftMaterial = $state<MaterialIdentity | undefined>();
-  const materialPending = $derived(
-    JSON.stringify(draftMaterial) !== JSON.stringify(project.data.material),
-  );
+  import CuttingSelectorFrame from '../CuttingSelectorFrame.svelte';
   import {
     PreviewRequests,
     displayNumber,
     distinctEngagement,
-    adaptationKind,
   } from '../../state/recommendation-preview';
   import { cuttingOriginPresentation } from '../../state/cutting-origin-presentation';
-  import RecommendationBasis from './RecommendationBasis.svelte';
+  import CuttingRecommendationDetails from './CuttingRecommendationDetails.svelte';
   import LabPresetDialog from '../LabPresetDialog.svelte';
   import { captureLabPreset } from '../../state/feeds-speeds-pack-store';
   import { isLabPackId, labHasRevision, type LabCapture } from '../../state/lab-presets';
@@ -40,7 +45,39 @@
   import { recommendationSources } from '../../state/feeds-speeds-sources.svelte';
   import { t } from '../../i18n';
   type S = components['schemas'];
-  let { op }: { op: OpEntry } = $props();
+  let {
+    op,
+    initialSelection,
+    initialAggressiveness = 'prudent',
+    selectorOnly = false,
+    onClose,
+  }: {
+    op: OpEntry;
+    initialSelection?: SelectedRecord;
+    initialAggressiveness?: S['FsAggressiveness'];
+    selectorOnly?: boolean;
+    onClose?: () => void;
+  } = $props();
+  let discovery = $state<'recommended' | 'browse'>(
+    untrack(() => (initialSelection ? 'browse' : 'recommended')),
+  );
+  let selectedRecord = $state<SelectedRecord | undefined>(untrack(() => initialSelection));
+  let selectedUnavailable = $state(false);
+  let selectedMode = $state<S['FsAggressiveness']>(untrack(() => initialAggressiveness));
+  let overwriteAcknowledged = $state(false);
+
+  function selectPreset(row: PresetRow) {
+    requests.cancel();
+    responses = [];
+    error = '';
+    busy = false;
+    attempted = false;
+    selectedRecord = recordSelection(row);
+    selectedMode = row.profile.aggressiveness;
+    mode = selectedMode;
+    selectedUnavailable = unavailableRecord(row);
+    overwriteAcknowledged = false;
+  }
   let labCapture = $state<LabCapture | null>(null);
   let labFingerprint = $state('');
   let showMissingIdentities = $state(false);
@@ -73,8 +110,8 @@
   let reviewTrigger = $state<HTMLButtonElement>();
   const requests = new PreviewRequests();
   onDestroy(() => requests.cancel());
-  let review = $state(false);
-  let fullWidth = $state(false);
+  let review = $state(untrack(() => selectorOnly));
+  let fullWidth = $state(untrack(() => op.fsFullWidth ?? false));
   function cancelReview() {
     requests.cancel();
     review = false;
@@ -82,9 +119,10 @@
     attempted = false;
     busy = false;
     error = '';
+    onClose?.();
     void tick().then(() => reviewTrigger?.focus());
   }
-  let mode = $state<S['FsAggressiveness']>('prudent');
+  let mode = $state<S['FsAggressiveness']>(untrack(() => initialAggressiveness));
   let responses = $state<
     {
       id: string;
@@ -95,6 +133,7 @@
     }[]
   >([]);
   let responseKey = $state('');
+  let previewOperation: OpEntry | undefined;
   let busy = $state(false);
   let attempted = $state(false);
   let error = $state('');
@@ -106,6 +145,18 @@
   const tool = $derived(project.data.tools.find((t) => t.id === op.toolId));
   const mainPass = $derived(op.kind === 'profile' ? 'finish' : 'rough');
   const main = $derived(tool ? operationRates(op, tool, mainPass) : null);
+  const hasManual = $derived(
+    [
+      main?.origins.rpm,
+      main?.origins.feed,
+      main?.origins.plunge,
+      op.appliedCutting?.doc_origin,
+      op.appliedCutting?.stepover_origin,
+    ].includes('manual') ||
+      op.feedRateOverride != null ||
+      op.plungeRateOverride != null ||
+      (!op.appliedCutting && (op.step != null || (op.kind === 'pocket' && op.xyOverlap != null))),
+  );
   const finishToolId = $derived('finishToolId' in op ? (op.finishToolId ?? op.toolId) : op.toolId);
   const finishTool = $derived(project.data.tools.find((t) => t.id === finishToolId));
   const secondary = $derived(
@@ -137,7 +188,16 @@
   const missingIdentities = $derived(wire ? missingPresetIdentities(wire, op.toolId) : []);
   const currentLabFingerprint = $derived(JSON.stringify([wire, op.id, project.data.machine.name]));
   const key = $derived(
-    JSON.stringify([wire, mode, recommendationSources.rows.map((s) => s.contents), op.id]),
+    JSON.stringify([
+      wire,
+      mode,
+      recommendationSources.rows.map((s) => s.contents),
+      op.id,
+      discovery,
+      selectedRecord,
+      selectedUnavailable,
+      project.data.settings.feedsSpeedsSources,
+    ]),
   );
   const stale = $derived(
     !!(op.appliedCutting?.proposal || op.appliedCutting?.knowledge) &&
@@ -230,7 +290,7 @@
     const captured = key;
     if (
       review &&
-      !materialPending &&
+      (discovery === 'recommended' || (!!selectedRecord && !selectedUnavailable)) &&
       wire &&
       project.data.material &&
       !recommendationSources.loading &&
@@ -242,11 +302,14 @@
     }
   });
   async function calculate(captured = key) {
+    if (discovery === 'browse' && (!selectedRecord || selectedUnavailable)) return;
+    overwriteAcknowledged = false;
     if (!wire || !api.feedsSpeeds) {
       error = t('fs.unavailable_build');
       return;
     }
     const revision = requests.start();
+    const operation = op;
     busy = true;
     error = '';
     attempted = true;
@@ -270,10 +333,12 @@
             dataset_json: contents,
             aggressiveness: mode,
             apply: false,
+            selected_record: discovery === 'browse' ? selectedRecord : undefined,
           }),
         },
       ];
       if (review && requests.owns(revision) && captured === key) {
+        previewOperation = operation;
         responses = next;
         responseKey = captured;
       }
@@ -284,49 +349,66 @@
     }
   }
   async function apply(source: (typeof suggestions)[number]) {
-    if (!wire || !api.feedsSpeeds || previewStale || materialPending) return;
+    if (!wire || !api.feedsSpeeds || previewStale || (hasManual && !overwriteAcknowledged)) return;
+    if (previewOperation !== op || !project.data.operations.includes(op)) {
+      error = t('preset3.stale');
+      return;
+    }
     const captured = key;
+    const operation = op;
+    const previewSources = [...recommendationSources.rows];
+    const settings = project.data.settings.feedsSpeedsSources;
     const revision = requests.start();
     busy = true;
     error = '';
     try {
-      const result = await api.feedsSpeeds({
-        project: wire,
-        op_id: op.id,
-        dataset_json: source.contents,
-        aggressiveness: mode,
-        apply: true,
+      await applyReviewedCutting({
+        previewSources,
+        readSources: () => freshCuttingSources(settings, recommendationSources.builtins),
+        isCurrent: () =>
+          review &&
+          requests.owns(revision) &&
+          captured === key &&
+          operation === op &&
+          project.data.operations.includes(operation),
+        requiresAcknowledgement: hasManual,
+        acknowledged: overwriteAcknowledged,
+        validate: () =>
+          api.feedsSpeeds!({
+            project: wire!,
+            op_id: op.id,
+            dataset_json: source.contents,
+            aggressiveness: mode,
+            apply: true,
+            selected_record: discovery === 'browse' ? selectedRecord : undefined,
+          }),
+        commit: (result) => {
+          if (!result.applied_op?.params.applied_cutting)
+            throw new Error(t('fs36.reason.missing_cutting_data'));
+          const native = result.applied_op;
+          const patch: Partial<OpEntry> = {
+            appliedCutting: native.params.applied_cutting!,
+            ...(op.kind === 'profile' ? { fsFullWidth: fullWidth } : {}),
+            step: native.params.step ?? op.step,
+            feedRateOverride: undefined,
+            plungeRateOverride: undefined,
+          };
+          if (op.kind === 'pocket' && native.kind.type === 'pocket')
+            Object.assign(patch, { xyOverlap: native.kind.pocket.xy_overlap });
+          patch.appliedContextKey = cuttingContextKey(
+            { ...op, ...patch } as OpEntry,
+            project.data.machine,
+            project.data.tools,
+            project.data.material,
+            context,
+          );
+          project.history.exec(
+            applyCuttingCommand(op.id, patch, project.data.material, context),
+            project.target(),
+          );
+          cancelReview();
+        },
       });
-      if (
-        !review ||
-        materialPending ||
-        !requests.owns(revision) ||
-        captured !== key ||
-        !result.applied_op?.params.applied_cutting
-      )
-        return;
-      const native = result.applied_op;
-      const patch: Partial<OpEntry> = {
-        appliedCutting: native.params.applied_cutting!,
-        ...(op.kind === 'profile' ? { fsFullWidth: fullWidth } : {}),
-        step: native.params.step ?? op.step,
-        feedRateOverride: undefined,
-        plungeRateOverride: undefined,
-      };
-      if (op.kind === 'pocket' && native.kind.type === 'pocket')
-        Object.assign(patch, { xyOverlap: native.kind.pocket.xy_overlap });
-      patch.appliedContextKey = cuttingContextKey(
-        { ...op, ...patch } as OpEntry,
-        project.data.machine,
-        project.data.tools,
-        project.data.material,
-        context,
-      );
-      project.history.exec(
-        applyCuttingCommand(op.id, patch, project.data.material, context),
-        project.target(),
-      );
-      cancelReview();
     } catch (e) {
       if (review && requests.owns(revision) && captured === key) error = String(e);
     } finally {
@@ -340,503 +422,387 @@
   function origin(field: (typeof fields)[number]) {
     return field === 'rpm' ? 'rpm' : field === 'feed_mm_min' ? 'feed' : 'plunge';
   }
-  function rejectionReason(reason: S['FsUnavailableReason']) {
-    switch (reason.kind) {
-      case 'invalid_request':
-        return t('fs36.reason.invalid_request');
-      case 'dataset_mismatch':
-        return t('fs36.reason.dataset_mismatch');
-      case 'missing_material':
-        return t('fs36.reason.missing_material');
-      case 'unsupported_tool':
-        return t('fs36.reason.unsupported_tool');
-      case 'unsupported_operation':
-        return t('fs36.reason.unsupported_operation');
-      case 'missing_cutting_data':
-        return t('fs36.reason.missing_cutting_data');
-      case 'ambiguous_profiles':
-        return t('fs36.reason.ambiguous_profiles');
-      case 'unrepresentable_output':
-        return t('fs36.reason.unrepresentable_output');
-    }
-  }
-  function scopeField(field: string) {
-    switch (field) {
-      case 'mode':
-        return t('fs.mode');
-      case 'machine':
-        return t('fs35.machine');
-      case 'material':
-        return t('fs.material');
-      case 'tool':
-        return t('fs35.tool');
-      case 'operation':
-        return t('fs35.operation');
-      case 'doc_mm':
-        return t('fs36.pass_depth');
-      case 'thickness_mm':
-        return t('stock.thickness');
-      case 'diameter_proximity':
-        return t('fs39.relative_gap');
-      case 'cutting_family':
-        return t('fs36.scope.cutting_family');
-      case 'diameter_mm':
-        return t('fs36.scope.diameter_mm');
-      case 'flute_count':
-        return t('fs36.scope.flute_count');
-      case 'entry':
-        return t('fs36.scope.entry');
-      case 'engagement':
-        return t('fs36.scope.engagement');
-      default:
-        return field;
-    }
-  }
-  function evidence(value: S['FsEvidence']) {
-    return t(
-      value === 'reference_data'
-        ? 'fs35.reference'
-        : value === 'tested'
-          ? 'fs35.tested'
-          : value === 'validated'
-            ? 'fs35.validated'
-            : 'fs35.theoretical',
-    );
-  }
 </script>
 
-<section class="cutting-section" aria-label={t('fs35.cutting')}>
-  <h3>{t('fs35.cutting')}</h3>
-  {#if op.appliedCutting && (!main || (op.kind === 'pocket' && !secondary))}<p role="alert">
-      {t('fs35.missing_rates')}
-    </p>{/if}
-  {#if originView.shared}<p class="source-meta" role="status">
-      {t(
-        originView.shared === 'recommendation'
-          ? 'fs391.applied_values'
-          : originView.shared === 'manual'
-            ? 'fs391.modified_values'
-            : 'fs391.mixed_values',
-      )}
-    </p>{/if}
-  {#each fields as field (field)}
+<section class="cutting-section" class:props={selectorOnly} aria-label={t('fs35.cutting')}>
+  {#if !selectorOnly}
+    <h3>{t('fs35.cutting')}</h3>
+    {#if op.appliedCutting && (!main || (op.kind === 'pocket' && !secondary))}<p role="alert">
+        {t('fs35.missing_rates')}
+      </p>{/if}
+    {#if originView.shared}<p class="source-meta" role="status">
+        {t(
+          originView.shared === 'recommendation'
+            ? 'fs391.applied_values'
+            : originView.shared === 'manual'
+              ? 'fs391.modified_values'
+              : 'fs391.mixed_values',
+        )}
+      </p>{/if}
+    {#each fields as field (field)}
+      <label class="inspector-field"
+        ><span>{fieldName(field)}</span><input
+          type="number"
+          min="1"
+          max="4294967295"
+          step="1"
+          value={main?.[field] ?? ''}
+          oninput={(e) => editRate(op.toolId, mainPass, field, Number(e.currentTarget.value))}
+        /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span>
+        {#if originView.show(main?.origins[origin(field)])}<CuttingOriginStatus
+            origin={main?.origins[origin(field)]}
+          />{/if}</label
+      >
+    {/each}
     <label class="inspector-field"
-      ><span>{fieldName(field)}</span><input
+      ><span>{t('fs36.pass_depth')}</span><input
         type="number"
-        min="1"
-        max="4294967295"
-        step="1"
-        value={main?.[field] ?? ''}
-        oninput={(e) => editRate(op.toolId, mainPass, field, Number(e.currentTarget.value))}
-      /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span>
-      {#if originView.show(main?.origins[origin(field)])}<CuttingOriginStatus
-          origin={main?.origins[origin(field)]}
-        />{/if}</label
-    >
-  {/each}
-  <label class="inspector-field"
-    ><span>{t('fs36.pass_depth')}</span><input
-      type="number"
-      min="0.01"
-      step="0.1"
-      value={doc || ''}
-      disabled={!!op.depthList?.length}
-      oninput={(e) => {
-        const n = Number(e.currentTarget.value);
-        if (n > 0) project.updateOperation(op.id, { step: -n });
-      }}
-    /><span class="unit">mm</span
-    >{#if originView.show(op.appliedCutting?.doc_origin)}<CuttingOriginStatus
-        origin={op.appliedCutting?.doc_origin}
-      />{/if}</label
-  >
-  {#if op.depthList?.length}<p>{t('fs35.schedule')}</p>{/if}
-  {#if op.kind === 'pocket'}<label class="inspector-field"
-      ><span>{t('fs.stepover')}</span><input
-        type="number"
-        min="1"
-        max="99"
-        step="1"
-        value={((1 - overlap) * 100).toFixed(1)}
+        min="0.01"
+        step="0.1"
+        value={doc || ''}
+        disabled={!!op.depthList?.length}
         oninput={(e) => {
           const n = Number(e.currentTarget.value);
-          if (n > 0 && n < 100) project.updateOperation(op.id, { xyOverlap: 1 - n / 100 });
+          if (n > 0) project.updateOperation(op.id, { step: -n });
         }}
-      /><span class="unit">%</span
-      >{#if originView.show(op.appliedCutting?.stepover_origin)}<CuttingOriginStatus
-          origin={op.appliedCutting?.stepover_origin}
+      /><span class="unit">mm</span
+      >{#if originView.show(op.appliedCutting?.doc_origin)}<CuttingOriginStatus
+          origin={op.appliedCutting?.doc_origin}
         />{/if}</label
-    >{/if}
-  {#if separateFinish && secondary}
-    <details>
-      <summary>{t('fs35.finishing')}</summary>
-      <p>{finishTool?.name}</p>
-      {#if finishOriginView.shared}<p class="source-meta">
-          {t(
-            finishOriginView.shared === 'recommendation'
-              ? 'fs391.applied_values'
-              : finishOriginView.shared === 'manual'
-                ? 'fs391.modified_values'
-                : 'fs391.mixed_values',
-          )}
-        </p>{/if}
-      {#each fields as field (field)}<label class="inspector-field"
-          ><span>{fieldName(field)}</span><input
-            type="number"
-            min="1"
-            step="1"
-            value={secondary[field]}
-            oninput={(e) => editRate(finishToolId, 'finish', field, Number(e.currentTarget.value))}
-          /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span
-          >{#if finishOriginView.show(secondary.origins[origin(field)])}<CuttingOriginStatus
-              origin={secondary.origins[origin(field)]}
-            />{/if}</label
-        >{/each}
-    </details>
-  {/if}
-  <div class="inspector-action-row">
-    <button
-      type="button"
-      class="inspector-action"
-      disabled={!wire || busy}
-      onclick={openLabCapture}
-      title={t('fs391.preset_help')}>{t('fs391.save_preset')}</button
     >
-    {#if !review}<button
+    {#if op.depthList?.length}<p>{t('fs35.schedule')}</p>{/if}
+    {#if op.kind === 'pocket'}<label class="inspector-field"
+        ><span>{t('fs.stepover')}</span><input
+          type="number"
+          min="1"
+          max="99"
+          step="1"
+          value={((1 - overlap) * 100).toFixed(1)}
+          oninput={(e) => {
+            const n = Number(e.currentTarget.value);
+            if (n > 0 && n < 100) project.updateOperation(op.id, { xyOverlap: 1 - n / 100 });
+          }}
+        /><span class="unit">%</span
+        >{#if originView.show(op.appliedCutting?.stepover_origin)}<CuttingOriginStatus
+            origin={op.appliedCutting?.stepover_origin}
+          />{/if}</label
+      >{/if}
+    {#if separateFinish && secondary}
+      <details>
+        <summary>{t('fs35.finishing')}</summary>
+        <p>{finishTool?.name}</p>
+        {#if finishOriginView.shared}<p class="source-meta">
+            {t(
+              finishOriginView.shared === 'recommendation'
+                ? 'fs391.applied_values'
+                : finishOriginView.shared === 'manual'
+                  ? 'fs391.modified_values'
+                  : 'fs391.mixed_values',
+            )}
+          </p>{/if}
+        {#each fields as field (field)}<label class="inspector-field"
+            ><span>{fieldName(field)}</span><input
+              type="number"
+              min="1"
+              step="1"
+              value={secondary[field]}
+              oninput={(e) =>
+                editRate(finishToolId, 'finish', field, Number(e.currentTarget.value))}
+            /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span
+            >{#if finishOriginView.show(secondary.origins[origin(field)])}<CuttingOriginStatus
+                origin={secondary.origins[origin(field)]}
+              />{/if}</label
+          >{/each}
+      </details>
+    {/if}
+    <div class="inspector-action-row">
+      <button
         type="button"
         class="inspector-action"
-        bind:this={reviewTrigger}
-        onclick={() => {
-          fullWidth = op.fsFullWidth ?? false;
-          draftMaterial = project.data.material ? { ...project.data.material } : undefined;
-          review = true;
-          error = '';
-        }}>{t('fs391.review_recommendation')}</button
-      >{/if}
-  </div>
-  {#if showMissingIdentities && missingIdentities.length}<div role="alert" class="identity-help">
-      {#if missingIdentities.length === 1}
-        <p>{t(`v11.missing_${missingIdentities[0]}`, { name: tool?.name ?? `#${op.toolId}` })}</p>
-      {:else}
-        <p>{t('v11.preset_missing')}</p>
-        <ul>
-          {#each missingIdentities as missing (missing)}<li>
-              {t(`v11.missing_${missing}`, { name: tool?.name ?? `#${op.toolId}` })}
-            </li>{/each}
-        </ul>
-      {/if}
-    </div>{/if}
-  {#if stale}<div class="stale" role="status" title={t('fs35.kept')}>
-      <strong>{t('fs35.outdated')}</strong><span>{t('fs36.kept')}</span>
-    </div>{/if}
-  {#if savedKnowledge}<p class="source-meta">
-      {t(
-        isLabPackId(savedKnowledge.selected_pack.id)
-          ? 'v11.saved_source_lab'
-          : 'v11.saved_source_pack',
-        { name: sourceName(savedKnowledge.selected_pack.id) },
-      )}
-    </p>{/if}
-  {#if provenanceMissing}<p class="source-meta" role="status">
-      {t('fs37.provenance_missing')}
-    </p>{/if}
-  {#if review}
-    <Modal
-      onClose={cancelReview}
-      width="min(440px, 95vw)"
-      maxHeight="85vh"
-      ariaLabelledBy="cutting-recommendation-title"
-    >
-      <div class="recommendation" aria-busy={busy}>
-        <h4 id="cutting-recommendation-title">{t('fs35.recommendation')}</h4>
-        <MaterialPicker
-          value={draftMaterial}
-          onchange={(value) => {
-            draftMaterial = value;
-            requests.cancel();
-            responses = [];
-            attempted = false;
+        disabled={!wire || busy}
+        onclick={openLabCapture}
+        title={t('fs391.preset_help')}>{t('fs391.save_preset')}</button
+      >
+      {#if !review}<button
+          type="button"
+          class="inspector-action primary"
+          bind:this={reviewTrigger}
+          onclick={() => {
+            fullWidth = op.fsFullWidth ?? false;
+            discovery = 'recommended';
+            selectedRecord = undefined;
+            overwriteAcknowledged = false;
+            review = true;
             error = '';
-            busy = false;
-          }}
+          }}>{t('preset3.choose')}</button
+        >{/if}
+    </div>
+    {#if showMissingIdentities}<PresetIdentityHelp
+        missing={missingIdentities}
+        toolName={tool?.name ?? `#${op.toolId}`}
+      />{/if}
+    {#if stale}<div class="stale" role="status" title={t('fs35.kept')}>
+        <strong>{t('fs35.outdated')}</strong><span>{t('fs36.kept')}</span>
+      </div>{/if}
+    {#if savedKnowledge}<p class="source-meta">
+        {t(
+          isLabPackId(savedKnowledge.selected_pack.id)
+            ? 'v11.saved_source_lab'
+            : 'v11.saved_source_pack',
+          { name: sourceName(savedKnowledge.selected_pack.id) },
+        )}
+      </p>{/if}
+    {#if provenanceMissing}<p class="source-meta" role="status">
+        {t('fs37.provenance_missing')}
+      </p>{/if}
+  {/if}
+  {#if review}
+    <CuttingSelectorFrame
+      onClose={cancelReview}
+      context={`${op.kind === 'profile' ? t('fs35.profile') : t('fs35.pocket')} · Ø${tool ? displayNumber(tool.diameter, 3) : '—'} mm · ${tool?.flutes ?? '—'}F · ${materialLabel} · ${project.data.machine.name ?? ''}`}
+      {busy}
+    >
+      <div class="discovery" aria-label={t('preset3.choose')}>
+        <button
+          type="button"
+          class="inspector-action"
+          title={t('fs35.suggest')}
+          aria-pressed={discovery === 'recommended'}
+          onclick={() => {
+            discovery = 'recommended';
+            responses = [];
+            error = '';
+          }}>{t('preset3.recommended')}</button
+        >
+        <button
+          type="button"
+          class="inspector-action"
+          aria-pressed={discovery === 'browse'}
+          onclick={() => {
+            discovery = 'browse';
+            mode = selectedMode;
+            responses = [];
+            error = '';
+          }}>{t('preset3.browse')}</button
+        >
+      </div>
+      {#if discovery === 'browse'}<PresetBrowser
+          selected={selectedRecord}
+          onselect={selectPreset}
+          compatibility={busy
+            ? 'checking'
+            : previewStale || error || !attempted
+              ? 'unchecked'
+              : suggestions.length
+                ? 'compatible'
+                : 'incompatible'}
         />
-        {#if materialPending}
-          <p role="status">{t('uxc.material_draft')}</p>
-          <button
-            type="button"
-            class="inspector-action"
-            onclick={() =>
-              project.history.exec(setMaterialCommand(draftMaterial), project.target())}
-            >{t('uxc.material_apply')}</button
-          >
-        {/if}
-        <p class="context-line">
-          {t('fs35.saved_material')}: {materialLabel} · {op.kind === 'profile'
-            ? t('fs35.profile')
-            : t('fs35.pocket')} · Ø{tool ? displayNumber(tool.diameter, 3) : '—'} mm · {tool?.flutes ??
-            '—'}F
-        </p>
-        {#if op.kind === 'profile'}<label class="check-row"
-            ><input type="checkbox" bind:checked={fullWidth} />{t('fs.full_width')}</label
-          >{/if}
-        <label class="inspector-field mode-field"
+        {#if selectedUnavailable}<p role="status">{t('preset3.unavailable')}</p>{/if}
+      {/if}
+      <p class="source-meta">{t('selector.job_material')}</p>
+      {#if op.kind === 'profile'}<label class="check-row"
+          ><input type="checkbox" bind:checked={fullWidth} />{t('fs.full_width')}</label
+        >{/if}
+      {#if discovery === 'recommended'}<label class="inspector-field mode-field"
           ><span>{t('fs.mode')}</span><select bind:value={mode}>
             <option value="prudent">{t('fs.prudent')}</option><option value="normal"
               >{t('fs.normal')}</option
             ><option value="rapid">{t('fs.rapid')}</option>
           </select></label
         >
-        {#if busy}<p class="source-meta" role="status">{t('fs391.calculating')}</p>{/if}
-        {#if recommendationSources.loading}<p role="status">{t('fs35.loading')}</p>
-        {:else if recommendationSources.error}<p role="alert">{t('fs35.source_unavailable')}</p>
-        {:else if !recommendationSources.rows.length}<p role="status">
-            {t('fs35.sources_disabled')}
-          </p>{/if}
-        {#if !project.data.material}<p role="status">{t('uxc.choose_material_here')}</p>{/if}
-        {#if attempted && !busy && !suggestions.length && !error && !previewStale}
-          <div
-            class="no-match"
-            class:blocking={responses.some(
-              (s) =>
-                s.result.recommendation.status === 'unavailable' &&
-                ['invalid_request', 'unrepresentable_output'].includes(
-                  s.result.recommendation.reason.kind,
-                ),
-            )}
-            role="alert"
-          >
-            {#each responses as source (source.id)}
-              {#if source.result.recommendation.status === 'unavailable'}
-                <p>
-                  {source.result.recommendation.reason.kind === 'missing_cutting_data'
-                    ? t('fs391.no_reference')
-                    : rejectionReason(source.result.recommendation.reason)}
-                </p>
-                {#if source.result.recommendation.reason.kind === 'invalid_request'}
-                  {#each source.result.recommendation.reason.issues as issue, index (index)}<p>
-                      {issue.field}: {issue.message}
-                    </p>{/each}
-                {/if}
-                <details>
-                  <summary>{t('fs391.rejection_details')}</summary>
-                  <p>{rejectionReason(source.result.recommendation.reason)}</p>
-                  {#if source.result.scope_rejections?.length}
-                    <p class="scope-heading">{t('fs36.closest_scopes')}</p>
-                    {#each source.result.scope_rejections as rejection, rejectionIndex (rejectionIndex)}
-                      <ul class="scope-reasons">
-                        {#each rejection.mismatches as mismatch (mismatch.field)}
-                          <li>
-                            <strong>{scopeField(mismatch.field)}</strong><br />{t('fs36.actual')}: {scopeValue(
-                              mismatch.actual,
-                              source.catalog,
-                              t('fs36.unknown'),
-                            )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}<br />{t(
-                              'fs36.required',
-                            )}: {scopeValue(
-                              mismatch.required,
-                              source.catalog,
-                              t('fs36.unknown'),
-                            )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}
-                          </li>
-                        {/each}
-                      </ul>
-                    {/each}
-                  {/if}
-                </details>
-              {/if}
-            {/each}
-          </div>
-        {/if}
-
-        {#each suggestions as source (source.id)}
-          {#if source.result.recommendation.status === 'available' && !previewStale}
-            {@const proposal = source.result.recommendation.recommendation}
-            {@const derived = proposal.provenance.derivation}
-            <p class="source-meta" role="status">
-              <strong
-                >{t(
-                  isLabPackId(source.result.knowledge?.summary.selected_pack.id ?? '')
-                    ? 'v11.source_lab'
-                    : 'v11.source_pack',
-                  {
-                    name: sourceName(
-                      source.result.knowledge?.summary.selected_pack.id ??
-                        proposal.provenance.dataset.id,
-                    ),
-                  },
-                )}</strong
-              >
-            </p>
-            {#if isLabPackId(source.result.knowledge?.summary.selected_pack.id ?? '')}<p
-                class="source-meta"
-              >
-                {t('v11.lab_priority')}
-              </p>{/if}
-            <dl class="suggested-values" aria-label={t('fs35.suggested')}>
-              <dt>{t('fs.rpm')}</dt>
-              <dd>{displayNumber(proposal.parameters.rpm)} <span>rpm</span></dd>
-              <dt>{t('fs.feed')}</dt>
-              <dd>{displayNumber(proposal.parameters.feed_mm_min)} <span>mm/min</span></dd>
-              <dt>{t('fs.plunge')}</dt>
-              <dd>{displayNumber(proposal.parameters.plunge_mm_min)} <span>mm/min</span></dd>
-              <dt>{t('fs36.pass_depth')}</dt>
-              <dd>{displayNumber(proposal.parameters.doc_mm, 2)} <span>mm</span></dd>
-              {#if proposal.parameters.stepover_ratio != null}<dt>{t('fs.stepover')}</dt>
-                <dd>
-                  {displayNumber(proposal.parameters.stepover_ratio * 100, 1)} <span>%</span>
-                </dd>{/if}
-            </dl>
-            {#if op.kind === 'pocket' && distinctEngagement(1 - overlap, proposal.parameters.stepover_ratio)}<p
-                class="source-meta"
-              >
-                {t('fs36.engagement')}: {displayNumber((1 - overlap) * 100, 1)} % · {t(
-                  'fs35.nominal',
-                )}
-              </p>{/if}
-            <p class="source-meta" class:extrapolated={derived?.quality === 'extrapolated'}>
-              {derived?.quality === 'extrapolated'
-                ? t('fs39.extrapolated')
-                : derived
-                  ? t('fs391.adapted_reference')
-                  : evidence(proposal.source_evidence)} · {proposal.provenance.profile.source
-                .author}
-            </p>
-            {#if derived}<p class="source-meta">{evidence(proposal.source_evidence)}</p>{/if}
-            {#if proposal.diagnostics.length || proposal.applicability === 'adjusted_outside_evidence'}<p
-                class="caution-copy"
-                role="status"
-              >
-                {t('fs391.review_limits')}
-              </p>{/if}
-            {#if source.result.knowledge?.disagreement}<p class="extrapolated" role="status">
-                {t('fs37.disagreement')}
-              </p>{/if}
-            <details class="explanation">
-              <summary>{t('fs39.why')}</summary>
-              <dl>
-                <dt>{t('fs35.machine')}</dt>
-                <dd>{project.data.machine.name}</dd>
-                <dt>{t('fs35.tool')}</dt>
-                <dd>{tool?.name}</dd>
-                <dt>{t('fs.material')}</dt>
-                <dd>{materialLabel}</dd>
-                <dt>{t('fs36.pass_depth')}</dt>
-                <dd>{displayNumber(doc, 2)} mm · {t('fs391.requested')}</dd>
-                <dt>{t('fs36.engagement')}</dt>
-                <dd>
-                  {op.kind === 'pocket'
-                    ? `${displayNumber((1 - overlap) * 100, 1)} % · ${t('fs35.nominal')}`
-                    : fullWidth
-                      ? t('fs.full_width')
-                      : t('fs36.unknown')}
-                </dd>
-                <dt>{t('fs.chipload')}</dt>
-                <dd>
-                  {displayNumber(proposal.parameters.effective_chipload_mm_tooth, 3)} mm/{t(
-                    'fs.tooth',
-                  )}
-                </dd>
-                <dt>{t('fs391.cutting_speed')}</dt>
-                <dd>
-                  {displayNumber(
-                    (Math.PI * (tool?.diameter ?? 0) * proposal.parameters.rpm) / 1000,
-                    1,
-                  )} m/min
-                </dd>
-              </dl>
-              {#if op.kind === 'pocket' && distinctEngagement(1 - overlap, proposal.parameters.stepover_ratio)}<p
-                >
-                  {t('fs391.engagement_distinct')}
-                </p>{/if}
-              {#if derived && adaptationKind(derived) === 'diameter'}<p>
-                  {t('fs39.adapted_from')} Ø{derived.source_diameters_mm
-                    .map((v) => displayNumber(v, 3))
-                    .join(' / Ø')} → Ø{displayNumber(derived.requested_diameter_mm, 3)} mm
-                </p>{/if}
-              <RecommendationBasis knowledge={source.result.knowledge} detail={derived} embedded />
-              {#if proposal.diagnostics.length}<p>{t('fs.unknowns')}</p>
-                <ul>
-                  {#each proposal.diagnostics as diagnostic, index (index)}<li>
-                      {diagnostic.kind === 'unknown_limit'
-                        ? `${t('fs391.unknown_limit')}: ${diagnostic.field}`
-                        : t(`fs391.${diagnostic.kind}`)}
-                      {#if diagnostic.kind === 'low_effective_chipload'}
-                        {displayNumber(diagnostic.chipload_mm_tooth, 5)} / {displayNumber(
-                          diagnostic.target_chipload_mm_tooth,
-                          5,
-                        )} mm/tooth
-                      {/if}
-                    </li>{/each}
-                </ul>{/if}
-              <dl>
-                <dt>{t('fs391.known_limits')}</dt>
-                <dd>
-                  {proposal.provenance.request.machine.rpm_min ?? '—'}–{proposal.provenance.request
-                    .machine.rpm_max ?? '—'} rpm ·
-                  {proposal.provenance.request.machine.max_feed_mm_min ?? '—'} mm/min ({t(
-                    'fs.feed',
-                  )}) ·
-                  {proposal.provenance.request.machine.max_plunge_mm_min ?? '—'} mm/min ({t(
-                    'fs.plunge',
-                  )})
-                </dd>
-              </dl>
-            </details>
-            <details>
-              <summary>{t('fs.source')}</summary>
-              <p>{proposal.provenance.dataset.id} · {proposal.provenance.dataset.revision}</p>
-              <p>{proposal.provenance.profile.identity.id}</p>
+      {/if}
+      {#if busy}<p class="source-meta" role="status">{t('fs391.calculating')}</p>{/if}
+      {#if recommendationSources.loading}<p role="status">{t('fs35.loading')}</p>
+      {:else if recommendationSources.error}<p role="alert">{t('fs35.source_unavailable')}</p>
+      {:else if !recommendationSources.rows.length}<p role="status">
+          {t('fs35.sources_disabled')}
+        </p>{/if}
+      {#if !project.data.material}<p role="status">{t('selector.material_missing')}</p>{/if}
+      {#if attempted && !busy && !suggestions.length && !error && !previewStale}
+        <div
+          class="no-match"
+          class:blocking={responses.some(
+            (s) =>
+              s.result.recommendation.status === 'unavailable' &&
+              ['invalid_request', 'unrepresentable_output'].includes(
+                s.result.recommendation.reason.kind,
+              ),
+          )}
+          role="alert"
+        >
+          {#each responses as source (source.id)}
+            {#if source.result.recommendation.status === 'unavailable'}
               <p>
-                {evidence(proposal.source_evidence)} · {proposal.provenance.profile.source
-                  .permission_or_license}
+                {discovery === 'browse' ? t('preset3.similar') : ''}
+                {source.result.recommendation.reason.kind === 'missing_cutting_data'
+                  ? t('fs391.no_reference')
+                  : rejectionReason(source.result.recommendation.reason)}
               </p>
-              <a
-                href={sourceLink(proposal.provenance.profile.source.reference) ?? undefined}
-                target="_blank"
-                rel="noreferrer">{t('fs.source_link')}</a
-              >
-              <p>{proposal.provenance.profile.source.notes}</p>
-              <pre>{JSON.stringify(
-                  { provenance: proposal.provenance, knowledge: source.result.knowledge },
-                  null,
-                  2,
-                )}</pre>
-            </details>
-          {/if}
-        {/each}
-        {#if (accepted || savedKnowledge) && (!suggestions.length || previewStale)}<details>
-            <summary>{t('fs391.saved_recommendation')}</summary>
-            {#if savedKnowledge}<p>
-                {knowledgeName(savedKnowledge.selected_pack.id)} · {savedKnowledge.selected_pack
-                  .revision} · {evidence(savedKnowledge.evidence)}
-              </p>{/if}
-            {#if accepted}<p>{accepted.provenance.profile.source.permission_or_license}</p>
-              <a
-                href={sourceLink(accepted.provenance.profile.source.reference) ?? undefined}
-                target="_blank"
-                rel="noreferrer">{t('fs.source_link')}</a
-              >{/if}
-            <pre>{JSON.stringify(op.appliedCutting, null, 2)}</pre>
-          </details>{/if}
-        {#if error}<p role="alert">{error}</p>
-          <button type="button" class="inspector-action" disabled={busy} onclick={() => calculate()}
-            >{t('fs35.recalculate')}</button
-          >{/if}
-        <footer class="recommendation-footer">
+              {#if source.result.recommendation.reason.kind === 'invalid_request'}
+                {#each source.result.recommendation.reason.issues as issue, index (index)}<p>
+                    {issue.field}: {issue.message}
+                  </p>{/each}
+              {/if}
+              <details>
+                <summary>{t('fs391.rejection_details')}</summary>
+                <p>{rejectionReason(source.result.recommendation.reason)}</p>
+                {#if source.result.scope_rejections?.length}
+                  <p class="scope-heading">{t('fs36.closest_scopes')}</p>
+                  {#each source.result.scope_rejections as rejection, rejectionIndex (rejectionIndex)}
+                    <ul class="scope-reasons">
+                      {#each rejection.mismatches as mismatch (mismatch.field)}
+                        <li>
+                          <strong>{scopeField(mismatch.field)}</strong><br />{t('fs36.actual')}: {scopeValue(
+                            mismatch.actual,
+                            source.catalog,
+                            t('fs36.unknown'),
+                          )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}<br />{t('fs36.required')}: {scopeValue(
+                            mismatch.required,
+                            source.catalog,
+                            t('fs36.unknown'),
+                          )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}
+                        </li>
+                      {/each}
+                    </ul>
+                  {/each}
+                {/if}
+              </details>
+            {/if}
+          {/each}
+        </div>
+      {/if}
+
+      {#each suggestions as source (source.id)}
+        {#if source.result.recommendation.status === 'available' && !previewStale}
+          {#if discovery === 'browse'}<p role="status">{t('preset3.compatible')}</p>{/if}
+          {@const proposal = source.result.recommendation.recommendation}
+          {@const derived = proposal.provenance.derivation}
+          <p class="source-meta" role="status">
+            <strong
+              >{t(
+                isLabPackId(source.result.knowledge?.summary.selected_pack.id ?? '')
+                  ? 'v11.source_lab'
+                  : 'v11.source_pack',
+                {
+                  name: sourceName(
+                    source.result.knowledge?.summary.selected_pack.id ??
+                      proposal.provenance.dataset.id,
+                  ),
+                },
+              )}</strong
+            >
+          </p>
+          {#if isLabPackId(source.result.knowledge?.summary.selected_pack.id ?? '')}<p
+              class="source-meta"
+            >
+              {t('v11.lab_priority')}
+            </p>{/if}
+          <CuttingParameterComparison
+            pocket={op.kind === 'pocket'}
+            current={[
+              main?.rpm,
+              main?.feed_mm_min,
+              main?.plunge_mm_min,
+              doc,
+              op.kind === 'pocket' ? (1 - overlap) * 100 : undefined,
+            ]}
+            proposed={[
+              proposal.parameters.rpm,
+              proposal.parameters.feed_mm_min,
+              proposal.parameters.plunge_mm_min,
+              proposal.parameters.doc_mm,
+              proposal.parameters.stepover_ratio == null
+                ? undefined
+                : proposal.parameters.stepover_ratio * 100,
+            ]}
+          />
+          {#if op.kind === 'pocket' && distinctEngagement(1 - overlap, proposal.parameters.stepover_ratio)}<p
+              class="source-meta"
+            >
+              {t('fs36.engagement')}: {displayNumber((1 - overlap) * 100, 1)} % · {t(
+                'fs35.nominal',
+              )}
+            </p>{/if}
+          <p class="source-meta" class:extrapolated={derived?.quality === 'extrapolated'}>
+            {derived?.quality === 'extrapolated'
+              ? t('fs39.extrapolated')
+              : derived
+                ? t('fs391.adapted_reference')
+                : evidence(proposal.source_evidence)} · {proposal.provenance.profile.source.author}
+          </p>
+          {#if derived}<p class="source-meta">{evidence(proposal.source_evidence)}</p>{/if}
+          {#if proposal.diagnostics.length || proposal.applicability === 'adjusted_outside_evidence'}<p
+              class="caution-copy"
+              role="status"
+            >
+              {t('fs391.review_limits')}
+            </p>{/if}
+          {#if source.result.knowledge?.disagreement}<p class="extrapolated" role="status">
+              {t('fs37.disagreement')}
+            </p>{/if}
+          <CuttingRecommendationDetails
+            {proposal}
+            knowledge={source.result.knowledge}
+            {tool}
+            machineName={project.data.machine.name ?? ''}
+            {materialLabel}
+            {doc}
+            {overlap}
+            {fullWidth}
+            pocket={op.kind === 'pocket'}
+            {evidence}
+          />
+        {/if}
+      {/each}
+      {#if (accepted || savedKnowledge) && (!suggestions.length || previewStale)}<details>
+          <summary>{t('fs391.saved_recommendation')}</summary>
+          {#if savedKnowledge}<p>
+              {knowledgeName(savedKnowledge.selected_pack.id)} · {savedKnowledge.selected_pack
+                .revision} · {evidence(savedKnowledge.evidence)}
+            </p>{/if}
+          {#if accepted}<p>{accepted.provenance.profile.source.permission_or_license}</p>
+            <a
+              href={sourceLink(accepted.provenance.profile.source.reference) ?? undefined}
+              target="_blank"
+              rel="noreferrer">{t('fs.source_link')}</a
+            >{/if}
+          <pre>{JSON.stringify(op.appliedCutting, null, 2)}</pre>
+        </details>{/if}
+      {#if error}<p role="alert">{error}</p>
+        <button
+          type="button"
+          class="inspector-action"
+          disabled={busy}
+          onclick={async () => {
+            await recommendationSources.refresh(true);
+            await calculate();
+          }}>{t('fs35.recalculate')}</button
+        >{/if}
+      {#if hasManual && suggestions.length}<label class="check-row"
+          ><input type="checkbox" bind:checked={overwriteAcknowledged} />{t(
+            'preset3.overwrite',
+          )}</label
+        >{/if}
+      {#snippet footer()}
+        <div class="recommendation-footer">
           <button type="button" class="inspector-action" onclick={cancelReview}
             >{t('common.cancel')}</button
           >
           <button
             type="button"
             class="inspector-action primary"
-            disabled={busy || materialPending || previewStale || !suggestions.length || !!error}
+            disabled={busy ||
+              previewStale ||
+              !suggestions.length ||
+              !!error ||
+              (hasManual && !overwriteAcknowledged)}
             onclick={() => {
               if (suggestions[0]) void apply(suggestions[0]);
-            }}>{t('fs35.apply')}</button
+            }}>{t('selector.apply')}</button
           >
-        </footer>
-      </div>
-    </Modal>
+        </div>
+      {/snippet}
+    </CuttingSelectorFrame>
   {/if}
   {#if error}<p role="alert">{error}</p>{/if}
 </section>
@@ -850,21 +816,16 @@
   />{/if}
 
 <style>
-  .identity-help {
-    grid-column: 1;
-    color: var(--text-muted);
-    font-size: var(--inspector-font-meta);
-    line-height: 1.4;
-    margin-top: var(--ui-space-2);
+  .discovery {
+    display: flex;
+    gap: 4px;
+    margin: var(--ui-space-2) 0;
   }
-  .identity-help p {
-    margin: 0;
+  .discovery [aria-pressed='true'] {
+    border-color: var(--accent);
+    background: var(--accent-tint);
   }
-  .identity-help ul {
-    margin: var(--ui-space-1) 0 0;
-    padding-inline-start: 1.25rem;
-    font-size: inherit;
-  }
+
   .scope-reasons {
     margin: var(--ui-space-1) 0 var(--ui-space-2);
     padding-left: var(--ui-space-4);
@@ -890,8 +851,7 @@
     padding-top: var(--ui-space-2);
     margin: var(--ui-space-3) 0;
   }
-  h3,
-  h4 {
+  h3 {
     font-size: var(--inspector-font-meta);
     font-weight: 600;
     color: var(--text-section);
@@ -900,7 +860,6 @@
     text-transform: uppercase;
   }
   p,
-  dl,
   .check-row {
     font-size: var(--inspector-font-field);
     line-height: 1.35;
@@ -918,22 +877,8 @@
     width: auto;
     flex-shrink: 0;
   }
-  dl {
-    display: grid;
-    grid-template-columns: minmax(5rem, 1fr) minmax(0, 1.5fr);
-    gap: var(--ui-space-1) var(--ui-space-2);
-    margin: var(--ui-space-2) 0;
-  }
-  dd {
-    margin: 0;
-    overflow-wrap: anywhere;
-    font-variant-numeric: tabular-nums;
-  }
   .inspector-field.mode-field {
     grid-template-columns: minmax(0, 1fr) minmax(5rem, 1fr);
-  }
-  .recommendation {
-    padding: var(--ui-space-3);
   }
   .stale {
     grid-column: 1;
@@ -948,6 +893,12 @@
     display: block;
     color: var(--text-muted);
     margin-top: var(--ui-space-1);
+  }
+  .source-meta strong {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .source-meta {
     grid-column: 1;
@@ -971,22 +922,6 @@
     min-height: 24px;
     display: list-item;
   }
-  .context-line {
-    color: var(--text-muted);
-    margin-bottom: var(--ui-space-3);
-  }
-  .suggested-values {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: var(--ui-space-3) 0;
-    gap: var(--ui-space-2);
-  }
-  .suggested-values dd {
-    text-align: right;
-  }
-  .suggested-values dd span {
-    color: var(--text-muted);
-  }
   .extrapolated {
     color: var(--warn);
   }
@@ -995,15 +930,9 @@
     font-size: var(--inspector-font-meta);
   }
   .recommendation-footer {
-    position: sticky;
-    bottom: -12px;
-    background: var(--bg-panel, var(--bg));
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
     gap: var(--ui-space-2);
-    padding: var(--ui-space-3) 0;
-    border-top: 1px solid var(--border);
-    margin-top: var(--ui-space-3);
   }
 </style>

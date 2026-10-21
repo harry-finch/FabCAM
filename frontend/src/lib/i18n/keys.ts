@@ -330,7 +330,6 @@ export type MsgKey =
   | "fs35.add_library"
   | "fs35.advanced_depth"
   | "fs35.advanced_feed"
-  | "fs35.apply"
   | "fs35.available_tools"
   | "fs35.compatibility"
   | "fs35.compatibility_help"
@@ -1554,6 +1553,94 @@ export type MsgKey =
   | "post.tokens.tools"
   | "post.tokens.version"
   | "post.tool_change"
+  | "preset2.after"
+  | "preset2.before"
+  | "preset2.choose_material"
+  | "preset2.choose_tool"
+  | "preset2.differences"
+  | "preset2.field"
+  | "preset2.field_diameter"
+  | "preset2.field_flutes"
+  | "preset2.field_machine"
+  | "preset2.field_material"
+  | "preset2.field_tool"
+  | "preset2.help"
+  | "preset2.machine"
+  | "preset2.material_help"
+  | "preset2.ownership"
+  | "preset2.problem_geometry"
+  | "preset2.problem_identity"
+  | "preset2.problem_machine"
+  | "preset2.problem_material"
+  | "preset2.problem_process"
+  | "preset2.problem_rights"
+  | "preset2.problem_source"
+  | "preset2.problem_tool"
+  | "preset2.reductions"
+  | "preset2.review"
+  | "preset2.save"
+  | "preset2.source_notes"
+  | "preset2.stale"
+  | "preset2.title"
+  | "preset2.values"
+  | "preset3.browse"
+  | "preset3.choose"
+  | "preset3.compatible"
+  | "preset3.current"
+  | "preset3.filter_material"
+  | "preset3.none"
+  | "preset3.operation"
+  | "preset3.overwrite"
+  | "preset3.parameter"
+  | "preset3.proposed"
+  | "preset3.recommended"
+  | "preset3.similar"
+  | "preset3.stale"
+  | "preset3.unavailable"
+  | "preset3.use"
+  | "presets.aggressiveness"
+  | "presets.all"
+  | "presets.all_sources"
+  | "presets.author"
+  | "presets.availability"
+  | "presets.chipload"
+  | "presets.clear"
+  | "presets.context"
+  | "presets.deleted"
+  | "presets.details"
+  | "presets.diameter"
+  | "presets.disabled"
+  | "presets.empty"
+  | "presets.enabled"
+  | "presets.entry"
+  | "presets.identities"
+  | "presets.inactive_record"
+  | "presets.license"
+  | "presets.local_readonly"
+  | "presets.material_family"
+  | "presets.milling_only"
+  | "presets.no_calculation"
+  | "presets.no_match"
+  | "presets.pack"
+  | "presets.provenance"
+  | "presets.readonly_help"
+  | "presets.record"
+  | "presets.records"
+  | "presets.reference_readonly"
+  | "presets.refresh"
+  | "presets.resize_column"
+  | "presets.resize_details"
+  | "presets.search"
+  | "presets.search_hint"
+  | "presets.source"
+  | "presets.stored_values"
+  | "presets.thickness"
+  | "presets.title"
+  | "presets.tool"
+  | "presets.tool_family"
+  | "presets.trial"
+  | "presets.unspecified"
+  | "presets.validation"
   | "preview.toolpaths.label"
   | "preview.toolpaths.tip"
   | "qualification.back"
@@ -1614,6 +1701,26 @@ export type MsgKey =
   | "scene3d.ctx.new_op"
   | "scene3d.empty.sub"
   | "scene3d.empty.title"
+  | "selector.apply"
+  | "selector.changes"
+  | "selector.check"
+  | "selector.checking"
+  | "selector.compatibility"
+  | "selector.compatible"
+  | "selector.filtered"
+  | "selector.filtered_selection"
+  | "selector.filters"
+  | "selector.incompatible"
+  | "selector.inspect"
+  | "selector.job_material"
+  | "selector.list_help"
+  | "selector.material_missing"
+  | "selector.material_tool"
+  | "selector.na"
+  | "selector.no_changes"
+  | "selector.retained"
+  | "selector.title"
+  | "selector.unavailable"
   | "settings.appearance.language"
   | "settings.appearance.language.auto"
   | "settings.appearance.language.help"
@@ -2252,13 +2359,10 @@ export type MsgKey =
   | "uxb.schematic"
   | "uxb.unknown"
   | "uxc.authored_stock"
-  | "uxc.choose_material_here"
   | "uxc.current"
   | "uxc.drawing"
   | "uxc.frame_cancel"
   | "uxc.frame_legacy"
-  | "uxc.material_apply"
-  | "uxc.material_draft"
   | "uxc.minimum_z"
   | "uxc.no_drawing"
   | "uxc.palette_layers"
@@ -2738,7 +2842,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.add_library",
   "fs35.advanced_depth",
   "fs35.advanced_feed",
-  "fs35.apply",
   "fs35.available_tools",
   "fs35.compatibility",
   "fs35.compatibility_help",
@@ -3962,6 +4065,94 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "post.tokens.tools",
   "post.tokens.version",
   "post.tool_change",
+  "preset2.after",
+  "preset2.before",
+  "preset2.choose_material",
+  "preset2.choose_tool",
+  "preset2.differences",
+  "preset2.field",
+  "preset2.field_diameter",
+  "preset2.field_flutes",
+  "preset2.field_machine",
+  "preset2.field_material",
+  "preset2.field_tool",
+  "preset2.help",
+  "preset2.machine",
+  "preset2.material_help",
+  "preset2.ownership",
+  "preset2.problem_geometry",
+  "preset2.problem_identity",
+  "preset2.problem_machine",
+  "preset2.problem_material",
+  "preset2.problem_process",
+  "preset2.problem_rights",
+  "preset2.problem_source",
+  "preset2.problem_tool",
+  "preset2.reductions",
+  "preset2.review",
+  "preset2.save",
+  "preset2.source_notes",
+  "preset2.stale",
+  "preset2.title",
+  "preset2.values",
+  "preset3.browse",
+  "preset3.choose",
+  "preset3.compatible",
+  "preset3.current",
+  "preset3.filter_material",
+  "preset3.none",
+  "preset3.operation",
+  "preset3.overwrite",
+  "preset3.parameter",
+  "preset3.proposed",
+  "preset3.recommended",
+  "preset3.similar",
+  "preset3.stale",
+  "preset3.unavailable",
+  "preset3.use",
+  "presets.aggressiveness",
+  "presets.all",
+  "presets.all_sources",
+  "presets.author",
+  "presets.availability",
+  "presets.chipload",
+  "presets.clear",
+  "presets.context",
+  "presets.deleted",
+  "presets.details",
+  "presets.diameter",
+  "presets.disabled",
+  "presets.empty",
+  "presets.enabled",
+  "presets.entry",
+  "presets.identities",
+  "presets.inactive_record",
+  "presets.license",
+  "presets.local_readonly",
+  "presets.material_family",
+  "presets.milling_only",
+  "presets.no_calculation",
+  "presets.no_match",
+  "presets.pack",
+  "presets.provenance",
+  "presets.readonly_help",
+  "presets.record",
+  "presets.records",
+  "presets.reference_readonly",
+  "presets.refresh",
+  "presets.resize_column",
+  "presets.resize_details",
+  "presets.search",
+  "presets.search_hint",
+  "presets.source",
+  "presets.stored_values",
+  "presets.thickness",
+  "presets.title",
+  "presets.tool",
+  "presets.tool_family",
+  "presets.trial",
+  "presets.unspecified",
+  "presets.validation",
   "preview.toolpaths.label",
   "preview.toolpaths.tip",
   "qualification.back",
@@ -4022,6 +4213,26 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "scene3d.ctx.new_op",
   "scene3d.empty.sub",
   "scene3d.empty.title",
+  "selector.apply",
+  "selector.changes",
+  "selector.check",
+  "selector.checking",
+  "selector.compatibility",
+  "selector.compatible",
+  "selector.filtered",
+  "selector.filtered_selection",
+  "selector.filters",
+  "selector.incompatible",
+  "selector.inspect",
+  "selector.job_material",
+  "selector.list_help",
+  "selector.material_missing",
+  "selector.material_tool",
+  "selector.na",
+  "selector.no_changes",
+  "selector.retained",
+  "selector.title",
+  "selector.unavailable",
   "settings.appearance.language",
   "settings.appearance.language.auto",
   "settings.appearance.language.help",
@@ -4660,13 +4871,10 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "uxb.schematic",
   "uxb.unknown",
   "uxc.authored_stock",
-  "uxc.choose_material_here",
   "uxc.current",
   "uxc.drawing",
   "uxc.frame_cancel",
   "uxc.frame_legacy",
-  "uxc.material_apply",
-  "uxc.material_draft",
   "uxc.minimum_z",
   "uxc.no_drawing",
   "uxc.palette_layers",

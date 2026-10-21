@@ -9,7 +9,7 @@
 /// separate, not a toggle), so the activity order interleaves them at the
 /// front before the whole-screen tabs.
 
-export type MainTab = 'project' | 'machine' | 'tools' | 'settings' | 'help' | 'about';
+export type MainTab = 'project' | 'machine' | 'tools' | 'presets' | 'settings' | 'help' | 'about';
 export type Pane = '2d' | '3d';
 
 export type Activity =
@@ -17,6 +17,7 @@ export type Activity =
   | 'project-3d'
   | 'machine'
   | 'tools'
+  | 'presets'
   | 'settings'
   | 'help'
   | 'about';
@@ -28,6 +29,7 @@ export const ACTIVITY_ORDER: readonly Activity[] = [
   'project-3d',
   'machine',
   'tools',
+  'presets',
   'settings',
   'help',
   'about',
@@ -79,6 +81,8 @@ export function activityLabel(activity: Activity): string {
       return 'Machine';
     case 'tools':
       return 'Tool-Lib';
+    case 'presets':
+      return 'Presets';
     case 'settings':
       return 'Settings';
     case 'help':
@@ -100,6 +104,8 @@ export function activityAbbrev(activity: Activity): string {
       return 'Mch';
     case 'tools':
       return 'Tools';
+    case 'presets':
+      return 'Presets';
     case 'settings':
       return 'Set';
     case 'help':

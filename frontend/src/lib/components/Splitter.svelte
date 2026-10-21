@@ -20,8 +20,12 @@
     onResize: (delta: number) => void;
     onReset?: () => void;
     title?: string;
+    /// Optional controlled position enables keyboard resizing and accessible bounds.
+    value?: number;
+    min?: number;
+    max?: number;
   }
-  let { direction, onResize, onReset, title }: Props = $props();
+  let { direction, onResize, onReset, title, value, min = 0, max = 100 }: Props = $props();
 
   let dragging = $state(false);
   let last = 0;
@@ -48,17 +52,45 @@
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {}
   }
+  function onKeyDown(e: KeyboardEvent) {
+    if (value === undefined) return;
+    const decrease = direction === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+    const increase = direction === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
+    const step = e.shiftKey ? 40 : 10;
+    const next =
+      e.key === decrease
+        ? value - step
+        : e.key === increase
+          ? value + step
+          : e.key === 'Home'
+            ? min
+            : e.key === 'End'
+              ? max
+              : undefined;
+    if (next === undefined) return;
+    e.preventDefault();
+    e.stopPropagation();
+    onResize(Math.max(min, Math.min(max, next)) - value);
+  }
   function onDblClick() {
     onReset?.();
   }
 </script>
 
+<!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_no_noninteractive_element_interactions (A controlled WAI-ARIA window separator is intentionally focusable and arrow-key adjustable.) -->
 <div
   class="splitter"
   class:horizontal={direction === 'horizontal'}
   class:vertical={direction === 'vertical'}
   class:dragging
   role="separator"
+  tabindex={value === undefined ? undefined : 0}
+  aria-label={title}
+  aria-valuenow={value === undefined ? undefined : Math.round(value)}
+  aria-valuemin={value === undefined ? undefined : Math.round(min)}
+  aria-valuemax={value === undefined ? undefined : Math.round(max)}
+  aria-valuetext={value === undefined ? undefined : `${Math.round(value)} px`}
+  onkeydown={onKeyDown}
   aria-orientation={direction === 'horizontal' ? 'vertical' : 'horizontal'}
   title={title ?? (onReset ? 'Drag to resize · double-click to reset' : 'Drag to resize')}
   onpointerdown={onPointerDown}
@@ -105,6 +137,11 @@
   .splitter.vertical::after {
     top: -5px;
     bottom: -5px;
+  }
+  .splitter:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    z-index: 2;
   }
   .splitter:hover,
   .splitter.dragging {

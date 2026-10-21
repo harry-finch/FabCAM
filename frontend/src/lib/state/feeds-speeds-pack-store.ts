@@ -118,6 +118,7 @@ export const captureLabPreset = (
 export async function commitLabPack(
   pack: SourcePack,
   expectedRevision: string | null,
+  adaptation?: { sourceGuard: { id: string; revision: string } | null },
 ): Promise<SourcePack> {
   const json = JSON.stringify(pack);
   const checked = await validatePack(json);
@@ -129,7 +130,11 @@ export async function commitLabPack(
     throw new Error('Only private local presets can be authored');
   if (native())
     return JSON.parse(
-      await invoke<string>('save_lab_pack', { json, expectedRevision }),
+      await invoke<string>(adaptation ? 'save_adapted_lab_pack' : 'save_lab_pack', {
+        json,
+        expectedRevision,
+        sourceGuard: adaptation?.sourceGuard,
+      }),
     ) as SourcePack;
   const db = await database();
   try {
@@ -140,6 +145,18 @@ export async function commitLabPack(
       let reason: Error | undefined;
       req.onsuccess = () => {
         const rows = req.result.map(String);
+        if (adaptation?.sourceGuard) {
+          const guard = adaptation.sourceGuard;
+          const sourceHead = rows
+            .filter((key) => key.startsWith(`${guard.id}@`))
+            .sort()
+            .at(-1);
+          if (sourceHead !== `${guard.id}@${guard.revision}`) {
+            reason = new Error('Source changed; reopen and review the copy again');
+            tx.abort();
+            return;
+          }
+        }
         const versions = rows
           .filter((key) => key.startsWith(`${checked.manifest.identity.id}@`))
           .map((key) => key.split('@')[1])

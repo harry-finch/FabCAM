@@ -6,7 +6,7 @@
   "lib/components/MachineDialog.svelte": ["LinuxCNC", "mm", "mm, WCS", "mm/min", "mm/s²", "mm/s³"],
   "lib/components/op_properties/ChamferSection.svelte": ["mm"],
   "lib/components/op_properties/DrillSection.svelte": ["mm"],
-  "lib/components/op_properties/FeedsSpeedsSection.svelte": ["mm", "mm/min", "rpm"],
+  "lib/components/op_properties/FeedsSpeedsSection.svelte": ["mm"],
   "lib/components/op_properties/PatternSection.svelte": ["mm", "Δx", "Δy"],
   "lib/components/op_properties/PlanarSurfaceSection.svelte": ["mm"],
   "lib/components/op_properties/PocketSection.svelte": ["fraction", "mm"],

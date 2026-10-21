@@ -116,3 +116,58 @@ it('V-Carve tool geometry invalidates output across save, undo and redo without 
   p.data.tools[0].tipDiameter = 1;
   expect(generationContextKey(p, 'cps')).not.toBe(changed);
 });
+
+it('shared preset application invalidates generation identity and Undo/Redo restores it without setup substitution', async () => {
+  const { applyCuttingCommand } = await import('./commands');
+  const p = fixture();
+  p.data.tools = [
+    {
+      id: 1,
+      name: 'Software cutter',
+      kind: 'endmill',
+      diameter: 6.35,
+      flutes: 1,
+      speed: 17000,
+      feedRate: 1000,
+      plungeRate: 500,
+      coolant: 'off',
+    },
+  ];
+  p.data.operations[0].toolId = 1;
+  const old = generationContextKey(p, 'cps');
+  const tools = JSON.stringify(p.data.tools),
+    machine = JSON.stringify(p.data.machine);
+  const command = applyCuttingCommand(
+    p.data.operations[0].id,
+    {
+      step: -2.8,
+      appliedCutting: {
+        slots: [
+          {
+            tool_id: 1,
+            pass: 'finish',
+            rpm: 17000,
+            feed_mm_min: 1620,
+            plunge_mm_min: 810,
+            origins: { rpm: 'recommendation', feed: 'recommendation', plunge: 'recommendation' },
+          },
+        ],
+        context_key: 'software',
+        doc_origin: 'recommendation',
+      },
+    },
+    p.data.material,
+    p.data.fsContext,
+  );
+  command.apply(p.data);
+  const applied = generationContextKey(p, 'cps');
+  expect(applied).not.toBe(old);
+  p.data.dirty = false;
+  expect(generationContextKey(p, 'cps')).toBe(applied);
+  command.revert(p.data);
+  expect(generationContextKey(p, 'cps')).toBe(old);
+  command.apply(p.data);
+  expect(generationContextKey(p, 'cps')).toBe(applied);
+  expect(JSON.stringify(p.data.tools)).toBe(tools);
+  expect(JSON.stringify(p.data.machine)).toBe(machine);
+});

@@ -5,7 +5,7 @@
   import { isProgramOnlyOp } from '../state/op_types';
   import { project } from '../state/project.svelte';
   import { t } from '../i18n';
-  type Area = 'project' | 'machine' | 'tools' | 'settings' | 'help' | 'about';
+  type Area = 'project' | 'machine' | 'tools' | 'presets' | 'settings' | 'help' | 'about';
   let {
     mainTab,
     narrow,
@@ -70,6 +70,12 @@
     class:active={mainTab === 'tools'}
     onclick={() => onNavigate('tools')}
     title={t('app.tab.tools_tip')}>{t('app.tab.tools')}</button
+  >
+  <button
+    type="button"
+    class="main-tab"
+    class:active={mainTab === 'presets'}
+    onclick={() => onNavigate('presets')}>{t('presets.title')}</button
   >
   {#if operationToolLabel != null && selectedOpForHint && !isProgramOnlyOp(selectedOpForHint.kind) && mainTab === 'project'}
     <button

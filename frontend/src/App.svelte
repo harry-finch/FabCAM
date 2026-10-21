@@ -13,6 +13,7 @@
   let Scene3D = $state<Scene3DComp | null>(null);
   let scene3dLoading = $state(false);
   import LayerList from './lib/components/LayerList.svelte';
+  import PresetsLibrary from './lib/components/PresetsLibrary.svelte';
   import TextList from './lib/components/TextList.svelte';
   import OperationsList from './lib/components/OperationsList.svelte';
   import BottomSheet from './lib/components/BottomSheet.svelte';
@@ -63,7 +64,9 @@
   /// Top-level main-window tab. Machine and Tool library are
   /// first-class tabs (not modals); their panels stay mounted once
   /// loaded so in-progress drafts survive tab switches.
-  let mainTab = $state<'project' | 'machine' | 'tools' | 'settings' | 'help' | 'about'>('project');
+  let mainTab = $state<'project' | 'machine' | 'tools' | 'presets' | 'settings' | 'help' | 'about'>(
+    'project',
+  );
   let addTextOpen = $state(false);
   let reportOpen = $state(false);
   /// Build-time version stamp baked by vite.config.ts. Surfaces in
@@ -1441,6 +1444,9 @@
   {:else if mainTab === 'tools'}
     <main class="tab-panel"><p class="tab-loading">{t('app.loading.tools')}</p></main>
   {/if}
+  <main class="tab-panel" class:tab-hidden={mainTab !== 'presets'}>
+    <PresetsLibrary active={mainTab === 'presets'} />
+  </main>
   {#if SettingsDialog}
     {@const SettingsPanel = SettingsDialog}
     <main class="tab-panel" class:tab-hidden={mainTab !== 'settings'}>

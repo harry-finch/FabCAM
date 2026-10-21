@@ -172,6 +172,30 @@ describe('FS3 explicit persistence and edits', () => {
     expect(target.material).toBeUndefined();
     expect(target.fsContext).toBeUndefined();
   });
+  it('clears legacy manual overrides without immediately invalidating the applied context, including redo', () => {
+    const original = { ...op(), feedRateOverride: 1000, plungeRateOverride: 500 };
+    const machine = { mode: 'mill' } as MachineSettings;
+    const tools = [{ id: 1, diameter: 6.35 }] as ToolEntry[];
+    const target = { operations: [original], dirty: false } as CommandTarget;
+    const patch = {
+      appliedCutting: applied(),
+      feedRateOverride: undefined,
+      plungeRateOverride: undefined,
+      appliedContextKey: '',
+    };
+    patch.appliedContextKey = cuttingContextKey({ ...original, ...patch }, machine, tools);
+    const command = applyCuttingCommand(1, patch, undefined, undefined);
+    for (let round = 0; round < 2; round++) {
+      command.apply(target);
+      expect(target.operations[0].feedRateOverride).toBeUndefined();
+      expect(target.operations[0].plungeRateOverride).toBeUndefined();
+      expect(cuttingContextKey(target.operations[0], machine, tools)).toBe(patch.appliedContextKey);
+      const reopened = JSON.parse(JSON.stringify(target.operations[0]));
+      expect(cuttingContextKey(reopened, machine, tools)).toBe(patch.appliedContextKey);
+      command.revert(target);
+      expect(target.operations[0]).toEqual(original);
+    }
+  });
   it('catalog parsing does not promote source data or invent identities', () => {
     const d = parseDatasetCatalog(JSON.stringify(source));
     expect(d.tools).toHaveLength(2);

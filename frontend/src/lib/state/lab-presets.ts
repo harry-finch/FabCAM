@@ -140,7 +140,7 @@ function emptyPack(version: string, id = LAB_PACK_ID, name = 'Sorbonne Fablab'):
     records: [],
   };
 }
-function revisionPack(previous: SourcePack | undefined, now: string) {
+export function revisionPack(previous: SourcePack | undefined, now: string) {
   const version = Date.parse(now).toString().padStart(16, '0');
   if (!Number.isFinite(Date.parse(now))) throw new Error('Invalid revision date');
   if (
@@ -178,7 +178,7 @@ function retainPrevious(p: SourcePack, record: SourcePack['records'][number]) {
   ];
   return old;
 }
-function addCatalog<T extends { identity: S['FsIdentity'] }>(rows: T[], entry: T) {
+export function addCatalog<T extends { identity: S['FsIdentity'] }>(rows: T[], entry: T) {
   const old = rows.find((r) => r.identity.id === entry.identity.id);
   if (
     old &&
