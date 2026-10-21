@@ -323,8 +323,53 @@ pub fn feeds_speeds(request: JsValue) -> Result<JsValue, JsValue> {
         let request = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
         let response = ivac_core::feeds_speeds::feeds_speeds(request)
             .map_err(|e| structured_error_to_js(ivac_core::Error::bad_input(e)))?;
-        serde_wasm_bindgen::to_value(&response).map_err(into_js_error)
+        let value = serde_wasm_bindgen::to_value(&response).map_err(into_js_error)?;
+        // Only normalize successful, core-validated trial output. Native JSON emits
+        // null for this Option; serde-wasm-bindgen otherwise emits undefined, which
+        // JSON.stringify omits. Keep the strict portable v8 validator unchanged.
+        if let Some(op) = &response.applied_op {
+            portable_trial_stepover(op, &value, &["applied_op"])?;
+        }
+        if let Some(trial) = &response.trial {
+            portable_trial_stepover(&trial.operation, &value, &["trial", "operation"])?;
+        }
+        Ok(value)
     })
+}
+
+fn portable_trial_stepover(
+    op: &ivac_core::project::Op,
+    response: &JsValue,
+    path: &[&str],
+) -> Result<(), JsValue> {
+    if !matches!(op.kind, ivac_core::project::OpKind::Profile { .. })
+        || !op.params.applied_cutting.as_ref().is_some_and(|a| {
+            a.experimental_recipe
+                .as_ref()
+                .is_some_and(|r| r.applied_values.stepover_ratio.is_none())
+        })
+    {
+        return Ok(());
+    }
+    let mut object = response.clone();
+    for key in path.iter().copied().chain([
+        "params",
+        "applied_cutting",
+        "experimental_recipe",
+        "applied_values",
+    ]) {
+        object = js_sys::Reflect::get(&object, &JsValue::from_str(key))?;
+    }
+    if !js_sys::Reflect::set(
+        &object,
+        &JsValue::from_str("stepover_ratio"),
+        &JsValue::NULL,
+    )? {
+        return Err(JsValue::from_str(
+            "Cannot serialize experimental Profile stepover",
+        ));
+    }
+    Ok(())
 }
 
 #[wasm_bindgen(js_name = validateSourcePack)]

@@ -79,6 +79,11 @@ fn trial_exact_private_portable_and_no_source_dependency() {
     let mut project = r.project.clone();
     let result = feeds_speeds(r).unwrap();
     project.operations[0] = result.applied_op.unwrap();
+    // Native JSON contract: an absent Profile stepover is present as null.
+    let native = serde_json::to_value(&project.operations[0]).unwrap();
+    let baseline = &native["params"]["applied_cutting"]["experimental_recipe"]["applied_values"];
+    assert!(baseline.as_object().unwrap().contains_key("stepover_ratio"));
+    assert!(baseline["stepover_ratio"].is_null());
     let wire = serde_json::to_string(&project).unwrap();
     assert!(!wire.contains("PRIVATE-NOTES-SENTINEL"));
     assert!(!wire.contains("/Users/private"));
@@ -281,14 +286,17 @@ fn trial_pocket_snapshots_both_roles_and_refuses_unknown_stepover() {
         .slots
         .iter()
         .all(|s| s.rpm == 18000 && s.feed_mm_min == 1200 && s.plunge_mm_min == 300));
-    change_trial_pack(&mut r, |p| {
-        if let fs::CuttingData::ExactValues { stepover_ratio, .. } =
-            &mut p.dataset.profile_set.profiles[0].data
-        {
-            *stepover_ratio = None;
-        }
-    });
-    assert!(feeds_speeds(r).is_err());
+    for invalid in [None, Some(0.0), Some(1.0), Some(2.0)] {
+        let mut bad = r.clone();
+        change_trial_pack(&mut bad, |p| {
+            if let fs::CuttingData::ExactValues { stepover_ratio, .. } =
+                &mut p.dataset.profile_set.profiles[0].data
+            {
+                *stepover_ratio = invalid;
+            }
+        });
+        assert!(feeds_speeds(bad).is_err());
+    }
 }
 #[test]
 fn trial_refuses_unsupported_tool_or_process_without_relaxing_shopbot() {

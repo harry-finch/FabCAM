@@ -1,3 +1,7 @@
+import { validateProjectFile } from './feeds-speeds-persistence';
+import { trialOp } from './experimental-recipe.fixture';
+import { experimentalModified } from './experimental-recipe';
+import { validateExperimentalRecipe } from './experimental-recipe';
 import { notificationText } from '../api/error-notification';
 import { readFileSync } from 'node:fs';
 import { expect, it } from 'vitest';
@@ -123,6 +127,58 @@ it('real WASM trial preserves exact values, refuses stale sources and leaves Sug
   ).toBe(true);
   expect(JSON.stringify(result.applied_op)).not.toContain('PRIVATE TEST SENTINEL');
   expect(JSON.stringify(project)).toBe(before);
+  // PRESET-4 final UX: the real WASM result must survive portable project serialization.
+  const portable = JSON.parse(
+    JSON.stringify(result.applied_op!.params.applied_cutting!.experimental_recipe),
+  );
+  expect(
+    result.applied_op!.params.applied_cutting!.experimental_recipe!.applied_values.stepover_ratio,
+  ).toBeNull();
+  expect(
+    result.trial!.operation.params.applied_cutting!.experimental_recipe!.applied_values
+      .stepover_ratio,
+  ).toBeNull();
+  expect(portable.applied_values).toHaveProperty('stepover_ratio', null);
+  expect(() => validateExperimentalRecipe(portable)).not.toThrow();
+  const preview = wasm.feedsSpeeds({
+    ...request,
+    apply: false,
+    trial_acknowledged: false,
+  }) as FsCamResponse;
+  expect(preview.applied_op).toBeUndefined();
+  expect(
+    preview.trial!.operation.params.applied_cutting!.experimental_recipe!.applied_values
+      .stepover_ratio,
+  ).toBeNull();
+  const operation = {
+    ...trialOp(),
+    toolId: tool.id,
+    step: -2,
+    appliedCutting: result.applied_op!.params.applied_cutting!,
+  };
+  const file = JSON.parse(
+    JSON.stringify({
+      kind: 'ivac-project-experimental',
+      version: 8,
+      imports: [],
+      visibleLayers: [],
+      selectedEntities: [],
+      operations: [operation],
+    }),
+  );
+  expect(() => validateProjectFile(file)).not.toThrow();
+  expect(file.operations[0].appliedCutting.experimental_recipe).toEqual(portable);
+  expect(file.operations[0].appliedCutting.slots).toEqual(
+    result.applied_op!.params.applied_cutting!.slots,
+  );
+  expect(experimentalModified(file.operations[0])).toBe(false);
+  file.operations[0].appliedCutting.slots[0].feed_mm_min = 1100;
+  const reopened = JSON.parse(JSON.stringify(file));
+  expect(() => validateProjectFile(reopened)).not.toThrow();
+  expect(experimentalModified(reopened.operations[0])).toBe(true);
+  delete reopened.operations[0].appliedCutting.experimental_recipe.applied_values.stepover_ratio;
+  expect(() => validateProjectFile(reopened)).toThrow('Invalid experimental recipe snapshot');
+
   expect(() => wasm.feedsSpeeds({ ...request, experimental_trial: false })).toThrow();
   try {
     wasm.feedsSpeeds({ ...request, trial_acknowledged: false });
