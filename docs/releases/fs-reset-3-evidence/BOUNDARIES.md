@@ -249,3 +249,12 @@ run passed the p95 target; the repeat with no other compiler/benchmark running
 This is not a clean performance/cancellation-latency qualification. The functional
 cancel/cache regressions pass, but host variability versus a latency regression
 requires a controlled follow-up; no timeout, polling interval or assertion was changed.
+
+
+## Bounded UX correction during final walkthrough
+
+Source parent `ded2348`. Three machine-limit tooltips still described legacy automatic
+clamping. Their English and German strings now describe v9 milling refusal with saved
+values unchanged and absent ratings unknown. No layout, validation or numerical code
+changed. ESLint/Prettier PASS; frontend **1492 PASS / 1 existing locale skip**, including
+12 source-freshness checks. Final-source pre-release will be rerun after this commit.
