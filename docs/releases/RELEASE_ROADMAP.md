@@ -1,5 +1,18 @@
 # FabCAM release roadmap — approved direction
 
+## FS-RESET-2 final acceptance / FS-RESET-3 preflight — 2026-10-22
+
+[Final acceptance report](FS_RESET_2_FINAL_ACCEPTANCE.md) supersedes the investigation
+status below: **temporary NO-GO**. Watcher failures reproduce on the pre-FS2 baseline;
+report actual-role values (`ivac-tnu7d`) and native collection import ACL (`ivac-c93e1`)
+require separately authorized repairs. Browser file transfer remains a documented manual
+test. Exact dependency, safety and test-migration inventories are delivered; no legacy
+removal has begun. Human gate `ivac-y25vq` remains OPEN.
+
+Future only: `ivac-7cotu`, an optional registration-hole creation assistant producing
+ordinary visible, editable Drill operations with explicit rates and Undo/Redo. Automatic
+hidden dowel injection remains unsupported in v9; this roadmap item authorizes no code.
+
 ## FS-RESET-2 implementation checkpoint — 2026-10-22
 
 FS-RESET-1 architecture was explicitly approved; ADR-0030 is Accepted. All four FS-RESET-2

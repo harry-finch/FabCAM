@@ -1,0 +1,31 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-f3c3a9b0ce5b1fa0)
+
+running 5 tests
+test watcher::tests::audit_15_16_missing_source_does_not_disable_existing_sources ... ok
+test watcher::tests::debounce_collapses_rapid_writes ... FAILED
+test watcher::tests::set_paths_replaces_old_watches ... ok
+test watcher::tests::single_path_emits_event ... FAILED
+test watcher::tests::unwatch_all_clears_set ... ok
+
+failures:
+
+---- watcher::tests::debounce_collapses_rapid_writes stdout ----
+
+thread 'watcher::tests::debounce_collapses_rapid_writes' panicked at crates/ivac-tauri/src/watcher.rs:295:9:
+debounced 5 rapid writes; got 0 events for path
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watcher::tests::single_path_emits_event stdout ----
+
+thread 'watcher::tests::single_path_emits_event' panicked at crates/ivac-tauri/src/watcher.rs:268:14:
+event within 2s: Timeout
+
+
+failures:
+    watcher::tests::debounce_collapses_rapid_writes
+    watcher::tests::single_path_emits_event
+
+test result: FAILED. 3 passed; 2 failed; 0 ignored; 0 measured; 16 filtered out; finished in 4.40s
+
+error: test failed, to rerun pass `-p ivac-tauri --lib`

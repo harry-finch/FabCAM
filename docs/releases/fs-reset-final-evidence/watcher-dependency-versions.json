@@ -1,0 +1,66 @@
+{
+  "notify": {
+    "baseline": [
+      "8.2.0"
+    ],
+    "current": [
+      "8.2.0"
+    ],
+    "raw_probe": [
+      "8.2.0"
+    ]
+  },
+  "notify-types": {
+    "baseline": [
+      "2.1.0"
+    ],
+    "current": [
+      "2.1.0"
+    ],
+    "raw_probe": [
+      "2.1.0"
+    ]
+  },
+  "fsevent-sys": {
+    "baseline": [
+      "4.1.0"
+    ],
+    "current": [
+      "4.1.0"
+    ],
+    "raw_probe": [
+      "4.1.0"
+    ]
+  },
+  "tempfile": {
+    "baseline": [
+      "3.27.0"
+    ],
+    "current": [
+      "3.27.0"
+    ],
+    "raw_probe": [
+      "3.27.0"
+    ]
+  },
+  "libc": {
+    "baseline": [
+      "0.2.186"
+    ],
+    "current": [
+      "0.2.186"
+    ],
+    "raw_probe": [
+      "0.2.186"
+    ]
+  },
+  "crossbeam-channel": {
+    "baseline": [
+      "0.5.15"
+    ],
+    "current": [
+      "0.5.15"
+    ],
+    "raw_probe": []
+  }
+}

@@ -1,0 +1,11 @@
+   Compiling bitflags v2.11.1
+   Compiling fsevent-sys v4.1.0
+   Compiling rustix v1.1.4
+   Compiling notify-types v2.1.0
+   Compiling notify v8.2.0
+   Compiling tempfile v3.27.0
+   Compiling fs-reset-watcher-probe v0.0.0 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/fs-reset-final/watcher-probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.62s
+     Running `target/debug/fs-reset-watcher-probe /Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/fs-reset-final/current-temp`
+root=/var/folders/gz/gvwdkxk15zq2h7kgt2z185r00000gn/T/ raw_callbacks=0 poll_callbacks=3 raw=[] polled=[Ok(Event { kind: Modify(Data(Any)), paths: ["/var/folders/gz/gvwdkxk15zq2h7kgt2z185r00000gn/T/.tmpRWvvp3/synthetic.svg"], attr:tracker: None, attr:flag: None, attr:info: None, attr:source: None }), Ok(Event { kind: Modify(Data(Any)), paths: ["/var/folders/gz/gvwdkxk15zq2h7kgt2z185r00000gn/T/.tmpRWvvp3/synthetic.svg"], attr:tracker: None, attr:flag: None, attr:info: None, attr:source: None }), Ok(Event { kind: Modify(Data(Any)), paths: ["/var/folders/gz/gvwdkxk15zq2h7kgt2z185r00000gn/T/.tmpRWvvp3/synthetic.svg"], attr:tracker: None, attr:flag: None, attr:info: None, attr:source: None })]
+root=/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/fs-reset-final/current-temp raw_callbacks=0 poll_callbacks=3 raw=[] polled=[Ok(Event { kind: Modify(Data(Any)), paths: ["/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/fs-reset-final/current-temp/.tmppNvFUG/synthetic.svg"], attr:tracker: None, attr:flag: None, attr:info: None, attr:source: None }), Ok(Event { kind: Modify(Data(Any)), paths: ["/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/fs-reset-final/current-temp/.tmppNvFUG/synthetic.svg"], attr:tracker: None, attr:flag: None, attr:info: None, attr:source: None }), Ok(Event { kind: Modify(Data(Any)), paths: ["/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/fs-reset-final/current-temp/.tmppNvFUG/synthetic.svg"], attr:tracker: None, attr:flag: None, attr:info: None, attr:source: None })]

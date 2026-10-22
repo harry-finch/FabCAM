@@ -1,0 +1,14 @@
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ✓ src/lib/services/preset-collection-files.test.ts (4 tests) 17ms
+ ✓ src/lib/api/cutting-contract.test.ts (2 tests) 10ms
+ ✓ src/lib/state/preset-library-v9.test.ts (3 tests) 8ms
+ ✓ src/lib/state/cutting-v9-wasm.test.ts (3 tests) 149ms
+ ✓ src/lib/state/cutting-workflow.test.ts (5 tests) 9ms
+ ✓ src/lib/state/project-v9.test.ts (6 tests) 8ms
+
+ Test Files  6 passed (6)
+      Tests  23 passed (23)
+   Start at  17:28:55
+   Duration  459ms (transform 475ms, setup 0ms, collect 671ms, tests 200ms, environment 1ms, prepare 339ms)

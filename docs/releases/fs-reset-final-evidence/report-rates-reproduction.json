@@ -1,0 +1,24 @@
+{
+  "source": "src/lib/state/feeds-speeds.ts",
+  "sha256": "791c00198a1ca440f57902cf11ec9864e4c1708fbcd541debd480e5c9ae4b3fb",
+  "expected": {
+    "role": "finish",
+    "tool_id": 1,
+    "rpm": 13000,
+    "feed_mm_min": 410,
+    "plunge_mm_min": 110
+  },
+  "actual": {
+    "tool_id": 1,
+    "pass": "finish",
+    "rpm": 18000,
+    "feed_mm_min": 2500,
+    "plunge_mm_min": 500,
+    "origins": {
+      "rpm": "legacy_snapshot",
+      "feed": "legacy_snapshot",
+      "plunge": "legacy_snapshot"
+    }
+  },
+  "matchesV9": false
+}

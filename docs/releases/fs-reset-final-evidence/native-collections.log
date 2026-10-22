@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.33s
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-f3c3a9b0ce5b1fa0)
+
+running 3 tests
+test preset_collections::tests::symlink_destination_and_directory_refused ... ok
+test preset_collections::tests::malformed_oversized_busy_and_traversal_preserve_original ... ok
+test preset_collections::tests::atomic_current_document_and_conflicts ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.03s

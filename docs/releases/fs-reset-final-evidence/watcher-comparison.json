@@ -1,0 +1,9 @@
+{
+  "current_sha": "62440f87e06d36eacfc707c4d850680c2899879e",
+  "baseline_sha": "184c2088beda0d7bb65a6ea97b7e19f6d28c658d",
+  "watcher_sha256": "e99bfe1bca4618a83712c4ad2ce54c00be90cdd6ab4e2f1f4f4fc47f535818f5",
+  "watcher_identical": true,
+  "toolchain": "rustc 1.88.0 (6b00bc388 2025-06-23)\nbinary: rustc\ncommit-hash: 6b00bc3880198600130e1cf62b8f8a93494488cc\ncommit-date: 2025-06-23\nhost: aarch64-apple-darwin\nrelease: 1.88.0\nLLVM version: 20.1.5\n",
+  "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.2\nBuildVersion:\t\t25F84\n",
+  "conditions": "Same host/sandbox, offline locked repository dependencies, identical source tests/timeouts, default temp directory and dedicated writable repo temp directories. Cargo target cache shared, separately compiled test binaries/source paths; no installed/unsandboxed execution."
+}

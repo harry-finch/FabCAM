@@ -143,3 +143,11 @@ Legacy crate/modules/APIs/source assets and internal old-contract test/Setup con
 for separately reviewed FS-RESET-3 removal. New product behavior does not wrap the recommendation
 engine. **HARD STOP: human review `ivac-y25vq` OPEN**. Engineering completion does not authorize
 mass removal, close platform/physical gates or grant release acceptance.
+
+## Final acceptance checkpoint — 2026-10-22
+
+[Final acceptance and dependency preflight](../../releases/FS_RESET_2_FINAL_ACCEPTANCE.md)
+records the baseline watcher comparison, report/native-import defects, pending file transfer,
+safety ownership and staged removal plan. This ADR remains Accepted; implementation
+acceptance is temporarily NO-GO pending bounded repairs and human review `ivac-y25vq`.
+No legacy removal or FabSpeed integration is authorized by this checkpoint.

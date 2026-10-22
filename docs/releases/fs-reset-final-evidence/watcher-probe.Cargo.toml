@@ -1,0 +1,8 @@
+[package]
+name = "fs-reset-watcher-probe"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[dependencies]
+notify = "=8.2.0"
+tempfile = "3"

@@ -1,0 +1,14 @@
+{
+  "production_source_sha": "62440f87e06d36eacfc707c4d850680c2899879e",
+  "branch": "FabCAM-v1.1",
+  "tracked_snapshot_count": 3194,
+  "tracked_paths_changed_since_start": [
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md",
+    "docs/shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md"
+  ],
+  "all_fs2_commits_ancestors": true,
+  "worktrees_unchanged": true,
+  "main_sha": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "scope": "Documentation and diagnostic evidence only; pre-existing documentation edits retained outside index. No claim of byte-hashing all untracked user data or app data."
+}

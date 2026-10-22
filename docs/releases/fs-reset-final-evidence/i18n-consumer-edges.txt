@@ -1,0 +1,275 @@
+frontend/src/lib/components/TrialProvenance.svelte:13:  <p>{view?.name ?? t('trial.unknown_name')}</p>
+frontend/src/lib/components/TrialProvenance.svelte:16:      {t('trial.derived')}: {view.original.publisher}{view.original.material
+frontend/src/lib/components/TrialProvenance.svelte:18:        : ''} · {t(`fs.${view.original.mode}`)}
+frontend/src/lib/components/TrialProvenance.svelte:20:  {:else if view}<p class="secondary">{t('fs.source')}: {view.publisher}</p>{/if}
+frontend/src/lib/components/TrialProvenance.svelte:22:    <summary>{t('trial.technical')}</summary>
+frontend/src/lib/components/TrialProvenance.svelte:23:    <p>{t('trial.status')}</p>
+frontend/src/lib/components/TrialProvenance.svelte:29:        {t('trial.derived')}: {view.original.pack.id} @{view.original.pack.revision}<br />{view
+frontend/src/lib/components/TrialProvenance.svelte:32:    {#if !view && !recommendationSources.loading}<p>{t('trial.source_missing')}</p>{/if}
+frontend/src/lib/components/TrialProvenance.svelte:33:    <p class="secondary">{t('trial.source_evidence')}</p>
+frontend/src/lib/components/ToolLibraryDialog.svelte:630:                  <p class="hint">{t('fs35.fallback_help')}</p>
+frontend/src/lib/components/ReportDialog.svelte:73:    [t('fs.material'), project.data.material?.label ?? project.data.material?.id ?? '—'],
+frontend/src/lib/components/ReportDialog.svelte:91:      return `${t('uxc.rough')}: ${main} · ${t('fs35.finishing')}: ${finish ? `${finish.rpm} rpm · ${finish.feed_mm_min} / ${finish.plunge_mm_min} mm/min` : '—'}`;
+frontend/src/lib/components/MachineTooling.svelte:70:      {t('fs35.available_tools')}
+frontend/src/lib/components/MachineTooling.svelte:79:      {t('fs35.add_library')}
+frontend/src/lib/components/LabPresetManager.svelte:55:        title: t('fs38.delete'),
+frontend/src/lib/components/LabPresetManager.svelte:56:        body: `${name}. ${t('fs38.delete_help')}`,
+frontend/src/lib/components/LabPresetManager.svelte:57:        primaryLabel: t('fs38.delete'),
+frontend/src/lib/components/LabPresetManager.svelte:89:      ? t('fs38.draft')
+frontend/src/lib/components/LabPresetManager.svelte:91:        ? t('fs35.validated')
+frontend/src/lib/components/LabPresetManager.svelte:92:        : t('fs35.tested');
+frontend/src/lib/components/LabPresetManager.svelte:98:    >{t('fs38.manage')} · {pack.records.filter((r) => r.lab && !r.lab.deleted).length}</summary
+frontend/src/lib/components/LabPresetManager.svelte:100:  <label>{t('fs38.search')}<input type="search" bind:value={search} /></label>
+frontend/src/lib/components/LabPresetManager.svelte:102:    ><input type="checkbox" bind:checked={showDeleted} />{t('fs38.show_deleted')}</label
+frontend/src/lib/components/LabPresetManager.svelte:105:    >{t('fs38.preset')}<select bind:value={selected}
+frontend/src/lib/components/LabPresetManager.svelte:106:      ><option value="">{t('fs38.select_preset')}</option>{#each rows as r (r.profile.id)}<option
+frontend/src/lib/components/LabPresetManager.svelte:109:            ? ` · ${t('fs38.deleted')}`
+frontend/src/lib/components/LabPresetManager.svelte:117:      <summary>{t('fs36.calculation_context')}</summary>
+frontend/src/lib/components/LabPresetManager.svelte:119:        <dt>{t('fs35.machine')}</dt>
+frontend/src/lib/components/LabPresetManager.svelte:125:        <dt>{t('fs.material')}</dt>
+frontend/src/lib/components/LabPresetManager.svelte:131:        <dt>{t('fs35.tool')}</dt>
+frontend/src/lib/components/LabPresetManager.svelte:136:        <dt>{t('fs35.operation')}</dt>
+frontend/src/lib/components/LabPresetManager.svelte:138:          {profile.scope.operation === 'pocket' ? t('fs35.pocket') : t('fs35.profile')} · {profile
+frontend/src/lib/components/LabPresetManager.svelte:140:            ? t('fs38.full_width')
+frontend/src/lib/components/LabPresetManager.svelte:142:              ? `${t('fs35.nominal')} · ${profile.scope.engagement.ratio.max * 100}%`
+frontend/src/lib/components/LabPresetManager.svelte:143:              : t('fs38.unknown_engagement')}
+frontend/src/lib/components/LabPresetManager.svelte:145:        <dt>{t('fs36.pass_depth')}</dt>
+frontend/src/lib/components/LabPresetManager.svelte:147:        <dt>{t('fs38.actual_values')}</dt>
+frontend/src/lib/components/LabPresetManager.svelte:156:      <summary>{t('fs38.details')}</summary>
+frontend/src/lib/components/LabPresetManager.svelte:158:        {record.lab.tested_at ?? t('fs38.draft')} · {record.lab.operator} · {record.lab
+frontend/src/lib/components/LabPresetManager.svelte:163:    <label>{t('fs38.observations')}<textarea rows="2" bind:value={notes}></textarea></label>
+frontend/src/lib/components/LabPresetManager.svelte:167:      onclick={() => change(selected, { notes })}>{t('fs38.save_notes')}</button
+frontend/src/lib/components/LabPresetManager.svelte:172:        onclick={() => change(selected, { deleted: false })}>{t('fs38.restore')}</button
+frontend/src/lib/components/LabPresetManager.svelte:181:        />{t('fs38.use_preset')}</label
+frontend/src/lib/components/LabPresetManager.svelte:191:          }}>{t('fs38.promote')}</button
+frontend/src/lib/components/LabPresetManager.svelte:193:      <button class="inspector-action" disabled={busy} onclick={remove}>{t('fs38.delete')}</button>
+frontend/src/lib/components/LabPresetManager.svelte:200:      <summary>{t('fs38.history')} · {record.lab_history?.length ?? 0}</summary>
+frontend/src/lib/components/LabPresetManager.svelte:202:        {record.profile.id} · {t('fs38.created')}: {record.lab.created_at.slice(0, 10)}
+frontend/src/lib/components/LabPresetManager.svelte:211:  <p class="meta">{t('fs38.backup_help')}</p>
+frontend/src/lib/components/LabPresetManager.svelte:224:      <h2 id="lab-review-title">{t('fs38.promote')}</h2>
+frontend/src/lib/components/LabPresetManager.svelte:225:      <p>{t('fs38.validation_policy')}</p>
+frontend/src/lib/components/LabPresetManager.svelte:226:      <label>{t('fs38.review_notes')}<textarea rows="3" bind:value={reviewNotes}></textarea></label>
+frontend/src/lib/components/LabPresetManager.svelte:229:          'fs38.validation_confirm',
+frontend/src/lib/components/LabPresetManager.svelte:238:          onclick={promote}>{t('fs38.confirm_promotion')}</button
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:29:              ? 'fs35.reference'
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:31:                ? 'fs35.tested'
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:33:                  ? 'fs35.validated'
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:34:                  : 'fs35.theoretical',
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:93:<h3>{t('fs35.sources')}</h3>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:94:<p>{t('fs37.sources_help')}</p>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:95:<h4>{t('fs37.built_in')}</h4>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:117:  <p class="meta">{t('fs37.public')} · {evidenceSummary(pack)} · {pack.manifest.license}</p>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:119:    <summary>{t('fs.source')}</summary>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:124:<h4>{t('fs37.local')}</h4>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:150:    {t('fs37.local_only')} · {evidenceSummary(pack)} · {pack.manifest.identity.revision} · {pack
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:154:    <summary>{t('fs.source')}</summary>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:163:{#if !recommendationSources.local.length}<p class="meta">{t('fs37.no_local')}</p>{/if}
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:165:  >{t('fs37.import')}<input
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:175:        if (file.size > MAX_PACK_BYTES) throw new Error(t('fs37.too_large'));
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:190:        error = `${t('fs.invalid_data')} ${String(err)}`;
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:198:<p class="meta">{t('fs37.privacy')}</p>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:199:{#if recommendationSources.loading}<p role="status">{t('fs35.loading')}</p>{/if}
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:204:  <summary>{t('fs35.source_details')}</summary>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:205:  <p>{t('fs35.source_scope_help')}</p>
+frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte:209:    rel="noreferrer">{t('fs.reference_license')}</a
+frontend/src/lib/components/PresetBrowser.svelte:46:    if (row.record?.lab?.state === 'draft') return t('fs38.draft');
+frontend/src/lib/components/PresetBrowser.svelte:148:        onclick={() => ontrial?.(inspecting)}>{t('trial.use')}</button
+frontend/src/lib/components/PresetBrowser.svelte:197:          ? t('trial.status')
+frontend/src/lib/components/PresetBrowser.svelte:206:          ? 'fs35.loading'
+frontend/src/lib/components/PresetBrowser.svelte:208:            ? 'fs35.source_unavailable'
+frontend/src/lib/components/MaterialPicker.svelte:71:    <span id={`${id}-label`}>{t('fs.material')}</span>
+frontend/src/lib/components/MaterialPicker.svelte:90:        t(context === 'job' ? 'fs35.job_material' : 'preset2.material_help'),
+frontend/src/lib/components/MaterialPicker.svelte:101:      label={t('fs.material')}
+frontend/src/lib/components/MaterialPicker.svelte:116:          <label>{t('fs35.material_name')}<input type="text" bind:value={customName} /></label>
+frontend/src/lib/components/MaterialPicker.svelte:117:          <p>{t('fs35.custom_material_help')}</p>
+frontend/src/lib/components/MaterialPicker.svelte:158:            }}>{t('fs35.other_material')}</button
+frontend/src/lib/components/FeedsSpeedsCompatibility.svelte:85:    <p>{t('fs35.compatibility_help')}</p>
+frontend/src/lib/components/FeedsSpeedsCompatibility.svelte:86:    <p>{kind === 'machines' ? t('fs39.machine_setup') : t('fs39.tool_setup')}</p>
+frontend/src/lib/components/FeedsSpeedsCompatibility.svelte:89:      <summary>{t('fs38.identity')}</summary><small>{local.id} · {local.revision}</small>
+frontend/src/lib/components/DuplicatePresetDialog.svelte:205:          ><span>{t('fs38.name')}</span><input bind:value={name} maxlength="100" required /></label
+frontend/src/lib/components/DuplicatePresetDialog.svelte:270:          ><span>{t('fs38.observations')}</span><textarea bind:value={notes} rows="2"
+frontend/src/lib/components/PresetsLibrary.svelte:31:    { id: 'name', label: 'fs38.name', weight: 0.22, min: 130 },
+frontend/src/lib/components/PresetsLibrary.svelte:32:    { id: 'material', label: 'fs.material', weight: 0.18, min: 100 },
+frontend/src/lib/components/PresetsLibrary.svelte:36:    { id: 'rpm', label: 'fs.rpm', weight: 0.08, min: 76 },
+frontend/src/lib/components/PresetsLibrary.svelte:37:    { id: 'feed', label: 'fs.feed', weight: 0.09, min: 90 },
+frontend/src/lib/components/PresetsLibrary.svelte:38:    { id: 'doc', label: 'fs36.pass_depth', weight: 0.06, min: 80 },
+frontend/src/lib/components/PresetsLibrary.svelte:39:    { id: 'stepover', label: 'fs.stepover', weight: 0.06, min: 76 },
+frontend/src/lib/components/PresetsLibrary.svelte:100:    draft: 'fs38.draft',
+frontend/src/lib/components/PresetsLibrary.svelte:101:    tested: 'fs35.tested',
+frontend/src/lib/components/PresetsLibrary.svelte:102:    validated: 'fs35.validated',
+frontend/src/lib/components/PresetsLibrary.svelte:103:    theoretical: 'fs35.theoretical',
+frontend/src/lib/components/PresetsLibrary.svelte:104:    reference_data: 'fs35.reference',
+frontend/src/lib/components/PresetsLibrary.svelte:141:      >{selected && trialEligible(selected) ? t('trial.use') : t('preset3.use')}</button
+frontend/src/lib/components/PresetsLibrary.svelte:208:  {#if recommendationSources.loading}<p role="status" class="message">{t('fs35.loading')}</p>
+frontend/src/lib/components/SelectedRecipeContext.svelte:27:    <strong title={view?.name}>{view?.name ?? t('trial.unknown_name')}</strong><span
+frontend/src/lib/components/SelectedRecipeContext.svelte:33:    {error || (blocked ? t('trial.review_required') : t('trial.ready'))}
+frontend/src/lib/components/OpPropertiesPanel.svelte:845:          <summary>{t('fs35.advanced_depth')}</summary>{@render advancedCutSettings()}
+frontend/src/lib/components/OpPropertiesPanel.svelte:895:          {project.data.machine.mode === 'mill' ? t('fs35.advanced_feed') : t('opprops.feeds')}
+frontend/src/lib/components/OpPropertiesPanel.svelte:907:              ? t('fs35.advanced_feed')
+frontend/src/lib/components/ExperimentalBadge.svelte:9:    >{t('trial.status')}{modified ? ` · ${t('trial.modified')}` : ''}</span
+frontend/src/lib/components/LabPresetDialog.svelte:39:      name: `${materialName} · Ø${capture.request.tool.diameter_mm} · ${capture.request.operation.kind === 'pocket' ? t('fs35.pocket') : t('fs35.profile')}`,
+frontend/src/lib/components/LabPresetDialog.svelte:60:      error = t('fs38.stale');
+frontend/src/lib/components/LabPresetDialog.svelte:92:    <header><h2 id="lab-preset-title">{t('fs38.save_title')}</h2></header>
+frontend/src/lib/components/LabPresetDialog.svelte:94:      >{t('fs38.destination')}
+frontend/src/lib/components/LabPresetDialog.svelte:115:      <label>{t('fs38.name')}<input bind:value={form.name} required /></label>
+frontend/src/lib/components/LabPresetDialog.svelte:117:        >{t('fs38.evidence')}<select bind:value={form.state}
+frontend/src/lib/components/LabPresetDialog.svelte:118:          ><option value="tested">{t('fs35.tested')}</option><option value="draft"
+frontend/src/lib/components/LabPresetDialog.svelte:119:            >{t('fs38.draft')}</option
+frontend/src/lib/components/LabPresetDialog.svelte:125:          >{t('fs38.test_date')}<input
+frontend/src/lib/components/LabPresetDialog.svelte:134:            'fs38.physical_confirm',
+frontend/src/lib/components/LabPresetDialog.svelte:139:            'fs38.success_confirm',
+frontend/src/lib/components/LabPresetDialog.svelte:142:      {:else}<p class="meta">{t('fs38.draft_help')}</p>{/if}
+frontend/src/lib/components/LabPresetDialog.svelte:144:        >{t('fs38.observations')}<textarea rows="2" bind:value={form.observations}
+frontend/src/lib/components/LabPresetDialog.svelte:149:          >{t('fs38.duplicate')}<select bind:value={updateId}
+frontend/src/lib/components/LabPresetDialog.svelte:150:            ><option value="">{t('fs38.save_new')}</option
+frontend/src/lib/components/LabPresetDialog.svelte:152:                >{t('fs38.update_existing')}: {d.lab?.name} · {d.lab?.state}</option
+frontend/src/lib/components/LabPresetDialog.svelte:156:        <p class="meta">{t('fs38.revision_help')}</p>
+frontend/src/lib/components/LabPresetDialog.svelte:159:        <summary>{t('fs38.details')}</summary>
+frontend/src/lib/components/LabPresetDialog.svelte:160:        <label>{t('fs38.operator')}<input bind:value={form.operator} /></label>
+frontend/src/lib/components/LabPresetDialog.svelte:161:        <label>{t('fs38.job_reference')}<input bind:value={form.job_reference} /></label>
+frontend/src/lib/components/LabPresetDialog.svelte:163:          >{t('fs38.detailed_notes')}<textarea rows="3" bind:value={form.detailed_notes}
+frontend/src/lib/components/LabPresetDialog.svelte:169:        <summary>{t('fs36.calculation_context')}</summary>
+frontend/src/lib/components/LabPresetDialog.svelte:171:          <dt>{t('fs35.machine')}</dt>
+frontend/src/lib/components/LabPresetDialog.svelte:173:          <dt>{t('fs35.tool')}</dt>
+frontend/src/lib/components/LabPresetDialog.svelte:175:          <dt>{t('fs35.operation')}</dt>
+frontend/src/lib/components/LabPresetDialog.svelte:177:            {capture.request.operation.kind === 'pocket' ? t('fs35.pocket') : t('fs35.profile')}
+frontend/src/lib/components/LabPresetDialog.svelte:179:          <dt>{t('fs36.pass_depth')}</dt>
+frontend/src/lib/components/LabPresetDialog.svelte:181:          <dt>{t('fs38.engagement')}</dt>
+frontend/src/lib/components/LabPresetDialog.svelte:184:              ? t('fs38.full_width')
+frontend/src/lib/components/LabPresetDialog.svelte:186:                ? t('fs35.nominal')
+frontend/src/lib/components/LabPresetDialog.svelte:187:                : t('fs38.unknown_engagement')}{capture.request.operation.engagement.kind ===
+frontend/src/lib/components/LabPresetDialog.svelte:192:          <dt>{t('fs38.actual_values')}</dt>
+frontend/src/lib/components/LabPresetDialog.svelte:196:      {#if stale}<p role="alert">{t('fs38.stale')}</p>{/if}
+frontend/src/lib/components/LabPresetDialog.svelte:202:          disabled={busy || stale || !previous}>{t('fs38.save')}</button
+frontend/src/lib/components/MaterialBrowser.svelte:99:  <div class="results" bind:this={results} aria-label={t('fs.material')}>
+frontend/src/lib/components/PresetCuttingSummary.svelte:6:    [t('fs.rpm'), `${row.profile.data.rpm} rpm`],
+frontend/src/lib/components/PresetCuttingSummary.svelte:8:      t(row.profile.data.kind === 'exact_values' ? 'fs.feed' : 'fs.chipload'),
+frontend/src/lib/components/PresetCuttingSummary.svelte:13:    [t('fs.plunge'), `${row.profile.data.plunge_mm_min} mm/min`],
+frontend/src/lib/components/PresetCuttingSummary.svelte:14:    [t('fs36.pass_depth'), `${row.profile.data.doc_mm} mm`],
+frontend/src/lib/components/PresetCuttingSummary.svelte:17:      : [[t('fs.stepover'), `${row.profile.data.stepover_ratio * 100}%`]]),
+frontend/src/lib/components/TrialComparison.svelte:18:<section aria-label={t('trial.use')}>
+frontend/src/lib/components/TrialComparison.svelte:33:    <summary>{t('trial.context')}</summary>
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:37:        return t('fs39.close');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:39:        return t('fs39.approximate');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:41:        return t('fs39.extrapolated');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:43:        return t('fs39.interpolated');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:45:        return t('fs39.generic');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:47:        return t('fs39.theoretical');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:49:        return t('fs39.exact');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:51:        return t('fs36.unknown');
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:58:      {t('fs39.generic')}: {record.origin.material_taxon.replaceAll('.', ' / ')}
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:62:      <dt>{t('fs35.tool')}</dt>
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:66:          · {t('fs39.relative_gap')}: {(derivation.relative_delta * 100).toFixed(1)} %{/if}
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:68:      <dt>{t('fs35.operation')}</dt>
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:70:        {derivation.slot_basis_for_pocket ? t('fs39.slot_basis') : t('fs39.same_operation')}
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:72:      <dt>{t('fs35.machine')}</dt>
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:74:        {derivation.machine_transfer ? t('fs39.router_transfer') : t('fs39.same_machine')}
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:76:      <dt>{t('fs.material')}</dt>
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:78:        {derivation.material_transfer ? t('fs39.material_transfer') : t('fs39.same_material')}
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:80:      <dt>{t('fs39.method')}</dt>
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:83:          ? t('fs39.interpolation_method')
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:84:          : t('fs39.normalized_method')}
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:88:        {t('fs39.weight')}: {derivation.interpolation_weight.toFixed(3)}
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:90:    <p>{t('fs39.reference_only')}</p>
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:101:      · {t('fs39.adapted_from')} Ø{derivation.source_diameters_mm
+frontend/src/lib/components/op_properties/RecommendationBasis.svelte:109:      <summary>{t('fs39.why')}</summary>{@render explanation()}
+frontend/src/lib/components/RecipeValuesEditor.svelte:7:    { key: 'rpm', label: 'fs.rpm', unit: 'rpm' },
+frontend/src/lib/components/RecipeValuesEditor.svelte:10:      label: source.kind === 'exact_values' ? 'fs.feed' : 'fs.chipload',
+frontend/src/lib/components/RecipeValuesEditor.svelte:13:    { key: 'plunge', label: 'fs.plunge', unit: 'mm/min' },
+frontend/src/lib/components/RecipeValuesEditor.svelte:14:    { key: 'depth', label: 'fs36.pass_depth', unit: 'mm' },
+frontend/src/lib/components/RecipeValuesEditor.svelte:17:      : [{ key: 'stepover', label: 'fs.stepover', unit: '%' }]),
+frontend/src/lib/components/op_properties/CuttingOriginStatus.svelte:12:    ? t('fs36.modified_hint')
+frontend/src/lib/components/op_properties/CuttingOriginStatus.svelte:14:      ? t('fs36.suggested_hint')
+frontend/src/lib/components/op_properties/CuttingOriginStatus.svelte:31:    <span>{origin === 'manual' ? t('fs35.modified') : t('fs36.suggested')}</span>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:40:  <summary>{t('fs39.why')}</summary>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:42:    <dt>{t('fs35.machine')}</dt>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:44:    <dt>{t('fs35.tool')}</dt>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:46:    <dt>{t('fs.material')}</dt>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:48:    <dt>{t('fs36.pass_depth')}</dt>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:50:    <dt>{t('fs36.engagement')}</dt>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:53:        ? `${displayNumber((1 - overlap) * 100, 1)} % · ${t('fs35.nominal')}`
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:55:          ? t('fs.full_width')
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:56:          : t('fs36.unknown')}
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:58:    <dt>{t('fs.chipload')}</dt>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:60:      {displayNumber(proposal.parameters.effective_chipload_mm_tooth, 3)} mm/{t('fs.tooth')}
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:71:      {t('fs39.adapted_from')} Ø{derived.source_diameters_mm
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:76:  {#if proposal.diagnostics.length}<p>{t('fs.unknowns')}</p>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:95:      {proposal.provenance.request.machine.max_feed_mm_min ?? '—'} mm/min ({t('fs.feed')}) ·
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:96:      {proposal.provenance.request.machine.max_plunge_mm_min ?? '—'} mm/min ({t('fs.plunge')})
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:101:  <summary>{t('fs.source')}</summary>
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:111:    rel="noreferrer">{t('fs.source_link')}</a
+frontend/src/lib/components/PresetRecordDetails.svelte:8:    [t('fs35.machine'), row.machine],
+frontend/src/lib/components/PresetRecordDetails.svelte:9:    [t('fs.material'), row.material],
+frontend/src/lib/components/PresetRecordDetails.svelte:13:    [t('fs35.operation'), row.profile.scope.operation.replaceAll('_', ' ')],
+frontend/src/lib/components/PresetRecordDetails.svelte:19:    draft: 'fs38.draft',
+frontend/src/lib/components/PresetRecordDetails.svelte:20:    tested: 'fs35.tested',
+frontend/src/lib/components/PresetRecordDetails.svelte:21:    validated: 'fs35.validated',
+frontend/src/lib/components/PresetRecordDetails.svelte:22:    theoretical: 'fs35.theoretical',
+frontend/src/lib/components/PresetRecordDetails.svelte:23:    reference_data: 'fs35.reference',
+frontend/src/lib/components/PresetRecordDetails.svelte:48:    <dt>{t('fs.rpm')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:50:    <dt>{t('fs.feed')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:56:    <dt>{t('fs.plunge')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:58:    <dt>{t('fs36.pass_depth')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:60:    <dt>{t('fs.stepover')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:96:      <dt>{t('fs38.operator')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:98:      <dt>{t('fs38.job_reference')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:100:      <dt>{t('fs38.test_date')}</dt>
+frontend/src/lib/components/PresetRecordDetails.svelte:118:      <summary>{t('fs38.history')} · {row.record.lab_history.length}</summary>
+frontend/src/lib/components/StockPanel.svelte:260:            ? 'fs36.stock_manual_geometry'
+frontend/src/lib/components/StockPanel.svelte:261:            : 'fs36.stock_manual_empty'
+frontend/src/lib/components/StockPanel.svelte:263:            ? 'fs36.stock_auto_geometry'
+frontend/src/lib/components/StockPanel.svelte:264:            : 'fs36.stock_auto_empty',
+frontend/src/lib/components/StockPanel.svelte:316:  <div class="placement-readout" aria-label={t('fs36.stock_corner_wcs')}>
+frontend/src/lib/components/StockPanel.svelte:317:    <span>{t('fs36.stock_corner_wcs')}</span>
+frontend/src/lib/components/StockPanel.svelte:395:    <p class="placement-help">{t('fs36.stock_wcs_help')}</p>
+frontend/src/lib/components/CuttingParameterComparison.svelte:14:  const labels = ['fs.rpm', 'fs.feed', 'fs.plunge', 'fs36.pass_depth', 'fs.stepover'] as const;
+frontend/src/lib/components/CuttingParameterComparison.svelte:23:  <table aria-label={t('fs35.recommendation')}>
+frontend/src/lib/components/CuttingParameterComparison.svelte:27:          title={t('fs35.suggested')}>{t('preset3.proposed')}</th
+frontend/src/lib/components/op_properties/SavedCuttingRates.svelte:27:    <div class="row"><span>{t('fs.rpm')}</span><span>{rpm ?? '—'} rpm</span></div>
+frontend/src/lib/components/op_properties/SavedCuttingRates.svelte:29:      ><span>{t('fs.feed')}</span>
+frontend/src/lib/components/op_properties/SavedCuttingRates.svelte:42:      ><span>{t('fs.plunge')}</span>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:109:      if (fingerprint !== currentLabFingerprint) throw new Error(t('fs38.stale'));
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:120:        ?.manifest.name ?? t('fs37.references')
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:274:      : t('fs35.material_missing'),
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:303:      error = t('fs.positive');
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:326:      error = t('fs.unavailable_build');
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:340:        description: t('fs37.references'),
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:345:          label: t('fs37.references'),
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:408:            throw new Error(t('fs36.reason.missing_cutting_data'));
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:441:    return t(field === 'rpm' ? 'fs.rpm' : field === 'feed_mm_min' ? 'fs.feed' : 'fs.plunge');
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:456:<section class="cutting-section" class:props={selectorOnly} aria-label={t('fs35.cutting')}>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:458:    <h3>{t('fs35.cutting')}</h3>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:461:        {t('fs35.missing_rates')}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:491:      ><span>{t('fs36.pass_depth')}</span><input
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:506:    {#if op.depthList?.length}<p>{t('fs35.schedule')}</p>{/if}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:508:        ><span>{t('fs.stepover')}</span><input
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:525:        <summary>{t('fs35.finishing')}</summary>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:579:    {#if stale}<div class="stale" role="status" title={t('fs35.kept')}>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:580:        <strong>{t('fs35.outdated')}</strong><span>{t('fs36.kept')}</span>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:591:        {t('fs37.provenance_missing')}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:597:      context={`${op.kind === 'profile' ? t('fs35.profile') : t('fs35.pocket')} · Ø${tool ? displayNumber(tool.diameter, 3) : '—'} mm · ${tool?.flutes ?? '—'}F · ${materialLabel} · ${project.data.machine.name ?? ''}`}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:613:          title={t('fs35.suggest')}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:650:        {#if op.kind === 'profile'}<label class="check-row" title={t('trial.full_width_help')}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:651:            ><input type="checkbox" bind:checked={fullWidth} />{t('fs.full_width')}</label
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:655:          ><span>{t('fs.mode')}</span><select bind:value={mode}>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:656:            <option value="prudent">{t('fs.prudent')}</option><option value="normal"
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:657:              >{t('fs.normal')}</option
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:658:            ><option value="rapid">{t('fs.rapid')}</option>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:663:      {#if recommendationSources.loading}<p role="status">{t('fs35.loading')}</p>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:664:      {:else if recommendationSources.error}<p role="alert">{t('fs35.source_unavailable')}</p>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:666:          {t('fs35.sources_disabled')}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:702:                  <p class="scope-heading">{t('fs36.closest_scopes')}</p>
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:707:                          <strong>{scopeField(mismatch.field)}</strong><br />{t('fs36.actual')}: {scopeValue(
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:710:                            t('fs36.unknown'),
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:711:                          )}{mismatch.field.endsWith('_mm') ? ' mm' : ''}<br />{t('fs36.required')}: {scopeValue(
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:714:                            t('fs36.unknown'),
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:786:              {t('fs36.engagement')}: {displayNumber((1 - overlap) * 100, 1)} % · {t(
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:787:                'fs35.nominal',
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:792:              ? t('fs39.extrapolated')
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:805:              {t('fs37.disagreement')}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:831:              rel="noreferrer">{t('fs.source_link')}</a
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:843:          }}>{t('fs35.recalculate')}</button
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:851:          ><input type="checkbox" bind:checked={trialAcknowledged} />{t('trial.acknowledge')}</label
+frontend/src/lib/components/op_properties/PlanarSurfaceSection.svelte:99:<section aria-label={t('fs35.cutting')}>
+frontend/src/lib/components/op_properties/PlanarSurfaceSection.svelte:100:  <h3>{t('fs35.cutting')}</h3>
+frontend/src/lib/components/op_properties/PlanarSurfaceSection.svelte:111:    ><span>{t('fs36.pass_depth')}</span><input

@@ -1,0 +1,245 @@
+crates/ivac-core/src/feeds_speeds.rs:120:        .fs_context
+crates/ivac-core/src/feeds_speeds.rs:164:                .fs_context
+crates/ivac-core/src/feeds_speeds.rs:168:                .fs_context
+crates/ivac-core/src/feeds_speeds.rs:222:        &project.fs_context,
+crates/ivac-core/src/feeds_speeds.rs:230:pub fn saved_rates(op: &Op, tool: &ToolEntry, pass: PassKind) -> Result<(u32, u32, u32), String> {
+crates/ivac-core/src/feeds_speeds.rs:380:                    saved_rates(op, tool, pass)?
+crates/ivac-core/src/feeds_speeds.rs:434:        validate_applied_project(&checked).map_err(|e| e.to_string())?;
+crates/ivac-core/src/feeds_speeds.rs:448:pub(crate) fn effective_machine(project: &Project, tool_id: u32) -> crate::project::MachineConfig {
+crates/ivac-core/src/feeds_speeds.rs:451:        .fs_context
+crates/ivac-core/src/feeds_speeds.rs:461:pub(crate) fn validate_applied_project(
+crates/ivac-core/src/feeds_speeds.rs:465:    if let Some(context) = &project.fs_context {
+crates/ivac-core/src/feeds_speeds.rs:516:                saved_rates(op, tool, pass).map_err(|e| PipelineError::AppliedCutting(op.id, e))?;
+crates/ivac-core/src/feeds_speeds.rs:589:    let (rpm, plunge_mm_min, feed_mm_min) = saved_rates(op, tool, pass)?;
+crates/ivac-core/src/feeds_speeds.rs:596:        let rates = saved_rates(op, finish_tool, PassKind::Finish)?;
+crates/ivac-core/src/feeds_speeds.rs:640:            fs_context: Some(FsContext {
+crates/ivac-core/src/feeds_speeds.rs:663:                p.fs_context.as_mut().unwrap().machine_identity = None;
+crates/ivac-core/src/feeds_speeds.rs:669:                p.fs_context.as_mut().unwrap().tools.clear();
+crates/ivac-core/src/feeds_speeds.rs:706:        project.fs_context = None;
+crates/ivac-core/src/feeds_speeds.rs:720:        let context = p.fs_context.as_mut().unwrap();
+crates/ivac-core/src/feeds_speeds.rs:841:        p.fs_context.as_mut().unwrap().machine_identity = Some(fs::Identity {
+crates/ivac-core/src/feeds_speeds.rs:902:            saved_rates(&restored.operations[0], &restored.tools[0], PassKind::Rough).unwrap();
+crates/ivac-core/src/feeds_speeds.rs:993:            saved_rates(&restored, &p.tools[0], PassKind::Finish).unwrap(),
+crates/ivac-core/src/feeds_speeds.rs:1061:            saved_rates(op, &restored.tools[0], PassKind::Finish).unwrap(),
+crates/ivac-core/src/feeds_speeds.rs:1084:            saved_rates(&p.operations[0], &p.tools[0], PassKind::Finish).unwrap(),
+crates/ivac-core/src/feeds_speeds.rs:1108:        assert!(validate_applied_project(&p).is_err());
+crates/ivac-core/src/feeds_speeds.rs:1125:        assert!(validate_applied_project(&p).is_err());
+crates/ivac-core/src/feeds_speeds.rs:1129:        assert!(validate_applied_project(&p).is_err());
+crates/ivac-core/src/feeds_speeds.rs:1133:        assert!(validate_applied_project(&p).is_err());
+crates/ivac-core/src/feeds_speeds.rs:1171:        assert!(!encoded.contains("fs_context"));
+crates/ivac-core/src/feeds_speeds.rs:1174:            saved_rates(&p.operations[0], &p.tools[0], PassKind::Finish).unwrap(),
+crates/ivac-core/src/feeds_speeds.rs:1250:        p.fs_context = None;
+crates/ivac-core/src/feeds_speeds.rs:1290:        p.fs_context.as_mut().unwrap().tools[0].max_rpm = Some(11000);
+crates/ivac-core/src/feeds_speeds.rs:1311:            saved_rates(&p.operations[0], &p.tools[0], PassKind::Finish).unwrap(),
+crates/ivac-core/src/feeds_speeds.rs:1323:        let mut binding = p.fs_context.as_ref().unwrap().tools[0].clone();
+crates/ivac-core/src/feeds_speeds.rs:1325:        p.fs_context.as_mut().unwrap().tools.push(binding);
+crates/ivac-core/src/feeds_speeds.rs:1326:        assert!(validate_applied_project(&p).is_err());
+crates/ivac-core/src/feeds_speeds.rs:1328:        assert!(validate_applied_project(&p).is_ok());
+crates/ivac-core/src/pipeline.rs:2685:            || project.fs_context.is_some()
+crates/ivac-core/src/project.rs:59:    pub fs_context: Option<crate::feeds_speeds::FsContext>,
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:6:    project.fs_context.as_mut().unwrap().tools[0].max_rpm = Some(22000);
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:91:    validate_applied_project(&restored).unwrap();
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:93:        saved_rates(
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:153:            3 => r.project.fs_context.as_mut().unwrap().tools[0].max_rpm = None,
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:156:            6 => r.project.fs_context.as_mut().unwrap().tools[0].max_rpm = Some(17000),
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:202:    validate_applied_project(&p).unwrap();
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:242:        assert!(validate_applied_project(&bad).is_err());
+crates/ivac-core/src/feeds_speeds/trial_tests.rs:317:    let c = request.project.fs_context.as_mut().unwrap();
+crates/ivac-core/src/feeds_speeds/experimental.rs:3:    cam_request, saved_rates, AppliedCutting, AppliedRateSlot, CuttingOrigin, FsCamRequest,
+crates/ivac-core/src/feeds_speeds/experimental.rs:70:        .fs_context
+crates/ivac-core/src/feeds_speeds/experimental.rs:141:        .fs_context
+crates/ivac-core/src/feeds_speeds/experimental.rs:244:        let (rpm, plunge_mm_min, feed_mm_min) = saved_rates(op, tool, pass)?;
+crates/ivac-core/src/pipeline/setup_resolver.rs:231:    let machine = crate::cutting_parameters::effective_machine(project, tool.id);
+crates/ivac-core/src/pipeline/setup_resolver.rs:272:            crate::cutting_parameters::saved_rates(op, tool, pass)
+crates/ivac-core/src/pipeline/setup_resolver.rs:788:                crate::cutting_parameters::saved_rates(op, tool, main_pass).unwrap_or((0, 0, 0));
+crates/ivac-core/src/pipeline/setup_resolver.rs:792:                crate::cutting_parameters::saved_rates(op, tool, crate::project::PassKind::Finish)
+crates/ivac-core/src/pipeline/setup_resolver.rs:802:                &crate::cutting_parameters::effective_machine(project, tool.id),
+crates/ivac-core/src/pipeline/setup_resolver.rs:809:                    &crate::cutting_parameters::effective_machine(project, tool.id),
+crates/ivac-core/src/pipeline/offset_builder.rs:1088:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1175:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1242:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1327:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1407:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1480:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1611:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1673:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1715:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1753:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1799:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1878:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1930:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:1983:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2030:                fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2110:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2260:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2309:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2405:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2427:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2516:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2598:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2695:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2810:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:2903:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3019:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3129:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3181:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3257:                fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3319:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3401:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3469:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3535:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3582:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3635:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3828:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3885:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:3962:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4047:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4105:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4199:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4291:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4391:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4493:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4553:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4661:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4770:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4866:            fs_context: None,
+crates/ivac-core/src/pipeline/offset_builder.rs:4949:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/dual_tool.rs:158:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/dual_tool.rs:224:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/dual_tool.rs:259:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/dual_tool.rs:313:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/vcarve.rs:320:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/vcarve.rs:389:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/vcarve.rs:454:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/vcarve.rs:530:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/vcarve.rs:634:                fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/vcarve.rs:718:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:554:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:631:                fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:723:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:797:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:861:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:923:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:985:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:1063:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:1174:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/thread.rs:1256:            fs_context: None,
+crates/ivac-core/src/pipeline/test_helpers.rs:320:        fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs:337:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs:439:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs:524:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs:599:            fs_context: None,
+crates/ivac-core/src/cutting_parameters.rs:646:    if project.fs_context.is_some() {
+crates/ivac-core/src/cutting_parameters.rs:661:        return crate::feeds_speeds::validate_applied_project(project);
+crates/ivac-core/src/cutting_parameters.rs:698:pub fn saved_rates(op: &Op, tool: &ToolEntry, pass: PassKind) -> Result<(u32, u32, u32), String> {
+crates/ivac-core/src/cutting_parameters.rs:700:        return crate::feeds_speeds::saved_rates(op, tool, pass);
+crates/ivac-core/src/cutting_parameters.rs:721:pub fn effective_machine(project: &Project, tool_id: u32) -> crate::project::MachineConfig {
+crates/ivac-core/src/cutting_parameters.rs:723:        return crate::feeds_speeds::effective_machine(project, tool_id);
+crates/ivac-core/src/cutting_parameters.rs:761:            saved_rates(&p.operations[0], &p.tools[0], PassKind::Rough)
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:466:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:515:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:566:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:612:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:654:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:733:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:790:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:840:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:902:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:978:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:1055:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:1102:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:1206:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:1333:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:1396:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:1471:            fs_context: None,
+crates/ivac-core/src/pipeline/op_drivers/drill.rs:1540:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:90:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:143:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:233:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:335:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:439:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:513:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:701:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:776:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:860:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:913:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1014:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1115:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1157:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1239:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1319:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1427:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1578:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1667:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1701:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1740:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1791:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1838:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1895:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:1980:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2069:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2116:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2168:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2240:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2312:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2438:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2494:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2571:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2664:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2713:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2765:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:2942:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3018:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3140:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3225:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3323:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3405:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3552:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3681:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3772:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3860:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:3974:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4062:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4149:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4264:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4317:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4368:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4496:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4596:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4650:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4694:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4769:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4868:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:4932:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5004:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5095:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5155:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5212:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5258:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5307:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5366:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5421:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5471:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5519:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5587:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5646:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5726:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5795:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5845:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:5898:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6105:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6191:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6251:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6332:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6467:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6550:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6646:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6759:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6796:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:6883:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:7090:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:7250:        fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:7417:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:7482:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:7539:            fs_context: None,
+crates/ivac-core/src/pipeline/tests.rs:8159:        fs_context: None,

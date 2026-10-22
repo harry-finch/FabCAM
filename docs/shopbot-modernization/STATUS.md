@@ -1,5 +1,17 @@
 # FabCAM — current status
 
+## Latest checkpoint — FS-RESET-2 final acceptance, 2026-10-22
+
+[Final acceptance / preflight](../releases/FS_RESET_2_FINAL_ACCEPTANCE.md): **temporary
+NO-GO** for FS-RESET-3. Equivalent watcher tests reproduce the same two failures before
+FS2; installed-host event delivery remains unqualified. Two acceptance defects need
+separate production-fix authorization: actual-role report values/tools (`ivac-tnu7d`)
+and native import `stat` authorization (`ivac-c93e1`). Browser download authority was
+denied; a manual file round-trip protocol is recorded. Targeted core/preset/native/export/
+frontend/WASM checks pass. No production code or legacy infrastructure was changed.
+The source-bound inventory and proposed removal sequence are complete; `ivac-y25vq`
+remains OPEN. The earlier checkpoint below retains its original qualification context.
+
 ## Current checkpoint — FS-RESET-2, 2026-10-22
 
 The four approved implementation slices are complete on `FabCAM-v1.1`.

@@ -1,0 +1,193 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-322d57cd074e88ca)
+
+running 22 tests
+test cutting_parameters::tests::no_duplicate_missing_stray_or_misassigned_role ... ok
+test cutting_parameters::tests::explicit_rates_survive_default_changes ... ok
+test pipeline::cutting_v9_tests::v9_public_contract_refuses_legacy_and_duplicate_ids ... ok
+test cutting_parameters::tests::pocket_overlap_is_a_fraction_and_cannot_inherit_defaults ... ok
+test cutting_parameters::tests::known_limits_reject_without_mutation_unknowns_disclosed ... ok
+test cutting_parameters::tests::invalid_geometry_numeric_and_depth_rejected ... ok
+test pipeline::cutting_v9_tests::v9_role_matrix_uses_only_consumed_specialized_sets ... ok
+test pipeline::cutting_v9_tests::v9_chamfer_reach_and_peck_defaults_are_not_silently_substituted ... ok
+test cutting_parameters::tests::wire_refuses_unknown_fractional_overflow_roles ... ok
+test pipeline::cutting_v9_tests::v9_specialized_invalid_inputs_cannot_bypass_mandatory_restrictions ... ok
+test cutting_parameters::tests::incomplete_is_editable_but_cannot_generate ... ok
+test sim::holder::tests::form_profile_cutting_radius_matches_max_segment_radius ... ok
+test sim::timing::tests::plunge_segment_uses_plunge_rate_when_modal_f_is_cutting_feed ... ok
+test pipeline::cutting_v9_tests::v9_missing_secondary_values_and_known_limits_refuse_without_clamping ... ok
+test pipeline::op_drivers::vcarve::tests::vcarve_op_emits_cutting_moves_below_start_depth ... ok
+test pipeline::cutting_v9_tests::v9_streaming_preserves_bytes_and_preflight_rejects_missing_values ... ok
+test pipeline::cutting_v9_tests::v9_dual_pocket_uses_only_actual_secondary_finish_values ... ok
+test pipeline::cutting_v9_tests::v9_drill_spot_and_chamfer_are_independent_even_with_the_same_tool ... ok
+test pipeline::cutting_v9_tests::v9_two_sided_preserves_both_programs_and_refuses_invalid_back ... ok
+test pipeline::cutting_v9_tests::v9_standard_valid_inputs_keep_byte_identical_programs ... ok
+test pipeline::cutting_v9_tests::v9_specialized_valid_inputs_keep_program_and_toolpath ... ok
+test pipeline::cutting_v9_tests::v9_test1_shopbot_profile_and_vcarve_match_established_sources ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 1233 filtered out; finished in 0.48s
+
+     Running tests/arc_sweep_parity.rs (target/debug/deps/arc_sweep_parity-e99d724bd09e7553)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/cad1_qualification.rs (target/debug/deps/cad1_qualification-e7c26a5c8c696136)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/comment_safety.rs (target/debug/deps/comment_safety-e1e00ccc01c04ec5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/cps_posts.rs (target/debug/deps/cps_posts-3568963699103f93)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/drawing_audit.rs (target/debug/deps/drawing_audit-36db8af2ace63d69)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+     Running tests/geom1_contract.rs (target/debug/deps/geom1_contract-fa6f3ff1e3167ff5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.00s
+
+     Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-6b354ce02e9820eb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/golden_corpus.rs (target/debug/deps/golden_corpus-8a773a6c7db60a0b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/hatch_safe_z.rs (target/debug/deps/hatch_safe_z-528d3310bbd0b055)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.00s
+
+     Running tests/import_correctness.rs (target/debug/deps/import_correctness-1463260861ac9ee3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/numsafe.rs (target/debug/deps/numsafe-9ee4d55e9f5c4ffc)
+
+running 1 test
+test zero_cutting_or_plunge_feed_is_refused ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.02s
+
+     Running tests/numsafe2.rs (target/debug/deps/numsafe2-6c7ff23eb4f240aa)
+
+running 1 test
+test streamed_refusal_emits_no_cutting_move ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.02s
+
+     Running tests/numsafe3.rs (target/debug/deps/numsafe3-1ed4b8d89febd63b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/safe_z_extended.rs (target/debug/deps/safe_z_extended-3e2985641dbae9fd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.00s
+
+     Running tests/shopbot_m1_qualification.rs (target/debug/deps/shopbot_m1_qualification-5f0e444611e97935)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/shopbot_m2_post.rs (target/debug/deps/shopbot_m2_post-f954f3dfbc183cfa)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 31 filtered out; finished in 0.00s
+
+     Running tests/snapshots_drill_tabs_whirl.rs (target/debug/deps/snapshots_drill_tabs_whirl-bf8000ea5eaf8be5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/tessellation_tolerance.rs (target/debug/deps/tessellation_tolerance-57c20b77de1e2484)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/test1_properties.rs (target/debug/deps/test1_properties-f1f56c1c9124eecd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/text_rendering.rs (target/debug/deps/text_rendering-46dd0e8365284db1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/tool_provenance.rs (target/debug/deps/tool_provenance-e1dd99428e004f18)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+     Running tests/ux3_qualification.rs (target/debug/deps/ux3_qualification-5d6e7177d5513a64)
+
+running 1 test
+test planned_edge_travel_does_not_exempt_cutting_below_stock ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.02s
+
+     Running tests/ux_inspector_contracts.rs (target/debug/deps/ux_inspector_contracts-9026826bd96ea220)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/v1_stabilization.rs (target/debug/deps/v1_stabilization-d472eee684ff9b48)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/vcarve_qualification.rs (target/debug/deps/vcarve_qualification-d1c226a29ca1341e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/volume_validation.rs (target/debug/deps/volume_validation-0b8b8ee3f6dbc019)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/waterline_acceptance.rs (target/debug/deps/waterline_acceptance-7241d5c64d3ba480)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
