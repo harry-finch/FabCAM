@@ -1,0 +1,55 @@
+{
+  "source_sha": "d6b08fe82011c54d0166a6559b329804c2e56cee",
+  "baseline": "76cf19e7cc799e8002e62cdab5dc144785515fe7",
+  "method": "local fast-forward",
+  "pending_patch_identical": true,
+  "ux_files": [
+    {
+      "path": "frontend/src/lib/components/TestedPresetsLibrary.svelte",
+      "sha256": "88fe01bed3b6fda48a5ed4ee9e4454d39a861b7217e66d40aa18816e70a02244",
+      "identical_to_sol_76cf19e": true
+    },
+    {
+      "path": "frontend/src/lib/components/TestedPresetEditor.svelte",
+      "sha256": "3812e09a23be01cac8565cd4065ffd0afb6f293cad9841b0fee0b6406caff75c",
+      "identical_to_sol_76cf19e": true
+    },
+    {
+      "path": "frontend/src/lib/components/op_properties/CuttingParameters.svelte",
+      "sha256": "3aaba80203d1f4dccbb13bbb7bb1f99a3b32cc4f51f0d0e130e4ebaaeabffc22",
+      "identical_to_sol_76cf19e": true
+    },
+    {
+      "path": "frontend/src/lib/state/cutting-ui.ts",
+      "sha256": "8dc3ed13ee11ba93d611ecc213bf49a9e100a275b2dff6df54b9f149063724b7",
+      "identical_to_sol_76cf19e": true
+    },
+    {
+      "path": "frontend/src/lib/state/cutting-workflow.ts",
+      "sha256": "4e9a08da438d77d67f30d30838b547ac46b3fb458f8327e0d1016f1308e053e6",
+      "identical_to_sol_76cf19e": true
+    }
+  ],
+  "capability_delta_only_stat": true,
+  "generated_capabilities_contain_stat": true,
+  "generated_capabilities_sha256": "4f6103db6b29b373b59ce3bdbb9163781d39ba65260383f03a461337a090910d",
+  "acl_manifest_sha256": "07fda0d734570de2c5f855ae7afe422389b1267ba9fc32c785f0024d54359166",
+  "preserved_initial_untracked_file_count": 8272,
+  "missing_initial_untracked_files": [],
+  "pending_patch_sha256": "cde349ca548438f7adc2df320129f84df4815465c3cf79e16083e0ebdcf59195",
+  "live_remote_main": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "worktrees": [
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam                     d6b08fe [FabCAM-v1.1]",
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-docs-consolidation  7e1c24b [codex/sec1-roadmap]",
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs  d6b08fe [codex/fs-reset-2-repairs]",
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-v1-freeze           85a93c4 [codex/v1-freeze-readiness]"
+  ],
+  "environment": {
+    "os": "Darwin arm64",
+    "rust": "1.88.0",
+    "node": "24.21.0"
+  },
+  "full_release_gate_run": false,
+  "installed_native_dialog_acceptance": false,
+  "browser_collection_roundtrip_acceptance": false
+}

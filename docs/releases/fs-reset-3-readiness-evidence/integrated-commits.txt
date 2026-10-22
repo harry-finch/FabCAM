@@ -1,0 +1,3 @@
+d6b08fe82011c54d0166a6559b329804c2e56cee docs(fs-reset): record bounded report and native ACL repair qualification
+496c46f0e60472b36c529768d0d3974987615fd0 fix(native): authorize selected preset file stat without expanding scopes
+81382100b56b1540833532bd451546bd3c493288 fix(report): show authoritative v9 cutting roles and assigned tools

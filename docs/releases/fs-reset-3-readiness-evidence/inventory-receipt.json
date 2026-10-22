@@ -1,0 +1,20 @@
+{
+  "source_sha": "d6b08fe82011c54d0166a6559b329804c2e56cee",
+  "tracked_files_scanned": 3282,
+  "operational_files": 254,
+  "exact_operational_reference_lines": 4385,
+  "protected_historical_files": 320,
+  "patterns": [
+    "feeds[_ -]?speeds|feedsspeeds|fs[_-]?context|fsIdentity|fsLocalIdentity|fsFullWidth|appliedContextKey|(?-i:\\bFs[A-Z]\\w*)|source[_-]?pack|sourcepack|applied[_-]?cutting|appliedcutting|experimental[_-]?recipe|experimentalrecipe|sienci|RateOrigins|AppliedRateSlot|captureLabPreset|capture_lab_preset|[\\\"\\x27]fs\\d*\\.",
+    "(?:/|[\\\"\\x27])(?:cutting\\-comparison|cutting\\-identities|cutting\\-origin\\-presentation|cutting\\-selector|cutting\\-selector\\-labels|cutting\\-selector\\-sources|experimental\\-recipe|feeds\\-speeds|feeds\\-speeds\\-explanation|feeds\\-speeds\\-pack\\-store|feeds\\-speeds\\-persistence|feeds\\-speeds\\-sources|feeds\\-speeds\\-sources\\.svelte|lab\\-presets|lab\\-presets\\-store|preset\\-adaptation|preset\\-identities|preset\\-library|recipe\\-values|trial\\-presentation)[\\\"\\x27]",
+    "\\b(?:PipelineRequest|Project)\\s*\\{|Project::default\\(|\\brun_pipeline(?:_two_sided|_streaming)?\\("
+  ],
+  "scope": "All tracked UTF-8 at source SHA; explicit legacy module closure plus indirect gate script list. Per-line lexical references and whole-module candidates. Not a proof of arbitrary dynamic reachability or a bulk-delete manifest. Untracked user data excluded/protected.",
+  "counts": {
+    "SAFE TO REMOVE": 818,
+    "REPLACE FIRST": 1927,
+    "KEEP": 63,
+    "TEST FIXTURE": 1572,
+    "HUMAN DECISION": 5
+  }
+}

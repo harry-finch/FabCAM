@@ -1,0 +1,36 @@
+frontend/src/lib/state/project-data.svelte.ts:10:} from './feeds-speeds-sources';
+frontend/src/lib/state/project-data.svelte.ts:244:  fsContext = $state<import('../api/generated').components['schemas']['FsContext'] | undefined>();
+frontend/src/lib/components/OpPropertiesPanel.svelte:25:  import CuttingParameters from './op_properties/CuttingParameters.svelte';
+frontend/src/lib/components/OpPropertiesPanel.svelte:263:    {#key op.id}<CuttingParameters {op} />{/key}
+frontend/src/lib/components/OpPropertiesPanel.svelte:304:    {#key op.id}<CuttingParameters {op} />{/key}
+frontend/src/lib/components/OpPropertiesPanel.svelte:853:    {#if project.data.machine.mode === 'mill'}{#key op.id}<CuttingParameters {op} />{/key}{/if}
+frontend/src/lib/state/project-file-ops.ts:47:  p.data.fsContext = undefined;
+frontend/src/lib/state/project-file-ops.ts:191:    'fsContext',
+frontend/src/lib/state/project-file-ops.ts:210:  p.data.fsContext = file.fsContext;
+frontend/src/lib/state/project-file-ops.ts:245:          file.fsContext?.tools.find((b) => b.tool_id === t.id)?.identity,
+frontend/src/lib/state/project-file-ops.ts:246:          file.fsContext?.tools.find((b) => b.tool_id === t.id)?.local_identity,
+frontend/src/lib/state/project-file-ops.ts:258:      file.fsContext?.machine_identity,
+frontend/src/lib/state/project-file-ops.ts:259:      file.fsContext?.machine_local_identity,
+frontend/src/lib/state/project-v9.ts:18:  if (value.fsContext) throw new Error('Legacy source context is not supported in v9');
+frontend/src/lib/state/project-v9.test.ts:34:it('v9 persists incomplete explicit values without source packs', () => {
+frontend/src/lib/state/project-v9.test.ts:101:  expect(saved.fsContext).toBeUndefined();
+frontend/src/App.svelte:16:  import PresetsLibrary from './lib/components/TestedPresetsLibrary.svelte';
+frontend/src/App.svelte:1448:    <PresetsLibrary active={mainTab === 'presets'} />
+frontend/src/lib/state/project-operation-ops.ts:2:import { preserveManualCutting } from './feeds-speeds';
+frontend/src/lib/state/project-types.ts:817:  fsContext?: import('../api/generated').components['schemas']['FsContext'];
+frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte:5:  import { sourceLink } from '../../state/feeds-speeds';
+frontend/src/lib/components/op_properties/PlanarSurfaceSection.svelte:8:  import CuttingParameters from './CuttingParameters.svelte';
+frontend/src/lib/components/op_properties/PlanarSurfaceSection.svelte:120:{#key op.id}<CuttingParameters {op} />{/key}
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:11:  import PresetBrowser from '../PresetBrowser.svelte';
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:33:  import { captureLabPreset } from '../../state/feeds-speeds-pack-store';
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:35:  import { scopeValue } from '../../state/feeds-speeds-explanation';
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:40:  import { cuttingKnowledgeClient } from '../../state/feeds-speeds-pack-store';
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:41:  import { packCollection } from '../../state/feeds-speeds-sources';
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:51:  } from '../../state/feeds-speeds';
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:52:  import { recommendationSources } from '../../state/feeds-speeds-sources.svelte';
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:180:    referenceContext(project.data.machine, project.data.tools, project.data.fsContext),
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:198:      fsContext: context,
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:224:          project.data.fsContext,
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:586:            : 'v11.saved_source_pack',
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:635:      {#if discovery === 'browse'}<PresetBrowser
+frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte:749:                  : 'v11.source_pack',

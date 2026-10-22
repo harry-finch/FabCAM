@@ -1,0 +1,9 @@
+docs/CPS_POSTS.md:46:ivac generate part.dxf --post cps --post-id grbl
+docs/CPS_POSTS.md:47:ivac generate part.dxf --post cps --post-file my-post.cps \
+docs/CPS_POSTS.md:111:ivac generate part.dxf --post cps --post-file my-post.cps | jq -r .gcode
+docs/BUILDING.md:447:./target/release/ivac generate refs/viaconstructor/tests/data/simple.dxf > out.json
+crates/ivac-cli/src/main.rs:5://!   * `ivac generate <file> [--post]` — emit /generate-shaped JSON
+crates/ivac-cli/src/main.rs:86:        "  ivac generate <path> [--post linuxcnc|grbl|hpgl|cps] [--diameter MM] [--depth MM]"
+crates/ivac-cli/src/main.rs:133:    // CPS post selection (only meaningful with --post cps).
+crates/ivac-cli/src/main.rs:236:/// `--post cps`: build a one-op Profile project from the import and run
+crates/ivac-cli/src/main.rs:266:            bail!("--post cps needs --post-id <bundled id> or --post-file <file.cps>")

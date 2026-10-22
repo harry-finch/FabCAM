@@ -1,0 +1,48 @@
+crates/ivac-core/src/pipeline/setup_resolver.rs:205:    if let Some(applied) = &op.params.applied_cutting {
+crates/ivac-core/src/pipeline/setup_resolver.rs:226:            && applied.context_key != crate::feeds_speeds::context_key(project, canonical)
+crates/ivac-core/src/pipeline/setup_resolver.rs:228:            warnings.push(PipelineWarning::for_op(op.id, "feeds_speeds_stale", "Cutting context changed since Apply. Saved/manual values are retained; review or recalculate explicitly."));
+crates/ivac-server/src/main.rs:72:        .route("/feeds-speeds", post(feeds_speeds_handler))
+crates/ivac-server/src/main.rs:217:                "feeds-speeds",
+crates/ivac-server/src/main.rs:789:async fn feeds_speeds_handler(
+crates/ivac-server/src/main.rs:790:    Json(req): Json<ivac_core::feeds_speeds::FsCamRequest>,
+crates/ivac-server/src/main.rs:791:) -> Result<Json<ivac_core::feeds_speeds::FsCamResponse>, AppError> {
+crates/ivac-server/src/main.rs:792:    let response = tokio::task::spawn_blocking(move || ivac_core::feeds_speeds::feeds_speeds(req))
+crates/ivac-wasm/src/lib.rs:74:        "feeds-speeds",
+crates/ivac-wasm/src/lib.rs:325:pub fn feeds_speeds(request: JsValue) -> Result<JsValue, JsValue> {
+crates/ivac-wasm/src/lib.rs:328:        let response = ivac_core::feeds_speeds::feeds_speeds(request)
+crates/ivac-wasm/src/lib.rs:350:        || !op.params.applied_cutting.as_ref().is_some_and(|a| {
+crates/ivac-wasm/src/lib.rs:361:        "applied_cutting",
+crates/ivac-wasm/src/lib.rs:380:pub fn validate_source_pack(json: &str) -> Result<JsValue, JsValue> {
+crates/ivac-wasm/src/lib.rs:383:            ivac_core::feeds_speeds::validate_source_pack_json(json).map_err(into_js_error)?;
+crates/ivac-wasm/src/lib.rs:393:            ivac_core::feeds_speeds::capture_lab_preset(&project, op_id).map_err(into_js_error)?;
+crates/ivac-tauri/src/lib.rs:15:mod source_packs;
+crates/ivac-tauri/src/lib.rs:229:            commands::feeds_speeds_cmd,
+crates/ivac-tauri/src/lib.rs:234:            source_packs::import_source_pack,
+crates/ivac-tauri/src/lib.rs:235:            source_packs::save_lab_pack,
+crates/ivac-tauri/src/lib.rs:236:            source_packs::save_adapted_lab_pack,
+crates/ivac-tauri/src/lib.rs:237:            source_packs::remove_source_pack,
+crates/ivac-tauri/src/lib.rs:238:            source_packs::list_source_packs,
+crates/ivac-tauri/src/source_packs.rs:2:use ivac_core::feeds_speeds::is_lab_pack_id;
+crates/ivac-tauri/src/source_packs.rs:8:    let dir = base.join("feeds-speeds").join("sources");
+crates/ivac-tauri/src/source_packs.rs:30:    let pack = ivac_core::feeds_speeds::validate_source_pack_json(json)?;
+crates/ivac-tauri/src/source_packs.rs:36:    let mut pack = ivac_core::feeds_speeds::validate_source_pack_json(json)?;
+crates/ivac-tauri/src/source_packs.rs:56:        return Err("At most 32 distinct local source packs supported".into());
+crates/ivac-tauri/src/source_packs.rs:108:pub fn import_source_pack(app: tauri::AppHandle, json: String) -> Result<String, String> {
+crates/ivac-tauri/src/source_packs.rs:114:pub fn list_source_packs(app: tauri::AppHandle) -> Result<Vec<String>, String> {
+crates/ivac-tauri/src/source_packs.rs:156:        let pack = ivac_core::feeds_speeds::validate_source_pack_json(&json)?;
+crates/ivac-tauri/src/source_packs.rs:180:    if !ivac_core::feeds_speeds::safe_pack_id(id) {
+crates/ivac-tauri/src/source_packs.rs:210:    let pack = ivac_core::feeds_speeds::validate_source_pack_json(json)?;
+crates/ivac-tauri/src/source_packs.rs:261:            ivac_core::feeds_speeds::validate_source_pack_json(
+crates/ivac-tauri/src/source_packs.rs:298:    if !ivac_core::feeds_speeds::safe_pack_id(id)
+crates/ivac-tauri/src/source_packs.rs:299:        || !ivac_core::feeds_speeds::safe_pack_id(expected_head)
+crates/ivac-tauri/src/source_packs.rs:336:pub fn remove_source_pack(
+crates/ivac-tauri/src/source_packs.rs:352:            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+crates/ivac-tauri/src/source_packs.rs:463:            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+crates/ivac-tauri/src/source_packs.rs:489:            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+crates/ivac-tauri/src/source_packs.rs:518:            "../../../data/feeds-speeds/packs/sienci-longmill.v1.json"
+crates/ivac-tauri/src/source_packs.rs:567:        let json = include_str!("../../../data/feeds-speeds/packs/sienci-longmill.v1.json");
+crates/ivac-tauri/src/commands.rs:217:        "feeds-speeds",
+crates/ivac-tauri/src/commands.rs:577:pub async fn feeds_speeds_cmd(
+crates/ivac-tauri/src/commands.rs:578:    req: ivac_core::feeds_speeds::FsCamRequest,
+crates/ivac-tauri/src/commands.rs:579:) -> Result<ivac_core::feeds_speeds::FsCamResponse, String> {
+crates/ivac-tauri/src/commands.rs:580:    tokio::task::spawn_blocking(move || ivac_core::feeds_speeds::feeds_speeds(req))
