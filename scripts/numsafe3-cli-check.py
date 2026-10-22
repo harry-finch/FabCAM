@@ -11,7 +11,7 @@ import tempfile
 
 repo = Path(__file__).resolve().parents[1]
 binary = repo / "target/debug/ivac"
-request = json.loads((repo / "tests/fixtures/test1/profile.request.json").read_text())
+request = json.loads((repo / "tests/fixtures/cli-v9/profile.request.json").read_text())
 request["post_processor"] = "linuxcnc"
 request["cps_post"] = None
 

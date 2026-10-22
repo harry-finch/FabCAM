@@ -444,11 +444,18 @@ cd frontend && pnpm check
 
 # Smoke test the binary you just built:
 ./target/release/ivac --help
-./target/release/ivac generate refs/viaconstructor/tests/data/simple.dxf > out.json
+./target/release/ivac generate --request tests/fixtures/cli-v9/profile.request.json > out.json
 ```
 
 For Tauri builds, launching the bundled app should open a window titled
 *FabCAM* with the same UI you saw under `pnpm dev`.
+
+### Explicit CLI generation (V1.1)
+
+`ivac generate --request request.json` accepts a serialized v9 `PipelineRequest`,
+not the frontend saved-project envelope. See [CLI request contract](CLI_GENERATE.md)
+for reviewed geometry templates, input refusals, response fields and security boundaries.
+The example above is a software-only fixture, not workshop-qualified machining data.
 
 ## 5. Troubleshooting
 

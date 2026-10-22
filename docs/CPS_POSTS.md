@@ -38,15 +38,21 @@ prelude implementing the kernel API the posts call.
   (checkbox / number / dropdown / text). Only values you actually change
   are stored, so a post updating its own defaults takes effect.
 
-From the CLI:
+Current V1.1 CLI (explicit request only):
 
 ```sh
-ivac posts                                 # list bundled posts
-ivac posts inspect my-post.cps             # identity + property sheet as JSON
-ivac generate part.dxf --post cps --post-id grbl
-ivac generate part.dxf --post cps --post-file my-post.cps \
-  --post-prop useM30=false --post-prop spindleWarmupSeconds=2
+ivac posts
+ivac generate --request tests/fixtures/cli-v9/profile.request.json
+ivac generate part.dxf --request tests/fixtures/cli-v9/profile.template.json
 ```
+
+Review all example values before use. In the request set `post_processor: "cps"`,
+`cps_post.source: {"kind":"bundled","id":"shopbot"}` (or `grbl`), and typed
+`cps_post.properties`. These JSON fields are the sole authority; `--post`,
+`--post-file`, `--post-id` and `--post-prop` are rejected. External paths, source
+scripts and exact copies of bundled scripts are refused before evaluation.
+`ivac posts inspect external.cps` is also refused by the bundled-only policy.
+See [CLI contract](CLI_GENERATE.md). The authoring material below is historical.
 
 ## Writing one
 
@@ -101,18 +107,14 @@ Things worth knowing about this runtime specifically:
   to separate files, turning and additive. Those symbols exist and emit
   a named diagnostic, so a post touching them tells you what it wanted.
 
-## Testing a post
+## Testing a bundled post
 
 ```sh
-# Does it parse, and what properties does it expose?
-ivac posts inspect my-post.cps
-
-# Real output over real geometry:
-ivac generate part.dxf --post cps --post-file my-post.cps | jq -r .gcode
+ivac generate --request reviewed-bundled-request.json | jq -r .gcode
 ```
 
-Errors name the file and line — `my-post.cps:143` — so a stack trace
-points at your source, not at runtime internals.
+External authoring/inspection remains unavailable in the production CLI. Do not use
+historical external-script examples to infer permission to execute custom posts.
 
 For runtime development, the crate carries its own harnesses:
 

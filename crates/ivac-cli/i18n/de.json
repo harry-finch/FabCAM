@@ -11,7 +11,7 @@
   "cli.err.unexpected_arg": "unerwartetes Argument: {arg}",
   "cli.err.unknown_post": "unbekannter Postprozessor: {name}",
   "cli.err.unknown_subcommand": "unbekannter Unterbefehl: {name}",
-  "cli.help.generate": "G-Code + Vorschau-Werkzeugweg erzeugen",
+  "cli.help.generate": "Gepuffertes JSON aus expliziten v9-Werten; alle CAM-/Post-Einstellungen stehen im Request",
   "cli.help.help": "Diese Hilfe anzeigen",
   "cli.help.import": "Eine DXF einlesen und /import-JSON ausgeben",
   "cli.help.lang": "Oberflächensprache (en, de); überschreibt LANG/LC_ALL",
