@@ -1,0 +1,24 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running unittests src/lib.rs (target/debug/deps/ivac_file_export-bb0c0fd19e288ebb)
+
+running 11 tests
+test tests::missing_parent_and_directory_target_fail_without_artifacts ... ok
+test tests::symlink_destination_is_never_followed ... ok
+test tests::readonly_destination_is_not_replaced_via_directory_permissions ... ok
+test tests::failed_generation_preserves_target_and_removes_staging ... ok
+test tests::two_sided_preflight_preserves_both_old_generations ... ok
+test tests::failed_publication_preserves_existing_target ... ok
+test tests::valid_bytes_replace_only_after_publication ... ok
+test tests::new_only_refuses_existing_and_concurrent_destination ... ok
+test tests::write_error_after_prefix_preserves_target_and_cleans_temporary ... ok
+test cleanup_tests::cleanup_failure_reports_published_bytes_and_keeps_other_side_publishable ... ok
+test cleanup_tests::second_side_failure_is_unpublished_and_first_remains_complete ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+   Doc-tests ivac_file_export
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

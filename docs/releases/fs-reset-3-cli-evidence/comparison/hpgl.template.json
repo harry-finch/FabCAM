@@ -1,0 +1,95 @@
+{
+  "project": {
+    "segments": [],
+    "machine": {
+      "unit": "mm",
+      "mode": "mill",
+      "comments": true,
+      "arcs": true
+    },
+    "tools": [
+      {
+        "id": 1,
+        "name": "2mm endmill",
+        "kind": "endmill",
+        "diameter": 3,
+        "tip_angle_deg": 60.0,
+        "flutes": 2,
+        "speed": 18000,
+        "plunge_rate": 100,
+        "feed_rate": 800,
+        "coolant": "off"
+      }
+    ],
+    "operations": [
+      {
+        "id": 1,
+        "name": "TEST1 SOFTWARE ONLY",
+        "enabled": true,
+        "kind": {
+          "type": "profile",
+          "offset": "outside",
+          "contour": {
+            "tabs": {
+              "active": false,
+              "width": 10.0,
+              "height": 1.0,
+              "tab_type": "rectangle"
+            },
+            "leads": {
+              "in": "off",
+              "out": "off",
+              "in_lenght": 5.0,
+              "out_lenght": 5.0
+            }
+          },
+          "profile": {
+            "overcut": false,
+            "reverse": false,
+            "helix": false
+          }
+        },
+        "tool_id": 1,
+        "source": {
+          "kind": "all"
+        },
+        "params": {
+          "depth": -2,
+          "start_depth": 0.0,
+          "step": -1,
+          "fast_move_z": 5.0,
+          "objectorder": "nearest",
+          "cutting": {
+            "rates": [
+              {
+                "role": "rough",
+                "tool_id": 1,
+                "rpm": 18000,
+                "feed_mm_min": 800,
+                "plunge_mm_min": 100
+              },
+              {
+                "role": "finish",
+                "tool_id": 1,
+                "rpm": 18000,
+                "feed_mm_min": 800,
+                "plunge_mm_min": 100
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "stock": {
+      "origin": [
+        0.0,
+        0.0
+      ],
+      "width_mm": 100.0,
+      "height_mm": 100.0,
+      "thickness_mm": 18.0
+    },
+    "cutting_version": 9
+  },
+  "post_processor": "hpgl"
+}

@@ -1,10 +1,9 @@
 # FabCAM roadmap navigation
 
-**Current V1.1 checkpoint (2026-10-22):** [FS-RESET-1 architecture review](../releases/FS_RESET_ARCHITECTURE.md).
-FabCAM will own explicit CAM values and tested presets; independent FabSpeed owns calculation.
-The report is documentation only. **HARD STOP before FS-RESET-2**; no implementation or release
-approval is inferred. Earlier FS/PRESET entries below retain historical scope and evidence.
-
+**Current V1.1 checkpoint (2026-10-22):** [FS-RESET-3 CLI modernization and preflight](../releases/FS_RESET_3_CLI_MODERNIZATION.md).
+The accepted integrated FS2 baseline now has an explicit v9 CLI. Removal inventory and
+sequence are updated; **HARD STOP before legacy mass removal**, pending separate human
+approval. Earlier FS/PRESET entries retain their historical scope and evidence.
 
 **Role:** navigate the named engineering tracks and historical milestone decisions.
 The single authoritative release plan is [RELEASE_ROADMAP](../releases/RELEASE_ROADMAP.md).

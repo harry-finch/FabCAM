@@ -1,0 +1,3 @@
+Approved old CLI: generate rectangle_100x50.dxf --post cps --post-id shopbot
+Refused: ShopBot MVP: positive authored clearance Z required (shopbot.cps:33:32)
+No output generated. Current explicit software fixture supplies clearance and is separately compared to established TEST1 output.

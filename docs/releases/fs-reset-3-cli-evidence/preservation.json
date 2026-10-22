@@ -1,0 +1,18 @@
+{
+  "source_sha": "030e2149f5bcb7f356711face54caafcf6155843",
+  "approved_integrated_sha": "d6b08fe82011c54d0166a6559b329804c2e56cee",
+  "start_head": "10b04fce6eafb75eca65fe8683532bdef9d840fa",
+  "branch": "FabCAM-v1.1",
+  "unchanged_trees": [
+    "ivac-core",
+    "ivac-cps",
+    "ivac-file-export",
+    "ivac-tauri",
+    "ivac-wasm",
+    "frontend"
+  ],
+  "preexisting_pending_patch_unchanged": true,
+  "main_sha": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "worktrees": "worktree /Users/mugen/Documents/01_Projets/FabCAM/ivacam\nHEAD 030e2149f5bcb7f356711face54caafcf6155843\nbranch refs/heads/FabCAM-v1.1\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-docs-consolidation\nHEAD 7e1c24b937e9bc01aa320537c835ffc30fc9389c\nbranch refs/heads/codex/sec1-roadmap\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs\nHEAD d6b08fe82011c54d0166a6559b329804c2e56cee\nbranch refs/heads/codex/fs-reset-2-repairs\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-v1-freeze\nHEAD 85a93c4a467ff5965655d5737354d9500c2e94fc\nbranch refs/heads/codex/v1-freeze-readiness\n\n",
+  "scope": "No application-data access/reset; no other worktree modified. Current branch receives CLI and documentation commits only."
+}

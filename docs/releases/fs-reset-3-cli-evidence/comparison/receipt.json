@@ -1,0 +1,83 @@
+{
+  "baseline_cli_source": "d6b08fe82011c54d0166a6559b329804c2e56cee",
+  "baseline_build": "Original CLI sources compiled as private diagnostic crate against byte-unchanged integrated core; shared lock common versions; not a separate full-workspace baseline build.",
+  "fixture": "tests/fixtures/shopbot-m1/rectangle_100x50.dxf",
+  "results": [
+    {
+      "post": "linuxcnc",
+      "exact_equal": false,
+      "before_sha256": "8586fb955d52f13e4f3fcdc680f7993509766f44561ab7068257c5265c95c93c",
+      "after_sha256": "53a09d4c3bb9d33c33a63e47ac4ab772e2ee6b12d411b65a5d05caa02e0dabcb",
+      "before_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1,
+        "cut_distance": 0.0,
+        "travel_distance": 0.0
+      },
+      "after_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1
+      },
+      "assertion": "New program exactly matches common pipeline in CLI regression tests; differences reviewed in accompanying diff."
+    },
+    {
+      "post": "grbl",
+      "exact_equal": false,
+      "before_sha256": "fed6d04a1965e8739dd1639a3710c377d44945f86f59ae337eaf2f2297fe451d",
+      "after_sha256": "76e64d5fb423eaaa38b578c62519d6317d0f8ae286ce6880a89780c7fec4b401",
+      "before_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1,
+        "cut_distance": 0.0,
+        "travel_distance": 0.0
+      },
+      "after_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1
+      },
+      "assertion": "New program exactly matches common pipeline in CLI regression tests; differences reviewed in accompanying diff."
+    },
+    {
+      "post": "hpgl",
+      "exact_equal": false,
+      "before_sha256": "90ddf88d0016dc9b9760bb15238783ba9e02ecf574d0b3c8e8a007b6414068f4",
+      "after_sha256": "4923a962652d3721397be855143125c2851e10bccdb7a9832e9358868c75ddc9",
+      "before_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1,
+        "cut_distance": 0.0,
+        "travel_distance": 0.0
+      },
+      "after_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1
+      },
+      "assertion": "Exact multiset of HPGL commands preserved; order changes to conventional contour traversal."
+    },
+    {
+      "post": "cps",
+      "exact_equal": false,
+      "before_sha256": "5c19d303d64843529f963c8da6c18a6c34dbf39dca086365584a84eae3d34103",
+      "after_sha256": "df84cc9330106723301189a38a454d4163fb3bf45e3fb04e35a12b35679833d2",
+      "before_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1,
+        "cut_distance": 0.0,
+        "travel_distance": 0.0
+      },
+      "after_stats": {
+        "object_count": 1,
+        "closed_object_count": 1,
+        "offset_count": 1
+      },
+      "assertion": "New program exactly matches common pipeline in CLI regression tests; differences reviewed in accompanying diff."
+    }
+  ]
+}

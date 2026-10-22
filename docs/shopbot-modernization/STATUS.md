@@ -1,5 +1,16 @@
 # FabCAM — current status
 
+## Latest checkpoint — FS-RESET-3 CLI Option A, 2026-10-22
+
+Integrated FS2 baseline and CLI Option A explicitly approved. Local implementation
+`030e214` replaces implicit public CLI rates with reviewed v9 requests and the common
+buffered pipeline. CLI: 13 PASS with CPS / 12 without; targeted CAM: 25 PASS; export:
+11 PASS; strict Clippy and SEC1/NUMSAFE3 real probes PASS.
+[Receipt, output comparisons and refreshed inventory](../releases/FS_RESET_3_CLI_MODERNIZATION.md).
+Accepted UX, MAT-1, collections and core safety source are unchanged. **HARD STOP before
+mass removal**; human `ivac-y25vq` remains open for that next decision. Watcher exception,
+installed-native collection acceptance and physical gates remain separate.
+
 ## Latest checkpoint — FS-RESET-2 final acceptance, 2026-10-22
 
 [Final acceptance / preflight](../releases/FS_RESET_2_FINAL_ACCEPTANCE.md): **temporary

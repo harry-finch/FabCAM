@@ -1,5 +1,14 @@
 # FabCAM release roadmap — approved direction
 
+## FS-RESET-3 CLI Option A — qualified, 2026-10-22
+
+The maintainer accepted the integrated FS2 baseline and CLI Option A. Explicit v9
+`generate --request` and bounded reviewed geometry templates are qualified in local
+commit `030e214`. [CLI receipt and refreshed removal plan](FS_RESET_3_CLI_MODERNIZATION.md)
+record tests, deliberate output differences and exact remaining dependencies.
+**HARD STOP before legacy mass removal.** Existing watcher/installed-platform and
+physical qualification limits remain. No release or FabSpeed integration is authorized.
+
 ## FS-RESET-2 final acceptance / FS-RESET-3 preflight — 2026-10-22
 
 [Final acceptance report](FS_RESET_2_FINAL_ACCEPTANCE.md) supersedes the investigation

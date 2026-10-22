@@ -151,3 +151,12 @@ records the baseline watcher comparison, report/native-import defects, pending f
 safety ownership and staged removal plan. This ADR remains Accepted; implementation
 acceptance is temporarily NO-GO pending bounded repairs and human review `ivac-y25vq`.
 No legacy removal or FabSpeed integration is authorized by this checkpoint.
+
+## CLI Option A decision — 2026-10-22
+
+The maintainer accepted integrated FS2 source `d6b08fe` and explicit CLI Option A.
+[CLI modernization receipt](../../releases/FS_RESET_3_CLI_MODERNIZATION.md) records
+`030e214`: public buffered generation requires reviewed v9 requests, with bounded
+geometry templates and no implicit rate seeding. Neutral validation and the common
+pipeline remain authoritative. Legacy removal is still pending separate authorization;
+no FabSpeed API integration is implemented.

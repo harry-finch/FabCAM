@@ -1,0 +1,41 @@
+   Compiling getrandom v0.2.17
+   Compiling tracing v0.1.44
+   Compiling tempfile v3.27.0
+   Compiling ivac-feeds-speeds v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-feeds-speeds)
+   Compiling uuid v1.10.0
+   Compiling tracing-subscriber v0.3.23
+   Compiling ivac-file-export v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-file-export)
+   Compiling dxf v0.6.1
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 15.49s
+     Running unittests src/main.rs (target/debug/deps/ivac-01328fe220741116)
+
+running 6 tests
+test i18n::tests::detect_prefers_override_then_lc_all_then_lang ... ok
+test i18n::tests::parse_lang_handles_common_tags ... ok
+test i18n::tests::extract_lang_pulls_flag_in_both_forms ... ok
+test i18n::tests::tr_substitutes_params_and_falls_back ... ok
+test i18n::tests::en_catalog_matches_referenced_keys_exactly ... ok
+test i18n::tests::catalogs_parse_and_are_key_identical ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cutting_v9.rs (target/debug/deps/cutting_v9-7f7f45812907a0f4)
+
+running 1 test
+test serialized_v9_cli_preserves_output_and_rejects_before_publication ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.70s
+
+     Running tests/generate_v9.rs (target/debug/deps/generate_v9-12109cac8208095d)
+
+running 5 tests
+test duplicate_json_post_authorities_are_rejected ... ok
+test effective_finish_values_are_not_library_or_rough_defaults ... ok
+test canonical_posts_match_authoritative_pipeline_and_shopbot_golden ... ok
+test geometry_template_matches_canonical_import_and_rejects_ambiguous_selection ... ok
+test invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
