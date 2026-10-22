@@ -143,6 +143,7 @@ fn chamfer_after_pocket_does_not_dip_below_pocket_floor() {
     };
 
     let project = Project {
+        cutting_version: None,
         segments: closed_rectangle(RECT_X0, RECT_Y0, RECT_X1, RECT_Y1),
         machine: MachineConfig::default(),
         tools: vec![endmill.clone(), cone.clone()],
@@ -327,6 +328,7 @@ fn profile_after_pocket_does_not_dip_below_pocket_floor() {
     );
 
     let project = Project {
+        cutting_version: None,
         segments: closed_rectangle(RECT_X0, RECT_Y0, RECT_X1, RECT_Y1),
         machine: MachineConfig::default(),
         tools: vec![endmill1.clone(), endmill2.clone()],

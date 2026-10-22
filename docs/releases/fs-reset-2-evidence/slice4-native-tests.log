@@ -1,0 +1,85 @@
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-tauri)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-file-export v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-file-export)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.19s
+     Running unittests src/lib.rs (target/debug/deps/ivac_file_export-c29859000022f7f1)
+
+running 11 tests
+test tests::missing_parent_and_directory_target_fail_without_artifacts ... ok
+test tests::readonly_destination_is_not_replaced_via_directory_permissions ... ok
+test tests::failed_publication_preserves_existing_target ... ok
+test tests::symlink_destination_is_never_followed ... ok
+test tests::failed_generation_preserves_target_and_removes_staging ... ok
+test tests::new_only_refuses_existing_and_concurrent_destination ... ok
+test tests::two_sided_preflight_preserves_both_old_generations ... ok
+test tests::valid_bytes_replace_only_after_publication ... ok
+test tests::write_error_after_prefix_preserves_target_and_cleans_temporary ... ok
+test cleanup_tests::cleanup_failure_reports_published_bytes_and_keeps_other_side_publishable ... ok
+test cleanup_tests::second_side_failure_is_unpublished_and_first_remains_complete ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-f3c3a9b0ce5b1fa0)
+
+running 21 tests
+test audit_15_16::helper_identity_uses_only_exact_executable_basename ... ok
+test commands::sec1_tests::external_inspection_refuses_before_evaluation ... ok
+test preset_collections::tests::symlink_destination_and_directory_refused ... ok
+test source_packs::tests::rejects_repository_storage ... ok
+test commands::audit_15_16_tool::drawing_missing_tool_keeps_assign_tool_action ... FAILED
+test commands::audit_15_16::drawing_failures_keep_structured_contract ... FAILED
+test commands::audit_15_16::collision_error_retains_preview_without_executable_program ... FAILED
+test preset_collections::tests::malformed_oversized_busy_and_traversal_preserve_original ... ok
+test watcher::tests::audit_15_16_missing_source_does_not_disable_existing_sources ... ok
+test source_packs::tests::removal_rejects_symlinks_before_deleting_any_revision ... ok
+test source_packs::tests::removal_checks_head_and_removes_all_revisions_only_for_the_selected_id ... ok
+test source_packs::tests::stores_only_valid_local_json_and_refuses_duplicate_version ... ok
+test source_packs::tests::audit_15_16_lab_rejects_variable_width_and_text_revisions ... ok
+test preset_collections::tests::atomic_current_document_and_conflicts ... ok
+test source_packs::tests::lab_revisions_use_compare_and_append_not_overwrite ... ok
+test source_packs::tests::named_packs_keep_independent_heads_locks_and_import_history ... ok
+test source_packs::tests::adapted_copy_checks_source_and_destination_under_shared_locks ... ok
+test watcher::tests::unwatch_all_clears_set ... ok
+test watcher::tests::set_paths_replaces_old_watches ... ok
+test watcher::tests::debounce_collapses_rapid_writes ... FAILED
+test watcher::tests::single_path_emits_event ... FAILED
+
+failures:
+
+---- commands::audit_15_16_tool::drawing_missing_tool_keeps_assign_tool_action stdout ----
+
+thread 'commands::audit_15_16_tool::drawing_missing_tool_keeps_assign_tool_action' panicked at crates/ivac-tauri/src/commands.rs:734:69:
+called `Result::unwrap()` on an `Err` value: Error("expected value", line: 1, column: 1)
+
+---- commands::audit_15_16::drawing_failures_keep_structured_contract stdout ----
+
+thread 'commands::audit_15_16::drawing_failures_keep_structured_contract' panicked at crates/ivac-tauri/src/commands.rs:685:72:
+called `Result::unwrap()` on an `Err` value: Error("expected value", line: 1, column: 1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- commands::audit_15_16::collision_error_retains_preview_without_executable_program stdout ----
+
+thread 'commands::audit_15_16::collision_error_retains_preview_without_executable_program' panicked at crates/ivac-tauri/src/commands.rs:648:73:
+called `Result::unwrap()` on an `Err` value: Error("expected value", line: 1, column: 1)
+
+---- watcher::tests::debounce_collapses_rapid_writes stdout ----
+
+thread 'watcher::tests::debounce_collapses_rapid_writes' panicked at crates/ivac-tauri/src/watcher.rs:295:9:
+debounced 5 rapid writes; got 0 events for path
+
+---- watcher::tests::single_path_emits_event stdout ----
+
+thread 'watcher::tests::single_path_emits_event' panicked at crates/ivac-tauri/src/watcher.rs:268:14:
+event within 2s: Timeout
+
+
+failures:
+    commands::audit_15_16::collision_error_retains_preview_without_executable_program
+    commands::audit_15_16::drawing_failures_keep_structured_contract
+    commands::audit_15_16_tool::drawing_missing_tool_keeps_assign_tool_action
+    watcher::tests::debounce_collapses_rapid_writes
+    watcher::tests::single_path_emits_event
+
+test result: FAILED. 16 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.18s
+
+error: test failed, to rerun pass `-p ivac-tauri --lib`

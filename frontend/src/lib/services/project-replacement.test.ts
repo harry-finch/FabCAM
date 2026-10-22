@@ -1,3 +1,5 @@
+import { defaultProjectMachine } from '../state/project-defaults';
+import { explicitProjectFixture } from '../state/explicit-project.fixture';
 // Stage A regressions, actual export service with mocked desktop I/O.
 // I/O and application stores are mocked; production restore/snapshot,
 // diagnostics setter, warning summarizer and export service execute unchanged.
@@ -38,7 +40,7 @@ vi.mock('@tauri-apps/api/core', () => ({
     return { path: args.path, cleanupWarning: null };
   },
 }));
-const file = JSON.parse(
+const historicalFile = JSON.parse(
   readFileSync(
     new URL(
       '../../../../docs/releases/ux-c-2026-10-19-evidence/saved-preparation.ivac-project.json',
@@ -47,6 +49,7 @@ const file = JSON.parse(
     'utf8',
   ),
 );
+const file = explicitProjectFixture(historicalFile);
 const collision: SimDiagnostics = {
   warnings: [
     {
@@ -60,7 +63,7 @@ const collision: SimDiagnostics = {
     },
   ],
 } as SimDiagnostics;
-const cpsPost = { source: 'bundled', bundledId: 'shopbot', properties: {} };
+const cpsPost = { source: 'bundled' as const, bundledId: 'shopbot', properties: {} };
 beforeEach(() => {
   vi.clearAllMocks();
   io.beforeSave = () => {};
@@ -113,7 +116,12 @@ it('P1 control: explicitly authored inactive CPS data is preserved', () => {
 it('CPS -> LinuxCNC -> CPS and reopen preserve authored settings, tools and unknown keys', () => {
   const cps = {
     ...structuredClone(file),
-    machine: { ...file.machine, gcodeDialect: 'cps', cpsPost, futureExtension: { retained: 42 } },
+    machine: {
+      ...file.machine,
+      gcodeDialect: 'cps' as const,
+      cpsPost,
+      futureExtension: { retained: 42 },
+    },
   };
   restoreProject(io.project, cps);
   const authored = JSON.parse(JSON.stringify(snapshotProject(io.project)));
@@ -126,13 +134,14 @@ it('CPS -> LinuxCNC -> CPS and reopen preserve authored settings, tools and unkn
   expect(snapshotProject(io.project)).toEqual(authored);
   expect(io.project.history.clear).toHaveBeenCalledTimes(3);
 });
-it('legacy defaults and explicit empty tools do not inherit previous job or stock metadata', () => {
+it('empty v9 tools and operations do not inherit previous job or stock metadata', () => {
   io.project.data.stock.offsetZ = 88;
   io.project.data.stock.flip = { anything: true } as never;
   const old = {
     ...structuredClone(file),
-    machine: { supportsToolchange: true },
+    machine: { ...defaultProjectMachine(), toolchangeStrategy: 'atc' as const },
     tools: [],
+    operations: [],
     stock: undefined,
   };
   restoreProject(io.project, old);
@@ -142,7 +151,7 @@ it('legacy defaults and explicit empty tools do not inherit previous job or stoc
   expect(io.project.data.tools).toEqual([]);
   expect(io.project.data.stock.offsetZ).toBeUndefined();
   expect(io.project.data.stock.flip).toBeUndefined();
-  expect(io.project.data.operations).toEqual(file.operations);
+  expect(io.project.data.operations).toEqual([]);
 });
 it('machine edits after load remain undoable without reviving previous-project values', () => {
   restoreProject(io.project, structuredClone(file));

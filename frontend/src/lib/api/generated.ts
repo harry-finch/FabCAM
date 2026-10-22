@@ -1739,6 +1739,8 @@ export interface components {
             through_depth: number;
         };
         MillingCutting: {
+            /** Format: double */
+            entry_angle_deg?: number | null;
             preset_snapshot?: components["schemas"]["LoadedPresetSnapshot"] | null;
             rates: components["schemas"]["RoleRates"][];
         };
@@ -2775,11 +2777,14 @@ export interface components {
         };
         PresetParameters: {
             /** Format: double */
+            entry_angle_deg?: number | null;
+            /** Format: double */
             planar_stepover_mm?: number | null;
             /** Format: double */
             pocket_overlap?: number | null;
             rates: components["schemas"]["RoleRates"][];
             schedule: components["schemas"]["DepthSchedule"];
+            specialized?: components["schemas"]["SpecializedParameters"] | null;
         };
         /**
          * @description Axis selector for `OpKind::Probe`. Serializes as the bare lowercase letter (`"x"` / `"y"` / `"z"`) for a wire-friendly payload that drops straight into the G38.2 word.
@@ -3135,6 +3140,31 @@ export interface components {
             file: string;
             /** Format: uint32 */
             line: number;
+        };
+        SpecializedParameters: {
+            /** Format: double */
+            chamfer_width_mm?: number | null;
+            cycle: components["schemas"]["DrillCycle"];
+            /** @enum {string} */
+            kind: "drill";
+            /** Format: double */
+            spot_depth_mm?: number | null;
+        } | {
+            /** Format: double */
+            along_step_mm: number;
+            /** @enum {string} */
+            kind: "relief";
+            /** Format: double */
+            scallop_height_mm: number;
+            /** Format: double */
+            stepover_mm?: number | null;
+        } | {
+            /** @enum {string} */
+            kind: "waterline";
+            /** Format: double */
+            stepover_mm: number;
+            /** Format: double */
+            z_step_mm: number;
         };
         /**
          * @description Per-tool spindle direction — right-hand (`Cw`, M3) for the 99% of cutters, left-hand (`Ccw`, M4) for reverse-thread / mirror /-helix tooling. Mirrored into `ToolConfig.spindle_direction` at synth time so the gcode emitter can route between `spindle_cw` and `spindle_ccw` without reaching back into the tool library.

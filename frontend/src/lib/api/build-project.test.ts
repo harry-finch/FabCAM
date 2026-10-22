@@ -993,3 +993,33 @@ it('keeps saved chamfer depth fields and descent settings on the wire after insp
   });
   expect(JSON.stringify(op)).toBe(before);
 });
+
+it('v9 specialized missing values cannot be filled while building a generation request', () => {
+  const op = {
+    ...profileOp(),
+    kind: 'waterline_rough',
+    sourceId: 1,
+    zStepMm: undefined,
+    stepoverMm: undefined,
+    floorZMm: 0,
+    cutting: {
+      rates: [{ role: 'rough', tool_id: 1, rpm: 12000, feed_mm_min: 800, plunge_mm_min: 100 }],
+    },
+  } as unknown as OpEntry;
+  const p = buildProject({
+    transformedImport: fakeImport(),
+    machine: baseMachine(),
+    tools: [baseTool()],
+    operations: [op],
+  })!;
+  expect(p.operations[0].kind).toMatchObject({ z_step_mm: null, stepover_mm: null });
+  const drill = { ...op, kind: 'drill', drillCycle: undefined } as unknown as OpEntry;
+  expect(() =>
+    buildProject({
+      transformedImport: fakeImport(),
+      machine: baseMachine(),
+      tools: [baseTool()],
+      operations: [drill],
+    }),
+  ).toThrow('explicit drill cycle');
+});

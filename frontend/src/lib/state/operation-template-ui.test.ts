@@ -109,7 +109,7 @@ describe('UX4.1 presentation without changing template semantics', () => {
       [],
     );
     expect(templateToolDifferences(entry, { ...target(), toolId: 0 })).toEqual([]);
-    expect(instantiateTemplate(entry, target()).appliedCutting?.slots[0]).toMatchObject({
+    expect(instantiateTemplate(entry, target()).cutting?.rates[0]).toMatchObject({
       tool_id: 7,
       rpm: 10000,
       feed_mm_min: 1000,

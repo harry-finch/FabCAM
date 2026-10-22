@@ -74,7 +74,10 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     if !dpp.is_finite() || dpp <= 0. {
         return Err(invalid("Set a finite positive depth per pass."));
     }
-    let angle = tool.vcarve_lead_in_angle_deg.unwrap_or(10.);
+    let angle = op.params.cutting.as_ref().map_or_else(
+        || tool.vcarve_lead_in_angle_deg.unwrap_or(10.),
+        |c| c.entry_angle_deg.unwrap_or(0.),
+    );
     if !angle.is_finite() || angle <= 0. || angle >= 90. {
         return Err(invalid(
             "V-Carve entry angle must be between 0 and 90 degrees.",
@@ -96,6 +99,11 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     let tan = (tool.tip_angle_deg.to_radians() * 0.5).tan();
     let tip_r = tip * 0.5;
     let reach = diameter * 0.5;
+    if op.params.cutting.is_some() && params.carve_max_width_mm.is_some_and(|r| r > reach) {
+        return Err(invalid(
+            "Explicit V-Carve radius cap exceeds the cutter radius; values are not clamped.",
+        ));
+    }
     let r_cap = params.carve_max_width_mm.unwrap_or(reach).min(reach);
     let max_depth = if op.params.depth < 0. {
         -op.params.depth

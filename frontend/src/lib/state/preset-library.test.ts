@@ -112,6 +112,11 @@ describe('read-only cutting presets library', () => {
 
 it('MAT-1 family/alias browsing preserves source scopes and cannot grant compatibility', () => {
   const p = pack();
+  // Neutral presentation recognizes declared identities, never Sienci-specific implicit aliases.
+  const plywood = { id: 'material/wood.plywood', revision: '1' };
+  p.dataset.materials[0].identity = plywood;
+  for (const profile of p.dataset.profile_set.profiles)
+    profile.scope.material = { kind: 'exact', identity: plywood };
   const before = JSON.stringify(p);
   const rows = presetRows([p], new Set([key(p)]), true);
   expect(

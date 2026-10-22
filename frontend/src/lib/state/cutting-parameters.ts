@@ -15,6 +15,8 @@ export function cuttingRoles(op: OpEntry): { role: CuttingRole; tool_id: number 
         ? [{ role: 'chamfer' as const, tool_id: op.finishToolId ?? op.toolId }]
         : []),
     ];
+  if (op.kind === 'pocket' && op.pocketStrategy === 'halfpipe')
+    return [{ role: 'rough', tool_id: op.toolId }];
   if (op.kind === 'pocket')
     return [
       { role: 'rough', tool_id: op.toolId },
@@ -22,16 +24,24 @@ export function cuttingRoles(op: OpEntry): { role: CuttingRole; tool_id: number 
     ];
   return [
     { role: 'rough', tool_id: op.toolId },
-    ...(['profile', 'engrave', 'chamfer'].includes(op.kind)
+    ...(op.kind === 'profile' || (op.kind === 'chamfer' && op.chamferFinishPass)
       ? [{ role: 'finish' as const, tool_id: op.toolId }]
       : []),
   ];
+}
+export function usesEntryAngle(op: OpEntry): boolean {
+  return (
+    op.kind === 'vcarve' ||
+    (op.kind === 'pocket' && op.pocketStrategy === 'halfpipe') ||
+    (op.kind === 'drill' && op.chamferAfterWidthMm !== undefined)
+  );
 }
 const positive = (v: number | undefined) =>
   Number.isInteger(v) && v! > 0 && v! <= 0xffffffff ? v! : null;
 /** Called at creation only. Existing operation values never read live defaults. */
 export function seedCutting(op: OpEntry, tools: ToolEntry[]): MillingCutting {
   return {
+    ...(usesEntryAngle(op) ? { entry_angle_deg: 10 } : {}),
     rates: cuttingRoles(op).map(({ role, tool_id }) => {
       const t = tools.find((t) => t.id === tool_id);
       const drill = ['drill', 'spot', 'chamfer'].includes(role);
@@ -67,9 +77,14 @@ export function validateCuttingStructure(op: OpEntry): void {
   const c = op.cutting;
   if (!c || !Array.isArray(c.rates) || c.rates.length > 5)
     throw new Error(`${op.name}: missing cutting values`);
-  if (Object.keys(c).some((k) => !['rates', 'preset_snapshot'].includes(k)))
+  if (Object.keys(c).some((k) => !['rates', 'preset_snapshot', 'entry_angle_deg'].includes(k)))
     throw new Error('Unknown cutting field');
   if (c.preset_snapshot != null) validateLoadedSnapshot(c.preset_snapshot);
+  if (
+    c.entry_angle_deg != null &&
+    (typeof c.entry_angle_deg !== 'number' || !Number.isFinite(c.entry_angle_deg))
+  )
+    throw new Error('Invalid entry angle');
   const expected = cuttingRoles(op)
     .map((r) => `${r.role}/${r.tool_id}`)
     .sort();
@@ -149,7 +164,52 @@ export function validateLoadedSnapshot(
     throw new Error('Invalid loaded preset context');
   JSON.parse(c.signature);
   const p = value.parameters;
-  object(p, ['rates', 'schedule', 'pocket_overlap', 'planar_stepover_mm']);
+  object(p, [
+    'rates',
+    'schedule',
+    'pocket_overlap',
+    'planar_stepover_mm',
+    'entry_angle_deg',
+    'specialized',
+  ]);
+  if (
+    p.entry_angle_deg != null &&
+    (!Number.isFinite(p.entry_angle_deg) || p.entry_angle_deg < 1 || p.entry_angle_deg > 89)
+  )
+    throw new Error('Invalid entry angle');
+  if (p.specialized != null) {
+    const s = p.specialized;
+    const positive = (v: unknown) => typeof v === 'number' && Number.isFinite(v) && v > 0;
+    if (s.kind === 'drill') {
+      object(s, ['kind', 'cycle', 'spot_depth_mm', 'chamfer_width_mm']);
+      object(
+        s.cycle,
+        s.cycle?.kind === 'simple' ? ['kind', 'dwell_sec'] : ['kind', 'dwell_sec', 'peck_step_mm'],
+      );
+      if (
+        !['simple', 'peck', 'chip_break'].includes(s.cycle.kind) ||
+        !Number.isFinite(s.cycle.dwell_sec) ||
+        s.cycle.dwell_sec < 0 ||
+        (s.cycle.kind !== 'simple' && !positive(s.cycle.peck_step_mm)) ||
+        (s.spot_depth_mm != null && (!Number.isFinite(s.spot_depth_mm) || s.spot_depth_mm >= 0)) ||
+        (s.chamfer_width_mm != null && !positive(s.chamfer_width_mm))
+      )
+        throw new Error('Invalid drilling preset');
+    } else if (s.kind === 'relief') {
+      object(s, ['kind', 'scallop_height_mm', 'stepover_mm', 'along_step_mm']);
+      if (
+        !Number.isFinite(s.scallop_height_mm) ||
+        s.scallop_height_mm < 0 ||
+        !positive(s.along_step_mm) ||
+        (s.stepover_mm == null ? !positive(s.scallop_height_mm) : !positive(s.stepover_mm))
+      )
+        throw new Error('Invalid relief preset');
+    } else if (s.kind === 'waterline') {
+      object(s, ['kind', 'z_step_mm', 'stepover_mm']);
+      if (!positive(s.z_step_mm) || !positive(s.stepover_mm))
+        throw new Error('Invalid waterline preset');
+    } else throw new Error('Unknown specialized preset');
+  }
   if (!Array.isArray(p.rates) || !p.rates.length || p.rates.length > 5)
     throw new Error('Invalid loaded preset roles');
   const roles = new Set<string>();

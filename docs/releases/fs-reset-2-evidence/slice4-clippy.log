@@ -1,0 +1,5 @@
+    Blocking waiting for file lock on build directory
+    Checking ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Checking ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-tauri)
+    Checking ivac-wasm v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 17.00s

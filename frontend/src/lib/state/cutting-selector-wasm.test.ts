@@ -65,6 +65,11 @@ it('real WASM accepts legacy and selected requests with identical authoritative 
     ],
     material: pack.dataset.materials[0].identity,
   })!;
+  project.cutting_version = null;
+  project.fs_context = {
+    machine_identity: pack.dataset.machines[0].identity,
+    tools: [{ tool_id: 1, identity: pack.dataset.tools[0].identity }],
+  };
   const request: FsCamRequest = {
     project,
     op_id: 1,

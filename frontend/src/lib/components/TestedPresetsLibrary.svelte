@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from '../i18n';
   import { onDestroy } from 'svelte';
   import Modal from './Modal.svelte';
   import TestedPresetEditor from './TestedPresetEditor.svelte';
@@ -212,24 +213,24 @@
 
 <div class="library">
   <header>
-    <h1>Tested presets</h1>
-    <button disabled={busy} onclick={() => void run(refresh)}>Refresh</button><button
+    <h1>{t('fsreset.ui.tested.presets')}</h1>
+    <button disabled={busy} onclick={() => void run(refresh)}>{t('fsreset.ui.refresh')}</button
+    ><button
       disabled={busy}
       onclick={() =>
         void run(async () => {
           incoming = await importCollectionFile();
-        })}>Import collection</button
+        })}>{t('fsreset.ui.import.collection')}</button
     >
   </header>
   <p class="scope">
-    Workshop-tested configurations in named collections. Author attestations are separate from
-    software checks and do not qualify this project's machine.
+    {t('fsreset.ui.workshop.tested.configurations.in.named.collections.author.attestations')}
   </p>
   <div class="collection-bar">
     <label
-      >Collection<select bind:value={collectionId}
-        ><option value="">Choose…</option>{#each collections as c (c.data.id)}<option
-            value={c.data.id}>{c.data.name}</option
+      >{t('fsreset.ui.collection')}<select bind:value={collectionId}
+        ><option value="">{t('fsreset.ui.choose')}</option
+        >{#each collections as c (c.data.id)}<option value={c.data.id}>{c.data.name}</option
           >{/each}</select
       ></label
     >
@@ -238,74 +239,75 @@
       onclick={() => {
         naming = 'create';
         name = '';
-      }}>New collection</button
+      }}>{t('fsreset.ui.new.collection')}</button
     >
     <button
       disabled={busy || !collection}
       onclick={() => {
         naming = 'rename';
         name = collection!.data.name;
-      }}>Rename</button
+      }}>{t('fsreset.ui.rename')}</button
     >
     <button
       disabled={busy || !collection}
       onclick={() =>
         void run(async () => {
           if (await exportCollectionFile(collection!.data)) message = 'Collection export requested';
-        })}>Export</button
+        })}>{t('fsreset.ui.export')}</button
     >
     <button
       disabled={busy || !collection}
       onclick={() =>
         (deletion = { collection: structuredClone(collection!.data), token: collection!.token })}
-      >Delete collection</button
+      >{t('fsreset.ui.delete.collection')}</button
     >
     <button
       disabled={busy || !collection || project.sel.selectedOpId == null}
-      onclick={() => void run(createFromOperation)}>Save selected operation as preset</button
+      onclick={() => void run(createFromOperation)}
+      >{t('fsreset.ui.save.selected.operation.as.preset')}</button
     >
   </div>
   <div class="filters">
     <label
-      >Search<input
+      >{t('fsreset.ui.search')}<input
         type="search"
         bind:value={filters.query}
-        placeholder="Name, identity, material…"
+        placeholder={t('fsreset.ui.name.identity.material')}
       /></label
     >
     <label
-      >Collection<select bind:value={filters.collection}
-        ><option value="">All</option>{#each collections as c (c.data.id)}<option value={c.data.id}
-            >{c.data.name}</option
+      >{t('fsreset.ui.collection')}<select bind:value={filters.collection}
+        ><option value="">{t('fsreset.ui.all')}</option>{#each collections as c (c.data.id)}<option
+            value={c.data.id}>{c.data.name}</option
           >{/each}</select
       ></label
     >
     <label
-      >Machine<select bind:value={filters.machine}
-        ><option value="">All</option
+      >{t('fsreset.ui.machine')}<select bind:value={filters.machine}
+        ><option value="">{t('fsreset.ui.all')}</option
         >{#each [...new Map(rows.map( (r) => [r.preset.context.machine_id, r.preset.context.machine_label], )).entries()] as [id, label] (id)}<option
             value={id}>{label}</option
           >{/each}</select
       ></label
     >
     <label
-      >Tool<select bind:value={filters.tool}
-        ><option value="">All</option
+      >{t('fsreset.ui.tool')}<select bind:value={filters.tool}
+        ><option value="">{t('fsreset.ui.all')}</option
         >{#each [...new Set(rows.map((r) => r.tools))] as tool (tool)}<option>{tool}</option
           >{/each}</select
       ></label
     >
     <label
-      >Material<select bind:value={filters.material}
-        ><option value="">All</option
+      >{t('fsreset.ui.material')}<select bind:value={filters.material}
+        ><option value="">{t('fsreset.ui.all')}</option
         >{#each [...new Map(rows.map( (r) => [r.preset.context.material_id, r.preset.context.material_label], )).entries()] as [id, label] (id)}<option
             value={id}>{label}</option
           >{/each}</select
       ></label
     >
     <label
-      >Operation<select bind:value={filters.operation}
-        ><option value="">All</option
+      >{t('fsreset.ui.operation')}<select bind:value={filters.operation}
+        ><option value="">{t('fsreset.ui.all')}</option
         >{#each [...new Set(rows.map((r) => r.operation))] as op (op)}<option>{op}</option
           >{/each}</select
       ></label
@@ -317,8 +319,10 @@
       <table>
         <thead
           ><tr
-            ><th>Preset</th><th>Collection</th><th>Machine</th><th>Tool</th><th>Material</th><th
-              >Operation</th
+            ><th>{t('fsreset.ui.preset')}</th><th>{t('fsreset.ui.collection')}</th><th
+              >{t('fsreset.ui.machine')}</th
+            ><th>{t('fsreset.ui.tool')}</th><th>{t('fsreset.ui.material')}</th><th
+              >{t('fsreset.ui.operation')}</th
             ></tr
           ></thead
         ><tbody>
@@ -337,8 +341,7 @@
         </tbody>
       </table>
       {#if !shown.length}<p>
-          No tested presets match. Create a collection, then save an operation you have actually
-          tested, or import a current collection.
+          {t('fsreset.ui.no.tested.presets.match.create.a.collection.then')}
         </p>{/if}
     </div>
     {#if selected}<aside>
@@ -363,9 +366,9 @@
           </p>{/each}
         {#if selected.preset.notes}<p class="notes">{selected.preset.notes}</p>{/if}
         <div class="actions">
-          <button disabled={busy} onclick={() => edit(selected)}>Edit</button><button
-            disabled={busy}
-            onclick={() => edit(selected, true)}>Duplicate</button
+          <button disabled={busy} onclick={() => edit(selected)}>{t('fsreset.ui.edit')}</button
+          ><button disabled={busy} onclick={() => edit(selected, true)}
+            >{t('fsreset.ui.duplicate')}</button
           ><button
             disabled={busy}
             onclick={() => {
@@ -375,7 +378,7 @@
                 token: stored.token,
                 preset: structuredClone(selected.preset),
               };
-            }}>Delete preset</button
+            }}>{t('fsreset.ui.delete.preset')}</button
           >
         </div>
         <button
@@ -389,10 +392,10 @@
                 selected.collection,
                 selected.preset.id,
               );
-            })}>Preview load into selected operation</button
+            })}>{t('fsreset.ui.preview.load.into.selected.operation')}</button
         >
         {#if preview}<section class="preview">
-            <h3>Reviewed replacement</h3>
+            <h3>{t('fsreset.ui.reviewed.replacement')}</h3>
             {#each preview.after as rate (rate.role)}<p>
                 {rate.role}: {preview.before.find((r) => r.role === rate.role)?.rpm ?? '—'} → {rate.rpm}
                 rpm; feed {preview.before.find((r) => r.role === rate.role)?.feed_mm_min ?? '—'} → {rate.feed_mm_min};
@@ -407,16 +410,16 @@
                   project.history.exec(preview!.command, project.target());
                   preview = null;
                   message = 'Values copied into the reviewed operation';
-                })}>Replace operation parameters</button
-            ><button onclick={() => (preview = null)}>Cancel</button>
+                })}>{t('fsreset.ui.replace.operation.parameters')}</button
+            ><button onclick={() => (preview = null)}>{t('fsreset.ui.cancel')}</button>
           </section>{/if}
       </aside>{/if}
   </div>
   <footer>
     <span>{filtered.length} presets · page {Math.min(page, pages - 1) + 1}/{pages}</span><button
       disabled={page <= 0}
-      onclick={() => page--}>Previous</button
-    ><button disabled={page >= pages - 1} onclick={() => page++}>Next</button>
+      onclick={() => page--}>{t('fsreset.ui.previous')}</button
+    ><button disabled={page >= pages - 1} onclick={() => page++}>{t('fsreset.ui.next')}</button>
   </footer>
 </div>
 {#if naming}<Modal
@@ -435,14 +438,13 @@
       <h2 id="collection-name-title">
         {naming === 'create' ? 'New collection' : 'Rename collection'}
       </h2>
-      <label>Name<input bind:value={name} required maxlength="160" /></label>{#if error}<p
-          role="alert"
-        >
+      <label>{t('fsreset.ui.name')}<input bind:value={name} required maxlength="160" /></label
+      >{#if error}<p role="alert">
           {error}
-        </p>{/if}<button disabled={busy}>Save collection</button><button
+        </p>{/if}<button disabled={busy}>{t('fsreset.ui.save.collection')}</button><button
         type="button"
         disabled={busy}
-        onclick={() => (naming = null)}>Cancel</button
+        onclick={() => (naming = null)}>{t('fsreset.ui.cancel')}</button
       >
     </form></Modal
   >{/if}
@@ -462,8 +464,8 @@
         library. Existing operations keep their copied values. Export a backup first if needed.
       </p>
       {#if error}<p role="alert">{error}</p>{/if}<button disabled={busy} onclick={confirmDelete}
-        >Delete</button
-      ><button disabled={busy} onclick={() => (deletion = null)}>Cancel</button>
+        >{t('fsreset.ui.delete')}</button
+      ><button disabled={busy} onclick={() => (deletion = null)}>{t('fsreset.ui.cancel')}</button>
     </div></Modal
   >{/if}
 {#if incoming}<Modal
@@ -485,10 +487,12 @@
         <button disabled={busy} onclick={() => void run(() => importSelected('replace'))}
           >Replace “{collision.data.name}”</button
         ><button disabled={busy} onclick={() => void run(() => importSelected('copy'))}
-          >Import independent copy</button
+          >{t('fsreset.ui.import.independent.copy')}</button
         >{:else}<button disabled={busy} onclick={() => void run(() => importSelected('new'))}
-          >Import collection</button
-        >{/if}<button disabled={busy} onclick={() => (incoming = null)}>Cancel</button>
+          >{t('fsreset.ui.import.collection')}</button
+        >{/if}<button disabled={busy} onclick={() => (incoming = null)}
+        >{t('fsreset.ui.cancel')}</button
+      >
     </div></Modal
   >{/if}
 {#if editing}<TestedPresetEditor

@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { t } from '../i18n';
   import Modal from './Modal.svelte';
   import { project } from '../state/project.svelte';
   import { inspectCutting } from '../state/cutting-workflow';
-  import { attestationKey, editTestedPreset } from '../state/preset-library-v9';
+  import { attestationKey, editTestedPreset, parameterSummary } from '../state/preset-library-v9';
   import type { TestedPreset } from '../state/preset-collections';
   let {
     initial,
@@ -64,8 +65,10 @@
   ariaLabelledBy="tested-preset-editor-title"
 >
   <header>
-    <h2 id="tested-preset-editor-title">Edit tested preset</h2>
-    <button onclick={onClose} disabled={busy} aria-label="Close preset editor">×</button>
+    <h2 id="tested-preset-editor-title">{t('fsreset.ui.edit.tested.preset')}</h2>
+    <button onclick={onClose} disabled={busy} aria-label={t('fsreset.ui.close.preset.editor')}
+      >×</button
+    >
   </header>
   <form
     onsubmit={(e) => {
@@ -73,19 +76,22 @@
       void save();
     }}
   >
-    <label>Name<input bind:value={draft.name} maxlength="160" required /></label>
+    <label>{t('fsreset.ui.name')}<input bind:value={draft.name} maxlength="160" required /></label>
     <p>{draft.context.machine_label} · {draft.context.material_label}</p>
     <p class="meta">
       Machine identity: {draft.context.machine_id}. This claim concerns the recorded configuration;
       it does not qualify the current project.
     </p>
     <button type="button" onclick={useOperation} disabled={busy || project.sel.selectedOpId == null}
-      >Use selected operation's configuration and values</button
+      >{t('fsreset.ui.use.selected.operation.s.configuration.and.values')}</button
     >
     <div class="rates">
       <table>
         <thead
-          ><tr><th>Pass / tool</th><th>rpm</th><th>Feed mm/min</th><th>Plunge mm/min</th></tr
+          ><tr
+            ><th>{t('fsreset.ui.pass.tool')}</th><th>{t('fsreset.ui.rpm')}</th><th
+              >{t('fsreset.ui.feed.mm.min')}</th
+            ><th>{t('fsreset.ui.plunge.mm.min')}</th></tr
           ></thead
         ><tbody>
           {#each draft.parameters.rates as rate (rate.role)}<tr
@@ -153,7 +159,7 @@
       >
     {:else}
       <label
-        >Depth schedule (descending mm, comma separated)<input
+        >{t('fsreset.ui.depth.schedule.descending.mm.comma.separated')}<input
           value={draft.parameters.schedule.depths.join(', ')}
           onchange={(e) => {
             if (draft.parameters.schedule.kind === 'explicit')
@@ -165,7 +171,7 @@
       >
     {/if}
     {#if draft.parameters.pocket_overlap != null}<label
-        >Pocket overlap (%)<input
+        >{t('fsreset.ui.pocket.overlap')}<input
           type="number"
           min="0.01"
           max="99.99"
@@ -175,22 +181,35 @@
         /></label
       >{/if}
     {#if draft.parameters.planar_stepover_mm != null}<label
-        >Surface stepover (mm)<input
+        >{t('fsreset.ui.surface.stepover.mm')}<input
           type="number"
           min="0.0001"
           step="any"
           bind:value={draft.parameters.planar_stepover_mm}
         /></label
       >{/if}
+    {#if draft.parameters.entry_angle_deg != null}<label
+        >{t('fsreset.ui.entry.angle')}<input
+          type="number"
+          min="1"
+          max="89"
+          step="any"
+          bind:value={draft.parameters.entry_angle_deg}
+        /></label
+      >{/if}
+    {#if draft.parameters.specialized}
+      <p class="meta">{t('fsreset.ui.specialized.cycle.and.engagement.values.are.copied.with')}</p>
+      {#each parameterSummary(draft.parameters) as line (line)}<p class="meta">{line}</p>{/each}
+    {/if}
     <label
-      >Test date (optional)<input
+      >{t('fsreset.ui.test.date.optional')}<input
         type="date"
         value={draft.test_date ?? ''}
         onchange={(e) => (draft.test_date = e.currentTarget.value || null)}
       /></label
     >
     <label
-      >Workshop notes (optional)<textarea
+      >{t('fsreset.ui.workshop.notes.optional')}<textarea
         maxlength="4096"
         value={draft.notes ?? ''}
         onchange={(e) => (draft.notes = e.currentTarget.value || null)}
@@ -201,12 +220,15 @@
           type="checkbox"
           checked={attested === key}
           onchange={(e) => (attested = e.currentTarget.checked ? key : '')}
-        />I confirm these exact values were tested in the recorded workshop configuration.</label
-      >{:else}<p class="meta">Unchanged values retain the original author's attestation.</p>{/if}
+        />{t('fsreset.ui.i.confirm.these.exact.values.were.tested.in')}</label
+      >{:else}<p class="meta">
+        {t('fsreset.ui.unchanged.values.retain.the.original.author.s.attestation')}
+      </p>{/if}
     {#if error}<p role="alert">{error}</p>{/if}
     <footer>
-      <button type="button" onclick={onClose} disabled={busy}>Cancel</button><button
-        disabled={busy || (needsAttestation && attested !== key)}>Save preset</button
+      <button type="button" onclick={onClose} disabled={busy}>{t('fsreset.ui.cancel')}</button
+      ><button disabled={busy || (needsAttestation && attested !== key)}
+        >{t('fsreset.ui.save.preset')}</button
       >
     </footer>
   </form>

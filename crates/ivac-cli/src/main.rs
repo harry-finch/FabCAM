@@ -287,7 +287,13 @@ fn generate_cps(
     if let OpKind::Profile { offset, .. } = &mut op.kind {
         *offset = tool_offset;
     }
+    op.params.step = Some(step);
+    op.params.cutting = Some(ivac_core::cutting_parameters::seed(
+        &op,
+        std::slice::from_ref(&tool),
+    ));
     let project = Project {
+        cutting_version: Some(9),
         segments: import.segments.clone(),
         tools: vec![tool],
         operations: vec![op],
@@ -386,6 +392,8 @@ fn cmd_stream(args: impl Iterator<Item = String>) -> Result<()> {
                 &[("path", &path.display().to_string())],
             )
         })?;
+
+    ivac_core::cutting_parameters::require_current(&request.project).map_err(anyhow::Error::msg)?;
 
     // Two-sided (flip-stock) jobs emit two programs, so they can't stream to a
     // single sink — they write `<base>.front.<ext>` / `<base>.back.<ext>` and

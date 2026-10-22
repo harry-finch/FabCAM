@@ -116,18 +116,18 @@
         'Save this tool in the workshop library'}
     </p>
     <label
-      ><span>Maximum spindle speed</span><input
+      ><span>{t('fsreset.ui.maximum.spindle.speed')}</span><input
         type="number"
         min="1"
         step="1"
-        placeholder="Unknown"
+        placeholder={t('fsreset.ui.unknown')}
         value={tool.maxRpm ?? ''}
         onchange={(e) =>
           onUpdateField(
             'maxRpm',
             e.currentTarget.value === '' ? undefined : Number(e.currentTarget.value),
           )}
-      /><span>rpm</span></label
+      /><span>{t('fsreset.ui.rpm')}</span></label
     >}
   {/if}
   {#if section === 'legacy' || section === 'all'}

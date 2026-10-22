@@ -44,6 +44,40 @@ function patchFromWire(current: OpEntry, next: S['Op']): Partial<OpEntry> {
     ...(current.kind === 'pocket' && next.kind.type === 'pocket'
       ? { xyOverlap: next.kind.pocket?.xy_overlap }
       : {}),
+    ...(current.kind === 'drill' && next.kind.type === 'drill'
+      ? {
+          drillCycle:
+            next.kind.cycle.kind === 'simple'
+              ? { kind: 'simple', dwellSec: next.kind.cycle.dwell_sec }
+              : {
+                  kind: next.kind.cycle.kind,
+                  peckStepMm: next.kind.cycle.peck_step_mm,
+                  dwellSec: next.kind.cycle.dwell_sec,
+                },
+          ...(current.spotFirst && next.kind.spot_first
+            ? {
+                spotFirst: {
+                  ...current.spotFirst,
+                  spotDepthMm: next.kind.spot_first.spot_depth_mm,
+                },
+              }
+            : {}),
+          chamferAfterWidthMm: next.kind.chamfer_after_width_mm ?? undefined,
+        }
+      : {}),
+    ...(current.kind === 'relief_mill' && next.kind.type === 'relief_mill'
+      ? {
+          scallopHeightMm: next.kind.scallop_height_mm,
+          stepoverMm: next.kind.stepover_mm ?? null,
+          alongStepMm: next.kind.along_step_mm,
+        }
+      : {}),
+    ...(current.kind === 'waterline_rough' && next.kind.type === 'waterline_rough'
+      ? {
+          zStepMm: next.kind.z_step_mm,
+          stepoverMm: next.kind.stepover_mm,
+        }
+      : {}),
     ...(current.kind === 'planar_surface' && next.kind.type === 'planar_surface'
       ? { surface: { ...current.surface, stepover_mm: next.kind.surface.stepover_mm } }
       : {}),

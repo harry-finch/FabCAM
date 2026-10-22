@@ -1,0 +1,26 @@
+   Compiling ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.28s
+     Running unittests src/main.rs (target/debug/deps/ivac_server-fbf3358414cf9526)
+
+running 19 tests
+test tests::bad_request_helper_synthesizes_structured_error ... ok
+test tests::internal_helper_synthesizes_structured_error ... ok
+test tests::pipeline_cancelled_maps_to_408_with_structured_body ... ok
+test tests::pipeline_unknown_tool_promotes_auto_fix_into_http_body ... ok
+test tests::http_error_response_carries_full_structured_shape ... ok
+test tests::generate_gcode_stream_rejects_hpgl_with_400 ... ok
+test tests::every_generation_http_route_refuses_legacy_before_emission ... ok
+test tests::relief_stl_rejects_malformed_stl_with_400 ... ok
+test tests::fixtures_refuse_direct_stream_before_success_status ... ok
+test tests::status_for_kind_matches_legacy_mapping ... ok
+test tests::generate_rejects_cps_path_source ... ok
+test tests::relief_stl_returns_204_for_a_footprintless_mesh ... ok
+test tests::relief_stl_rasterizes_a_flat_quad_to_a_surface_field ... ok
+test tests::safe_z_refusal_is_structured_and_stream_has_no_program ... ok
+test tests::generate_gcode_stream_matches_the_buffered_program ... ok
+test tests::generate_gcode_stream_serves_grbl_too ... ok
+test tests::audit_15_16_import_memory_and_format_validation ... ok
+test tests::buffered_collision_returns_error_with_preview_without_program ... ok
+test tests::posts_routes_list_inspect_and_guard ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s

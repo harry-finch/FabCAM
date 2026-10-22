@@ -1,5 +1,17 @@
 # FabCAM release roadmap — approved direction
 
+## FS-RESET-2 implementation checkpoint — 2026-10-22
+
+FS-RESET-1 architecture was explicitly approved; ADR-0030 is Accepted. All four FS-RESET-2
+implementation slices are delivered locally on `FabCAM-v1.1` with bounded qualification.
+[Final implementation report](FS_RESET_2_IMPLEMENTATION.md) is authoritative for the commits,
+operation/preset/v9 behavior, role/output matrix and remaining legacy dependencies.
+Two native watcher tests remain unresolved; installed/browser file round-trips retain stated
+limits. No platform, physical or release gate is closed by software implementation.
+**FS-RESET-3 remains unstarted: separate human review/authorization `ivac-y25vq` is OPEN.**
+The original milestone table below is the FS-RESET-1 planning snapshot; its unstarted and
+approval-pending statuses are superseded by this checkpoint, not permission to remove code.
+
 ## FabCAM V1.1 — FS-RESET (current direction, 2026-10-22)
 
 The maintainer explicitly replaces FabCAM recommendations/source packs with direct operation

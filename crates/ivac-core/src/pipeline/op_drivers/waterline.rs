@@ -224,6 +224,9 @@ pub(in crate::pipeline) fn run_waterline_op<P: PostProcessor>(
     // Clamp the floor to what the flutes can reach.
     if let Some(flute) = tool.flute_length_mm.filter(|v| *v > 0.0) {
         if bottom_z < -flute {
+            if op.params.cutting.is_some() {
+                return Err(PipelineError::Waterline(op.id, "Requested floor exceeds the declared flute length; choose a shallower floor or another tool".into()));
+            }
             bottom_z = -flute;
             warnings.push(
                 PipelineWarning::for_op(

@@ -135,8 +135,24 @@ export function parameterSummary(p: TestedPreset['parameters']): string[] {
     p.schedule.kind === 'explicit'
       ? `Depths: ${p.schedule.depths.join(', ')} mm`
       : `Depth per pass: ${p.schedule.step == null ? 'not used' : `${Math.abs(p.schedule.step)} mm`}${p.schedule.finish_step == null ? '' : `; finish ${Math.abs(p.schedule.finish_step)} mm`}`;
+  const s = p.specialized;
+  const specialized = !s
+    ? []
+    : s.kind === 'drill'
+      ? [
+          `Drill cycle: ${s.cycle.kind}; dwell ${s.cycle.dwell_sec} s${s.cycle.kind === 'simple' ? '' : `; peck ${s.cycle.peck_step_mm} mm`}`,
+          ...(s.spot_depth_mm == null ? [] : [`Spot depth: ${s.spot_depth_mm} mm`]),
+          ...(s.chamfer_width_mm == null ? [] : [`Chamfer width: ${s.chamfer_width_mm} mm`]),
+        ]
+      : s.kind === 'relief'
+        ? [
+            `Relief scallop: ${s.scallop_height_mm} mm; stepover: ${s.stepover_mm ?? 'from scallop'}; along step: ${s.along_step_mm} mm`,
+          ]
+        : [`Waterline depth step: ${s.z_step_mm} mm; stepover: ${s.stepover_mm} mm`];
   return [
     depth,
+    ...specialized,
+    ...(p.entry_angle_deg == null ? [] : [`Entry angle: ${p.entry_angle_deg}°`]),
     ...(p.pocket_overlap == null ? [] : [`Pocket overlap: ${p.pocket_overlap * 100}%`]),
     ...(p.planar_stepover_mm == null ? [] : [`Surface stepover: ${p.planar_stepover_mm} mm`]),
   ];

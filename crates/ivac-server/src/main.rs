@@ -312,7 +312,7 @@ fn reject_cps_path(req: &GenerateRequest) -> Result<(), AppError> {
             ));
         }
     }
-    Ok(())
+    ivac_core::cutting_parameters::require_current(&req.project).map_err(AppError::bad_request)
 }
 
 async fn generate(
@@ -1214,9 +1214,51 @@ mod tests {
         app.oneshot(http_req).await.unwrap()
     }
 
+    #[tokio::test]
+    async fn every_generation_http_route_refuses_legacy_before_emission() {
+        let app = Router::new()
+            .route("/generate", post(generate))
+            .route("/generate/two-sided", post(generate_two_sided))
+            .route("/generate/gcode", post(generate_gcode_stream))
+            .route("/generate/stream", post(generate_stream))
+            .with_state(Arc::new(AppState::default()));
+        let mut req = a_request(PostProcessorKind::Linuxcnc);
+        req.project.cutting_version = None;
+        for path in [
+            "/generate",
+            "/generate/two-sided",
+            "/generate/gcode",
+            "/generate/stream",
+        ] {
+            let resp = app
+                .clone()
+                .oneshot(
+                    Request::builder()
+                        .method("POST")
+                        .uri(path)
+                        .header("content-type", "application/json")
+                        .body(Body::from(serde_json::to_vec(&req).unwrap()))
+                        .unwrap(),
+                )
+                .await
+                .unwrap();
+            assert_eq!(resp.status(), StatusCode::BAD_REQUEST, "{path}");
+            let bytes = to_bytes(resp.into_body(), usize::MAX).await.unwrap();
+            let error: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+            assert!(
+                error["message"].as_str().unwrap().contains("v9"),
+                "{path}: {error}"
+            );
+            assert!(error.get("gcode").is_none());
+        }
+    }
+
     fn a_request(post: PostProcessorKind) -> PipelineRequest {
         PipelineRequest {
-            project: ivac_core::project::Project::default(),
+            project: ivac_core::project::Project {
+                cutting_version: Some(9),
+                ..Default::default()
+            },
             post_processor: Some(post),
             cps_post: None,
         }
@@ -1230,6 +1272,10 @@ mod tests {
         .unwrap();
         req.post_processor = Some(PostProcessorKind::Linuxcnc);
         req.cps_post = None;
+        req.project.cutting_version = Some(9);
+        for op in &mut req.project.operations {
+            op.params.cutting = Some(ivac_core::cutting_parameters::seed(op, &req.project.tools));
+        }
         req.project.fixtures.push(ivac_core::project::Fixture {
             id: 1,
             name: "clamp".into(),

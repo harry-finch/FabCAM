@@ -166,6 +166,7 @@ pub fn from_stl(bytes: &[u8], max_dim: u32) -> Result<JsValue, JsValue> {
 #[wasm_bindgen]
 pub fn generate(request: JsValue) -> Result<JsValue, JsValue> {
     let req: PipelineRequest = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+    ivac_core::cutting_parameters::require_current(&req.project).map_err(into_js_error)?;
     let project = req.project.clone();
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| generate_request(req)));
     match result {
@@ -188,6 +189,7 @@ pub fn generate(request: JsValue) -> Result<JsValue, JsValue> {
 #[wasm_bindgen(js_name = generateTwoSided)]
 pub fn generate_two_sided(request: JsValue) -> Result<JsValue, JsValue> {
     let req: PipelineRequest = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+    ivac_core::cutting_parameters::require_current(&req.project).map_err(into_js_error)?;
     let project = req.project.clone();
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         run_pipeline_two_sided(req, |_phase, _fraction, _msg| {})
@@ -222,6 +224,7 @@ pub fn generate_streaming_wasm(
     on_event: js_sys::Function,
 ) -> Result<JsValue, JsValue> {
     let req: PipelineRequest = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+    ivac_core::cutting_parameters::require_current(&req.project).map_err(into_js_error)?;
     let cancel = CancelToken::new();
     let project = req.project.clone();
     let mut sink = |ev| {
@@ -413,7 +416,10 @@ pub fn evaluate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
 #[wasm_bindgen(js_name = generateDrawing)]
 pub fn generate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
     guard(|| {
-        let req = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+        let req: ivac_core::drawing::api::DrawingGenerationRequest =
+            serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+        ivac_core::cutting_parameters::require_current(&req.machining.project)
+            .map_err(into_js_error)?;
         let result = ivac_core::pipeline::generate_drawing(req).map_err(|e| {
             e.to_structured(None)
                 .map_or_else(|| into_js_error(e), structured_error_to_js)

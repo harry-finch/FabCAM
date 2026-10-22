@@ -166,6 +166,9 @@ pub(in crate::pipeline) fn run_relief_op<P: PostProcessor>(
     // Floor is clamped to what the flutes can reach (shared across kinds).
     if let Some(flute) = tool.flute_length_mm.filter(|v| *v > 0.0) {
         if z_floor < -flute {
+            if op.params.cutting.is_some() {
+                return Err(PipelineError::AppliedCutting(op.id, "Relief floor exceeds the declared flute length; choose a shallower relief or another tool".into()));
+            }
             z_floor = -flute;
             warnings.push(PipelineWarning::for_op(
                 op.id,

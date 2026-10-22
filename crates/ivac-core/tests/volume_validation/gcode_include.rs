@@ -88,6 +88,7 @@ fn gcode_include_g1_slot_volume_matches_closed_form() {
     };
 
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![tool.clone()],

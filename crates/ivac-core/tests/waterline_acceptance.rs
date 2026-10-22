@@ -179,6 +179,7 @@ fn waterline_rough_then_relief_finish_no_gouge_bounded_envelope() {
     };
 
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![rough_tool.clone(), finish_tool.clone()],

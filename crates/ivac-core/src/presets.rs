@@ -1,8 +1,10 @@
 //! Workshop attestation and reviewed copies. No matching, ranking or calculation engine.
 use crate::cutting_parameters::{validate_operation, MillingCutting, RoleRates};
 use crate::project::{Op, Project};
+mod specialized;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+pub use specialized::SpecializedParameters;
 
 pub const MAX_COLLECTION_BYTES: usize = 2 * 1024 * 1024;
 pub const MAX_PRESETS: usize = 256;
@@ -31,6 +33,10 @@ pub enum DepthSchedule {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct PresetParameters {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub specialized: Option<SpecializedParameters>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entry_angle_deg: Option<f64>,
     pub rates: Vec<RoleRates>,
     pub schedule: DepthSchedule,
     pub pocket_overlap: Option<f64>,
@@ -118,6 +124,9 @@ pub fn validate_collection(c: &PresetCollection) -> Result<(), String> {
     Ok(())
 }
 fn validate_parameters(p: &PresetParameters) -> Result<(), String> {
+    if let Some(s) = &p.specialized {
+        s.validate()?;
+    }
     let mut roles = std::collections::BTreeSet::new();
     if p.rates.is_empty() || p.rates.len() > 5 {
         return Err("Invalid role count".into());
@@ -153,6 +162,11 @@ fn validate_parameters(p: &PresetParameters) -> Result<(), String> {
             }
         }
     }
+    if p.entry_angle_deg
+        .is_some_and(|v| !v.is_finite() || !(1.0..=89.0).contains(&v))
+    {
+        return Err("Entry angle must be finite and within 1–89 degrees".into());
+    }
     if p.pocket_overlap
         .is_some_and(|v| !v.is_finite() || v <= 0.0 || v >= 1.0)
         || p.planar_stepover_mm
@@ -166,6 +180,8 @@ fn validate_parameters(p: &PresetParameters) -> Result<(), String> {
 pub fn parameters(op: &Op) -> Result<PresetParameters, String> {
     use crate::project::OpKind;
     Ok(PresetParameters {
+        specialized: SpecializedParameters::capture(op),
+        entry_angle_deg: op.params.cutting.as_ref().and_then(|c| c.entry_angle_deg),
         rates: op
             .params
             .cutting
@@ -233,6 +249,7 @@ pub fn context(project: &Project, op: &Op) -> Result<PresetContext, String> {
                 "default_step",
                 "default_xy_overlap",
                 "default_peck_step_mm",
+                "vcarve_lead_in_angle_deg",
                 "last_calibrated",
             ] {
                 map.remove(key);
@@ -241,6 +258,7 @@ pub fn context(project: &Project, op: &Op) -> Result<PresetContext, String> {
         tools.push(serde_json::json!({"role":role,"physical_id":physical,"geometry":geometry}));
     }
     let mut kind = serde_json::to_value(&op.kind).map_err(|e| e.to_string())?;
+    specialized::remove_copied_values(&mut kind);
     if let Some(p) = kind
         .get_mut("pocket")
         .and_then(serde_json::Value::as_object_mut)
@@ -298,7 +316,10 @@ pub fn load(
         .find(|p| p.id == id)
         .ok_or("Preset not found")?;
     let current = context(project, op)?;
-    if current.signature != p.context.signature {
+    if current.signature != p.context.signature
+        || current.machine_id != p.context.machine_id
+        || current.material_id != p.context.material_id
+    {
         return Err(
             "Preset context differs: review machine, material, tool geometry and operation".into(),
         );
@@ -315,6 +336,7 @@ pub fn load(
     }
     next.params.cutting = Some(MillingCutting {
         rates: parameters.rates.clone(),
+        entry_angle_deg: parameters.entry_angle_deg,
         preset_snapshot: None,
     });
     match &parameters.schedule {
@@ -340,6 +362,13 @@ pub fn load(
         } else {
             return Err("Surfacing values on another operation".into());
         }
+    }
+    match &parameters.specialized {
+        Some(values) => values.apply(&mut next)?,
+        None if SpecializedParameters::capture(&next).is_some() => {
+            return Err("Preset is missing specialized operation values".into())
+        }
+        None => {}
     }
     let report = validate_operation(project, &next);
     if !report.errors.is_empty() {
@@ -398,6 +427,63 @@ mod tests {
         });
         (p, c)
     }
+    #[test]
+    fn specialized_cycles_copy_without_changing_role_assignments() {
+        use crate::project::{DrillCycle, OpKind, SpotConfig};
+        let (mut p, mut c) = example();
+        p.operations[0].kind = OpKind::Drill {
+            cycle: DrillCycle::Peck {
+                peck_step_mm: 0.7,
+                dwell_sec: 0.2,
+            },
+            spot_first: Some(SpotConfig {
+                spot_tool_id: 1,
+                spot_depth_mm: -0.3,
+            }),
+            chamfer_after_width_mm: None,
+            pattern: None,
+        };
+        p.operations[0].params.cutting =
+            Some(crate::cutting_parameters::seed(&p.operations[0], &p.tools));
+        c.presets[0].context = context(&p, &p.operations[0]).unwrap();
+        c.presets[0].parameters = parameters(&p.operations[0]).unwrap();
+        let expected = p.operations[0].kind.clone();
+        if let OpKind::Drill {
+            cycle, spot_first, ..
+        } = &mut p.operations[0].kind
+        {
+            *cycle = DrillCycle::ChipBreak {
+                peck_step_mm: 1.2,
+                dwell_sec: 0.,
+            };
+            spot_first.as_mut().unwrap().spot_depth_mm = -0.5;
+        }
+        let restored = load(&p, &p.operations[0], &c, "tested-profile").unwrap();
+        assert_eq!(
+            serde_json::to_value(restored.kind).unwrap(),
+            serde_json::to_value(expected).unwrap()
+        );
+        assert_eq!(restored.tool_id, p.operations[0].tool_id);
+        let roundtrip = parse_collection(&serde_json::to_string(&c).unwrap()).unwrap();
+        assert_eq!(roundtrip, c);
+        c.presets[0].parameters.specialized = None;
+        assert!(load(&p, &p.operations[0], &c, "tested-profile").is_err());
+        c.presets[0].parameters.specialized = Some(SpecializedParameters::Waterline {
+            z_step_mm: 1.,
+            stepover_mm: 1.,
+        });
+        assert!(load(&p, &p.operations[0], &c, "tested-profile").is_err());
+        c.presets[0].parameters.specialized = Some(SpecializedParameters::Drill {
+            cycle: DrillCycle::Peck {
+                peck_step_mm: 0.,
+                dwell_sec: 0.,
+            },
+            spot_depth_mm: Some(-0.3),
+            chamfer_width_mm: None,
+        });
+        assert!(validate_collection(&c).is_err());
+    }
+
     #[test]
     fn exact_reviewed_load_is_a_copy_without_private_notes() {
         let (p, c) = example();

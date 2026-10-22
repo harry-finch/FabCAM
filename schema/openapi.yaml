@@ -3846,6 +3846,11 @@ components:
     MillingCutting:
       additionalProperties: false
       properties:
+        entry_angle_deg:
+          format: double
+          type:
+          - number
+          - 'null'
         preset_snapshot:
           anyOf:
           - $ref: '#/components/schemas/LoadedPresetSnapshot'
@@ -5540,6 +5545,11 @@ components:
     PresetParameters:
       additionalProperties: false
       properties:
+        entry_angle_deg:
+          format: double
+          type:
+          - number
+          - 'null'
         planar_stepover_mm:
           format: double
           type:
@@ -5556,6 +5566,10 @@ components:
           type: array
         schedule:
           $ref: '#/components/schemas/DepthSchedule'
+        specialized:
+          anyOf:
+          - $ref: '#/components/schemas/SpecializedParameters'
+          - type: 'null'
       required:
       - rates
       - schedule
@@ -6386,6 +6400,69 @@ components:
       - file
       - line
       type: object
+    SpecializedParameters:
+      oneOf:
+      - additionalProperties: false
+        properties:
+          chamfer_width_mm:
+            format: double
+            type:
+            - number
+            - 'null'
+          cycle:
+            $ref: '#/components/schemas/DrillCycle'
+          kind:
+            enum:
+            - drill
+            type: string
+          spot_depth_mm:
+            format: double
+            type:
+            - number
+            - 'null'
+        required:
+        - cycle
+        - kind
+        type: object
+      - additionalProperties: false
+        properties:
+          along_step_mm:
+            format: double
+            type: number
+          kind:
+            enum:
+            - relief
+            type: string
+          scallop_height_mm:
+            format: double
+            type: number
+          stepover_mm:
+            format: double
+            type:
+            - number
+            - 'null'
+        required:
+        - along_step_mm
+        - kind
+        - scallop_height_mm
+        type: object
+      - additionalProperties: false
+        properties:
+          kind:
+            enum:
+            - waterline
+            type: string
+          stepover_mm:
+            format: double
+            type: number
+          z_step_mm:
+            format: double
+            type: number
+        required:
+        - kind
+        - stepover_mm
+        - z_step_mm
+        type: object
     SpindleDirection:
       description: Per-tool spindle direction — right-hand (`Cw`, M3) for the 99% of cutters, left-hand (`Ccw`, M4) for reverse-thread / mirror /-helix tooling. Mirrored into `ToolConfig.spindle_direction` at synth time so the gcode emitter can route between `spindle_cw` and `spindle_ccw` without reaching back into the tool library.
       enum:

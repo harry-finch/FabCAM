@@ -122,3 +122,47 @@ it('real WASM reviews and copies a tested preset while preserving the assigned c
     command({ action: 'load', project: p, op_id: op.id, collection, preset_id: 'tested' }),
   ).toThrow();
 });
+
+it('real WASM generation adapters require v9 and preserve explicit profile output', async () => {
+  const url = new URL('../../../../crates/ivac-wasm/pkg/ivac_wasm.js', import.meta.url);
+  const wasm = await import(/* @vite-ignore */ url.href);
+  await wasm.default({ module_or_path: readFileSync(new URL('./ivac_wasm_bg.wasm', url)) });
+  const req = JSON.parse(
+    readFileSync(
+      new URL('../../../../tests/fixtures/test1/profile.request.json', import.meta.url),
+      'utf8',
+    ),
+  );
+  req.post_processor = 'linuxcnc';
+  req.cps_post = null;
+  const calls = [
+    () => wasm.generate(req),
+    () => wasm.generateTwoSided(req),
+    () => wasm.generateStreaming(req, () => {}),
+  ];
+  for (const call of calls) expect(call).toThrow('v9');
+  req.project.cutting_version = 9;
+  const op = req.project.operations[0];
+  op.params.cutting = {
+    rates: ['rough', 'finish'].map((role) => ({
+      role,
+      tool_id: op.tool_id,
+      rpm: 12000,
+      feed_mm_min: 800,
+      plunge_mm_min: 100,
+    })),
+  };
+  const first = wasm.generate(req);
+  expect(first.gcode).toContain('S12000');
+  expect(first.gcode).toContain('F800');
+  req.project.tools[0].speed = 99999;
+  req.project.tools[0].feed_rate = 99999;
+  expect(wasm.generate(req).gcode).toEqual(first.gcode);
+  expect(wasm.generateTwoSided(req).front.gcode).toEqual(first.gcode);
+  expect(wasm.generateStreaming(req, () => {}).gcode).toEqual(first.gcode);
+  op.params.cutting.rates[1].rpm = null;
+  for (const call of calls) expect(call).toThrow();
+  op.params.cutting.rates[1].rpm = 50000;
+  req.project.tools[0].max_rpm = 20000;
+  for (const call of calls) expect(call).toThrow();
+});

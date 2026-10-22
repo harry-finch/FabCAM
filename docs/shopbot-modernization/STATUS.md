@@ -1,5 +1,20 @@
 # FabCAM — current status
 
+## Current checkpoint — FS-RESET-2, 2026-10-22
+
+The four approved implementation slices are complete on `FabCAM-v1.1`.
+[Implementation report](../releases/FS_RESET_2_IMPLEMENTATION.md) records scoped commits,
+v9 operation/preset contracts, actual-role and output comparisons, and preserved boundaries.
+Core with CPS: **1463 PASS**; frontend: **1580 PASS / 1 existing skip**; HTTP: **19 PASS**;
+CLI integration: **1 PASS**. Native suite: **19 PASS / 2 unresolved watcher failures**.
+Typecheck/lint/build/Clippy pass; installed dialogs/browser file round-trip remain limited.
+No release or physical qualification. The maintainer-started web server remains available.
+**HARD STOP: human review `ivac-y25vq` OPEN before FS-RESET-3 legacy removal.**
+ADR-0030 is Accepted. No FabSpeed integration, push, merge, version promotion or installer.
+
+The following FS-RESET-1 checkpoint is the historical architecture handoff; its pending
+approval statements are superseded by the explicitly approved FS-RESET-2 report above.
+
 ## Current checkpoint — FS-RESET-1, 2026-10-22
 
 The maintainer has authorized separating FabSpeed calculation from FabCAM CAM/presets.

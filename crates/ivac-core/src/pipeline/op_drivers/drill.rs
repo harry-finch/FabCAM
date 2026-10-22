@@ -16,7 +16,7 @@ use crate::cam::setup::Setup;
 use crate::cam::VcObject;
 use crate::gcode::{emit_drill_block, emit_stufenfase_rim_block, PostProcessor, StufenfaseHole};
 use crate::geometry::Point2;
-use crate::pipeline::setup_resolver::{resolve_peck_step, synthesize_op_setup};
+use crate::pipeline::setup_resolver::{resolve_peck_step, synthesize_op_setup_for_role};
 use crate::pipeline::{
     emit_toolchange_envelope, op_includes_object, synthesize_finish_setup, PipelineError,
     PipelineWarning,
@@ -140,7 +140,12 @@ fn emit_spot_pre_pass<P: PostProcessor>(
         spot_first: None,
     };
     spot_op.params.depth = spot.spot_depth_mm;
-    let mut spot_setup = synthesize_op_setup(&spot_op, project, warnings)?;
+    let mut spot_setup = synthesize_op_setup_for_role(
+        &spot_op,
+        project,
+        warnings,
+        Some(crate::cutting_parameters::CuttingRole::Spot),
+    )?;
     // Spot block shares the main op's start_depth / fast_move_z so
     // the rapid retract plane stays consistent across the
     // spot→main→chamfer sequence.
@@ -167,7 +172,7 @@ fn emit_spot_pre_pass<P: PostProcessor>(
             false,
             // Spot pre-pass runs at the spot tool's library speed — no
             // finish-pass override here.
-            None,
+            op.params.cutting.as_ref().map(|_| spot_setup.tool.speed),
             Some((spot_setup.tool.rate_h, spot_setup.tool.rate_v)),
         );
     }
@@ -198,7 +203,7 @@ fn emit_spot_pre_pass<P: PostProcessor>(
             main_tool.id,
             false,
             // Returning to the main drill tool's own speed.
-            None,
+            op.params.cutting.as_ref().map(|_| main_setup.tool.speed),
             Some((main_setup.tool.rate_h, main_setup.tool.rate_v)),
         );
     }
@@ -311,10 +316,15 @@ fn emit_stufenfase<P: PostProcessor>(
         // pre-fix 64-chord G1 polyline. Only the ramp's varying-Z piece
         // still needs polyline samples — at LEAD_RAMP_STEPS the chord
         // error stays well under 1 % of `r` for any realistic chamfer.
-        let lead_angle_deg = cutter
-            .vcarve_lead_in_angle_deg
-            .unwrap_or(10.0)
-            .clamp(0.5, 45.0);
+        let lead_angle_deg = op.params.cutting.as_ref().map_or_else(
+            || {
+                cutter
+                    .vcarve_lead_in_angle_deg
+                    .unwrap_or(10.0)
+                    .clamp(0.5, 45.0)
+            },
+            |c| c.entry_angle_deg.unwrap_or(0.0),
+        );
         const LEAD_RAMP_STEPS: usize = 12;
         let circumference = std::f64::consts::TAU * r;
         let needed_arc = chamfer_z.abs() / lead_angle_deg.to_radians().tan();
@@ -365,7 +375,16 @@ fn emit_stufenfase<P: PostProcessor>(
     if found == 0 {
         return Ok(false);
     }
-    let mut chamfer_setup = drill_setup.clone();
+    let mut chamfer_setup = if op.params.cutting.is_some() && cutter_id == op.tool_id {
+        synthesize_op_setup_for_role(
+            op,
+            project,
+            warnings,
+            Some(crate::cutting_parameters::CuttingRole::Chamfer),
+        )?
+    } else {
+        drill_setup.clone()
+    };
     let mut swapped = false;
     if op.finish_tool_id.is_some() && op.finish_tool_id != Some(op.tool_id) {
         if !project.machine.tool_change.emits_m6() {

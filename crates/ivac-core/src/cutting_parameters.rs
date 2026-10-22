@@ -30,6 +30,8 @@ pub struct RoleRates {
 pub struct MillingCutting {
     pub rates: Vec<RoleRates>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entry_angle_deg: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub preset_snapshot: Option<crate::presets::LoadedPresetSnapshot>,
 }
 
@@ -44,7 +46,12 @@ pub struct CuttingCheck {
 #[must_use]
 pub fn roles(op: &Op) -> Vec<(CuttingRole, u32)> {
     use CuttingRole::{Chamfer, Drill, Finish, Rough, Spot};
-    if op.is_program_only() || matches!(op.kind, OpKind::DragKnife { .. }) {
+    if op.is_program_only()
+        || matches!(
+            op.kind,
+            OpKind::DragKnife { .. } | OpKind::RasterEngrave { .. }
+        )
+    {
         return vec![];
     }
     match &op.kind {
@@ -62,21 +69,48 @@ pub fn roles(op: &Op) -> Vec<(CuttingRole, u32)> {
             }
             result
         }
+        OpKind::Pocket {
+            strategy: crate::project::PocketStrategy::Halfpipe { .. },
+            ..
+        }
+        | OpKind::Chamfer {
+            finish_pass: false, ..
+        } => vec![(Rough, op.tool_id)],
+        OpKind::Pocket { pocket, .. } if pocket.pocket_nocontour => vec![(Rough, op.tool_id)],
         OpKind::Pocket { .. } => vec![
             (Rough, op.tool_id),
             (Finish, op.finish_tool_id.unwrap_or(op.tool_id)),
         ],
-        OpKind::Profile { .. } | OpKind::Engrave { .. } | OpKind::Chamfer { .. } => {
+        OpKind::Profile { .. } | OpKind::Chamfer { .. } => {
             vec![(Rough, op.tool_id), (Finish, op.tool_id)]
         }
         _ => vec![(Rough, op.tool_id)],
     }
 }
 
+#[must_use]
+pub fn uses_entry_angle(op: &Op) -> bool {
+    matches!(
+        op.kind,
+        OpKind::VCarve { .. }
+            | OpKind::Pocket {
+                strategy: crate::project::PocketStrategy::Halfpipe { .. },
+                ..
+            }
+    ) || op.drill_chamfer_after_width_mm().is_some()
+}
+
 /// Creation only. No generation path calls this helper.
 #[must_use]
 pub fn seed(op: &Op, tools: &[ToolEntry]) -> MillingCutting {
     MillingCutting {
+        entry_angle_deg: uses_entry_angle(op).then(|| {
+            tools
+                .iter()
+                .find(|t| t.id == op.finish_tool_id.unwrap_or(op.tool_id))
+                .and_then(|t| t.vcarve_lead_in_angle_deg)
+                .unwrap_or(10.0)
+        }),
         rates: roles(op)
             .into_iter()
             .map(|(role, tool_id)| {
@@ -197,11 +231,26 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
     if op.is_program_only() {
         return out;
     }
+    if op.params.applied_cutting.is_some()
+        || op.params.feed_rate_override.is_some()
+        || op.params.plunge_rate_override.is_some()
+    {
+        out.errors
+            .push("Legacy cutting overrides are unsupported in v9".into());
+    }
     if project.machine.mode != MachineMode::Mill {
         if op.params.cutting.is_some() {
             out.errors
                 .push("Milling values cannot be used for this process".into());
         }
+        return out;
+    }
+    if matches!(
+        op.kind,
+        OpKind::DragKnife { .. } | OpKind::RasterEngrave { .. }
+    ) {
+        out.errors
+            .push("Select the matching non-milling machine process for this operation".into());
         return out;
     }
     if let Err(e) = validate_structure(op) {
@@ -210,7 +259,12 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
     }
     if matches!(
         op.kind,
-        OpKind::Profile { .. } | OpKind::Pocket { .. } | OpKind::Engrave { .. }
+        OpKind::Profile { .. }
+            | OpKind::Pocket { .. }
+            | OpKind::Engrave { .. }
+            | OpKind::Chamfer { .. }
+            | OpKind::VCarve { .. }
+            | OpKind::PlanarSurface { .. }
     ) && op.params.step.is_none()
         && op.params.depth_list.is_empty()
     {
@@ -222,6 +276,19 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
             out.errors.push(
                 "Pocket overlap must be explicit, finite and between 0 and 100 percent".into(),
             );
+        }
+    }
+    if uses_entry_angle(op) {
+        let angle = op.params.cutting.as_ref().and_then(|c| c.entry_angle_deg);
+        let max = if op.drill_chamfer_after_width_mm().is_some() {
+            45.0
+        } else {
+            89.0
+        };
+        if !angle.is_some_and(|v| v.is_finite() && v >= 1.0 && v <= max) {
+            out.errors.push(format!(
+                "Set an explicit entry angle between 1 and {max} degrees"
+            ));
         }
     }
     for (role, id) in roles(op) {
@@ -242,6 +309,8 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
             out.errors
                 .push(format!("{role:?}: invalid diameter, wear or flute count"));
         }
+        out.errors
+            .extend(validate_specialized_values(op, tool, role));
         match rates(op, role, id).and_then(|v| validate_limits(project, tool, v)) {
             Ok(()) => {}
             Err(e) => out.errors.push(format!("{role:?}: {e}")),
@@ -259,8 +328,16 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
                 out.errors
                     .push(format!("{role:?}: invalid usable flute length"));
             }
-            if op.params.step.is_some_and(|s| s.abs() > length)
-                || op.params.finish_step.is_some_and(|s| s.abs() > length)
+            let reach = axial_reach(op, tool, role);
+            if reach.is_some_and(|depth| depth > length + 1e-9) {
+                out.errors.push(format!(
+                    "{role:?}: requested cutting depth exceeds usable flute length"
+                ));
+            }
+            if matches!(role, CuttingRole::Rough | CuttingRole::Finish)
+                && !matches!(op.kind, OpKind::TSlot { .. } | OpKind::Dovetail { .. })
+                && (op.params.step.is_some_and(|s| s.abs() > length)
+                    || op.params.finish_step.is_some_and(|s| s.abs() > length))
             {
                 out.errors.push(format!(
                     "{role:?}: depth per pass exceeds usable flute length"
@@ -284,6 +361,27 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
                 .push("Depth per pass must be finite and positive".into());
         }
     }
+    if op
+        .params
+        .finish_step
+        .is_some_and(|s| !s.is_finite() || s >= -1e-9)
+    {
+        out.errors
+            .push("Finish depth per pass must be finite and positive".into());
+    }
+    if !op.params.through_depth.is_finite() || op.params.through_depth < 0.0 {
+        out.errors
+            .push("Through depth must be finite and nonnegative".into());
+    }
+    if op
+        .params
+        .depth_list
+        .first()
+        .is_some_and(|v| *v >= op.params.start_depth)
+    {
+        out.errors
+            .push("Explicit depth schedule must start below the start depth".into());
+    }
     if op.params.depth_list.iter().any(|v| !v.is_finite())
         || op.params.depth_list.windows(2).any(|w| w[1] >= w[0])
     {
@@ -291,6 +389,264 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
             .push("Explicit depths must be finite and strictly descending".into());
     }
     out
+}
+
+fn axial_reach(op: &Op, tool: &ToolEntry, role: CuttingRole) -> Option<f64> {
+    if role == CuttingRole::Spot {
+        return if let OpKind::Drill {
+            spot_first: Some(spot),
+            ..
+        } = op.kind
+        {
+            Some(-spot.spot_depth_mm)
+        } else {
+            None
+        };
+    }
+    let width = if role == CuttingRole::Chamfer {
+        op.drill_chamfer_after_width_mm()
+    } else if let OpKind::Chamfer { width_mm, .. } = op.kind {
+        Some(width_mm)
+    } else {
+        None
+    };
+    if let Some(w) = width {
+        return Some(
+            crate::cam::chamfer::chamfer_depth_capped(
+                w,
+                tool.tip_angle_deg,
+                tool.effective_diameter(),
+                tool.tip_diameter.unwrap_or(0.0),
+            )
+            .z
+            .abs(),
+        );
+    }
+    match op.kind {
+        OpKind::Profile { .. }
+        | OpKind::Pocket { .. }
+        | OpKind::Engrave { .. }
+        | OpKind::Drill { .. }
+        | OpKind::PlanarSurface { .. }
+        | OpKind::Thread { .. } => Some(op.params.depth_list.iter().fold(
+            (-op.params.depth + op.params.through_depth).max(0.0),
+            |d, z| d.max(-z),
+        )),
+        OpKind::ReliefMill { z_min_mm, .. } => Some(-z_min_mm),
+        _ => None,
+    }
+}
+
+fn validate_specialized_values(op: &Op, tool: &ToolEntry, role: CuttingRole) -> Vec<String> {
+    use crate::project::{DrillCycle, HalfpipeProfile, PocketStrategy, ToolKind};
+    let mut errors = vec![];
+    let positive = |v: f64| v.is_finite() && v > 0.0;
+    if matches!(
+        op.kind,
+        OpKind::Profile { .. }
+            | OpKind::Pocket { .. }
+            | OpKind::Thread { .. }
+            | OpKind::WaterlineRough { .. }
+    ) && tool.kind == ToolKind::Drill
+    {
+        errors
+            .push("This operation requires a side-cutting milling tool, not an axial drill".into());
+    }
+    if matches!(op.kind, OpKind::TSlot { .. } | OpKind::Dovetail { .. })
+        && (tool.kind != ToolKind::FormProfile || tool.form_profile_mm.len() < 2)
+    {
+        errors.push("Undercut operations require an explicit form-profile cutter".into());
+    }
+    let width = if role == CuttingRole::Chamfer {
+        op.drill_chamfer_after_width_mm()
+    } else if let OpKind::Chamfer { width_mm, .. } = op.kind {
+        Some(width_mm)
+    } else {
+        None
+    };
+    if let Some(w) = width {
+        let tip = tool.tip_diameter.unwrap_or(0.0);
+        if tool.kind != ToolKind::VBit
+            || !positive(w)
+            || !tip.is_finite()
+            || tip < 0.0
+            || tip >= tool.effective_diameter()
+            || !(1.0..=179.0).contains(&tool.tip_angle_deg)
+            || w > (tool.effective_diameter() - tip) * 0.5
+        {
+            errors.push("Chamfer requires a valid V-bit and an explicit width within its physical reach; values are not clamped".into());
+        }
+    }
+    if let OpKind::VCarve { carve } = &op.kind {
+        let tip = tool.tip_diameter.unwrap_or(0.0);
+        if tool.kind != ToolKind::VBit
+            || !tip.is_finite()
+            || tip < 0.0
+            || tip >= tool.effective_diameter()
+            || !(1.0..=179.0).contains(&tool.tip_angle_deg)
+            || op.params.start_depth != 0.0
+            || op.params.depth > 0.0
+            || op.params.through_depth != 0.0
+            || !op.params.depth_list.is_empty()
+            || op.params.finish_step.is_some()
+            || carve.multi_pass_refine
+            || carve
+                .carve_max_width_mm
+                .is_some_and(|r| !positive(r) || r > tool.effective_diameter() * 0.5)
+            || carve
+                .source_inset_mm
+                .is_some_and(|v| !v.is_finite() || v < 0.0)
+        {
+            errors.push("V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported".into());
+        }
+    }
+    if let OpKind::PlanarSurface { surface } = &op.kind {
+        if !matches!(tool.kind, ToolKind::Endmill | ToolKind::Compression)
+            || tool.whirl
+            || !positive(surface.stepover_mm)
+            || surface.stepover_mm > tool.effective_diameter() * 0.95
+            || op.params.start_depth != 0.0
+            || op.params.depth >= 0.0
+            || op.params.through_depth != 0.0
+            || !op.params.depth_list.is_empty()
+            || op.finish_tool_id.is_some()
+            || !matches!(op.params.plunge, crate::project::PlungeStrategy::Direct)
+        {
+            errors.push("Planar surfacing requires a flat cutter, one explicit depth-step schedule, direct entry and stepover at most 95% of cutter diameter".into());
+        }
+    }
+    match &op.kind {
+        OpKind::Drill {
+            cycle, spot_first, ..
+        } => {
+            let (peck, dwell) = match *cycle {
+                DrillCycle::Simple { dwell_sec } => (None, dwell_sec),
+                DrillCycle::Peck {
+                    peck_step_mm,
+                    dwell_sec,
+                }
+                | DrillCycle::ChipBreak {
+                    peck_step_mm,
+                    dwell_sec,
+                } => (Some(peck_step_mm), dwell_sec),
+            };
+            if peck.is_some_and(|v| !positive(v)) || !dwell.is_finite() || dwell < 0.0 {
+                errors.push(
+                    "Drill cycle requires positive explicit peck depth and nonnegative dwell"
+                        .into(),
+                );
+            }
+            if spot_first.is_some_and(|v| {
+                !v.spot_depth_mm.is_finite() || v.spot_depth_mm >= op.params.start_depth
+            }) {
+                errors.push("Spot depth must be finite and below the start depth".into());
+            }
+        }
+        OpKind::Pocket {
+            strategy: PocketStrategy::Halfpipe { profile },
+            ..
+        } => {
+            if op.finish_tool_id.is_some() {
+                errors.push("Halfpipe uses one cutter; remove the unused finish tool".into());
+            }
+            if tool.flute_length_mm.is_none() {
+                errors.push("Halfpipe requires an explicit usable flute length; no tool-radius rating is inferred".into());
+            }
+            if op.params.step.is_some_and(|v| v.abs() < 0.05) {
+                errors.push("Halfpipe depth per pass must be at least 0.05 mm".into());
+            }
+            let valid = match profile {
+                HalfpipeProfile::CircularArc { radius_mm } => {
+                    tool.kind == ToolKind::BallNose
+                        && positive(*radius_mm)
+                        && (tool.effective_diameter() * 0.5 - radius_mm).abs() <= radius_mm * 0.10
+                }
+                HalfpipeProfile::VBottom { included_angle_deg } => {
+                    tool.kind == ToolKind::VBit
+                        && (1.0..=179.0).contains(included_angle_deg)
+                        && (tool.tip_angle_deg - included_angle_deg).abs() <= 1e-6
+                }
+            };
+            if !valid {
+                errors
+                    .push("Halfpipe profile requires matching ball-nose or V-bit geometry".into());
+            }
+        }
+        OpKind::ReliefMill {
+            z_min_mm,
+            z_max_mm,
+            scallop_height_mm,
+            stepover_mm,
+            along_step_mm,
+            ..
+        } => {
+            if !matches!(tool.kind, ToolKind::BallNose | ToolKind::BullNose)
+                || !z_min_mm.is_finite()
+                || !z_max_mm.is_finite()
+                || z_min_mm >= z_max_mm
+                || (stepover_mm.is_none() && !positive(*scallop_height_mm))
+                || !positive(*along_step_mm)
+                || stepover_mm.is_some_and(|v| !positive(v))
+            {
+                errors.push("Relief requires a ball/bull-nose, descending finite depth range and positive sampling/engagement".into());
+            }
+            if tool.kind == ToolKind::BullNose
+                && !tool
+                    .corner_radius_mm
+                    .is_some_and(|r| positive(r) && r <= tool.effective_diameter() * 0.5)
+            {
+                errors.push(
+                    "Bull-nose corner radius must be explicit and within cutter radius".into(),
+                );
+            }
+        }
+        OpKind::WaterlineRough {
+            z_step_mm,
+            stepover_mm,
+            floor_z_mm,
+            ..
+        } => {
+            if !positive(*z_step_mm)
+                || !positive(*stepover_mm)
+                || !floor_z_mm.is_finite()
+                || *floor_z_mm > 0.0
+            {
+                errors.push(
+                    "Waterline requires explicit positive depth/side steps and a nonpositive floor"
+                        .into(),
+                );
+            }
+        }
+        OpKind::Thread {
+            pitch_mm,
+            radial_passes,
+            thread_depth_mm,
+            ..
+        } => {
+            if !positive(*pitch_mm)
+                || *radial_passes == 0
+                || thread_depth_mm.is_some_and(|v| !positive(v))
+            {
+                errors.push("Thread requires positive pitch, radial pass count and any explicit thread depth".into());
+            }
+        }
+        _ => {}
+    }
+    errors
+}
+
+/// Required by every public generation adapter before any output file is staged.
+pub fn require_current(project: &Project) -> Result<(), String> {
+    if project.cutting_version != Some(9) {
+        return Err(
+            "Generation requires explicit cutting contract v9; legacy projects are unsupported"
+                .into(),
+        );
+    }
+    if project.fs_context.is_some() {
+        return Err("Legacy source context is unsupported in v9".into());
+    }
+    Ok(())
 }
 
 /// V9 is an explicit native contract; old internal fixtures stay isolated during staged removal.
@@ -304,7 +660,29 @@ pub fn validate_project(project: &Project) -> Result<(), crate::pipeline::Pipeli
     if project.cutting_version != Some(9) {
         return crate::feeds_speeds::validate_applied_project(project);
     }
+    require_current(project).map_err(|e| crate::pipeline::PipelineError::AppliedCutting(0, e))?;
+    let mut tool_ids = std::collections::BTreeSet::new();
+    let mut op_ids = std::collections::BTreeSet::new();
+    if project
+        .tools
+        .iter()
+        .any(|t| t.id == 0 || !tool_ids.insert(t.id))
+        || project
+            .operations
+            .iter()
+            .any(|o| o.id == 0 || !op_ids.insert(o.id))
+    {
+        return Err(crate::pipeline::PipelineError::AppliedCutting(
+            0,
+            "Tool and operation IDs must be positive and unique".into(),
+        ));
+    }
     for op in project.operations.iter().filter(|o| o.enabled) {
+        for (_, id) in roles(op) {
+            if !project.tools.iter().any(|t| t.id == id) {
+                return Err(crate::pipeline::PipelineError::UnknownTool(op.id, id));
+            }
+        }
         let report = validate_operation(project, op);
         if !report.errors.is_empty() {
             return Err(crate::pipeline::PipelineError::AppliedCutting(

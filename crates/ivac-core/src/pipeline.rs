@@ -1041,6 +1041,23 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         .operations
         .iter()
         .filter_map(|op| {
+            if let Some(cutting) = &op.params.cutting {
+                return Some(crate::sim::timing::OpRates {
+                    op_id: op.id,
+                    plunge_rate_mm_min: cutting
+                        .rates
+                        .iter()
+                        .filter_map(|r| r.plunge_mm_min)
+                        .max()
+                        .unwrap_or(0),
+                    feed_rate_mm_min: cutting
+                        .rates
+                        .iter()
+                        .filter_map(|r| r.feed_mm_min)
+                        .max()
+                        .unwrap_or(0),
+                });
+            }
             let setup = synthesize_op_setup(op, &project, &mut Vec::new()).ok()?;
             let mut feed = setup.tool.rate_h.max(setup.tool.rate_h_finish);
             let mut plunge = setup.tool.rate_v.max(setup.tool.rate_v_finish);
@@ -3137,7 +3154,13 @@ pub(super) fn synthesize_finish_setup(
     let mut finish_op = op.clone();
     finish_op.tool_id = ft_id;
     finish_op.finish_tool_id = None;
-    let mut setup = synthesize_op_setup(&finish_op, project, warnings)?;
+    let role = if drill_with_chamfer {
+        crate::cutting_parameters::CuttingRole::Chamfer
+    } else {
+        crate::cutting_parameters::CuttingRole::Finish
+    };
+    let mut setup =
+        setup_resolver::synthesize_op_setup_for_role(&finish_op, project, warnings, Some(role))?;
     // Force the finish block to use the finish tool's finish-set as
     // its rough rates too — every offset in the finish block is the
     // wall ring, the dedicated "finish" pass for the dual-tool flow.
@@ -3899,3 +3922,6 @@ mod lot8_tests;
 mod audit_13_14;
 
 pub mod provenance;
+
+#[cfg(test)]
+mod cutting_v9_tests;

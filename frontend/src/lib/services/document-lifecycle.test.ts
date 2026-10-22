@@ -1,3 +1,5 @@
+import { explicitProjectFixture } from '../state/explicit-project.fixture';
+import { seedCutting } from '../state/cutting-parameters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ProjectState } from '../state/project.svelte';
 import { History } from '../state/history';
@@ -334,7 +336,7 @@ describe('Atelier project lifecycle through shared file services', () => {
 });
 
 // UX3 uses the same guarded save/open lifecycle as contour jobs.
-it('saves and reopens a standalone surfacing zone in guarded format 6', () => {
+it('saves and reopens a standalone surfacing zone in explicit format 9', () => {
   const p = io.project;
   p.data.operations = [
     {
@@ -358,9 +360,10 @@ it('saves and reopens a standalone surfacing zone in guarded format 6', () => {
       },
     },
   ];
+  p.data.operations[0].cutting = seedCutting(p.data.operations[0], p.data.tools);
   const saved = p.snapshot();
-  expect(saved.kind).toBe('ivac-project-surfacing');
-  expect(saved.version).toBe(6);
+  expect(saved.kind).toBe('ivac-project');
+  expect(saved.version).toBe(9);
   const reopened = JSON.parse(JSON.stringify(saved));
   clearProject(p);
   restoreProject(p, reopened);
@@ -399,6 +402,8 @@ it('saves and restores both V-Carve modes, radius caps and physical bit properti
       coolant: 'off',
     },
   ];
+  p.data.tools[0].physicalId = 'software-vbit';
+  for (const op of p.data.operations) op.cutting = seedCutting(op, p.data.tools);
   const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
   clearProject(p);
   restoreProject(p, saved);
@@ -417,50 +422,57 @@ const geomFiles = [
   'UX3-software-surfacing.ivac-project.json',
   'geom1/square-repaired.ivac-project.json',
 ];
-it.each(geomFiles)('round trips representative geometry/operation data: %s', async (name) => {
-  const { readFileSync } = await import('node:fs');
-  const file = JSON.parse(
-    readFileSync(
-      new URL(`../../../../docs/shopbot-modernization/${name}`, import.meta.url),
-      'utf8',
-    ),
-  );
-  file.workshopNote = { revision: 3, label: 'inert metadata retained' };
-  const p = io.project;
-  restoreProject(p, file);
-  const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
-  clearProject(p);
-  restoreProject(p, saved);
-  const reopened = JSON.parse(JSON.stringify(snapshotProject(p)));
-  for (const key of [
-    'imports',
-    'operations',
-    'machineProfileId',
-    'material',
-    'fsContext',
-    'cornerRelief',
-    'drawing',
-    'workshopNote',
-  ]) {
-    expect(reopened[key] ?? null, key).toEqual(file[key] ?? null);
-  }
-  expect(reopened.tools).toMatchObject(file.tools);
-  expect(
-    reopened.tools.every(
-      (tool: import('../state/project-types').ToolEntry) => tool.fsLocalIdentity,
-    ),
-  ).toBe(true);
-  // Machine defaults may be filled by the existing migration, but saved fields survive.
-  expect(reopened.machine).toMatchObject(file.machine);
-  expect(reopened).toEqual(saved);
-  if (file.version === 7) {
-    expect(reopened.version).toBe(7);
-    const { drawingCommand } = await import('../state/drawing');
-    p.history.exec(drawingCommand(p.data.drawing, undefined, p.data.operations, []), p.data);
-    p.history.undo(p.data);
-    expect(p.data.drawing).toEqual(file.drawing);
-    expect(p.data.operations).toEqual(file.operations);
-    p.history.redo(p.data);
-    expect(p.data.drawing).toBeUndefined();
-  }
-});
+it.each(geomFiles)(
+  'rejects old format then round trips separately authored v9 geometry: %s',
+  async (name) => {
+    const { readFileSync } = await import('node:fs');
+    const historicalFile = JSON.parse(
+      readFileSync(
+        new URL(`../../../../docs/shopbot-modernization/${name}`, import.meta.url),
+        'utf8',
+      ),
+    );
+    const before = JSON.stringify(io.project.data);
+    expect(() => restoreProject(io.project, historicalFile)).toThrow('v9');
+    expect(JSON.stringify(io.project.data)).toBe(before);
+    const file = explicitProjectFixture(historicalFile);
+    file.workshopNote = { revision: 3, label: 'inert metadata retained' };
+    const p = io.project;
+    restoreProject(p, file);
+    const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
+    clearProject(p);
+    restoreProject(p, saved);
+    const reopened = JSON.parse(JSON.stringify(snapshotProject(p)));
+    for (const key of [
+      'imports',
+      'operations',
+      'machineProfileId',
+      'material',
+      'fsContext',
+      'cornerRelief',
+      'drawing',
+      'workshopNote',
+    ]) {
+      expect(reopened[key] ?? null, key).toEqual(file[key] ?? null);
+    }
+    expect(reopened.tools).toMatchObject(file.tools);
+    expect(
+      reopened.tools.every(
+        (tool: import('../state/project-types').ToolEntry) => tool.fsLocalIdentity,
+      ),
+    ).toBe(true);
+    // Machine defaults may be filled by the existing migration, but saved fields survive.
+    expect(reopened.machine).toMatchObject(file.machine);
+    expect(reopened).toEqual(saved);
+    if (file.drawing) {
+      expect(reopened.version).toBe(9);
+      const { drawingCommand } = await import('../state/drawing');
+      p.history.exec(drawingCommand(p.data.drawing, undefined, p.data.operations, []), p.data);
+      p.history.undo(p.data);
+      expect(p.data.drawing).toEqual(file.drawing);
+      expect(p.data.operations).toEqual(file.operations);
+      p.history.redo(p.data);
+      expect(p.data.drawing).toBeUndefined();
+    }
+  },
+);

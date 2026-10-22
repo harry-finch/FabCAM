@@ -539,11 +539,12 @@ function buildOpKind(opIn: OpEntry): WireOpKind {
       return { type: 'pocket', strategy, contour, pocket } as WireOpKind;
     }
     case 'drill': {
+      if (opIn.cutting && !op.drillCycle) throw new Error('Set an explicit drill cycle');
       const cycle: WireDrillCycle = op.drillCycle
         ? mapDrillCycle(op.drillCycle)
         : { kind: 'simple', dwell_sec: 0 };
       const drill: Record<string, unknown> = { type: 'drill', cycle };
-      if (op.chamferAfterWidthMm !== undefined && op.chamferAfterWidthMm > 0) {
+      if (op.chamferAfterWidthMm !== undefined) {
         drill.chamfer_after_width_mm = op.chamferAfterWidthMm;
       }
       // Pattern repetition (Drill-only). FE model is camelCase;
@@ -565,7 +566,7 @@ function buildOpKind(opIn: OpEntry): WireOpKind {
               : p;
       }
       // Spot-drill pre-pass.
-      if (op.spotFirst && op.spotFirst.spotToolId > 0) {
+      if (op.spotFirst) {
         drill.spot_first = {
           spot_depth_mm: op.spotFirst.spotDepthMm,
           spot_tool_id: op.spotFirst.spotToolId,
@@ -632,21 +633,21 @@ function buildOpKind(opIn: OpEntry): WireOpKind {
       return {
         type: 'relief_mill',
         source_id: op.sourceId ?? 0,
-        z_min_mm: op.zMinMm ?? -2,
-        z_max_mm: op.zMaxMm ?? 0,
+        z_min_mm: op.zMinMm ?? (opIn.cutting ? null : -2),
+        z_max_mm: op.zMaxMm ?? (opIn.cutting ? null : 0),
         invert: op.invert ?? false,
-        scallop_height_mm: op.scallopHeightMm ?? 0.05,
-        ...(op.stepoverMm != null && op.stepoverMm > 0 ? { stepover_mm: op.stepoverMm } : {}),
+        scallop_height_mm: op.scallopHeightMm ?? (opIn.cutting ? null : 0.05),
+        ...(op.stepoverMm != null ? { stepover_mm: op.stepoverMm } : {}),
         scan_direction: op.scanDirection ?? 'along_x',
-        along_step_mm: op.alongStepMm ?? 0.5,
+        along_step_mm: op.alongStepMm ?? (opIn.cutting ? null : 0.5),
       } as WireOpKind;
     case 'waterline_rough':
       return {
         type: 'waterline_rough',
         source_id: op.sourceId ?? 0,
-        z_step_mm: op.zStepMm ?? 1,
-        stepover_mm: op.stepoverMm ?? 2,
-        floor_z_mm: op.floorZMm ?? 0,
+        z_step_mm: op.zStepMm ?? (opIn.cutting ? null : 1),
+        stepover_mm: op.stepoverMm ?? (opIn.cutting ? null : 2),
+        floor_z_mm: op.floorZMm ?? (opIn.cutting ? null : 0),
       } as WireOpKind;
     case 'raster_engrave':
       return {

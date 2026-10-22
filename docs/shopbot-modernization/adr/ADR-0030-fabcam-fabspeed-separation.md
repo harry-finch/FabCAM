@@ -124,8 +124,22 @@ existing supported role without hidden defaults or duplicate executable values.
 
 ## Implementation status — FS-RESET-2
 
-Explicit maintainer approval received on 2026-10-22. The four bounded slices are authorized; implementation and qualification are in progress. Acceptance of this architecture is not a claim that the replacement is implemented. Legacy removal (FS-RESET-3) remains subject to a separate human review.
+All four approved slices are implemented: neutral explicit role/limit validation, current
+collection storage, v9 save/open and public generation boundaries, direct operation editing,
+reviewed copy/attestation, tested collection library, neutral MAT-1 and specialized actual-role
+dispatch. [Implementation report](../../releases/FS_RESET_2_IMPLEMENTATION.md) records contracts,
+commits, comparisons and the qualification matrix. The final affected core/frontend/HTTP/CLI
+checks pass; two unchanged native watcher tests fail by missing events and remain unresolved.
+Native installed dialogs and a real browser file round-trip are not qualified.
 
-Slices 1–2 implemented: neutral explicit contracts/storage, direct operation editing, reviewed copy/attestation and v9 save/open. Collection UI/MAT-1 decoupling and all-role integration are pending slices 3–4; see the evolving FS-RESET-2 report.
+The current Profile emitter consumes Finish values for contours; Rough values remain explicit
+and stored. Automatic two-sided dowel injection is refused in v9 because it has no explicit
+operation-owned cutting values; explicit Drill operations are the supported preparation path.
+Unknown ratings remain disclosed, with specialized mandatory restrictions unchanged. No
+FabSpeed integration, data migration/deletion, version promotion, publication or physical
+operation was implemented.
 
-Slice 3 implemented: active tested-collection library, explicit import collision handling, renewed edit attestation and neutral MAT-1 catalog. Specialized driver integration/output qualification remains slice 4.
+Legacy crate/modules/APIs/source assets and internal old-contract test/Setup consumers remain
+for separately reviewed FS-RESET-3 removal. New product behavior does not wrap the recommendation
+engine. **HARD STOP: human review `ivac-y25vq` OPEN**. Engineering completion does not authorize
+mass removal, close platform/physical gates or grant release acceptance.

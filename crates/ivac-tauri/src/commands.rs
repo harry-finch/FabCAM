@@ -252,6 +252,7 @@ pub async fn import_path(path: String, scale: Option<f64>) -> Result<ImportOutpu
 
 #[tauri::command]
 pub async fn generate(request: PipelineRequest) -> Result<PipelineResponse, String> {
+    ivac_core::cutting_parameters::require_current(&request.project)?;
     let project = request.project.clone();
     let result = tokio::task::spawn_blocking(move || {
         std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -278,6 +279,7 @@ pub async fn generate(request: PipelineRequest) -> Result<PipelineResponse, Stri
 /// with `back: null` and a front identical to [`generate`].
 #[tauri::command]
 pub async fn generate_two_sided(request: PipelineRequest) -> Result<TwoSidedResponse, String> {
+    ivac_core::cutting_parameters::require_current(&request.project)?;
     let project = request.project.clone();
     let result = tokio::task::spawn_blocking(move || {
         std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -336,6 +338,7 @@ pub async fn generate_streaming_cmd(
     app: AppHandle,
     request: PipelineRequest,
 ) -> Result<GenerateStreamingResponse, String> {
+    ivac_core::cutting_parameters::require_current(&request.project)?;
     let token_id = next_token_id();
     let cancel = CancelToken::new();
     token_registry()
@@ -602,6 +605,7 @@ pub async fn evaluate_drawing_cmd(
 pub async fn generate_drawing_cmd(
     req: ivac_core::drawing::api::DrawingGenerationRequest,
 ) -> Result<ivac_core::pipeline::PipelineResponse, String> {
+    ivac_core::cutting_parameters::require_current(&req.machining.project)?;
     let project = req.machining.project.clone();
     let result = tokio::task::spawn_blocking(move || {
         std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -628,6 +632,13 @@ mod audit_15_16 {
             "../../../tests/fixtures/test1/profile.request.json"
         ))
         .unwrap();
+        request.project.cutting_version = Some(9);
+        for op in &mut request.project.operations {
+            op.params.cutting = Some(ivac_core::cutting_parameters::seed(
+                op,
+                &request.project.tools,
+            ));
+        }
         request.project.fixtures.push(ivac_core::project::Fixture {
             id: 1,
             name: "clamp".into(),
@@ -671,7 +682,10 @@ mod audit_15_16 {
             drawing,
             bindings: vec![],
             machining: PipelineRequest {
-                project: ivac_core::project::Project::default(),
+                project: ivac_core::project::Project {
+                    cutting_version: Some(9),
+                    ..Default::default()
+                },
                 post_processor: None,
                 cps_post: None,
             },
@@ -690,6 +704,7 @@ mod audit_15_16_tool {
     #[tokio::test]
     async fn drawing_missing_tool_keeps_assign_tool_action() {
         let mut project = ivac_core::project::Project::default();
+        project.cutting_version = Some(9);
         project.tools.push(ivac_core::project::ToolEntry {
             id: 7,
             ..Default::default()

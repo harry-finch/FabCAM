@@ -104,6 +104,11 @@ it('real WASM trial preserves exact values, refuses stale sources and leaves Sug
       },
     ],
   })!;
+  project.cutting_version = null;
+  project.fs_context = {
+    machine_identity: machine.fsIdentity,
+    tools: [{ tool_id: tool.id, identity: tool.fsIdentity, max_rpm: 22000 }],
+  };
   const request: FsCamRequest = {
     project,
     op_id: 1,

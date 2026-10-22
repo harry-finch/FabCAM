@@ -250,6 +250,12 @@ pub(in crate::pipeline) fn run_halfpipe_op<P: PostProcessor>(
         .with_param("op_name", op.name.as_str()));
     }
     if any_tool_reach_limited {
+        if op.params.cutting.is_some() {
+            return Err(PipelineError::AppliedCutting(
+                op.id,
+                "Halfpipe geometry exceeds usable flute length; values are not clamped".into(),
+            ));
+        }
         let reach = reach_z;
         warnings.push(PipelineWarning::for_op(
             op.id,

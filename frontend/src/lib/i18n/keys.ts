@@ -356,7 +356,6 @@ export type MsgKey =
   | "fs35.recommendation"
   | "fs35.reference"
   | "fs35.schedule"
-  | "fs35.settings"
   | "fs35.source"
   | "fs35.source_details"
   | "fs35.source_scope_help"
@@ -504,6 +503,79 @@ export type MsgKey =
   | "fs391.unknown_engagement_full_width_assumption"
   | "fs391.unknown_entry_strategy"
   | "fs391.unknown_limit"
+  | "fsreset.ui.all"
+  | "fsreset.ui.cancel"
+  | "fsreset.ui.choose"
+  | "fsreset.ui.choose.an.exact.machine.tool.and.material.configuration"
+  | "fsreset.ui.close.preset.editor"
+  | "fsreset.ui.collection"
+  | "fsreset.ui.collection.name"
+  | "fsreset.ui.current.preset"
+  | "fsreset.ui.cutting.parameters"
+  | "fsreset.ui.cutting.pass"
+  | "fsreset.ui.delete"
+  | "fsreset.ui.delete.collection"
+  | "fsreset.ui.delete.preset"
+  | "fsreset.ui.depth.per.pass"
+  | "fsreset.ui.depth.schedule.descending.mm.comma.separated"
+  | "fsreset.ui.disable.automatic.dowel.holes"
+  | "fsreset.ui.duplicate"
+  | "fsreset.ui.edit"
+  | "fsreset.ui.edit.tested.preset"
+  | "fsreset.ui.entry.angle"
+  | "fsreset.ui.entry.angle2"
+  | "fsreset.ui.export"
+  | "fsreset.ui.feed.mm.min"
+  | "fsreset.ui.i.confirm.these.exact.values.were.tested.in"
+  | "fsreset.ui.i.tested.these.values.with.this.machine.tool"
+  | "fsreset.ui.import.collection"
+  | "fsreset.ui.import.independent.copy"
+  | "fsreset.ui.load.preset"
+  | "fsreset.ui.machine"
+  | "fsreset.ui.material"
+  | "fsreset.ui.maximum.spindle.speed"
+  | "fsreset.ui.mm"
+  | "fsreset.ui.name"
+  | "fsreset.ui.name.identity.material"
+  | "fsreset.ui.new.collection"
+  | "fsreset.ui.new.collection2"
+  | "fsreset.ui.next"
+  | "fsreset.ui.no.tested.presets.match.create.a.collection.then"
+  | "fsreset.ui.no.tested.presets.yet.save.a.tested.configuration"
+  | "fsreset.ui.operation"
+  | "fsreset.ui.pass"
+  | "fsreset.ui.pass.tool"
+  | "fsreset.ui.plunge.mm.min"
+  | "fsreset.ui.pocket.overlap"
+  | "fsreset.ui.preset"
+  | "fsreset.ui.preset.name"
+  | "fsreset.ui.preview.load.into.selected.operation"
+  | "fsreset.ui.previous"
+  | "fsreset.ui.refresh"
+  | "fsreset.ui.rename"
+  | "fsreset.ui.replace.operation.parameters"
+  | "fsreset.ui.replace.parameters"
+  | "fsreset.ui.required"
+  | "fsreset.ui.reviewed.replacement"
+  | "fsreset.ui.rpm"
+  | "fsreset.ui.save.collection"
+  | "fsreset.ui.save.preset"
+  | "fsreset.ui.save.selected.operation.as.preset"
+  | "fsreset.ui.save.tested.preset"
+  | "fsreset.ui.search"
+  | "fsreset.ui.software.validation.does.not.establish.a.workshop.test"
+  | "fsreset.ui.specialized.cycle.and.engagement.values.are.copied.with"
+  | "fsreset.ui.surface.stepover.mm"
+  | "fsreset.ui.test.date.optional"
+  | "fsreset.ui.tested.presets"
+  | "fsreset.ui.this.setup.still.requests.automatic.dowel.holes.and"
+  | "fsreset.ui.tool"
+  | "fsreset.ui.unchanged.values.retain.the.original.author.s.attestation"
+  | "fsreset.ui.unknown"
+  | "fsreset.ui.unknown.machine.tool.limits"
+  | "fsreset.ui.use.selected.operation.s.configuration.and.values"
+  | "fsreset.ui.workshop.notes.optional"
+  | "fsreset.ui.workshop.tested.configurations.in.named.collections.author.attestations"
   | "gcode.label"
   | "gcode.line_sync_unavailable"
   | "gcode.line_sync_unavailable.title"
@@ -1879,10 +1951,6 @@ export type MsgKey =
   | "stock.flip.axis.y"
   | "stock.flip.axis.y.hint"
   | "stock.flip.badge"
-  | "stock.flip.dowel_count"
-  | "stock.flip.dowel_dia"
-  | "stock.flip.dowel_margin"
-  | "stock.flip.dowel_margin.title"
   | "stock.flip.enable"
   | "stock.length"
   | "stock.margin"
@@ -2920,7 +2988,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs35.recommendation",
   "fs35.reference",
   "fs35.schedule",
-  "fs35.settings",
   "fs35.source",
   "fs35.source_details",
   "fs35.source_scope_help",
@@ -3068,6 +3135,79 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fs391.unknown_engagement_full_width_assumption",
   "fs391.unknown_entry_strategy",
   "fs391.unknown_limit",
+  "fsreset.ui.all",
+  "fsreset.ui.cancel",
+  "fsreset.ui.choose",
+  "fsreset.ui.choose.an.exact.machine.tool.and.material.configuration",
+  "fsreset.ui.close.preset.editor",
+  "fsreset.ui.collection",
+  "fsreset.ui.collection.name",
+  "fsreset.ui.current.preset",
+  "fsreset.ui.cutting.parameters",
+  "fsreset.ui.cutting.pass",
+  "fsreset.ui.delete",
+  "fsreset.ui.delete.collection",
+  "fsreset.ui.delete.preset",
+  "fsreset.ui.depth.per.pass",
+  "fsreset.ui.depth.schedule.descending.mm.comma.separated",
+  "fsreset.ui.disable.automatic.dowel.holes",
+  "fsreset.ui.duplicate",
+  "fsreset.ui.edit",
+  "fsreset.ui.edit.tested.preset",
+  "fsreset.ui.entry.angle",
+  "fsreset.ui.entry.angle2",
+  "fsreset.ui.export",
+  "fsreset.ui.feed.mm.min",
+  "fsreset.ui.i.confirm.these.exact.values.were.tested.in",
+  "fsreset.ui.i.tested.these.values.with.this.machine.tool",
+  "fsreset.ui.import.collection",
+  "fsreset.ui.import.independent.copy",
+  "fsreset.ui.load.preset",
+  "fsreset.ui.machine",
+  "fsreset.ui.material",
+  "fsreset.ui.maximum.spindle.speed",
+  "fsreset.ui.mm",
+  "fsreset.ui.name",
+  "fsreset.ui.name.identity.material",
+  "fsreset.ui.new.collection",
+  "fsreset.ui.new.collection2",
+  "fsreset.ui.next",
+  "fsreset.ui.no.tested.presets.match.create.a.collection.then",
+  "fsreset.ui.no.tested.presets.yet.save.a.tested.configuration",
+  "fsreset.ui.operation",
+  "fsreset.ui.pass",
+  "fsreset.ui.pass.tool",
+  "fsreset.ui.plunge.mm.min",
+  "fsreset.ui.pocket.overlap",
+  "fsreset.ui.preset",
+  "fsreset.ui.preset.name",
+  "fsreset.ui.preview.load.into.selected.operation",
+  "fsreset.ui.previous",
+  "fsreset.ui.refresh",
+  "fsreset.ui.rename",
+  "fsreset.ui.replace.operation.parameters",
+  "fsreset.ui.replace.parameters",
+  "fsreset.ui.required",
+  "fsreset.ui.reviewed.replacement",
+  "fsreset.ui.rpm",
+  "fsreset.ui.save.collection",
+  "fsreset.ui.save.preset",
+  "fsreset.ui.save.selected.operation.as.preset",
+  "fsreset.ui.save.tested.preset",
+  "fsreset.ui.search",
+  "fsreset.ui.software.validation.does.not.establish.a.workshop.test",
+  "fsreset.ui.specialized.cycle.and.engagement.values.are.copied.with",
+  "fsreset.ui.surface.stepover.mm",
+  "fsreset.ui.test.date.optional",
+  "fsreset.ui.tested.presets",
+  "fsreset.ui.this.setup.still.requests.automatic.dowel.holes.and",
+  "fsreset.ui.tool",
+  "fsreset.ui.unchanged.values.retain.the.original.author.s.attestation",
+  "fsreset.ui.unknown",
+  "fsreset.ui.unknown.machine.tool.limits",
+  "fsreset.ui.use.selected.operation.s.configuration.and.values",
+  "fsreset.ui.workshop.notes.optional",
+  "fsreset.ui.workshop.tested.configurations.in.named.collections.author.attestations",
   "gcode.label",
   "gcode.line_sync_unavailable",
   "gcode.line_sync_unavailable.title",
@@ -4443,10 +4583,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "stock.flip.axis.y",
   "stock.flip.axis.y.hint",
   "stock.flip.badge",
-  "stock.flip.dowel_count",
-  "stock.flip.dowel_dia",
-  "stock.flip.dowel_margin",
-  "stock.flip.dowel_margin.title",
   "stock.flip.enable",
   "stock.length",
   "stock.margin",

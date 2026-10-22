@@ -140,6 +140,9 @@ pub(super) fn resolve_peck_step(
     op: &Op,
 ) -> crate::project::DrillCycle {
     use crate::project::DrillCycle;
+    if op.params.cutting.is_some() {
+        return cycle;
+    }
     let tool_default = project
         .tools
         .iter()
@@ -182,6 +185,15 @@ pub(in crate::pipeline) fn synthesize_op_setup(
     op: &Op,
     project: &Project,
     warnings: &mut Vec<PipelineWarning>,
+) -> Result<Setup, PipelineError> {
+    synthesize_op_setup_for_role(op, project, warnings, None)
+}
+
+pub(in crate::pipeline) fn synthesize_op_setup_for_role(
+    op: &Op,
+    project: &Project,
+    warnings: &mut Vec<PipelineWarning>,
+    role: Option<crate::cutting_parameters::CuttingRole>,
 ) -> Result<Setup, PipelineError> {
     use crate::project::{MachineMode, MillConfig, PocketConfig, ToolConfig, ToolOffset};
 
@@ -253,9 +265,15 @@ pub(in crate::pipeline) fn synthesize_op_setup(
     } else {
         crate::project::PassKind::Rough
     };
+    let resolve = |pass| {
+        if let Some(role) = role.filter(|_| op.params.cutting.is_some()) {
+            crate::cutting_parameters::rates(op, role, tool.id)
+        } else {
+            crate::cutting_parameters::saved_rates(op, tool, pass)
+        }
+    };
     let (rough_speed_raw, rough_plunge, rough_feed) =
-        crate::cutting_parameters::saved_rates(op, tool, main_pass)
-            .map_err(|e| PipelineError::AppliedCutting(op.id, e))?;
+        resolve(main_pass).map_err(|e| PipelineError::AppliedCutting(op.id, e))?;
     let (finish_speed_raw, finish_plunge, finish_feed) = if matches!(op.kind, OpKind::Drill { .. })
     {
         // Drill never emits a finish pass — keep the finish triplet
@@ -263,9 +281,18 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         // sees consistent values.
         (rough_speed_raw, rough_plunge, rough_feed)
     } else {
-        crate::cutting_parameters::saved_rates(op, tool, crate::project::PassKind::Finish)
+        resolve(crate::project::PassKind::Finish)
             .map_err(|e| PipelineError::AppliedCutting(op.id, e))?
     };
+    if op.params.cutting.is_some() {
+        for values in [
+            (rough_speed_raw, rough_plunge, rough_feed),
+            (finish_speed_raw, finish_plunge, finish_feed),
+        ] {
+            crate::cutting_parameters::validate_limits(project, tool, values)
+                .map_err(|e| PipelineError::AppliedCutting(op.id, e))?;
+        }
+    }
     // Clamp each pass's resolved RPM into the machine's
     // [spindle_rpm_min, spindle_rpm_max] window so an emitted S<x>
     // is always physically reachable. Clamp + warn rather than fail
@@ -381,7 +408,10 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         // legacy 10° at emit time inside `ratchet_emit`. Clamp to the
         // physically meaningful open interval (0°, 90°); anything else
         // means "use the default".
-        vcarve_lead_in_angle_deg: resolve_vcarve_lead_in_angle_deg(tool.vcarve_lead_in_angle_deg),
+        vcarve_lead_in_angle_deg: op.params.cutting.as_ref().map_or_else(
+            || resolve_vcarve_lead_in_angle_deg(tool.vcarve_lead_in_angle_deg),
+            |c| c.entry_angle_deg.unwrap_or(0.0),
+        ),
     };
     // Plasma + laser kerf compensation. For a torch or a
     // beam the cut width is the kerf, not a physical tool diameter — so

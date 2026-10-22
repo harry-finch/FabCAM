@@ -171,6 +171,7 @@ fn snapshot_drill_with_stufenfase_and_toolchange() {
     params.start_depth = 0.0;
     params.fast_move_z = 5.0;
     let project = Project {
+        cutting_version: None,
         segments: closed_circle(center, 0.5),
         machine,
         tools: vec![drill, finisher],
@@ -263,6 +264,7 @@ fn snapshot_profile_rectangle_tabs_and_helix_entry() {
     };
     contour.tab_mode = TabPlacementMode::Auto { count: 2 };
     let project = Project {
+        cutting_version: None,
         segments: closed_square(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -337,6 +339,7 @@ fn snapshot_profile_ramp_tabs() {
     };
     contour.tab_mode = TabPlacementMode::Auto { count: 2 };
     let project = Project {
+        cutting_version: None,
         segments: closed_square(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -402,6 +405,7 @@ fn snapshot_whirl_walks_closed_contour() {
     params.start_depth = 0.0;
     params.fast_move_z = 5.0;
     let project = Project {
+        cutting_version: None,
         segments: closed_square(10.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![tool],

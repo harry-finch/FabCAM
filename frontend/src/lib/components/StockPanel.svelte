@@ -26,20 +26,15 @@
     type Wcs,
     type WorkOffset,
     type FlipRegistration,
-    type DowelPinConfig,
   } from '../state/project-types';
 
   function patch(p: Partial<typeof project.data.stock>) {
     project.setStock(p);
   }
 
-  /// Sensible seed when the user first enables two-sided machining.
-  /// 6 mm dowel pins are the hobby-CNC standard; two holes is the minimum
-  /// for an unambiguous flip alignment (one leaves the part free to
-  /// pivot); a 10 mm inset keeps the holes in waste stock clear of the
-  /// part. Matches the Rust `DowelPinConfig` defaults (count = 2).
-  const DEFAULT_DOWELS: DowelPinConfig = { diameterMm: 6, count: 2, marginMm: 10 };
-  const DEFAULT_FLIP: FlipRegistration = { axis: 'x', dowels: DEFAULT_DOWELS };
+  // Automatic dowel injection reads tool defaults during generation and is not
+  // part of the explicit v9 operation contract (nor full-program qualification).
+  const DEFAULT_FLIP: FlipRegistration = { axis: 'x' };
 
   /// Toggle two-sided (flip-stock) mode. Enabling seeds a default flip
   /// registration; disabling drops it entirely — ops keep their `side`
@@ -61,29 +56,6 @@
     project.setStock({ flip: { ...cur, ...part } }, coalesceKey);
   }
 
-  /// Commit a nested dowel-config number with the shared invalid-feedback
-  /// flash (keyed `flip:<field>`), mirroring `onStockNumberChange`. Counts
-  /// round to a whole number; diameters / margins keep their decimals.
-  function onDowelNumberChange(
-    field: keyof DowelPinConfig,
-    e: Event,
-    opts: { min?: number; integer?: boolean } = {},
-  ) {
-    const cur = project.data.stock.flip;
-    if (!cur) return;
-    const parsed = parseFiniteNumber((e.target as HTMLInputElement).value, {
-      min: opts.min ?? 0,
-    });
-    const ns = `flip:${field}`;
-    if (parsed.value == null) {
-      invalidKey = ns;
-      return;
-    }
-    invalidKey = null;
-    const value = opts.integer ? Math.round(parsed.value) : parsed.value;
-    const dowels: DowelPinConfig = { ...(cur.dowels ?? DEFAULT_DOWELS), [field]: value };
-    project.setStock({ flip: { ...cur, dowels } }, `setStock:${ns}`);
-  }
   function patchWorkOffset(p: Partial<WorkOffset>) {
     project.setWorkOffset(p);
   }
@@ -501,48 +473,18 @@
           {t(flip.axis === 'x' ? 'stock.flip.axis.x.hint' : 'stock.flip.axis.y.hint')}
         </p>
       </div>
-      <label>
-        <span>{t('stock.flip.dowel_dia')}</span>
-        <span class="field">
-          <input
-            type="number"
-            step="0.5"
-            min="0.1"
-            value={flip.dowels?.diameterMm ?? DEFAULT_DOWELS.diameterMm}
-            class:invalid={invalidKey === 'flip:diameterMm'}
-            onchange={(e) => onDowelNumberChange('diameterMm', e, { min: 0.1 })}
-          />
-          <span class="unit">mm</span>
-        </span>
-      </label>
-      <label>
-        <span>{t('stock.flip.dowel_count')}</span>
-        <span class="field">
-          <input
-            type="number"
-            step="1"
-            min="2"
-            value={flip.dowels?.count ?? DEFAULT_DOWELS.count}
-            class:invalid={invalidKey === 'flip:count'}
-            onchange={(e) => onDowelNumberChange('count', e, { min: 2, integer: true })}
-          />
-        </span>
-      </label>
-      <label>
-        <span>{t('stock.flip.dowel_margin')}</span>
-        <span class="field">
-          <input
-            type="number"
-            step="0.5"
-            min="0"
-            value={flip.dowels?.marginMm ?? DEFAULT_DOWELS.marginMm}
-            class:invalid={invalidKey === 'flip:marginMm'}
-            onchange={(e) => onDowelNumberChange('marginMm', e, { min: 0 })}
-            title={t('stock.flip.dowel_margin.title')}
-          />
-          <span class="unit">mm</span>
-        </span>
-      </label>
+      <p class="placement-help">
+        Prepare registration holes as explicit Drill operations. Automatic dowel drilling is
+        unavailable in the v9 cutting contract; align and re-zero the back face deliberately.
+      </p>
+      {#if flip.dowels}
+        <p class="placement-help" role="alert">
+          {t('fsreset.ui.this.setup.still.requests.automatic.dowel.holes.and')}
+        </p>
+        <button onclick={() => patchFlip({ dowels: undefined }, 'setStock:flip:dowels')}
+          >{t('fsreset.ui.disable.automatic.dowel.holes')}</button
+        >
+      {/if}
     {/if}
   </fieldset>
 </div>

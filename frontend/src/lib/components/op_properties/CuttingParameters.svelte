@@ -1,7 +1,14 @@
 <script lang="ts">
+  import { t } from '../../i18n';
+  import { parameterSummary } from '../../state/preset-library-v9';
   import { onDestroy } from 'svelte';
   import { project, type OpEntry } from '../../state/project.svelte';
-  import { cuttingRoles, type CuttingRole, type RoleRates } from '../../state/cutting-parameters';
+  import {
+    cuttingRoles,
+    usesEntryAngle,
+    type CuttingRole,
+    type RoleRates,
+  } from '../../state/cutting-parameters';
   import {
     inspectCutting,
     cuttingTargetKey,
@@ -19,9 +26,14 @@
   import { testedRows } from '../../state/preset-library-v9';
   import './op-properties.css';
   let { op }: { op: OpEntry } = $props();
-  let role = $state<CuttingRole>('rough');
+  let selection = $state<{ id: number; role: CuttingRole } | null>(null);
   const roles = $derived(cuttingRoles(op));
-  const activeRole = $derived(roles.some((r) => r.role === role) ? role : roles[0]?.role);
+  const requestedRole = $derived(
+    selection?.id === op.id ? selection.role : op.kind === 'profile' ? 'finish' : roles[0]?.role,
+  );
+  const activeRole = $derived(
+    roles.some((r) => r.role === requestedRole) ? requestedRole : roles[0]?.role,
+  );
   const slot = $derived(op.cutting?.rates.find((r) => r.role === activeRole));
   const key = $derived(cuttingTargetKey(project.data, op.id));
   let inspection = $state<CuttingInspection | null>(null);
@@ -173,16 +185,20 @@
 />
 {#if roles.length}
   <fieldset class="cutting">
-    <legend>Cutting parameters</legend>
+    <legend>{t('fsreset.ui.cutting.parameters')}</legend>
     {#if roles.length > 1}<label class="row"
-        ><span>Pass</span><select
-          aria-label="Cutting pass"
+        ><span>{t('fsreset.ui.pass')}</span><select
+          aria-label={t('fsreset.ui.cutting.pass')}
           value={activeRole}
-          onchange={(e) => (role = e.currentTarget.value as CuttingRole)}
+          onchange={(e) => (selection = { id: op.id, role: e.currentTarget.value as CuttingRole })}
           >{#each roles as r (r.role)}<option value={r.role}>{label[r.role]} · T{r.tool_id}</option
             >{/each}</select
         ></label
       >{/if}
+    {#if op.kind === 'profile'}<p class="basis">
+        Profile contours use the finishing values. Main values are stored separately; they do not
+        set the contour feed.
+      </p>{/if}
     {#each fields as field (field.key)}<label class="row"
         ><span>{field.label}</span><input
           aria-label={field.label}
@@ -190,14 +206,14 @@
           min="1"
           step="1"
           value={slot?.[field.key] ?? ''}
-          placeholder="Required"
+          placeholder={t('fsreset.ui.required')}
           onchange={(e) => edit(field.key, e.currentTarget.value)}
         /><span class="unit">{field.unit}</span></label
       >{/each}
     {#if ['profile', 'pocket', 'engrave'].includes(op.kind) && !op.depthList?.length}<label
         class="row"
-        ><span>Depth per pass</span><input
-          aria-label="Depth per pass"
+        ><span>{t('fsreset.ui.depth.per.pass')}</span><input
+          aria-label={t('fsreset.ui.depth.per.pass')}
           type="number"
           min="0.000001"
           step="0.1"
@@ -206,23 +222,38 @@
             project.updateOperation(op.id, {
               step: e.currentTarget.value === '' ? null : -Number(e.currentTarget.value),
             })}
-        /><span class="unit">mm</span></label
+        /><span class="unit">{t('fsreset.ui.mm')}</span></label
+      >{/if}
+    {#if usesEntryAngle(op)}<label class="row"
+        ><span>{t('fsreset.ui.entry.angle2')}</span><input
+          type="number"
+          min="1"
+          max={op.kind === 'drill' ? 45 : 89}
+          step="any"
+          value={op.cutting?.entry_angle_deg ?? ''}
+          onchange={(e) =>
+            project.updateOperation(op.id, {
+              cutting: {
+                ...op.cutting!,
+                entry_angle_deg:
+                  e.currentTarget.value === '' ? null : Number(e.currentTarget.value),
+              },
+            })}
+        /><span class="unit">°</span></label
       >{/if}
     <p class="basis">{presetStatus(op, inspection)}</p>
     {#if inspection?.check.errors.length}<ul class="errors">
         {#each inspection.check.errors as issue, index (index)}<li>{issue}</li>{/each}
       </ul>{/if}
     {#if inspection?.check.warnings.length}<details>
-        <summary>Unknown machine / tool limits</summary
+        <summary>{t('fsreset.ui.unknown.machine.tool.limits')}</summary
         >{#each inspection.check.warnings as warning, index (index)}<p class="basis">
             {warning}
           </p>{/each}
       </details>{/if}
     <div class="actions">
-      <button onclick={() => open('load')} disabled={busy}>Load preset</button><button
-        onclick={() => open('save')}
-        disabled={busy}>Save preset</button
-      >
+      <button onclick={() => open('load')} disabled={busy}>{t('fsreset.ui.load.preset')}</button
+      ><button onclick={() => open('save')} disabled={busy}>{t('fsreset.ui.save.preset')}</button>
     </div>
     {#if panel}
       <section
@@ -235,12 +266,12 @@
               panel = null;
               prepared = null;
               attestedKey = '';
-            }}>Cancel</button
+            }}>{t('fsreset.ui.cancel')}</button
           >
         </div>
         {#if panel === 'load'}
           <p class="basis">
-            Choose an exact machine, tool and material configuration, then review the replacement.
+            {t('fsreset.ui.choose.an.exact.machine.tool.and.material.configuration')}
           </p>
           <div class="choices">
             {#each testedRows(collections.map((c) => c.data)) as row (row.key)}<button
@@ -254,10 +285,13 @@
               >{/each}
           </div>
           {#if !busy && !collections.some((c) => c.data.presets.length)}<p class="basis">
-              No tested presets yet. Save a tested configuration or import a collection in Presets.
+              {t('fsreset.ui.no.tested.presets.yet.save.a.tested.configuration')}
             </p>{/if}
           {#if prepared}<table>
-              <thead><tr><th>Pass</th><th>Current → preset</th></tr></thead><tbody
+              <thead
+                ><tr><th>{t('fsreset.ui.pass')}</th><th>{t('fsreset.ui.current.preset')}</th></tr
+                ></thead
+              ><tbody
                 >{#each prepared.after as after (after.role)}{@const before = prepared.before.find(
                     (v) => v.role === after.role,
                   )}<tr
@@ -288,20 +322,26 @@
             {#if op.kind === 'planar_surface' && 'surface' in prepared.patch}<p class="basis">
                 Stepover: {op.surface.stepover_mm} → {prepared.patch.surface?.stepover_mm} mm.
               </p>{/if}
-            <button class="primary" onclick={apply}>Replace parameters</button>
+            {#each parameterSummary(prepared.parameters) as line (line)}<p class="basis">
+                {line}
+              </p>{/each}
+            <button class="primary" onclick={apply}>{t('fsreset.ui.replace.parameters')}</button>
           {/if}
         {:else}
           <label class="row"
-            ><span>Preset name</span><input bind:value={name} maxlength="160" /></label
+            ><span>{t('fsreset.ui.preset.name')}</span><input
+              bind:value={name}
+              maxlength="160"
+            /></label
           >
           <label class="row"
-            ><span>Collection</span><select bind:value={selected}
+            ><span>{t('fsreset.ui.collection')}</span><select bind:value={selected}
               >{#each collections as c (c.data.id)}<option value={c.data.id}>{c.data.name}</option
-                >{/each}<option value="__new__">New collection…</option></select
+                >{/each}<option value="__new__">{t('fsreset.ui.new.collection2')}</option></select
             ></label
           >
           {#if selected === '__new__'}<label class="row"
-              ><span>Collection name</span><input
+              ><span>{t('fsreset.ui.collection.name')}</span><input
                 bind:value={collectionName}
                 maxlength="160"
               /></label
@@ -312,11 +352,13 @@
               type="checkbox"
               checked={attestedKey === key}
               onchange={(e) => (attestedKey = e.currentTarget.checked ? key : '')}
-            />I tested these values with this machine, tool, material and operation.</label
+            />{t('fsreset.ui.i.tested.these.values.with.this.machine.tool')}</label
           >
-          <p class="basis">Software validation does not establish a workshop test.</p>
+          <p class="basis">
+            {t('fsreset.ui.software.validation.does.not.establish.a.workshop.test')}
+          </p>
           <button class="primary" disabled={busy || attestedKey !== key} onclick={save}
-            >Save tested preset</button
+            >{t('fsreset.ui.save.tested.preset')}</button
           >
         {/if}
       </section>
