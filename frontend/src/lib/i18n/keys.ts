@@ -308,201 +308,28 @@ export type MsgKey =
   | "error.hint.unimplemented_op_kind"
   | "error.hint.unknown_post_processor"
   | "error.span"
-  | "fs.chipload"
-  | "fs.feed"
-  | "fs.full_width"
-  | "fs.invalid_data"
   | "fs.material"
-  | "fs.mode"
-  | "fs.normal"
-  | "fs.plunge"
-  | "fs.positive"
-  | "fs.prudent"
-  | "fs.rapid"
-  | "fs.reference_license"
-  | "fs.rpm"
-  | "fs.source"
-  | "fs.source_link"
-  | "fs.stepover"
-  | "fs.tooth"
-  | "fs.unavailable_build"
-  | "fs.unknowns"
   | "fs35.add_library"
   | "fs35.advanced_depth"
   | "fs35.advanced_feed"
   | "fs35.available_tools"
-  | "fs35.compatibility"
-  | "fs35.compatibility_help"
   | "fs35.custom_material_help"
   | "fs35.cutting"
   | "fs35.fallback"
   | "fs35.fallback_help"
   | "fs35.finishing"
   | "fs35.job_material"
-  | "fs35.kept"
-  | "fs35.loading"
-  | "fs35.machine"
-  | "fs35.material_missing"
   | "fs35.material_name"
-  | "fs35.missing_rates"
-  | "fs35.modified"
-  | "fs35.nominal"
-  | "fs35.operation"
   | "fs35.other_material"
-  | "fs35.outdated"
-  | "fs35.pocket"
-  | "fs35.profile"
-  | "fs35.recalculate"
-  | "fs35.recommendation"
-  | "fs35.reference"
-  | "fs35.schedule"
-  | "fs35.source"
-  | "fs35.source_details"
-  | "fs35.source_scope_help"
-  | "fs35.source_unavailable"
-  | "fs35.sources"
-  | "fs35.sources_disabled"
-  | "fs35.suggest"
-  | "fs35.suggested"
-  | "fs35.tested"
-  | "fs35.theoretical"
-  | "fs35.tool"
-  | "fs35.validated"
-  | "fs36.actual"
-  | "fs36.calculation_context"
-  | "fs36.closest_scopes"
-  | "fs36.engagement"
-  | "fs36.kept"
-  | "fs36.modified_hint"
   | "fs36.pass_depth"
-  | "fs36.reason.ambiguous_profiles"
-  | "fs36.reason.dataset_mismatch"
-  | "fs36.reason.invalid_request"
-  | "fs36.reason.missing_cutting_data"
-  | "fs36.reason.missing_material"
-  | "fs36.reason.unrepresentable_output"
-  | "fs36.reason.unsupported_operation"
-  | "fs36.reason.unsupported_tool"
-  | "fs36.required"
-  | "fs36.scope.cutting_family"
-  | "fs36.scope.diameter_mm"
-  | "fs36.scope.engagement"
-  | "fs36.scope.entry"
-  | "fs36.scope.flute_count"
   | "fs36.stock_auto_empty"
   | "fs36.stock_auto_geometry"
   | "fs36.stock_corner_wcs"
   | "fs36.stock_manual_empty"
   | "fs36.stock_manual_geometry"
   | "fs36.stock_wcs_help"
-  | "fs36.suggested"
-  | "fs36.suggested_hint"
-  | "fs36.unknown"
-  | "fs37.built_in"
-  | "fs37.disagreement"
-  | "fs37.import"
-  | "fs37.local"
-  | "fs37.local_only"
-  | "fs37.no_local"
-  | "fs37.privacy"
-  | "fs37.provenance_missing"
-  | "fs37.public"
-  | "fs37.references"
-  | "fs37.sources_help"
-  | "fs37.too_large"
-  | "fs38.actual_values"
-  | "fs38.backup_help"
-  | "fs38.confirm_promotion"
-  | "fs38.created"
-  | "fs38.delete"
-  | "fs38.delete_help"
-  | "fs38.deleted"
-  | "fs38.destination"
-  | "fs38.detailed_notes"
-  | "fs38.details"
-  | "fs38.draft"
-  | "fs38.draft_help"
-  | "fs38.duplicate"
-  | "fs38.engagement"
-  | "fs38.evidence"
-  | "fs38.full_width"
-  | "fs38.history"
-  | "fs38.identity"
-  | "fs38.job_reference"
-  | "fs38.manage"
-  | "fs38.name"
-  | "fs38.observations"
-  | "fs38.operator"
-  | "fs38.physical_confirm"
-  | "fs38.preset"
-  | "fs38.promote"
-  | "fs38.restore"
-  | "fs38.review_notes"
-  | "fs38.revision_help"
-  | "fs38.save"
-  | "fs38.save_new"
-  | "fs38.save_notes"
-  | "fs38.save_title"
-  | "fs38.search"
-  | "fs38.select_preset"
-  | "fs38.show_deleted"
-  | "fs38.stale"
-  | "fs38.success_confirm"
-  | "fs38.test_date"
-  | "fs38.unknown_engagement"
-  | "fs38.update_existing"
-  | "fs38.use_preset"
-  | "fs38.validation_confirm"
-  | "fs38.validation_policy"
-  | "fs39.adapted_from"
-  | "fs39.approximate"
-  | "fs39.close"
-  | "fs39.exact"
-  | "fs39.extrapolated"
-  | "fs39.generic"
-  | "fs39.interpolated"
-  | "fs39.interpolation_method"
-  | "fs39.machine_setup"
-  | "fs39.material_transfer"
-  | "fs39.method"
-  | "fs39.normalized_method"
-  | "fs39.reference_only"
-  | "fs39.relative_gap"
-  | "fs39.router_transfer"
-  | "fs39.same_machine"
-  | "fs39.same_material"
-  | "fs39.same_operation"
-  | "fs39.slot_basis"
-  | "fs39.theoretical"
-  | "fs39.tool_setup"
-  | "fs39.weight"
-  | "fs39.why"
-  | "fs391.adapted_reference"
-  | "fs391.applied_values"
-  | "fs391.calculating"
-  | "fs391.cutting_speed"
-  | "fs391.engagement_distinct"
-  | "fs391.generic_profile_direct_entry"
   | "fs391.known_limits"
-  | "fs391.low_effective_chipload"
-  | "fs391.mixed_values"
-  | "fs391.modified_values"
-  | "fs391.no_reference"
-  | "fs391.nominal_engagement_not_maximum"
   | "fs391.pocket_overlap"
-  | "fs391.preset_help"
-  | "fs391.rejection_details"
-  | "fs391.requested"
-  | "fs391.review_limits"
-  | "fs391.review_recommendation"
-  | "fs391.save_current"
-  | "fs391.save_preset"
-  | "fs391.saved_recommendation"
-  | "fs391.slot_basis"
-  | "fs391.unknown_doc"
-  | "fs391.unknown_engagement_full_width_assumption"
-  | "fs391.unknown_entry_strategy"
-  | "fs391.unknown_limit"
   | "fsreset.ui.all"
   | "fsreset.ui.cancel"
   | "fsreset.ui.choose"
@@ -1671,99 +1498,14 @@ export type MsgKey =
   | "post.tokens.tools"
   | "post.tokens.version"
   | "post.tool_change"
-  | "preset2.after"
-  | "preset2.before"
-  | "preset2.choose_tool"
-  | "preset2.context_warning"
-  | "preset2.differences"
-  | "preset2.edit_help"
-  | "preset2.field"
-  | "preset2.field_diameter"
-  | "preset2.field_flutes"
-  | "preset2.field_machine"
-  | "preset2.field_material"
-  | "preset2.field_tool"
-  | "preset2.help"
-  | "preset2.identities"
-  | "preset2.machine"
   | "preset2.material_help"
-  | "preset2.ownership"
-  | "preset2.problem_geometry"
-  | "preset2.problem_identity"
-  | "preset2.problem_limits"
-  | "preset2.problem_machine"
-  | "preset2.problem_material"
-  | "preset2.problem_process"
-  | "preset2.problem_rights"
-  | "preset2.problem_source"
-  | "preset2.problem_tool"
-  | "preset2.problem_values"
-  | "preset2.recipe"
-  | "preset2.reductions"
-  | "preset2.review"
-  | "preset2.save"
-  | "preset2.source_notes"
-  | "preset2.stale"
-  | "preset2.title"
-  | "preset2.values"
-  | "preset2.warn_machine"
-  | "preset2.warn_material"
-  | "preset3.browse"
-  | "preset3.choose"
-  | "preset3.compatible"
   | "preset3.current"
-  | "preset3.none"
-  | "preset3.operation"
-  | "preset3.overwrite"
-  | "preset3.parameter"
-  | "preset3.proposed"
-  | "preset3.recommended"
-  | "preset3.similar"
-  | "preset3.stale"
-  | "preset3.unavailable"
-  | "preset3.use"
-  | "presets.aggressiveness"
   | "presets.all"
-  | "presets.all_sources"
-  | "presets.author"
-  | "presets.availability"
-  | "presets.chipload"
-  | "presets.clear"
-  | "presets.context"
-  | "presets.deleted"
-  | "presets.details"
-  | "presets.diameter"
-  | "presets.disabled"
-  | "presets.empty"
-  | "presets.enabled"
-  | "presets.entry"
-  | "presets.identities"
-  | "presets.inactive_record"
-  | "presets.license"
-  | "presets.local_readonly"
   | "presets.material_family"
-  | "presets.milling_only"
-  | "presets.no_calculation"
   | "presets.no_match"
   | "presets.pack"
-  | "presets.provenance"
-  | "presets.readonly_help"
-  | "presets.record"
-  | "presets.records"
-  | "presets.reference_readonly"
-  | "presets.refresh"
-  | "presets.resize_column"
-  | "presets.resize_details"
   | "presets.search"
-  | "presets.search_hint"
-  | "presets.source"
-  | "presets.stored_values"
-  | "presets.thickness"
   | "presets.title"
-  | "presets.tool"
-  | "presets.tool_family"
-  | "presets.trial"
-  | "presets.validation"
   | "preview.toolpaths.label"
   | "preview.toolpaths.tip"
   | "qualification.back"
@@ -1825,27 +1567,6 @@ export type MsgKey =
   | "scene3d.empty.sub"
   | "scene3d.empty.title"
   | "selector.apply"
-  | "selector.changes"
-  | "selector.check"
-  | "selector.checking"
-  | "selector.compatibility"
-  | "selector.compatible"
-  | "selector.copy_only"
-  | "selector.filtered"
-  | "selector.filtered_selection"
-  | "selector.filters"
-  | "selector.incompatible"
-  | "selector.inspect"
-  | "selector.job_material"
-  | "selector.list_help"
-  | "selector.material_missing"
-  | "selector.material_tool"
-  | "selector.na"
-  | "selector.no_changes"
-  | "selector.retained"
-  | "selector.selected_preset"
-  | "selector.title"
-  | "selector.unavailable"
   | "settings.appearance.language"
   | "settings.appearance.language.auto"
   | "settings.appearance.language.help"
@@ -2294,19 +2015,6 @@ export type MsgKey =
   | "tools.whirl.z_wobble.title"
   | "tools.z_shift"
   | "tools.z_shift.title"
-  | "trial.acknowledge"
-  | "trial.context"
-  | "trial.derived"
-  | "trial.full_width_help"
-  | "trial.modified"
-  | "trial.ready"
-  | "trial.review_required"
-  | "trial.source_evidence"
-  | "trial.source_missing"
-  | "trial.status"
-  | "trial.technical"
-  | "trial.unknown_name"
-  | "trial.use"
   | "ux1.entry.compatibility"
   | "ux1.entry.helix"
   | "ux1.entry.leads"
@@ -2437,7 +2145,6 @@ export type MsgKey =
   | "ux6b.retained"
   | "ux6b.retained_help"
   | "ux6b.retained_profile"
-  | "ux6b.retained_reference"
   | "ux6b.reveal_selection"
   | "ux6b.review_apply"
   | "ux6b.review_changed"
@@ -2471,14 +2178,11 @@ export type MsgKey =
   | "uxa.pass_depth"
   | "uxa.pause_cps"
   | "uxa.pending"
-  | "uxa.rates_help"
   | "uxa.safety"
-  | "uxa.saved_rates"
   | "uxa.shopbot_parking"
   | "uxa.shopbot_raw_blocked"
   | "uxa.unavailable_short"
   | "uxa.undercut"
-  | "uxa.unsupported_applied"
   | "uxb.after"
   | "uxb.before"
   | "uxb.diagram"
@@ -2518,36 +2222,10 @@ export type MsgKey =
   | "uxd.playback.path"
   | "uxd.stl"
   | "uxd.stl_source"
-  | "v11.identity_automatic"
-  | "v11.identity_machine"
-  | "v11.identity_tool"
-  | "v11.lab_identity_help"
-  | "v11.lab_machine"
-  | "v11.lab_priority"
-  | "v11.lab_tool"
   | "v11.missing_machine"
   | "v11.missing_material"
   | "v11.missing_tool"
-  | "v11.no_reference"
-  | "v11.pack_choose"
-  | "v11.pack_create"
-  | "v11.pack_empty"
-  | "v11.pack_export"
-  | "v11.pack_name"
-  | "v11.pack_private"
-  | "v11.pack_reference"
   | "v11.preset_missing"
-  | "v11.reference_help"
-  | "v11.reference_independent"
-  | "v11.saved_source_lab"
-  | "v11.saved_source_pack"
-  | "v11.source_bundled"
-  | "v11.source_lab"
-  | "v11.source_pack"
-  | "v11.source_remove"
-  | "v11.source_remove_help"
-  | "v11.this_machine"
-  | "v11.this_tool"
   | "v11.tool_auto"
   | "v11.tool_choose"
   | "v11.tool_library"
@@ -2954,201 +2632,28 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "error.hint.unimplemented_op_kind",
   "error.hint.unknown_post_processor",
   "error.span",
-  "fs.chipload",
-  "fs.feed",
-  "fs.full_width",
-  "fs.invalid_data",
   "fs.material",
-  "fs.mode",
-  "fs.normal",
-  "fs.plunge",
-  "fs.positive",
-  "fs.prudent",
-  "fs.rapid",
-  "fs.reference_license",
-  "fs.rpm",
-  "fs.source",
-  "fs.source_link",
-  "fs.stepover",
-  "fs.tooth",
-  "fs.unavailable_build",
-  "fs.unknowns",
   "fs35.add_library",
   "fs35.advanced_depth",
   "fs35.advanced_feed",
   "fs35.available_tools",
-  "fs35.compatibility",
-  "fs35.compatibility_help",
   "fs35.custom_material_help",
   "fs35.cutting",
   "fs35.fallback",
   "fs35.fallback_help",
   "fs35.finishing",
   "fs35.job_material",
-  "fs35.kept",
-  "fs35.loading",
-  "fs35.machine",
-  "fs35.material_missing",
   "fs35.material_name",
-  "fs35.missing_rates",
-  "fs35.modified",
-  "fs35.nominal",
-  "fs35.operation",
   "fs35.other_material",
-  "fs35.outdated",
-  "fs35.pocket",
-  "fs35.profile",
-  "fs35.recalculate",
-  "fs35.recommendation",
-  "fs35.reference",
-  "fs35.schedule",
-  "fs35.source",
-  "fs35.source_details",
-  "fs35.source_scope_help",
-  "fs35.source_unavailable",
-  "fs35.sources",
-  "fs35.sources_disabled",
-  "fs35.suggest",
-  "fs35.suggested",
-  "fs35.tested",
-  "fs35.theoretical",
-  "fs35.tool",
-  "fs35.validated",
-  "fs36.actual",
-  "fs36.calculation_context",
-  "fs36.closest_scopes",
-  "fs36.engagement",
-  "fs36.kept",
-  "fs36.modified_hint",
   "fs36.pass_depth",
-  "fs36.reason.ambiguous_profiles",
-  "fs36.reason.dataset_mismatch",
-  "fs36.reason.invalid_request",
-  "fs36.reason.missing_cutting_data",
-  "fs36.reason.missing_material",
-  "fs36.reason.unrepresentable_output",
-  "fs36.reason.unsupported_operation",
-  "fs36.reason.unsupported_tool",
-  "fs36.required",
-  "fs36.scope.cutting_family",
-  "fs36.scope.diameter_mm",
-  "fs36.scope.engagement",
-  "fs36.scope.entry",
-  "fs36.scope.flute_count",
   "fs36.stock_auto_empty",
   "fs36.stock_auto_geometry",
   "fs36.stock_corner_wcs",
   "fs36.stock_manual_empty",
   "fs36.stock_manual_geometry",
   "fs36.stock_wcs_help",
-  "fs36.suggested",
-  "fs36.suggested_hint",
-  "fs36.unknown",
-  "fs37.built_in",
-  "fs37.disagreement",
-  "fs37.import",
-  "fs37.local",
-  "fs37.local_only",
-  "fs37.no_local",
-  "fs37.privacy",
-  "fs37.provenance_missing",
-  "fs37.public",
-  "fs37.references",
-  "fs37.sources_help",
-  "fs37.too_large",
-  "fs38.actual_values",
-  "fs38.backup_help",
-  "fs38.confirm_promotion",
-  "fs38.created",
-  "fs38.delete",
-  "fs38.delete_help",
-  "fs38.deleted",
-  "fs38.destination",
-  "fs38.detailed_notes",
-  "fs38.details",
-  "fs38.draft",
-  "fs38.draft_help",
-  "fs38.duplicate",
-  "fs38.engagement",
-  "fs38.evidence",
-  "fs38.full_width",
-  "fs38.history",
-  "fs38.identity",
-  "fs38.job_reference",
-  "fs38.manage",
-  "fs38.name",
-  "fs38.observations",
-  "fs38.operator",
-  "fs38.physical_confirm",
-  "fs38.preset",
-  "fs38.promote",
-  "fs38.restore",
-  "fs38.review_notes",
-  "fs38.revision_help",
-  "fs38.save",
-  "fs38.save_new",
-  "fs38.save_notes",
-  "fs38.save_title",
-  "fs38.search",
-  "fs38.select_preset",
-  "fs38.show_deleted",
-  "fs38.stale",
-  "fs38.success_confirm",
-  "fs38.test_date",
-  "fs38.unknown_engagement",
-  "fs38.update_existing",
-  "fs38.use_preset",
-  "fs38.validation_confirm",
-  "fs38.validation_policy",
-  "fs39.adapted_from",
-  "fs39.approximate",
-  "fs39.close",
-  "fs39.exact",
-  "fs39.extrapolated",
-  "fs39.generic",
-  "fs39.interpolated",
-  "fs39.interpolation_method",
-  "fs39.machine_setup",
-  "fs39.material_transfer",
-  "fs39.method",
-  "fs39.normalized_method",
-  "fs39.reference_only",
-  "fs39.relative_gap",
-  "fs39.router_transfer",
-  "fs39.same_machine",
-  "fs39.same_material",
-  "fs39.same_operation",
-  "fs39.slot_basis",
-  "fs39.theoretical",
-  "fs39.tool_setup",
-  "fs39.weight",
-  "fs39.why",
-  "fs391.adapted_reference",
-  "fs391.applied_values",
-  "fs391.calculating",
-  "fs391.cutting_speed",
-  "fs391.engagement_distinct",
-  "fs391.generic_profile_direct_entry",
   "fs391.known_limits",
-  "fs391.low_effective_chipload",
-  "fs391.mixed_values",
-  "fs391.modified_values",
-  "fs391.no_reference",
-  "fs391.nominal_engagement_not_maximum",
   "fs391.pocket_overlap",
-  "fs391.preset_help",
-  "fs391.rejection_details",
-  "fs391.requested",
-  "fs391.review_limits",
-  "fs391.review_recommendation",
-  "fs391.save_current",
-  "fs391.save_preset",
-  "fs391.saved_recommendation",
-  "fs391.slot_basis",
-  "fs391.unknown_doc",
-  "fs391.unknown_engagement_full_width_assumption",
-  "fs391.unknown_entry_strategy",
-  "fs391.unknown_limit",
   "fsreset.ui.all",
   "fsreset.ui.cancel",
   "fsreset.ui.choose",
@@ -4317,99 +3822,14 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "post.tokens.tools",
   "post.tokens.version",
   "post.tool_change",
-  "preset2.after",
-  "preset2.before",
-  "preset2.choose_tool",
-  "preset2.context_warning",
-  "preset2.differences",
-  "preset2.edit_help",
-  "preset2.field",
-  "preset2.field_diameter",
-  "preset2.field_flutes",
-  "preset2.field_machine",
-  "preset2.field_material",
-  "preset2.field_tool",
-  "preset2.help",
-  "preset2.identities",
-  "preset2.machine",
   "preset2.material_help",
-  "preset2.ownership",
-  "preset2.problem_geometry",
-  "preset2.problem_identity",
-  "preset2.problem_limits",
-  "preset2.problem_machine",
-  "preset2.problem_material",
-  "preset2.problem_process",
-  "preset2.problem_rights",
-  "preset2.problem_source",
-  "preset2.problem_tool",
-  "preset2.problem_values",
-  "preset2.recipe",
-  "preset2.reductions",
-  "preset2.review",
-  "preset2.save",
-  "preset2.source_notes",
-  "preset2.stale",
-  "preset2.title",
-  "preset2.values",
-  "preset2.warn_machine",
-  "preset2.warn_material",
-  "preset3.browse",
-  "preset3.choose",
-  "preset3.compatible",
   "preset3.current",
-  "preset3.none",
-  "preset3.operation",
-  "preset3.overwrite",
-  "preset3.parameter",
-  "preset3.proposed",
-  "preset3.recommended",
-  "preset3.similar",
-  "preset3.stale",
-  "preset3.unavailable",
-  "preset3.use",
-  "presets.aggressiveness",
   "presets.all",
-  "presets.all_sources",
-  "presets.author",
-  "presets.availability",
-  "presets.chipload",
-  "presets.clear",
-  "presets.context",
-  "presets.deleted",
-  "presets.details",
-  "presets.diameter",
-  "presets.disabled",
-  "presets.empty",
-  "presets.enabled",
-  "presets.entry",
-  "presets.identities",
-  "presets.inactive_record",
-  "presets.license",
-  "presets.local_readonly",
   "presets.material_family",
-  "presets.milling_only",
-  "presets.no_calculation",
   "presets.no_match",
   "presets.pack",
-  "presets.provenance",
-  "presets.readonly_help",
-  "presets.record",
-  "presets.records",
-  "presets.reference_readonly",
-  "presets.refresh",
-  "presets.resize_column",
-  "presets.resize_details",
   "presets.search",
-  "presets.search_hint",
-  "presets.source",
-  "presets.stored_values",
-  "presets.thickness",
   "presets.title",
-  "presets.tool",
-  "presets.tool_family",
-  "presets.trial",
-  "presets.validation",
   "preview.toolpaths.label",
   "preview.toolpaths.tip",
   "qualification.back",
@@ -4471,27 +3891,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "scene3d.empty.sub",
   "scene3d.empty.title",
   "selector.apply",
-  "selector.changes",
-  "selector.check",
-  "selector.checking",
-  "selector.compatibility",
-  "selector.compatible",
-  "selector.copy_only",
-  "selector.filtered",
-  "selector.filtered_selection",
-  "selector.filters",
-  "selector.incompatible",
-  "selector.inspect",
-  "selector.job_material",
-  "selector.list_help",
-  "selector.material_missing",
-  "selector.material_tool",
-  "selector.na",
-  "selector.no_changes",
-  "selector.retained",
-  "selector.selected_preset",
-  "selector.title",
-  "selector.unavailable",
   "settings.appearance.language",
   "settings.appearance.language.auto",
   "settings.appearance.language.help",
@@ -4940,19 +4339,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "tools.whirl.z_wobble.title",
   "tools.z_shift",
   "tools.z_shift.title",
-  "trial.acknowledge",
-  "trial.context",
-  "trial.derived",
-  "trial.full_width_help",
-  "trial.modified",
-  "trial.ready",
-  "trial.review_required",
-  "trial.source_evidence",
-  "trial.source_missing",
-  "trial.status",
-  "trial.technical",
-  "trial.unknown_name",
-  "trial.use",
   "ux1.entry.compatibility",
   "ux1.entry.helix",
   "ux1.entry.leads",
@@ -5083,7 +4469,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ux6b.retained",
   "ux6b.retained_help",
   "ux6b.retained_profile",
-  "ux6b.retained_reference",
   "ux6b.reveal_selection",
   "ux6b.review_apply",
   "ux6b.review_changed",
@@ -5117,14 +4502,11 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "uxa.pass_depth",
   "uxa.pause_cps",
   "uxa.pending",
-  "uxa.rates_help",
   "uxa.safety",
-  "uxa.saved_rates",
   "uxa.shopbot_parking",
   "uxa.shopbot_raw_blocked",
   "uxa.unavailable_short",
   "uxa.undercut",
-  "uxa.unsupported_applied",
   "uxb.after",
   "uxb.before",
   "uxb.diagram",
@@ -5164,36 +4546,10 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "uxd.playback.path",
   "uxd.stl",
   "uxd.stl_source",
-  "v11.identity_automatic",
-  "v11.identity_machine",
-  "v11.identity_tool",
-  "v11.lab_identity_help",
-  "v11.lab_machine",
-  "v11.lab_priority",
-  "v11.lab_tool",
   "v11.missing_machine",
   "v11.missing_material",
   "v11.missing_tool",
-  "v11.no_reference",
-  "v11.pack_choose",
-  "v11.pack_create",
-  "v11.pack_empty",
-  "v11.pack_export",
-  "v11.pack_name",
-  "v11.pack_private",
-  "v11.pack_reference",
   "v11.preset_missing",
-  "v11.reference_help",
-  "v11.reference_independent",
-  "v11.saved_source_lab",
-  "v11.saved_source_pack",
-  "v11.source_bundled",
-  "v11.source_lab",
-  "v11.source_pack",
-  "v11.source_remove",
-  "v11.source_remove_help",
-  "v11.this_machine",
-  "v11.this_tool",
   "v11.tool_auto",
   "v11.tool_choose",
   "v11.tool_library",

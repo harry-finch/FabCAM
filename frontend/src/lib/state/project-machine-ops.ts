@@ -1,4 +1,4 @@
-import { withLocalIdentity } from './cutting-identities';
+import { withPhysicalIdentity } from './physical-identities';
 // Machine / stock / work-offset / profile mutations extracted from the
 // ProjectState god root. Every edit here routes through the undo/redo
 // command bus; the machine + profile paths additionally run the
@@ -24,7 +24,7 @@ import {
 } from './commands';
 
 export function setMachine(p: ProjectState, next: MachineSettings) {
-  next = withLocalIdentity(next, 'machine');
+  next = withPhysicalIdentity(next, 'machine');
   const prevModes = effectiveModes(p.data.machine);
   p.history.exec(setMachineCommand(next), p.target());
   // Machine change invalidates the cached gcode: work area / units /

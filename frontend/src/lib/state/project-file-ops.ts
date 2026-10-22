@@ -1,4 +1,4 @@
-import { withLocalIdentity } from './cutting-identities';
+import { withPhysicalIdentity } from './physical-identities';
 import {
   defaultProjectTools,
   defaultProjectMachine,
@@ -44,7 +44,6 @@ export function clearProject(p: ProjectState) {
   p.data.serializedExtensions = {};
   p.data.operations = [];
   p.data.material = undefined;
-  p.data.fsContext = undefined;
   p.data.fixtures = [];
   p.data.textLayers = [];
   p.data.reliefSources = [];
@@ -157,12 +156,12 @@ export function snapshotProject(p: ProjectState): ProjectFile {
     stock: p.data.stock,
     tools: p.data.tools.map((t) => ({
       ...t,
-      physicalId: t.physicalId ?? t.fsLocalIdentity?.id,
+      physicalId: t.physicalId,
       maxRpm: t.maxRpm,
     })),
     machine: {
       ...p.data.machine,
-      physicalId: p.data.machine.physicalId ?? p.data.machine.fsLocalIdentity?.id,
+      physicalId: p.data.machine.physicalId,
     },
     operations: p.data.operations,
     fixtures: p.data.fixtures,
@@ -207,7 +206,6 @@ export function restoreProject(p: ProjectState, file: ProjectFile) {
     Object.entries(file).filter(([key]) => !known.has(key)),
   );
   p.data.material = file.material;
-  p.data.fsContext = file.fsContext;
   // imports[] is the canonical shape. Pre-migration project
   // files (with bare `imported` / `fileTransform` / `lastImportPath`
   // fields) are no longer loadable — the user explicitly waived
@@ -238,26 +236,14 @@ export function restoreProject(p: ProjectState, file: ProjectFile) {
   }
   p.data.stock = { ...defaultProjectStock(), ...file.stock };
   p.data.tools = Array.isArray(file.tools)
-    ? file.tools.map((t) =>
-        withLocalIdentity(
-          migrateLegacyToolTerms(t),
-          'tool',
-          file.fsContext?.tools.find((b) => b.tool_id === t.id)?.identity,
-          file.fsContext?.tools.find((b) => b.tool_id === t.id)?.local_identity,
-        ),
-      )
+    ? file.tools.map((t) => withPhysicalIdentity(migrateLegacyToolTerms(t), 'tool'))
     : defaultProjectTools();
   // A full document owns its machine, including inactive/unknown authored keys.
   // Missing legacy dialect means LinuxCNC, not the previously used workspace post.
   p.data.machine = {
     ...defaultProjectMachine(),
     gcodeDialect: 'linuxcnc',
-    ...withLocalIdentity(
-      migrateMachineSettings(file.machine ?? {}),
-      'machine',
-      file.fsContext?.machine_identity,
-      file.fsContext?.machine_local_identity,
-    ),
+    ...withPhysicalIdentity(migrateMachineSettings(file.machine ?? {}), 'machine'),
   };
   if (Array.isArray(file.operations)) p.data.operations = file.operations;
   p.data.fixtures = Array.isArray(file.fixtures) ? file.fixtures : [];

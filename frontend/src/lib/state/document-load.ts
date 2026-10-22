@@ -17,7 +17,6 @@ export async function commitDocumentLoad(
     'cornerRelief',
     'operations',
     'material',
-    'fsContext',
     'fixtures',
     'textLayers',
     'reliefSources',

@@ -13,7 +13,8 @@ import {
   type CornerReliefModifier,
 } from './corner-relief';
 import { History } from './history';
-import { validateProjectFile } from './feeds-speeds-persistence';
+import { validateProjectV9 as validateProjectFile } from './project-v9';
+import { explicitProjectFixture } from './explicit-project.fixture';
 const seg: Segment = {
   type: 'ARC',
   start: { x: 0, y: 0 },
@@ -86,18 +87,20 @@ describe('persistent corner relief', () => {
     expect(reliefError(m, imports, [{ ...tool, wearOffsetMm: 0 }])).toContain('Cutter changed');
     expect(reliefError(m, [], [tool])).toContain('Drawing changed');
   });
-  it('guards file format while retaining cutting provenance version support', () => {
-    const file = {
+  it('round-trips v9 relief and refuses malformed geometry', () => {
+    const file = explicitProjectFixture({
       kind: 'ivac-project-cad',
       version: 5,
       imports,
       cornerRelief: modifier(),
-    } as ProjectFile;
+    } as ProjectFile);
     const restored = JSON.parse(JSON.stringify(file)) as ProjectFile;
     expect(() => validateProjectFile(restored)).not.toThrow();
     expect(restored.cornerRelief).toEqual(file.cornerRelief);
     expect(() => validateProjectFile({ ...file, kind: 'ivac-project', version: 1 })).toThrow();
-    expect(() => validateProjectFile({ ...file, cornerRelief: undefined })).toThrow();
+    expect(() =>
+      validateProjectFile({ ...file, cornerRelief: { ...modifier(), diameter: 0 } }),
+    ).toThrow();
   });
   it('does not silently move tabs or permit a different cutter for affected geometry', () => {
     const op = {

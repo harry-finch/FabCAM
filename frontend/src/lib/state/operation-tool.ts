@@ -57,46 +57,7 @@ export function selectOperationToolCommand(
         slot === 'spotToolId' && op.kind === 'drill' && op.spotFirst
           ? { spotFirst: { ...op.spotFirst, spotToolId: chosen.id } }
           : { [slot]: slot === 'finishToolId' && chosen.id === op.toolId ? undefined : chosen.id };
-      // Keep explicit cutting values when changing cutters. Their captured proposal
-      // remains unchanged, so the existing context comparison requires review.
-      if (op.appliedCutting && slot !== 'spotToolId') {
-        const previous =
-          slot === 'toolId'
-            ? op.toolId
-            : 'finishToolId' in op
-              ? (op.finishToolId ?? op.toolId)
-              : op.toolId;
-        const applied = JSON.parse(JSON.stringify(op.appliedCutting)) as NonNullable<
-          OpEntry['appliedCutting']
-        >;
-        const relevant = (pass: string) =>
-          slot === 'finishToolId'
-            ? pass === 'finish'
-            : !(
-                'finishToolId' in op &&
-                op.finishToolId &&
-                op.finishToolId !== op.toolId &&
-                pass === 'finish'
-              );
-        const moved = applied.slots
-          .filter((s) => s.tool_id === previous && relevant(s.pass))
-          .map((s) => ({ ...s, tool_id: chosen.id }));
-        applied.slots = [
-          ...applied.slots.filter(
-            (s) => !moved.some((m) => m.tool_id === s.tool_id && m.pass === s.pass),
-          ),
-          ...moved,
-        ];
-        const mainId = slot === 'toolId' ? chosen.id : op.toolId;
-        const finishId =
-          slot === 'finishToolId'
-            ? chosen.id
-            : 'finishToolId' in op
-              ? (op.finishToolId ?? mainId)
-              : mainId;
-        applied.slots = applied.slots.filter((s) => s.tool_id === mainId || s.tool_id === finishId);
-        patch.appliedCutting = applied;
-      }
+      // updateOperationCommand rebinds actual v9 roles while preserving authored values.
       if (addedId !== undefined)
         s.tools = [...s.tools, JSON.parse(JSON.stringify(chosen)) as ToolEntry];
       edit = updateOperationCommand(opId, patch);

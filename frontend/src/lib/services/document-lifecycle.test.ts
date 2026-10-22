@@ -408,8 +408,8 @@ it('saves and restores both V-Carve modes, radius caps and physical bit properti
   clearProject(p);
   restoreProject(p, saved);
   expect(p.data.operations).toEqual(saved.operations);
-  expect(p.data.tools.map(({ fsLocalIdentity: _identity, ...tool }) => tool)).toEqual(saved.tools);
-  expect(p.data.tools.every((tool) => tool.fsLocalIdentity)).toBe(true);
+  expect(p.data.tools).toEqual(saved.tools);
+  expect(p.data.tools.every((tool) => tool.physicalId)).toBe(true);
 });
 
 // Exercise actual restore/snapshot code, not only the file validator.
@@ -457,9 +457,7 @@ it.each(geomFiles)(
     }
     expect(reopened.tools).toMatchObject(file.tools);
     expect(
-      reopened.tools.every(
-        (tool: import('../state/project-types').ToolEntry) => tool.fsLocalIdentity,
-      ),
+      reopened.tools.every((tool: import('../state/project-types').ToolEntry) => tool.physicalId),
     ).toBe(true);
     // Machine defaults may be filled by the existing migration, but saved fields survive.
     expect(reopened.machine).toMatchObject(file.machine);

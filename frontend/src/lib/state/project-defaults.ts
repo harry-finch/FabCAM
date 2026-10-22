@@ -1,10 +1,10 @@
-import { withLocalIdentity } from './cutting-identities';
+import { withPhysicalIdentity } from './physical-identities';
 import type { MachineSettings, ToolEntry, StockConfig } from './project-types';
 
 // Fresh values per document; never seed a loaded project from the previous job.
 export function defaultProjectTools(): ToolEntry[] {
   return [
-    withLocalIdentity<ToolEntry>(
+    withPhysicalIdentity<ToolEntry>(
       {
         id: 1,
         name: '3mm endmill',
@@ -22,7 +22,7 @@ export function defaultProjectTools(): ToolEntry[] {
 }
 
 export function defaultProjectMachine(): MachineSettings {
-  return withLocalIdentity<MachineSettings>(
+  return withPhysicalIdentity<MachineSettings>(
     {
       unit: 'mm',
       mode: 'mill',

@@ -60,7 +60,6 @@
   {#if tool.formProfileMm?.length && !attrApplies('formProfile', tool.kind)}<p>
       {t('ux6b.retained_profile', { count: tool.formProfileMm.length })}
     </p>{/if}
-  {#if tool.fsIdentity && tool.kind !== 'endmill'}<p>{t('ux6b.retained_reference')}</p>{/if}
 </details>
 
 <style>

@@ -104,7 +104,6 @@
               operation,
               currentTool,
               effectiveModes(project.data.machine),
-              true, // The shared selection command preserves the saved cutting values.
             );
             return reason ? t(reason) : undefined;
           })();

@@ -39,7 +39,7 @@ describe('tool_mode_defaults', () => {
 
   it('the mill default matches the historical "+ Add tool" entry', () => {
     const t = defaultToolForMode('mill', 3);
-    expect(t.fsLocalIdentity?.id).toMatch(/^lab-tool-/);
+    expect(t.physicalId).toMatch(/^lab-tool-/);
     expect(t).toMatchObject({
       id: 3,
       name: '3mm endmill',

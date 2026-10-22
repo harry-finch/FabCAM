@@ -1,3 +1,4 @@
+import { seedCutting } from './cutting-parameters';
 import { describe, expect, it } from 'vitest';
 import { generationContextKey } from './generation-context';
 import type { ProjectState } from './project.svelte';
@@ -86,6 +87,7 @@ it('V-Carve tool geometry invalidates output across save, undo and redo without 
     }),
   ];
   p.data.operations[0].toolId = 1;
+  p.data.operations[0].cutting = seedCutting(p.data.operations[0], p.data.tools);
   p.data.tools = [
     {
       id: 1,
@@ -118,7 +120,7 @@ it('V-Carve tool geometry invalidates output across save, undo and redo without 
 });
 
 it('shared preset application invalidates generation identity and Undo/Redo restores it without setup substitution', async () => {
-  const { applyCuttingCommand } = await import('./commands');
+  const { updateOperationCommand } = await import('./commands');
   const p = fixture();
   p.data.tools = [
     {
@@ -134,31 +136,25 @@ it('shared preset application invalidates generation identity and Undo/Redo rest
     },
   ];
   p.data.operations[0].toolId = 1;
+  p.data.operations[0].cutting = seedCutting(p.data.operations[0], p.data.tools);
   const old = generationContextKey(p, 'cps');
   const tools = JSON.stringify(p.data.tools),
     machine = JSON.stringify(p.data.machine);
-  const command = applyCuttingCommand(
-    p.data.operations[0].id,
-    {
-      step: -2.8,
-      appliedCutting: {
-        slots: [
-          {
-            tool_id: 1,
-            pass: 'finish',
-            rpm: 17000,
-            feed_mm_min: 1620,
-            plunge_mm_min: 810,
-            origins: { rpm: 'recommendation', feed: 'recommendation', plunge: 'recommendation' },
-          },
-        ],
-        context_key: 'software',
-        doc_origin: 'recommendation',
-      },
+  const command = updateOperationCommand(p.data.operations[0].id, {
+    step: -2.8,
+    cutting: {
+      rates: [
+        p.data.operations[0].cutting.rates[0],
+        {
+          tool_id: 1,
+          role: 'finish',
+          rpm: 17000,
+          feed_mm_min: 1620,
+          plunge_mm_min: 810,
+        },
+      ],
     },
-    p.data.material,
-    p.data.fsContext,
-  );
+  });
   command.apply(p.data);
   const applied = generationContextKey(p, 'cps');
   expect(applied).not.toBe(old);

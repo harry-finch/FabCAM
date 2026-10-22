@@ -1,0 +1,503 @@
+[
+  {
+    "file": "frontend/src/lib/state/lab-presets-store.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/preset-identities.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-selector.test.ts",
+    "tests": [
+      "pins all original identity dimensions without rewriting the source",
+      "rejects removed, edited and revised records, independently of collection order",
+      "never validates or commits unacknowledged manual replacements",
+      "both discovery modes commit only the authoritative result through the same boundary"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Review binds actual context; stale async replies cannot mutate; no implicit replacement",
+    "replacement": "cutting-workflow.test.ts; cutting-v9-wasm.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds-explanation.test.ts",
+    "tests": [
+      "keeps precise exact and ranged DOC values",
+      "resolves identity and revision without fabricating equivalence",
+      "distinguishes unknown and full-width engagement"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Presentation-only legacy recommendation/Draft/Trial evidence labels; no retained CAM calculation or validator",
+    "replacement": "cutting-ui.test.ts; report-cutting.test.ts; preset-library-v9.test.ts; material-picker-presentation.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/experimental-recipe.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/trial-presentation.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds-persistence.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/preset-library.test.ts",
+    "tests": [
+      "preserves identities, authored values and provenance without mutation or calculation",
+      "combines accent-insensitive search and pack, family, tool and evidence filters",
+      "does not infer material equivalence and preserves unknown revisioned IDs",
+      "browses disabled and non-milling sources without enabling them",
+      "retains the newest legacy Sorbonne head and optional fields without re-identification",
+      "keeps null and range dimensions explicit",
+      "MAT-1 family/alias browsing preserves source scopes and cannot grant compatibility"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Exact material revisions, read-only search/aliases, no compatibility inferred from presentation",
+    "replacement": "material-picker-presentation.test.ts; preset-library-v9.test.ts; cutting-v9-wasm.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds-sources.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/preset-library.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/experimental-recipe.test.ts",
+    "tests": [
+      "round trips guarded v8, refuses disguised metadata and proves old v7 reader rejection",
+      "legacy v1 through v7 reader behavior is unchanged without experimental data",
+      "rejects private extension bodies, paths, fractional or malformed baselines",
+      "manual values remain authoritative and retain ancestry with a modified indicator",
+      "atomic trial command restores absent metadata on Undo and restores it on Redo"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Strict versions, malformed/private snapshot refusal, independent manual values and history",
+    "replacement": "project-v9.test.ts; cutting-workflow.test.ts; cutting-v9-wasm.test.ts; crates/ivac-core/src/presets.rs",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/trial-presentation.test.ts",
+    "tests": [
+      "uses authored name and exact upstream labels without leaking notes or narrowing the material category",
+      "does not guess missing, deleted or revised source names; disabled source labels remain usable",
+      "reopened experimental values retain ancestry and modified presentation independent of source availability"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Presentation-only legacy recommendation/Draft/Trial evidence labels; no retained CAM calculation or validator",
+    "replacement": "cutting-ui.test.ts; report-cutting.test.ts; preset-library-v9.test.ts; material-picker-presentation.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/preset-identities.test.ts",
+    "tests": [
+      "lists missing identities separately and checks the selected tool binding"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Separate missing machine/material/tool identity diagnostics",
+    "replacement": "crates/ivac-core/src/presets.rs; cutting-v9-wasm.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds.test.ts",
+    "tests": [
+      "keeps v1 legacy files, refuses unsupported versions and FS data disguised as v1",
+      "uses a distinct root kind rejected by pre-FS apps",
+      "refuses invalid and duplicate role rates at reopen",
+      "manual feed edits target saved roles and never reopen tool inheritance",
+      "marks native geometry origins on manual step or overlap edits",
+      "saved manual slots and provenance survive JSON independently of live source data",
+      "context changes mark stale while manual rate edits do not change the context key",
+      "applies context, geometry and rates atomically with undo",
+      "clears legacy manual overrides without immediately invalidating the applied context, including redo",
+      "catalog parsing does not promote source data or invent identities",
+      "intersects all known maxima without inventing an unknown limit",
+      "saves manual-only values without fabricated evidence and rejects old FS readers",
+      "manual editing keeps the accepted proposal and native geometry",
+      "physical reference metadata explicitly overrides or clears legacy bindings",
+      "does not silently inherit a different cutter and allows explicit manual resolution"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Finite role values, explicit manual authority, no clamping, context freshness, atomic Undo/Redo",
+    "replacement": "project-v9.test.ts; cutting-workflow.test.ts; cutting-v9-wasm.test.ts; generation-context.test.ts; crates/ivac-core/src/cutting_parameters.rs",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds-sources.test.ts",
+    "tests": [
+      "persists enabled sources and custom contents through the actual settings storage",
+      "disabled sources load no data and never calculate or apply operation values",
+      "loads configured references and custom sources without rewriting their scope",
+      "keeps settings backward compatible and refuses malformed imports"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Source enablement/import compatibility retired; local settings and user file contents remain untouched",
+    "replacement": "workspace.test.ts; preset-collection-files.test.ts for current bounded collection import (different product contract)",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-selector.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds-pack-store.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/recipe-values.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-comparison.test.ts",
+    "tests": [
+      "keeps identical values numeric and permits a provenance-only application",
+      "highlights a changed value without calculating or scaling a preset",
+      "distinguishes a retained optional value from unavailable and inapplicable values",
+      "does not confuse a zero value with absent data",
+      "handles many records, boundaries and Home/End without implicit selection",
+      "leaves activation and Tab to native buttons and handles empty filters",
+      "filters a large long-label collection without changing the pinned record"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Keyboard bounds and no implicit selection; display cannot replace values",
+    "replacement": "components/material-browser-focus.test.ts; cutting-ui.test.ts; preset-library-v9.test.ts; cutting-workflow.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds-explanation.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/preset-adaptation.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/preset-adaptation.fixture.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/recipe-values.test.ts",
+    "tests": [
+      "edits explicitly without diameter/flute scaling, and preserves immutable source provenance",
+      "retains chipload semantics and synchronizes edited pocket scope without inventing a feed",
+      "rejects out-of-range stepover, hard limits and edited depths beyond flute length"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "No scaling of explicit values; hard limits/depth/flute reach",
+    "replacement": "cutting-v9-wasm.test.ts; crates/ivac-core/src/cutting_parameters.rs; cutting-workflow.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-comparison.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-origin-presentation.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/preset-adaptation.test.ts",
+    "tests": [
+      "preserves values/license/provenance, clears evidence, and leaves inputs unchanged",
+      "flags diameter/flutes changes and preserves chipload-only values without inventing feed",
+      "requires explicit material relationships and exact known taxonomy revisions",
+      "blocks generic unlicensed references and requires deliberate local authorship authorization",
+      "rejects missing/ambiguous identities, incompatible machines/families/processes, short tools and missing review",
+      "keeps recorded RPM limits and refuses geometry changes under an existing physical identity"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Machine/process/cutter restrictions and exact physical/material identity; no unreviewed substitution",
+    "replacement": "cutting-v9-wasm.test.ts; operation-tool.test.ts; tool_family.test.ts; crates/ivac-core/src/cutting_parameters.rs",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-selector-labels.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-origin-presentation.test.ts",
+    "tests": [
+      "collapses identical recommended origins without repeated badges",
+      "marks manual exceptions without calling them recommended",
+      "does not broaden recommendation origin to missing or legacy fields",
+      "groups fully manual values and handles empty contexts neutrally"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Presentation-only legacy recommendation/Draft/Trial evidence labels; no retained CAM calculation or validator",
+    "replacement": "cutting-ui.test.ts; report-cutting.test.ts; preset-library-v9.test.ts; material-picker-presentation.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/lab-presets.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/experimental-recipe.fixture.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/lab-presets.test.ts",
+    "tests": [
+      "captures actual manually overridden values and all known exact context without mutations",
+      "requires deliberate physical-use attestation for Tested",
+      "keeps unknown engagement as an inactive Draft, never an exact tested claim",
+      "detects duplicates and retains stable identity, creation date and previous values on explicit update",
+      "does not generalize duplicate detection to other machine/material/tool/engagement",
+      "requires all review criteria for a later Validated revision and retains Tested history",
+      "disables and reversibly deletes without destructive record removal",
+      "rejects invalid values, missing identities and public pack authoring",
+      "selects one current immutable Sorbonne revision without losing old revision objects",
+      "uses stable identity labels when a legacy machine or tool has no display name",
+      "keeps physical identity through a display rename",
+      "can revise a reactive proxy-backed JSON pack without mutating it",
+      "detects duplicates after Rust JSON normalization changes property order",
+      "creates an empty private pack with an independent identity and free display name",
+      "keeps independent pack heads, provenance and histories alongside the legacy pack"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Explicit attestation, exact context, duplicate/collision review, independent stored copies and revisions",
+    "replacement": "preset-library-v9.test.ts; cutting-workflow.test.ts; cutting-v9-wasm.test.ts; preset-collections tests; crates/ivac-tauri/src/preset_collections.rs",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-selector-sources.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/feeds-speeds-sources.svelte.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/LabPresetDialog.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/SelectedRecipeContext.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/PresetRecordDetails.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/LabPackCreate.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/PresetCuttingSummary.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/DuplicatePresetDialog.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/CuttingParameterComparison.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/RecipeValuesEditor.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/TrialProvenance.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/TrialComparison.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/PresetsLibrary.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/FeedsSpeedsSourcesSettings.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/PresetOperationPicker.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/PresetBrowser.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/LabPresetManager.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/FeedsSpeedsCompatibility.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/op_properties/FeedsSpeedsSection.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/op_properties/ExperimentalRecipeStatus.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/op_properties/SavedCuttingRates.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/op_properties/CuttingRecommendationDetails.svelte",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/source-packs.test.ts",
+    "tests": [
+      "keeps built-in and local sources distinct with explicit version references",
+      "refuses duplicate enabled pack identities",
+      "retains legacy data and provenance during local-only migration",
+      "prepares one multi-pack request",
+      "uses stable vendor-independent material identities",
+      "saves a guarded summary and opens without private source content"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Exact material identity and saved values independent of source availability",
+    "replacement": "project-v9.test.ts; document-lifecycle.test.ts; material-picker-presentation.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/experimental-recipe-wasm.test.ts",
+    "tests": [
+      "real WASM trial preserves exact values, refuses stale sources and leaves Suggest eligibility unchanged"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Authoritative values and stale context refusal through actual WASM",
+    "replacement": "cutting-v9-wasm.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-selector-wasm.test.ts",
+    "tests": [
+      "real WASM accepts legacy and selected requests with identical authoritative application, and refuses revision substitution"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Real WASM reviewed load validates exact context and authored numbers",
+    "replacement": "cutting-v9-wasm.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-identities.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/cutting-identities.test.ts",
+    "tests": [
+      "creates independent stable identities without activating presets",
+      "preserves legacy captures and explicit unlinking without reviving a reference",
+      "does not inherit a previous project reference when selecting another machine or tool",
+      "persists both links through workspace reload without replacing IDs"
+    ],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt",
+    "embedded_assertions": "Stable independent workshop identities, library reload preservation, reference identity cannot establish physical identity",
+    "replacement": "physical-identities.test.ts; workspace.test.ts; machine_profiles.test.ts; document-lifecycle.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  },
+  {
+    "file": "frontend/src/lib/state/fixtures/preset4-legacy-v7.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/state/fixtures/geom1-legacy-v6.ts",
+    "tests": [],
+    "disposition": "Retire recommendation/source-pack/v1\u20138 behavior; retained safety mapped in test-replacements.json and phase C receipt"
+  },
+  {
+    "file": "frontend/src/lib/components/ExperimentalBadge.svelte",
+    "tests": [],
+    "disposition": "Retire legacy recommendation presentation/preview; retained async mutation guard in cutting-workflow.test.ts"
+  },
+  {
+    "file": "frontend/src/lib/components/CuttingSelectorFrame.svelte",
+    "tests": [],
+    "disposition": "Retire legacy recommendation presentation/preview; retained async mutation guard in cutting-workflow.test.ts"
+  },
+  {
+    "file": "frontend/src/lib/components/op_properties/CuttingOriginStatus.svelte",
+    "tests": [],
+    "disposition": "Retire legacy recommendation presentation/preview; retained async mutation guard in cutting-workflow.test.ts"
+  },
+  {
+    "file": "frontend/src/lib/components/op_properties/RecommendationBasis.svelte",
+    "tests": [],
+    "disposition": "Retire legacy recommendation presentation/preview; retained async mutation guard in cutting-workflow.test.ts"
+  },
+  {
+    "file": "frontend/src/lib/state/recommendation-preview.ts",
+    "tests": [],
+    "disposition": "Retire legacy recommendation presentation/preview; retained async mutation guard in cutting-workflow.test.ts"
+  },
+  {
+    "file": "frontend/src/lib/state/recommendation-preview.test.ts",
+    "tests": [
+      "does not call an unchanged diameter adapted, even for a Close reference",
+      "distinguishes interpolation and real differences before display rounding",
+      "formats display only and preserves distinctions between engagement and stepover",
+      "keeps the newest mode result when responses arrive out of order",
+      "invalidates preview and apply responses on cancellation, including reopen"
+    ],
+    "disposition": "Retire legacy recommendation presentation/preview; retained async mutation guard in cutting-workflow.test.ts",
+    "embedded_assertions": "Late async responses and cancellation cannot apply changes",
+    "replacement": "cutting-workflow.test.ts; services/document-lifecycle.test.ts",
+    "qualification": "phase-c-tests.log (1489 pass, 1 existing optional locale skip); neutral Rust evidence phase B"
+  }
+]

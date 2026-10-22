@@ -35,7 +35,6 @@
     saveLabel?: string;
     section?: 'general' | 'output' | 'advanced' | 'all';
     scopeKey?: string;
-    inheritedIdentity?: MachineSettings['fsIdentity'];
     onDraftState?: (dirty: boolean, conflict: boolean) => void;
   }
   let {
@@ -522,7 +521,6 @@
       </p>
       <p class="help">
         Workshop machine identity: {draft.physicalId ??
-          draft.fsLocalIdentity?.id ??
           'Assign a named workshop machine before saving presets'}
       </p>
     {/if}

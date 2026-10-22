@@ -16,7 +16,7 @@ const file = JSON.parse(
 );
 function setup() {
   const data = {
-    ...structuredClone(file),
+    ...explicitProjectFixture(file),
     settings: { cellResolutionMode: 'auto', cellResolutionMm: 0.1, maxSimulationCells: 250000 },
   };
   const p = {
@@ -118,17 +118,34 @@ it.each(['pending', 'failed', 'unavailable', 'stale'] as const)(
   },
 );
 
-import { trialOp } from './experimental-recipe.fixture';
-it('trial application and provenance-only edits invalidate generated export qualification', () => {
+import { explicitProjectFixture } from './explicit-project.fixture';
+it('authored rate and preset provenance edits invalidate generated export qualification', () => {
   const p = setup();
   const before = generationContextKey(p, 'linuxcnc');
-  p.data.operations[0].appliedCutting = trialOp().appliedCutting;
+  p.data.operations[0].cutting!.rates[0].feed_mm_min = 1620;
+  p.data.operations[0].cutting!.preset_snapshot = {
+    collection_id: 'qa',
+    collection_name: 'Synthetic QA',
+    preset_id: 'qa-cut',
+    preset_name: 'Synthetic cut',
+    context: {
+      machine_id: 'qa',
+      machine_label: 'QA',
+      material_id: 'qa',
+      material_label: 'QA',
+      signature: '{}',
+    },
+    parameters: {
+      rates: structuredClone(p.data.operations[0].cutting!.rates),
+      schedule: { kind: 'step', step: -1, finish_step: null },
+    },
+  };
   expect(generationContextKey(p, 'linuxcnc')).not.toBe(before);
   expect(qualificationPhase(p, 'linuxcnc')).toBe('stale');
   p.gen.inputContextKey = generationContextKey(p, 'linuxcnc');
   p.gen.qualification!.key = qualificationKey(p, 'linuxcnc')!;
   expect(qualificationPhase(p, 'linuxcnc')).toBe('current');
-  p.data.operations[0].appliedCutting!.experimental_recipe!.source.profile.revision = '2';
+  p.data.operations[0].cutting!.preset_snapshot!.preset_name = 'Changed provenance';
   expect(qualificationKey(p, 'linuxcnc')).toBeNull();
   expect(qualificationPhase(p, 'linuxcnc')).toBe('stale');
 });

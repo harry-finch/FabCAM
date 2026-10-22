@@ -1,4 +1,4 @@
-import { withLocalIdentity } from './cutting-identities';
+import { withPhysicalIdentity } from './physical-identities';
 // Plain-TS core of the workspace persistence layer. See the doc comment
 // on `./workspace.svelte.ts` for the bigger picture; this file is split
 // from the `.svelte.ts` so vitest can import it without the Svelte rune
@@ -221,8 +221,8 @@ export function parseWorkspace(raw: string | null | undefined): WorkspaceState {
       profiles.push({
         id: p.id,
         name: p.name,
-        machine: withLocalIdentity(p.machine as MachineSettings, 'machine'),
-        tools: (p.tools as ToolEntry[]).map((t) => withLocalIdentity(t, 'tool')),
+        machine: withPhysicalIdentity(p.machine as MachineSettings, 'machine'),
+        tools: (p.tools as ToolEntry[]).map((t) => withPhysicalIdentity(t, 'tool')),
       });
     }
     out.machine_profiles = profiles;
@@ -239,7 +239,7 @@ export function parseWorkspace(raw: string | null | undefined): WorkspaceState {
       if (typeof t.id !== 'number' || seen.has(t.id)) continue;
       if (typeof t.name !== 'string' || typeof t.kind !== 'string') continue;
       seen.add(t.id);
-      tools.push(withLocalIdentity(t, 'tool'));
+      tools.push(withPhysicalIdentity(t, 'tool'));
     }
     out.tool_inventory = tools;
   }
@@ -413,8 +413,8 @@ export class WorkspaceStore {
   /// can't leak into the store.
   upsertMachineProfile(profile: MachineProfile) {
     const clone = JSON.parse(JSON.stringify(profile)) as MachineProfile;
-    clone.machine = withLocalIdentity(clone.machine, 'machine');
-    clone.tools = clone.tools.map((t) => withLocalIdentity(t, 'tool'));
+    clone.machine = withPhysicalIdentity(clone.machine, 'machine');
+    clone.tools = clone.tools.map((t) => withPhysicalIdentity(t, 'tool'));
     const rest = this.state.machine_profiles.filter((p) => p.id !== profile.id);
     const idx = this.state.machine_profiles.findIndex((p) => p.id === profile.id);
     if (idx >= 0) rest.splice(idx, 0, clone);
@@ -450,7 +450,7 @@ export class WorkspaceStore {
     this.state = {
       ...this.state,
       tool_inventory: (JSON.parse(JSON.stringify(tools)) as ToolEntry[]).map((t) =>
-        withLocalIdentity(t, 'tool'),
+        withPhysicalIdentity(t, 'tool'),
       ),
     };
     this.notify();

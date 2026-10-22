@@ -49,7 +49,6 @@ function clone<T>(v: T): T {
 export interface CommandTarget {
   drawing?: import('./drawing').DrawingState;
   material?: import('./project-types').MaterialIdentity;
-  fsContext?: import('../api/generated').components['schemas']['FsContext'];
   imports: ImportEntry[];
   operations: OpEntry[];
   tools: ToolEntry[];
@@ -988,48 +987,6 @@ export function autoFixToCommand(fix: WiacAutoFix): Command {
     case 'lower_sim_resolution':
       return lowerSimResolutionCommand(fix.suggested_cell_mm);
   }
-}
-
-export function applyCuttingCommand(
-  opId: number,
-  patch: Partial<OpEntry>,
-  material: CommandTarget['material'],
-  context: CommandTarget['fsContext'],
-): Command {
-  let oldMaterial: CommandTarget['material'];
-  let oldContext: CommandTarget['fsContext'];
-  let oldOp: OpEntry | undefined;
-  return {
-    label: 'Apply cutting parameters',
-    apply(s) {
-      const target = s as CommandTarget;
-      oldMaterial = target.material;
-      oldContext = target.fsContext;
-      oldOp = target.operations.find((o) => o.id === opId);
-      if (!oldOp) return;
-      target.material = material ? clone(material) : undefined;
-      target.fsContext = context ? clone(context) : undefined;
-      // Undefined is an explicit removal in this patch (legacy rate overrides).
-      // JSON cloning the whole patch drops those keys and resurrects old overrides.
-      const appliedPatch = Object.fromEntries(
-        Object.entries(patch).map(([key, value]) => [
-          key,
-          value === undefined ? undefined : clone(value),
-        ]),
-      ) as Partial<OpEntry>;
-      target.operations = target.operations.map((o) =>
-        o.id === opId ? ({ ...o, ...appliedPatch } as OpEntry) : o,
-      );
-      target.dirty = true;
-    },
-    revert(s) {
-      const target = s as CommandTarget;
-      target.material = oldMaterial;
-      target.fsContext = oldContext;
-      if (oldOp) target.operations = target.operations.map((o) => (o.id === opId ? oldOp! : o));
-      target.dirty = true;
-    },
-  };
 }
 
 export function setMaterialCommand(material: CommandTarget['material']): Command {

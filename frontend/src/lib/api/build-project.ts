@@ -205,7 +205,6 @@ interface ProjectStateView {
   /// falls back to `transformedImport`.
   stockSizingImport?: ImportResponse | null;
   material?: Schemas['FsIdentity'];
-  fsContext?: Schemas['FsContext'];
   machine: MachineSettings;
   tools: FrontToolEntry[];
   operations: OpEntry[];
@@ -891,11 +890,11 @@ export function buildProject(state: ProjectStateView, allowEmpty = false): WireP
       : {}),
     machine: {
       ...buildMachine(state.machine),
-      physical_id: state.machine.physicalId ?? state.machine.fsLocalIdentity?.id,
+      physical_id: state.machine.physicalId,
     },
     tools: state.tools.map((t) => ({
       ...buildTool(t),
-      physical_id: t.physicalId ?? t.fsLocalIdentity?.id,
+      physical_id: t.physicalId,
       max_rpm: t.maxRpm,
     })),
     operations: state.operations.map((op) => buildOp(op, state.machine)),

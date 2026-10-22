@@ -1,4 +1,4 @@
-import { editOperationRate, operationRates } from './feeds-speeds';
+import { seedCutting } from './cutting-parameters';
 import { syncStockedFromInventory } from './tool_inventory';
 /// Command-builder coverage. Each builder is exercised in isolation with
 /// a plain CommandTarget mock so the tests don't pull in the Svelte
@@ -301,7 +301,8 @@ describe('tools', () => {
     const tool = sampleTool(1);
     target.tools = [tool];
     const op = sampleOp(1);
-    op.appliedCutting = editOperationRate(op, [tool], 1, 'finish', 'feed_mm_min', 731);
+    op.cutting = seedCutting(op, [tool]);
+    op.cutting.rates.find((r) => r.role === 'finish')!.feed_mm_min = 731;
     target.operations = [op];
     const saved = JSON.stringify(target.operations);
     const synced = syncStockedFromInventory(
@@ -317,7 +318,7 @@ describe('tools', () => {
     command.apply(target);
     expect(JSON.stringify(target.operations)).toBe(saved);
     const restored = JSON.parse(JSON.stringify(target.operations)) as OpEntry[];
-    expect(operationRates(restored[0], target.tools[0], 'finish')?.feed_mm_min).toBe(731);
+    expect(restored[0].cutting?.rates.find((r) => r.role === 'finish')?.feed_mm_min).toBe(731);
   });
 
   it('replaceToolsCommand swaps the whole array', () => {

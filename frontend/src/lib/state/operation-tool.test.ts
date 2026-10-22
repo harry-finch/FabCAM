@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
 import { selectOperationToolCommand, toolFitsOperation } from './operation-tool';
 import { buildOpEntry } from './op_defaults';
-import { operationRates } from './feeds-speeds';
+import { seedCutting } from './cutting-parameters';
 import { History } from './history';
 import type { CommandTarget } from './commands';
 import type { ToolEntry } from './project-types';
@@ -66,29 +66,27 @@ it('filters by both operation and machine and rejects invalid selection before s
   ).toThrow('incompatible');
   expect(s.tools).toHaveLength(1);
 });
-it('keeps saved manual cutting values, the captured context and the separate finishing tool', () => {
+it('keeps authored v9 values and the separate finishing tool', () => {
   const s = state('pocket'),
     op = s.operations[0];
   if (op.kind !== 'pocket') throw new Error('fixture');
   op.finishToolId = 11;
-  op.appliedCutting = {
-    context_key: 'original-context',
-    doc_origin: 'manual',
-    slots: [7, 11].map((id) => ({
+  op.cutting = {
+    rates: [7, 11].map((id) => ({
       tool_id: id,
-      pass: id === 7 ? 'rough' : 'finish',
+      role: id === 7 ? 'rough' : 'finish',
       rpm: 9000,
       feed_mm_min: 321,
       plunge_mm_min: 123,
-      origins: { rpm: 'manual', feed: 'manual', plunge: 'manual' },
     })),
   };
   const next = { ...tool, id: 9 };
   selectOperationToolCommand(1, 'toolId', next, 'inventory').apply(s);
-  expect(operationRates(s.operations[0], next, 'rough')?.feed_mm_min).toBe(321);
-  expect(s.operations[0].appliedCutting?.context_key).toBe('original-context');
+  expect(
+    s.operations[0].cutting?.rates.find((r) => r.role === 'rough' && r.tool_id === 9)?.feed_mm_min,
+  ).toBe(321);
   expect('finishToolId' in s.operations[0] && s.operations[0].finishToolId).toBe(11);
-  expect(s.operations[0].appliedCutting?.slots.find((s) => s.tool_id === 11)?.pass).toBe('finish');
+  expect(s.operations[0].cutting?.rates.find((s) => s.tool_id === 11)?.role).toBe('finish');
 });
 it('stocks finishing and spot tools through the same command', () => {
   const s = state('drill'),
@@ -113,22 +111,22 @@ it('switches a finishing tool back to the main tool while retaining its last edi
     op = s.operations[0];
   if (op.kind !== 'pocket') throw new Error('fixture');
   op.finishToolId = 8;
-  op.appliedCutting = {
-    context_key: 'frozen',
-    doc_origin: 'manual',
-    slots: [
+  op.cutting = {
+    rates: [
+      seedCutting(op, [tool]).rates[0],
       {
         tool_id: 8,
-        pass: 'finish',
+        role: 'finish',
         rpm: 9000,
         feed_mm_min: 321,
         plunge_mm_min: 123,
-        origins: { rpm: 'manual', feed: 'manual', plunge: 'manual' },
       },
     ],
   };
   selectOperationToolCommand(1, 'finishToolId', tool, 'project').apply(s);
   expect('finishToolId' in s.operations[0] && s.operations[0].finishToolId).toBeUndefined();
-  expect(operationRates(s.operations[0], tool, 'finish')?.feed_mm_min).toBe(321);
-  expect(s.operations[0].appliedCutting?.slots).toHaveLength(1);
+  expect(
+    s.operations[0].cutting?.rates.find((r) => r.role === 'finish' && r.tool_id === 7)?.feed_mm_min,
+  ).toBe(321);
+  expect(s.operations[0].cutting?.rates).toHaveLength(2);
 });

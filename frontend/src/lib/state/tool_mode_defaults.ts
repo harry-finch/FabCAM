@@ -1,4 +1,4 @@
-import { withLocalIdentity } from './cutting-identities';
+import { withPhysicalIdentity } from './physical-identities';
 /// Default tool seeding per machine mode. Pure-logic so vitest covers
 /// it without the rune runtime.
 ///
@@ -43,7 +43,7 @@ export function defaultKindForMode(mode: MachineMode): ToolKind {
 export function defaultToolForMode(mode: MachineMode, id: number): ToolEntry {
   switch (mode) {
     case 'mill':
-      return withLocalIdentity<ToolEntry>(
+      return withPhysicalIdentity<ToolEntry>(
         {
           id,
           name: '3mm endmill',
@@ -58,7 +58,7 @@ export function defaultToolForMode(mode: MachineMode, id: number): ToolEntry {
         'tool',
       );
     case 'laser':
-      return withLocalIdentity<ToolEntry>(
+      return withPhysicalIdentity<ToolEntry>(
         {
           id,
           name: '0.15mm laser',
@@ -74,7 +74,7 @@ export function defaultToolForMode(mode: MachineMode, id: number): ToolEntry {
         'tool',
       );
     case 'drag':
-      return withLocalIdentity<ToolEntry>(
+      return withPhysicalIdentity<ToolEntry>(
         {
           id,
           name: 'drag knife',
@@ -90,7 +90,7 @@ export function defaultToolForMode(mode: MachineMode, id: number): ToolEntry {
         'tool',
       );
     case 'plasma':
-      return withLocalIdentity<ToolEntry>(
+      return withPhysicalIdentity<ToolEntry>(
         {
           id,
           name: '1.5mm plasma torch',

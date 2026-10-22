@@ -111,9 +111,7 @@
   {/if}
   {#if section === 'advanced' || section === 'all'}
     <p class="help">
-      Workshop tool identity: {tool.physicalId ??
-        tool.fsLocalIdentity?.id ??
-        'Save this tool in the workshop library'}
+      Workshop tool identity: {tool.physicalId ?? 'Save this tool in the workshop library'}
     </p>
     <label
       ><span>{t('fsreset.ui.maximum.spindle.speed')}</span><input

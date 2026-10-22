@@ -3,7 +3,7 @@ import en from '../i18n/messages/en.json';
 import type { MsgKey } from '../i18n';
 import { materialPickerLabel, materialPage } from './material-picker-presentation';
 import { materialOptions, materialIdentityKey } from './material-presentation';
-import type { LoadedSource } from './feeds-speeds-sources';
+import type { MaterialSource } from './material-presentation';
 const translate = (key: MsgKey) => en[key];
 const label = (id: string, fallback = id, revision = '1') =>
   materialPickerLabel({ id, revision }, fallback, translate);
@@ -32,14 +32,10 @@ describe('compact material labels preserve exact classification boundaries', () 
   });
 });
 
-const source = (id: string, count: number): LoadedSource => ({
+const source = (id: string, count: number): MaterialSource => ({
   id,
   label: `Software source ${id}`,
-  contents: '',
   catalog: {
-    machines: [],
-    tools: [],
-    description: 'Software only',
     materials: Array.from({ length: count }, (_, i) => ({
       identity: { id: `material-fixture-${i}`, revision: '7' },
       label: `Homonymous long label ${'é'.repeat(100)}`,

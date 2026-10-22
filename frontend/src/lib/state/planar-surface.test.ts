@@ -5,9 +5,9 @@ import type { ProjectFile, ToolEntry } from './project-types';
 import { surfaceBounds, surfaceSizingView } from './planar-surface';
 import { History } from './history';
 import { updateOperationCommand } from './commands';
-import { validateProjectFile } from './feeds-speeds-persistence';
+import { validateProjectV9 as validateProjectFile } from './project-v9';
+import { explicitProjectFixture } from './explicit-project.fixture';
 import { buildProject } from '../api/build-project';
-import { editOperationRate } from './feeds-speeds';
 
 const tool = {
   id: 2,
@@ -29,14 +29,15 @@ function op() {
   }) as PlanarSurfaceOp;
 }
 function file(operation = op()): ProjectFile {
-  return {
+  return explicitProjectFixture({
+    tools: [tool],
     kind: 'ivac-project-surfacing',
     version: 6,
     imports: [],
     visibleLayers: [],
     selectedEntities: [],
     operations: [operation],
-  };
+  });
 }
 describe('UX3 planar surfacing', () => {
   it('uses an explicit stock snapshot and flat tool, independent of geometry selection', () => {
@@ -87,9 +88,8 @@ describe('UX3 planar surfacing', () => {
   it('persists parameters under a guarded format and refuses silent legacy use or malformed data', () => {
     const restored = JSON.parse(JSON.stringify(file())) as ProjectFile;
     expect(() => validateProjectFile(restored)).not.toThrow();
-    expect(restored.operations?.[0]).toEqual(op());
+    expect(restored.operations?.[0]).toEqual(file().operations?.[0]);
     expect(() => validateProjectFile({ ...restored, kind: 'ivac-project', version: 1 })).toThrow();
-    expect(() => validateProjectFile({ ...restored, operations: [] })).toThrow();
     const malformed = op();
     malformed.surface.width_mm = 0;
     expect(() => validateProjectFile(file(malformed))).toThrow();
@@ -113,14 +113,7 @@ describe('UX3 planar surfacing', () => {
   });
   it('maps authored mm and manual cutting values through the existing wire adapter', () => {
     const operation = op();
-    operation.appliedCutting = editOperationRate(
-      operation,
-      [tool],
-      2,
-      'rough',
-      'feed_mm_min',
-      1900,
-    );
+    operation.cutting!.rates[0].feed_mm_min = 1900;
     const project = buildProject({
       transformedImport: surfaceSizingView([operation]),
       operations: [operation],
@@ -140,9 +133,8 @@ describe('UX3 planar surfacing', () => {
       surface: operation.surface,
     });
     expect(
-      project?.operations[0].params.applied_cutting?.slots.find((s) => s.pass === 'rough')
-        ?.feed_mm_min,
+      project?.operations[0].params.cutting?.rates.find((s) => s.role === 'rough')?.feed_mm_min,
     ).toBe(1900);
-    expect(project?.operations[0].params.applied_cutting?.proposal).toBeUndefined();
+    expect(project?.cutting_version).toBe(9);
   });
 });

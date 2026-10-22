@@ -21,7 +21,6 @@ export function buildGenerationProject(p: ProjectState, allowEmpty = false) {
   return buildProject(
     {
       material: p.data.material,
-      fsContext: p.data.fsContext,
       transformedImport: p.transformedImport,
       geometryView: p.geometryView,
       stockSizingImport: p.stockSizingImport,

@@ -335,7 +335,6 @@
             scopeKey={isProject
               ? `project:${project.data.machineProfileId ?? 'local'}`
               : `profile:${selectedId}`}
-            inheritedIdentity={isProject ? project.data.fsContext?.machine_identity : undefined}
             onSaveMachine={save}
             saveLabel={isProject
               ? assigned

@@ -3,7 +3,6 @@ import { pocketFramePatch, workZeroPoint, compatibleTextTool } from './preparati
 import { updateOperationCommand, setWorkOffsetCommand, setMaterialCommand } from './commands';
 import { History } from './history';
 import type { PocketOp } from './op_types';
-import { PreviewRequests } from './recommendation-preview';
 import { generatedMinimumZ, workshopWarnings } from './workshop-report';
 import type { ToolpathSegment } from '../api/types';
 
@@ -88,15 +87,10 @@ describe('preparation contracts', () => {
     expect(compatibleTextTool(tools, 2, 'v_bit')).toBe(true);
     expect(compatibleTextTool([], 0, null)).toBe(true);
   });
-  it('material cancellation invalidates late requests and explicit application is undoable', async () => {
-    const requests = new PreviewRequests();
+  it('explicit material application is undoable', () => {
     const old = { id: 'old', revision: '1' };
     const target = { material: old, dirty: false };
     const draft = { id: 'new', revision: '2' };
-    const ticket = requests.start();
-    const late = Promise.resolve(ticket);
-    requests.cancel();
-    expect(requests.owns(await late)).toBe(false);
     expect(target.material).toEqual(old);
     const cmd = setMaterialCommand(draft);
     cmd.apply(target);

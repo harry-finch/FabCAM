@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { withLocalIdentity } from '../state/cutting-identities';
+  import { withPhysicalIdentity } from '../state/physical-identities';
   import {
     project,
     type ToolEntry,
@@ -149,14 +149,14 @@
         return;
       }
       if (mode === 'replace') pendingImport = next;
-      else dd.draft = next.map((t) => withLocalIdentity(t, 'tool'));
+      else dd.draft = next.map((t) => withPhysicalIdentity(t, 'tool'));
     } finally {
       importing = false;
     }
   }
   function acceptImport() {
     if (!pendingImport || conflict) return;
-    dd.draft = pendingImport.map((t) => withLocalIdentity(t, 'tool'));
+    dd.draft = pendingImport.map((t) => withPhysicalIdentity(t, 'tool'));
     selectedId = pendingImport[0]?.id ?? null;
     pendingImport = null;
     clearFilters();

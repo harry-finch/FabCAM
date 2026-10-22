@@ -81,3 +81,41 @@ operation; it no longer reads a library's unrelated rates or spindle minimum. No
 machining operation is seeded or clamped by that path. The retained actual-cut corpus
 is byte-identical. Legacy fixtures requiring invalid clamping were rewritten as
 refusals; positive volume fixtures explicitly author the same effective geometry.
+
+## Phase C — frontend dependency detachment
+
+Parent source: `c5b13c9348aa0fd5ddbb08cdb27e78358e7e5ba4`.
+The actual authored-v9 UI remains the product path: CuttingParameters,
+TestedPresetsLibrary, named collections, reviewed copy and attestation are retained.
+Removed the disconnected recommendation, source-pack, adaptation and Trial UI/state
+closure plus old readers and their retired behavior tests. `phase-c-test-retirement.json`
+records per-file removed tests, embedded safety concerns and replacement locations.
+322 unused translations were removed using the unchanged i18n dead-key scanner;
+`keys.ts` was regenerated, not hand edited. MAT-1 keyboard focus was moved to its own
+component helper with equivalent boundary/no-selection tests.
+
+Physical identities now have a neutral creation/load helper. Existing physical IDs
+are never overwritten; old **library** `fsLocalIdentity.id` is retained as the same
+physical identity when absent, while reference bindings remain inert unknown metadata.
+This does not load or migrate v1–8 projects or require old source stores. Generic
+machine/tool settings and unknown fields remain preserved. No application-data file
+or browser store was cleared. V9 generation uses only the neutral physical ID.
+
+Active source enablement, fsContext state and legacy rate helpers were removed.
+Operation assignment routes through existing v9 role rebinding: authored numbers
+survive actual tool changes, new roles stay visibly incomplete, and Undo/Redo restores
+tools and values. Geometry, lifecycle and stale-export tests now use the actual v9
+contract, including malformed geometry and late async mutation refusal.
+
+Qualification on the phase-C source fingerprint: 170 frontend test files, **1489
+passed, 1 skipped** (existing optional German translation completeness), 0 failed;
+Svelte/TypeScript 0 errors/0 warnings; ESLint/Prettier PASS; production build PASS.
+The real freshly compiled WASM adapter/serialization tests ran in that full suite.
+Initial wasm-pack invocation lacked cached tools on PATH and failed with EPERM;
+rerun with the existing matching wasm-bindgen/wasm-opt cache passed offline and
+recorded the verified package fingerprint. No guard was disabled. Vite retains its
+large-chunk warning; no claim of installed-native or physical acceptance is made.
+
+Transport declarations/core adapters still exist for the next ordered phase D;
+they are not consumed by the retained product UI. Full final-source gate, TEST1/C2
+and desktop/narrow UX walkthrough remain phases F–I.

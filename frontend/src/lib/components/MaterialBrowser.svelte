@@ -8,8 +8,7 @@
     type MaterialFamily,
   } from '../state/material-presentation';
   import { materialPage, materialPickerLabel } from '../state/material-picker-presentation';
-  import { focusMaterialResult } from './material-browser-focus';
-  import { recordFocusIndex } from '../state/cutting-comparison';
+  import { focusMaterialResult, recordFocusIndex } from './material-browser-focus';
   let {
     options,
     selected,

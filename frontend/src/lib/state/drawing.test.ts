@@ -7,7 +7,8 @@ import {
   type DrawingState,
 } from './drawing';
 import { History } from './history';
-import { validateProjectFile } from './feeds-speeds-persistence';
+import { validateProjectV9 as validateProjectFile } from './project-v9';
+import { explicitProjectFixture } from './explicit-project.fixture';
 
 const op = {
   id: 1,
@@ -61,13 +62,13 @@ describe('edited drawing lifecycle adapters', () => {
     expect(state.operations).toEqual(nextOps);
   });
   it('requires a guarded format and matching source revision', () => {
-    const file = {
+    const file = explicitProjectFixture({
       kind: 'ivac-project-geometry',
       version: 7,
       imports: [],
       operations: [],
       drawing,
-    } as unknown as import('./project-types').ProjectFile;
+    } as unknown as import('./project-types').ProjectFile);
     expect(() => validateProjectFile(file)).not.toThrow();
     expect(() => validateProjectFile({ ...file, version: 1, kind: 'ivac-project' })).toThrow();
     expect(() =>
@@ -77,20 +78,6 @@ describe('edited drawing lifecycle adapters', () => {
   });
 });
 
-it('the actual pre-GEOM1 reader refuses a saved edited project', async () => {
-  const { readFileSync } = await import('node:fs');
-  const { validateProjectFile: legacyReader } = await import('./fixtures/geom1-legacy-v6');
-  const saved = JSON.parse(
-    readFileSync(
-      new URL(
-        '../../../../docs/shopbot-modernization/geom1/square-repaired.ivac-project.json',
-        import.meta.url,
-      ),
-      'utf8',
-    ),
-  );
-  expect(() => legacyReader(saved)).toThrow('Unsupported project format/version');
-});
 it('old backend is never called through an unedited fallback', async () => {
   const { generateEditedDrawing } = await import('./drawing');
   let legacyCalls = 0;
@@ -142,18 +129,18 @@ it('never writes stable or unresolved references into an old readable envelope',
         imports: [],
         operations: [{ ...op, geometryBinding: binding }],
       } as unknown as import('./project-types').ProjectFile),
-    ).toThrow('guarded edited-drawing');
+    ).toThrow('requires project format v9');
   }
 });
 
 it('rejects malformed reset provenance and unknown saved binding variants', () => {
-  const base = {
+  const base = explicitProjectFixture({
     kind: 'ivac-project-geometry',
     version: 7,
     imports: [],
     operations: [],
     drawing,
-  } as unknown as import('./project-types').ProjectFile;
+  } as unknown as import('./project-types').ProjectFile);
   expect(() =>
     validateProjectFile({
       ...base,

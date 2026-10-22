@@ -42,43 +42,21 @@ it('checks actual kind, capabilities and finite diameter', () => {
     'palette.incompatible',
   );
 });
-it('retains legacy assignment behavior without rewriting data', () => {
+it('checks assignment without rewriting authored values', () => {
   const op = profile();
   const before = JSON.stringify(op);
   expect(assignmentProblem(op, tool, ['mill'])).toBeUndefined();
   expect(JSON.stringify(op)).toBe(before);
 });
-it('refuses new tool IDs absent from saved cutting roles', () => {
+it('accepts assignment with incomplete v9 values without mutating them', () => {
   const op = profile();
-  op.appliedCutting = { slots: [], context_key: 'manual', doc_origin: 'manual' };
-  expect(assignmentProblem(op, tool, ['mill'])).toBe('palette.review_rates');
-  expect(op.appliedCutting.slots).toEqual([]);
-});
-
-it('allows only covered saved roles and leaves their values untouched', () => {
-  const op = profile();
-  const slot = {
-    tool_id: 7,
-    pass: 'rough' as const,
-    rpm: 11000,
-    feed_mm_min: 900,
-    plunge_mm_min: 450,
-    origins: { rpm: 'manual' as const, feed: 'manual' as const, plunge: 'manual' as const },
-  };
-  op.appliedCutting = { slots: [slot], context_key: 'frozen', doc_origin: 'manual' };
-  const before = JSON.stringify(op);
-  expect(assignmentProblem(op, tool, ['mill'])).toBeUndefined();
-  expect(JSON.stringify(op)).toBe(before);
-  const pocket = buildOpEntry('pocket', {
-    nextId: 2,
-    tools: [tool],
-    reliefSources: [],
-    selectionIds: [],
-    objectMeta: [],
+  op.cutting!.rates.forEach((r) => {
+    r.rpm = null;
+    r.feed_mm_min = null;
   });
-  pocket.appliedCutting = op.appliedCutting;
-  if (pocket.kind === 'pocket') pocket.finishToolId = tool.id;
-  expect(assignmentProblem(pocket, tool, ['mill'])).toBe('palette.review_rates');
+  const before = JSON.stringify(op);
+  expect(assignmentProblem(op, { ...tool, id: 99 }, ['mill'])).toBeUndefined();
+  expect(JSON.stringify(op)).toBe(before);
 });
 it('refuses whirling tools for planar surfacing', () => {
   const op = buildOpEntry('planar_surface', {
@@ -94,9 +72,8 @@ it('refuses whirling tools for planar surfacing', () => {
 
 it('permits inventory assignment through the value-preserving selection command', () => {
   const op = profile();
-  op.appliedCutting = { slots: [], context_key: 'manual', doc_origin: 'manual' };
-  expect(assignmentProblem(op, { ...tool, id: 99 }, ['mill'], true)).toBeUndefined();
-  expect(assignmentProblem(op, { ...tool, kind: 'drag_knife' }, ['mill'], true)).toBe(
+  expect(assignmentProblem(op, { ...tool, id: 99 }, ['mill'])).toBeUndefined();
+  expect(assignmentProblem(op, { ...tool, kind: 'drag_knife' }, ['mill'])).toBe(
     'palette.incompatible',
   );
 });
