@@ -1,0 +1,200 @@
+[
+  {
+    "name": "missing-layer-cps.json",
+    "sha256": "dc2af80fd2ff3c478620854021b96f9f6932aa1ba245d2f7d9293beb6fbdbc6f",
+    "bytes": 3751,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/missing-layer-cps.json",
+    "historical_sha256": "3f926d57d6a221269867b636e7aa7799b5345865875ed1f2d2526b553895124b",
+    "expected": "no cutting moves with missing-source diagnostics; never successful machining",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "missing-layer-linuxcnc.json",
+    "sha256": "2d673ae711b85fec241c07b4ee8b6378df062729267c8ab463d4da63c15d9af8",
+    "bytes": 3700,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/missing-layer-linuxcnc.json",
+    "historical_sha256": "e8f5e25c48fb0a5becbd9f7cec9e9dc17a95a56fc79c6b91923fe2daeec51df5",
+    "expected": "no cutting moves with missing-source diagnostics; never successful machining",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "pocket-islands-cps.json",
+    "sha256": "517e45a6813dacf34525238b5557e1c2c20ddf5d97988a5317a03d0c3ed07756",
+    "bytes": 6458,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/pocket-islands-cps.json",
+    "historical_sha256": "78f39a2c59600f24ffb175c93a81a236dd78b4f649dbdec3d649038907464c8f",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "pocket-islands-linuxcnc.json",
+    "sha256": "dd9be856dda30e181087112bf3d168b168845839c96a7f9ab49f7cea2fff5608",
+    "bytes": 6407,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/pocket-islands-linuxcnc.json",
+    "historical_sha256": "76664af7b48be3d61dec7bc45d198eaa28fc241b32b030db430fbd2e16e1aea7",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "profile-contours-cps.json",
+    "sha256": "b3773472760dcca6b036cba1a96ddd5afa7089dcceaa52f6eeeffebe76ae7efc",
+    "bytes": 3759,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/profile-contours-cps.json",
+    "historical_sha256": "fc413e553c850a30368b910e535c8bfa4eb7c6dd7ded6ba26b74918954c80ccf",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "profile-contours-linuxcnc.json",
+    "sha256": "4910cb93de491df5a24f434f64a7fbacf720a6587d3cfff050210f519b539931",
+    "bytes": 3708,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/profile-contours-linuxcnc.json",
+    "historical_sha256": "91770439c0c454ea5e28a756152c6a65cf5db5f61be49d01274590a2669a195d",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "profile-many-segments-cps.json",
+    "sha256": "cb37ce64aac97570d4ca11dc7cb0f267eae976d6419e96be984bacbbee1386af",
+    "bytes": 637237,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/profile-many-segments-cps.json",
+    "historical_sha256": "b28e2fab395c641d23aaa0161da4096160ec8693d28dbda0b12379c25e66b9eb",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "profile-many-segments-linuxcnc.json",
+    "sha256": "7caf801aef28d0c0916159b9139232bd38e71cc0fc1864f6859ddc7405c0ceba",
+    "bytes": 637186,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/profile-many-segments-linuxcnc.json",
+    "historical_sha256": "e2f8ae3c93264262adca0ecf61235ac7efda828e2279225d517dad5142c916e1",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "square-medial-cps.json",
+    "sha256": "6e869f2871dd0389bf6376762e535c04dc6c71fde31c6571cc6e81840c579019",
+    "bytes": 2036,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/square-medial-cps.json",
+    "historical_sha256": "7d51a26bbaaa2551aa802cbb81f1b354c511332ee3bba1333380298476d5f5ef",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "square-medial-linuxcnc.json",
+    "sha256": "90c4c3432655b9840dbcc73357c03cf0cd2f8f7bcefef8d9653bfe5e8de4acec",
+    "bytes": 1985,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/square-medial-linuxcnc.json",
+    "historical_sha256": "77b856c02e3f7509e79fb142ce63234515a8f3e5a063f05e35d64964651d7a0b",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "square-outline-cps.json",
+    "sha256": "07cba889365b5c28832461400bc2fb3e76555014e66b418f2ec38d7cff5c83e5",
+    "bytes": 2037,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/square-outline-cps.json",
+    "historical_sha256": "85bdb653ccdaf900fe4417c4e8c1998ba796555c039aa311d6c522e8b89f88d0",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "square-outline-linuxcnc.json",
+    "sha256": "4998edb08b19765a178b5b33c6e3e951bf47b607c62b78741ac2144fb901ccfd",
+    "bytes": 1986,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/square-outline-linuxcnc.json",
+    "historical_sha256": "c2b4bc78fe2d3572558b35d589790669207ee80fd6c92aadab0cb627c9279410",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "text-B8-medial-cps.json",
+    "sha256": "f324e2da8d2c3353e366fc95c61e1deae9f35f059b968ff7fa5937adbb48e62a",
+    "bytes": 1014954,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/text-B8-medial-cps.json",
+    "historical_sha256": "6cbae73630f7bef90539ffaaa8168529bbeab7cf8aaa31ec69522d628b8ef035",
+    "expected": "guard refusal: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+    "historical_error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+    "historical_response_success": false,
+    "expected_response_success": false
+  },
+  {
+    "name": "text-B8-medial-linuxcnc.json",
+    "sha256": "76df3a6f62ed9e4c195b8de5056235e02054ca43f6c4dd87205ab104ff66cf8e",
+    "bytes": 1014903,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/text-B8-medial-linuxcnc.json",
+    "historical_sha256": "55bee9b1b9e25d0e205cbd0e3fae24242a7f7d960eba06a70c33d195c5939966",
+    "expected": "guard refusal: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+    "historical_error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+    "historical_response_success": false,
+    "expected_response_success": false
+  },
+  {
+    "name": "text-Test-medial-cps.json",
+    "sha256": "87caed9bb01b468988293c7391be2a0d048c98fd64c34e131b97ba4e6a645135",
+    "bytes": 1014920,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/text-Test-medial-cps.json",
+    "historical_sha256": "71d48ac5d59f5683a843f2002aadafeb1c2f0e682b17095a00b69b97277f75ec",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "text-Test-medial-linuxcnc.json",
+    "sha256": "44245ed015c4294af355d4c3a7df8597ac1583ac1f24e3cc890227b3b5b8e478",
+    "bytes": 1014869,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/text-Test-medial-linuxcnc.json",
+    "historical_sha256": "89a605c62b70357b79ced7c0ab8efb439d0155d95315229f812ab01aa70c1585",
+    "expected": "generate",
+    "historical_error": null,
+    "historical_response_success": true,
+    "expected_response_success": true
+  },
+  {
+    "name": "text-Test-outline-cps.json",
+    "sha256": "52f935a94a692d8e3909e9e5405ecb8043bf4246cd794695a4f2bae5398722ec",
+    "bytes": 1014921,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/text-Test-outline-cps.json",
+    "historical_sha256": "86f6a7e11b1886169d80e4e1b7bd1129e4dfa07573a2dc67381e24bc981449d1",
+    "expected": "generate; before-removal 951b12f behavior, earlier PERF1 refusal is historical",
+    "historical_error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+    "historical_response_success": false,
+    "expected_response_success": true
+  },
+  {
+    "name": "text-Test-outline-linuxcnc.json",
+    "sha256": "771c2155e9d8567fdad102758a5ae80141ae4335fe38e4d0ceba10196a4aaa69",
+    "bytes": 1014870,
+    "historical_source": "docs/shopbot-modernization/perf1/requests/text-Test-outline-linuxcnc.json",
+    "historical_sha256": "f186ebfa18b68d5ba6ed6d6e9aaddb648b022111c38b450617d3eff88db36671",
+    "expected": "generate; before-removal 951b12f behavior, earlier PERF1 refusal is historical",
+    "historical_error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.",
+    "historical_response_success": false,
+    "expected_response_success": true
+  }
+]

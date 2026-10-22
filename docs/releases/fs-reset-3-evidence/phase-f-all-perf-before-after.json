@@ -1,0 +1,206 @@
+[
+  {
+    "case": "missing-layer-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "missing-layer-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "pocket-islands-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "pocket-islands-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-contours-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-contours-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-many-segments-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-many-segments-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-medial-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-medial-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-outline-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-outline-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-B8-medial-cps.json",
+    "before_success": false,
+    "after_success": false,
+    "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated."
+  },
+  {
+    "case": "text-B8-medial-linuxcnc.json",
+    "before_success": false,
+    "after_success": false,
+    "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated."
+  },
+  {
+    "case": "text-Test-medial-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-Test-medial-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-Test-outline-cps.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-Test-outline-linuxcnc.json",
+    "before_success": true,
+    "after_success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  }
+]

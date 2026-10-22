@@ -4,9 +4,12 @@ import argparse,hashlib,json,math,subprocess
 from pathlib import Path
 from statistics import median
 from perf1_evidence import verify_request
-p=argparse.ArgumentParser();p.add_argument('--control',required=True);p.add_argument('--candidate',required=True);a=p.parse_args()
-root=Path(__file__).resolve().parents[1];e=root/'docs/shopbot-modernization/perf1-cancel';e.mkdir(exist_ok=True)
-requests=root/'docs/shopbot-modernization/perf1/requests';manifest={x['name']:x['sha256'] for x in json.loads((requests/'manifest.json').read_text())}
+p=argparse.ArgumentParser();p.add_argument('--control',required=True);p.add_argument('--candidate',required=True)
+p.add_argument('--requests',type=Path,default=Path(__file__).resolve().parents[1]/'tests/fixtures/perf-v9')
+p.add_argument('--output',type=Path,required=True)
+a=p.parse_args()
+root=Path(__file__).resolve().parents[1];e=a.output;e.mkdir(parents=True,exist_ok=True)
+requests=a.requests;manifest={x['name']:x['sha256'] for x in json.loads((requests/'manifest.json').read_text())}
 rows=[]
 for case,delay,count in [('text-Test-medial-cps',50,20),('profile-many-segments-cps',50,10),('text-Test-medial-cps',1,5)]:
     req=requests/(case+'.json');digest=verify_request(req,manifest[req.name])

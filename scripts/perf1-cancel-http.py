@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """HTTP/SSE cancellation and exact retry-result parity; run on idle local servers."""
-import hashlib,json,math,threading,time,urllib.request
+import argparse,hashlib,json,math,threading,time,urllib.request
 from pathlib import Path
 from statistics import median
 root=Path(__file__).resolve().parents[1]
-out=root/'docs/shopbot-modernization/perf1-cancel'
-request=(root/'docs/shopbot-modernization/perf1/requests/text-Test-medial-cps.json').read_bytes()
+p=argparse.ArgumentParser()
+p.add_argument('--request',type=Path,default=root/'tests/fixtures/perf-v9/text-Test-medial-cps.json')
+p.add_argument('--output',type=Path,required=True)
+p.add_argument('--native-response',type=Path,required=True)
+p.add_argument('--control-port',type=int,default=18797)
+p.add_argument('--candidate-port',type=int,default=18798)
+a=p.parse_args()
+out=a.output;out.mkdir(parents=True,exist_ok=True)
+request=a.request.read_bytes()
 def post(base,path,data):
     return urllib.request.urlopen(urllib.request.Request(base+path,data=data,headers={'Content-Type':'application/json'}),timeout=30)
 def run(port,cancel):
@@ -35,10 +42,10 @@ def run(port,cancel):
     return result
 rows=[]
 for i in range(10):
-    for label,port in ([('control',18797),('candidate',18798)] if i%2==0 else [('candidate',18798),('control',18797)]):
+    for label,port in ([('control',a.control_port),('candidate',a.candidate_port)] if i%2==0 else [('candidate',a.candidate_port),('control',a.control_port)]):
         rows.append(dict(label=label,iteration=i,**run(port,True)))
-expected=json.loads(Path('/private/tmp/fabcam-perf1-cancel/profile/text-Test-medial-cps.json.response.json').read_text())
-for label,port in [('control',18797),('candidate',18798)]:
+expected=json.loads(a.native_response.read_text())
+for label,port in [('control',a.control_port),('candidate',a.candidate_port)]:
     actual=run(port,False);assert actual==expected,label
 summary=[]
 for label in ['control','candidate']:

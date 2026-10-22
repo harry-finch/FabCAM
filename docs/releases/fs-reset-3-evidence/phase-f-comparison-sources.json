@@ -1,0 +1,22 @@
+{
+  "baseline_source": "951b12f4477f64fd5e9c229b693748f23e794a0e",
+  "baseline_core_wasm_same_as": "d6b08fe82011c54d0166a6559b329804c2e56cee",
+  "hashes": {
+    "perf-baseline-951b12f": "dcd6a603249d070919959f3a8e7ab0145e5e0dcef2e3c5b374a4536c2357e55e",
+    "perf-candidate": "f73ac262fab82776fbaab17a84d4bfff4e7d36c913b6b9b9fa003356fb3e501d",
+    "baseline-source/Cargo.lock": "a1c0931188675694c00e78c72b38e3c0e10a5770a53ae7f9379f42b1b0fa7794",
+    "wasm_before": "c4a28c9bf50883d8f342f15a2f72f30b956d4e0b54537d58a679c76a8d0d402b",
+    "wasm_after": "f400b7c0b198e4f20b67c786dd89f8532f2681d898da77af214892d075a9010f"
+  },
+  "preserved_wasm_build_stamp": {
+    "version": 1,
+    "input": "aae77223be67c9889db57039ac084f7463f5f26fed408c99c3e1a6d1993f4e93",
+    "assets": {
+      "ivac_wasm_bg.wasm": "c4a28c9bf50883d8f342f15a2f72f30b956d4e0b54537d58a679c76a8d0d402b",
+      "ivac_wasm.js": "0c06dd1eb6db6c97584cd097eecae442df9ca16e0fdde6a29137e7137fc90703",
+      "ivac_wasm.d.ts": "d6d400a16ac048bc418dd268f5507f0e4c551af6c1e7a9dc1fde39a0192ec43e",
+      "ivac_wasm_bg.wasm.d.ts": "387bf991c0a270ddd97a44826b63d457de2e9f8c4ea3d98b1277ef7182d7280d",
+      "package.json": "15ace77ef3da914ac8d8b6d4bf47609eba81220c8cafce9064d9a25025c893ef"
+    }
+  }
+}

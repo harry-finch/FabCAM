@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { performance } from 'node:perf_hooks';
+import { explicitProjectFixture } from '../src/lib/state/explicit-project.fixture';
 import { buildProject } from '../src/lib/api/build-project';
 import { combineImports } from '../src/lib/state/file-transform';
 import { augmentWithStockOutline } from '../src/lib/state/stock-outline';
@@ -13,15 +14,13 @@ import type { ImportResponse, RenderTextLayerResponse } from '../src/lib/api/typ
 import type { ProjectFile } from '../src/lib/state/project-types';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const output = resolve(
-  process.argv[2] ?? resolve(root, 'docs/shopbot-modernization/perf1/requests'),
-);
+const output = resolve(process.argv[2] ?? resolve(root, 'dist-test/perf-v9-authored'));
 mkdirSync(output, { recursive: true });
 type PerfProject = ProjectFile &
   Required<Pick<ProjectFile, 'stock' | 'tools' | 'machine' | 'operations' | 'textLayers'>>;
 const load = (name: string) =>
-  JSON.parse(
-    readFileSync(resolve(root, 'docs/shopbot-modernization', name), 'utf8'),
+  explicitProjectFixture(
+    JSON.parse(readFileSync(resolve(root, 'docs/shopbot-modernization', name), 'utf8')),
   ) as PerfProject;
 const square = load('VCARVE-software-perimeter.ivac-project.json');
 const text = load('VCARVE-texte-Test.ivac-project.json');

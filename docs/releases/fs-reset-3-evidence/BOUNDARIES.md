@@ -202,3 +202,50 @@ validators/presets/project and independence from removed assets. Full workspace,
 watchers, TEST1/C2 and visual acceptance remain mandatory in later phases.
 
 Frontend final E: **1492 PASS, 1 existing optional locale skip**; production build PASS.
+
+
+## Phase F/G — indirect fixture contracts and extended output comparisons
+
+Parent `f4896e4`. Eighteen reviewed explicit v9 PERF1 request copies now live in
+`tests/fixtures/perf-v9`; historical requests/evidence remain unchanged. Five
+cache/cancellation/remaining-stock regressions read those inputs directly, without
+per-run fixture seeding. Feed invalidation changes the operation role value. The
+frontend fixture author is explicitly test-only and writes new candidates under
+dist-test. Native/WASM/cancellation scripts use current requests and explicit output
+locations. No thresholds or required gates were relaxed. Missing-layer cases reach
+`op_source_missing_layer` / `op_source_empty`, with no cutting moves (the native
+LinuxCNC header retract is retained), rather than failing early on a version check.
+B8 reaches the same independent V-Carve overcut refusal.
+
+Five affected Rust tests and strict pedantic checks PASS; frontend script lint PASS;
+fresh WASM rebuilt and verified. Eighteen native requests were compared with a fresh
+build of an archived **951b12f** source tree using identical v9 input bytes: program,
+toolpath, provenance, line index and stats are identical for every successful case;
+two B8 cases retain identical overcut errors. Historical PERF1 Test-outline refusals
+pre-date the approved FS2 baseline: both 951b12f and current code generate identical
+programs. The earlier records are preserved, not rewritten as current expectations.
+
+The strict native/WASM PERF1 comparison **FAILS** on two pre-existing V-Carve medial
+cases: square (5376 native / 5368 WASM moves) and Test text (18342 / 18351). These are
+executable-program differences, not merely comments or the 1e-10 preview allowance.
+Investigation compared current WASM against the preserved d6b08fe package, whose
+core/WASM source is identical to 951b12f (`git diff` empty): all nine before/after
+WASM cases have identical successful outputs or identical errors. All 18 native
+before/after cases likewise match. Therefore FS-RESET-3 introduces no difference,
+but cross-runtime V-Carve output equivalence remains unqualified. The strict harness
+continues to fail; no assertion/tolerance was changed to hide this. Determining the
+underlying cross-target numerical cause is separate technical debt.
+
+`/usr/bin/time -l` fails on sandbox `sysctl kern.clockrate`; full resource profiling
+is unavailable. Separate direct functional repeats are not claimed as RSS or speedup
+measurements. Native cancellation keeps the original 200 ms p95 threshold. HTTP/SSE
+and installed-platform evidence remain separate. Final-source full gate, TEST1/C2,
+canonical 23-case comparison and visual acceptance follow this boundary.
+
+Native cancellation: all 70 observations cancelled without a valid result. The first
+run passed the p95 target; the repeat with no other compiler/benchmark running
+**FAILS** unchanged 200 ms p95: candidate many-segments 229.928 ms, Test/50 ms
+202.479 ms; control Test/50 ms also 200.643 ms. Test/1 ms is 0.555 ms candidate.
+This is not a clean performance/cancellation-latency qualification. The functional
+cancel/cache regressions pass, but host variability versus a latency regression
+requires a controlled follow-up; no timeout, polling interval or assertion was changed.

@@ -5,13 +5,13 @@ use serde_json::{json, Value};
 fn fixture() -> Value {
     serde_json::from_str(include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../../docs/shopbot-modernization/perf1/requests/square-outline-cps.json"
+        "/../../tests/fixtures/perf-v9/square-outline-cps.json"
     )))
     .unwrap()
 }
 fn run(value: &Value, cache: Option<&PipelineCache>) -> Result<Value, PipelineError> {
     run_pipeline_impl(
-        crate::fixture_support::request(serde_json::from_value(value.clone()).unwrap()),
+        serde_json::from_value(value.clone()).unwrap(),
         &|_, _, _| {},
         &mut |_| {},
         None,
@@ -45,7 +45,10 @@ fn bundled_post_exact_response_invalidation_and_return_to_previous_input() {
     // an uncached run, not merely a changed-key assertion.
     for (pointer, value) in [
         ("/project/operations/0/params/depth", json!(-0.5)),
-        ("/project/tools/0/feed_rate", json!(500)),
+        (
+            "/project/operations/0/params/cutting/rates/0/feed_mm_min",
+            json!(500),
+        ),
         ("/project/tools/0/diameter", json!(5)),
         ("/project/operations/0/name", json!("changed operation")),
         ("/project/operations/0/params/fast_move_z", json!(12)),
@@ -106,7 +109,7 @@ fn cancelled_warm_post_never_returns_valid_output() {
     run(&a, Some(&cache)).unwrap();
     let cancel = CancelToken::new();
     let result = run_pipeline_impl(
-        crate::fixture_support::request(serde_json::from_value(a).unwrap()),
+        serde_json::from_value(a).unwrap(),
         &|phase, _, _| {
             if phase == "post" {
                 cancel.cancel();
@@ -124,7 +127,7 @@ fn cancelled_warm_post_never_returns_valid_output() {
 fn remaining_analysis_reuse_preserves_full_results_and_live_stock_guards() {
     let a: Value = serde_json::from_str(include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../../docs/shopbot-modernization/perf1/requests/pocket-islands-cps.json"
+        "/../../tests/fixtures/perf-v9/pocket-islands-cps.json"
     )))
     .unwrap();
     let cache = PipelineCache::new(8);
@@ -166,7 +169,7 @@ fn remaining_analysis_reuse_preserves_full_results_and_live_stock_guards() {
 fn interrupted_cps_execution_has_no_result_or_successful_post_cache_entry() {
     let a: Value = serde_json::from_str(include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../../docs/shopbot-modernization/perf1/requests/text-Test-medial-cps.json"
+        "/../../tests/fixtures/perf-v9/text-Test-medial-cps.json"
     )))
     .unwrap();
     let cache = PipelineCache::new(8);
@@ -178,7 +181,7 @@ fn interrupted_cps_execution_has_no_result_or_successful_post_cache_entry() {
     });
     let mut events = Vec::new();
     let result = run_pipeline_impl(
-        crate::fixture_support::request(serde_json::from_value(a.clone()).unwrap()),
+        serde_json::from_value(a.clone()).unwrap(),
         &|_, _, _| {},
         &mut |e| events.push(e),
         Some(&token),

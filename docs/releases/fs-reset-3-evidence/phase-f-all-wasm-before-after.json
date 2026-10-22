@@ -1,0 +1,128 @@
+[
+  {
+    "case": "missing-layer-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 1,
+    "wasm_moves": 1
+  },
+  {
+    "case": "pocket-islands-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 1720,
+    "wasm_moves": 1720
+  },
+  {
+    "case": "profile-contours-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 246,
+    "wasm_moves": 246
+  },
+  {
+    "case": "profile-many-segments-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 41602,
+    "wasm_moves": 41602
+  },
+  {
+    "case": "square-medial-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": false,
+    "native_moves": 5376,
+    "wasm_moves": 5368
+  },
+  {
+    "case": "square-outline-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 85,
+    "wasm_moves": 85
+  },
+  {
+    "case": "text-B8-medial-linuxcnc.json",
+    "same_success": true,
+    "success": false,
+    "same_error": true
+  },
+  {
+    "case": "text-Test-medial-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": false,
+    "native_moves": 18342,
+    "wasm_moves": 18351
+  },
+  {
+    "case": "text-Test-outline-linuxcnc.json",
+    "same_success": true,
+    "success": true,
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 9585,
+    "wasm_moves": 9585
+  }
+]

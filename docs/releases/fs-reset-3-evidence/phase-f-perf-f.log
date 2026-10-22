@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/scripts/perf1-native.py", line 54, in <module>
+    raise RuntimeError(f"{name}: {stderr}")
+RuntimeError: missing-layer-cps:         0.44 real         0.01 user         0.00 sys
+time: sysctl kern.clockrate: Operation not permitted

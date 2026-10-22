@@ -1,0 +1,6 @@
+
+> ivac-frontend@ lint /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+> eslint . && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
