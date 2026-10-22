@@ -38,6 +38,7 @@ fn main() {
             op,
             segments.clone(),
         );
+        let p = fixture_support::project(p);
         let r = run_pipeline(
             PipelineRequest {
                 project: p.clone(),
@@ -94,3 +95,6 @@ fn main() {
         .collect::<Vec<_>>();
     println!("ramp in shallow target zone (x>1, target=-0.01): {gouges:?}");
 }
+
+#[path = "../tests/support/explicit.rs"]
+mod fixture_support;

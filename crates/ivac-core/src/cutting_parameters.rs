@@ -649,17 +649,8 @@ pub fn require_current(project: &Project) -> Result<(), String> {
     Ok(())
 }
 
-/// V9 is an explicit native contract; old internal fixtures stay isolated during staged removal.
+/// Every generation path requires the explicit native v9 contract.
 pub fn validate_project(project: &Project) -> Result<(), crate::pipeline::PipelineError> {
-    if project.cutting_version.is_some_and(|v| v != 9) {
-        return Err(crate::pipeline::PipelineError::AppliedCutting(
-            0,
-            "Unsupported cutting contract version".into(),
-        ));
-    }
-    if project.cutting_version != Some(9) {
-        return crate::feeds_speeds::validate_applied_project(project);
-    }
     require_current(project).map_err(|e| crate::pipeline::PipelineError::AppliedCutting(0, e))?;
     let mut tool_ids = std::collections::BTreeSet::new();
     let mut op_ids = std::collections::BTreeSet::new();
@@ -694,11 +685,8 @@ pub fn validate_project(project: &Project) -> Result<(), crate::pipeline::Pipeli
     Ok(())
 }
 
-/// Resolve only explicit v9 rates. Legacy dispatch remains temporary for internal fixtures.
+/// Resolve only explicit v9 milling rates. Generation never reads creation defaults.
 pub fn saved_rates(op: &Op, tool: &ToolEntry, pass: PassKind) -> Result<(u32, u32, u32), String> {
-    if op.params.cutting.is_none() {
-        return crate::feeds_speeds::saved_rates(op, tool, pass);
-    }
     let role = match pass {
         PassKind::Drill => CuttingRole::Drill,
         PassKind::Rough => CuttingRole::Rough,
@@ -719,9 +707,6 @@ pub fn saved_rates(op: &Op, tool: &ToolEntry, pass: PassKind) -> Result<(u32, u3
 
 #[must_use]
 pub fn effective_machine(project: &Project, tool_id: u32) -> crate::project::MachineConfig {
-    if project.cutting_version != Some(9) {
-        return crate::feeds_speeds::effective_machine(project, tool_id);
-    }
     let mut m = project.machine.clone();
     if let Some(max) = project
         .tools
@@ -787,7 +772,7 @@ mod tests {
                 1 => c.rates.push(c.rates[0].clone()),
                 2 => c.rates[0].role = CuttingRole::Spot,
                 _ => c.rates[0].tool_id = 999,
-            };
+            }
             assert!(validate_structure(&op).is_err());
         }
     }
@@ -816,7 +801,7 @@ mod tests {
                 2 => p.tools[0].flutes = 0,
                 3 => p.operations[0].params.step = Some(f64::INFINITY),
                 _ => p.tools[0].flute_length_mm = Some(0.1),
-            };
+            }
             assert!(validate_project(&p).is_err(), "case {case}");
         }
     }
@@ -838,7 +823,7 @@ mod tests {
         let c = serde_json::to_value(p.operations[0].params.cutting.as_ref().unwrap()).unwrap();
         for value in [
             serde_json::json!(1.5),
-            serde_json::json!(4294967296_u64),
+            serde_json::json!(4_294_967_296_u64),
             serde_json::json!(-1),
         ] {
             let mut c = c.clone();

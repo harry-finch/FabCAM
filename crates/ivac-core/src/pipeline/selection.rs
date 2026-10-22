@@ -451,11 +451,11 @@ mod tests {
         op.params.step = Some(-1.0);
         op.params.depth = -1.0;
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with(vec![op], vec![tool]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -488,11 +488,11 @@ mod tests {
         op.params.step = Some(-1.0);
         op.params.depth = -1.0;
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with(vec![op], vec![tool]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();

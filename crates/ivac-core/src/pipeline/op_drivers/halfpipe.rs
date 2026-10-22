@@ -337,20 +337,20 @@ mod tests {
             fs_context: None,
         };
         let resp_a = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with_tool(tool_a),
                 post_processor: Some(crate::pipeline::PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         let resp_b = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with_tool(tool_b),
                 post_processor: Some(crate::pipeline::PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -401,6 +401,7 @@ mod tests {
 
         let mut ball = endmill(1, 10.0);
         ball.kind = ToolKind::BallNose;
+        ball.flute_length_mm = Some(20.0);
         let mut params = OpParams::mill_default();
         params.depth = -10.0; // permissive cap so the profile drives Z
         params.start_depth = 0.0;
@@ -439,11 +440,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -473,7 +474,7 @@ mod tests {
     /// profile — passes silently under a loose 50 % threshold.
     /// The 10 % gate fires `halfpipe_radius_mismatch`.
     #[test]
-    fn halfpipe_warns_when_tool_radius_mismatch_exceeds_10pct() {
+    fn halfpipe_refuses_mismatched_radius() {
         let mut segments_8w: Vec<Segment> = Vec::new();
         let p = |x: f64, y: f64| Point2::new(x, y);
         segments_8w.push(Segment::line(p(0.0, 0.0), p(40.0, 0.0), "0", 7));
@@ -523,29 +524,23 @@ mod tests {
             material: None,
             fs_context: None,
         };
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "halfpipe_radius_mismatch"),
-            "expected halfpipe_radius_mismatch warning; got {:?}",
-            resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
-        );
+        .expect_err("invalid authored input must not produce machine output");
+        assert!(err.to_string().contains("matching ball-nose"), "{err}");
     }
 
     /// Halfpipe with profile R larger than the cutter's flute
     /// length must clamp Z to -`flute_length` and emit a
     /// `halfpipe_tool_reach_exceeded` warning.
     #[test]
-    fn halfpipe_tool_reach_clamps_deep_profile() {
+    fn halfpipe_refuses_depth_exceeding_tool_reach() {
         // 40mm-wide rectangle slot (matches the existing harness).
         let mut segs: Vec<Segment> = Vec::new();
         let p = |x: f64, y: f64| Point2::new(x, y);
@@ -598,35 +593,16 @@ mod tests {
             material: None,
             fs_context: None,
         };
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "halfpipe_tool_reach_exceeded"),
-            "expected halfpipe_tool_reach_exceeded warning; got {:?}",
-            resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
-        );
-        // Every G1 line must have Z >= -5 (no deeper than flute reach).
-        for l in resp.gcode.lines().filter(|l| l.starts_with("G1 ")) {
-            for tok in l.split_whitespace() {
-                if let Some(rest) = tok.strip_prefix('Z') {
-                    if let Ok(z) = rest.parse::<f64>() {
-                        assert!(
-                            z >= -5.0 - 1e-6,
-                            "Z {z} exceeds tool flute reach (-5.0 mm) on line: {l}",
-                        );
-                    }
-                }
-            }
-        }
+        .expect_err("invalid authored input must not produce machine output");
+        assert!(err.to_string().contains("flute length"), "{err}");
     }
 
     /// `PocketStrategy::Halfpipe` serde round-trip covers both

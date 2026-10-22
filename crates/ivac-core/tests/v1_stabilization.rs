@@ -189,7 +189,7 @@ fn deep_pocket_opensbp_decodes_to_the_same_preview_moves() {
         [square(0., 60.), square(15., 45.), square(23., 37.)].concat(),
     );
     let out = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -198,7 +198,7 @@ fn deep_pocket_opensbp_decodes_to_the_same_preview_moves() {
                 },
                 properties: std::collections::BTreeMap::default(),
             }),
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -242,3 +242,6 @@ fn deep_pocket_opensbp_decodes_to_the_same_preview_moves() {
         }
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

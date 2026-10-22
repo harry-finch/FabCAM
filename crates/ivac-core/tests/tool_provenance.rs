@@ -31,11 +31,11 @@ fn pocket() -> ivac_core::project::Project {
 #[test]
 fn native_rough_finish_carries_two_bodies_under_one_operation() {
     let result = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: pocket(),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -55,11 +55,11 @@ fn ignored_multi_tool_is_not_resolved() {
     let mut p = pocket();
     p.machine.tool_change = ToolChangeStrategy::Ignore;
     let r = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -71,7 +71,7 @@ fn shopbot_resolved_moves_use_finish_body_and_keep_guarded_subset() {
     use ivac_core::pipeline::{CpsPostSelection, CpsPostSource};
     let p = pocket();
     let r = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -80,7 +80,7 @@ fn shopbot_resolved_moves_use_finish_body_and_keep_guarded_subset() {
                 },
                 properties: std::collections::BTreeMap::default(),
             }),
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -149,11 +149,11 @@ fn spot_drill_and_chamfer_keep_three_tool_geometries() {
     );
     p.machine.tool_change = ToolChangeStrategy::ManualM0Pause;
     let r = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -198,26 +198,26 @@ fn leading_tool_less_pause_and_duplicate_ids_do_not_guess() {
     };
     p.operations.insert(0, pause);
     let r = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p.clone(),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
     assert_eq!(r.tool_provenance.authority, Authority::Resolved);
     p.tools.push(p.tools[0].clone());
-    let r = run_pipeline(
-        PipelineRequest {
+    let err = run_pipeline(
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
-    .unwrap();
-    assert_eq!(r.tool_provenance.authority, Authority::Unavailable);
+    .unwrap_err();
+    assert!(err.to_string().contains("positive and unique"), "{err}");
 }
 
 #[test]
@@ -225,11 +225,11 @@ fn numbered_native_output_keeps_physical_line_bindings() {
     let mut p = pocket();
     p.machine.line_number_start = Some(10);
     let r = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -251,11 +251,11 @@ fn native_change_strategies_and_tool_reuse_keep_stable_bindings() {
         second.id = 18;
         p.operations.push(second);
         let r = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: p,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -282,11 +282,11 @@ fn injected_reserved_marker_cannot_certify_native_output() {
     let mut p = pocket();
     p.operations[0].name = "FABTOOL/1 ACTIVE 7".into();
     let r = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -308,11 +308,11 @@ fn generate(
     #[cfg(not(feature = "cps"))]
     let cps_post = None;
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(post),
             cps_post,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap()
@@ -442,3 +442,6 @@ fn unmodelled_native_features_stay_planned_with_a_specific_reason() {
         Authority::Resolved
     );
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

@@ -1088,11 +1088,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1175,11 +1175,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1242,11 +1242,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1327,11 +1327,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1407,11 +1407,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1480,11 +1480,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1611,11 +1611,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1673,11 +1673,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1715,11 +1715,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1753,11 +1753,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1799,11 +1799,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1878,11 +1878,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1930,11 +1930,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1983,11 +1983,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2043,11 +2043,11 @@ mod tests {
             ];
             for (offset_label, offset) in cases {
                 let resp = run_pipeline(
-                    PipelineRequest {
+                    crate::fixture_support::request(PipelineRequest {
                         project: mk(offset),
                         post_processor: None,
                         cps_post: None,
-                    },
+                    }),
                     |_, _, _| {},
                 )
                 .unwrap();
@@ -2110,11 +2110,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2163,7 +2163,7 @@ mod tests {
             }
         });
         let req: PipelineRequest = serde_json::from_value(raw).expect("wire JSON");
-        let resp = run_pipeline(req, |_, _, _| {}).unwrap();
+        let resp = run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).unwrap();
         let max_x = resp
             .toolpath
             .iter()
@@ -2220,7 +2220,7 @@ mod tests {
         } else {
             panic!("not a profile op");
         }
-        let resp = run_pipeline(req, |_, _, _| {}).unwrap();
+        let resp = run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).unwrap();
         let max_x = resp
             .toolpath
             .iter()
@@ -2261,11 +2261,11 @@ mod tests {
         };
         for offset in [ToolOffset::Outside, ToolOffset::Inside] {
             let resp = run_pipeline(
-                PipelineRequest {
+                crate::fixture_support::request(PipelineRequest {
                     project: mk(offset),
                     post_processor: None,
                     cps_post: None,
-                },
+                }),
                 |_, _, _| {},
             )
             .unwrap();
@@ -2316,29 +2316,29 @@ mod tests {
                 .fold(f64::NEG_INFINITY, f64::max)
         };
         let on = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(ToolOffset::On),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         let outside = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(ToolOffset::Outside),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         let inside = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(ToolOffset::Inside),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2427,20 +2427,20 @@ mod tests {
             fs_context: None,
         };
         let baseline = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: baseline_project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         let annulus = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: annulus_project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2516,11 +2516,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2598,11 +2598,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2695,11 +2695,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2810,11 +2810,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -2903,11 +2903,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3019,11 +3019,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3044,7 +3044,7 @@ mod tests {
     /// Drill bit on a Pocket op — emits a `tool_kind_mismatch` warning
     /// regardless of whether the cascade actually produced anything.
     #[test]
-    fn pocket_with_drill_bit_warns_about_tool_kind() {
+    fn pocket_with_drill_bit_refuses() {
         let drill = ToolEntry {
             max_rpm: None,
             physical_id: None,
@@ -3128,16 +3128,16 @@ mod tests {
             material: None,
             fs_context: None,
         };
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(resp.warnings.iter().any(|w| w.kind == "tool_kind_mismatch"));
+        .expect_err("invalid authored input must not produce machine output");
+        assert!(err.to_string().contains("side-cutting"), "{err}");
     }
 
     // Plunge tests moved to pipeline/offset_builder.rs.
@@ -3181,11 +3181,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3257,11 +3257,11 @@ mod tests {
                 fs_context: None,
             };
             run_pipeline(
-                PipelineRequest {
+                crate::fixture_support::request(PipelineRequest {
                     project,
                     post_processor: None,
                     cps_post: None,
-                },
+                }),
                 |_, _, _| {},
             )
             .unwrap()
@@ -3319,11 +3319,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3401,11 +3401,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3469,11 +3469,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3535,11 +3535,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3582,11 +3582,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3635,11 +3635,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3828,11 +3828,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3885,11 +3885,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -3962,11 +3962,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4047,11 +4047,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4111,21 +4111,21 @@ mod tests {
             pocket: crate::project::PocketParams::default(),
         };
         let cascade_gcode = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: cascade_project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
         .gcode;
         let spiral_gcode = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: spiral_project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -4199,11 +4199,11 @@ mod tests {
             fs_context: None,
         };
         let gcode = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -4298,20 +4298,20 @@ mod tests {
         for strategy in strategies {
             for pocket_islands in [false, true] {
                 let baseline = run_pipeline(
-                    PipelineRequest {
+                    crate::fixture_support::request(PipelineRequest {
                         project: mk(outer_only.clone(), strategy, pocket_islands),
                         post_processor: None,
                         cps_post: None,
-                    },
+                    }),
                     |_, _, _| {},
                 )
                 .unwrap();
                 let with_inners_run = run_pipeline(
-                    PipelineRequest {
+                    crate::fixture_support::request(PipelineRequest {
                         project: mk(with_inners.clone(), strategy, pocket_islands),
                         post_processor: None,
                         cps_post: None,
-                    },
+                    }),
                     |_, _, _| {},
                 )
                 .unwrap();
@@ -4402,23 +4402,23 @@ mod tests {
                 .sum()
         };
         let spiral = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(PocketStrategy::Spiral),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         let trochoidal = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(PocketStrategy::Trochoidal {
                     engagement_angle_deg: 30.0,
                     loop_radius_factor: 0.6,
                 }),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4493,11 +4493,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4553,11 +4553,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4571,7 +4571,7 @@ mod tests {
     }
 
     #[test]
-    fn op_step_and_tool_default_step_emit_identical_gcode() {
+    fn tool_default_step_cannot_supply_missing_operation_step() {
         let mut tool_a = endmill(1, 3.0);
         tool_a.default_step = None;
         let mut op_a = profile_op(1, 1, ToolOffset::Outside);
@@ -4583,26 +4583,25 @@ mod tests {
         op_b.params.step = None;
 
         let resp_a = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with(vec![op_a], vec![tool_a]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
-        let resp_b = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with(vec![op_b], vec![tool_b]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert_eq!(resp_a.gcode, resp_b.gcode);
-        assert!(resp_a.warnings.iter().all(|w| w.kind != "step_unspecified"));
-        assert!(resp_b.warnings.iter().all(|w| w.kind != "step_unspecified"));
+        .unwrap_err();
+        assert!(!resp_a.gcode.is_empty());
+        assert!(err.to_string().contains("explicit depth"), "{err}");
     }
 
     /// Regression: under `OpSource::All`, two nested closed contours
@@ -4661,20 +4660,20 @@ mod tests {
             fs_context: None,
         };
         let auto = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(false),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         let explicit = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(true),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4770,11 +4769,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4866,11 +4865,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -4950,22 +4949,22 @@ mod tests {
         };
         // Baseline: nocontour + allowance=0.
         let baseline = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(0.0, true),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         // Pathological: nocontour + allowance=0.2. Should produce IDENTICAL
         // toolpath (we folded allowance to 0) AND emit the warning.
         let ignored = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: mk(0.2, true),
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();

@@ -56,11 +56,11 @@ fn profile(depth: f64, step: Option<f64>) -> Project {
 
 fn generate(p: Project) -> Result<PipelineResponse, PipelineError> {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
 }
@@ -116,12 +116,12 @@ fn pass_budget_boundary_is_exact() {
     }
     // The finish pre-pass counts: 998 + pre-finish + final = 1000 passes.
     let mut p = profile(-999., Some(-1.));
-    p.operations[0].params.finish_step = Some(0.5);
+    p.operations[0].params.finish_step = Some(-0.5);
     let levels = cut_levels(&generate(p).unwrap());
     assert_eq!(levels.len(), 1000);
     assert_eq!(&levels[997..], &[-998., -998.5, -999.]);
     let mut p = profile(-1000., Some(-1.));
-    p.operations[0].params.finish_step = Some(0.5);
+    p.operations[0].params.finish_step = Some(-0.5);
     assert_pass_limit(generate(p), "1000 + pre-finish");
     // An explicit depth list is a schedule too.
     let mut p = profile(-1., Some(-1.));
@@ -153,7 +153,7 @@ fn large_legitimate_job_completes() {
 }
 
 #[test]
-fn explicit_invalid_step_is_refused_omitted_step_keeps_its_default() {
+fn explicit_invalid_or_missing_step_refuses_without_tool_inheritance() {
     for step in [
         0.,
         -0.,
@@ -165,30 +165,36 @@ fn explicit_invalid_step_is_refused_omitted_step_keeps_its_default() {
     ] {
         let err = generate(profile(-10., Some(step))).expect_err("invalid step");
         assert!(
-            matches!(&err, PipelineError::InvalidStep(1, d) if d.starts_with("depth per pass")),
+            matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("Depth per pass must be finite and positive")),
             "{step}: {err:?}"
         );
     }
-    // Inherited from the tool: an invalid supplied tool default is refused…
+    // A tool default cannot satisfy a missing authored depth step…
     let mut p = profile(-10., None);
     p.tools[0].default_step = Some(0.);
     let err = generate(p).unwrap_err();
     assert!(
-        matches!(&err, PipelineError::InvalidStep(1, d) if d.starts_with("tool default step")),
+        matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("Set explicit depth per pass")),
         "{err:?}"
     );
     // …but unused when the op supplies its own valid step.
     let mut p = profile(-10., Some(-2.));
     p.tools[0].default_step = Some(0.);
     assert_eq!(cut_levels(&generate(p).unwrap()).len(), 5);
-    // Omitted everywhere: documented default (one pass + `step_unspecified`).
-    let r = generate(profile(-10., None)).unwrap();
-    assert_eq!(cut_levels(&r), vec![-10.]);
-    assert!(r.warnings.iter().any(|w| w.kind == "step_unspecified"));
-    // Omitted on the op: the tool default schedules the passes.
+    // Omitted everywhere refuses; there is no whole-depth fallback.
+    let err = generate(profile(-10., None)).unwrap_err();
+    assert!(
+        err.to_string().contains("Set explicit depth per pass"),
+        "{err}"
+    );
+    // A library default cannot supply missing operation intent.
     let mut p = profile(-10., None);
     p.tools[0].default_step = Some(-2.5);
-    assert_eq!(cut_levels(&generate(p).unwrap()).len(), 4);
+    let err = generate(p).unwrap_err();
+    assert!(
+        err.to_string().contains("Set explicit depth per pass"),
+        "{err}"
+    );
 }
 
 #[test]
@@ -198,7 +204,7 @@ fn refused_op_is_never_cached_and_regenerates_after_correction() {
         assert_pass_limit(generate(profile(-5000., Some(-1.))), "refused twice");
         assert!(matches!(
             generate(profile(-5., Some(0.))),
-            Err(PipelineError::InvalidStep(..))
+            Err(PipelineError::AppliedCutting(1, ref d)) if d.contains("Depth per pass")
         ));
     }
     assert_eq!(generate(profile(-5., Some(-1.))).unwrap().gcode, valid);
@@ -220,11 +226,11 @@ impl std::io::Write for Shared {
 fn streamed_refusal_emits_no_cutting_move() {
     let buf = Arc::new(Mutex::new(Vec::new()));
     let r = stream_gcode_to_writer(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: profile(-5000., Some(-1.)),
             post_processor: Some(PostProcessorKind::Grbl),
             cps_post: None,
-        },
+        }),
         Box::new(Shared(buf.clone())),
     );
     assert!(r.is_err());
@@ -262,9 +268,9 @@ fn pocket_and_drill_share_the_budget() {
     assert!(generate(drill(-999.5, 1.)).is_ok(), "1000 pecks");
     assert_pass_limit(generate(drill(-1000.5, 1.)), "1001 pecks");
     assert_pass_limit(generate(drill(-10., 1e-6)), "micro peck");
-    // A drill never reads the depth per pass: an odd stored step is ignored.
+    // A drill uses its explicit peck cycle and does not require a contour step.
     let mut p = drill(-5., 1.);
-    p.operations[0].params.step = Some(0.);
+    p.operations[0].params.step = None;
     assert!(generate(p).is_ok());
 }
 
@@ -303,6 +309,9 @@ fn vcarve_depth_levels_share_the_budget() {
     assert_pass_limit(generate(project(-0.0009)), "V-Carve 1112 levels");
     assert!(matches!(
         generate(project(f64::NAN)),
-        Err(PipelineError::InvalidStep(1, _))
+        Err(PipelineError::AppliedCutting(1, ref d)) if d.contains("Depth per pass")
     ));
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

@@ -554,11 +554,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -631,11 +631,11 @@ mod tests {
                 fs_context: None,
             };
             run_pipeline(
-                PipelineRequest {
+                crate::fixture_support::request(PipelineRequest {
                     project,
                     post_processor: Some(PostProcessorKind::Linuxcnc),
                     cps_post: None,
-                },
+                }),
                 |_, _, _| {},
             )
             .unwrap()
@@ -723,11 +723,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -797,11 +797,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -861,11 +861,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -923,11 +923,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -985,11 +985,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1063,11 +1063,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1174,11 +1174,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1210,7 +1210,7 @@ mod tests {
     /// driver silently emitted a helix with whatever cutter the user
     /// configured, including ones that can't physically cut a thread.
     #[test]
-    fn thread_op_with_drill_tool_emits_kind_mismatch_warning() {
+    fn thread_op_with_drill_tool_refuses() {
         let center = Point2::new(0.0, 0.0);
         let radius = 5.0;
         let segments = closed_circle(center, radius);
@@ -1255,20 +1255,16 @@ mod tests {
             material: None,
             fs_context: None,
         };
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.warnings.iter().any(|w| w.kind == "tool_kind_mismatch"),
-            "lo4j: expected tool_kind_mismatch warning for Thread + Drill tool; got: {:?}",
-            resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
-        );
+        .expect_err("invalid authored input must not produce machine output");
+        assert!(err.to_string().contains("side-cutting"), "{err}");
     }
 }
 
@@ -1315,6 +1311,8 @@ mod audit_09_10 {
             s.layer = "target".into();
         }
         let mut project = project_with_segments(segs, vec![op.clone()], vec![endmill(1, 2.)]);
+        project = crate::fixture_support::project(project);
+        op = project.operations[0].clone();
         let setup = crate::pipeline::synthesize_op_setup(&op, &project, &mut vec![]).unwrap();
         let run = |p: &Project| {
             let objects = crate::cam::chaining::segments_to_objects(&p.segments);

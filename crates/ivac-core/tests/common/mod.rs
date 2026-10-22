@@ -191,11 +191,11 @@ pub fn build_project(
 /// Run the pipeline → toolpath. Panics with the underlying error.
 pub fn run(project: Project, post: PostProcessorKind) -> PipelineResponse {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(post),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline runs")

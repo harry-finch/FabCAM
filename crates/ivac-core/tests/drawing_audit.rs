@@ -294,7 +294,11 @@ fn intact_circle_generates_through_authoritative_drawing_api() {
         operation: req.machining.project.operations[0].id,
         binding: Binding::All,
     }];
-    let response = ivac_core::pipeline::generate_drawing(req).unwrap();
+    let response =
+        ivac_core::pipeline::generate_drawing(crate::fixture_support::drawing(req)).unwrap();
     assert!(!response.toolpath.is_empty());
     assert!(!response.gcode.is_empty());
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

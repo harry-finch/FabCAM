@@ -63,7 +63,7 @@ fn known_stock_refuses_clearance_at_or_below_top() {
             if !work_area_known {
                 req.project.machine.work_area.z = 0.;
             }
-            let result = run_pipeline(req, |_, _, _| {});
+            let result = run_pipeline(crate::fixture_support::request(req), |_, _, _| {});
             assert!(result.is_err(), "top18/clearance{clearance} must refuse");
             assert!(result.unwrap_err().to_string().contains("clearance"));
         }
@@ -84,7 +84,10 @@ impl std::io::Write for Capture {
 #[test]
 fn invalid_clearance_stream_writes_no_bytes() {
     let bytes = Arc::new(Mutex::new(Vec::new()));
-    let result = stream_gcode_to_writer(request(18., 5.), Box::new(Capture(bytes.clone())));
+    let result = stream_gcode_to_writer(
+        crate::fixture_support::request(request(18., 5.)),
+        Box::new(Capture(bytes.clone())),
+    );
     assert!(
         result.is_err(),
         "invalid clearance must fail before streaming"
@@ -126,8 +129,16 @@ fn top_level_hatch_stays_supported_but_unused_block_is_also_refused() {
 #[test]
 fn finite_and_disabled_and_unknown_stock_contracts() {
     for value in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
-        assert!(run_pipeline(request(18., value), |_, _, _| {}).is_err());
-        assert!(run_pipeline(request(value, 23.), |_, _, _| {}).is_err());
+        assert!(run_pipeline(
+            crate::fixture_support::request(request(18., value)),
+            |_, _, _| {}
+        )
+        .is_err());
+        assert!(run_pipeline(
+            crate::fixture_support::request(request(value, 23.)),
+            |_, _, _| {}
+        )
+        .is_err());
     }
     let mut req = request(18., 23.);
     let mut disabled = req.project.operations[0].clone();
@@ -135,11 +146,11 @@ fn finite_and_disabled_and_unknown_stock_contracts() {
     disabled.enabled = false;
     disabled.params.fast_move_z = 5.;
     req.project.operations.push(disabled);
-    assert!(run_pipeline(req.clone(), |_, _, _| {}).is_ok());
+    assert!(run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).is_ok());
     req.project.stock = None;
     req.project.operations[0].params.fast_move_z = 5.;
     assert!(
-        run_pipeline(req, |_, _, _| {}).is_ok(),
+        run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).is_ok(),
         "unknown stock is not a new global prohibition"
     );
 }
@@ -148,15 +159,15 @@ fn finite_and_disabled_and_unknown_stock_contracts() {
 fn stock_edit_is_revalidated_even_after_successful_cached_generation() {
     let req = request(0., 5.);
     let before = serde_json::to_value(&req.project).unwrap();
-    assert!(run_pipeline(req.clone(), |_, _, _| {}).is_ok());
-    assert!(run_pipeline(req.clone(), |_, _, _| {}).is_ok());
+    assert!(run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).is_ok());
+    assert!(run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).is_ok());
     let mut changed = req.clone();
     changed.project.stock.as_mut().unwrap().top_z_mm = 18.;
-    let error = run_pipeline(changed, |_, _, _| {}).unwrap_err();
+    let error = run_pipeline(crate::fixture_support::request(changed), |_, _, _| {}).unwrap_err();
     assert!(error.to_string().contains("clearance"));
     assert!(error.to_structured(None).is_some());
     assert_eq!(before, serde_json::to_value(&req.project).unwrap());
-    assert!(run_pipeline(req, |_, _, _| {}).is_ok());
+    assert!(run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).is_ok());
 }
 
 #[cfg(feature = "cps")]
@@ -185,7 +196,7 @@ fn shopbot_decoded_lateral_rapids_stay_above_stock_with_two_clearances() {
         next.tool_id = 2;
         req.project.tools.push(endmill_tool(2, 6.));
         req.project.operations.push(next);
-        let r = run_pipeline(req, |_, _, _| {}).unwrap();
+        let r = run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).unwrap();
         // Independent minimal OpenSBP state oracle: initial XY deliberately unknown.
         let mut z: Option<f64> = None;
         let mut lateral_count = 0;
@@ -229,16 +240,21 @@ fn shopbot_decoded_lateral_rapids_stay_above_stock_with_two_clearances() {
 #[cfg(feature = "cps")]
 #[test]
 fn shopbot_invalid_stock_clearance_and_existing_z_origin_refuse() {
-    assert!(run_pipeline(shopbot(request(18., 5.)), |_, _, _| {})
-        .unwrap_err()
-        .to_string()
-        .contains("clearance"));
+    assert!(run_pipeline(
+        crate::fixture_support::request(shopbot(request(18., 5.))),
+        |_, _, _| {}
+    )
+    .unwrap_err()
+    .to_string()
+    .contains("clearance"));
     let mut req = shopbot(request(18., 23.));
     req.project.work_offset.z_mm = 18.;
-    assert!(run_pipeline(req, |_, _, _| {})
-        .unwrap_err()
-        .to_string()
-        .contains("numeric Z"));
+    assert!(
+        run_pipeline(crate::fixture_support::request(req), |_, _, _| {})
+            .unwrap_err()
+            .to_string()
+            .contains("numeric Z")
+    );
 }
 
 #[cfg(feature = "cps")]
@@ -246,10 +262,12 @@ fn shopbot_invalid_stock_clearance_and_existing_z_origin_refuse() {
 fn shopbot_parking_stays_explicitly_unsupported() {
     let mut req = shopbot(request(18., 23.));
     req.project.machine.park_xy = Some((80., 80.));
-    assert!(run_pipeline(req, |_, _, _| {})
-        .unwrap_err()
-        .to_string()
-        .contains("parking"));
+    assert!(
+        run_pipeline(crate::fixture_support::request(req), |_, _, _| {})
+            .unwrap_err()
+            .to_string()
+            .contains("parking")
+    );
 }
 
 #[test]
@@ -257,7 +275,7 @@ fn generic_parking_and_stream_preview_retain_safe_air_traversals() {
     use ivac_core::pipeline::stream_gcode_with_preview;
     let mut req = request(18., 23.);
     req.project.machine.park_xy = Some((80., 80.));
-    let out = run_pipeline(req.clone(), |_, _, _| {}).unwrap();
+    let out = run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).unwrap();
     for segment in out
         .toolpath
         .iter()
@@ -268,10 +286,18 @@ fn generic_parking_and_stream_preview_retain_safe_air_traversals() {
         }
     }
     let bytes = Arc::new(Mutex::new(Vec::new()));
-    assert!(stream_gcode_with_preview(req, Box::new(Capture(bytes.clone()))).is_ok());
+    assert!(stream_gcode_with_preview(
+        crate::fixture_support::request(req),
+        Box::new(Capture(bytes.clone()))
+    )
+    .is_ok());
     assert!(!bytes.lock().unwrap().is_empty());
     let bytes = Arc::new(Mutex::new(Vec::new()));
-    assert!(stream_gcode_with_preview(request(18., 5.), Box::new(Capture(bytes.clone()))).is_err());
+    assert!(stream_gcode_with_preview(
+        crate::fixture_support::request(request(18., 5.)),
+        Box::new(Capture(bytes.clone()))
+    )
+    .is_err());
     assert!(bytes.lock().unwrap().is_empty());
 }
 
@@ -281,10 +307,12 @@ fn header_only_job_cannot_bypass_stock_guard() {
     req.project.operations[0].kind = OpKind::Pause {
         message: "inspect".into(),
     };
-    assert!(run_pipeline(req, |_, _, _| {})
-        .unwrap_err()
-        .to_string()
-        .contains("clearance"));
+    assert!(
+        run_pipeline(crate::fixture_support::request(req), |_, _, _| {})
+            .unwrap_err()
+            .to_string()
+            .contains("clearance")
+    );
 }
 
 #[test]
@@ -292,13 +320,13 @@ fn inch_serialization_guard_and_shared_process_boundary() {
     use ivac_core::project::{MachineMode, UnitSystem};
     let mut req = request(18., 18.001);
     req.project.machine.unit = UnitSystem::Inch;
-    assert!(run_pipeline(req.clone(), |_, _, _| {}).is_err());
+    assert!(run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).is_err());
     req.project.operations[0].params.fast_move_z = 23.;
-    assert!(run_pipeline(req, |_, _, _| {}).is_ok());
+    assert!(run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).is_ok());
     let mut req = request(18., 5.);
     req.project.machine.mode = MachineMode::Laser;
     assert!(
-        run_pipeline(req, |_, _, _| {}).is_ok(),
+        run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).is_ok(),
         "milling guard must not reinterpret laser height"
     );
 }
@@ -325,7 +353,7 @@ fn supported_pocket_and_drill_keep_air_clearance() {
     ] {
         let mut req = shopbot(request(0., 5.));
         req.project.operations[0].kind = kind;
-        let out = run_pipeline(req, |_, _, _| {}).unwrap();
+        let out = run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).unwrap();
         for s in out
             .toolpath
             .iter()
@@ -345,7 +373,10 @@ fn custom_identity_z_rounding_must_not_erase_clearance() {
     let mut profile = PostProfile::linuxcnc_default();
     profile.axes = Some(AxesConfig::default()); // standard identity Z, three decimals
     req.project.machine.post_profile = Some(profile);
-    assert!(run_pipeline(req.clone(), |_, _, _| {}).is_err());
+    assert!(run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).is_err());
     req.project.operations[0].params.fast_move_z = 23.;
-    assert!(run_pipeline(req, |_, _, _| {}).is_ok());
+    assert!(run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).is_ok());
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

@@ -11,7 +11,7 @@ fn fixture() -> Value {
 }
 fn run(value: &Value, cache: Option<&PipelineCache>) -> Result<Value, PipelineError> {
     run_pipeline_impl(
-        serde_json::from_value(value.clone()).unwrap(),
+        crate::fixture_support::request(serde_json::from_value(value.clone()).unwrap()),
         &|_, _, _| {},
         &mut |_| {},
         None,
@@ -106,7 +106,7 @@ fn cancelled_warm_post_never_returns_valid_output() {
     run(&a, Some(&cache)).unwrap();
     let cancel = CancelToken::new();
     let result = run_pipeline_impl(
-        serde_json::from_value(a).unwrap(),
+        crate::fixture_support::request(serde_json::from_value(a).unwrap()),
         &|phase, _, _| {
             if phase == "post" {
                 cancel.cancel();
@@ -178,7 +178,7 @@ fn interrupted_cps_execution_has_no_result_or_successful_post_cache_entry() {
     });
     let mut events = Vec::new();
     let result = run_pipeline_impl(
-        serde_json::from_value(a.clone()).unwrap(),
+        crate::fixture_support::request(serde_json::from_value(a.clone()).unwrap()),
         &|_, _, _| {},
         &mut |e| events.push(e),
         Some(&token),

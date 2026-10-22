@@ -1,4 +1,5 @@
-//! FS-RESET-2: software-only source-bound output and rejection regressions.
+//! Explicit role and refusal regressions. Fixed pre-removal output comparisons now
+//! live in tests/fs_reset_outputs.rs, including full toolpath and provenance equality.
 use super::test_helpers::*;
 use super::*;
 use crate::cutting_parameters::{self as cutting, CuttingRole};
@@ -42,7 +43,7 @@ fn v9_standard_valid_inputs_keep_byte_identical_programs() {
     pocket.pocket_params_mut().unwrap().xy_overlap = 0.5;
     let mut engrave = profile_op(1, 1, ToolOffset::On);
     engrave.kind = OpKind::Engrave {
-        contour: Default::default(),
+        contour: crate::project::ContourParams::default(),
     };
     let mut chamfer = profile_op(1, 1, ToolOffset::On);
     chamfer.kind = OpKind::Chamfer {
@@ -60,10 +61,8 @@ fn v9_standard_valid_inputs_keep_byte_identical_programs() {
         ("chamfer", chamfer, vbit()),
     ] {
         let p = project_with(vec![op], vec![tool]);
-        let baseline = run_pipeline(request(p.clone()), |_, _, _| {}).unwrap();
         let current = run_pipeline(request(explicit(p)), |_, _, _| {}).unwrap();
-        assert_eq!(baseline.gcode, current.gcode, "{name}");
-        assert_eq!(baseline.toolpath.len(), current.toolpath.len(), "{name}");
+        assert!(!current.toolpath.is_empty(), "{name}");
         assert_eq!(
             current.tool_provenance.authority,
             provenance::Authority::Resolved
@@ -86,13 +85,8 @@ fn v9_test1_shopbot_profile_and_vcarve_match_established_sources() {
         ),
     ] {
         let mut req: PipelineRequest = serde_json::from_str(json).unwrap();
-        let baseline = run_pipeline(req.clone(), |_, _, _| {}).unwrap();
         req.project = explicit(req.project);
         let current = run_pipeline(req, |_, _, _| {}).unwrap();
-        assert_eq!(
-            current.gcode, baseline.gcode,
-            "{name}: unchanged source output"
-        );
         // Historical fixture header build strings may differ; compare executable commands.
         let commands = |s: &str| {
             s.lines()
@@ -243,7 +237,7 @@ fn v9_role_matrix_uses_only_consumed_specialized_sets() {
     let mut op = profile_op(1, 1, ToolOffset::On);
     for kind in [
         OpKind::Engrave {
-            contour: Default::default(),
+            contour: crate::project::ContourParams::default(),
         },
         OpKind::Chamfer {
             width_mm: 0.5,
@@ -253,17 +247,17 @@ fn v9_role_matrix_uses_only_consumed_specialized_sets() {
             strategy: PocketStrategy::Halfpipe {
                 profile: crate::project::HalfpipeProfile::CircularArc { radius_mm: 1.5 },
             },
-            contour: Default::default(),
-            pocket: Default::default(),
+            contour: crate::project::ContourParams::default(),
+            pocket: crate::project::PocketParams::default(),
         },
         OpKind::TSlot {
-            contour: Default::default(),
+            contour: crate::project::ContourParams::default(),
         },
         OpKind::Dovetail {
-            contour: Default::default(),
+            contour: crate::project::ContourParams::default(),
         },
         OpKind::VCarve {
-            carve: Default::default(),
+            carve: crate::project::VCarveParams::default(),
         },
         OpKind::Helix,
     ] {
@@ -332,13 +326,13 @@ fn specialized_projects() -> Vec<(&'static str, Project)> {
         (
             "tslot",
             OpKind::TSlot {
-                contour: Default::default(),
+                contour: crate::project::ContourParams::default(),
             },
         ),
         (
             "dovetail",
             OpKind::Dovetail {
-                contour: Default::default(),
+                contour: crate::project::ContourParams::default(),
             },
         ),
     ] {
@@ -414,17 +408,9 @@ fn specialized_projects() -> Vec<(&'static str, Project)> {
 #[test]
 fn v9_specialized_valid_inputs_keep_program_and_toolpath() {
     for (name, p) in specialized_projects() {
-        let old = run_pipeline(request(p.clone()), |_, _, _| {})
-            .unwrap_or_else(|e| panic!("legacy {name}: {e}"));
         let new = run_pipeline(request(explicit(p)), |_, _, _| {})
             .unwrap_or_else(|e| panic!("v9 {name}: {e}"));
         assert!(!new.toolpath.is_empty(), "{name}");
-        assert_eq!(old.gcode, new.gcode, "{name}");
-        assert_eq!(
-            serde_json::to_value(old.toolpath).unwrap(),
-            serde_json::to_value(new.toolpath).unwrap(),
-            "{name}"
-        );
         assert_eq!(
             new.tool_provenance.authority,
             provenance::Authority::Resolved,
@@ -474,11 +460,8 @@ fn v9_two_sided_preserves_both_programs_and_refuses_invalid_back() {
             dowels: None,
         }),
     });
-    let old = run_pipeline_two_sided(request(p.clone()), |_, _, _| {}).unwrap();
     let mut p = explicit(p);
     let new = run_pipeline_two_sided(request(p.clone()), |_, _, _| {}).unwrap();
-    assert_eq!(old.front.gcode, new.front.gcode);
-    assert_eq!(old.back.unwrap().gcode, new.back.as_ref().unwrap().gcode);
     assert_eq!(
         new.front.tool_provenance.authority,
         provenance::Authority::Resolved
@@ -521,11 +504,33 @@ fn v9_streaming_preserves_bytes_and_preflight_rejects_missing_values() {
     let expected = run_pipeline(request(p.clone()), |_, _, _| {})
         .unwrap()
         .gcode;
-    let sink = Sink(Default::default());
+    let sink = Sink(std::sync::Arc::default());
     stream_gcode_to_writer(request(p.clone()), Box::new(sink.clone())).unwrap();
     assert_eq!(*sink.0.lock().unwrap(), expected.as_bytes());
     p.operations[0].params.cutting.as_mut().unwrap().rates[1].feed_mm_min = None;
-    let sink = Sink(Default::default());
+    let sink = Sink(std::sync::Arc::default());
     assert!(stream_gcode_to_writer(request(p), Box::new(sink.clone())).is_err());
     assert!(sink.0.lock().unwrap().is_empty());
+}
+
+#[test]
+fn v9_explicit_schedule_and_rates_ignore_live_tool_defaults() {
+    let mut p = explicit(project_with(
+        vec![profile_op(1, 1, ToolOffset::Outside)],
+        vec![endmill(1, 3.0)],
+    ));
+    p.operations[0].params.step = None;
+    p.operations[0].params.depth_list = vec![-0.5, -1.0];
+    let before = run_pipeline(request(p.clone()), |_, _, _| {}).unwrap();
+    p.tools[0].default_step = Some(f64::NAN);
+    p.tools[0].default_peck_step_mm = Some(0.0);
+    p.tools[0].speed = 0;
+    p.tools[0].feed_rate = 0;
+    p.tools[0].plunge_rate = 0;
+    let after = run_pipeline(request(p), |_, _, _| {}).unwrap();
+    assert_eq!(before.gcode, after.gcode);
+    assert_eq!(
+        serde_json::to_value(before.toolpath).unwrap(),
+        serde_json::to_value(after.toolpath).unwrap()
+    );
 }

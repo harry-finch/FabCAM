@@ -131,49 +131,6 @@ pub(super) fn dual_tool_finish_radius(op: &Op, project: &Project) -> Option<f64>
     Some(t.effective_diameter() * 0.5)
 }
 
-/// Apply the tool library's `default_peck_step_mm` to peck-style drill
-/// cycles when the op leaves `peck_step_mm` at 0. Unrecognized values
-/// pass through untouched.
-pub(super) fn resolve_peck_step(
-    cycle: crate::project::DrillCycle,
-    project: &Project,
-    op: &Op,
-) -> crate::project::DrillCycle {
-    use crate::project::DrillCycle;
-    if op.params.cutting.is_some() {
-        return cycle;
-    }
-    let tool_default = project
-        .tools
-        .iter()
-        .find(|t| t.id == op.tool_id)
-        .and_then(|t| t.default_peck_step_mm);
-    let resolved = |op_step: f64| -> f64 {
-        if op_step.abs() > 1e-9 {
-            op_step
-        } else {
-            tool_default.unwrap_or(0.0)
-        }
-    };
-    match cycle {
-        DrillCycle::Simple { .. } => cycle,
-        DrillCycle::Peck {
-            peck_step_mm,
-            dwell_sec,
-        } => DrillCycle::Peck {
-            peck_step_mm: resolved(peck_step_mm),
-            dwell_sec,
-        },
-        DrillCycle::ChipBreak {
-            peck_step_mm,
-            dwell_sec,
-        } => DrillCycle::ChipBreak {
-            peck_step_mm: resolved(peck_step_mm),
-            dwell_sec,
-        },
-    }
-}
-
 /// Build a [`Setup`] that represents this single op — copy in its
 /// tool from `project.tools` and its params.kind-driven mill /
 /// pockets / tabs / leads.
@@ -202,32 +159,6 @@ pub(in crate::pipeline) fn synthesize_op_setup_for_role(
         .iter()
         .find(|t| t.id == op.tool_id)
         .ok_or(PipelineError::UnknownTool(op.id, op.tool_id))?;
-    if let Some(applied) = &op.params.applied_cutting {
-        if project.machine.mode != crate::project::MachineMode::Mill
-            || !matches!(
-                op.kind,
-                OpKind::Profile { .. } | OpKind::Pocket { .. } | OpKind::PlanarSurface { .. }
-            )
-        {
-            return Err(PipelineError::AppliedCutting(
-                op.id,
-                "Saved milling rates cannot be used for this process/operation".into(),
-            ));
-        }
-        let canonical = project
-            .operations
-            .iter()
-            .find(|o| o.id == op.id)
-            .unwrap_or(op);
-        if applied.experimental_recipe.is_some() {
-            warnings.push(PipelineWarning::for_op(op.id, "experimental_recipe", "Experimental recipe · Not tested. Software checks do not establish physical qualification; manually edited values retain experimental ancestry."));
-        }
-        if applied.proposal.is_some()
-            && applied.context_key != crate::feeds_speeds::context_key(project, canonical)
-        {
-            warnings.push(PipelineWarning::for_op(op.id, "feeds_speeds_stale", "Cutting context changed since Apply. Saved/manual values are retained; review or recalculate explicitly."));
-        }
-    }
     let machine = crate::cutting_parameters::effective_machine(project, tool.id);
     if machine.spindle_rpm_max == Some(0)
         || machine
@@ -269,7 +200,7 @@ pub(in crate::pipeline) fn synthesize_op_setup_for_role(
         if let Some(role) = role.filter(|_| op.params.cutting.is_some()) {
             crate::cutting_parameters::rates(op, role, tool.id)
         } else {
-            crate::cutting_parameters::saved_rates(op, tool, pass)
+            resolved_rates(project, op, tool, pass)
         }
     };
     let (rough_speed_raw, rough_plunge, rough_feed) =
@@ -760,6 +691,14 @@ pub(super) fn header_setup_for(project: &Project) -> Setup {
         wcs: project.work_offset.wcs,
         ..Setup::default()
     };
+    if project.machine.mode == crate::project::MachineMode::Mill {
+        setup.tool.speed = 0;
+        setup.tool.speed_finish = 0;
+        setup.tool.rate_h = 0;
+        setup.tool.rate_h_finish = 0;
+        setup.tool.rate_v = 0;
+        setup.tool.rate_v_finish = 0;
+    }
     // Pick the first enabled op THAT ACTUALLY CUTS. Pause ops have
     // no tool / source / setup of their own and don't emit any header-
     // relevant tool-setup gcode, so falling back to them produces a
@@ -785,11 +724,11 @@ pub(super) fn header_setup_for(project: &Project) -> Setup {
                 crate::project::PassKind::Rough
             };
             let (rs_raw, rp, rf) =
-                crate::cutting_parameters::saved_rates(op, tool, main_pass).unwrap_or((0, 0, 0));
+                resolved_rates(project, op, tool, main_pass).unwrap_or((0, 0, 0));
             let (fs_raw, fp, ff) = if matches!(op.kind, OpKind::Drill { .. }) {
                 (rs_raw, rp, rf)
             } else {
-                crate::cutting_parameters::saved_rates(op, tool, crate::project::PassKind::Finish)
+                resolved_rates(project, op, tool, crate::project::PassKind::Finish)
                     .unwrap_or((0, 0, 0))
             };
             // Keep the header S<x> consistent with the per-op
@@ -877,12 +816,22 @@ pub(super) fn header_setup_for(project: &Project) -> Setup {
         }
         setup.mill.fast_move_z = op.params.fast_move_z;
     } else if let Some(tool) = project.tools.first() {
-        let (rs_raw, rp, rf) =
-            crate::project::resolve_tool_rates(tool, crate::project::PassKind::Rough);
-        let (fs_raw, fp, ff) =
-            crate::project::resolve_tool_rates(tool, crate::project::PassKind::Finish);
-        let rs = clamp_rpm_silent(rs_raw, &project.machine);
-        let fs = clamp_rpm_silent(fs_raw, &project.machine);
+        let (rs, rp, rf, fs, fp, ff) = if project.machine.mode == crate::project::MachineMode::Mill
+        {
+            // No cutting operation: header metadata cannot invent cutting intent.
+            (0, 0, 0, 0, 0, 0)
+        } else {
+            let (rs, rp, rf) = crate::project::resolve_tool_rates(tool, PassKind::Rough);
+            let (fs, fp, ff) = crate::project::resolve_tool_rates(tool, PassKind::Finish);
+            (
+                clamp_rpm_silent(rs, &project.machine),
+                rp,
+                rf,
+                clamp_rpm_silent(fs, &project.machine),
+                fp,
+                ff,
+            )
+        };
         let pierce_sec = if matches!(tool.kind, crate::project::ToolKind::LaserBeam) {
             tool.laser_pierce_sec.unwrap_or(0.0).max(0.0)
         } else {
@@ -1000,9 +949,47 @@ fn effective_tip_diameter_mm(tool: &crate::project::ToolEntry) -> f64 {
     }
 }
 
+/// Milling consumes authored roles. Existing non-milling/process controls are separate
+/// from milling parameter ownership and retain their own operation/tool semantics.
+fn resolved_rates(
+    project: &Project,
+    op: &Op,
+    tool: &crate::project::ToolEntry,
+    pass: PassKind,
+) -> Result<(u32, u32, u32), String> {
+    if project.machine.mode == crate::project::MachineMode::Mill
+        && !matches!(
+            op.kind,
+            OpKind::DragKnife { .. } | OpKind::RasterEngrave { .. }
+        )
+    {
+        return crate::cutting_parameters::saved_rates(op, tool, pass);
+    }
+    let (rpm, plunge, feed) = crate::project::resolve_tool_rates(tool, pass);
+    Ok((
+        rpm,
+        op.params.plunge_rate_override.unwrap_or(plunge),
+        op.params.feed_rate_override.unwrap_or(feed),
+    ))
+}
+
 #[cfg(test)]
 #[allow(clippy::float_cmp)]
 mod tests {
+    fn synthesize_op_setup(
+        op: &crate::project::Op,
+        project: &crate::project::Project,
+        warnings: &mut Vec<crate::pipeline::PipelineWarning>,
+    ) -> Result<crate::cam::setup::Setup, crate::pipeline::PipelineError> {
+        let mut fixture = project.clone();
+        fixture.operations = vec![op.clone()];
+        let fixture = crate::fixture_support::project(fixture);
+        super::synthesize_op_setup(&fixture.operations[0], &fixture, warnings)
+    }
+    fn header_setup_for(project: &crate::project::Project) -> crate::cam::setup::Setup {
+        super::header_setup_for(&crate::fixture_support::project(project.clone()))
+    }
+
     use super::*;
     use crate::pipeline::test_helpers::{endmill, profile_op, project_with};
     use crate::pipeline::{run_pipeline, PipelineRequest, PostProcessorKind};
@@ -1042,12 +1029,12 @@ mod tests {
     }
 
     #[test]
-    fn effective_step_falls_back_to_tool_default() {
+    fn effective_step_does_not_read_tool_default() {
         let mut tool = endmill(1, 3.0);
         tool.default_step = Some(-0.5);
         let mut op = profile_op(1, 1, ToolOffset::Outside);
         op.params.step = None;
-        assert_eq!(effective_step(&op, &tool).unwrap(), -0.5);
+        assert!(effective_step(&op, &tool).is_err());
     }
 
     #[test]
@@ -1204,24 +1191,20 @@ mod tests {
     }
 
     #[test]
-    fn run_pipeline_emits_step_unspecified_warning() {
+    fn missing_step_refuses_generation() {
         let tool = endmill(1, 3.0);
         let mut op = profile_op(1, 1, ToolOffset::Outside);
         op.params.step = None;
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with(vec![op], vec![tool]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.warnings.iter().any(|w| w.kind == "step_unspecified"),
-            "expected step_unspecified warning, got {:?}",
-            resp.warnings
-        );
+        .expect_err("invalid authored input must not produce machine output");
+        assert!(err.to_string().contains("explicit depth"), "{err}");
     }
 
     /// `resolve_tool_rates`: unset finish/drill variants fall back to the
@@ -1259,41 +1242,41 @@ mod tests {
         op.params.step = Some(-1.0);
         op.params.depth = -1.0;
         let err = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with(vec![op], vec![tool]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect_err("zero cutting feed must not produce a program");
         assert!(
-            matches!(&err, PipelineError::RefusedOutput(1, d) if d.contains("zero feed")),
+            matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("feed")),
             "{err:?}"
         );
     }
 
-    /// A zero spindle speed also triggers the warning.
+    /// Missing spindle intent is refused before program emission.
     #[test]
-    fn zero_spindle_speed_emits_warning() {
+    fn zero_spindle_speed_refuses_generation() {
         let mut tool = endmill(1, 3.0);
         tool.speed = 0;
         let mut op = profile_op(1, 1, ToolOffset::Outside);
         op.params.step = Some(-1.0);
         op.params.depth = -1.0;
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project: project_with(vec![op], vec![tool]),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
+        .expect_err("invalid authored input must not produce machine output");
         assert!(
-            resp.warnings.iter().any(|w| w.kind == "zero_rate_emitted"),
-            "expected zero_rate_emitted warning for S0, got {:?}",
-            resp.warnings
+            err.to_string()
+                .contains("spindle, feed and plunge must be explicit positive integers"),
+            "{err}"
         );
     }
 
@@ -1370,12 +1353,9 @@ mod tests {
         assert_eq!(header.tool.pause, 4);
     }
 
-    /// Tool RPM above the machine spindle ceiling clamps to the
-    /// ceiling and emits a `spindle_speed_clamped_above_max` warning.
-    /// The emitted `M3 S<n>` reflects the clamped value, not the raw
-    /// tool speed.
+    /// Known spindle violations refuse; no substituted S-word may be emitted.
     #[test]
-    fn rpm_above_machine_max_clamps_and_warns() {
+    fn rpm_above_machine_max_refuses_without_clamping() {
         let mut tool = endmill(1, 3.0);
         tool.speed = 24_000; // way above hobby spindle range
         let mut op = profile_op(1, 1, ToolOffset::Outside);
@@ -1383,41 +1363,24 @@ mod tests {
         op.params.depth = -1.0;
         let mut project = project_with(vec![op], vec![tool]);
         project.machine.spindle_rpm_max = Some(12_000);
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
+        .expect_err("invalid authored input must not produce machine output");
         assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "spindle_speed_clamped_above_max"),
-            "expected clamp warning, got {:?}",
-            resp.warnings
-        );
-        // The emitted gcode shouldn't ever say S24000 — the clamp must
-        // bite at the output boundary, not just in the warning.
-        assert!(
-            !resp.gcode.contains("S24000"),
-            "raw 24000 RPM leaked into gcode despite clamp"
-        );
-        assert!(
-            resp.gcode.contains("S12000"),
-            "expected clamped S12000, got {}",
-            resp.gcode
+            err.to_string().contains("rpm exceeds the machine maximum"),
+            "{err}"
         );
     }
 
-    /// A cutting feed above the machine's `max_feed_mm_min` ceiling
-    /// clamps DOWN at the output boundary and emits a
-    /// `feed_clamped_above_max` warning — the raw F-word never reaches
-    /// the controller.
+    /// Known feed violations refuse before any F-word reaches the controller.
     #[test]
-    fn feed_above_machine_max_clamps_and_warns() {
+    fn feed_above_machine_max_refuses_without_clamping() {
         let mut tool = endmill(1, 3.0);
         tool.feed_rate = 5000; // above the machine ceiling
         let mut op = profile_op(1, 1, ToolOffset::Outside);
@@ -1425,39 +1388,24 @@ mod tests {
         op.params.depth = -1.0;
         let mut project = project_with(vec![op], vec![tool]);
         project.machine.max_feed_mm_min = Some(2000);
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
+        .expect_err("invalid authored input must not produce machine output");
         assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "feed_clamped_above_max"),
-            "expected feed clamp warning, got {:?}",
-            resp.warnings
-        );
-        assert!(
-            !resp.gcode.contains("F5000"),
-            "raw 5000 mm/min feed leaked into gcode despite clamp:\n{}",
-            resp.gcode
-        );
-        assert!(
-            resp.gcode.contains("F2000"),
-            "expected clamped F2000, got:\n{}",
-            resp.gcode
+            err.to_string().contains("exceeds the machine maximum"),
+            "{err}"
         );
     }
 
-    /// An op-level feed override above the ceiling is ALSO clamped
-    /// — the clamp sits after the override merge, so a fat-fingered
-    /// override can't bypass the machine limit.
+    /// Manually authored values cannot bypass the machine ceiling.
     #[test]
-    fn feed_override_above_machine_max_clamps() {
+    fn authored_feed_above_machine_max_refuses() {
         let tool = endmill(1, 3.0);
         let mut op = profile_op(1, 1, ToolOffset::Outside);
         op.params.step = Some(-1.0);
@@ -1465,24 +1413,22 @@ mod tests {
         op.params.feed_rate_override = Some(9999);
         let mut project = project_with(vec![op], vec![tool]);
         project.machine.max_feed_mm_min = Some(1500);
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
+        .expect_err("invalid authored input must not produce machine output");
         assert!(
-            !resp.gcode.contains("F9999"),
-            "override feed bypassed the machine ceiling:\n{}",
-            resp.gcode
+            err.to_string().contains("exceeds the machine maximum"),
+            "{err}"
         );
-        assert!(resp.gcode.contains("F1500"), "expected clamped F1500");
     }
     #[test]
-    fn lot7_rpm_clamp_preserves_manual_feeds_but_explains_chipload_factor() {
+    fn lot7_rpm_limit_refuses_instead_of_recalculating_chipload() {
         use crate::pipeline::test_helpers::{endmill, profile_op, project_with};
         let op = profile_op(1, 1, crate::project::ToolOffset::Outside);
         let mut tool = endmill(1, 6.);
@@ -1490,15 +1436,31 @@ mod tests {
         let mut project = project_with(vec![op.clone()], vec![tool]);
         project.machine.spindle_rpm_max = Some(12_000);
         let mut warnings = Vec::new();
-        let setup = synthesize_op_setup(&op, &project, &mut warnings).unwrap();
-        assert_eq!(setup.tool.speed, 12_000);
-        assert_eq!(setup.tool.rate_h, 800);
-        assert_eq!(setup.tool.rate_v, 100);
-        let warning = warnings
-            .iter()
-            .find(|w| w.kind == "spindle_speed_clamped_above_max")
-            .unwrap();
-        assert_eq!(warning.params["chipload_factor"], "2.000");
-        assert!(warning.message.contains("Feeds are unchanged"));
+        let err = synthesize_op_setup(&op, &project, &mut warnings)
+            .expect_err("invalid authored input must not produce machine output");
+        assert!(
+            err.to_string().contains("rpm exceeds the machine maximum"),
+            "{err}"
+        );
+    }
+    #[test]
+    fn header_without_cutting_operations_has_no_live_milling_rates() {
+        for tools in [vec![], vec![endmill(1, 3.0)]] {
+            let mut project = project_with(vec![], tools);
+            project.machine.spindle_rpm_min = Some(5000);
+            let header = header_setup_for(&project);
+            assert_eq!(
+                (header.tool.speed, header.tool.rate_h, header.tool.rate_v),
+                (0, 0, 0)
+            );
+            assert_eq!(
+                (
+                    header.tool.speed_finish,
+                    header.tool.rate_h_finish,
+                    header.tool.rate_v_finish
+                ),
+                (0, 0, 0)
+            );
+        }
     }
 }

@@ -43,6 +43,9 @@ fn run_pipeline(dxf: &Path) -> usize {
 
     let mut setup = Setup::default();
     setup.tool.diameter = 3.0;
+    setup.tool.speed = 18_000;
+    setup.tool.rate_h = 800;
+    setup.tool.rate_v = 100;
     setup.mill.depth = -2.0;
     setup.mill.step = -1.0;
     setup.mill.offset = ToolOffset::Outside;

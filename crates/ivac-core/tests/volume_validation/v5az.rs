@@ -64,12 +64,10 @@ const CHAMFER_TIP_ANGLE_DEG: f64 = 45.0; // very pointy cone
 const CHAMFER_WIDTH: f64 = 0.5;
 const SIM_CELL_MM: f64 = 0.1;
 
-/// Build a Kegel (cone) tool from the v-bit builder — `from_tool`
-/// maps Kegel → `ToolProfile::VBit` so the sim behavior is
-/// identical to a V-bit of the same geometry.
+/// Explicit v9 V-bit fixture; retains the original cone geometry and volume witness.
 fn cone_tool(id: u32, diameter_mm: f64, tip_angle_deg: f64) -> ivac_core::project::ToolEntry {
     let mut t = vbit_tool(id, diameter_mm, tip_angle_deg, 0.0);
-    t.kind = ToolKind::Kegel;
+    t.kind = ToolKind::VBit;
     t.name = format!("{diameter_mm}mm {tip_angle_deg}° cone");
     t
 }
@@ -159,11 +157,11 @@ fn chamfer_after_pocket_does_not_dip_below_pocket_floor() {
     };
 
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project.clone(),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline runs");

@@ -145,7 +145,7 @@ mod pipeline_checks {
         }
     }
     fn rejected(req: PipelineRequest) -> Box<DiagnosticPreview> {
-        match run_pipeline(req, |_, _, _| {}) {
+        match run_pipeline(crate::fixture_support::request(req), |_, _, _| {}) {
             Err(PipelineError::FixtureCollision(preview)) => preview,
             other => panic!("expected collision refusal: {other:?}"),
         }
@@ -188,13 +188,16 @@ mod pipeline_checks {
                     req.project.fixtures[0].origin = (90., 90.);
                 }
                 let bytes = Arc::new(Mutex::new(vec![]));
-                assert!(
-                    stream_gcode_with_preview(req.clone(), Box::new(Capture(bytes.clone())))
-                        .is_err()
-                );
-                assert!(
-                    stream_gcode_to_writer(req.clone(), Box::new(Capture(bytes.clone()))).is_err()
-                );
+                assert!(stream_gcode_with_preview(
+                    crate::fixture_support::request(req.clone()),
+                    Box::new(Capture(bytes.clone()))
+                )
+                .is_err());
+                assert!(stream_gcode_to_writer(
+                    crate::fixture_support::request(req.clone()),
+                    Box::new(Capture(bytes.clone()))
+                )
+                .is_err());
                 assert!(bytes.lock().unwrap().is_empty());
             }
             req.project.fixtures[0].origin = (30., 17.);
@@ -233,7 +236,8 @@ mod pipeline_checks {
         };
         assert_eq!(kinds(&base.warnings), kinds(&shifted.warnings));
         req.project.fixtures[0].origin = (90., 90.);
-        let clear = run_pipeline(req.clone(), |_, _, _| {}).unwrap();
+        let clear =
+            run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).unwrap();
         assert!(!kinds(&clear.warnings).contains(&"fixture_path_collision".into()));
         req.project.fixtures[0].origin = (30., 17.);
         let restored = rejected(req);
@@ -248,7 +252,7 @@ mod pipeline_checks {
         second.tool_id = 2;
         second.params.fast_move_z = 8.;
         req.project.operations.push(second);
-        let r = run_pipeline(req.clone(), |_, _, _| {}).unwrap();
+        let r = run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).unwrap();
         let moves = oracle::decode(&r.gcode).unwrap();
         assert!(!moves.is_empty());
         assert!(r.gcode.contains("Load tool 2"));
@@ -284,17 +288,21 @@ mod pipeline_checks {
         let token = CancelToken::new();
         let mut done = false;
         assert!(matches!(
-            generate_streaming(req.clone(), &token, &mut |event| {
-                if matches!(event, PipelineEvent::Done { .. }) {
-                    done = true;
+            generate_streaming(
+                crate::fixture_support::request(req.clone()),
+                &token,
+                &mut |event| {
+                    if matches!(event, PipelineEvent::Done { .. }) {
+                        done = true;
+                    }
                 }
-            }),
+            ),
             Err(PipelineError::FixtureCollision(_))
         ));
         assert!(!done);
         token.cancel();
         assert!(matches!(
-            generate_streaming(req, &token, &mut |_| {}),
+            generate_streaming(crate::fixture_support::request(req), &token, &mut |_| {}),
             Err(PipelineError::Cancelled)
         ));
     }
@@ -313,7 +321,8 @@ mod pipeline_checks {
             z_top: 12.,
             color: 0,
         });
-        let unknown = run_pipeline(req.clone(), |_, _, _| {}).unwrap();
+        let unknown =
+            run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).unwrap();
         assert!(unknown
             .warnings
             .iter()
@@ -361,7 +370,10 @@ mod pipeline_checks {
                 1 => req.project.machine.park_at_home = true,
                 _ => req.project.machine.toolchange_xy = Some((50., 50.)),
             }
-            assert!(run_pipeline(req, |_, _, _| {}).is_err(), "mode {mode}");
+            assert!(
+                run_pipeline(crate::fixture_support::request(req), |_, _, _| {}).is_err(),
+                "mode {mode}"
+            );
         }
     }
     #[test]
@@ -386,7 +398,7 @@ mod pipeline_checks {
             z_top: 25.,
             color: 0,
         });
-        let r = run_pipeline(req.clone(), |_, _, _| {}).unwrap();
+        let r = run_pipeline(crate::fixture_support::request(req.clone()), |_, _, _| {}).unwrap();
         assert!(r
             .warnings
             .iter()
@@ -420,3 +432,6 @@ fn constant_height_holder_crossing_and_output_uncertainty_band() {
         );
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

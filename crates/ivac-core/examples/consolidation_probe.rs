@@ -60,6 +60,7 @@ fn main() {
                 properties: std::collections::BTreeMap::default(),
             }),
         };
+        let request = fixture_support::request(request);
         let response = ivac_core::pipeline::run_pipeline(request.clone(), |_, _, _| {});
         cases.push(serde_json::json!({"name":name, "request":request, "response":response.map_err(|e|e.to_string())}));
     }
@@ -71,3 +72,6 @@ fn main() {
         .unwrap()
     );
 }
+
+#[path = "../tests/support/explicit.rs"]
+mod fixture_support;

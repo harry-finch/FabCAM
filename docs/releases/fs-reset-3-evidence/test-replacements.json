@@ -1,0 +1,224 @@
+[
+  {
+    "file": "crates/ivac-core/src/pipeline/setup_resolver.rs",
+    "old": "run_pipeline_emits_step_unspecified_warning",
+    "new": "missing_step_refuses_generation",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/setup_resolver.rs",
+    "old": "zero_spindle_speed_emits_warning",
+    "new": "zero_spindle_speed_refuses_generation",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/setup_resolver.rs",
+    "old": "rpm_above_machine_max_clamps_and_warns",
+    "new": "rpm_above_machine_max_refuses_without_clamping",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/setup_resolver.rs",
+    "old": "feed_above_machine_max_clamps_and_warns",
+    "new": "feed_above_machine_max_refuses_without_clamping",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/setup_resolver.rs",
+    "old": "feed_override_above_machine_max_clamps",
+    "new": "authored_feed_above_machine_max_refuses",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/setup_resolver.rs",
+    "old": "zero_feed_rate_is_refused",
+    "new": "zero_feed_rate_is_refused",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/setup_resolver.rs",
+    "old": "lot7_rpm_clamp_preserves_manual_feeds_but_explains_chipload_factor",
+    "new": "lot7_rpm_limit_refuses_instead_of_recalculating_chipload",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/offset_builder.rs",
+    "old": "pocket_with_drill_bit_warns_about_tool_kind",
+    "new": "pocket_with_drill_bit_refuses",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/op_drivers/thread.rs",
+    "old": "thread_op_with_drill_tool_emits_kind_mismatch_warning",
+    "new": "thread_op_with_drill_tool_refuses",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/op_drivers/drill.rs",
+    "old": "drill_chamfer_after_clamps_oversize_width_to_reach",
+    "new": "drill_chamfer_after_refuses_oversize_width",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/op_drivers/drill.rs",
+    "old": "drill_peck_uses_tool_default_when_op_step_zero",
+    "new": "drill_peck_requires_explicit_cycle_depth",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "chamfer_oversize_width_clamped_to_tool_reach",
+    "new": "chamfer_oversize_width_refuses_without_clamping",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "chamfer_with_non_vbit_warns",
+    "new": "chamfer_with_non_vbit_refuses",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "tslot_op_with_plain_endmill_warns_kind_mismatch",
+    "new": "tslot_op_with_plain_endmill_refuses",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "dovetail_op_with_plain_endmill_warns_kind_mismatch",
+    "new": "dovetail_op_with_plain_endmill_refuses",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs",
+    "old": "halfpipe_warns_when_tool_radius_mismatch_exceeds_10pct",
+    "new": "halfpipe_refuses_mismatched_radius",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs",
+    "old": "halfpipe_tool_reach_clamps_deep_profile",
+    "new": "halfpipe_refuses_depth_exceeding_tool_reach",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "pipeline_relief_mill_emits_varying_z_ballnose_surface",
+    "new": "pipeline_relief_mill_emits_varying_z_ballnose_surface",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "pipeline_relief_mill_heightgrid_cuts_real_z_without_depth_range",
+    "new": "pipeline_relief_mill_heightgrid_cuts_real_z_with_explicit_range",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs",
+    "old": "halfpipe_circular_arc_emits_curved_floor",
+    "new": "halfpipe_circular_arc_emits_curved_floor",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/offset_builder.rs",
+    "old": "op_step_and_tool_default_step_emit_identical_gcode",
+    "new": "op_step_and_tool_default_step_emit_identical_gcode",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "regenerate_with_no_edits_hits_cache",
+    "new": "v9_regeneration_does_not_reuse_legacy_op_cache",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "edit_one_op_misses_only_that",
+    "new": "v9_edits_recompute_all_operations",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "under_cap_ops_are_cached_normally",
+    "new": "v9_under_cap_ops_still_bypass_legacy_cache",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/tests.rs",
+    "old": "per_op_warnings_resurface_on_cache_hit",
+    "new": "v9_repeated_generation_preserves_prerequisite_warnings",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/pipeline/two_sided_emit.rs",
+    "old": "dowels_drilled_front_referenced_back",
+    "new": "automatic_dowels_refuse_without_authored_roles",
+    "disposition": "strict v9 refusal replaces warning/clamping or implicit-default success"
+  },
+  {
+    "file": "crates/ivac-core/src/feeds_speeds.rs",
+    "old": "manual_only_values_roundtrip_and_generate_without_recommendation_or_data",
+    "new": "pipeline/cutting_v9_tests.rs + tests/fs_reset_outputs.rs",
+    "disposition": "retire applied-recommendation transport; role/output/saved-copy checks retained"
+  },
+  {
+    "file": "crates/ivac-core/src/feeds_speeds.rs",
+    "old": "pipeline_uses_saved_manual_values_and_warns_on_changed_context",
+    "new": "pipeline/cutting_v9_tests.rs + tests/fs_reset_outputs.rs",
+    "disposition": "retire applied-recommendation transport; role/output/saved-copy checks retained"
+  },
+  {
+    "file": "crates/ivac-core/src/feeds_speeds.rs",
+    "old": "section_metadata_reads_active_profile_pass_and_final_constraints",
+    "new": "pipeline/cutting_v9_tests.rs + tests/fs_reset_outputs.rs",
+    "disposition": "retire applied-recommendation transport; role/output/saved-copy checks retained"
+  },
+  {
+    "family": "NUMSAFE finite/zero input",
+    "old_behavior": "legacy error variants and implicit tool rates",
+    "safety": "finite numbers, no zero feed, structured diagnostics, empty/refused stream",
+    "replacement": "crates/ivac-core/tests/numsafe.rs: explicit fixture rates and specific neutral validator refusals"
+  },
+  {
+    "family": "NUMSAFE2 schedule",
+    "old_behavior": "tool step fallback; positive legacy finish-step magnitude",
+    "safety": "1000/1001 pass boundary, extreme values, no stream cuts, regeneration",
+    "replacement": "crates/ivac-core/tests/numsafe2.rs: authored negative finish-step, missing/invalid step refusal; thresholds unchanged"
+  },
+  {
+    "family": "op cache",
+    "old_behavior": "legacy unversioned requests could hit per-op cache",
+    "safety": "byte parity, invalidation, cancellation, bounded tee memory",
+    "replacement": "v9 already bypassed this cache in FS-RESET-2; pipeline tests now assert recomputation; gcode/sink.rs retains exact tee cap/overflow/recovery positives and negatives; perf1_b_tests retains CPS-result and remaining-material caching"
+  },
+  {
+    "family": "chamfer simulation volumes",
+    "old_behavior": "oversize width implicitly clamped; cone fixture kind",
+    "safety": "analytic volume, depth and stock floor, open-edge pass traversal",
+    "replacement": "volume_validation/chamfer.rs uses explicit width 4 (same effective geometry); v5az uses VBit of identical cone geometry; invalid width/kind refuses in core regression tests"
+  },
+  {
+    "family": "heightgrid relief",
+    "old_behavior": "default (0,0) depth range",
+    "safety": "real height-grid Z, gouge envelope, volume",
+    "replacement": "pipeline/tests.rs and waterline_acceptance.rs use explicit reviewed model ranges; numeric thresholds unchanged"
+  },
+  {
+    "family": "duplicate tool IDs",
+    "old_behavior": "generate with unavailable provenance",
+    "safety": "never guess tool identity",
+    "replacement": "tool_provenance.rs requires refusal, retaining leading tool-less Pause positive"
+  },
+  {
+    "family": "manual planar rates",
+    "old_behavior": "AppliedCutting persisted old recommendation slots",
+    "safety": "saved manual RPM/feed/plunge determine ShopBot output",
+    "replacement": "ux3_qualification.rs persists explicit v9 roles with same 16000/1800/300 output assertions"
+  },
+  {
+    "family": "geometry/API fixtures",
+    "old_behavior": "version-absent machining in DrawingGenerationRequest",
+    "safety": "authoritative drawings, selection ambiguity, source deletion, schema distinction",
+    "replacement": "drawing_audit.rs and geom1_contract.rs author nested v9 requests before generation; existing assertions retained"
+  }
+]

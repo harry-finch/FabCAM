@@ -510,15 +510,23 @@ mod tests {
             crate::pipeline::test_helpers::project_with(ops, vec![endmill(1, 3.0), drill]);
         project.stock = Some(flip_stock(w, h));
         project
+            .stock
+            .as_mut()
+            .unwrap()
+            .flip
+            .as_mut()
+            .unwrap()
+            .dowels = None;
+        project
     }
 
     fn run2(project: Project) -> Result<TwoSidedResponse, PipelineError> {
         run_pipeline_two_sided(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
     }
@@ -539,11 +547,11 @@ mod tests {
             flip: None,
         });
         let single = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project.clone(),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect("single-program run");
@@ -615,8 +623,8 @@ mod tests {
     /// Dowel holes are drilled in the front program and only referenced in the
     /// back header (the back must not re-drill them).
     #[test]
-    fn dowels_drilled_front_referenced_back() {
-        let project = two_sided(
+    fn automatic_dowels_refuse_without_authored_roles() {
+        let mut project = two_sided(
             20.0,
             40.0,
             vec![
@@ -624,27 +632,18 @@ mod tests {
                 pocket(2, WorkpieceSide::Back, -3.0),
             ],
         );
-        let two = run2(project).expect("two-sided job emits");
-        let back = two.back.expect("back program");
-        // The dowel op is the only drill op → a peck cycle (G83) at each
-        // auto-placed centre proves the front program drilled the registration
-        // holes. Stock 20×40, margin 2, X-axis flip ⇒ centres on the y=20
-        // centre-line at x=2 and x=18.
-        let drilled = |x: &str| {
-            two.front
-                .gcode
-                .lines()
-                .any(|l| l.contains("G83") && l.contains(x))
-        };
-        assert!(drilled("X2 Y20"), "front drills the first dowel at (2, 20)");
-        assert!(drilled("X18"), "front drills the second dowel at (18, 20)");
+        project
+            .stock
+            .as_mut()
+            .unwrap()
+            .flip
+            .as_mut()
+            .unwrap()
+            .dowels = flip_stock(20., 40.).flip.unwrap().dowels;
+        let err = run2(project).unwrap_err();
         assert!(
-            back.gcode.contains("Seat the stock on the dowel pins"),
-            "back header references the dowel positions"
-        );
-        assert!(
-            !back.gcode.contains("G83"),
-            "back program must not re-drill the dowels"
+            err.to_string().contains("Automatic dowel drilling"),
+            "{err}"
         );
     }
 
@@ -725,7 +724,8 @@ mod tests {
                 pocket(2, WorkpieceSide::Back, -3.),
             ],
         );
-        let stock = p.stock.clone().unwrap();
+        let mut stock = p.stock.clone().unwrap();
+        stock.flip.as_mut().unwrap().dowels = flip_stock(20., 40.).flip.unwrap().dowels;
         let cfg = stock.flip.as_ref().unwrap().dowels.as_ref().unwrap();
         let centres = dowel_centres(&stock, FlipAxis::X, cfg).unwrap();
         inject_dowel_op(&mut p, &stock, &centres, cfg).unwrap();

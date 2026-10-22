@@ -85,7 +85,7 @@ fn profile() -> OpKind {
 }
 fn post(p: Project) -> Result<PipelineResponse, ivac_core::pipeline::PipelineError> {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -94,7 +94,7 @@ fn post(p: Project) -> Result<PipelineResponse, ivac_core::pipeline::PipelineErr
                 },
                 properties: BTreeMap::new(),
             }),
-        },
+        }),
         |_, _, _| {},
     )
 }
@@ -411,7 +411,7 @@ fn m4_lab_spindle_runs_real_cam_and_preserves_manual_default() {
         ivac_core::pipeline::CpsParamValue::Bool(true),
     );
     let lab = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -420,7 +420,7 @@ fn m4_lab_spindle_runs_real_cam_and_preserves_manual_default() {
                 },
                 properties,
             }),
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -918,11 +918,11 @@ fn ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct()
                 }
             ));
             let generic = run_pipeline(
-                PipelineRequest {
+                crate::fixture_support::request(PipelineRequest {
                     project: reloaded.clone(),
                     post_processor: Some(PostProcessorKind::Linuxcnc),
                     cps_post: None,
-                },
+                }),
                 |_, _, _| {},
             )
             .unwrap();
@@ -957,11 +957,11 @@ fn ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct()
             radius_mm: Some(500.),
         };
         let generic = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: too_large.clone(),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1050,7 +1050,7 @@ fn ux2_work_zero_translates_actual_output_without_changing_intent_or_depths() {
                 .count()
         );
         let native = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: {
                     let mut p = base;
                     p.work_offset.x_mm = 10.;
@@ -1059,7 +1059,7 @@ fn ux2_work_zero_translates_actual_output_without_changing_intent_or_depths() {
                 },
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1175,7 +1175,7 @@ fn ux2_unqualified_two_sided_shopbot_scaffold_blocks_before_invalid_output() {
     p.operations.push(back);
     let before = serde_json::to_value(&p).unwrap();
     let err = ivac_core::pipeline::run_pipeline_two_sided(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p.clone(),
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -1184,7 +1184,7 @@ fn ux2_unqualified_two_sided_shopbot_scaffold_blocks_before_invalid_output() {
                 },
                 properties: BTreeMap::new(),
             }),
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap_err();
@@ -1550,7 +1550,7 @@ fn v1_freeze_pocket_rpm_matrix() {
             let mut previous = None;
             for _ in 0..2 {
                 let result = run_pipeline(
-                    PipelineRequest {
+                    crate::fixture_support::request(PipelineRequest {
                         project: p.clone(),
                         post_processor: Some(PostProcessorKind::Cps),
                         cps_post: Some(CpsPostSelection {
@@ -1562,7 +1562,7 @@ fn v1_freeze_pocket_rpm_matrix() {
                                 ivac_core::pipeline::CpsParamValue::Bool(lab),
                             )]),
                         }),
-                    },
+                    }),
                     |_, _, _| {},
                 );
                 let signature = result
@@ -1646,7 +1646,7 @@ fn v1_freeze_pocket_without_wall_ring_does_not_change_tools_or_rpm() {
         finish.speed = 10000;
         p.tools.push(finish);
         let result = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: p,
                 post_processor: Some(PostProcessorKind::Cps),
                 cps_post: Some(CpsPostSelection {
@@ -1658,7 +1658,7 @@ fn v1_freeze_pocket_without_wall_ring_does_not_change_tools_or_rpm() {
                         ivac_core::pipeline::CpsParamValue::Bool(lab),
                     )]),
                 }),
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1667,3 +1667,6 @@ fn v1_freeze_pocket_without_wall_ring_does_not_change_tools_or_rpm() {
         assert!(!result.gcode.contains("TR,10000"));
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

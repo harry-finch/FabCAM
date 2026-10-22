@@ -62,25 +62,6 @@ pub(in crate::pipeline) fn validate_planar_surface(
             "Planar surfacing V1 requires a single-sided job with Z=0 on the material surface.",
         ));
     }
-    if let Some(a) = &op.params.applied_cutting {
-        if a.proposal.is_some()
-            || a.knowledge.is_some()
-            || a.slots.iter().any(|s| {
-                matches!(
-                    s.origins.rpm,
-                    crate::feeds_speeds::CuttingOrigin::Recommendation
-                ) || matches!(
-                    s.origins.feed,
-                    crate::feeds_speeds::CuttingOrigin::Recommendation
-                ) || matches!(
-                    s.origins.plunge,
-                    crate::feeds_speeds::CuttingOrigin::Recommendation
-                )
-            })
-        {
-            return Err(invalid(op, "Surfacing accepts manual cutting values only; dedicated recommendation data is unavailable."));
-        }
-    }
     let raster = planar_raster(surface, setup.tool.diameter).map_err(|m| invalid(op, m))?;
     if surface.stepover_mm > setup.tool.diameter * 0.95 {
         return Err(invalid(op, "Surfacing stepover must not exceed 95% of the effective cutter diameter (retain overlap between raster passes)."));

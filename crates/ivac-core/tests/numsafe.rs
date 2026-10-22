@@ -44,11 +44,11 @@ fn project() -> Project {
 
 fn generate(p: Project, post: PostProcessorKind) -> Result<PipelineResponse, PipelineError> {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(post),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
 }
@@ -68,11 +68,11 @@ impl std::io::Write for Shared {
 fn stream(p: Project, post: PostProcessorKind) -> (Result<(), StreamGcodeError>, String) {
     let buf = Arc::new(Mutex::new(Vec::new()));
     let r = stream_gcode_to_writer(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(post),
             cps_post: None,
-        },
+        }),
         Box::new(Shared(buf.clone())),
     )
     .map(|_| ());
@@ -120,7 +120,7 @@ fn nan_clearance_is_refused_never_zeroed() {
         p.operations[0].params.fast_move_z = f64::NAN;
         let err = generate(p.clone(), post).expect_err("NaN clearance must not generate");
         assert!(
-            matches!(&err, PipelineError::RefusedOutput(0, d) if d.contains("non-finite")),
+            matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("clearance must be finite")),
             "{post:?}: {err:?}"
         );
         let (r, streamed) = stream(p, post);
@@ -152,12 +152,19 @@ fn non_finite_parameters_are_refused_before_planning() {
         edit(&mut p);
         let err = generate(p, PostProcessorKind::Linuxcnc).expect_err(name);
         assert!(
-            matches!(&err, PipelineError::NonFiniteParameter(1, d) if d.starts_with(name)),
+            matches!(&err, PipelineError::AppliedCutting(1, d) if match name {
+                "depth" => d.contains("depth must be finite"),
+                "start depth" => d.contains("start depth must be finite"),
+                "tool diameter" => d.contains("invalid diameter"),
+                "depth list entry" => d.contains("Explicit depths must be finite"),
+                _ => false,
+            }),
             "{name}: {err:?}"
         );
         let structured = err.to_structured(None).expect("structured");
         assert!(
-            structured.message.contains("No program generated"),
+            !structured.message.is_empty()
+                && structured.params.get("op_id").is_some_and(|id| id == "1"),
             "{structured:?}"
         );
     }
@@ -184,7 +191,7 @@ fn zero_cutting_or_plunge_feed_is_refused() {
             for attempt in 0..2 {
                 let err = generate(p.clone(), post).expect_err(name);
                 assert!(
-                    matches!(&err, PipelineError::RefusedOutput(1, d) if d.contains("zero feed")),
+                    matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("spindle, feed and plunge must be explicit positive integers")),
                     "{post:?} {name} attempt {attempt}: {err:?}"
                 );
             }
@@ -257,16 +264,28 @@ fn shopbot_post_still_fails_closed_on_invalid_feed_and_clearance() {
             properties: std::collections::BTreeMap::default(),
         }),
     };
-    let valid = run_pipeline(shopbot(project()), |_, _, _| {}).expect("valid ShopBot program");
+    let valid = run_pipeline(
+        crate::fixture_support::request(shopbot(project())),
+        |_, _, _| {},
+    )
+    .expect("valid ShopBot program");
     assert!(valid.gcode.contains("MS,"), "{}", valid.gcode);
     let mut zero_feed = project();
     zero_feed.tools[0].feed_rate = 0;
-    let err = run_pipeline(shopbot(zero_feed), |_, _, _| {}).unwrap_err();
+    let err = run_pipeline(
+        crate::fixture_support::request(shopbot(zero_feed)),
+        |_, _, _| {},
+    )
+    .unwrap_err();
     assert!(err.to_string().contains("feed"), "{err}");
     let mut nan_clearance = project();
     nan_clearance.stock = None;
     nan_clearance.operations[0].params.fast_move_z = f64::NAN;
-    assert!(run_pipeline(shopbot(nan_clearance), |_, _, _| {}).is_err());
+    assert!(run_pipeline(
+        crate::fixture_support::request(shopbot(nan_clearance)),
+        |_, _, _| {}
+    )
+    .is_err());
 }
 
 /// The CPS route records into IR instead of formatting text, so it needs
@@ -285,15 +304,23 @@ fn cps_route_refuses_zero_feed_before_any_post_runs() {
             }),
         };
         assert!(
-            run_pipeline(request(project()), |_, _, _| {}).is_ok(),
+            run_pipeline(
+                crate::fixture_support::request(request(project())),
+                |_, _, _| {}
+            )
+            .is_ok(),
             "{id}"
         );
         let mut p = project();
         p.operations[0].params.feed_rate_override = Some(0);
-        let err = run_pipeline(request(p), |_, _, _| {}).unwrap_err();
+        let err =
+            run_pipeline(crate::fixture_support::request(request(p)), |_, _, _| {}).unwrap_err();
         assert!(
-            matches!(&err, PipelineError::RefusedOutput(1, d) if d.contains("zero feed")),
+            matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("spindle, feed and plunge must be explicit positive integers")),
             "{id}: {err:?}"
         );
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

@@ -231,3 +231,9 @@ mod tests {
         assert!(!reason.is_empty(), "fallback_reason should be non-empty");
     }
 }
+
+#[cfg(test)]
+extern crate self as ivac_core;
+#[cfg(test)]
+#[path = "../tests/support/explicit.rs"]
+pub(crate) mod fixture_support;

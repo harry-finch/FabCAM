@@ -26,7 +26,7 @@ fn streaming_rejects_two_sided_through_before_writing() {
         flip: None,
     });
     assert!(matches!(
-        prepare_stream(request(p)),
+        prepare_stream(crate::fixture_support::request(request(p))),
         Err(StreamGcodeError::Pipeline(
             PipelineError::TwoSidedThrough { .. }
         ))
@@ -48,10 +48,17 @@ fn streaming_fixture_warnings_match_buffered() {
         color: 0,
     });
     assert!(matches!(
-        run_pipeline(request(p.clone()), |_, _, _| {}),
+        run_pipeline(
+            crate::fixture_support::request(request(p.clone())),
+            |_, _, _| {}
+        ),
         Err(PipelineError::FixtureCollision(_))
     ));
-    assert!(stream_gcode_with_preview(request(p), Box::new(std::io::sink())).is_err());
+    assert!(stream_gcode_with_preview(
+        crate::fixture_support::request(request(p)),
+        Box::new(std::io::sink())
+    )
+    .is_err());
 }
 #[test]
 fn cache_key_tracks_spot_tool_entry_position_state_and_topology() {
@@ -153,12 +160,20 @@ fn timing_respects_override_and_counts_emitted_warmup_once() {
     );
     p.machine.use_kinematic_time_estimate = false;
     p.tools[0].pause = 0;
-    let a = run_pipeline(request(p.clone()), |_, _, _| {}).unwrap();
+    let a = run_pipeline(
+        crate::fixture_support::request(request(p.clone())),
+        |_, _, _| {},
+    )
+    .unwrap();
     p.operations[0].params.feed_rate_override = Some(2000);
-    let b = run_pipeline(request(p.clone()), |_, _, _| {}).unwrap();
+    let b = run_pipeline(
+        crate::fixture_support::request(request(p.clone())),
+        |_, _, _| {},
+    )
+    .unwrap();
     assert!(b.time_estimate.cut_s < a.time_estimate.cut_s);
     p.tools[0].pause = 2;
-    let c = run_pipeline(request(p), |_, _, _| {}).unwrap();
+    let c = run_pipeline(crate::fixture_support::request(request(p)), |_, _, _| {}).unwrap();
     let emitted = (c.gcode.matches("G4 P2").count() as f64) * 2.;
     assert!(emitted > 0.);
     assert!((c.time_estimate.total_s - b.time_estimate.total_s - emitted).abs() < 1e-6);

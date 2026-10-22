@@ -144,7 +144,7 @@ fn exact_diameter_corners_are_reached_in_emitted_profile_and_pocket() {
                 project.work_offset.x_mm = 5.;
                 project.work_offset.y_mm = 7.;
                 let response = run_pipeline(
-                    PipelineRequest {
+                    crate::fixture_support::request(PipelineRequest {
                         project,
                         post_processor: Some(PostProcessorKind::Cps),
                         cps_post: Some(CpsPostSelection {
@@ -153,7 +153,7 @@ fn exact_diameter_corners_are_reached_in_emitted_profile_and_pocket() {
                             },
                             properties: std::collections::BTreeMap::default(),
                         }),
-                    },
+                    }),
                     |_, _, _| {},
                 )
                 .unwrap();
@@ -191,3 +191,6 @@ fn exact_diameter_corners_are_reached_in_emitted_profile_and_pocket() {
         }
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

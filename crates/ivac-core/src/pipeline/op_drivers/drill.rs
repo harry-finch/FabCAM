@@ -16,7 +16,7 @@ use crate::cam::setup::Setup;
 use crate::cam::VcObject;
 use crate::gcode::{emit_drill_block, emit_stufenfase_rim_block, PostProcessor, StufenfaseHole};
 use crate::geometry::Point2;
-use crate::pipeline::setup_resolver::{resolve_peck_step, synthesize_op_setup_for_role};
+use crate::pipeline::setup_resolver::synthesize_op_setup_for_role;
 use crate::pipeline::{
     emit_toolchange_envelope, op_includes_object, synthesize_finish_setup, PipelineError,
     PipelineWarning,
@@ -56,10 +56,8 @@ pub(super) fn run_drill<P: PostProcessor>(
     {
         emit_spot_pre_pass(op, project, setup, offsets, *spot, post, last_pos, warnings)?;
     }
-    // Peck cycles fall back to the tool's `default_peck_step_mm`
-    // when the op's own peck_step_mm is unset (== 0).
-    let resolved_cycle = resolve_peck_step(cycle, project, op);
-    emit_drill_block(setup, offsets, resolved_cycle, post, last_pos);
+    // The neutral validator has checked this explicit operation-owned peck cycle.
+    emit_drill_block(setup, offsets, cycle, post, last_pos);
     // When the drill op carries a chamfer-after width, walk a single
     // revolution at each hole's rim at the V-bit chamfer depth.
     // Stufenfase width lives on the OpKind::Drill variant.
@@ -466,11 +464,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -515,11 +513,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -566,11 +564,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -612,11 +610,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -654,11 +652,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Grbl),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -733,11 +731,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -790,11 +788,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -813,7 +811,7 @@ mod tests {
     /// Drill op with peck cycle and `peck_step_mm=0` falls back to the
     /// tool's `default_peck_step_mm`.
     #[test]
-    fn drill_peck_uses_tool_default_when_op_step_zero() {
+    fn drill_peck_requires_explicit_cycle_depth() {
         let mut tool = endmill(1, 3.0);
         tool.kind = ToolKind::Drill;
         tool.default_peck_step_mm = Some(1.25);
@@ -839,20 +837,16 @@ mod tests {
             material: None,
             fs_context: None,
         };
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.gcode.contains("Q1.25"),
-            "expected resolved peck step Q1.25 in gcode:\n{}",
-            resp.gcode
-        );
+        .expect_err("invalid authored input must not produce machine output");
+        assert!(err.to_string().contains("peck depth"), "{err}");
     }
 
     /// A drill op with `chamfer_after_width_mm` follows the drill cycle
@@ -861,7 +855,7 @@ mod tests {
     #[test]
     fn drill_with_chamfer_after_emits_constant_z_revolution() {
         let mut vbit_drill = vbit();
-        vbit_drill.kind = ToolKind::Drill;
+        vbit_drill.kind = ToolKind::VBit;
         vbit_drill.diameter = 3.0;
         vbit_drill.tip_angle_deg = 90.0; // z = -width when tan(45°) = 1
         let center = Point2::new(5.0, 7.0);
@@ -902,11 +896,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -934,9 +928,9 @@ mod tests {
     /// op's setup_resolver path. Pre-fix this drove an un-capped Z
     /// straight into stock with no warning.
     #[test]
-    fn drill_chamfer_after_clamps_oversize_width_to_reach() {
+    fn drill_chamfer_after_refuses_oversize_width() {
         let mut vbit_drill = vbit();
-        vbit_drill.kind = ToolKind::Drill;
+        vbit_drill.kind = ToolKind::VBit;
         vbit_drill.diameter = 3.0; // reach cap = (3 - 0.1) / 2 = 1.45 mm
         vbit_drill.tip_angle_deg = 90.0; // tan(45°) = 1 ⇒ z = -(w - tip_r)
         let center = Point2::new(5.0, 7.0);
@@ -977,29 +971,16 @@ mod tests {
             material: None,
             fs_context: None,
         };
-        let resp = run_pipeline(
-            PipelineRequest {
+        let err = run_pipeline(
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "chamfer_width_clamped_to_reach"),
-            "expected chamfer_width_clamped_to_reach warning, got: {:?}",
-            resp.warnings
-        );
-        // Clamped width = 1.45 mm; z = -(1.45 - 0.05) / tan(45°) = -1.4.
-        // The un-capped pre-fix value would have been -(5 - 0.05) = -4.95.
-        assert!(
-            resp.gcode.contains("Z-1.4") && !resp.gcode.contains("Z-4.95"),
-            "expected chamfer revolution clamped to Z-1.4 (reach cap), not the un-capped Z-4.95:\n{}",
-            resp.gcode
-        );
+        .expect_err("invalid authored input must not produce machine output");
+        assert!(err.to_string().contains("physical reach"), "{err}");
     }
 
     /// Drill with `chamfer_after` AND a distinct `finish_tool_id` emits
@@ -1055,11 +1036,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1102,11 +1083,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1165,7 +1146,7 @@ mod tests {
     #[test]
     fn stufenfase_first_g1_is_not_vertical_plunge_at_rim() {
         let mut vbit_drill = vbit();
-        vbit_drill.kind = ToolKind::Drill;
+        vbit_drill.kind = ToolKind::VBit;
         vbit_drill.diameter = 3.0;
         vbit_drill.tip_angle_deg = 90.0;
         let center = Point2::new(5.0, 7.0);
@@ -1212,11 +1193,11 @@ mod tests {
             let mut nonmill = project.clone();
             nonmill.machine.mode = mode;
             let error = run_pipeline(
-                PipelineRequest {
+                crate::fixture_support::request(PipelineRequest {
                     project: nonmill,
                     post_processor: Some(PostProcessorKind::Linuxcnc),
                     cps_post: None,
-                },
+                }),
                 |_, _, _| {},
             )
             .unwrap_err();
@@ -1226,11 +1207,11 @@ mod tests {
             );
         }
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1292,7 +1273,7 @@ mod tests {
     #[test]
     fn stufenfase_rim_emits_g2_full_circle_not_64_g1() {
         let mut vbit_drill = vbit();
-        vbit_drill.kind = ToolKind::Drill;
+        vbit_drill.kind = ToolKind::VBit;
         vbit_drill.diameter = 3.0;
         vbit_drill.tip_angle_deg = 90.0;
         let center = Point2::new(5.0, 7.0);
@@ -1333,11 +1314,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1396,11 +1377,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1471,11 +1452,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1540,11 +1521,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -1583,11 +1564,14 @@ mod audit_09_10 {
         let mut project = project_with_segments(segs, vec![op.clone()], vec![tool]);
         let objects = crate::cam::chaining::segments_to_objects(&project.segments);
         let run = |p: &Project| {
-            let setup = crate::pipeline::synthesize_op_setup(&op, p, &mut vec![]).unwrap();
+            let fixture = crate::fixture_support::project(p.clone());
+            let p = &fixture;
+            let op = &p.operations[0];
+            let setup = crate::pipeline::synthesize_op_setup(op, p, &mut vec![]).unwrap();
             let mut post = crate::gcode::linuxcnc::Post::new();
             let mut warnings = vec![];
             emit_stufenfase(
-                &op,
+                op,
                 p,
                 &objects,
                 &setup,

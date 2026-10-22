@@ -136,11 +136,11 @@ fn vbit(id: u32, diameter: f64, tip_angle_deg: f64) -> ToolEntry {
 
 fn run_to_gcode(project: Project) -> String {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -484,3 +484,6 @@ fn seahash_hex(s: &str) -> String {
     h.write(s.as_bytes());
     format!("{:016x}", h.finish())
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

@@ -9,6 +9,8 @@ use crate::cam::source_combine::FrameShape;
 use crate::geometry::{Point2, Segment};
 use crate::project::{OpSource, PocketStrategy, SourceCombine, TabPlacement, TabPlacementMode};
 fn offsets(p: &crate::project::Project) -> Result<Vec<PolylineOffset>, PipelineError> {
+    let fixture = crate::fixture_support::project(p.clone());
+    let p = &fixture;
     let mut objects = segments_to_objects(&p.segments);
     classify_containment(&mut objects);
     let setup = super::setup_resolver::synthesize_op_setup(&p.operations[0], p, &mut Vec::new())?;
@@ -229,11 +231,11 @@ fn lot8_frame_tab_survives_final_resolved_native_cut_height() {
     p.operations[0].params.depth = -4.;
     p.operations[0].params.step = Some(-2.);
     let response = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -287,7 +289,7 @@ fn lot8_same_tool_finish_rpm_change_is_refused_not_silently_ignored_by_shopbot()
     p.tools[0].speed = 18000;
     p.tools[0].speed_finish = Some(12000);
     let result = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -296,7 +298,7 @@ fn lot8_same_tool_finish_rpm_change_is_refused_not_silently_ignored_by_shopbot()
                 },
                 properties: BTreeMap::default(),
             }),
-        },
+        }),
         |_, _, _| {},
     );
     let error = result.unwrap_err().to_string();

@@ -35,7 +35,7 @@ fn pipeline_refuses_thread_budget_and_recovers_without_cached_partial_success() 
             -2.,
         );
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: build_project(
                     &stock_at_origin(100., 100., 18.),
                     vec![endmill_tool(1, 2.)],
@@ -44,7 +44,7 @@ fn pipeline_refuses_thread_budget_and_recovers_without_cached_partial_success() 
                 ),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
     };
@@ -233,3 +233,6 @@ fn thread_whirling_obeys_remaining_operation_budget() {
         baseline
     );
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

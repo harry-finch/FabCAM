@@ -186,11 +186,11 @@ mod tests {
             vec![endmill(1, 3.0)],
         );
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -240,11 +240,11 @@ mod tests {
             vec![endmill(1, 3.0)],
         );
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -316,11 +316,11 @@ mod tests {
             vec![endmill(1, 3.0)],
         );
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
@@ -462,20 +462,20 @@ mod tests {
         let op_b = profile_op(1, 1, ToolOffset::Outside);
         let project_b = project_with(vec![op_b], vec![endmill(1, 3.0)]);
         let resp_a = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_a,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();
         let resp_b = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: project_b,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap();

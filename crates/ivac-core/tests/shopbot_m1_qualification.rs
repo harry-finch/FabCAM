@@ -670,3 +670,6 @@ fn qualification_outputs_are_deterministic() {
         }
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

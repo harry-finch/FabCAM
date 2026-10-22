@@ -304,7 +304,11 @@ fn edited_generation_uses_authoritative_geometry_and_refuses_old_request_shape()
         post_processor: None,
         cps_post: None,
     };
-    let expected = run_pipeline(legacy.clone(), |_, _, _| {}).unwrap();
+    let expected = run_pipeline(
+        crate::fixture_support::request(legacy.clone()),
+        |_, _, _| {},
+    )
+    .unwrap();
     let mut request = DrawingGenerationRequest {
         version: 1,
         drawing,
@@ -319,13 +323,13 @@ fn edited_generation_uses_authoritative_geometry_and_refuses_old_request_shape()
     assert!(
         serde_json::from_value::<PipelineRequest>(serde_json::to_value(&request).unwrap()).is_err()
     );
-    let actual = generate_drawing(request.clone()).unwrap();
+    let actual = generate_drawing(crate::fixture_support::drawing(request.clone())).unwrap();
     assert_eq!(actual.gcode, expected.gcode);
     request.bindings[0].binding = Binding::Unresolved {
         previous: vec![],
         reason: "deleted".into(),
     };
-    assert!(generate_drawing(request).is_err());
+    assert!(generate_drawing(crate::fixture_support::drawing(request)).is_err());
 }
 
 #[test]
@@ -606,7 +610,7 @@ fn ui_saved_repair_matches_generated_decoded_program_and_resolved_preview() {
         "../../../docs/shopbot-modernization/geom1/square-repaired.request.json"
     ))
     .unwrap();
-    let response = generate_drawing(request.clone()).unwrap();
+    let response = generate_drawing(crate::fixture_support::drawing(request.clone())).unwrap();
     // ADR-0025 adds only `' FABTOOL/1` provenance comments; every other byte
     // still equals the saved GEOM1 software reference.
     let (markers, rest): (Vec<&str>, Vec<&str>) = response
@@ -625,7 +629,9 @@ fn ui_saved_repair_matches_generated_decoded_program_and_resolved_preview() {
     reference.project.segments = request.drawing.evaluate().unwrap().segments;
     assert_eq!(
         response.gcode,
-        run_pipeline(reference, |_, _, _| {}).unwrap().gcode
+        run_pipeline(crate::fixture_support::request(reference), |_, _, _| {})
+            .unwrap()
+            .gcode
     );
     let mut pos: [Option<f64>; 3] = [None, None, None];
     let mut decoded = vec![];
@@ -678,7 +684,12 @@ fn ui_saved_repair_matches_generated_decoded_program_and_resolved_preview() {
     explicit.bindings[0].binding = Binding::Contours {
         ids: vec![explicit.drawing.contours[0].id],
     };
-    assert_eq!(generate_drawing(explicit).unwrap().gcode, response.gcode);
+    assert_eq!(
+        generate_drawing(crate::fixture_support::drawing(explicit))
+            .unwrap()
+            .gcode,
+        response.gcode
+    );
 }
 
 #[cfg(feature = "cps")]
@@ -694,7 +705,7 @@ fn edited_sources_fail_explicitly_for_empty_or_synthetic_or_fuzzy_ambiguous_scop
     missing.bindings[0].binding = Binding::Layers {
         names: vec!["deleted".into()],
     };
-    assert!(generate_drawing(missing)
+    assert!(generate_drawing(crate::fixture_support::drawing(missing))
         .unwrap_err()
         .to_string()
         .contains("no remaining geometry"));
@@ -702,7 +713,7 @@ fn edited_sources_fail_explicitly_for_empty_or_synthetic_or_fuzzy_ambiguous_scop
     stock.bindings[0].binding = Binding::Layers {
         names: vec!["__stock_outline".into()],
     };
-    assert!(generate_drawing(stock)
+    assert!(generate_drawing(crate::fixture_support::drawing(stock))
         .unwrap_err()
         .to_string()
         .contains("Synthetic stock"));
@@ -713,7 +724,7 @@ fn edited_sources_fail_explicitly_for_empty_or_synthetic_or_fuzzy_ambiguous_scop
     let c = &mut fuzzy.drawing.contours[0];
     c.edges.pop();
     c.edges.last_mut().unwrap().geometry.end.y = 10.001;
-    assert!(generate_drawing(fuzzy)
+    assert!(generate_drawing(crate::fixture_support::drawing(fuzzy))
         .unwrap_err()
         .to_string()
         .contains("fuzzy chaining"));
@@ -785,8 +796,12 @@ fn deleting_an_earlier_import_cannot_redirect_an_unrelated_operation() {
         post_processor: None,
         cps_post: None,
     };
-    let expected = run_pipeline(machining.clone(), |_, _, _| {}).unwrap();
-    let result = generate_drawing(DrawingGenerationRequest {
+    let expected = run_pipeline(
+        crate::fixture_support::request(machining.clone()),
+        |_, _, _| {},
+    )
+    .unwrap();
+    let result = generate_drawing(crate::fixture_support::drawing(DrawingGenerationRequest {
         version: 1,
         drawing: accepted,
         bindings: vec![OperationBinding {
@@ -794,7 +809,10 @@ fn deleting_an_earlier_import_cannot_redirect_an_unrelated_operation() {
             binding: b[0].clone(),
         }],
         machining,
-    })
+    }))
     .unwrap();
     assert_eq!(result.gcode, expected.gcode);
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

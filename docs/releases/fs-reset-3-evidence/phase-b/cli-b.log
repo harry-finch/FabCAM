@@ -1,0 +1,34 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+   Compiling ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.93s
+     Running unittests src/main.rs (target/debug/deps/ivac-fceaeae0af6e9ce3)
+
+running 6 tests
+test i18n::tests::parse_lang_handles_common_tags ... ok
+test i18n::tests::detect_prefers_override_then_lc_all_then_lang ... ok
+test i18n::tests::extract_lang_pulls_flag_in_both_forms ... ok
+test i18n::tests::tr_substitutes_params_and_falls_back ... ok
+test i18n::tests::en_catalog_matches_referenced_keys_exactly ... ok
+test i18n::tests::catalogs_parse_and_are_key_identical ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cutting_v9.rs (target/debug/deps/cutting_v9-21e87dc88452777c)
+
+running 1 test
+test serialized_v9_cli_preserves_output_and_rejects_before_publication ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.02s
+
+     Running tests/generate_v9.rs (target/debug/deps/generate_v9-75758d51bafcc56d)
+
+running 6 tests
+test duplicate_json_post_authorities_are_rejected ... ok
+test effective_finish_values_are_not_library_or_rough_defaults ... ok
+test external_cps_reaches_security_guard_and_never_executes ... ok
+test geometry_template_matches_canonical_import_and_rejects_ambiguous_selection ... ok
+test invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing ... ok
+test canonical_posts_match_authoritative_pipeline_and_shopbot_golden ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s
+

@@ -111,8 +111,10 @@ fn request(c: &Case, shape: u32, v: bool) -> PipelineRequest {
     }
 }
 fn run(req: PipelineRequest, tag: &str) -> Result<PipelineResponse, String> {
+    let req = crate::fixture_support::request(req);
     save(&format!("{tag}.request.json"), &req);
-    let r = run_pipeline(req, |_, _, _| {}).map_err(|e| format!("generation_refusal: {e}"))?;
+    let r = run_pipeline(crate::fixture_support::request(req), |_, _, _| {})
+        .map_err(|e| format!("generation_refusal: {e}"))?;
     save(&format!("{tag}.response.json"), &r);
     if r.toolpath.len() > 20_000 {
         return Err(format!("move_budget:actual={}", r.toolpath.len()));
@@ -403,12 +405,16 @@ fn c1(c: &Case) -> Result<(), String> {
         8 => changed.project.machine.max_feed_mm_min = Some(500),
         _ => changed.project.operations[0].params.start_depth = 0.1,
     }
+    let changed = crate::fixture_support::request(changed);
     save("mutation.request.json", &changed);
-    let cached = run_pipeline(changed.clone(), |_, _, _| {})
-        .map(|r| serde_json::to_value(r).unwrap())
-        .map_err(|e| e.to_string());
+    let cached = run_pipeline(
+        crate::fixture_support::request(changed.clone()),
+        |_, _, _| {},
+    )
+    .map(|r| serde_json::to_value(r).unwrap())
+    .map_err(|e| e.to_string());
     clear_pipeline_cache();
-    let fresh = run_pipeline(changed, |_, _, _| {})
+    let fresh = run_pipeline(crate::fixture_support::request(changed), |_, _, _| {})
         .map(|r| serde_json::to_value(r).unwrap())
         .map_err(|e| e.to_string());
     insist(cached == fresh, "cache_mutation_equivalence")?;
@@ -474,8 +480,9 @@ fn d2(c: &Case) -> Result<(), String> {
     if c.index % 3 == 0 {
         req.project.machine.work_area.z = 0.;
     }
+    let req = crate::fixture_support::request(req);
     save("safety.request.json", &req);
-    let result = run_pipeline(req, |_, _, _| {});
+    let result = run_pipeline(crate::fixture_support::request(req), |_, _, _| {});
     if !valid {
         return insist(
             matches!(result, Err(PipelineError::UnsafeClearance(..))),
@@ -515,3 +522,6 @@ fn test1_case() {
     save("result.json", &json!({"case":c,"result":result}));
     assert!(result.is_ok(), "{}", result.unwrap_err());
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

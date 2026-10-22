@@ -165,7 +165,7 @@ fn trial_refuses_deleted_stale_and_missing_source() {
         let mut r = trial_fixture();
         match case {
             0 => change_trial_pack(&mut r, |p| {
-                p.records[0].lab.as_mut().unwrap().deleted = true
+                p.records[0].lab.as_mut().unwrap().deleted = true;
             }),
             1 => r.selected_record.as_mut().unwrap().pack.revision.push('1'),
             2 => r
@@ -221,7 +221,7 @@ fn trial_generation_revalidates_manual_edits_context_and_metadata() {
                     .as_mut()
                     .unwrap()
                     .slots[0]
-                    .rpm = 25000
+                    .rpm = 25000;
             }
             1 => bad.material.as_mut().unwrap().revision.push('1'),
             2 => bad.operations[0].finish_tool_id = Some(99),
@@ -236,7 +236,7 @@ fn trial_generation_revalidates_manual_edits_context_and_metadata() {
                     .as_mut()
                     .unwrap()
                     .source
-                    .record_id = "/private/source".into()
+                    .record_id = "/private/source".into();
             }
         }
         assert!(validate_applied_project(&bad).is_err());

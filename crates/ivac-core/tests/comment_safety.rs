@@ -45,11 +45,11 @@ fn project(text: &str) -> Project {
 
 fn generate(p: Project, post: PostProcessorKind) -> PipelineResponse {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(post),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap()
@@ -112,3 +112,6 @@ fn hostile_names_never_reach_executable_gcode() {
         }
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

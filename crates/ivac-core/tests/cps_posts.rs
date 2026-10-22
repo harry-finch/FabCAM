@@ -40,11 +40,11 @@ fn selection(source: CpsPostSource) -> CpsPostSelection {
 
 fn run_cps(project: ivac_core::project::Project, source: CpsPostSource) -> PipelineResponse {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(selection(source)),
-        },
+        }),
         |_, _, _| {},
     )
     .expect("cps pipeline runs")
@@ -128,11 +128,11 @@ fn legacy_zero_clearance_is_refused_when_stock_is_declared() {
     let mut project = legacy_post_fixture();
     project.stock = Some(stock());
     let error = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(selection(CpsPostSource::Bundled { id: "grbl".into() })),
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap_err();
@@ -183,14 +183,14 @@ fn fanuc_refs_snapshot() {
         return;
     };
     let err = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: legacy_post_fixture(),
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(selection(CpsPostSource::Inline {
                 script,
                 filename: Some("fanuc.cps".into()),
             })),
-        },
+        }),
         |_, _, _| {},
     )
     .expect_err("external oracle is not a V1 application post");
@@ -261,11 +261,11 @@ fn two_sided_cps_refuses_unqualified_output() {
     project.operations[1].side = WorkpieceSide::Back;
 
     let result = run_pipeline_two_sided(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(selection(CpsPostSource::Bundled { id: "grbl".into() })),
-        },
+        }),
         |_, _, _| {},
     );
     assert!(matches!(
@@ -297,8 +297,12 @@ fn external_sources_are_refused_without_reading_or_evaluating() {
         };
         let saved = serde_json::to_value(&request).unwrap();
         let restored = serde_json::from_value(saved.clone()).unwrap();
-        let error = run_pipeline(restored, |_, _, _| {}).expect_err("must refuse");
+        let error = run_pipeline(crate::fixture_support::request(restored), |_, _, _| {})
+            .expect_err("must refuse");
         assert!(error.to_string().contains("External CPS"), "{error}");
         assert_eq!(serde_json::to_value(&request).unwrap(), saved);
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

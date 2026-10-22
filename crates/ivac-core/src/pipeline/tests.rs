@@ -90,11 +90,11 @@ fn pipeline_relief_mill_emits_varying_z_ballnose_surface() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("relief pipeline should run end-to-end");
@@ -142,23 +142,16 @@ fn pipeline_relief_mill_emits_varying_z_ballnose_surface() {
         material: None,
         fs_context: None,
     };
-    let resp2 = run_pipeline(
-        PipelineRequest {
+    let err = run_pipeline(
+        crate::fixture_support::request(PipelineRequest {
             project: project2,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
-    .expect("relief pipeline (flat tool) should still run");
-    assert!(
-        resp2
-            .warnings
-            .iter()
-            .any(|w| w.kind == "tool_kind_mismatch"),
-        "non-ball-nose relief should warn tool_kind_mismatch: {:?}",
-        resp2.warnings
-    );
+    .expect_err("invalid authored input must not produce machine output");
+    assert!(err.to_string().contains("ball/bull-nose"), "{err}");
 }
 
 /// A `ReliefMill` op over a `Heightgrid` source (the STL path) cuts the
@@ -166,7 +159,7 @@ fn pipeline_relief_mill_emits_varying_z_ballnose_surface() {
 /// model depth with the op's depth range left at its default (0, 0). The
 /// emitted Z follows the geometry ramp and stays within the model's range.
 #[test]
-fn pipeline_relief_mill_heightgrid_cuts_real_z_without_depth_range() {
+fn pipeline_relief_mill_heightgrid_cuts_real_z_with_explicit_range() {
     use crate::cam::surface_mill::ScanDirection;
     use crate::geometry::Point2;
     use crate::project::{ReliefGrid, ReliefSource};
@@ -201,7 +194,7 @@ fn pipeline_relief_mill_heightgrid_cuts_real_z_without_depth_range() {
             source_id: 3,
             // Depth range left at its default — for a height grid this means
             // "cut the full model depth", so the real Z drives everything.
-            z_min_mm: 0.0,
+            z_min_mm: -4.2,
             z_max_mm: 0.0,
             invert: false,
             scallop_height_mm: 0.0,
@@ -233,11 +226,11 @@ fn pipeline_relief_mill_heightgrid_cuts_real_z_without_depth_range() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("heightgrid relief pipeline should run end-to-end");
@@ -335,11 +328,11 @@ fn pipeline_waterline_rough_emits_level_chains_over_stl_basin() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("waterline pipeline should run end-to-end");
@@ -439,11 +432,11 @@ fn pipeline_waterline_rough_rejects_grayscale_source() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("waterline pipeline should still run");
@@ -513,11 +506,11 @@ fn pipeline_renders_text_layers_and_routes_via_synthetic_layer() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline should run text engraving end-to-end");
@@ -532,14 +525,14 @@ fn pipeline_renders_text_layers_and_routes_via_synthetic_layer() {
 #[test]
 fn run_pipeline_emits_a_recognizable_program() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project_with(
                 vec![profile_op(1, 1, ToolOffset::Outside)],
                 vec![endmill(1, 3.0)],
             ),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -562,14 +555,14 @@ fn run_pipeline_emits_a_recognizable_program() {
 #[test]
 fn run_pipeline_picks_grbl_when_requested() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project_with(
                 vec![profile_op(1, 1, ToolOffset::Outside)],
                 vec![endmill(1, 3.0)],
             ),
             post_processor: Some(PostProcessorKind::Grbl),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -595,14 +588,14 @@ fn run_pipeline_picks_grbl_when_requested() {
 #[test]
 fn run_pipeline_hpgl_emits_pen_up_down_program() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project_with(
                 vec![profile_op(1, 1, ToolOffset::Outside)],
                 vec![endmill(1, 3.0)],
             ),
             post_processor: Some(PostProcessorKind::Hpgl),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -628,11 +621,11 @@ fn two_op_project_emits_two_distinct_op_blocks() {
         vec![endmill(1, 3.0)],
     );
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -646,14 +639,14 @@ fn two_op_project_emits_two_distinct_op_blocks() {
 fn progress_callback_fires_each_phase() {
     let phases = std::cell::RefCell::new(Vec::<String>::new());
     let _ = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project_with(
                 vec![profile_op(1, 1, ToolOffset::Outside)],
                 vec![endmill(1, 3.0)],
             ),
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |phase, _f, _m| phases.borrow_mut().push(phase.to_string()),
     )
     .unwrap();
@@ -701,11 +694,11 @@ fn post_profile_overrides_program_start_and_end() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -776,11 +769,11 @@ fn post_profile_axes_config_drives_axis_emission() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -860,11 +853,11 @@ fn post_profile_disabled_axis_drops_the_word() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -913,20 +906,20 @@ fn post_profile_without_axes_keeps_legacy_output() {
         fs_context: None,
     };
     let resp_a = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project(machine_with),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
     let resp_b = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project(machine_without),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1014,11 +1007,11 @@ fn plot_mode_emits_only_two_z_values() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1115,11 +1108,11 @@ fn laser_op_emits_pierce_dwell_before_cut() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1157,11 +1150,11 @@ fn non_laser_tool_ignores_pierce_field() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1239,11 +1232,11 @@ fn raster_engrave_emits_power_modulated_scanlines() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1319,11 +1312,11 @@ fn raster_scan_direction_sets_scanline_count() {
             fs_context: None,
         };
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -1427,11 +1420,11 @@ fn raster_streaming_alongx_reproduces_whole_grid_powers() {
         fs_context: None,
     };
     let g = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap()
@@ -1578,11 +1571,11 @@ fn raster_streaming_alongy_reproduces_whole_grid_powers() {
         fs_context: None,
     };
     let g = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap()
@@ -1667,11 +1660,11 @@ fn first_tool_z_shift_emits_g92_after_program_begin() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1701,11 +1694,11 @@ fn no_z_shift_emits_no_g92() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1740,11 +1733,11 @@ fn comma_decimal_separator_emits_commas_in_numbers() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1791,11 +1784,11 @@ fn line_numbering_prefixes_every_line() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1838,11 +1831,11 @@ fn no_line_numbering_by_default() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1895,11 +1888,11 @@ fn chamfer_op_emits_constant_z_pass_at_computed_depth() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -1980,11 +1973,11 @@ fn chamfer_after_deep_profile_keeps_own_depth() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -2069,11 +2062,11 @@ fn chamfer_finish_pass_emits_second_pass_at_finish_feed() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -2084,7 +2077,7 @@ fn chamfer_finish_pass_emits_second_pass_at_finish_feed() {
 /// Chamfer on a non-V-bit tool emits a warning so the user knows
 /// the cone math is approximate.
 #[test]
-fn chamfer_with_non_vbit_warns() {
+fn chamfer_with_non_vbit_refuses() {
     let project = Project {
         cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
@@ -2115,16 +2108,16 @@ fn chamfer_with_non_vbit_warns() {
         material: None,
         fs_context: None,
     };
-    let resp = run_pipeline(
-        PipelineRequest {
+    let err = run_pipeline(
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
-    .unwrap();
-    assert!(resp.warnings.iter().any(|w| w.kind == "chamfer_non_vbit"));
+    .expect_err("invalid authored input must not produce machine output");
+    assert!(err.to_string().contains("valid V-bit"), "{err}");
 }
 
 /// A chamfer whose final Z magnitude exceeds the per-pass
@@ -2168,11 +2161,11 @@ fn chamfer_deep_chamfer_uses_multi_pass_stepdown() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -2240,11 +2233,11 @@ fn chamfer_step_larger_than_depth_clamps_to_chamfer_z() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -2279,7 +2272,7 @@ fn chamfer_step_larger_than_depth_clamps_to_chamfer_z() {
 /// 3.125 mm clamp (3.125 / tan(30°) ≈ -5.413), not the raw
 /// (catastrophic) -17.32 mm.
 #[test]
-fn chamfer_oversize_width_clamped_to_tool_reach() {
+fn chamfer_oversize_width_refuses_without_clamping() {
     let vbit = vbit();
     let project = Project {
         cutting_version: None,
@@ -2311,37 +2304,16 @@ fn chamfer_oversize_width_clamped_to_tool_reach() {
         material: None,
         fs_context: None,
     };
-    let resp = run_pipeline(
-        PipelineRequest {
+    let err = run_pipeline(
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
-    .unwrap();
-    assert!(
-        resp.warnings
-            .iter()
-            .any(|w| w.kind == "chamfer_width_clamped_to_reach"),
-        "expected chamfer_width_clamped_to_reach warning, got: {:?}",
-        resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>()
-    );
-    // Clamped final Z = -(3.125 - 0.05) / tan(30°) ≈ -5.326
-    // (the vbit's 0.1mm tip flat subtracts tip_radius=0.05). Previously
-    // the value was -5.4126 (raw 3.125 / tan(30°)).
-    assert!(
-        resp.gcode.contains("Z-5.326") || resp.gcode.contains("Z-5.3261"),
-        "expected clamped final depth Z-5.326 in gcode (tip-flat correction):\n{}",
-        resp.gcode
-    );
-    // The unclamped depth (10 / tan(30°) ≈ -17.32) must NOT
-    // appear — that would be the catastrophic over-cut value.
-    assert!(
-        !resp.gcode.contains("Z-17."),
-        "unclamped catastrophic depth leaked into gcode:\n{}",
-        resp.gcode
-    );
+    .expect_err("invalid authored input must not produce machine output");
+    assert!(err.to_string().contains("physical reach"), "{err}");
 }
 
 /// `Op.finish_tool_id` round-trips through serde and is
@@ -2440,11 +2412,11 @@ fn generate_streaming_emits_op_events_in_order() {
     let cancel = CancelToken::new();
     let mut events: Vec<PipelineEvent> = Vec::new();
     let resp = generate_streaming(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         &cancel,
         &mut |e| events.push(e),
     )
@@ -2496,11 +2468,11 @@ fn generate_streaming_done_event_carries_aggregated_stats() {
     let cancel = CancelToken::new();
     let mut last: Option<PipelineEvent> = None;
     let resp = generate_streaming(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         &cancel,
         &mut |e| last = Some(e),
     )
@@ -2582,9 +2554,13 @@ fn generate_streaming_cancellation() {
     cancel_clone.cancel();
     let start = Instant::now();
     let result = std::thread::spawn(move || {
-        generate_streaming(request, &cancel_clone, &mut |e| {
-            events_clone.lock().unwrap().push(e);
-        })
+        generate_streaming(
+            crate::fixture_support::request(request),
+            &cancel_clone,
+            &mut |e| {
+                events_clone.lock().unwrap().push(e);
+            },
+        )
     })
     .join()
     .expect("worker thread panicked");
@@ -2612,11 +2588,11 @@ fn collect_cached_flags(project: Project) -> Vec<(u32, bool)> {
     let cancel = CancelToken::new();
     let mut flags: Vec<(u32, bool)> = Vec::new();
     let _ = generate_streaming(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         &cancel,
         &mut |e| {
             if let PipelineEvent::OpCompleted { op_id, cached } = e {
@@ -2628,10 +2604,9 @@ fn collect_cached_flags(project: Project) -> Vec<(u32, bool)> {
     flags
 }
 
-/// Generating twice with no edits should serve every op from cache
-/// on the second run.
+/// The accepted v9 contract deliberately bypasses the legacy per-op cache.
 #[test]
-fn regenerate_with_no_edits_hits_cache() {
+fn v9_regeneration_does_not_reuse_legacy_op_cache() {
     let project = Project {
         cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
@@ -2667,13 +2642,16 @@ fn regenerate_with_no_edits_hits_cache() {
     let first = collect_cached_flags(project.clone());
     assert_eq!(first, vec![(91, false)], "first run misses cache");
     let second = collect_cached_flags(project);
-    assert_eq!(second, vec![(91, true)], "second run hits cache");
+    assert_eq!(
+        second,
+        vec![(91, false)],
+        "v9 revalidates and recomputes each operation"
+    );
 }
 
-/// Editing one op of many should miss only that op; the others
-/// should still hit the cache.
+/// V9 revalidates/recomputes every op after an edit.
 #[test]
-fn edit_one_op_misses_only_that() {
+fn v9_edits_recompute_all_operations() {
     // Five profile ops, distinct tool ids so each gets its own
     // cache slot regardless of segments (they all share the same
     // square geometry).
@@ -2721,11 +2699,8 @@ fn edit_one_op_misses_only_that() {
     // Edit op 3's depth — only it should miss on the second run.
     project.operations[2].params.depth -= 0.1;
     let second = collect_cached_flags(project);
-    let edited_id = 100 + 3;
-    let expected: Vec<(u32, bool)> = (1..=5)
-        .map(|i| (100 + i as u32, (100 + i) != edited_id))
-        .collect();
-    assert_eq!(second, expected, "only op {edited_id} should miss");
+    let expected: Vec<(u32, bool)> = (1..=5).map(|i| (100 + i as u32, false)).collect();
+    assert_eq!(second, expected, "v9 recomputes all operations after edits");
 }
 
 /// Cache hit must reproduce the same gcode + toolpath as a fresh
@@ -2770,8 +2745,9 @@ fn cache_hit_produces_identical_response() {
         post_processor: Some(PostProcessorKind::Linuxcnc),
         cps_post: None,
     };
-    let r1 = run_pipeline(req(), |_, _, _| {}).expect("first run");
-    let r2 = run_pipeline(req(), |_, _, _| {}).expect("cached run");
+    let r1 = run_pipeline(crate::fixture_support::request(req()), |_, _, _| {}).expect("first run");
+    let r2 =
+        run_pipeline(crate::fixture_support::request(req()), |_, _, _| {}).expect("cached run");
     assert_eq!(r1.gcode, r2.gcode, "gcode must match across cache hit");
     // Equivalence gate for the interpret memo (bd ivac-ryan.14, option c):
     // the second run serves its toolpath + line index from the memo instead
@@ -2821,11 +2797,11 @@ fn missing_tool_returns_structured_error() {
         vec![endmill(7, 3.0)],
     );
     let err = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project.clone(),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect_err("missing tool should fail");
@@ -2852,11 +2828,11 @@ fn unsupported_op_kind_returns_structured_error() {
     op.kind = OpKind::Helix;
     let project = project_with(vec![op], vec![endmill(1, 3.0)]);
     let err = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: project.clone(),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect_err("Thread op should fail");
@@ -2942,11 +2918,11 @@ fn pipeline_emits_m0_for_pause_op() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3018,11 +2994,11 @@ fn pause_op_skips_tool_validation() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     );
     assert!(
@@ -3140,11 +3116,11 @@ fn pipeline_emits_g28_for_homing_op() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3227,11 +3203,11 @@ fn pipeline_homing_without_retract_skips_safe_z_move() {
     let mut project = project;
     project.machine.tool_change = ToolChangeStrategy::Atc;
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3323,11 +3299,11 @@ fn pipeline_emits_g38_2_for_probe_op() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3407,11 +3383,11 @@ fn pipeline_emits_comment_only_for_cycle_marker_op() {
     let mut project = project;
     project.machine.tool_change = ToolChangeStrategy::Atc;
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3552,11 +3528,11 @@ fn pipeline_emits_gcode_include_with_variable_expansion() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3681,11 +3657,11 @@ fn gcode_include_unknown_variable_warns_and_passes_through() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3772,11 +3748,11 @@ fn gcode_include_empty_content_warns() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3860,11 +3836,11 @@ fn gcode_include_mixed_body_emits_counted_skipped_summary() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -3974,11 +3950,11 @@ fn gcode_include_multi_axis_line_classified_unsimulated() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -4062,11 +4038,11 @@ fn gcode_include_comment_only_body_emits_no_classification_warning() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -4149,11 +4125,11 @@ fn gcode_include_verbose_mode_fans_out_per_line_warnings() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -4264,11 +4240,11 @@ fn pipeline_emits_group_boundary_markers() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -4317,11 +4293,11 @@ fn pipeline_emits_no_group_markers_when_field_unset() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -4368,11 +4344,11 @@ fn pipeline_treats_empty_group_string_as_no_group() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline ran");
@@ -4521,11 +4497,11 @@ fn project_with_pause_between_cuts_decodes_and_runs() {
     assert_eq!(project.operations[2].params.depth, -2.0);
 
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline runs over a Pause-between-cuts project");
@@ -4596,11 +4572,11 @@ fn multi_op_different_tools_emit_m6_at_each_boundary() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -4650,11 +4626,11 @@ fn multi_op_same_tool_emits_at_most_one_m6() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -4694,11 +4670,11 @@ fn no_toolchange_machine_omits_m6() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -4769,11 +4745,11 @@ fn rectangle_tab_drop_uses_plunge_feedrate() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -4868,11 +4844,11 @@ fn laser_pierce_dwells_at_cut_z() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -4932,11 +4908,11 @@ fn multi_op_toolchange_envelope_has_m5_before_m6_and_m3_after() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5004,11 +4980,11 @@ fn dual_tool_internal_change_uses_full_envelope() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5095,11 +5071,11 @@ fn drill_stufenfase_change_uses_full_envelope() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5155,11 +5131,11 @@ fn coolant_off_before_spindle_off_in_inter_op_toolchange() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5212,11 +5188,11 @@ fn first_tool_envelope_omits_leading_coolant_off() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5258,11 +5234,11 @@ fn same_tool_consecutive_ops_skip_envelope_entirely() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5307,11 +5283,11 @@ fn non_toolchange_machine_pauses_for_manual_swap() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5366,11 +5342,11 @@ fn manual_multitool_emits_g53_move_to_toolchange_position() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5421,11 +5397,11 @@ fn unset_toolchange_position_emits_no_mid_program_g53() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5471,11 +5447,11 @@ fn atc_multitool_emits_g53_move_before_m6() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5519,11 +5495,11 @@ fn multi_tool_manual_machine_warns_with_change_count() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -5587,11 +5563,11 @@ fn single_tool_and_atc_machines_omit_manual_toolchange_warning() {
             fs_context: None,
         };
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -5646,11 +5622,11 @@ fn grbl_atc_without_template_warns() {
             fs_context: None,
         };
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(post),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -5726,11 +5702,11 @@ fn grbl_fixed_sensor_without_template_warns() {
             fs_context: None,
         };
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(post),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -5795,11 +5771,11 @@ fn tool_length_offsets_emit_g43_and_skip_zshift() {
         fs_context: None,
     };
     let g = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap()
@@ -5845,11 +5821,11 @@ fn tool_length_offsets_off_emits_no_g43() {
         fs_context: None,
     };
     let g = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap()
@@ -5898,11 +5874,11 @@ fn two_tool_manual_gcode(
         fs_context: None,
     };
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap()
@@ -6105,11 +6081,11 @@ fn inch_units_emit_scaled_numbers() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6191,11 +6167,11 @@ fn toolchange_envelope_routes_ccw_tool_through_m4() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: Some(crate::pipeline::PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6251,11 +6227,11 @@ fn toolchange_envelope_keeps_m3_for_default_cw_tool() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: Some(crate::pipeline::PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6332,11 +6308,11 @@ fn prev_tool_id_stays_unchanged_when_dual_tool_skips_finish() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: Some(crate::pipeline::PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6467,11 +6443,11 @@ fn prev_tool_id_unchanged_after_drill_skips_chamfer_swap() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: Some(crate::pipeline::PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6550,11 +6526,11 @@ fn pause_op_does_not_lock_spindle_direction() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: Some(crate::pipeline::PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6646,11 +6622,11 @@ fn laser_mode_toolchange_envelope_emits_no_spindle_commands() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        crate::pipeline::PipelineRequest {
+        crate::fixture_support::request(crate::pipeline::PipelineRequest {
             project,
             post_processor: Some(crate::pipeline::PostProcessorKind::Grbl),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6759,11 +6735,11 @@ fn run_pipeline_flags_cuts_outside_work_area() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline should run");
@@ -6796,11 +6772,11 @@ fn run_pipeline_no_work_area_warning_when_in_bounds() {
         fs_context: None,
     };
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .expect("pipeline should run");
@@ -6887,11 +6863,11 @@ fn tslot_project(tool: ToolEntry, depth: f64) -> Project {
 #[test]
 fn tslot_op_emits_single_floor_z_pass_not_a_depth_cascade() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: tslot_project(tslot_tool(1, 12.0, 6.0), -3.0),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6936,11 +6912,11 @@ fn tslot_op_emits_single_floor_z_pass_not_a_depth_cascade() {
 #[test]
 fn tslot_op_emits_stem_slot_prerequisite_warning() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: tslot_project(tslot_tool(1, 12.0, 6.0), -7.0),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -6959,21 +6935,17 @@ fn tslot_op_emits_stem_slot_prerequisite_warning() {
 /// A T-slot op with a non-T-slot cutter warns `tool_kind_mismatch`
 /// (no undercut head ⇒ it would just cut a plain centerline groove).
 #[test]
-fn tslot_op_with_plain_endmill_warns_kind_mismatch() {
-    let resp = run_pipeline(
-        PipelineRequest {
+fn tslot_op_with_plain_endmill_refuses() {
+    let err = run_pipeline(
+        crate::fixture_support::request(PipelineRequest {
             project: tslot_project(endmill(1, 6.0), -5.0),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
-    .unwrap();
-    assert!(
-        resp.warnings.iter().any(|w| w.kind == "tool_kind_mismatch"),
-        "expected tool_kind_mismatch for an endmill on a T-slot op; got {:?}",
-        resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
-    );
+    .expect_err("invalid authored input must not produce machine output");
+    assert!(err.to_string().contains("form-profile"), "{err}");
 }
 
 /// Per-op planning warnings must survive a pipeline CACHE HIT.
@@ -6984,8 +6956,8 @@ fn tslot_op_with_plain_endmill_warns_kind_mismatch() {
 /// on the hit. We run the SAME mis-tooled project twice and assert the
 /// warning is present BOTH times.
 #[test]
-fn per_op_warnings_resurface_on_cache_hit() {
-    // Endmill on a T-slot op → tool_kind_mismatch (critical) plus the
+fn v9_repeated_generation_preserves_prerequisite_warnings() {
+    // Endmill on a T-slot op → tslot_requires_stem_slot (critical) plus the
     // tslot_requires_stem_slot note. A unique depth + geometry keeps
     // this project off every other test's cache key, so the first call
     // is a guaranteed miss (populates the global cache) and the second
@@ -6994,29 +6966,29 @@ fn per_op_warnings_resurface_on_cache_hit() {
     // calls, the recompute would still raise the warning, so the test
     // never false-fails; it only fails if the hit path drops it.
     let mk = || PipelineRequest {
-        project: tslot_project(endmill(1, 6.0), -2.71),
+        project: tslot_project(tslot_tool(1, 6.0, 3.0), -2.71),
         post_processor: Some(PostProcessorKind::Linuxcnc),
         cps_post: None,
     };
     let kinds = |r: &crate::pipeline::PipelineResponse| -> Vec<String> {
         r.warnings.iter().map(|w| w.kind.clone()).collect()
     };
-    let first = run_pipeline(mk(), |_, _, _| {}).unwrap();
+    let first = run_pipeline(crate::fixture_support::request(mk()), |_, _, _| {}).unwrap();
     assert!(
         first
             .warnings
             .iter()
-            .any(|w| w.kind == "tool_kind_mismatch"),
-        "first (cache-miss) run should raise tool_kind_mismatch; got {:?}",
+            .any(|w| w.kind == "tslot_requires_stem_slot"),
+        "first (cache-miss) run should raise tslot_requires_stem_slot; got {:?}",
         kinds(&first),
     );
     // Second run is served from the cache for this op.
-    let second = run_pipeline(mk(), |_, _, _| {}).unwrap();
+    let second = run_pipeline(crate::fixture_support::request(mk()), |_, _, _| {}).unwrap();
     assert!(
         second
             .warnings
             .iter()
-            .any(|w| w.kind == "tool_kind_mismatch"),
+            .any(|w| w.kind == "tslot_requires_stem_slot"),
         "cache HIT dropped the per-op critical warning; got {:?}",
         kinds(&second),
     );
@@ -7098,11 +7070,11 @@ fn dovetail_project(tool: ToolEntry, depth: f64) -> Project {
 #[test]
 fn dovetail_op_emits_single_floor_z_pass_not_a_depth_cascade() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: dovetail_project(dovetail_tool(1, 12.0), -3.0),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -7146,11 +7118,11 @@ fn dovetail_op_emits_single_floor_z_pass_not_a_depth_cascade() {
 #[test]
 fn dovetail_op_emits_rough_channel_prerequisite_warning() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: dovetail_project(dovetail_tool(1, 12.0), -7.0),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -7170,21 +7142,17 @@ fn dovetail_op_emits_rough_channel_prerequisite_warning() {
 /// A dovetail op with a non-FormProfile cutter warns `tool_kind_mismatch`
 /// (straight walls ⇒ no angled undercut flanks).
 #[test]
-fn dovetail_op_with_plain_endmill_warns_kind_mismatch() {
-    let resp = run_pipeline(
-        PipelineRequest {
+fn dovetail_op_with_plain_endmill_refuses() {
+    let err = run_pipeline(
+        crate::fixture_support::request(PipelineRequest {
             project: dovetail_project(endmill(1, 6.0), -5.0),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
-    .unwrap();
-    assert!(
-        resp.warnings.iter().any(|w| w.kind == "tool_kind_mismatch"),
-        "expected tool_kind_mismatch for an endmill on a dovetail op; got {:?}",
-        resp.warnings.iter().map(|w| &w.kind).collect::<Vec<_>>(),
-    );
+    .expect_err("invalid authored input must not produce machine output");
+    assert!(err.to_string().contains("form-profile"), "{err}");
 }
 
 /// A Profile on a circle that arrives TESSELLATED (many short LINE
@@ -7254,11 +7222,11 @@ fn tessellated_circle_profile_project(arcs: bool) -> Project {
 #[test]
 fn ldu2_tessellated_circle_profile_collapses_to_arcs() {
     let resp = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: tessellated_circle_profile_project(true),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -7292,11 +7260,11 @@ fn ldu2_tessellated_circle_profile_collapses_to_arcs() {
 fn ldu2_source_fit_is_gated_on_arcs_flag() {
     let count = |arcs: bool| {
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: tessellated_circle_profile_project(arcs),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -7417,11 +7385,11 @@ fn group_ops_by_tool_collapses_redundant_toolchange() {
             fs_context: None,
         };
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -7482,11 +7450,11 @@ fn optional_stop_swaps_pause_m0_for_m1() {
             fs_context: None,
         };
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -7539,11 +7507,11 @@ fn optional_stop_swaps_manual_toolchange_m0_for_m1() {
             fs_context: None,
         };
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .unwrap()
@@ -7604,11 +7572,11 @@ mod streaming_gcode {
 
     fn buffered_gcode(kind: PostProcessorKind) -> String {
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: a_project(),
                 post_processor: Some(kind),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect("buffered pipeline runs")
@@ -7618,11 +7586,11 @@ mod streaming_gcode {
     fn streamed_gcode(kind: PostProcessorKind) -> (Vec<u8>, StreamGcodeOutcome) {
         let buf = Arc::new(Mutex::new(Vec::new()));
         let outcome = stream_gcode_to_writer(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: a_project(),
                 post_processor: Some(kind),
                 cps_post: None,
-            },
+            }),
             Box::new(SharedBuf(buf.clone())),
         )
         .expect("streaming pipeline runs");
@@ -7662,11 +7630,11 @@ mod streaming_gcode {
         let cache = crate::pipeline_cache::PipelineCache::new(200);
         let buf = Arc::new(Mutex::new(Vec::new()));
         stream_gcode_to_writer_capped(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: a_project(),
                 post_processor: Some(kind),
                 cps_post: None,
-            },
+            }),
             Box::new(SharedBuf(buf.clone())),
             cap,
             &cache,
@@ -7698,17 +7666,16 @@ mod streaming_gcode {
     }
 
     #[test]
-    fn under_cap_ops_are_cached_normally() {
-        // Control for the test above: with the default (huge) cap no op
-        // overflows, so the same two ops both land in the cache. This pins the
-        // CAP as the thing that gates caching — not some unrelated skip.
+    fn v9_under_cap_ops_still_bypass_legacy_cache() {
+        // The v9 cache policy applies even below the cap. Exact tee threshold,
+        // overflow and recovery remain independently pinned in gcode/sink.rs.
         let (_, cached_entries) = streamed_with_cap(
             PostProcessorKind::Linuxcnc,
             crate::gcode::sink::DEFAULT_STREAM_TEE_CAP_LINES,
         );
         assert_eq!(
-            cached_entries, 2,
-            "both distinct ops fit under the default cap and are cached",
+            cached_entries, 0,
+            "v9 bypasses legacy operation cache independently of tee capacity",
         );
     }
 
@@ -7718,11 +7685,11 @@ mod streaming_gcode {
         // it has no write-through mode — reject before any bytes are written.
         let buf = Arc::new(Mutex::new(Vec::new()));
         let err = stream_gcode_to_writer(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: a_project(),
                 post_processor: Some(PostProcessorKind::Hpgl),
                 cps_post: None,
-            },
+            }),
             Box::new(SharedBuf(buf.clone())),
         )
         .expect_err("HPGL cannot stream");
@@ -7747,18 +7714,18 @@ mod streaming_gcode {
             }
         }
         let err = stream_gcode_to_writer(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: a_project(),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             Box::new(AlwaysFails),
         )
         .expect_err("write failure must surface");
         assert!(matches!(err, StreamGcodeError::Write(_)));
     }
 
-    // ─── stream_gcode_with_preview (ivac-3j1p.3.2.2) ─────────────────────
+    // ─── stream_gcode_with_preview (crate::fixture_support::request(ivac-3j1p.3.2.2)) ─────────────────────
     //
     // The tee-fed preview path must produce the SAME g-code bytes as the
     // bytes-only stream AND the same toolpath / index / warnings the buffered
@@ -7767,11 +7734,11 @@ mod streaming_gcode {
     fn streamed_preview(kind: PostProcessorKind) -> (Vec<u8>, StreamPreviewOutcome) {
         let buf = Arc::new(Mutex::new(Vec::new()));
         let outcome = stream_gcode_with_preview(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: a_project(),
                 post_processor: Some(kind),
                 cps_post: None,
-            },
+            }),
             Box::new(SharedBuf(buf.clone())),
         )
         .expect("streaming preview runs");
@@ -7797,11 +7764,11 @@ mod streaming_gcode {
     #[test]
     fn stream_with_preview_matches_buffered_program_toolpath_and_warnings() {
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project: a_project(),
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect("buffered pipeline runs");
@@ -7870,11 +7837,11 @@ mod two_sided_guard {
 
     fn run(project: Project) -> Result<PipelineResponse, PipelineError> {
         run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: Some(PostProcessorKind::Linuxcnc),
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
     }
@@ -8004,7 +7971,11 @@ mod cps_seam {
     #[cfg(feature = "cps")]
     #[test]
     fn cps_without_selection_is_a_structured_error() {
-        let err = run_pipeline(cps_request(None), |_, _, _| {}).expect_err("must reject");
+        let err = run_pipeline(
+            crate::fixture_support::request(cps_request(None)),
+            |_, _, _| {},
+        )
+        .expect_err("must reject");
         assert!(matches!(err, PipelineError::CpsSelectionMissing));
         let structured = err.to_structured(None).expect("structured");
         assert_eq!(
@@ -8018,8 +7989,11 @@ mod cps_seam {
     #[cfg(not(feature = "cps"))]
     #[test]
     fn cps_kind_rejected_without_feature() {
-        let err = run_pipeline(cps_request(Some(inline_selection())), |_, _, _| {})
-            .expect_err("must reject");
+        let err = run_pipeline(
+            crate::fixture_support::request(cps_request(Some(inline_selection()))),
+            |_, _, _| {},
+        )
+        .expect_err("must reject");
         assert!(matches!(err, PipelineError::CpsUnavailable));
         let structured = err.to_structured(None).expect("structured");
         assert_eq!(
@@ -8039,8 +8013,11 @@ mod cps_seam {
             script: "extension = \"tap\";\nfunction onOpen() { writeln(\"HELLO\"); }".into(),
             filename: Some("mini.cps".into()),
         };
-        let err =
-            run_pipeline(cps_request(Some(selection)), |_, _, _| {}).expect_err("external post");
+        let err = run_pipeline(
+            crate::fixture_support::request(cps_request(Some(selection))),
+            |_, _, _| {},
+        )
+        .expect_err("external post");
         assert!(err.to_string().contains("External CPS"));
     }
 
@@ -8052,7 +8029,11 @@ mod cps_seam {
             source: CpsPostSource::Bundled { id: "nope".into() },
             properties: std::collections::BTreeMap::new(),
         };
-        let err = run_pipeline(cps_request(Some(selection)), |_, _, _| {}).expect_err("unknown");
+        let err = run_pipeline(
+            crate::fixture_support::request(cps_request(Some(selection))),
+            |_, _, _| {},
+        )
+        .expect_err("unknown");
         assert!(matches!(err, PipelineError::CpsPostFailed { .. }));
     }
 
@@ -8060,7 +8041,9 @@ mod cps_seam {
     /// recorded program at the end) — rejected up front like HPGL.
     #[test]
     fn streaming_rejects_cps() {
-        match prepare_stream(cps_request(Some(inline_selection()))) {
+        match prepare_stream(crate::fixture_support::request(cps_request(Some(
+            inline_selection(),
+        )))) {
             Err(StreamGcodeError::Unsupported(PostProcessorKind::Cps)) => {}
             Err(other) => panic!("wrong rejection: {other}"),
             Ok(_) => panic!("streaming must reject cps"),
@@ -8159,11 +8142,11 @@ fn audit_waterline_open_slice_is_an_error_without_output() {
         fs_context: None,
     };
     let err = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap_err();

@@ -34,7 +34,7 @@ fn fixture(direction: ScanDirection) -> Project {
 }
 fn run(p: Project) -> Result<PipelineResponse, PipelineError> {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -43,7 +43,7 @@ fn run(p: Project) -> Result<PipelineResponse, PipelineError> {
                 },
                 properties: BTreeMap::new(),
             }),
-        },
+        }),
         |_, _, _| {},
     )
 }
@@ -214,31 +214,12 @@ fn planned_edge_travel_does_not_exempt_cutting_below_stock() {
 }
 #[test]
 fn manual_rates_persist_and_drive_shopbot_without_a_recommendation() {
-    use ivac_core::feeds_speeds::*;
-    let mut p = fixture(ScanDirection::AlongX);
-    p.operations[0].params.applied_cutting = Some(AppliedCutting {
-        experimental_recipe: None,
-        slots: [FsPass::Rough, FsPass::Finish]
-            .into_iter()
-            .map(|pass| AppliedRateSlot {
-                tool_id: 1,
-                pass,
-                rpm: 16000,
-                feed_mm_min: 1800,
-                plunge_mm_min: 300,
-                origins: RateOrigins {
-                    rpm: CuttingOrigin::Manual,
-                    feed: CuttingOrigin::Manual,
-                    plunge: CuttingOrigin::Manual,
-                },
-            })
-            .collect(),
-        proposal: None,
-        knowledge: None,
-        context_key: String::new(),
-        doc_origin: CuttingOrigin::Manual,
-        stepover_origin: None,
-    });
+    let mut p = crate::fixture_support::project(fixture(ScanDirection::AlongX));
+    for rate in &mut p.operations[0].params.cutting.as_mut().unwrap().rates {
+        rate.rpm = Some(16000);
+        rate.feed_mm_min = Some(1800);
+        rate.plunge_mm_min = Some(300);
+    }
     let roundtrip: Project = serde_json::from_str(&serde_json::to_string(&p).unwrap()).unwrap();
     let response = run(roundtrip).unwrap();
     assert!(response.gcode.contains("16000 RPM"));
@@ -284,20 +265,20 @@ fn fixture_on_extended_edge_travel_is_still_a_collision() {
 fn standalone_generic_output_and_disabled_invalid_op_are_supported() {
     let p = fixture(ScanDirection::AlongY);
     assert!(run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p.clone(),
             post_processor: Some(PostProcessorKind::Hpgl),
             cps_post: None
-        },
+        }),
         |_, _, _| {}
     )
     .is_err());
     let response = run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project: p.clone(),
             post_processor: Some(PostProcessorKind::Linuxcnc),
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
     .unwrap();
@@ -335,3 +316,6 @@ fn contour_jobs_retain_their_existing_work_origin_warning() {
         .iter()
         .any(|w| w.kind == "stock_origin_outside_geometry_bbox"));
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

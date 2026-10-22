@@ -161,7 +161,7 @@ fn waterline_rough_then_relief_finish_no_gouge_bounded_envelope() {
         enabled: true,
         kind: OpKind::ReliefMill {
             source_id: 1,
-            z_min_mm: 0.0, // default range ⇒ cut the real model depth
+            z_min_mm: -6.0, // explicit reviewed model range
             z_max_mm: 0.0,
             invert: false,
             scallop_height_mm: 0.0,
@@ -277,3 +277,6 @@ fn waterline_rough_then_relief_finish_no_gouge_bounded_envelope() {
         "finish left stock beyond the {tol_env} mm envelope (staircase not cleaned)"
     );
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

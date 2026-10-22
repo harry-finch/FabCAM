@@ -2378,16 +2378,14 @@ fn refuse_faulty_output(op_id: u32) -> Result<(), PipelineError> {
     })
 }
 
-/// NUMSAFE2: an explicitly supplied depth per pass must be usable. Only
-/// omitted values (`None` on the op and, when the op inherits, on its tool)
-/// keep the documented `step_unspecified` default; a supplied zero,
-/// positive, non-finite or sub-1e-9 mm value is refused instead of
-/// silently becoming a single full-depth pass (or a 1 mm default). Kinds
+/// NUMSAFE2: an explicitly supplied depth per pass must be usable. Missing
+/// values are checked by the neutral operation validator; no tool default is read.
+/// A zero, positive, non-finite or sub-1e-9 mm step refuses. Kinds
 /// that never read the step (drill, thread, T-slot, dovetail) are exempt,
 /// matching the editor that hides the field for them.
 fn require_valid_explicit_step(
     op: &Op,
-    tool: Option<&crate::project::ToolEntry>,
+    _tool: Option<&crate::project::ToolEntry>,
 ) -> Result<(), PipelineError> {
     if matches!(
         op.kind,
@@ -2398,11 +2396,7 @@ fn require_valid_explicit_step(
     ) {
         return Ok(());
     }
-    let supplied = match (op.params.step, tool.and_then(|t| t.default_step)) {
-        (Some(v), _) => Some(("depth per pass", v)),
-        (None, Some(v)) => Some(("tool default step", v)),
-        (None, None) => None,
-    };
+    let supplied = op.params.step.map(|v| ("depth per pass", v));
     match supplied {
         Some((name, v)) if !(v.is_finite() && v <= -1e-9) => Err(PipelineError::InvalidStep(
             op.id,
@@ -3104,20 +3098,17 @@ fn next_prev_tool_id(op: &Op, internal_swap_emitted: bool) -> u32 {
 // other `mod` declarations so child modules keep doing
 // `use super::ordered_selection`.
 
-/// Resolve the per-pass Z step: op override wins, otherwise the tool's
-/// `default_step`. Both must be negative (a depth, not a height); a
-/// non-negative value or two Nones produces a `step_unspecified`
-/// warning.
-pub(crate) fn effective_step(op: &Op, tool: &ToolEntry) -> Result<f64, PipelineWarning> {
+/// Resolve the authored per-pass Z step. A missing, non-finite or nonnegative
+/// value is invalid; generation never reads a live tool-library default.
+pub(crate) fn effective_step(op: &Op, _tool: &ToolEntry) -> Result<f64, PipelineWarning> {
     op.params
         .step
-        .or_else(|| if op.params.cutting.is_some() { None } else { tool.default_step })
         .filter(|v| v.is_finite() && *v <= -1e-9)
         .ok_or_else(|| {
             PipelineWarning::for_op(
                 op.id,
                 "step_unspecified",
-                "depth-per-pass must be finite and at most -0.000000001 mm; set it on the operation or its tool",
+                "depth-per-pass must be finite and at most -0.000000001 mm; set it explicitly on the operation",
             )
         })
 }
@@ -3136,6 +3127,12 @@ pub(super) fn synthesize_finish_setup(
     let Some(ft_id) = op.finish_tool_id else {
         return Ok(None);
     };
+    // A pocket without a wall ring has no Finish role and must not read or
+    // synthesize rates for its unused secondary tool.
+    if op.pocket_params().is_some_and(|p| p.pocket_nocontour) {
+        return Ok(None);
+    }
+
     if ft_id == op.tool_id {
         return Ok(None);
     }

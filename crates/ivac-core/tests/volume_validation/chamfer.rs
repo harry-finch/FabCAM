@@ -1,7 +1,7 @@
 //! End-to-end chamfer validation harness (refactored onto
 //! `common::` scaffolding).
 //!
-//! Runs a real chamfer CAM job — 8 mm Ø 90° v-bit, 5 mm requested
+//! Runs a real chamfer CAM job — 8 mm Ø 90° v-bit, 4 mm explicit
 //! chamfer width on one side of a rectangle, 10 mm stock — through the
 //! full pipeline → toolpath → heightmap-sim path. Measures carved
 //! volume from the heightmap and compares against the closed-form
@@ -10,8 +10,7 @@
 //! Numbers to remember (8 mm 90° v-bit, no tip flat):
 //!
 //! * `chamfer_width_cap_mm(8, 0) = 4 mm` — physical reach of the cone.
-//! * User asks for `width_mm = 5`; pipeline clamps to 4 and emits a
-//!   `chamfer_width_clamped_to_reach` warning.
+//! * Explicit `width_mm = 4`; v9 refuses larger widths instead of clamping.
 //! * Spindle Z at the cone tip: `-effective_width / tan(45°) = -4 mm`.
 //! * Trench cross-section (perpendicular to the chord): V from
 //!   `(-4, 0) → (0, -4) → (4, 0)` → area = ½·8·4 = 16 mm².
@@ -56,7 +55,7 @@ const RECT_W: f64 = RECT_X1 - RECT_X0; // 50 mm
 const RECT_H: f64 = RECT_Y1 - RECT_Y0; // 30 mm
 const TOOL_DIA: f64 = 8.0;
 const TIP_ANGLE_DEG: f64 = 90.0; // 45° half-angle
-const REQUESTED_WIDTH: f64 = 5.0;
+const REQUESTED_WIDTH: f64 = 4.0;
 const SIM_CELL_MM: f64 = 0.1;
 
 /// Build the standard chamfer op used by both tests below.
@@ -87,7 +86,10 @@ fn assert_cone_math_is_4mm_at_z_minus_4() {
         "tool reach should be 4 mm, got {cap}"
     );
     let sol = chamfer_depth_capped(REQUESTED_WIDTH, TIP_ANGLE_DEG, TOOL_DIA, 0.0);
-    assert!(sol.clamped_to_reach, "5 mm chamfer on 8 mm bit must clamp");
+    assert!(
+        !sol.clamped_to_reach,
+        "explicit 4 mm width fits the 8 mm bit"
+    );
     assert!((sol.effective_width_mm - 4.0).abs() < 1e-9);
     assert!((sol.z - (-4.0)).abs() < 1e-9);
 }

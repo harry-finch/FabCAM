@@ -53,31 +53,35 @@ fn cps_motion_refuses_after_roundtrip_before_success_event() {
         let req: PipelineRequest =
             serde_json::from_slice(&serde_json::to_vec(&req).unwrap()).unwrap();
         let mut done = false;
-        let error = generate_streaming(req.clone(), &CancelToken::new(), &mut |event| {
-            if matches!(event, PipelineEvent::Done { .. }) {
-                done = true;
-            }
-        })
+        let error = generate_streaming(
+            crate::fixture_support::request(req.clone()),
+            &CancelToken::new(),
+            &mut |event| {
+                if matches!(event, PipelineEvent::Done { .. }) {
+                    done = true;
+                }
+            },
+        )
         .unwrap_err();
         assert!(matches!(error, PipelineError::UnsupportedCpsMotion(1, _)));
         assert!(!done);
         assert!(error.to_string().contains("No program generated"));
         let mut disabled = req.clone();
         disabled.project.operations[0].enabled = false;
-        assert!(run_pipeline(disabled, |_, _, _| {}).is_ok());
+        assert!(run_pipeline(crate::fixture_support::request(disabled), |_, _, _| {}).is_ok());
         let mut native = req;
         native.post_processor = Some(PostProcessorKind::Linuxcnc);
         native.cps_post = None;
-        let output = run_pipeline(native, |_, _, _| {}).unwrap();
+        let output = run_pipeline(crate::fixture_support::request(native), |_, _, _| {}).unwrap();
         assert!(output.gcode.contains("G28") || output.gcode.contains("G38.2"));
     }
 }
 #[test]
 fn cps_marker_remains_explicitly_skipped_and_pause_still_emits() {
     let marker = run_pipeline(
-        request(OpKind::CycleMarker {
+        crate::fixture_support::request(request(OpKind::CycleMarker {
             label: "section".into(),
-        }),
+        })),
         |_, _, _| {},
     )
     .unwrap();
@@ -86,11 +90,14 @@ fn cps_marker_remains_explicitly_skipped_and_pause_still_emits() {
         .iter()
         .any(|w| w.kind == "cps_unsupported_op"));
     let pause = run_pipeline(
-        request(OpKind::Pause {
+        crate::fixture_support::request(request(OpKind::Pause {
             message: "inspect".into(),
-        }),
+        })),
         |_, _, _| {},
     )
     .unwrap();
     assert!(pause.gcode.contains("PAUSE"));
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;

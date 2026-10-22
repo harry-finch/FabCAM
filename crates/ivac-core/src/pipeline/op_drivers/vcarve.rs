@@ -320,11 +320,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect("pipeline ran");
@@ -389,11 +389,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect_err("unsupported carve must fail, not return successful empty output");
@@ -454,11 +454,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect("pipeline ran");
@@ -530,11 +530,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect("pipeline ran");
@@ -634,11 +634,11 @@ mod tests {
                 fs_context: None,
             };
             run_pipeline(
-                PipelineRequest {
+                crate::fixture_support::request(PipelineRequest {
                     project,
                     post_processor: None,
                     cps_post: None,
-                },
+                }),
                 |_, _, _| {},
             )
             .expect("pipeline ran")
@@ -718,11 +718,11 @@ mod tests {
             fs_context: None,
         };
         let resp = run_pipeline(
-            PipelineRequest {
+            crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
                 cps_post: None,
-            },
+            }),
             |_, _, _| {},
         )
         .expect_err("unsupported carve must fail, not return successful empty output");

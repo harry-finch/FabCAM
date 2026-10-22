@@ -41,11 +41,11 @@ fn rectangle_project(medial: bool) -> Project {
 }
 fn generic(project: Project) -> Result<PipelineResponse, PipelineError> {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: None,
             cps_post: None,
-        },
+        }),
         |_, _, _| {},
     )
 }
@@ -400,7 +400,7 @@ fn circle_islands_and_disconnected_regions_are_explicit() {
 #[cfg(feature = "cps")]
 fn shopbot(project: Project) -> Result<PipelineResponse, PipelineError> {
     run_pipeline(
-        PipelineRequest {
+        crate::fixture_support::request(PipelineRequest {
             project,
             post_processor: Some(PostProcessorKind::Cps),
             cps_post: Some(CpsPostSelection {
@@ -409,7 +409,7 @@ fn shopbot(project: Project) -> Result<PipelineResponse, PipelineError> {
                 },
                 properties: std::collections::BTreeMap::default(),
             }),
-        },
+        }),
         |_, _, _| {},
     )
 }
@@ -513,3 +513,6 @@ fn a4_decoded_output_preview_generic_parity_and_persistence() {
         assert!((actual.iter().map(|p| p[2]).fold(0., f64::min) + 1.).abs() < 0.00011);
     }
 }
+
+#[path = "support/explicit.rs"]
+mod fixture_support;
