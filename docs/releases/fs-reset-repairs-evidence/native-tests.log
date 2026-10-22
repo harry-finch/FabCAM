@@ -1,0 +1,15 @@
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-cps)
+   Compiling ivac-feeds-speeds v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-feeds-speeds)
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-tauri)
+   Compiling ivac-file-export v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-file-export)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.77s
+     Running unittests src/lib.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/debug/deps/ivac_tauri_lib-f3c3a9b0ce5b1fa0)
+
+running 3 tests
+test preset_collections::tests::symlink_destination_and_directory_refused ... ok
+test preset_collections::tests::malformed_oversized_busy_and_traversal_preserve_original ... ok
+test preset_collections::tests::atomic_current_document_and_conflicts ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.01s
+

@@ -1,0 +1,22 @@
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-cps)
+   Compiling ivac-feeds-speeds v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-feeds-speeds)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 35.79s
+     Running unittests src/lib.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/debug/deps/ivac_core-322d57cd074e88ca)
+
+running 12 tests
+test pipeline::cutting_v9_tests::v9_role_matrix_uses_only_consumed_specialized_sets ... ok
+test pipeline::cutting_v9_tests::v9_public_contract_refuses_legacy_and_duplicate_ids ... ok
+test pipeline::cutting_v9_tests::v9_chamfer_reach_and_peck_defaults_are_not_silently_substituted ... ok
+test pipeline::cutting_v9_tests::v9_specialized_invalid_inputs_cannot_bypass_mandatory_restrictions ... ok
+test pipeline::cutting_v9_tests::v9_missing_secondary_values_and_known_limits_refuse_without_clamping ... ok
+test pipeline::cutting_v9_tests::v9_streaming_preserves_bytes_and_preflight_rejects_missing_values ... ok
+test pipeline::cutting_v9_tests::v9_dual_pocket_uses_only_actual_secondary_finish_values ... ok
+test pipeline::cutting_v9_tests::v9_drill_spot_and_chamfer_are_independent_even_with_the_same_tool ... ok
+test pipeline::cutting_v9_tests::v9_two_sided_preserves_both_programs_and_refuses_invalid_back ... ok
+test pipeline::cutting_v9_tests::v9_standard_valid_inputs_keep_byte_identical_programs ... ok
+test pipeline::cutting_v9_tests::v9_specialized_valid_inputs_keep_program_and_toolpath ... ok
+test pipeline::cutting_v9_tests::v9_test1_shopbot_profile_and_vcarve_match_established_sources ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 1243 filtered out; finished in 0.42s
+

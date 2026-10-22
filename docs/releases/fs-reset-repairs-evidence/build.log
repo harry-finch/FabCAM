@@ -1,0 +1,168 @@
+
+> build
+> node scripts/ensure-wasm-fresh.mjs && vite build
+
+[ensure-wasm] ivac-wasm pkg is stale — rebuilding (offline, --mode no-install)…
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling autocfg v1.5.0
+   Compiling wasm-bindgen-shared v0.2.120
+   Compiling rustversion v1.0.22
+   Compiling cfg-if v1.0.4
+   Compiling serde_core v1.0.228
+   Compiling once_cell v1.21.4
+   Compiling bumpalo v3.20.2
+   Compiling serde v1.0.228
+   Compiling pin-project-lite v0.2.17
+   Compiling futures-task v0.3.32
+   Compiling slab v0.4.12
+   Compiling futures-core v0.3.32
+   Compiling zmij v1.0.21
+   Compiling num-traits v0.2.19
+   Compiling futures-util v0.3.32
+   Compiling indexmap v1.9.3
+   Compiling xml-rs v0.8.28
+   Compiling syn v2.0.117
+   Compiling crc32fast v1.5.0
+   Compiling serde_json v1.0.149
+   Compiling xmltree v0.9.0
+   Compiling arrayvec v0.7.6
+   Compiling simd-adler32 v0.3.9
+   Compiling num-integer v0.1.46
+   Compiling smallvec v1.15.1
+   Compiling num-bigint v0.4.6
+   Compiling adler2 v2.0.1
+   Compiling schemars v0.8.22
+   Compiling memchr v2.8.0
+   Compiling hashbrown v0.12.3
+   Compiling wasm-bindgen v0.2.120
+   Compiling itoa v1.0.18
+   Compiling float-cmp v0.9.0
+   Compiling strict-num v0.1.1
+   Compiling miniz_oxide v0.8.9
+   Compiling num-iter v0.1.45
+   Compiling kurbo v0.11.3
+   Compiling num-complex v0.4.6
+   Compiling num-traits v0.1.43
+   Compiling dxf v0.6.1
+   Compiling wasm-bindgen-macro-support v0.2.120
+   Compiling serde_derive_internals v0.29.1
+   Compiling num-rational v0.4.2
+   Compiling siphasher v1.0.3
+   Compiling arrayref v0.3.9
+   Compiling thiserror v2.0.18
+   Compiling dyn-clone v1.0.20
+   Compiling log v0.4.29
+   Compiling either v1.15.0
+   Compiling byteorder-lite v0.1.0
+   Compiling simplecss v0.2.2
+   Compiling itertools v0.14.0
+   Compiling num v0.4.3
+   Compiling svgtypes v0.15.3
+   Compiling flate2 v1.1.9
+   Compiling serde_derive v1.0.228
+   Compiling bytemuck_derive v1.11.0
+   Compiling schemars_derive v0.8.22
+   Compiling thiserror-impl v2.0.18
+   Compiling tracing-attributes v0.1.31
+   Compiling enum_primitive v0.1.1
+   Compiling static_aabb2d_index v2.0.0
+   Compiling tracing-core v0.1.36
+   Compiling encoding_rs v0.8.35
+   Compiling imagesize v0.13.0
+   Compiling bytemuck v1.25.0
+   Compiling roxmltree v0.20.0
+   Compiling pico-args v0.5.0
+   Compiling data-url v0.3.2
+   Compiling xmlwriter v0.1.0
+   Compiling base64 v0.22.1
+   Compiling wasm-bindgen-macro v0.2.120
+   Compiling font-types v0.9.0
+   Compiling image v0.25.5
+   Compiling tiny-skia-path v0.11.4
+   Compiling maybe_parallel_iterator v0.12.0
+   Compiling read-fonts v0.34.0
+   Compiling byteorder v1.5.0
+   Compiling voronator v0.2.1
+   Compiling tracing v0.1.44
+   Compiling cavalier_contours v0.7.0
+   Compiling usvg v0.45.1
+   Compiling clipper2-rust v1.0.3
+   Compiling seahash v4.1.0
+   Compiling lru v0.18.2
+   Compiling js-sys v0.3.97
+   Compiling console_error_panic_hook v0.1.7
+   Compiling ivac-feeds-speeds v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-feeds-speeds)
+   Compiling skrifa v0.36.0
+   Compiling getrandom v0.2.17
+   Compiling chrono v0.4.44
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling uuid v1.10.0
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-core)
+   Compiling ivac-wasm v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs/crates/ivac-wasm)
+    Finished `release` profile [optimized] target(s) in 1m 28s
+[INFO]: found wasm-opt at "/Users/mugen/Library/Caches/.wasm-pack/wasm-opt-50385c9e73ccee70/bin/wasm-opt"
+[INFO]: Optimizing wasm binaries with `wasm-opt`...
+[INFO]: ✨   Done in 1m 39s
+[INFO]: 📦   Your wasm pkg is ready to publish at crates/ivac-wasm/pkg.
+[WARN]: ⚠️   failed to get wasm-pack version
+[ensure-wasm] rebuilt package verified
+vite v8.0.10 building client environment for production...
+[2Ktransforming...✓ 4573 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   2.07 kB │ gzip:     0.66 kB
+dist/assets/qualification.worker-BliwUhHZ.js     22.53 kB
+dist/assets/wasm.worker-XEZFJJ9F.js              24.61 kB
+dist/assets/ivac_wasm_bg-Bx0Jf1YA.wasm        6,639.17 kB │ gzip: 2,361.54 kB
+dist/assets/Scene3D-BBqyjIFX.css                  2.01 kB │ gzip:     0.73 kB
+dist/assets/ReportDialog-DfTZZiF-.css             2.68 kB │ gzip:     0.76 kB
+dist/assets/SettingsDialog-B5_9_ipF.css           3.36 kB │ gzip:     0.94 kB
+dist/assets/AboutDialog-BaILN9aX.css              3.73 kB │ gzip:     0.93 kB
+dist/assets/AddTextDialog-BJlzrc0R.css            4.02 kB │ gzip:     1.07 kB
+dist/assets/GcodePanel-CpuoXhYj.css               4.43 kB │ gzip:     1.23 kB
+dist/assets/MachineWorkspace-D6SMeSGf.css        14.70 kB │ gzip:     2.87 kB
+dist/assets/ToolLibraryDialog-u5IMaWUZ.css       15.46 kB │ gzip:     2.89 kB
+dist/assets/index-WamItWSF.css                  123.00 kB │ gzip:    20.63 kB
+dist/assets/dist-js-C4PRV8Tj.js                   0.12 kB │ gzip:     0.13 kB
+dist/assets/dist-js-CT2R3UoV.js                   0.13 kB │ gzip:     0.14 kB
+dist/assets/rolldown-runtime-lhHHWwHU.js          0.15 kB │ gzip:     0.15 kB
+dist/assets/env-P19VVBwe.js                       0.17 kB │ gzip:     0.15 kB
+dist/assets/wasm-fatal-Cq8arUKL.js                0.20 kB │ gzip:     0.17 kB
+dist/assets/dist-js-DqGRkUa-.js                   0.29 kB │ gzip:     0.18 kB
+dist/assets/path-DnsxXZLh.js                      0.84 kB │ gzip:     0.44 kB
+dist/assets/event-Df0RJ65L.js                     1.05 kB │ gzip:     0.55 kB
+dist/assets/preload-helper-ca-nBW7U.js            1.19 kB │ gzip:     0.68 kB
+dist/assets/cutting-contract-B2QSyRFo.js          1.27 kB │ gzip:     0.63 kB
+dist/assets/dialog-draft.svelte-BkTYBt6w.js       1.33 kB │ gzip:     0.56 kB
+dist/assets/core-B9JRyPmD.js                      1.90 kB │ gzip:     0.79 kB
+dist/assets/project-types-BpHPJJEL.js             2.10 kB │ gzip:     0.95 kB
+dist/assets/tauri-CpsHqtAQ.js                     3.31 kB │ gzip:     1.31 kB
+dist/assets/wasm-worker-client-DB-Df1a_.js        3.56 kB │ gzip:     1.41 kB
+dist/assets/wasm-Ca3JaxKJ.js                      3.89 kB │ gzip:     1.38 kB
+dist/assets/dist-js-D1P0LHlE.js                   6.71 kB │ gzip:     1.71 kB
+dist/assets/GcodePanel-bGC5D9cP.js                7.95 kB │ gzip:     3.08 kB
+dist/assets/AboutDialog-BYi6ysUc.js              10.52 kB │ gzip:     4.78 kB
+dist/assets/text_preview.svelte-BMLU0Je_.js      12.33 kB │ gzip:     3.45 kB
+dist/assets/AddTextDialog-Mit5i9t-.js            16.23 kB │ gzip:     5.74 kB
+dist/assets/ReportDialog-DQDn7Z15.js             16.87 kB │ gzip:     5.59 kB
+dist/assets/SettingsDialog-D8AEweq0.js           17.60 kB │ gzip:     4.91 kB
+dist/assets/ivac_wasm-D4vY0QBL.js                20.61 kB │ gzip:     5.41 kB
+dist/assets/import-ops-D1jLECTt.js               31.99 kB │ gzip:     9.75 kB
+dist/assets/Scene3D-D3U_TBat.js                  41.30 kB │ gzip:    14.36 kB
+dist/assets/driver-C0RLgfvX.js                   52.36 kB │ gzip:    15.29 kB
+dist/assets/index-client-DVoIp7bL.js             53.27 kB │ gzip:    20.33 kB
+dist/assets/MachineWorkspace-Btlc1Qsx.js         70.64 kB │ gzip:    20.58 kB
+dist/assets/ToolLibraryDialog-DW-9y6uZ.js        77.27 kB │ gzip:    19.16 kB
+dist/assets/three-bcSkbUAg.js                   597.98 kB │ gzip:   152.42 kB
+dist/assets/index-vCZp9U3_.js                 1,084.58 kB │ gzip:   319.39 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 600 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.83s

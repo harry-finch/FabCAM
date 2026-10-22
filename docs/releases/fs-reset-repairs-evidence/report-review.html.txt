@@ -1,0 +1,19 @@
+<div id="app"></div><script type="module">
+import { mount } from 'svelte';
+import Report from '/src/lib/components/ReportDialog.svelte';
+import { project } from '/src/lib/state/project.svelte';
+import { buildOpEntry } from '/src/lib/state/op_defaults';
+import { cuttingRoles } from '/src/lib/state/cutting-parameters';
+import '/src/app.css';
+const base = project.data.tools[0];
+project.data.tools = [base, {...base, id: 7, name: 'QA Spot'}, {...base, id: 8, name: 'QA Chamfer'}];
+project.data.operations = ['profile','pocket','drill'].map((kind,i) => {
+ const o = buildOpEntry(kind,{nextId:i+1, tools:project.data.tools, reliefSources:[],selectionIds:[],objectMeta:[]});
+ o.name = 'SOFTWARE QA '+kind;
+ if(kind==='pocket') o.finishToolId=8;
+ if(kind==='drill'){o.spotFirst={spotToolId:7,depth:-1};o.finishToolId=8;o.chamferAfterWidthMm=1;}
+ o.cutting={rates:cuttingRoles(o).map((r,j)=>({...r,rpm:13000+j,feed_mm_min:410+j,plunge_mm_min:110+j}))};
+ return o;
+});
+mount(Report,{target:document.getElementById('app'),props:{open:true,onClose:()=>{}}});
+</script>
