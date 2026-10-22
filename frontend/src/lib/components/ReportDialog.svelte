@@ -6,7 +6,7 @@
   import { generatedMinimumZ, workshopWarnings } from '../state/workshop-report';
   import { generationContextKey, coerceGenerationPost } from '../state/generation-context';
   import { workspace } from '../state/workspace.svelte';
-  import { operationRates } from '../state/feeds-speeds';
+  import { reportCuttingText, reportToolIds, reportToolNames } from '../state/report-cutting';
   import { computeFootprint } from '../sim/footprint';
   import { project, type OpEntry } from '../state/project.svelte';
   import { isProgramOnlyOp } from '../state/op_types';
@@ -77,21 +77,8 @@
       `${project.data.workOffset.wcs} · X ${project.data.workOffset.x_mm} · Y ${project.data.workOffset.y_mm} · Z ${project.data.workOffset.z_mm} mm`,
     ],
   ]);
-  function opRates(op: OpEntry) {
-    if (isProgramOnlyOp(op.kind)) return '—';
-    const tool = project.data.tools.find((t) => t.id === op.toolId);
-    if (!tool) return '—';
-    if (op.kind === 'profile' || op.kind === 'pocket') {
-      const rates = operationRates(op, tool, op.kind === 'profile' ? 'finish' : 'rough');
-      if (!rates) return '—';
-      const main = `${rates.rpm} rpm · ${rates.feed_mm_min} / ${rates.plunge_mm_min} mm/min`;
-      if (op.kind !== 'pocket') return main;
-      const finishTool = project.data.tools.find((t) => t.id === (op.finishToolId ?? op.toolId));
-      const finish = finishTool ? operationRates(op, finishTool, 'finish') : null;
-      return `${t('uxc.rough')}: ${main} · ${t('fs35.finishing')}: ${finish ? `${finish.rpm} rpm · ${finish.feed_mm_min} / ${finish.plunge_mm_min} mm/min` : '—'}`;
-    }
-    return `${(op.kind === 'drill' ? tool.speedDrill : undefined) ?? tool.speed} rpm · ${op.feedRateOverride ?? (op.kind === 'drill' ? tool.feedRateDrill : undefined) ?? tool.feedRate} / ${op.plungeRateOverride ?? (op.kind === 'drill' ? tool.plungeRateDrill : undefined) ?? tool.plungeRate} mm/min`;
-  }
+  const opRates = (op: OpEntry) =>
+    reportCuttingText(op, { rough: t('uxc.rough'), finish: t('fs35.finishing') });
   function minimum(op: OpEntry) {
     const z = gen ? generatedMinimumZ(gen.toolpath, op.id) : null;
     return z == null ? '—' : `${z.toFixed(3)} mm`;
@@ -101,19 +88,7 @@
   );
 
   const enabledOps = $derived(project.data.operations.filter((o) => o.enabled));
-  /// Distinct tool IDs referenced by enabled ops, excluding Pause
-  /// (which carries toolId 0 but uses no tool).
-  const usedToolIds = $derived(
-    Array.from(
-      new Set(
-        enabledOps
-          .filter((o) => !isProgramOnlyOp(o.kind))
-          .flatMap((o) =>
-            'finishToolId' in o && o.finishToolId != null ? [o.toolId, o.finishToolId] : [o.toolId],
-          ),
-      ),
-    ),
-  );
+  const usedToolIds = $derived([...new Set(enabledOps.flatMap(reportToolIds))]);
   const usedTools = $derived(
     usedToolIds
       .map((id) => project.data.tools.find((t) => t.id === id))
@@ -172,8 +147,6 @@
   /// Assemble the report into the pure ReportData shape, then serialize
   /// to Markdown + front matter and save.
   function reportData(): ReportData {
-    const toolNameFor = (id: number) =>
-      project.data.tools.find((t) => t.id === id)?.name ?? `#${id}`;
     return {
       projectName: projectName(),
       setup,
@@ -206,7 +179,7 @@
         kind: op.kind,
         // Every program-only kind (Pause, Homing, Probe, CycleMarker,
         // GcodeInclude) is tool-less by design.
-        tool: isProgramOnlyOp(op.kind) ? '—' : toolNameFor(op.toolId),
+        tool: reportToolNames(op, project.data.tools),
         source: opSourceSummary(op),
         depth: opDepth(op),
         minimumZ: minimum(op),
@@ -365,12 +338,7 @@
                   <td>{op.name}</td>
                   <td>{op.kind}</td>
                   <td>
-                    <!-- Program-only ops show a dash, not the
-                         missing-tool sentinel. -->
-                    {isProgramOnlyOp(op.kind)
-                      ? '—'
-                      : (project.data.tools.find((t) => t.id === op.toolId)?.name ??
-                        `#${op.toolId}`)}
+                    {reportToolNames(op, project.data.tools)}
                   </td>
                   <td>{opSourceSummary(op)}</td>
                   <td>{opDepth(op)}</td>
