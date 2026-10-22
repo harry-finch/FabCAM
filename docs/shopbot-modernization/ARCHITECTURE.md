@@ -1,5 +1,10 @@
 # Architecture at M0
 
+Current V1.1 architecture is described in [the current architecture](../ARCHITECTURE.md)
+and [FS-RESET-3 results](../releases/FS_RESET_3_RESULTS.md). ADR-0030 is Accepted and
+the obsolete recommendation implementation is removed. This M0 document retains its
+historical source and reasoning; later implementation receipts supersede current-state claims.
+
 Audit reference: upstream `9168104b4fc4e02e916740a54bd1e56b5019f662`, version
 0.5.0. Cross-check with upstream [architecture](../ARCHITECTURE.md) and
 [contributing recipes](../CONTRIBUTING.md).

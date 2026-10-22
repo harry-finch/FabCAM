@@ -160,3 +160,20 @@ The maintainer accepted integrated FS2 source `d6b08fe` and explicit CLI Option 
 geometry templates and no implicit rate seeding. Neutral validation and the common
 pipeline remain authoritative. Legacy removal is still pending separate authorization;
 no FabSpeed API integration is implemented.
+
+## Implementation status — FS-RESET-3, 2026-10-22
+
+The maintainer subsequently authorized phases A–I. The former recommendation crate,
+core adapter/Trial implementation, transports/source storage, browser legacy stores
+and shipped Sienci/registry assets are removed at software source
+`64d75849e3bdc05a2d3ce47c50486ad169058507`. Retained internal callers and fixtures now
+use explicit v9 contracts. General CAM guards moved before deletion; no reduced
+resolver or calculation substitute was embedded. User data and historical reports remain.
+
+[Final results](../../releases/FS_RESET_3_RESULTS.md) records scoped commits, safety/test
+ownership, exact output comparisons and every final gate. Implementation is complete;
+unconditional final software/release acceptance is **NO-GO** while the documented
+watcher/environment, cross-runtime and cancellation limits remain. Installed collection
+I/O, browser file transfer, three-platform and physical acceptance remain unqualified.
+This Accepted ADR is not release approval. **HARD STOP for human review `ivac-y25vq`**;
+no FabSpeed API, PRESET-5 or later milestone begins at this checkpoint.

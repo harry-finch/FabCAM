@@ -1,22 +1,15 @@
 # FabCAM documentation
 
-Current V1.1 architecture review: [FS-RESET-1](releases/FS_RESET_ARCHITECTURE.md) —
-explicit operation cutting parameters and tested presets, independent FabSpeed calculation.
-[ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md) is proposed;
-**HARD STOP before implementation**.
-
+Current V1.1 implementation: [FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md).
+FabCAM owns explicit operation values and tested collections;
+[Accepted ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
+separates optional future FabSpeed calculation. Legacy recommendation infrastructure
+is removed. Full software/manual acceptance limitations remain in the report.
+**HARD STOP for final human review; no release or next milestone.**
 
 Start with [current STATUS](shopbot-modernization/STATUS.md), then select a route.
-This index separates product setup, engineering contracts, plans and evidence.
-Source/qualification snapshot: [V1 readiness](releases/V1_READINESS.md).
-Active branch: [v1.1 UX changes and verification](releases/FABCAM_V1_1_UX_2026_10_21.md),
-[PRESET-1 read-only library checkpoint](releases/PRESET_1_READONLY_2026_10_21.md)
-and [PRESET-2 strict-copy checkpoint](releases/PRESET_2_DUPLICATE_ADAPT_2026_10_21.md).
-
-PRESET-1/2/3 are accepted and integrated locally on `FabCAM-v1.1`: library, strict
-Draft copying and the [unified selector](releases/FABCAM_PRESET3_AUDIT_AND_IMPLEMENTATION.md).
-[Integration commits, checks and remaining boundaries](releases/PRESET_INTEGRATION_2026_10_21.md).
-No push or release; MAT-1 remains unstarted.
+Frozen V1 evidence remains in [V1 readiness](releases/V1_READINESS.md). Historical
+FS/PRESET reports describe their original sources; they are not current user guides.
 
 ## Read by task
 
@@ -26,7 +19,7 @@ No push or release; MAT-1 remains unstarted.
 | Contribute or work as an AI agent | [Contributing](CONTRIBUTING.md), [AGENTS](../AGENTS.md), [CLAUDE](../CLAUDE.md); repository skills under `.agents/skills/` |
 | Understand architecture and compatibility | [General architecture](ARCHITECTURE.md), [fork-specific contracts](shopbot-modernization/ARCHITECTURE.md), [upstream analysis](shopbot-modernization/UPSTREAM_ANALYSIS.md), [ADRs](shopbot-modernization/adr/README.md) |
 | Add CAM, machine or post functionality | [Extension recipes](CONTRIBUTING.md#extension-recipes), [machine guide](development/ADDING_A_MACHINE.md), [machine template](development/MACHINE_INTEGRATION_TEMPLATE.md), [CPS](CPS_POSTS.md) |
-| Author workshop cutting data | [Custom Feeds & Speeds sources](feeds-speeds/CUSTOM_DATA_SOURCES.md), [synthetic examples](feeds-speeds/examples/README.md) |
+| Author workshop cutting data | [Tested preset collections](TESTED_PRESETS.md), [current cutting/API contract](CUTTING_CONTRACT.md) |
 | Validate a change | [Testing strategy](shopbot-modernization/TESTING_STRATEGY.md), [CAM validation register](shopbot-modernization/CAM_VALIDATION.md), [TEST1 contracts](releases/TEST1_CONTRACTS.md), [SAFE-Z contracts](releases/SAFE_Z_CONTRACTS.md) |
 | Assess V1 / prepare candidates | [Release scope/priorities](releases/RELEASE_ROADMAP.md), [V1 readiness](releases/V1_READINESS.md), [candidate process](releases/DESKTOP_CANDIDATES.md), [version policy](releases/VERSIONING.md), [signing](SIGNING.md) |
 | Find a result or qualification artifact | [Historical/report catalogue](releases/HISTORY.md), [local-only evidence register](releases/LOCAL_EVIDENCE_2026_10_19.md), [beta.3 delivery](releases/beta3-delivery-2026-10-18/README.md) |

@@ -1,5 +1,10 @@
 # FS-RESET-1 — Cutting parameters and tested workshop presets
 
+Implementation checkpoint, 2026-10-22: the approved architecture is now implemented
+through FS-RESET-3 at `64d75849e3bdc05a2d3ce47c50486ad169058507`.
+[Final results and acceptance limits](FS_RESET_3_RESULTS.md) supersede the pending
+implementation status in this preserved FS-RESET-1 proposal. No FabSpeed API is implemented.
+
 Date: **2026-10-22**. Branch: **FabCAM-v1.1**. Audited code HEAD:
 **e48241c89dbd911841eaf93dc72553f2763aa45f**.
 Engineering: `ivac-j47dy`; human approval gate: **`ivac-909v6` OPEN**. **Architecture proposal; HARD STOP before production implementation.**

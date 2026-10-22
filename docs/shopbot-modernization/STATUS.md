@@ -1,5 +1,19 @@
 # FabCAM — current status
 
+## Latest checkpoint — FS-RESET-3 removal, 2026-10-22
+
+The maintainer authorized the complete reset. Legacy recommendation, source-pack,
+Trial and v1–8 implementation dependencies are removed on `FabCAM-v1.1`.
+Qualified software source: `64d75849e3bdc05a2d3ce47c50486ad169058507`.
+[Final report, gate matrix and remaining acceptance gaps](../releases/FS_RESET_3_RESULTS.md)
+is authoritative. Explicit v9 roles, neutral safety, tested collections, MAT-1 and
+native publication boundaries remain. No FabSpeed integration or user-data deletion.
+**NO-GO for unconditional final qualification/release**: full gate failures and
+pre-existing performance/parity limits remain visible. Architecture implementation
+is ready for human review `ivac-y25vq`; engineering `ivac-wjymz` stops at this handoff.
+No push, main merge, version promotion, installer or physical operation.
+The checkpoints below retain their historical source and now-superseded stop points.
+
 ## Latest checkpoint — FS-RESET-3 CLI Option A, 2026-10-22
 
 Integrated FS2 baseline and CLI Option A explicitly approved. Local implementation

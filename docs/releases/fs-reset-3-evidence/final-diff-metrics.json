@@ -1,0 +1,7 @@
+{
+  "range": "951b12f4477f64fd5e9c229b693748f23e794a0e..64d75849e3bdc05a2d3ce47c50486ad169058507",
+  "scope": "crates, frontend, schema, Cargo.toml/Cargo.lock, scripts; includes tests/generated code, excludes docs and new fixture directories",
+  "changed_files": 230,
+  "added_lines": 1977,
+  "deleted_lines": 27422
+}

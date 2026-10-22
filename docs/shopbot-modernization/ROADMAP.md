@@ -1,5 +1,10 @@
 # FabCAM roadmap navigation
 
+Current checkpoint, 2026-10-22: [FS-RESET-3 removal and final qualification](../releases/FS_RESET_3_RESULTS.md).
+The recommendation implementation is removed; explicit values and tested collections remain.
+Human final review is OPEN; mandatory qualification failures are not waived. No subsequent
+milestone is authorized. Earlier track entries below retain historical context only.
+
 **Current V1.1 checkpoint (2026-10-22):** [FS-RESET-3 CLI modernization and preflight](../releases/FS_RESET_3_CLI_MODERNIZATION.md).
 The accepted integrated FS2 baseline now has an explicit v9 CLI. Removal inventory and
 sequence are updated; **HARD STOP before legacy mass removal**, pending separate human

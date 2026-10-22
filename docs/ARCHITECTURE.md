@@ -1,8 +1,32 @@
 # FabCAM Architecture
 
 FabCAM derives from [ivaCAM](https://github.com/aalarchiv/ivacam). The inherited
-`ivac-*` crates and transport/storage contracts remain intact. Fork-specific
-CAM/FS/setup architecture is documented in [the modernization architecture](shopbot-modernization/ARCHITECTURE.md).
+`ivac-*` names retain upstream attribution. V1.1 uses the explicit v9 cutting contract;
+legacy recommendation transports and source stores have been removed. Earlier
+milestones are recorded in [the modernization architecture](shopbot-modernization/ARCHITECTURE.md).
+
+## V1.1 operation and safety ownership
+
+`ivac-core::cutting_parameters` validates authored actual-role values and known limits;
+`pipeline::setup_resolver` carries those values into the existing CAM setup. No
+recommendation resolver, live tool-rate fallback or FabSpeed client participates.
+Tool defaults may seed operation creation once. `project::MaterialIdentity` owns exact
+material id/revision; generic machine/tool inventories own physical identities and ratings.
+`presets` validates bounded tested collections and reviewed context-exact value copies.
+See [current contract and safety/test inventory](CUTTING_CONTRACT.md).
+
+The pipeline, operation drivers, numeric budgets, post restrictions, provenance and
+simulation qualification remain independent safety owners. Transport success alone
+is not full-program qualification. `ivac-file-export` stages and publishes individual
+files; Tauri authorizes the canonical destination against its existing filesystem scope.
+Two-sided publication can be partial and reports which side exists; it is not pair-atomic.
+Filesystem scopes were not broadened. Static ACL/unit checks are not installed acceptance.
+
+The Svelte Cutting parameters inspector, MAT-1 and tested library remain the product UX.
+File persistence accepts v9 only; incomplete authored values can be saved but cannot
+silently become executable values. Old user projects/packs remain untouched on disk.
+[FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md) distinguishes implemented removal
+from the remaining release, cross-runtime and platform qualification gaps.
 
 This is the map. CONTRIBUTING.md tells you how to set up the toolchain
 and walks two extension recipes (new op kind, new post-processor); this

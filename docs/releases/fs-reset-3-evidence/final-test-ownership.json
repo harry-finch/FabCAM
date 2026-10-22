@@ -1,0 +1,88 @@
+[
+  {
+    "family": "Recommendation ranking, aggressiveness and interpolation",
+    "retirement_or_migration": "Retired numerical policy, not reimplemented",
+    "safety_assertions": "Known machine/tool caps; immutable context",
+    "final_locations": "crates/ivac-core/src/cutting_parameters.rs; crates/ivac-core/src/presets.rs",
+    "detail_ledger_or_evidence": "phase-e-test-retirement.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Sienci/source-pack schema, registry and immutable revisions",
+    "retirement_or_migration": "Retired source-pack model and storage; original user files retained",
+    "safety_assertions": "Bounded parsing, exact material/context, concurrent writes, traversal/symlinks",
+    "final_locations": "crates/ivac-core/src/presets.rs; crates/ivac-tauri/src/preset_collections.rs; frontend/src/lib/services/preset-collection-files.test.ts",
+    "detail_ledger_or_evidence": "phase-d-test-retirement.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Experimental Draft/Trial and v1\u20138 projects",
+    "retirement_or_migration": "Retired lifecycle and compatibility",
+    "safety_assertions": "Explicit actual roles, no silent transfer/default; strict v9 refusal",
+    "final_locations": "crates/ivac-core/tests/explicit_contract.rs; frontend/src/lib/state/project-v9.test.ts; frontend/src/lib/services/document-lifecycle.test.ts",
+    "detail_ledger_or_evidence": "phase-c-test-retirement.json; phase-d-test-retirement.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Applied recommendation core and UI",
+    "retirement_or_migration": "Removed capture/apply/resolution state",
+    "safety_assertions": "Saved rates, role provenance, immutable reviewed copy and stale context",
+    "final_locations": "crates/ivac-core/src/pipeline/cutting_v9_tests.rs; frontend/src/lib/state/cutting-workflow.test.ts; frontend/src/lib/state/cutting-v9-wasm.test.ts; frontend/src/lib/state/preset-library-v9.test.ts",
+    "detail_ledger_or_evidence": "phase-c-test-retirement.json; phase-d-test-retirement.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Old clamp/default success assertions",
+    "retirement_or_migration": "Replaced by strict refusal; effective valid geometry authored explicitly",
+    "safety_assertions": "No live rates/step/peck defaults, known reach and compatible cutter kinds",
+    "final_locations": "crates/ivac-core/src/pipeline/setup_resolver.rs; crates/ivac-core/src/pipeline/offset_builder.rs; crates/ivac-core/src/pipeline/op_drivers; crates/ivac-core/tests/volume_validation",
+    "detail_ledger_or_evidence": "test-replacements.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Old implicit geometric fixture constructors",
+    "retirement_or_migration": "Test-only v9 authoring; never a production migrator",
+    "safety_assertions": "Original geometric/volume/NUMSAFE/provenance assertions remain; serialized explicit requests",
+    "final_locations": "crates/ivac-core/tests/support/explicit.rs; frontend/src/lib/state/explicit-project.fixture.ts; crates/ivac-core/tests/numsafe.rs; crates/ivac-core/tests/numsafe2.rs",
+    "detail_ledger_or_evidence": "BOUNDARIES.md",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Legacy per-op-cache success for version-absent requests",
+    "retirement_or_migration": "Assert the already-approved v9 cache bypass",
+    "safety_assertions": "Tee cap/overflow/recovery, CPS cache invalidation, cancellation, repeated output",
+    "final_locations": "crates/ivac-core/src/gcode/sink.rs; crates/ivac-core/src/pipeline/tests.rs; crates/ivac-core/src/pipeline/perf1_b_tests.rs",
+    "detail_ledger_or_evidence": "test-replacements.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Historical PERF1 serialized inputs",
+    "retirement_or_migration": "New authored v9 copies; historical originals unchanged",
+    "safety_assertions": "Guard reachability, exact backend comparisons, strict cross-runtime and timing thresholds",
+    "final_locations": "tests/fixtures/perf-v9; scripts/perf1-b2-wasm-check.py; scripts/perf1-cancel.py; scripts/perf1-cancel-http.py",
+    "detail_ledger_or_evidence": "phase-f-all-perf-before-after.json; phase-f-all-wasm-before-after.json; phase-f-cancellation-summary.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "SEC1 / NUMSAFE3 indirect CLI requests",
+    "retirement_or_migration": "Current explicit fixtures reach intended checks",
+    "safety_assertions": "External CPS refusal, numeric budgets, no output/transactional publication",
+    "final_locations": "scripts/sec1-cli-check.py; scripts/numsafe3-cli-check.py; crates/ivac-file-export/src/lib.rs",
+    "detail_ledger_or_evidence": "final-pre-release.log",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "TEST1 including C2",
+    "retirement_or_migration": "Native and frontend workers keep exact watchdog limits",
+    "safety_assertions": "Bounded lifecycle, cancellation/recovery, stale context and retained software properties",
+    "final_locations": "scripts/test1/run.py; crates/ivac-core/tests/test1_properties.rs; frontend/src/lib/state/test1-lifecycle.test.ts",
+    "detail_ledger_or_evidence": "final-test1-summary.json",
+    "qualification": "See final-pre-release.log and FS_RESET_3_RESULTS.md; failures/skips remain explicit"
+  },
+  {
+    "family": "Correction to incremental B ledger",
+    "detail": "The final name replacing op_step_and_tool_default_step_emit_identical_gcode is tool_default_step_cannot_supply_missing_operation_step. Unchanged Halfpipe/Relief positives author explicit supported geometry; they are not refusal tests. V9 cache changes assert already-approved recomputation, not rate validation.",
+    "final_locations": "crates/ivac-core/src/pipeline/offset_builder.rs; crates/ivac-core/src/pipeline/tests.rs; crates/ivac-core/src/pipeline/op_drivers/halfpipe.rs",
+    "qualification": "Full final core suite and fixed corpus pass; original incremental ledger retained as history."
+  }
+]

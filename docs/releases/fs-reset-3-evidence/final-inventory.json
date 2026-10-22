@@ -1,0 +1,10 @@
+{
+  "source": "64d75849e3bdc05a2d3ce47c50486ad169058507",
+  "tracked_files": 3363,
+  "lexical_reference_lines": 202,
+  "files_with_references": 49,
+  "documentation_files_with_references": 202,
+  "historical_files": 195,
+  "pattern": "feeds[_ -]?speeds|feedsspeeds|fs[_-]?context|fsIdentity|fsLocalIdentity|fsFullWidth|appliedContextKey|(?-i:\\bFs[A-Z]\\w*)|source[_-]?pack|sourcepack|applied[_-]?cutting|appliedcutting|experimental[_-]?recipe|experimentalrecipe|sienci|RateOrigins|AppliedRateSlot|captureLabPreset|capture_lab_preset|[\\\"\\x27]fs\\d*\\.",
+  "scope": "Tracked UTF-8 only. Legacy lexical scan plus Cargo metadata/transport registrations and negative tests. User/untracked data never cleanup targets."
+}

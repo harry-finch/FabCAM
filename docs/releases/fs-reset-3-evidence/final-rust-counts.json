@@ -1,0 +1,331 @@
+{
+  "totals": {
+    "passed": 1575,
+    "failed": 2,
+    "ignored": 1
+  },
+  "binaries": [
+    {
+      "binary": "Running unittests src/main.rs (target/debug/deps/ivac-1b13c82a36f29166)",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/cutting_v9.rs (target/debug/deps/cutting_v9-ee9d8797b8661b10)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/generate_v9.rs (target/debug/deps/generate_v9-ea2229611082c77e)",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (target/debug/deps/ivac_core-f8c42eeab53e3a12)",
+      "status": "ok",
+      "passed": 1230,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/arc_sweep_parity.rs (target/debug/deps/arc_sweep_parity-764e4df22231775f)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/cad1_qualification.rs (target/debug/deps/cad1_qualification-66776438d46801a9)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/comment_safety.rs (target/debug/deps/comment_safety-62ac0ea57293ee0e)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/cps_posts.rs (target/debug/deps/cps_posts-ecdd9bb5eb04bbcd)",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/drawing_audit.rs (target/debug/deps/drawing_audit-149c7d06acccf077)",
+      "status": "ok",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/explicit_contract.rs (target/debug/deps/explicit_contract-8cfb8e46424a4797)",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/fs_reset_outputs.rs (target/debug/deps/fs_reset_outputs-9760146e52785900)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/geom1_contract.rs (target/debug/deps/geom1_contract-3dbc4d408d7d1dee)",
+      "status": "ok",
+      "passed": 23,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/geometry_source_ux.rs (target/debug/deps/geometry_source_ux-725f2ac6dba6f45a)",
+      "status": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/golden_corpus.rs (target/debug/deps/golden_corpus-ddc8d56f4ec318aa)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/hatch_safe_z.rs (target/debug/deps/hatch_safe_z-4d7c390c3ab378c9)",
+      "status": "ok",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/import_correctness.rs (target/debug/deps/import_correctness-7f4c2a4c2800595d)",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/numsafe.rs (target/debug/deps/numsafe-2007d9e8709970c8)",
+      "status": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/numsafe2.rs (target/debug/deps/numsafe2-6bbeacf1ea3557fd)",
+      "status": "ok",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/numsafe3.rs (target/debug/deps/numsafe3-2fed591fd1a9f406)",
+      "status": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/safe_z_extended.rs (target/debug/deps/safe_z_extended-de840ddacc1bb881)",
+      "status": "ok",
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/shopbot_m1_qualification.rs (target/debug/deps/shopbot_m1_qualification-02f7121d0eaab9ff)",
+      "status": "ok",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/shopbot_m2_post.rs (target/debug/deps/shopbot_m2_post-d162ab06321f5bac)",
+      "status": "ok",
+      "passed": 31,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/snapshots_drill_tabs_whirl.rs (target/debug/deps/snapshots_drill_tabs_whirl-108c3408855c0273)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/tessellation_tolerance.rs (target/debug/deps/tessellation_tolerance-c18372bdad62f263)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/test1_properties.rs (target/debug/deps/test1_properties-2d5bf0587f7fd108)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "Running tests/text_rendering.rs (target/debug/deps/text_rendering-29bac0320759342a)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/tool_provenance.rs (target/debug/deps/tool_provenance-c638eb029b641c21)",
+      "status": "ok",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/ux3_qualification.rs (target/debug/deps/ux3_qualification-6bd09e66c470b228)",
+      "status": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/ux_inspector_contracts.rs (target/debug/deps/ux_inspector_contracts-7245be8f21753e61)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/v1_stabilization.rs (target/debug/deps/v1_stabilization-6dbc5f336b608bc6)",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/vcarve_qualification.rs (target/debug/deps/vcarve_qualification-fac90cec082018ed)",
+      "status": "ok",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/volume_validation.rs (target/debug/deps/volume_validation-e742fe89de046975)",
+      "status": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/waterline_acceptance.rs (target/debug/deps/waterline_acceptance-afeea4a6eacc2c64)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (target/debug/deps/ivac_cps-b318c30523490eea)",
+      "status": "ok",
+      "passed": 48,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/v1_trust.rs (target/debug/deps/v1_trust-15e4237fdd82266d)",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (target/debug/deps/ivac_file_export-2323a23d23461d19)",
+      "status": "ok",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/main.rs (target/debug/deps/ivac_server-d41a7778a3eeafe2)",
+      "status": "ok",
+      "passed": 19,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-531ece703a937de0)",
+      "status": "FAILED",
+      "passed": 11,
+      "failed": 2,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/main.rs (target/debug/deps/ivac_desktop-02b2f8e2bfd028dd)",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (target/debug/deps/ivac_wasm-8fdeeaae62769484)",
+      "status": "ok",
+      "passed": 24,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/main.rs (target/debug/deps/xtask-b1ea2584785af4d8)",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Doc-tests ivac_core",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Doc-tests ivac_cps",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Doc-tests ivac_file_export",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Doc-tests ivac_tauri_lib",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Doc-tests ivac_wasm",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ]
+}

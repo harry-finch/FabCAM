@@ -563,3 +563,31 @@ verified installer bytes. Activation and the actual draft-publication step requi
 a separate human checkpoint proving the protected environment works (required
 reviewers, self-review prevention and no administrator bypass). No environment or
 GitHub setting was configured by SEC1. Merely naming an environment is insufficient.
+
+## V1.1 explicit cutting contract qualification
+
+The workspace no longer contains `ivac-feeds-speeds`; no source-pack asset is needed
+to build or generate. Preserve old user data. Current request fixtures are in
+`tests/fixtures/cli-v9`, `tests/fixtures/fs-reset3-output` and `tests/fixtures/perf-v9`.
+Historical PERF1 records stay immutable. Test-only authoring helpers are not supported
+project migrators and must never become generation defaults.
+
+Run `scripts/pre-release.sh` with the pinned Rust toolchain and matching cached WASM
+tools on PATH. All 20 gates are mandatory; an unavailable browser or advisory database
+is not a PASS. The full Rust command is `cargo test --locked --workspace --all-features`.
+If it stops at a failing binary, qualify omitted binaries/doctests separately and retain
+the overall failure. Keep the two native watcher tests unfiltered.
+
+Build the TEST1 release worker separately with
+`cargo test --locked -p ivac-core --all-features --release --test test1_properties --no-run`,
+then pass its reported executable to
+`python3 scripts/test1/run.py --binary <executable> --output <new-directory> --frontend`.
+Do not omit C2, increase watchdog limits, or count the ignored worker as a regular PASS.
+Use the current v9 performance fixtures with the PERF1 probe/cancellation/WASM scripts;
+retain their strict parity and timing thresholds even when baseline comparisons fail.
+
+`frontend/scripts/wasm-package-state.mjs` fingerprints the retained source closure.
+Source edits require a fresh verified package; removing old assets did not disable
+freshness or size checks. This run used Node 26.10.0 and local pnpm 10 (CI remains Node24).
+[FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md) gives exact commands, results and
+host limitations. None of these commands establishes installed-native or physical safety.

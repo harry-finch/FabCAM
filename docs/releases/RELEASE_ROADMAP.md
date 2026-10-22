@@ -1,5 +1,17 @@
 # FabCAM release roadmap — approved direction
 
+## FS-RESET-3 removal — implementation delivered, 2026-10-22
+
+The full removal was explicitly authorized and is implemented locally on
+`FabCAM-v1.1` at software source `64d75849e3bdc05a2d3ce47c50486ad169058507`.
+[FS-RESET-3 results](FS_RESET_3_RESULTS.md) records the complete mandatory gate,
+output equivalence, test ownership and manual acceptance gaps. **NO-GO for an
+unqualified final acceptance or release**; request human review of the completed
+architecture and separately scoped resolution/host qualification of remaining gaps.
+No active recommendation engine, source-pack dependency, Trial lifecycle or legacy
+project migration remains. FabSpeed integration and PRESET-5 remain out of scope.
+Earlier checkpoint statements below are historical, not the current removal status.
+
 ## FS-RESET-3 CLI Option A — qualified, 2026-10-22
 
 The maintainer accepted the integrated FS2 baseline and CLI Option A. Explicit v9

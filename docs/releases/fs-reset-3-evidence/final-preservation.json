@@ -1,0 +1,17 @@
+{
+  "source": "64d75849e3bdc05a2d3ce47c50486ad169058507",
+  "preexisting_edits": {
+    "docs/shopbot-modernization/STATUS.md": {
+      "original_sha256": "9f4051d6c9b896f8fcf35f1811223390ffde4bdc5f9afb72346ab20647a80072",
+      "preserved_after_removing_own_prefix": true
+    },
+    "docs/releases/RELEASE_ROADMAP.md": {
+      "original_sha256": "e10d85df0ba36e715c66d6a449020c325a94eb8b68e18a41141f8583894af965",
+      "preserved_after_removing_own_prefix": true
+    }
+  },
+  "other_worktree_records_unchanged": true,
+  "main_sha": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "frozen_corpus_hashes_verified": true,
+  "production_diff_after_qualification_empty": true
+}

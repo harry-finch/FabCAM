@@ -54,3 +54,11 @@ publication, resource/refusal rules and incomplete full-program simulation quali
 publication if the second side fails. Buffered generate does not add a two-sided CLI
 mode. Automatic double-sided dowel injection remains excluded. No controller support,
 installed-native acceptance or physical qualification is added by this CLI change.
+
+FS-RESET-3 removes the legacy transport fields `fs_context`, `applied_cutting` and
+`fs_full_width`; JSON requests containing them are refused. Current v9 examples remain
+explicit software fixtures. [Final contract and qualification](CUTTING_CONTRACT.md)
+and [output comparisons](releases/FS_RESET_3_RESULTS.md) record the fixed corpus and
+remaining native/WASM parity limits. The old direct-emitter G2/G3 winding difference
+remains the deliberate pipeline-adoption change documented in the CLI modernization
+receipt; the removed direct path is not restored.

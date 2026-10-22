@@ -1,0 +1,43 @@
+{
+  "source": "64d75849e3bdc05a2d3ce47c50486ad169058507",
+  "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+  "node": "v26.10.0",
+  "pnpm_installed_version": "10.34.7",
+  "env": {
+    "CARGO_INCREMENTAL": "0",
+    "RUSTC_WRAPPER": "",
+    "PATH_prefixes": [
+      "$HOME/.local/pnpm-10/node_modules/.bin",
+      "$HOME/Library/Caches/.wasm-pack/wasm-bindgen-cargo-install-0.2.120",
+      "$HOME/Library/Caches/.wasm-pack/wasm-opt-50385c9e73ccee70/bin"
+    ]
+  },
+  "commands": [
+    "bash scripts/pre-release.sh",
+    "cargo test --locked --offline --workspace --all-features --no-fail-fast",
+    "python3 scripts/test1/run.py --binary target/release/deps/test1_properties-fec01085c2e3072a --output dist-test/fs-reset3/test1-final --frontend",
+    "python3 dist-test/fs-reset3/final-cli-compare.py",
+    "node --test frontend/scripts/wasm-package-state.test.mjs",
+    "cargo metadata --locked --offline --no-deps --format-version 1"
+  ],
+  "exit_statuses": {
+    "pre_release": 1,
+    "workspace_no_fail_fast": 101,
+    "test1": 0,
+    "cli_comparisons": 0,
+    "freshness": 0,
+    "cargo_metadata": 0
+  },
+  "test1_binary_sha256": "7b03af68cd5b39c6a772ef281ed14d180f3f75d15f855ae535bc29b4c36b3e91",
+  "wasm_build_stamp": {
+    "version": 1,
+    "input": "41889c2bee2997a309a3ee6146f34edbe9fd20f4900883efb1f25ac23b42ba76",
+    "assets": {
+      "ivac_wasm_bg.wasm": "f400b7c0b198e4f20b67c786dd89f8532f2681d898da77af214892d075a9010f",
+      "ivac_wasm.js": "3aa8d0c2fa7742bb6b8a60842531a843a3cd3c5864c023880d6e94377f440fa1",
+      "ivac_wasm.d.ts": "86b33e4b84fd9ed7e8c6bdd5e89d617d2e7a5d5518e0013246a08f8a716207f9",
+      "ivac_wasm_bg.wasm.d.ts": "4b944487b5df22255272e4d07e8e64a79d8c35647653d1d5f8cac90253c99ae6",
+      "package.json": "15ace77ef3da914ac8d8b6d4bf47609eba81220c8cafce9064d9a25025c893ef"
+    }
+  }
+}

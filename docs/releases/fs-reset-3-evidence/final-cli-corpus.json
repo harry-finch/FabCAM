@@ -1,0 +1,279 @@
+{
+  "source": "64d75849e3bdc05a2d3ce47c50486ad169058507",
+  "binary_sha256": "a7c475a75859f7411945a7f593e5c52280c3f6c809a9537d392741d4abe675c2",
+  "cases": [
+    {
+      "case": "chamfer-grbl.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "chamfer.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "dovetail.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "drill-shared-false.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "drill-shared-true.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "dual-pocket.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "engrave-grbl.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "engrave.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "halfpipe.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "planar.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "pocket-grbl.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "pocket.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "profile-grbl.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "profile-inside-grbl.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "profile-inside.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "profile.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "relief.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "shopbot-profile.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "shopbot-vcarve.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "thread.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "tslot.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "two-sided.json",
+      "mode": "stream-gcode --two-sided",
+      "fields": [
+        "front.gcode",
+        "back.gcode"
+      ],
+      "result": "exact"
+    },
+    {
+      "case": "waterline.json",
+      "mode": "generate --request",
+      "fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats"
+      ],
+      "result": "exact"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "source": "64d75849e3bdc05a2d3ce47c50486ad169058507",
+  "workspace_packages": [
+    "ivac-file-export",
+    "ivac-core",
+    "ivac-cps",
+    "ivac-cli",
+    "ivac-server",
+    "ivac-tauri",
+    "ivac-wasm",
+    "xtask"
+  ],
+  "recommendation_package_or_dependency": false
+}
