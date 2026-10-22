@@ -1,0 +1,3153 @@
+{
+  "name": "two-sided",
+  "request": {
+    "post_processor": "linuxcnc",
+    "project": {
+      "cutting_version": 9,
+      "machine": {
+        "arcs": true,
+        "comments": true,
+        "mode": "mill",
+        "tool_change": "manual_m0_pause",
+        "unit": "mm"
+      },
+      "operations": [
+        {
+          "enabled": true,
+          "id": 1,
+          "kind": {
+            "contour": {
+              "leads": {
+                "in": "off",
+                "in_lenght": 5.0,
+                "out": "off",
+                "out_lenght": 5.0
+              },
+              "tabs": {
+                "active": false,
+                "height": 1.0,
+                "tab_type": "rectangle",
+                "width": 10.0
+              }
+            },
+            "offset": "outside",
+            "profile": {
+              "helix": false,
+              "overcut": false,
+              "reverse": false
+            },
+            "type": "profile"
+          },
+          "name": "Profile 1",
+          "params": {
+            "cutting": {
+              "rates": [
+                {
+                  "feed_mm_min": 800,
+                  "plunge_mm_min": 100,
+                  "role": "rough",
+                  "rpm": 18000,
+                  "tool_id": 1
+                },
+                {
+                  "feed_mm_min": 800,
+                  "plunge_mm_min": 100,
+                  "role": "finish",
+                  "rpm": 18000,
+                  "tool_id": 1
+                }
+              ]
+            },
+            "depth": -2.0,
+            "fast_move_z": 5.0,
+            "objectorder": "nearest",
+            "start_depth": 0.0,
+            "step": -1.0
+          },
+          "source": {
+            "kind": "all"
+          },
+          "tool_id": 1
+        },
+        {
+          "enabled": true,
+          "id": 2,
+          "kind": {
+            "contour": {
+              "leads": {
+                "in": "off",
+                "in_lenght": 5.0,
+                "out": "off",
+                "out_lenght": 5.0
+              },
+              "tabs": {
+                "active": false,
+                "height": 1.0,
+                "tab_type": "rectangle",
+                "width": 10.0
+              }
+            },
+            "offset": "outside",
+            "profile": {
+              "helix": false,
+              "overcut": false,
+              "reverse": false
+            },
+            "type": "profile"
+          },
+          "name": "Profile 1",
+          "params": {
+            "cutting": {
+              "rates": [
+                {
+                  "feed_mm_min": 800,
+                  "plunge_mm_min": 100,
+                  "role": "rough",
+                  "rpm": 18000,
+                  "tool_id": 1
+                },
+                {
+                  "feed_mm_min": 800,
+                  "plunge_mm_min": 100,
+                  "role": "finish",
+                  "rpm": 18000,
+                  "tool_id": 1
+                }
+              ]
+            },
+            "depth": -2.0,
+            "fast_move_z": 5.0,
+            "objectorder": "nearest",
+            "start_depth": 0.0,
+            "step": -1.0
+          },
+          "side": "back",
+          "source": {
+            "kind": "all"
+          },
+          "tool_id": 1
+        }
+      ],
+      "segments": [
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 20.0,
+            "y": 0.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "type": "LINE"
+        },
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 20.0,
+            "y": 20.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 20.0,
+            "y": 0.0
+          },
+          "type": "LINE"
+        },
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 0.0,
+            "y": 20.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 20.0,
+            "y": 20.0
+          },
+          "type": "LINE"
+        },
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 0.0,
+            "y": 20.0
+          },
+          "type": "LINE"
+        }
+      ],
+      "stock": {
+        "flip": {
+          "axis": "x"
+        },
+        "height_mm": 30.0,
+        "origin": [
+          0.0,
+          0.0
+        ],
+        "thickness_mm": 20.0,
+        "width_mm": 30.0
+      },
+      "tools": [
+        {
+          "coolant": "off",
+          "diameter": 3.0,
+          "feed_rate": 800,
+          "flutes": 2,
+          "id": 1,
+          "kind": "endmill",
+          "name": "3.0mm endmill",
+          "plunge_rate": 100,
+          "speed": 18000,
+          "tip_angle_deg": 60.0
+        }
+      ]
+    }
+  },
+  "two_sided": {
+    "back": {
+      "gcode": "; ===== TWO-SIDED JOB: BACK PROGRAM =====\n; 1. FLIP the stock about the X axis.\n; 2. Re-register the stock against your fixture.\n; 3. RE-ZERO Z to the new top (back) face before running — stock thickness varies.\n(FABTOOL/1 PRELOAD 1)\n(generated by ivaCAM)\nG21\nG90\nG54\nG17\nG40\nG94\nG0 Z5\n(FABTOOL/1 REQUEST 1)\nG0 Z5\n(pause: swap to tool 1 [3.0mm endmill])\nM3 S18000\nG4 P0.5\nG4 P1\n(FABTOOL/1 ACTIVE 1)\n; OP 2\n\n(object=0 level=0 pocket=0 segments=8 finish)\nF800\nG0 X0 Y31.5 Z5\nF100\nG1 Z0\nF800\nF100\nG1 Z-1\nF800\nG1 X20\nG2 X21.5 Y30 I0 J-1.5\nG1 Y10\nG2 X20 Y8.5 I-1.5 J0\nG1 X0\nG2 X-1.5 Y10 I0 J1.5\nG1 Y30\nG2 X0 Y31.5 I1.5 J0\nF100\nG1 Z-2\nF800\nG1 X20\nG2 X21.5 Y30 I0 J-1.5\nG1 Y10\nG2 X20 Y8.5 I-1.5 J0\nG1 X0\nG2 X-1.5 Y10 I0 J1.5\nG1 Y30\nG2 X0 Y31.5 I1.5 J0\nG0 Z5\nG0 Y0\nM5\nM30\n",
+      "gcode_index": {
+        "lines_to_segment": [
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          0,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          1,
+          4294967295,
+          2,
+          4294967295,
+          4294967295,
+          3,
+          4294967295,
+          4,
+          5,
+          11,
+          12,
+          18,
+          19,
+          25,
+          26,
+          4294967295,
+          32,
+          4294967295,
+          33,
+          34,
+          40,
+          41,
+          47,
+          48,
+          54,
+          55,
+          61,
+          62,
+          4294967295,
+          4294967295
+        ],
+        "segments_to_line": [
+          9,
+          21,
+          23,
+          26,
+          28,
+          29,
+          29,
+          29,
+          29,
+          29,
+          29,
+          30,
+          31,
+          31,
+          31,
+          31,
+          31,
+          31,
+          32,
+          33,
+          33,
+          33,
+          33,
+          33,
+          33,
+          34,
+          35,
+          35,
+          35,
+          35,
+          35,
+          35,
+          37,
+          39,
+          40,
+          40,
+          40,
+          40,
+          40,
+          40,
+          41,
+          42,
+          42,
+          42,
+          42,
+          42,
+          42,
+          43,
+          44,
+          44,
+          44,
+          44,
+          44,
+          44,
+          45,
+          46,
+          46,
+          46,
+          46,
+          46,
+          46,
+          47,
+          48
+        ]
+      },
+      "remaining_material": [
+        {
+          "area_mm2": 0.0,
+          "depth_mm": -2.0,
+          "largest_area_mm2": 0.0,
+          "op_id": 2,
+          "reason": "cascade_pocket_only",
+          "regions": [],
+          "status": "unsupported"
+        }
+      ],
+      "stats": {
+        "closed_object_count": 1,
+        "object_count": 1,
+        "offset_count": 1
+      },
+      "time_estimate": {
+        "arc_s": 1.592922004063619,
+        "cut_s": 12.0784787112383,
+        "dwell_s": 0.5,
+        "plunge_s": 4.213333333333334,
+        "rapid_s": 1.712416980036914,
+        "retract_s": 0.0,
+        "spindle_warmup_s": 1.0,
+        "toolchange_s": 5.0,
+        "total_s": 26.09715102867217
+      },
+      "tool_provenance": {
+        "authority": "resolved",
+        "bindings": [
+          {
+            "program_tool_number": 1,
+            "project_tool_id": 1,
+            "reference": 1,
+            "tool": {
+              "coolant": "off",
+              "diameter": 3.0,
+              "feed_rate": 800,
+              "flutes": 2,
+              "id": 1,
+              "kind": "endmill",
+              "name": "3.0mm endmill",
+              "plunge_rate": 100,
+              "speed": 18000,
+              "tip_angle_deg": 60.0
+            }
+          }
+        ],
+        "diagnostics": [],
+        "revision": 1,
+        "transitions": [
+          {
+            "after_ref": 1,
+            "before_ref": null,
+            "evidence": "declared_preload_not_physical_state",
+            "output_line": 1
+          },
+          {
+            "after_ref": 1,
+            "before_ref": 1,
+            "evidence": "manual_load_assumption",
+            "output_line": 16
+          }
+        ]
+      },
+      "toolpath": [
+        {
+          "from": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "gcode_line": 9,
+          "kind": "rapid",
+          "op_id": 0,
+          "to": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 5.0
+          },
+          "gcode_line": 21,
+          "kind": "rapid",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": 5.0
+          },
+          "gcode_line": 23,
+          "kind": "plunge",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": 0.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": 0.0
+          },
+          "gcode_line": 26,
+          "kind": "plunge",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -1.0
+          },
+          "gcode_line": 28,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": 20.0,
+            "y": 31.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 20.0,
+            "y": 31.5,
+            "z": -1.0
+          },
+          "gcode_line": 29,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.38822856765378,
+            "y": 31.448888739433603,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": 31.448888739433603,
+            "z": -1.0
+          },
+          "gcode_line": 29,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.75,
+            "y": 31.299038105676658,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": 31.299038105676658,
+            "z": -1.0
+          },
+          "gcode_line": 29,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.060660171779823,
+            "y": 31.060660171779823,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": 31.060660171779823,
+            "z": -1.0
+          },
+          "gcode_line": 29,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.299038105676658,
+            "y": 30.75,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": 30.75,
+            "z": -1.0
+          },
+          "gcode_line": 29,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.448888739433603,
+            "y": 30.38822856765378,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": 30.38822856765378,
+            "z": -1.0
+          },
+          "gcode_line": 29,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.5,
+            "y": 30.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 21.5,
+            "y": 30.0,
+            "z": -1.0
+          },
+          "gcode_line": 30,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": 21.5,
+            "y": 10.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.5,
+            "y": 10.0,
+            "z": -1.0
+          },
+          "gcode_line": 31,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.448888739433603,
+            "y": 9.611771432346218,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": 9.611771432346218,
+            "z": -1.0
+          },
+          "gcode_line": 31,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.299038105676658,
+            "y": 9.25,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": 9.25,
+            "z": -1.0
+          },
+          "gcode_line": 31,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.060660171779823,
+            "y": 8.939339828220179,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": 8.939339828220179,
+            "z": -1.0
+          },
+          "gcode_line": 31,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.75,
+            "y": 8.700961894323342,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": 8.700961894323342,
+            "z": -1.0
+          },
+          "gcode_line": 31,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.38822856765378,
+            "y": 8.551111260566397,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": 8.551111260566397,
+            "z": -1.0
+          },
+          "gcode_line": 31,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.0,
+            "y": 8.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 20.0,
+            "y": 8.5,
+            "z": -1.0
+          },
+          "gcode_line": 32,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 8.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 0.0,
+            "y": 8.5,
+            "z": -1.0
+          },
+          "gcode_line": 33,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.38822856765378094,
+            "y": 8.551111260566397,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -0.38822856765378094,
+            "y": 8.551111260566397,
+            "z": -1.0
+          },
+          "gcode_line": 33,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.7499999999999998,
+            "y": 8.700961894323342,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -0.7499999999999998,
+            "y": 8.700961894323342,
+            "z": -1.0
+          },
+          "gcode_line": 33,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": 8.939339828220179,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": 8.939339828220179,
+            "z": -1.0
+          },
+          "gcode_line": 33,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.2990381056766578,
+            "y": 9.25,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -1.2990381056766578,
+            "y": 9.25,
+            "z": -1.0
+          },
+          "gcode_line": 33,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": 9.611771432346218,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": 9.611771432346218,
+            "z": -1.0
+          },
+          "gcode_line": 33,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.5,
+            "y": 10.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": -1.5,
+            "y": 10.0,
+            "z": -1.0
+          },
+          "gcode_line": 34,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": -1.5,
+            "y": 30.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.5,
+            "y": 30.0,
+            "z": -1.0
+          },
+          "gcode_line": 35,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": 30.388228567653783,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": 30.388228567653783,
+            "z": -1.0
+          },
+          "gcode_line": 35,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.299038105676658,
+            "y": 30.75,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.299038105676658,
+            "y": 30.75,
+            "z": -1.0
+          },
+          "gcode_line": 35,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": 31.060660171779823,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": 31.060660171779823,
+            "z": -1.0
+          },
+          "gcode_line": 35,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.7500000000000003,
+            "y": 31.299038105676658,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -0.7500000000000003,
+            "y": 31.299038105676658,
+            "z": -1.0
+          },
+          "gcode_line": 35,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.3882285676537813,
+            "y": 31.448888739433603,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -0.3882285676537813,
+            "y": 31.448888739433603,
+            "z": -1.0
+          },
+          "gcode_line": 35,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -1.0
+          },
+          "gcode_line": 37,
+          "kind": "plunge",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -2.0
+          },
+          "gcode_line": 39,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": 20.0,
+            "y": 31.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 20.0,
+            "y": 31.5,
+            "z": -2.0
+          },
+          "gcode_line": 40,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.38822856765378,
+            "y": 31.448888739433603,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": 31.448888739433603,
+            "z": -2.0
+          },
+          "gcode_line": 40,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.75,
+            "y": 31.299038105676658,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": 31.299038105676658,
+            "z": -2.0
+          },
+          "gcode_line": 40,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.060660171779823,
+            "y": 31.060660171779823,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": 31.060660171779823,
+            "z": -2.0
+          },
+          "gcode_line": 40,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.299038105676658,
+            "y": 30.75,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": 30.75,
+            "z": -2.0
+          },
+          "gcode_line": 40,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.448888739433603,
+            "y": 30.38822856765378,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": 30.38822856765378,
+            "z": -2.0
+          },
+          "gcode_line": 40,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.5,
+            "y": 30.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 21.5,
+            "y": 30.0,
+            "z": -2.0
+          },
+          "gcode_line": 41,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": 21.5,
+            "y": 10.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.5,
+            "y": 10.0,
+            "z": -2.0
+          },
+          "gcode_line": 42,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.448888739433603,
+            "y": 9.611771432346218,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": 9.611771432346218,
+            "z": -2.0
+          },
+          "gcode_line": 42,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.299038105676658,
+            "y": 9.25,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": 9.25,
+            "z": -2.0
+          },
+          "gcode_line": 42,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 21.060660171779823,
+            "y": 8.939339828220179,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": 8.939339828220179,
+            "z": -2.0
+          },
+          "gcode_line": 42,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.75,
+            "y": 8.700961894323342,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": 8.700961894323342,
+            "z": -2.0
+          },
+          "gcode_line": 42,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.38822856765378,
+            "y": 8.551111260566397,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": 8.551111260566397,
+            "z": -2.0
+          },
+          "gcode_line": 42,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 20.0,
+            "y": 8.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 20.0,
+            "y": 8.5,
+            "z": -2.0
+          },
+          "gcode_line": 43,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 8.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": 0.0,
+            "y": 8.5,
+            "z": -2.0
+          },
+          "gcode_line": 44,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.38822856765378094,
+            "y": 8.551111260566397,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -0.38822856765378094,
+            "y": 8.551111260566397,
+            "z": -2.0
+          },
+          "gcode_line": 44,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.7499999999999998,
+            "y": 8.700961894323342,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -0.7499999999999998,
+            "y": 8.700961894323342,
+            "z": -2.0
+          },
+          "gcode_line": 44,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": 8.939339828220179,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": 8.939339828220179,
+            "z": -2.0
+          },
+          "gcode_line": 44,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.2990381056766578,
+            "y": 9.25,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -1.2990381056766578,
+            "y": 9.25,
+            "z": -2.0
+          },
+          "gcode_line": 44,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": 9.611771432346218,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 10.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": 9.611771432346218,
+            "z": -2.0
+          },
+          "gcode_line": 44,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.5,
+            "y": 10.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": -1.5,
+            "y": 10.0,
+            "z": -2.0
+          },
+          "gcode_line": 45,
+          "kind": "cut",
+          "op_id": 2,
+          "to": {
+            "x": -1.5,
+            "y": 30.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.5,
+            "y": 30.0,
+            "z": -2.0
+          },
+          "gcode_line": 46,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": 30.388228567653783,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": 30.388228567653783,
+            "z": -2.0
+          },
+          "gcode_line": 46,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.299038105676658,
+            "y": 30.75,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.299038105676658,
+            "y": 30.75,
+            "z": -2.0
+          },
+          "gcode_line": 46,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": 31.060660171779823,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": 31.060660171779823,
+            "z": -2.0
+          },
+          "gcode_line": 46,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.7500000000000003,
+            "y": 31.299038105676658,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -0.7500000000000003,
+            "y": 31.299038105676658,
+            "z": -2.0
+          },
+          "gcode_line": 46,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": -0.3882285676537813,
+            "y": 31.448888739433603,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 30.0
+          },
+          "from": {
+            "x": -0.3882285676537813,
+            "y": 31.448888739433603,
+            "z": -2.0
+          },
+          "gcode_line": 46,
+          "kind": "arc",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": -2.0
+          },
+          "gcode_line": 47,
+          "kind": "rapid",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 31.5,
+            "z": 5.0
+          },
+          "gcode_line": 48,
+          "kind": "rapid",
+          "op_id": 2,
+          "to": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        }
+      ],
+      "warnings": [
+        {
+          "kind": "cutting_limits_unknown",
+          "message": "Rough: some machine/tool limits are unknown; verify spindle, feed and usable flute length",
+          "op_id": 2
+        },
+        {
+          "kind": "cutting_limits_unknown",
+          "message": "Finish: some machine/tool limits are unknown; verify spindle, feed and usable flute length",
+          "op_id": 2
+        },
+        {
+          "kind": "out_of_work_area",
+          "message": "24 cut moves outside the machine work area (first at gcode line 33). The controller may refuse the move (soft-limit fault) or, worse, crash into the gantry. Set Project.work_offset so the cuts land inside the work envelope.",
+          "params": {
+            "count": "24",
+            "first_line": "33",
+            "variant": "at_line"
+          }
+        },
+        {
+          "kind": "out_of_stock",
+          "message": "41 cut moves outside the stock (first at gcode line 23). The controller will try to cut into air or below the stock — either re-zero the machine, expand the stock, or translate the geometry into the stock bbox.",
+          "params": {
+            "count": "41",
+            "first_line": "23",
+            "variant": "at_line"
+          }
+        }
+      ]
+    },
+    "front": {
+      "gcode": "; ===== TWO-SIDED JOB: FRONT PROGRAM =====\n; Run this program FIRST.\n; No dowel registration configured — align the flip by hand.\n; Do NOT unclamp the stock until the back program is set up.\n(FABTOOL/1 PRELOAD 1)\n(generated by ivaCAM)\nG21\nG90\nG54\nG17\nG40\nG94\nG0 Z5\n(FABTOOL/1 REQUEST 1)\nG0 Z5\n(pause: swap to tool 1 [3.0mm endmill])\nM3 S18000\nG4 P0.5\nG4 P1\n(FABTOOL/1 ACTIVE 1)\n; OP 1\n\n(object=0 level=0 pocket=0 segments=8 finish)\nF800\nG0 X0 Y-1.5 Z5\nF100\nG1 Z0\nF800\nF100\nG1 Z-1\nF800\nG2 X-1.5 Y0 I0 J1.5\nG1 Y20\nG2 X0 Y21.5 I1.5 J0\nG1 X20\nG2 X21.5 Y20 I0 J-1.5\nG1 Y0\nG2 X20 Y-1.5 I-1.5 J0\nG1 X0\nF100\nG1 Z-2\nF800\nG2 X-1.5 Y0 I0 J1.5\nG1 Y20\nG2 X0 Y21.5 I1.5 J0\nG1 X20\nG2 X21.5 Y20 I0 J-1.5\nG1 Y0\nG2 X20 Y-1.5 I-1.5 J0\nG1 X0\nG0 Z5\nG0 Y0\nM5\nM30\n",
+      "gcode_index": {
+        "lines_to_segment": [
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          0,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          4294967295,
+          1,
+          4294967295,
+          2,
+          4294967295,
+          4294967295,
+          3,
+          4294967295,
+          4,
+          10,
+          11,
+          17,
+          18,
+          24,
+          25,
+          31,
+          4294967295,
+          32,
+          4294967295,
+          33,
+          39,
+          40,
+          46,
+          47,
+          53,
+          54,
+          60,
+          61,
+          62,
+          4294967295,
+          4294967295
+        ],
+        "segments_to_line": [
+          9,
+          21,
+          23,
+          26,
+          28,
+          28,
+          28,
+          28,
+          28,
+          28,
+          29,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          31,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          33,
+          34,
+          34,
+          34,
+          34,
+          34,
+          34,
+          35,
+          37,
+          39,
+          39,
+          39,
+          39,
+          39,
+          39,
+          40,
+          41,
+          41,
+          41,
+          41,
+          41,
+          41,
+          42,
+          43,
+          43,
+          43,
+          43,
+          43,
+          43,
+          44,
+          45,
+          45,
+          45,
+          45,
+          45,
+          45,
+          46,
+          47,
+          48
+        ]
+      },
+      "remaining_material": [
+        {
+          "area_mm2": 0.0,
+          "depth_mm": -2.0,
+          "largest_area_mm2": 0.0,
+          "op_id": 1,
+          "reason": "cascade_pocket_only",
+          "regions": [],
+          "status": "unsupported"
+        }
+      ],
+      "stats": {
+        "closed_object_count": 1,
+        "object_count": 1,
+        "offset_count": 1
+      },
+      "time_estimate": {
+        "arc_s": 1.5929220040636192,
+        "cut_s": 12.0784787112383,
+        "dwell_s": 0.5,
+        "plunge_s": 4.213333333333334,
+        "rapid_s": 0.7640899852303659,
+        "retract_s": 0.0,
+        "spindle_warmup_s": 1.0,
+        "toolchange_s": 5.0,
+        "total_s": 25.14882403386562
+      },
+      "tool_provenance": {
+        "authority": "resolved",
+        "bindings": [
+          {
+            "program_tool_number": 1,
+            "project_tool_id": 1,
+            "reference": 1,
+            "tool": {
+              "coolant": "off",
+              "diameter": 3.0,
+              "feed_rate": 800,
+              "flutes": 2,
+              "id": 1,
+              "kind": "endmill",
+              "name": "3.0mm endmill",
+              "plunge_rate": 100,
+              "speed": 18000,
+              "tip_angle_deg": 60.0
+            }
+          }
+        ],
+        "diagnostics": [],
+        "revision": 1,
+        "transitions": [
+          {
+            "after_ref": 1,
+            "before_ref": null,
+            "evidence": "declared_preload_not_physical_state",
+            "output_line": 1
+          },
+          {
+            "after_ref": 1,
+            "before_ref": 1,
+            "evidence": "manual_load_assumption",
+            "output_line": 16
+          }
+        ]
+      },
+      "toolpath": [
+        {
+          "from": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "gcode_line": 9,
+          "kind": "rapid",
+          "op_id": 0,
+          "to": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 5.0
+          },
+          "gcode_line": 21,
+          "kind": "rapid",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": 5.0
+          },
+          "gcode_line": 23,
+          "kind": "plunge",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": 0.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": 0.0
+          },
+          "gcode_line": 26,
+          "kind": "plunge",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -1.0
+          },
+          "gcode_line": 28,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.38822856765378094,
+            "y": -1.4488887394336025,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -0.38822856765378094,
+            "y": -1.4488887394336025,
+            "z": -1.0
+          },
+          "gcode_line": 28,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.7499999999999998,
+            "y": -1.299038105676658,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -0.7499999999999998,
+            "y": -1.299038105676658,
+            "z": -1.0
+          },
+          "gcode_line": 28,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": -1.0606601717798214,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": -1.0606601717798214,
+            "z": -1.0
+          },
+          "gcode_line": 28,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.2990381056766578,
+            "y": -0.7500000000000004,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -1.2990381056766578,
+            "y": -0.7500000000000004,
+            "z": -1.0
+          },
+          "gcode_line": 28,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": -0.38822856765378155,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": -0.38822856765378155,
+            "z": -1.0
+          },
+          "gcode_line": 28,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.5,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": -1.5,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "gcode_line": 29,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": -1.5,
+            "y": 20.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.5,
+            "y": 20.0,
+            "z": -1.0
+          },
+          "gcode_line": 30,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": 20.388228567653783,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": 20.388228567653783,
+            "z": -1.0
+          },
+          "gcode_line": 30,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.299038105676658,
+            "y": 20.75,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.299038105676658,
+            "y": 20.75,
+            "z": -1.0
+          },
+          "gcode_line": 30,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": 21.060660171779823,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": 21.060660171779823,
+            "z": -1.0
+          },
+          "gcode_line": 30,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.7500000000000003,
+            "y": 21.299038105676658,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -0.7500000000000003,
+            "y": 21.299038105676658,
+            "z": -1.0
+          },
+          "gcode_line": 30,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.3882285676537813,
+            "y": 21.448888739433603,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -0.3882285676537813,
+            "y": 21.448888739433603,
+            "z": -1.0
+          },
+          "gcode_line": 30,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": 21.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 21.5,
+            "z": -1.0
+          },
+          "gcode_line": 31,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": 21.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 20.0,
+            "y": 21.5,
+            "z": -1.0
+          },
+          "gcode_line": 32,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.38822856765378,
+            "y": 21.448888739433603,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": 21.448888739433603,
+            "z": -1.0
+          },
+          "gcode_line": 32,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.75,
+            "y": 21.299038105676658,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": 21.299038105676658,
+            "z": -1.0
+          },
+          "gcode_line": 32,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.060660171779823,
+            "y": 21.060660171779823,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": 21.060660171779823,
+            "z": -1.0
+          },
+          "gcode_line": 32,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.299038105676658,
+            "y": 20.75,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": 20.75,
+            "z": -1.0
+          },
+          "gcode_line": 32,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.448888739433603,
+            "y": 20.38822856765378,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": 20.38822856765378,
+            "z": -1.0
+          },
+          "gcode_line": 32,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.5,
+            "y": 20.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 21.5,
+            "y": 20.0,
+            "z": -1.0
+          },
+          "gcode_line": 33,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": 21.5,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.5,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "gcode_line": 34,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.448888739433603,
+            "y": -0.3882285676537811,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": -0.3882285676537811,
+            "z": -1.0
+          },
+          "gcode_line": 34,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.299038105676658,
+            "y": -0.7499999999999999,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": -0.7499999999999999,
+            "z": -1.0
+          },
+          "gcode_line": 34,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.060660171779823,
+            "y": -1.0606601717798212,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": -1.0606601717798212,
+            "z": -1.0
+          },
+          "gcode_line": 34,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.75,
+            "y": -1.299038105676658,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": -1.299038105676658,
+            "z": -1.0
+          },
+          "gcode_line": 34,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.38822856765378,
+            "y": -1.4488887394336023,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": -1.4488887394336023,
+            "z": -1.0
+          },
+          "gcode_line": 34,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": -1.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 20.0,
+            "y": -1.5,
+            "z": -1.0
+          },
+          "gcode_line": 35,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -1.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -1.0
+          },
+          "gcode_line": 37,
+          "kind": "plunge",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -2.0
+          },
+          "gcode_line": 39,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.38822856765378094,
+            "y": -1.4488887394336025,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -0.38822856765378094,
+            "y": -1.4488887394336025,
+            "z": -2.0
+          },
+          "gcode_line": 39,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.7499999999999998,
+            "y": -1.299038105676658,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -0.7499999999999998,
+            "y": -1.299038105676658,
+            "z": -2.0
+          },
+          "gcode_line": 39,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": -1.0606601717798214,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": -1.0606601717798214,
+            "z": -2.0
+          },
+          "gcode_line": 39,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.2990381056766578,
+            "y": -0.7500000000000004,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -1.2990381056766578,
+            "y": -0.7500000000000004,
+            "z": -2.0
+          },
+          "gcode_line": 39,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": -0.38822856765378155,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": -0.38822856765378155,
+            "z": -2.0
+          },
+          "gcode_line": 39,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.5,
+            "y": 0.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": -1.5,
+            "y": 0.0,
+            "z": -2.0
+          },
+          "gcode_line": 40,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": -1.5,
+            "y": 20.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.5,
+            "y": 20.0,
+            "z": -2.0
+          },
+          "gcode_line": 41,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.4488887394336023,
+            "y": 20.388228567653783,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.4488887394336023,
+            "y": 20.388228567653783,
+            "z": -2.0
+          },
+          "gcode_line": 41,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.299038105676658,
+            "y": 20.75,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.299038105676658,
+            "y": 20.75,
+            "z": -2.0
+          },
+          "gcode_line": 41,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -1.0606601717798212,
+            "y": 21.060660171779823,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -1.0606601717798212,
+            "y": 21.060660171779823,
+            "z": -2.0
+          },
+          "gcode_line": 41,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.7500000000000003,
+            "y": 21.299038105676658,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -0.7500000000000003,
+            "y": 21.299038105676658,
+            "z": -2.0
+          },
+          "gcode_line": 41,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": -0.3882285676537813,
+            "y": 21.448888739433603,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 0.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": -0.3882285676537813,
+            "y": 21.448888739433603,
+            "z": -2.0
+          },
+          "gcode_line": 41,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": 21.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": 21.5,
+            "z": -2.0
+          },
+          "gcode_line": 42,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": 21.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 20.0,
+            "y": 21.5,
+            "z": -2.0
+          },
+          "gcode_line": 43,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.38822856765378,
+            "y": 21.448888739433603,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": 21.448888739433603,
+            "z": -2.0
+          },
+          "gcode_line": 43,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.75,
+            "y": 21.299038105676658,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": 21.299038105676658,
+            "z": -2.0
+          },
+          "gcode_line": 43,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.060660171779823,
+            "y": 21.060660171779823,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": 21.060660171779823,
+            "z": -2.0
+          },
+          "gcode_line": 43,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.299038105676658,
+            "y": 20.75,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": 20.75,
+            "z": -2.0
+          },
+          "gcode_line": 43,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.448888739433603,
+            "y": 20.38822856765378,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 20.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": 20.38822856765378,
+            "z": -2.0
+          },
+          "gcode_line": 43,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.5,
+            "y": 20.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 21.5,
+            "y": 20.0,
+            "z": -2.0
+          },
+          "gcode_line": 44,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": 21.5,
+            "y": 0.0,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.5,
+            "y": 0.0,
+            "z": -2.0
+          },
+          "gcode_line": 45,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.448888739433603,
+            "y": -0.3882285676537811,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.448888739433603,
+            "y": -0.3882285676537811,
+            "z": -2.0
+          },
+          "gcode_line": 45,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.299038105676658,
+            "y": -0.7499999999999999,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.299038105676658,
+            "y": -0.7499999999999999,
+            "z": -2.0
+          },
+          "gcode_line": 45,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 21.060660171779823,
+            "y": -1.0606601717798212,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 21.060660171779823,
+            "y": -1.0606601717798212,
+            "z": -2.0
+          },
+          "gcode_line": 45,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.75,
+            "y": -1.299038105676658,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 20.75,
+            "y": -1.299038105676658,
+            "z": -2.0
+          },
+          "gcode_line": 45,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.38822856765378,
+            "y": -1.4488887394336023,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "arc": {
+            "ccw": false,
+            "cx": 20.0,
+            "cy": 0.0
+          },
+          "from": {
+            "x": 20.38822856765378,
+            "y": -1.4488887394336023,
+            "z": -2.0
+          },
+          "gcode_line": 45,
+          "kind": "arc",
+          "op_id": 1,
+          "to": {
+            "x": 20.0,
+            "y": -1.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 20.0,
+            "y": -1.5,
+            "z": -2.0
+          },
+          "gcode_line": 46,
+          "kind": "cut",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -2.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": -2.0
+          },
+          "gcode_line": 47,
+          "kind": "rapid",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        },
+        {
+          "from": {
+            "x": 0.0,
+            "y": -1.5,
+            "z": 5.0
+          },
+          "gcode_line": 48,
+          "kind": "rapid",
+          "op_id": 1,
+          "to": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 5.0
+          },
+          "tool_ref": 1
+        }
+      ],
+      "warnings": [
+        {
+          "kind": "cutting_limits_unknown",
+          "message": "Rough: some machine/tool limits are unknown; verify spindle, feed and usable flute length",
+          "op_id": 1
+        },
+        {
+          "kind": "cutting_limits_unknown",
+          "message": "Finish: some machine/tool limits are unknown; verify spindle, feed and usable flute length",
+          "op_id": 1
+        },
+        {
+          "kind": "out_of_work_area",
+          "message": "41 cut moves outside the machine work area (first at gcode line 23). The controller may refuse the move (soft-limit fault) or, worse, crash into the gantry. Set Project.work_offset so the cuts land inside the work envelope.",
+          "params": {
+            "count": "41",
+            "first_line": "23",
+            "variant": "at_line"
+          }
+        },
+        {
+          "kind": "out_of_stock",
+          "message": "41 cut moves outside the stock (first at gcode line 23). The controller will try to cut into air or below the stock — either re-zero the machine, expand the stock, or translate the geometry into the stock bbox.",
+          "params": {
+            "count": "41",
+            "first_line": "23",
+            "variant": "at_line"
+          }
+        }
+      ]
+    }
+  }
+}

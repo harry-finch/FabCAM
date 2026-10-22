@@ -1,0 +1,745 @@
+{
+  "name": "shopbot-vcarve",
+  "request": {
+    "cps_post": {
+      "source": {
+        "id": "shopbot",
+        "kind": "bundled"
+      }
+    },
+    "post_processor": "cps",
+    "project": {
+      "cutting_version": 9,
+      "machine": {
+        "arcs": true,
+        "comments": true,
+        "mode": "mill",
+        "tool_change": "manual_m0_pause",
+        "unit": "mm"
+      },
+      "operations": [
+        {
+          "enabled": true,
+          "id": 1,
+          "kind": {
+            "carve": {
+              "full_medial_axis": false,
+              "multi_pass_refine": false
+            },
+            "type": "v_carve"
+          },
+          "name": "TEST1 SOFTWARE ONLY",
+          "params": {
+            "cutting": {
+              "entry_angle_deg": 10.0,
+              "rates": [
+                {
+                  "feed_mm_min": 1200,
+                  "plunge_mm_min": 200,
+                  "role": "rough",
+                  "rpm": 18000,
+                  "tool_id": 1
+                }
+              ]
+            },
+            "depth": -0.5,
+            "fast_move_z": 5.0,
+            "objectorder": "nearest",
+            "start_depth": 0.0,
+            "step": -0.25
+          },
+          "source": {
+            "kind": "all"
+          },
+          "tool_id": 1
+        }
+      ],
+      "segments": [
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 35.5,
+            "y": 10.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 10.0,
+            "y": 10.0
+          },
+          "type": "LINE"
+        },
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 35.5,
+            "y": 30.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 35.5,
+            "y": 10.0
+          },
+          "type": "LINE"
+        },
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 10.0,
+            "y": 30.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 35.5,
+            "y": 30.0
+          },
+          "type": "LINE"
+        },
+        {
+          "bulge": 0.0,
+          "color": 7,
+          "end": {
+            "x": 10.0,
+            "y": 10.0
+          },
+          "layer": "0",
+          "start": {
+            "x": 10.0,
+            "y": 30.0
+          },
+          "type": "LINE"
+        }
+      ],
+      "stock": {
+        "height_mm": 100.0,
+        "origin": [
+          0.0,
+          0.0
+        ],
+        "thickness_mm": 18.0,
+        "width_mm": 100.0
+      },
+      "tools": [
+        {
+          "coolant": "off",
+          "diameter": 6.0,
+          "feed_rate": 1200,
+          "flutes": 2,
+          "id": 1,
+          "kind": "v_bit",
+          "name": "6mm 60° v-bit",
+          "plunge_rate": 200,
+          "speed": 18000,
+          "tip_angle_deg": 60.0,
+          "tip_diameter": 0.0
+        }
+      ]
+    }
+  },
+  "response": {
+    "gcode": "' ivaCAM ShopBot MVP - metric XYZ - manual spindle\n' ivaCAM\nVD,,1\nSA\n' Stop spindle. Verify work zero, stock, clearances and controller jog speeds before continuing.\nPAUSE\n' FABTOOL/1 REQUEST 0 1\nJZ,5.0000\n' Spindle OFF and stationary. Load tool 1 D=6.0000; set work Z zero for this tool. Return to clearance before OK.\nPAUSE\nJZ,5.0000\n' Start spindle CW manually at 18000 RPM. Wait until ready before OK.\nPAUSE\n' FABTOOL/1 ACTIVE 0 1\n' TEST1 SOFTWARE ONLY\n' OP 1\nPAUSE 1.000\nJ2,35.2113,10.2887\nMS,3.333333,3.333333\nM3,35.2113,10.2887,0.0000\nMS,20.000000,20.000000\nM3,35.2113,11.7065,-0.2500\nM3,35.2113,13.1243,-0.2500\nM3,35.2113,29.7113,-0.2500\nM3,10.2887,29.7113,-0.2500\nM3,10.2887,10.2887,-0.2500\nM3,35.2113,10.2887,-0.2500\nM3,33.7935,10.2887,-0.5000\nM3,10.2887,10.2887,-0.5000\nM3,10.2887,29.7113,-0.5000\nM3,35.2113,29.7113,-0.5000\nM3,35.2113,11.7065,-0.5000\nM3,35.2113,10.2887,-0.2500\nM3,35.2113,10.9976,-0.5000\nM3,35.2113,11.7065,-0.5000\nM3,35.2113,29.7113,-0.5000\nM3,10.2887,29.7113,-0.5000\nM3,10.2887,10.2887,-0.5000\nM3,33.7935,10.2887,-0.5000\nM3,35.2113,10.2887,-0.5000\nM3,33.7935,10.2887,-0.5000\nM3,10.2887,10.2887,-0.5000\nM3,10.2887,29.7113,-0.5000\nM3,35.2113,29.7113,-0.5000\nM3,35.2113,10.9976,-0.5000\nM3,35.2113,10.2887,-0.5000\nJZ,5.0000\nJZ,5.0000\n' Stop spindle manually and wait until stationary before OK.\nPAUSE\nEND\n",
+    "gcode_index": {
+      "lines_to_segment": [
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295,
+        0,
+        4294967295,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        4294967295,
+        4294967295,
+        4294967295,
+        4294967295
+      ],
+      "segments_to_line": [
+        20,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    "output_extension": "sbp",
+    "remaining_material": [
+      {
+        "area_mm2": 0.0,
+        "depth_mm": -0.5,
+        "largest_area_mm2": 0.0,
+        "op_id": 1,
+        "reason": "cascade_pocket_only",
+        "regions": [],
+        "status": "unsupported"
+      }
+    ],
+    "stats": {
+      "closed_object_count": 0,
+      "object_count": 1,
+      "offset_count": 0
+    },
+    "time_estimate": {
+      "arc_s": 0.0,
+      "cut_s": 18.0621690294258,
+      "dwell_s": 0.0,
+      "plunge_s": 1.5133334820000148,
+      "rapid_s": 0.2966479394838265,
+      "retract_s": 0.0,
+      "spindle_warmup_s": 1.0,
+      "toolchange_s": 5.0,
+      "total_s": 25.87215045090964
+    },
+    "tool_provenance": {
+      "authority": "resolved",
+      "bindings": [
+        {
+          "program_tool_number": 1,
+          "project_tool_id": 1,
+          "reference": 1,
+          "tool": {
+            "coolant": "off",
+            "diameter": 6.0,
+            "feed_rate": 1200,
+            "flutes": 2,
+            "id": 1,
+            "kind": "v_bit",
+            "name": "6mm 60° v-bit",
+            "plunge_rate": 200,
+            "speed": 18000,
+            "tip_angle_deg": 60.0,
+            "tip_diameter": 0.0
+          }
+        }
+      ],
+      "diagnostics": [],
+      "revision": 1,
+      "transitions": [
+        {
+          "after_ref": 1,
+          "before_ref": null,
+          "evidence": "manual_load_and_pause",
+          "output_line": 14
+        }
+      ]
+    },
+    "toolpath": [
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": 5.0
+        },
+        "gcode_line": 20,
+        "kind": "plunge",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": 0.0
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": 0.0
+        },
+        "gcode_line": 22,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 11.7065,
+          "z": -0.25
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 11.7065,
+          "z": -0.25
+        },
+        "gcode_line": 23,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 13.1243,
+          "z": -0.25
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 13.1243,
+          "z": -0.25
+        },
+        "gcode_line": 24,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.25
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.25
+        },
+        "gcode_line": 25,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.25
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.25
+        },
+        "gcode_line": 26,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.25
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.25
+        },
+        "gcode_line": 27,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.25
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.25
+        },
+        "gcode_line": 28,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 33.7935,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 33.7935,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 29,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 30,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "gcode_line": 31,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "gcode_line": 32,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 11.7065,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 11.7065,
+          "z": -0.5
+        },
+        "gcode_line": 33,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.25
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.25
+        },
+        "gcode_line": 34,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.9976,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.9976,
+          "z": -0.5
+        },
+        "gcode_line": 35,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 11.7065,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 11.7065,
+          "z": -0.5
+        },
+        "gcode_line": 36,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "gcode_line": 37,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "gcode_line": 38,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 39,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 33.7935,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 33.7935,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 40,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 41,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 33.7935,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 33.7935,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 42,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 43,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 10.2887,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "gcode_line": 44,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 29.7113,
+          "z": -0.5
+        },
+        "gcode_line": 45,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.9976,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.9976,
+          "z": -0.5
+        },
+        "gcode_line": 46,
+        "kind": "cut",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "tool_ref": 1
+      },
+      {
+        "from": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": -0.5
+        },
+        "gcode_line": 47,
+        "kind": "rapid",
+        "op_id": 1,
+        "to": {
+          "x": 35.2113,
+          "y": 10.2887,
+          "z": 5.0
+        },
+        "tool_ref": 1
+      }
+    ],
+    "warnings": [
+      {
+        "kind": "cutting_limits_unknown",
+        "message": "Rough: some machine/tool limits are unknown; verify spindle, feed and usable flute length",
+        "op_id": 1
+      },
+      {
+        "kind": "vcarve_target_capped",
+        "message": "V-Carve reaches the explicitly capped target; capped regions are not fully cleared. Reduce radius limits only if that is your intended geometry.",
+        "op_id": 1
+      },
+      {
+        "kind": "vcarve_scope",
+        "message": "Perimeter: V-bit contour groove at constant final depth; the interior is not cleared.",
+        "op_id": 1
+      },
+      {
+        "kind": "cps_post_warning",
+        "message": "ShopBot MVP uses manual spindle start/stop and RPM; verify every operator pause. Arcs linearized at 0.01 mm. No controller/hardware qualification."
+      }
+    ]
+  }
+}
