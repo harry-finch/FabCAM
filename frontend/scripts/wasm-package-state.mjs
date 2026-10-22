@@ -17,8 +17,7 @@ const inputs = [
   'rust-toolchain',
   '.cargo',
   'crates/ivac-core/assets',
-  'data/feeds-speeds',
-  ...['ivac-wasm', 'ivac-core', 'ivac-feeds-speeds'].flatMap((name) =>
+  ...['ivac-wasm', 'ivac-core'].flatMap((name) =>
     ['src', 'Cargo.toml', 'build.rs'].map((file) => `crates/${name}/${file}`),
   ),
   'frontend/scripts/ensure-wasm-fresh.mjs',

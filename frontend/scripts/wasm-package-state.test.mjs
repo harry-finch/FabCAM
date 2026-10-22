@@ -101,3 +101,31 @@ test('embedded font/data changes and file deletion invalidate the package', (t) 
   rmSync(font);
   assert.equal(packageState(root).fresh, false);
 });
+
+test('neutral cutting and preset sources remain freshness inputs after recommendation removal', (t) => {
+  const root = fixture(t);
+  const dir = join(root, 'crates/ivac-core/src');
+  mkdirSync(dir, { recursive: true });
+  for (const name of ['cutting_parameters.rs', 'presets.rs', 'project.rs']) {
+    recordBuild(root, inputFingerprint(root));
+    const path = join(dir, name);
+    writeFileSync(path, 'current neutral contract');
+    assert.equal(packageState(root).fresh, false);
+    recordBuild(root, inputFingerprint(root));
+    writeFileSync(path, 'changed neutral contract');
+    utimesSync(path, new Date(0), new Date(0));
+    assert.equal(packageState(root).fresh, false);
+    recordBuild(root, inputFingerprint(root));
+    rmSync(path);
+    assert.equal(packageState(root).fresh, false);
+  }
+});
+
+test('unused old source-pack files are not required runtime inputs', (t) => {
+  const root = fixture(t);
+  recordBuild(root, inputFingerprint(root));
+  const dir = join(root, 'data/feeds-speeds');
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, 'private-old-pack.json'), 'unchanged user data');
+  assert.equal(packageState(root).fresh, true);
+});

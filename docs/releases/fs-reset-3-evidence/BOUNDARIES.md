@@ -176,3 +176,29 @@ API or types. Generic physical IDs/max RPM, neutral MAT-1 vocabulary and role sa
 have independent owners. Final-source workspace gate, TEST1/C2 and UI acceptance
 are still pending; no installed-native/browser-transfer or hardware claim follows
 from these adapter and filesystem unit tests.
+
+
+## Phase E — recommendation crate and shipped assets removed
+
+Parent: `a9d25bde4ad2c0102ed95e17874a00c6d7906ea3`. Removed the 22 tracked
+crate files and 11 shipped Sienci/license/registry assets, workspace/dependency and
+lock entries. No user pack, project, application directory or IndexedDB data was
+removed. Cargo metadata has no recommendation package or edge. Neutral material
+identity, physical identity, limits, taxonomy and safety owners remain unchanged.
+The removed families and their retained safety coverage are enumerated in
+`phase-e-test-retirement.json`; obsolete numerical/ranking policies have no successor.
+
+Auditing the original request validator uncovered the missing rejection of an
+explicit zero machine minimum RPM. Neutral validation now rejects it alongside the
+three other zero known ratings, without mutating rates; absent limits remain valid
+with disclosure. The new regression proves all four refusal paths and unknowns.
+This is a transferred guard, not a new rating or calculator.
+
+Final core unit suite: **1230 PASS**; strict contract **3 PASS**; fixed 23-case corpus
+**1 PASS**, no output changes. The preceding complete core integration run also
+passed. Strict pedantic core Clippy PASS. WASM rebuilt and verified on final E source.
+Freshness checks: **12 PASS**, including source deletion/old-mtime changes in neutral
+validators/presets/project and independence from removed assets. Full workspace,
+watchers, TEST1/C2 and visual acceptance remain mandatory in later phases.
+
+Frontend final E: **1492 PASS, 1 existing optional locale skip**; production build PASS.

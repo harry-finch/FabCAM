@@ -195,6 +195,7 @@ pub fn validate_limits(
     if m.spindle_rpm_min
         .zip(m.spindle_rpm_max)
         .is_some_and(|(a, b)| a > b)
+        || m.spindle_rpm_min == Some(0)
         || m.spindle_rpm_max == Some(0)
         || tool.max_rpm == Some(0)
         || m.max_feed_mm_min == Some(0)
@@ -781,6 +782,28 @@ mod tests {
         p.machine.spindle_rpm_min = Some(u32::MAX);
         assert!(validate_project(&p).is_err());
         assert_eq!(original, p.operations[0].params.cutting);
+    }
+    #[test]
+    fn zero_known_ratings_refuse_instead_of_becoming_unknown() {
+        for case in 0..4 {
+            let mut p = project();
+            let original = p.operations[0].params.cutting.clone();
+            match case {
+                0 => p.machine.spindle_rpm_min = Some(0),
+                1 => p.machine.spindle_rpm_max = Some(0),
+                2 => p.machine.max_feed_mm_min = Some(0),
+                _ => p.tools[0].max_rpm = Some(0),
+            }
+            assert!(validate_operation(&p, &p.operations[0])
+                .errors
+                .iter()
+                .any(|e| e.contains("zero machine/tool limits")));
+            assert!(validate_project(&p).is_err());
+            assert_eq!(original, p.operations[0].params.cutting);
+        }
+        let p = project();
+        assert!(validate_project(&p).is_ok());
+        assert!(!validate_operation(&p, &p.operations[0]).warnings.is_empty());
     }
     #[test]
     fn invalid_geometry_numeric_and_depth_rejected() {

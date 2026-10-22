@@ -21,7 +21,6 @@ cps = ["dep:ivac-cps"]
 profiling = []
 
 [dependencies]
-ivac-feeds-speeds = { path = "../ivac-feeds-speeds", features = ["schema"] }
 ivac-cps = { workspace = true, optional = true }
 serde = { workspace = true }
 # Existing transitive dependency; exact binary-float orientation fallback for GEOM1.

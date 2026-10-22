@@ -1,0 +1,397 @@
+[
+  {
+    "file": "crates/ivac-feeds-speeds/Cargo.toml",
+    "sha256": "488b02ad05240447e800d4c476f973acecf6c844dda8cdd5c98863f10fd28aa3",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/README.md",
+    "sha256": "c2bb276e70f77d6c1a88fc69f5a3e7f29869f60e0458c0f28eae38e5276a3a7b",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/examples/coverage.rs",
+    "sha256": "694009f9879e1be528e239c71418fa1a76b4c5930e41a000666b227bc27d13f0",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/examples/sensitivity.rs",
+    "sha256": "82ad69994568bd8983769db9174294fa4f3c3d46e5b5911943622bd9d95a852a",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/examples/sensitivity_report.py",
+    "sha256": "7ca21f38475fda3bd367f398cb9da083645886b85e8095f40a5018adf1d211ab",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/examples/sensitivity_support/mod.rs",
+    "sha256": "9736e3956a853947292ca0d1b49793306f6bd34fafa13afd38daefddf6e08a46",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/adaptation.rs",
+    "sha256": "0f1d59fe3320e9534ddd0e24827aaae0da12587a4a9bc6895a08b2964904295d",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/dataset.rs",
+    "sha256": "eaa3848bec0237da8653918f70a47e3f4d913c6718c59f920da43d1e2077192a",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/engine.rs",
+    "sha256": "72564cf7e81c4aa518b83257c78b36232cc16fb83af2af6255165a8d6d2edf2f",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/lib.rs",
+    "sha256": "781c7e93cb721f74814d2decde30428115ae330247d0f89655a5f2eb71dfc521",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/matching.rs",
+    "sha256": "20eb1e543e5867c0542b1d36be20d2372413932301d45ed8e6abc699ced5c46d",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/model.rs",
+    "sha256": "10344f4dafca384ff593540c44da1be0da43fe7eb830f7b6703ba680c5faa214",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/rank.rs",
+    "sha256": "32a796c3773faa736f433539524192ef73986e9f1bf54bcf5af1f83cb83eb538",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/source_error.rs",
+    "sha256": "7826dc5f54d83eb7b4085e13e37fc4bfdee3eeec94b635571d8e567675a2753a",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/source_pack.rs",
+    "sha256": "80a18ba3ce63fbeaff144f06ea5eeb77c111d25f1d7fd237503f15599ca2ef73",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/src/validation.rs",
+    "sha256": "7398e8ab35ec949014a16ee8a1e372d2cdc599eed0da7f590156872e409d144c",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/tests/approximate.rs",
+    "sha256": "0092d323fbce7c821f51b0d55f1d484e5e72c9a394f85ed03cff1fda3285c17b",
+    "tests": [
+      "six_mm_pocket_normalizes_near_reference_and_keeps_all_transfers_explicit",
+      "all_six_exact_rows_are_numerically_unchanged",
+      "interpolation_preserves_both_originals_and_is_deterministic",
+      "small_diameter_extrapolation_is_bounded_and_two_vs_three175_is_refused",
+      "two_from_three_has_exact_fifty_percent_gap_and_conservative_factor",
+      "larger_diameter_caps_cutting_speed_doc_and_machine_limits",
+      "incompatible_family_flutes_operation_machine_and_material_remain_rejected",
+      "exact_and_near_precede_farther_and_bracket_candidates",
+      "policy_permission_and_physical_evidence_cannot_be_broadened",
+      "diagnostic_trace_retains_rejections_selection_and_order",
+      "machine_transfer_penalty_survives_diameter_adaptation",
+      "approximate_disagreement_remains_visible_without_averaging",
+      "declared_parent_fallback_uses_taxonomy_graph_and_cannot_accept_invented_prefix",
+      "multiple_pack_interpolations_do_not_hide_disagreement",
+      "no_match_reports_distance_instead_of_already_permitted_transfers",
+      "ambiguous_interpolation_anchor_preserves_disagreement_and_determinism",
+      "router_class_cannot_become_exact_physical_trial_scope",
+      "invalid_request_and_malformed_pack_trace_do_not_panic",
+      "interpolation_does_not_inherit_one_anchors_better_doc_specificity",
+      "adaptation_taxonomy_descendants_match_and_trace_agrees",
+      "tool_classification_index_ignores_absence_but_rejects_conflict",
+      "explicit_selection_refuses_reference_adaptation_that_recommended_still_supports"
+    ],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": "Physical context cannot become exact through adaptation; machine caps and immutable input",
+    "replacement": "crates/ivac-core/src/presets.rs: different_context_limits_or_unattested_data_refused, local_tool_numbers_do_not_establish_physical_compatibility; crates/ivac-core/src/cutting_parameters.rs: known_limits_reject_without_mutation_unknowns_disclosed",
+    "qualification": "phase-e-tests-e-final.log; phase-e-tests-e-final-frontend.log; earlier D contracts and later final-source workspace gate"
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/tests/dataset.rs",
+    "sha256": "581851f107870e7e9fd28eb5f0eda45b24dddb83d5cc14f8bee3ac774ec21be1",
+    "tests": [
+      "source_rows_transcribed_without_derating_or_chipload_recomputation",
+      "explicit_roundtrip_retains_catalog_and_source_snapshots",
+      "no_shopbot_or_unknown_machine_transfer",
+      "no_silent_metric_diameter_material_or_tool_transfer",
+      "no_pocket_finish_or_unknown_doc_transfer",
+      "external_reference_never_becomes_locally_validated_after_clamp",
+      "schema_versions_unknown_fields_duplicate_fields_and_units_refused",
+      "dangling_revisions_and_family_members_refused",
+      "catalog_duplicates_geometry_conflicts_and_hard_limit_conflicts_refused",
+      "incomplete_data_provenance_or_unearned_evidence_refused_atomically",
+      "local_trial_records_are_distinct_from_external_references",
+      "missing_data_explains_actual_scope_without_relaxing_matching",
+      "in_memory_validation_matches_json_validation_without_mutating_document"
+    ],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": "Exact context, bounded strict parser, attestation distinct from external data",
+    "replacement": "crates/ivac-core/src/presets.rs: bounded_strict_collection_parser, different_context_limits_or_unattested_data_refused; crates/ivac-core/tests/explicit_contract.rs",
+    "qualification": "phase-e-tests-e-final.log; phase-e-tests-e-final-frontend.log; earlier D contracts and later final-source workspace gate"
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/tests/lab_presets.rs",
+    "sha256": "f338dc36418807b2b436ac5f2cc7f4d463bcbb787152600a35d3f39c44aaeda1",
+    "tests": [
+      "local_capture_round_trip_requires_successful_physical_attestation",
+      "public_lab_metadata_and_incomplete_validation_are_refused",
+      "local_tested_precedence_uses_existing_resolver_and_disabled_deleted_presets_are_ignored",
+      "draft_is_saved_but_never_supplies_recommendations",
+      "history_preserves_prior_evidence_and_rejects_changed_identity",
+      "malformed_dates_and_unsupported_authoring_schema_are_rejected_without_panics",
+      "imported_physical_test_cannot_postdate_its_saved_revision",
+      "sorbonne_validated_record_precedes_tested_record_without_ui_ranking",
+      "lab_and_reference_identities_coexist_with_lab_priority_and_reference_fallback",
+      "named_lab_pack_preserves_validation_and_empty_creation_contract",
+      "named_lab_pack_roundtrip_keeps_priority_without_reclassifying_generic_lab_sources",
+      "explicit_tested_validated_and_unavailable_lab_records"
+    ],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": "Explicit attestation, named collections, exact identities, reviewed copied values",
+    "replacement": "crates/ivac-core/src/presets.rs: exact_reviewed_load_is_a_copy_without_private_notes, empty_named_collection_roundtrip, different_context_limits_or_unattested_data_refused; frontend/src/lib/state/preset-library-v9.test.ts; frontend/src/lib/state/cutting-v9-wasm.test.ts",
+    "qualification": "phase-e-tests-e-final.log; phase-e-tests-e-final-frontend.log; earlier D contracts and later final-source workspace gate"
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/tests/qualification.rs",
+    "sha256": "9f29b26fd005bb984b7cd0c4e7cc87f8965bfa5fcbc815b1c228a163052e1fb5",
+    "tests": [
+      "fs01_equation_units_and_profile_unknown_engagement",
+      "fs02_slot_cannot_use_profile_or_low_radial_data",
+      "fs02_full_slot_contradiction_is_invalid",
+      "fs03_pocket_preserves_nominal_ratio_and_distinction",
+      "fs04_rpm_clamps_and_chipload_target_uses_final_rpm",
+      "fs04_inconsistent_machine_or_tool_limits_refuse",
+      "fs05_feed_and_plunge_limits_are_independent",
+      "fs05_unknown_limits_are_not_invented",
+      "fs06_unknown_material_missing_profiles_and_dataset_mismatch",
+      "fs07_unsupported_families_and_operations",
+      "fs08_exact_validated_then_tested_then_reference_precedence",
+      "fs08_exact_evidence_never_broadens_to_changed_context",
+      "fs08_exact_values_keep_chipload_after_rpm_clamp_and_downgrade_applicability",
+      "fs09_equal_or_incomparable_scopes_are_ambiguous_in_any_order",
+      "fs09_strict_containment_selects_unique_maximal_scope",
+      "fs09_ambiguity_in_higher_tier_does_not_fall_through",
+      "fs09_all_precedence_tiers_and_mode_are_explicit",
+      "fs09_inclusive_range_boundaries_and_missing_qualifiers",
+      "fs09_families_require_explicit_membership_and_specificity",
+      "fs09_family_subset_containment_and_machine_membership",
+      "fs13_request_profile_set_and_result_round_trip",
+      "fs13_dataset_validation_rejects_invalid_claims_and_duplicates",
+      "fs13_validation_label_requires_scope_and_record",
+      "fs13_unknown_fields_and_non_milling_operations_reject_on_deserialize",
+      "fs15_invalid_request_quantities_and_limits",
+      "fs15_nonfinite_and_bad_profile_data_reject_at_construction",
+      "fs15_rounding_and_representability_are_explicit",
+      "fs15_overflow_and_unbounded_large_output_refuse",
+      "fs15_repeated_output_and_input_immutability",
+      "fs15_limit_invariants_over_deterministic_grid",
+      "fs16_aggressiveness_and_evidence_independent_no_hidden_mode_factor",
+      "fs16_reduction_expansion_missing_source_and_duplicates_refuse",
+      "finish_context_requires_finish_data_and_unknowns_are_visible",
+      "request_doc_and_nominal_stepover_cannot_be_silently_increased",
+      "equivalent_single_member_family_and_exact_scope_are_ambiguous",
+      "nominal_scope_containment_selects_narrower_recipe_at_boundaries",
+      "family_and_rule_authoring_errors_cannot_bypass_constructor_validation",
+      "family_provenance_survives_external_dataset_loss_and_member_reordering",
+      "exact_values_rpm_cap_never_increases_implicit_chipload",
+      "exact_feed_tracks_tool_cap_and_rounding_but_never_increases_at_rpm_floor",
+      "feed_saturation_reports_target_comparison_without_material_threshold_or_rpm_retuning",
+      "plunge_scales_down_for_both_data_modes_and_never_up",
+      "exact_rpm_floor_reports_original_chipload_even_with_feed_cap"
+    ],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": "Finite positive explicit values; intersecting known machine/tool limits; unknown disclosure; immutable values; supported process/roles; overflow refusal",
+    "replacement": "crates/ivac-core/src/cutting_parameters.rs: zero_known_ratings_refuse_instead_of_becoming_unknown, known_limits_reject_without_mutation_unknowns_disclosed, wire_refuses_unknown_fractional_overflow_roles, invalid_geometry_numeric_and_depth_rejected, no_duplicate_missing_stray_or_misassigned_role; crates/ivac-core/tests/numsafe2.rs; crates/ivac-core/tests/fs_reset_outputs.rs",
+    "qualification": "phase-e-tests-e-final.log; phase-e-tests-e-final-frontend.log; earlier D contracts and later final-source workspace gate"
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/tests/sensitivity.rs",
+    "sha256": "a888bbe5a4877346ddd9718da5e68bc1959a1bb4b04b349b18244b37f9bf2205",
+    "tests": [
+      "diameter_sweep_is_order_independent_and_preserves_evidence_and_caps",
+      "availability_boundaries_are_explicit_on_both_sides",
+      "ten_percent_small_tool_transition_is_continuous_with_integer_feed_rounding",
+      "interpolation_entry_exposes_a_larger_selection_jump"
+    ],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": "Recommendation response curves only; limit/evidence assertions covered independently",
+    "replacement": "crates/ivac-core/src/cutting_parameters.rs; crates/ivac-core/src/presets.rs. No sensitivity calculator replacement.",
+    "qualification": "phase-e-tests-e-final.log; phase-e-tests-e-final-frontend.log; earlier D contracts and later final-source workspace gate"
+  },
+  {
+    "file": "crates/ivac-feeds-speeds/tests/source_packs.rs",
+    "sha256": "85b3975369a15ec19a9dff2928132f9acbfacada0055f92c9364380a100f17c9",
+    "tests": [
+      "manifest_versions_and_required_license",
+      "classification_and_private_not_bundle",
+      "identities_and_record_origins_are_required",
+      "schema_and_size_fail_closed",
+      "source_record_and_original_values_survive",
+      "derived_quantities_have_units_and_keep_original",
+      "generic_material_fallback_and_exact_preference",
+      "composite_sienci_is_not_all_mdf",
+      "unknown_material_taxonomy_and_tool_traits_are_rejected",
+      "disagreement_selects_authored_record_never_average",
+      "normal_and_rapid_stay_in_authored_same_mode_records",
+      "noncomparable_rpm_is_ambiguous_even_when_clamps_equal",
+      "deterministic_under_input_reordering",
+      "duplicate_pack_ids_refused",
+      "exact_local_tested_preset_precedes_reference",
+      "tested_cannot_use_material_fallback",
+      "missing_and_invalid_context_keep_reasons",
+      "bundle_registry_is_explicit_and_contains_only_licensed_public_packs",
+      "source_chipload_is_distinguished_from_derived_chipload",
+      "floating_point_roundoff_does_not_create_false_ambiguity_but_real_doc_difference_does",
+      "typed_errors_preserve_legacy_api_and_rank_array_contract",
+      "explicit_selection_pins_original_even_when_recommended_prefers_another",
+      "selected_single_source_equals_recommended_and_does_not_mutate_request",
+      "selected_unknown_revision_identity_and_ineligible_never_fall_back",
+      "selected_incompatible_context_never_adapts_or_substitutes"
+    ],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": "Strict bounded imports, exact context, no silent substitution, input immutability",
+    "replacement": "crates/ivac-core/src/presets.rs; crates/ivac-core/tests/explicit_contract.rs; frontend/src/lib/api/removed-legacy-contract.test.ts. Source-pack licensing/ranking/revision registry retired; no collection import implies current-machine testing.",
+    "qualification": "phase-e-tests-e-final.log; phase-e-tests-e-final-frontend.log; earlier D contracts and later final-source workspace gate"
+  },
+  {
+    "file": "data/feeds-speeds/CC-BY-SA-4.0.txt",
+    "sha256": "4d66e4499b703e54c7bba4459f74a166d6cc67693abaca3559163279079b964c",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "data/feeds-speeds/README.md",
+    "sha256": "1ec38718550cc7225847206f8b4526b15cd80212aed271ba63841c975aa588e9",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "data/feeds-speeds/packs/sienci-longmill.v1.json",
+    "sha256": "89b703be88ef9cafa748c1d8c7d38fb925a8785b770ae1d880e4070dd5b6d5b0",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "data/feeds-speeds/packs/sienci-longmill.v3.json",
+    "sha256": "37e607ff2797495c0bec5d0dfdb8aa93cbcff33cc1b89a018a39785064a9f995",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "data/feeds-speeds/sienci-router-reference.v1.json",
+    "sha256": "f4eb0bb6d50d4dff357f002205b262fd458d54035eed4db81359305ba1286748",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "frontend/public/feeds-speeds/CC-BY-SA-4.0.txt",
+    "sha256": "4d66e4499b703e54c7bba4459f74a166d6cc67693abaca3559163279079b964c",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "frontend/public/feeds-speeds/README.md",
+    "sha256": "1ec38718550cc7225847206f8b4526b15cd80212aed271ba63841c975aa588e9",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "frontend/public/feeds-speeds/packs/sienci-longmill.v1.json",
+    "sha256": "89b703be88ef9cafa748c1d8c7d38fb925a8785b770ae1d880e4070dd5b6d5b0",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "frontend/public/feeds-speeds/packs/sienci-longmill.v3.json",
+    "sha256": "37e607ff2797495c0bec5d0dfdb8aa93cbcff33cc1b89a018a39785064a9f995",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "frontend/public/feeds-speeds/registry.v1.json",
+    "sha256": "2d5dfa328ab98d06640311bbcc3ebddcd22c523273b566d80c8004e56e8c244c",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  },
+  {
+    "file": "frontend/public/feeds-speeds/sienci-router-reference.v1.json",
+    "sha256": "f4eb0bb6d50d4dff357f002205b262fd458d54035eed4db81359305ba1286748",
+    "tests": [],
+    "retired_behavior": "Recommendation ranking/calculation/interpolation, aggressiveness, source pack policy or shipped manufacturer data",
+    "embedded_safety": null,
+    "replacement": null
+  }
+]
