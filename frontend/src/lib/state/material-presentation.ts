@@ -1,6 +1,11 @@
 /** Presentation only. Nothing in this module establishes cutting compatibility. */
 import type { MsgKey } from '../i18n';
-import { NORMALIZED_MATERIALS, type LoadedSource } from './feeds-speeds-sources';
+import { MATERIAL_CATALOG } from './material-catalog';
+export interface MaterialSource {
+  id: string;
+  label: string;
+  catalog: { materials: { identity: Identity; label: string }[] };
+}
 type Identity = { id: string; revision: string };
 export type MaterialFamily = 'wood' | 'plastic' | 'metal' | 'unknown';
 export const materialFamilyKeys: Record<MaterialFamily, MsgKey> = {
@@ -41,17 +46,15 @@ export function normalizeMaterialSearch(text: string): string {
 export function materialPresentation(id: Identity) {
   const taxon = id.revision === '1' && id.id.startsWith('material/') ? id.id.slice(9) : '';
   const known = Object.hasOwn(concepts, taxon);
-  const broad = id.id === 'sienci-softwood-soft-plywood-mdf' && id.revision === '1';
+  const broad = false;
   const path = known ? taxon.split('.').map((_, i, parts) => parts.slice(0, i + 1).join('.')) : [];
   return {
-    family: (known ? taxon.split('.')[0] : broad ? 'wood' : 'unknown') as MaterialFamily,
+    family: (known ? taxon.split('.')[0] : 'unknown') as MaterialFamily,
     broad,
     keys: path.map((p) => concepts[p].key),
-    aliases: broad
-      ? 'wood products bois holz holzwerkstoffe softwood plywood contreplaqué sperrholz mdf medium'
-      : known
-        ? path.map((p) => concepts[p].aliases).join(' ')
-        : 'unclassified nicht klassifiziert',
+    aliases: known
+      ? path.map((p) => concepts[p].aliases).join(' ')
+      : 'unclassified nicht klassifiziert',
   };
 }
 export function materialDisplay(
@@ -73,7 +76,7 @@ export type MaterialOption = {
 };
 const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 export function materialOptions(
-  sources: LoadedSource[],
+  sources: MaterialSource[],
   current?: Identity & { label?: string },
 ): MaterialOption[] {
   const entries = new Map<string, MaterialOption>();
@@ -96,7 +99,7 @@ export function materialOptions(
     if (!entry.labels.includes(label)) entry.labels.push(label);
     if (source && !entry.sources.some((s) => s.key === source.key)) entry.sources.push(source);
   }
-  for (const m of NORMALIZED_MATERIALS) add(m.identity, m.label);
+  for (const m of MATERIAL_CATALOG) add(m.identity, m.label);
   for (const source of sources)
     for (const m of source.catalog.materials)
       add(m.identity, m.label, { key: source.id, name: source.label });

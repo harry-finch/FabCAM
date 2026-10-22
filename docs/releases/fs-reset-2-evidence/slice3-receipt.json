@@ -1,0 +1,36 @@
+{
+  "source_sha": "b6a41d6251c490a26620b9f0e376debff8de2b7a",
+  "slice": 3,
+  "files": {
+    "docs/releases/FS_RESET_2_IMPLEMENTATION.md": "c01a99c7e9dae04c83c0236b3b26bb6394ac3d87e50d759a27bf1e0c82b526cb",
+    "docs/shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md": "441bf638cabecc801fbe2b2699e7e7e38f0578ec230f6e31c6f28095913b42cf",
+    "frontend/src/App.svelte": "9b129f0c29a6a6ff23ae7d5650218a01be231a08e6eff387691d7451bd907041",
+    "frontend/src/lib/components/MaterialPicker.svelte": "1cf92ac694b9178f4305f9a58f39854bdd8671142432b78e9684c67005aace38",
+    "frontend/src/lib/components/SettingsDialog.svelte": "a2797edd1f0ebd2685bd8b92079f5aeeb0f135633502a74d296cf6ae60b28048",
+    "frontend/src/lib/components/op_properties/CuttingParameters.svelte": "f84aeba128a78f3f7ff162beefcbbbe6d52ae4525fea77d1410e2f4f09ec8a53",
+    "frontend/src/lib/state/cutting-workflow.ts": "bad30862da702644400775a1987870a876133f8565164ca8307b8829170a4e7a",
+    "frontend/src/lib/state/material-picker-presentation.test.ts": "0397d016b231350c82c2f13f63d6f88e734eede5a3bbdb1799ba42da0ecc1a5c",
+    "frontend/src/lib/state/material-presentation.test.ts": "5c7fcc719be94bd5aeac1c56479127509904eb24446508979498ebb794be4f98",
+    "frontend/src/lib/state/material-presentation.ts": "09005796118de723a6cd5fe187aa6be503f7b5b07cfa1789f4dce8aebc5dfba9",
+    "frontend/src/lib/state/material-catalog.ts": "0840eeea5929197846607cd65d656ab79967d29d7a6ae29cd1b61de9ba790a54",
+    "frontend/src/lib/state/preset-library-v9.ts": "a23cf96c4062ce136e12d684ae602be664aa9172b856741c2e8ec8305a3de71e",
+    "frontend/src/lib/state/preset-library-v9.test.ts": "d47ce398729bb146cf035ebdcc2fab727b4d3d68726108a4b1bbf8e89099bef8",
+    "frontend/src/lib/services/preset-collection-files.ts": "5eaf15a1fa3b6bab56bafbf4a214f86be9724d7bcc91747441cf0bbe3f7ff305",
+    "frontend/src/lib/services/preset-collection-files.test.ts": "f477554425f3bd8a4e93a31506cf5f686215e1f4662b1bfff60afe9a3fcc129c",
+    "frontend/src/lib/components/TestedPresetEditor.svelte": "9b10b708407d7c95abdf8760e8a2412da5f2718b06e0391caf3634ea9e788635",
+    "frontend/src/lib/components/TestedPresetsLibrary.svelte": "727699ebd47564523a830fb8f6e5aa9170f1723ffa73eac9da3dddd23e3820a3",
+    "docs/releases/fs-reset-2-evidence/slice3-tests.log": "6804d7c55ff74f8162c5ac16794fb222650711935268381f89e6c8ab39d1acae",
+    "docs/releases/fs-reset-2-evidence/slice3-check.log": "cd7b82b438d15dde0ee4fccc9167f84434fd4c8040117480b758b08920438435",
+    "docs/releases/fs-reset-2-evidence/slice3-build.log": "01b9f152dcefb68f312fb5582eb6d9050d5b7f15202d0061887cd316ab10ba2b",
+    "docs/releases/fs-reset-2-evidence/slice3-lint.log": "566824760924fd34646e68e5fc8cf4f7b245d1c8bb895625cae0fef2785c3688",
+    "docs/releases/fs-reset-2-evidence/slice3-lint-recheck.log": "0b2eec482686d4779e5ed16a3f567724e28b717a63bf7fa0a5da5673f117e441",
+    "docs/releases/fs-reset-2-evidence/slice3-library-desktop.jpg": "84c9e1062ec0777d06de616009361f0b705015a2dcdb13016005b7e409f6701b",
+    "docs/releases/fs-reset-2-evidence/slice3-library-narrow.jpg": "3e5fdb7bf7330118fcecef0f882f9dbc5f6a6108a7bdcddf9bd9d480af31a7e7"
+  },
+  "limitations": [
+    "Browser download rejected by authorization gate; real browser round-trip not attempted via workaround",
+    "Native dialogs tested with mocks; no installed-app qualification",
+    "Empty software-QA browser collection retained; no pre-existing data removed",
+    "One initial lint formatting finding corrected; recheck passed"
+  ]
+}

@@ -19,10 +19,8 @@ describe('compact material labels preserve exact classification boundaries', () 
     ['material/wood.plywood.birch', 'Plywood — Birch'],
     ['material/wood.mdf', 'MDF'],
   ])('renders %s concisely', (id, expected) => expect(label(id)).toBe(expected));
-  it('labels the already classified broad source without inventing a variant', () => {
-    expect(label('sienci-softwood-soft-plywood-mdf')).toBe(
-      'Softwood / soft plywood / MDF — Broad source category',
-    );
+  it('keeps removed manufacturer categories as custom identities without inventing a variant', () => {
+    expect(label('sienci-softwood-soft-plywood-mdf')).toBe('Custom / unavailable material');
   });
   it('does not classify unknown IDs/revisions or expose technical IDs as collapsed names', () => {
     expect(label('private-material', 'Original human label')).toBe('Original human label');

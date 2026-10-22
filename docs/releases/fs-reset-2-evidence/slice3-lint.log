@@ -1,0 +1,19 @@
+src/App.svelte 289ms (unchanged)
+src/lib/components/MaterialPicker.svelte 21ms (unchanged)
+src/lib/components/SettingsDialog.svelte 56ms (unchanged)
+src/lib/components/TestedPresetEditor.svelte 19ms (unchanged)
+src/lib/components/TestedPresetsLibrary.svelte 53ms (unchanged)
+src/lib/components/op_properties/CuttingParameters.svelte 49ms (unchanged)
+src/lib/services/preset-collection-files.ts 20ms (unchanged)
+src/lib/state/cutting-workflow.ts 9ms (unchanged)
+src/lib/state/material-catalog.ts 2ms (unchanged)
+src/lib/state/material-picker-presentation.test.ts 7ms
+src/lib/state/material-presentation.test.ts 6ms (unchanged)
+src/lib/state/material-presentation.ts 7ms (unchanged)
+src/lib/state/preset-library-v9.test.ts 5ms (unchanged)
+src/lib/state/preset-library-v9.ts 6ms (unchanged)
+
+/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/src/lib/components/TestedPresetsLibrary.svelte
+  209:7  error  Unexpected newline between object and [ of property access  no-unexpected-multiline
+
+✖ 1 problem (1 error, 0 warnings)

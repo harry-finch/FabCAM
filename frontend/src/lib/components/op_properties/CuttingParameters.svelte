@@ -16,6 +16,7 @@
     saveCollection,
     type PresetCollection,
   } from '../../state/preset-collections';
+  import { testedRows } from '../../state/preset-library-v9';
   import './op-properties.css';
   let { op }: { op: OpEntry } = $props();
   let role = $state<CuttingRole>('rough');
@@ -242,15 +243,15 @@
             Choose an exact machine, tool and material configuration, then review the replacement.
           </p>
           <div class="choices">
-            {#each collections as c (c.data.id)}{#each c.data.presets as preset (preset.id)}<button
-                  class="choice"
-                  disabled={busy}
-                  onclick={() => review(c.data, preset.id)}
-                  ><strong>{preset.name}</strong><small
-                    >{c.data.name} · {preset.context.machine_label} · {preset.context
-                      .material_label}</small
-                  ></button
-                >{/each}{/each}
+            {#each testedRows(collections.map((c) => c.data)) as row (row.key)}<button
+                class="choice"
+                disabled={busy}
+                onclick={() => review(row.collection, row.preset.id)}
+                ><strong>{row.preset.name}</strong><small
+                  >{row.collection.name} · {row.preset.context.machine_label} · {row.tools} · {row
+                    .preset.context.material_label} · {row.operation}</small
+                ></button
+              >{/each}
           </div>
           {#if !busy && !collections.some((c) => c.data.presets.length)}<p class="basis">
               No tested presets yet. Save a tested configuration or import a collection in Presets.

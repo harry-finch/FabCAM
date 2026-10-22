@@ -90,6 +90,7 @@ export async function preparePresetLoad(
     patch,
     before: op.cutting?.rates ?? [],
     after: next.params.cutting!.rates,
+    parameters: next.params.cutting!.preset_snapshot!.parameters,
     command: reviewedCuttingCommand(id, key, patch),
   };
 }

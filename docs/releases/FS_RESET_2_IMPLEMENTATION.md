@@ -6,7 +6,7 @@ Engineering tracker: `ivac-jcr1o`. This report is updated with each qualified sl
 
 ## Implementation state
 
-Slices 1–2 establish the contracts/storage and explicit operation workflow. Slices 3–4 remain pending;
+Slices 1–3 establish the contracts/storage, explicit workflow and collection library. Slice 4 remains pending;
 this intermediate commit does not claim that the product UI or every driver has switched.
 The legacy engine is retained temporarily; there is no new recommendation wrapper.
 FS-RESET-3 removal, FabSpeed integration, publication and physical operation are unauthorized.
@@ -113,3 +113,40 @@ Visual browser QA is pending: port 5173 was unavailable; opening a local listene
 the sandbox (EPERM). The maintainer has been asked to start the existing dev script. No user
 application-data file was modified for UI testing. Source-pack settings and the old library
 remain temporarily active until the immediately following slice 3.
+
+## Slice 3 — tested collection library and neutral MAT-1
+
+Source: `b6a41d6` (qualified slice 2). The active Presets tab now has named collection
+create/rename/delete, preset inspect/edit/duplicate/delete, capture from an existing operation,
+reviewed load, and collection import/export. Both load surfaces share a display-only row model;
+only core exact-context validation authorizes a copy. Deletion names the reviewed item and
+preserves copied operation values. Every update/delete uses its reviewed optimistic token.
+Import validates before writing and presents explicit replace-versus-independent-copy choices.
+
+Rates, context or test-date edits require a fresh unchecked attestation bound to those values.
+Name/notes edits and exact duplication retain the original author claim. A context can be
+replaced explicitly from the selected operation. Imported attestations are displayed as source
+claims, never current-workshop qualification. No live source links are created.
+
+The active source enablement panel and old recommendation library are disconnected; their
+implementation files remain for FS-RESET-3 review. MAT-1 now consumes a neutral 19-entry catalog
+and collection-context projections, retaining family/variant aliases, exact revision identities,
+unknown/custom selection, deterministic aggregation, search and pagination. The Sienci-specific
+presentation mapping is deliberately removed; tests now assert unknown/custom preservation.
+Machine/tool asset storage and existing application data are not reset.
+
+Qualification: **37 frontend tests PASS** across seven affected files, covering attestation
+renewal, explicit import collisions, immutable filtering, MAT-1, v9, real WASM and selected-file
+read/write/cancel/scope-error behavior. Targeted ESLint (one formatter-induced optional-index
+finding corrected), typecheck **0 errors / 0 warnings**, fresh-package production build PASS.
+No Rust/WASM schema changed in this slice. Existing native CAS/path/storage qualification
+continues to apply; mocked file-plugin tests do not establish installed native-dialog behavior.
+
+Browser QA on the maintainer-started server: empty collection creation and rename persisted
+successfully; desktop and 640px layouts captured in `slice3-library-*.jpg`. One explicitly named
+empty software-QA collection remains in the browser's new store. No physical testing was claimed.
+The browser's automatic authorization review refused the collection download, so the real
+browser export/import loop was **not performed** and was not retried by another route.
+Populated inspector/role workflow checks continue in slice 4. Native export of a collection uses
+the existing dialog-granted filesystem plugin scope; it is a backup write, not a program-export
+qualification or multi-file atomicity claim. `ivac-file-export` and its program guards are unchanged.

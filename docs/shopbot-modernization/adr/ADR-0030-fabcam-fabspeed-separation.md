@@ -127,3 +127,5 @@ existing supported role without hidden defaults or duplicate executable values.
 Explicit maintainer approval received on 2026-10-22. The four bounded slices are authorized; implementation and qualification are in progress. Acceptance of this architecture is not a claim that the replacement is implemented. Legacy removal (FS-RESET-3) remains subject to a separate human review.
 
 Slices 1–2 implemented: neutral explicit contracts/storage, direct operation editing, reviewed copy/attestation and v9 save/open. Collection UI/MAT-1 decoupling and all-role integration are pending slices 3–4; see the evolving FS-RESET-2 report.
+
+Slice 3 implemented: active tested-collection library, explicit import collision handling, renewed edit attestation and neutral MAT-1 catalog. Specialized driver integration/output qualification remains slice 4.

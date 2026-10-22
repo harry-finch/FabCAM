@@ -13,7 +13,7 @@
   let Scene3D = $state<Scene3DComp | null>(null);
   let scene3dLoading = $state(false);
   import LayerList from './lib/components/LayerList.svelte';
-  import PresetsLibrary from './lib/components/PresetsLibrary.svelte';
+  import PresetsLibrary from './lib/components/TestedPresetsLibrary.svelte';
   import TextList from './lib/components/TextList.svelte';
   import OperationsList from './lib/components/OperationsList.svelte';
   import BottomSheet from './lib/components/BottomSheet.svelte';

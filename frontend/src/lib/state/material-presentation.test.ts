@@ -6,16 +6,15 @@ import {
   materialDisplay,
   materialIdentityKey,
 } from './material-presentation';
-import type { LoadedSource } from './feeds-speeds-sources';
+import type { MaterialSource } from './material-presentation';
 function source(
   id: string,
   materials: { identity: { id: string; revision: string }; label: string }[],
-): LoadedSource {
+): MaterialSource {
   return {
     id,
     label: `Workshop ${id}`,
-    contents: '',
-    catalog: { description: 'Synthetic test catalog', materials, machines: [], tools: [] },
+    catalog: { materials },
   };
 }
 const item = (id: string, label = 'Same name', revision = '1') => ({
@@ -50,9 +49,10 @@ describe('MAT-1 presentation does not establish equivalence', () => {
     );
     const options = materialOptions([source('public@1', [broad])]);
     expect(options).toHaveLength(20);
-    expect(filterMaterials(options, 'medium')).toHaveLength(2);
+    expect(filterMaterials(options, 'medium')).toHaveLength(1);
     expect(filterMaterials(options, 'mdf', '', 'public@1')[0].identity).toEqual(broad.identity);
-    expect(filterMaterials(options, 'mdf', '', 'public@1')[0].broad).toBe(true);
+    expect(filterMaterials(options, 'mdf', '', 'public@1')[0].broad).toBe(false);
+    expect(filterMaterials(options, 'mdf', '', 'public@1')[0].family).toBe('unknown');
   });
   it('keeps same-name private identities separate and source-order selection deterministic', () => {
     const a = source('a@1', [item('private-a'), item('shared', 'Z name')]);

@@ -1,9 +1,10 @@
 <script lang="ts">
   import './op_properties/op-properties.css';
   import { tick } from 'svelte';
-  import { project } from '../state/project.svelte';
   import type { MaterialIdentity } from '../state/project-types';
-  import { recommendationSources } from '../state/feeds-speeds-sources.svelte';
+  import { listCollections, validateCollection } from '../state/preset-collections';
+  import { collectionMaterials } from '../state/preset-library-v9';
+  import type { MaterialSource } from '../state/material-presentation';
   import { materialOptions, materialIdentityKey } from '../state/material-presentation';
   import { materialPickerLabel } from '../state/material-picker-presentation';
   import MaterialBrowser from './MaterialBrowser.svelte';
@@ -23,11 +24,27 @@
     custom = $state(false),
     customName = $state('');
   let trigger = $state<HTMLButtonElement>();
+  let sources = $state<MaterialSource[]>([]);
+  let sourceError = $state('');
   $effect(() => {
-    void project.data.settings.feedsSpeedsSources;
-    void recommendationSources.refresh();
+    if (!browsing) return;
+    let cancelled = false;
+    void listCollections()
+      .then((rows) => Promise.all(rows.map((r) => validateCollection(r.json))))
+      .then((rows) => {
+        if (!cancelled) {
+          sources = collectionMaterials(rows);
+          sourceError = '';
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) sourceError = String(e);
+      });
+    return () => {
+      cancelled = true;
+    };
   });
-  const materials = $derived(materialOptions(recommendationSources.rows, value));
+  const materials = $derived(materialOptions(sources, value));
   const selected = $derived(
     value ? materials.find((m) => m.key === materialIdentityKey(value)) : undefined,
   );
@@ -84,6 +101,7 @@
       label={t('fs.material')}
       onClose={closeBrowser}
     >
+      {#if sourceError}<p role="status">Collection materials unavailable: {sourceError}</p>{/if}
       {#if custom}
         <form
           class="custom-form"
