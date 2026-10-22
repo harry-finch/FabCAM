@@ -11,8 +11,6 @@ import type {
   GenerateRequest,
   GenerateResponse,
   TwoSidedGenerateResponse,
-  FsCamRequest,
-  FsCamResponse,
   HelixRadiusRequest,
   HelixRadiusResponse,
   ImportResponse,
@@ -141,16 +139,6 @@ export class HttpWiacClient implements WiacClient {
     });
     if (!res.ok) await throwHttpError('/text/layer', res);
     return (await res.json()) as RenderTextLayerResponse;
-  }
-
-  async feedsSpeeds(request: FsCamRequest): Promise<FsCamResponse> {
-    const res = await fetch(`${this.base}/feeds-speeds`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(request),
-    });
-    if (!res.ok) await throwHttpError('/feeds-speeds', res);
-    return (await res.json()) as FsCamResponse;
   }
 
   async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
@@ -526,11 +514,6 @@ class WasmClientLazy {
         ),
       renderText: (req) => ensure().then((c) => c.renderText(req)),
       renderTextLayer: (layer) => ensure().then((c) => c.renderTextLayer(layer)),
-      feedsSpeeds: (req) =>
-        ensure().then((c) => {
-          if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
-          return c.feedsSpeeds(req);
-        }),
       evaluateDrawing: (req) =>
         ensure().then((c) => {
           if (!c.evaluateDrawing) throw new Error('Backend does not support GEOM1');
@@ -596,11 +579,6 @@ class TauriClientLazy {
         ),
       renderText: (req) => ensure().then((c) => c.renderText(req)),
       renderTextLayer: (layer) => ensure().then((c) => c.renderTextLayer(layer)),
-      feedsSpeeds: (req) =>
-        ensure().then((c) => {
-          if (!c.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this build');
-          return c.feedsSpeeds(req);
-        }),
       evaluateDrawing: (req) =>
         ensure().then((c) => {
           if (!c.evaluateDrawing) throw new Error('Backend does not support GEOM1');

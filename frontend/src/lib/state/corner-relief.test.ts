@@ -89,8 +89,8 @@ describe('persistent corner relief', () => {
   });
   it('round-trips v9 relief and refuses malformed geometry', () => {
     const file = explicitProjectFixture({
-      kind: 'ivac-project-cad',
-      version: 5,
+      kind: 'ivac-project',
+      version: 9,
       imports,
       cornerRelief: modifier(),
     } as ProjectFile);

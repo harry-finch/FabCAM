@@ -1,0 +1,43 @@
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.72s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-1cfdf37ed6c9045d)
+
+running 36 tests
+test cam::halfpipe::tests::circular_arc_profile_depth_curve ... ok
+test cam::halfpipe::tests::v_bottom_profile_depth_curve ... ok
+test gcode::post_profile::tests::profile_serde_round_trip ... ok
+test pipeline::count_tool_changes_tests::profile_op_with_distinct_finish_tool_counts_one_change ... ok
+test gcode::post_profile::tests::bundled_mach3_profile_has_percent_brackets ... ok
+test gcode::post_profile::tests::post_profile_with_axes_serde_round_trip ... ok
+test gcode::tests::profile_circle_gcode_smaller_with_arc_fitting ... ok
+test pipeline::offset_builder::tests::profile_offset_open_polyline_either_offsets_or_emits_nothing_never_on_line ... ok
+test pipeline::offset_builder::tests::profile_outside_selecting_inner_circle_offsets_outward ... ok
+test pipeline::offset_builder::tests::profile_offset_actually_offsets_outside_inside_on ... ok
+test pipeline::offset_builder::tests::profile_offset_via_wire_json_outside_actually_offsets ... ok
+test pipeline::offset_builder::tests::profile_outside_with_source_objects_actually_offsets ... ok
+test pipeline::offset_builder::tests::profile_op_uses_finish_feed_and_speed ... ok
+test pipeline::tests::chamfer_after_deep_profile_keeps_own_depth ... ok
+test pipeline::tests::post_profile_axes_config_drives_axis_emission ... ok
+test pipeline::tests::post_profile_overrides_program_start_and_end ... ok
+test pipeline::tests::post_profile_disabled_axis_drops_the_word ... ok
+test pipeline::tests::post_profile_without_axes_keeps_legacy_output ... ok
+test pipeline::warnings::tests::op_order_drill_after_profile_emits_warning ... ok
+test pipeline::offset_builder::tests::profile_offset_works_for_cw_and_ccw_input ... ok
+test pipeline::warnings::tests::op_order_drill_before_profile_no_warning ... ok
+test project::op::tests::operation_default_is_an_outside_profile_on_all_geometry ... ok
+test sim::heightmap::tests::endmill_profile_zero_inside_r_none_outside ... ok
+test sim::heightmap::tests::ball_nose_profile_matches_analytic ... ok
+test sim::heightmap::tests::form_profile_dovetail_interval_ceiling_slopes_with_radius ... ok
+test sim::heightmap::tests::form_profile_eval_interval_models_finite_undercut_ceiling ... ok
+test sim::heightmap::tests::from_tool_form_profile_one_sample_falls_back_to_taper ... ok
+test sim::heightmap::tests::from_tool_form_profile_uses_user_samples ... ok
+test sim::heightmap::tests::vbit_profile_with_tip_flat ... ok
+test sim::holder::tests::form_profile_cutting_radius_matches_max_segment_radius ... ok
+test sim::holder::tests::profile_from_tool_cylinder ... ok
+test sim::heightmap::tests::from_tool_tslot_as_form_profile_carves_head_radius ... ok
+test sim::holder::tests::profile_radius_at_interpolates ... ok
+test sim::timing::tests::triangular_profile_short_segment ... ok
+test pipeline::tests::ldu2_tessellated_circle_profile_collapses_to_arcs ... ok
+test pipeline::cutting_v9_tests::v9_test1_shopbot_profile_and_vcarve_match_established_sources ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 1193 filtered out; finished in 0.59s

@@ -18,7 +18,6 @@ pub mod corner_relief;
 pub mod cutting_parameters;
 pub mod drawing;
 pub mod errors;
-pub mod feeds_speeds;
 pub mod gcode;
 pub mod geometry;
 pub mod input;

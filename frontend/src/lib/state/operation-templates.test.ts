@@ -100,7 +100,7 @@ describe('UX4 reusable operation templates', () => {
     expect(next.cutting?.rates.every((slot) => slot.rpm === 18000)).toBe(true);
     template.tool.rough.rpm = 1;
     expect(next.cutting?.rates[0].rpm).toBe(18000);
-    expect(op.appliedCutting).toBeUndefined();
+    expect('appliedCutting' in op).toBe(false);
   });
   it('requires all destination choices, current IDs, milling mode and compatible physical tool', () => {
     const template = captureTemplate(source(), [sourceTool], 'Pocket', 't');

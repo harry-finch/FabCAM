@@ -2674,10 +2674,7 @@ where
         // per-op effects live in compute_op_cache_key / apply_cached_op /
         // store_op_cache; this loop keeps only the control flow (hit ⇒
         // bookkeep + continue; miss ⇒ emit + store + fall through).
-        let cache_key = if op.params.cutting.is_some()
-            || op.params.applied_cutting.is_some()
-            || project.fs_context.is_some()
-        {
+        let cache_key = if op.params.cutting.is_some() {
             None
         } else {
             compute_op_cache_key(

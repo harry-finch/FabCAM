@@ -113,9 +113,6 @@ export type LeadKind = 'off' | 'straight' | 'arc';
 export interface OpBase {
   cutting?: import('../api/generated').components['schemas']['MillingCutting'];
   geometryBinding?: import('./drawing').GeometryBinding;
-  appliedCutting?: import('../api/generated').components['schemas']['AppliedCutting'];
-  fsFullWidth?: boolean;
-  appliedContextKey?: string;
   id: number;
   name: string;
   enabled: boolean;

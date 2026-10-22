@@ -1359,7 +1359,6 @@ export type MsgKey =
   | "palette.inventory"
   | "palette.keyboard"
   | "palette.layers"
-  | "palette.legacy"
   | "palette.machine"
   | "palette.manual"
   | "palette.menu"
@@ -1379,7 +1378,6 @@ export type MsgKey =
   | "palette.result_count"
   | "palette.results"
   | "palette.review_operation"
-  | "palette.review_rates"
   | "palette.save"
   | "palette.search"
   | "palette.select_operation"
@@ -3683,7 +3681,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "palette.inventory",
   "palette.keyboard",
   "palette.layers",
-  "palette.legacy",
   "palette.machine",
   "palette.manual",
   "palette.menu",
@@ -3703,7 +3700,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "palette.result_count",
   "palette.results",
   "palette.review_operation",
-  "palette.review_rates",
   "palette.save",
   "palette.search",
   "palette.select_operation",

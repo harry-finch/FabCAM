@@ -461,7 +461,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -510,7 +509,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -561,7 +559,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -607,7 +604,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -649,7 +645,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -728,7 +723,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -785,7 +779,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -835,7 +828,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let err = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -893,7 +885,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -969,7 +960,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let err = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1033,7 +1023,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1080,7 +1069,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1184,7 +1172,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         for mode in [
             crate::project::MachineMode::Laser,
@@ -1311,7 +1298,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1374,7 +1360,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1449,7 +1434,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1518,7 +1502,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {

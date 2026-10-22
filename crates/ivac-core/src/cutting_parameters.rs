@@ -176,10 +176,7 @@ pub fn validate_structure(op: &Op) -> Result<(), String> {
     if actual != sorted {
         return Err("Cutting roles are missing, duplicated or assigned to a different tool".into());
     }
-    if op.params.applied_cutting.is_some()
-        || op.params.feed_rate_override.is_some()
-        || op.params.plunge_rate_override.is_some()
-    {
+    if op.params.feed_rate_override.is_some() || op.params.plunge_rate_override.is_some() {
         return Err("Legacy cutting overrides are not part of the v9 contract".into());
     }
     Ok(())
@@ -231,10 +228,7 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
     if op.is_program_only() {
         return out;
     }
-    if op.params.applied_cutting.is_some()
-        || op.params.feed_rate_override.is_some()
-        || op.params.plunge_rate_override.is_some()
-    {
+    if op.params.feed_rate_override.is_some() || op.params.plunge_rate_override.is_some() {
         out.errors
             .push("Legacy cutting overrides are unsupported in v9".into());
     }
@@ -642,9 +636,6 @@ pub fn require_current(project: &Project) -> Result<(), String> {
             "Generation requires explicit cutting contract v9; legacy projects are unsupported"
                 .into(),
         );
-    }
-    if project.fs_context.is_some() {
-        return Err("Legacy source context is unsupported in v9".into());
     }
     Ok(())
 }

@@ -3,7 +3,8 @@ import type { ProjectFile } from './project-types';
 import { validateCuttingStructure } from './cutting-parameters';
 import { validateProjectGeometry } from './project-geometry-validation';
 /** Validate before changing any current document state. Null rates remain editable. */
-export function validateProjectV9(value: ProjectFile): void {
+export function validateProjectV9(input: unknown): asserts input is ProjectFile {
+  const value = input as ProjectFile;
   if (!value || value.kind !== 'ivac-project' || value.version !== 9)
     throw new Error(
       'This FabCAM requires project format v9. Versions 1–8 are unsupported; the original file was kept.',
@@ -15,7 +16,7 @@ export function validateProjectV9(value: ProjectFile): void {
     !value.machine
   )
     throw new Error('Incomplete v9 project');
-  if (value.fsContext) throw new Error('Legacy source context is not supported in v9');
+  if ('fsContext' in value) throw new Error('Legacy source context is not supported in v9');
   validateProjectGeometry(value);
   const ids = new Set<number>();
   for (const t of value.tools) {
@@ -29,7 +30,9 @@ export function validateProjectV9(value: ProjectFile): void {
       throw new Error('Invalid or duplicate operation ID');
     ops.add(op.id);
     if (
-      op.appliedCutting ||
+      'appliedCutting' in op ||
+      'fsFullWidth' in op ||
+      'appliedContextKey' in op ||
       op.feedRateOverride !== undefined ||
       op.plungeRateOverride !== undefined
     )

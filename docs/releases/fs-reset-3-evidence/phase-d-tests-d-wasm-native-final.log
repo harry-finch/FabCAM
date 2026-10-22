@@ -1,0 +1,31 @@
+   Compiling ivac-wasm v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.47s
+     Running unittests src/lib.rs (target/debug/deps/ivac_wasm-7c5b153b6a9be14c)
+
+running 24 tests
+test sim::tests::data_ptr_and_len_consistent_with_cols_rows ... ok
+test sim::tests::deviation_recompute_in_matches_full_over_the_dirty_aabb ... ok
+test sim::tests::advance_clears_previous_dirty_so_aabb_reflects_only_this_call ... ok
+test sim::tests::deviation_flags_gouge_under_plunge_and_reststock_around_it ... ok
+test sim::tests::advance_with_no_cuts_returns_empty_aabb ... ok
+test sim::tests::advance_endmill_plunge_lowers_cells_and_returns_dirty_aabb ... ok
+test sim::tests::clear_toolpath_drops_warning_cache ... ok
+test sim::tests::audit_15_16_reset_then_changed_tool_rechecks_cached_warnings ... ok
+test sim::tests::checkpoint_same_index_overwrites ... ok
+test sim::tests::deviation_unions_multiple_targets_deepest_wins ... ok
+test sim::tests::nearest_checkpoint_picks_largest_at_or_below_target ... ok
+test sim::tests::new_initializes_heightmap_to_top_z ... ok
+test sim::tests::partial_advance_cut_only_touches_swept_chunk ... ok
+test sim::tests::partial_advance_emits_rapid_warning_only_on_first_slice ... ok
+test sim::tests::partial_advance_plunge_grows_as_t_advances ... ok
+test sim::tests::re_sweep_replays_cached_diagnostics_identically ... ok
+test sim::tests::reset_restores_top_z_and_no_dirty ... ok
+test sim::tests::checkpoint_restore_then_replay_matches_full_replay ... ok
+test sim::tests::three_axis_advance_keeps_sidecar_empty ... ok
+test sim::tests::restore_checkpoint_marks_whole_grid_dirty ... ok
+test sim::tests::form_tool_advance_populates_undercut_sidecar ... ok
+test sim::tests::checkpoint_restore_round_trips_undercut_sidecar ... ok
+test test1_bridge::native_bridge_preserves_non_executable_collision_diagnostic ... ok
+test test1_bridge::shared_profile_and_vcarve_requests_replay_through_native_bridge ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s

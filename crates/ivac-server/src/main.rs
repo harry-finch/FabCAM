@@ -69,7 +69,6 @@ async fn main() -> Result<()> {
         .route("/corner-relief", post(corner_relief_handler))
         .route("/drawing", post(drawing_handler))
         .route("/generate-drawing", post(generate_drawing_handler))
-        .route("/feeds-speeds", post(feeds_speeds_handler))
         .route("/presets/command", post(preset_command_handler))
         .route("/relief/stl", post(relief_stl_handler));
     // Post-library surfaces exist only in cps builds; the /version
@@ -214,7 +213,6 @@ async fn version() -> Json<VersionResponse> {
                 "import-dxf",
                 "generate-gcode",
                 "cutting-parameters-v9",
-                "feeds-speeds",
                 "stream-gcode",
                 "post-linuxcnc",
                 "post-grbl",
@@ -783,17 +781,7 @@ async fn preset_command_handler(
 ) -> Result<Json<serde_json::Value>, AppError> {
     ivac_core::presets::command(req)
         .map(Json)
-        .map_err(|e| AppError::bad_request(e))
-}
-
-async fn feeds_speeds_handler(
-    Json(req): Json<ivac_core::feeds_speeds::FsCamRequest>,
-) -> Result<Json<ivac_core::feeds_speeds::FsCamResponse>, AppError> {
-    let response = tokio::task::spawn_blocking(move || ivac_core::feeds_speeds::feeds_speeds(req))
-        .await
-        .map_err(|e| AppError::internal(e.to_string()))?
-        .map_err(AppError::bad_request)?;
-    Ok(Json(response))
+        .map_err(AppError::bad_request)
 }
 
 async fn corner_relief_handler(

@@ -40,7 +40,7 @@ fn request() -> Value {
     ))
     .unwrap()
 }
-fn success(out: Output) -> Value {
+fn success(out: &Output) -> Value {
     assert!(
         out.status.success(),
         "{}",
@@ -48,7 +48,7 @@ fn success(out: Output) -> Value {
     );
     serde_json::from_slice(&out.stdout).expect("stdout must contain only JSON")
 }
-fn refused(out: Output) {
+fn refused(out: &Output) {
     assert!(!out.status.success());
     assert!(out.stdout.is_empty(), "failure emitted stdout");
 }
@@ -69,7 +69,7 @@ fn canonical_posts_match_authoritative_pipeline_and_shopbot_golden() {
             |_, _, _| {},
         )
         .unwrap();
-        let actual = success(dir.run(&req, &[]));
+        let actual = success(&dir.run(&req, &[]));
         assert_eq!(actual["gcode"], expected.gcode);
         assert_eq!(
             actual["tool_provenance"],
@@ -99,7 +99,7 @@ fn effective_finish_values_are_not_library_or_rough_defaults() {
     req.as_object_mut().unwrap().remove("cps_post");
     req["project"]["operations"][0]["params"]["cutting"]["rates"][1] =
         json!({"role":"finish","tool_id":1,"rpm":13000,"feed_mm_min":410,"plunge_mm_min":110});
-    let actual = success(dir.run(&req, &[]));
+    let actual = success(&dir.run(&req, &[]));
     let g = actual["gcode"].as_str().unwrap();
     assert!(
         g.contains("S13000") && g.contains("F410") && g.contains("F110"),
@@ -121,12 +121,14 @@ fn geometry_template_matches_canonical_import_and_rejects_ambiguous_selection() 
     let geometry = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/fixtures/shopbot-m1/circle_d50.dxf");
     let path = geometry.to_str().unwrap();
-    let actual = success(dir.run(&req, &[path]));
-    let imported = ivac_core::input::import_path(&geometry, &Default::default()).unwrap();
+    let actual = success(&dir.run(&req, &[path]));
+    let imported =
+        ivac_core::input::import_path(&geometry, &ivac_core::input::ImportOptions::default())
+            .unwrap();
     let mut canonical = req.clone();
     canonical["project"]["segments"] = serde_json::to_value(imported.segments).unwrap();
-    assert_eq!(actual, success(dir.run(&canonical, &[])));
-    refused(dir.run(&canonical, &[path]));
+    assert_eq!(actual, success(&dir.run(&canonical, &[])));
+    refused(&dir.run(&canonical, &[path]));
     for pointer in [
         "/project/machine",
         "/project/operations/0/source",
@@ -137,7 +139,7 @@ fn geometry_template_matches_canonical_import_and_rejects_ambiguous_selection() 
     ] {
         let mut bad = req.clone();
         *bad.pointer_mut(pointer).unwrap() = Value::Null;
-        refused(dir.run(&bad, &[path]));
+        refused(&dir.run(&bad, &[path]));
     }
     for source in [
         json!({"kind":"objects","ids":[1]}),
@@ -145,17 +147,17 @@ fn geometry_template_matches_canonical_import_and_rejects_ambiguous_selection() 
     ] {
         let mut bad = req.clone();
         bad["project"]["operations"][0]["source"] = source;
-        refused(dir.run(&bad, &[path]));
+        refused(&dir.run(&bad, &[path]));
     }
     let mut bad = req.clone();
     bad["project"]["operations"][0]["enabled"] = json!(false);
-    refused(dir.run(&bad, &[path]));
+    refused(&dir.run(&bad, &[path]));
     let mut bad = req.clone();
     bad["project"]["operations"]
         .as_array_mut()
         .unwrap()
         .push(req["project"]["operations"][0].clone());
-    refused(dir.run(&bad, &[path]));
+    refused(&dir.run(&bad, &[path]));
 }
 #[test]
 fn invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing() {
@@ -166,13 +168,13 @@ fn invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing() {
         json!(0),
         json!(-1),
         json!(1.5),
-        json!(4294967296_u64),
+        json!(4_294_967_296_u64),
         json!("NaN"),
     ] {
         for field in ["rpm", "feed_mm_min", "plunge_mm_min"] {
             let mut bad = base.clone();
             bad["project"]["operations"][0]["params"]["cutting"]["rates"][1][field] = value.clone();
-            refused(dir.run(&bad, &[]));
+            refused(&dir.run(&bad, &[]));
         }
     }
     for (pointer, value) in [
@@ -192,7 +194,7 @@ fn invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing() {
     ] {
         let mut bad = base.clone();
         *bad.pointer_mut(pointer).unwrap() = value;
-        refused(dir.run(&bad, &[]));
+        refused(&dir.run(&bad, &[]));
     }
     for (object, key, value) in [
         ("machine", "spindle_rpm_max", json!(100)),
@@ -207,7 +209,7 @@ fn invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing() {
         } else {
             bad["project"]["tools"][0][key] = value;
         }
-        refused(dir.run(&bad, &[]));
+        refused(&dir.run(&bad, &[]));
     }
     for args in [
         vec!["--post", "grbl"],
@@ -217,16 +219,16 @@ fn invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing() {
         vec!["--outside"],
         vec!["--typo"],
     ] {
-        refused(dir.run(&base, &args));
+        refused(&dir.run(&base, &args));
     }
     let mut bad = base.clone();
     bad["post_processor"] = json!("grbl");
-    refused(dir.run(&bad, &[]));
+    refused(&dir.run(&bad, &[]));
     let mut bad = base.clone();
     bad["post_procesor"] = json!("grbl");
-    refused(dir.run(&bad, &[]));
+    refused(&dir.run(&bad, &[]));
     refused(
-        Command::new(env!("CARGO_BIN_EXE_ivac"))
+        &Command::new(env!("CARGO_BIN_EXE_ivac"))
             .args(["generate", "part.dxf"])
             .output()
             .unwrap(),
@@ -234,7 +236,7 @@ fn invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing() {
     let malformed = dir.0.join("bad.json");
     fs::write(&malformed, b"{bad").unwrap();
     refused(
-        Command::new(env!("CARGO_BIN_EXE_ivac"))
+        &Command::new(env!("CARGO_BIN_EXE_ivac"))
             .arg("generate")
             .arg("--request")
             .arg(malformed)
@@ -261,7 +263,7 @@ fn external_cps_reaches_security_guard_and_never_executes() {
             "{}",
             String::from_utf8_lossy(&out.stderr)
         );
-        refused(out);
+        refused(&out);
     }
 }
 
@@ -276,7 +278,7 @@ fn duplicate_json_post_authorities_are_rejected() {
     )
     .unwrap();
     refused(
-        Command::new(env!("CARGO_BIN_EXE_ivac"))
+        &Command::new(env!("CARGO_BIN_EXE_ivac"))
             .args(["generate", "--request"])
             .arg(path)
             .output()

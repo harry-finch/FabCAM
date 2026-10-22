@@ -23,7 +23,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use serde::Serialize;
-use wasm_bindgen::prelude::*;
+use wasm_bindgen::{prelude::*, JsCast};
 
 use ivac_core::input::text::{render_text_api, render_text_layer_api, RenderTextRequest};
 use ivac_core::pipeline::{
@@ -71,7 +71,6 @@ pub fn version() -> Result<JsValue, JsValue> {
         "import-dxf",
         "generate-gcode",
         "cutting-parameters-v9",
-        "feeds-speeds",
         "post-linuxcnc",
         "post-grbl",
         "post-hpgl",
@@ -163,8 +162,42 @@ pub fn from_stl(bytes: &[u8], max_dim: u32) -> Result<JsValue, JsValue> {
     })
 }
 
+// serde-wasm-bindgen's struct visitor visits declared fields only, unlike the
+// JSON reader. Refuse retired fields explicitly before they could be discarded.
+// This is a transport check; all current cutting/safety values remain core-owned.
+fn reject_legacy_cutting_fields(request: &JsValue) -> Result<(), JsValue> {
+    let project = js_sys::Reflect::get(request, &JsValue::from_str("project"))?;
+    if !project.is_object() {
+        return Ok(()); // The typed reader reports missing/invalid structure.
+    }
+    if js_sys::Reflect::has(&project, &JsValue::from_str("fs_context"))? {
+        return Err(JsValue::from_str("Legacy fs_context is unsupported in v9"));
+    }
+    let operations = js_sys::Reflect::get(&project, &JsValue::from_str("operations"))?;
+    if let Some(operations) = operations.dyn_ref::<js_sys::Array>() {
+        for op in operations.iter() {
+            if !op.is_object() {
+                continue;
+            }
+            let params = js_sys::Reflect::get(&op, &JsValue::from_str("params"))?;
+            if !params.is_object() {
+                continue;
+            }
+            for field in ["applied_cutting", "fs_full_width"] {
+                if js_sys::Reflect::has(&params, &JsValue::from_str(field))? {
+                    return Err(JsValue::from_str(&format!(
+                        "Legacy {field} is unsupported in v9"
+                    )));
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
 #[wasm_bindgen]
 pub fn generate(request: JsValue) -> Result<JsValue, JsValue> {
+    reject_legacy_cutting_fields(&request)?;
     let req: PipelineRequest = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
     ivac_core::cutting_parameters::require_current(&req.project).map_err(into_js_error)?;
     let project = req.project.clone();
@@ -188,6 +221,7 @@ pub fn generate(request: JsValue) -> Result<JsValue, JsValue> {
 /// identical to [`generate`].
 #[wasm_bindgen(js_name = generateTwoSided)]
 pub fn generate_two_sided(request: JsValue) -> Result<JsValue, JsValue> {
+    reject_legacy_cutting_fields(&request)?;
     let req: PipelineRequest = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
     ivac_core::cutting_parameters::require_current(&req.project).map_err(into_js_error)?;
     let project = req.project.clone();
@@ -223,6 +257,7 @@ pub fn generate_streaming_wasm(
     request: JsValue,
     on_event: js_sys::Function,
 ) -> Result<JsValue, JsValue> {
+    reject_legacy_cutting_fields(&request)?;
     let req: PipelineRequest = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
     ivac_core::cutting_parameters::require_current(&req.project).map_err(into_js_error)?;
     let cancel = CancelToken::new();
@@ -321,80 +356,6 @@ pub(crate) fn panic_message(p: &Box<dyn std::any::Any + Send>) -> String {
     }
 }
 
-#[wasm_bindgen(js_name = feedsSpeeds)]
-pub fn feeds_speeds(request: JsValue) -> Result<JsValue, JsValue> {
-    guard(|| {
-        let request = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
-        let response = ivac_core::feeds_speeds::feeds_speeds(request)
-            .map_err(|e| structured_error_to_js(ivac_core::Error::bad_input(e)))?;
-        let value = serde_wasm_bindgen::to_value(&response).map_err(into_js_error)?;
-        // Only normalize successful, core-validated trial output. Native JSON emits
-        // null for this Option; serde-wasm-bindgen otherwise emits undefined, which
-        // JSON.stringify omits. Keep the strict portable v8 validator unchanged.
-        if let Some(op) = &response.applied_op {
-            portable_trial_stepover(op, &value, &["applied_op"])?;
-        }
-        if let Some(trial) = &response.trial {
-            portable_trial_stepover(&trial.operation, &value, &["trial", "operation"])?;
-        }
-        Ok(value)
-    })
-}
-
-fn portable_trial_stepover(
-    op: &ivac_core::project::Op,
-    response: &JsValue,
-    path: &[&str],
-) -> Result<(), JsValue> {
-    if !matches!(op.kind, ivac_core::project::OpKind::Profile { .. })
-        || !op.params.applied_cutting.as_ref().is_some_and(|a| {
-            a.experimental_recipe
-                .as_ref()
-                .is_some_and(|r| r.applied_values.stepover_ratio.is_none())
-        })
-    {
-        return Ok(());
-    }
-    let mut object = response.clone();
-    for key in path.iter().copied().chain([
-        "params",
-        "applied_cutting",
-        "experimental_recipe",
-        "applied_values",
-    ]) {
-        object = js_sys::Reflect::get(&object, &JsValue::from_str(key))?;
-    }
-    if !js_sys::Reflect::set(
-        &object,
-        &JsValue::from_str("stepover_ratio"),
-        &JsValue::NULL,
-    )? {
-        return Err(JsValue::from_str(
-            "Cannot serialize experimental Profile stepover",
-        ));
-    }
-    Ok(())
-}
-
-#[wasm_bindgen(js_name = validateSourcePack)]
-pub fn validate_source_pack(json: &str) -> Result<JsValue, JsValue> {
-    guard(|| {
-        let pack =
-            ivac_core::feeds_speeds::validate_source_pack_json(json).map_err(into_js_error)?;
-        serde_wasm_bindgen::to_value(&pack).map_err(into_js_error)
-    })
-}
-
-#[wasm_bindgen(js_name = captureLabPreset)]
-pub fn capture_lab_preset(project: JsValue, op_id: u32) -> Result<JsValue, JsValue> {
-    guard(|| {
-        let project = serde_wasm_bindgen::from_value(project).map_err(into_js_error)?;
-        let capture =
-            ivac_core::feeds_speeds::capture_lab_preset(&project, op_id).map_err(into_js_error)?;
-        serde_wasm_bindgen::to_value(&capture).map_err(into_js_error)
-    })
-}
-
 #[wasm_bindgen(js_name = cornerRelief)]
 pub fn corner_relief(request: JsValue) -> Result<JsValue, JsValue> {
     let req: ivac_core::corner_relief::CornerReliefRequest =
@@ -416,6 +377,8 @@ pub fn evaluate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
 #[wasm_bindgen(js_name = generateDrawing)]
 pub fn generate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
     guard(|| {
+        let machining = js_sys::Reflect::get(&request, &JsValue::from_str("machining"))?;
+        reject_legacy_cutting_fields(&machining)?;
         let req: ivac_core::drawing::api::DrawingGenerationRequest =
             serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
         ivac_core::cutting_parameters::require_current(&req.machining.project)
@@ -435,6 +398,10 @@ fn generate_request(
 ) -> Result<ivac_core::pipeline::PipelineResponse, ivac_core::pipeline::PipelineError> {
     run_pipeline(req, |_phase, _fraction, _msg| {})
 }
+#[cfg(test)]
+#[path = "../../ivac-core/tests/support/explicit.rs"]
+mod fixture_support;
+
 #[cfg(all(test, feature = "cps"))]
 mod test1_bridge {
     use super::*;
@@ -444,6 +411,7 @@ mod test1_bridge {
             "../../../tests/fixtures/test1/profile.request.json"
         ))
         .unwrap();
+        req = fixture_support::request(req);
         req.project.fixtures.push(ivac_core::project::Fixture {
             id: 1,
             name: "clamp".into(),
@@ -482,7 +450,7 @@ mod test1_bridge {
                 include_str!("../../../tests/fixtures/test1/vcarve.sbp"),
             ),
         ] {
-            let req: PipelineRequest = serde_json::from_str(request).unwrap();
+            let req = fixture_support::request(serde_json::from_str(request).unwrap());
             let result = generate_request(req.clone()).unwrap();
             // ADR-0025 adds only `' FABTOOL/1` provenance comments; every other
             // byte still equals the saved TEST1 reference.

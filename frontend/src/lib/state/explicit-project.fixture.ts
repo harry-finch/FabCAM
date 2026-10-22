@@ -10,27 +10,28 @@ type ExplicitFixture = ProjectFile & {
   tools: ToolEntry[];
   operations: OpEntry[];
 } & Record<string, unknown>;
-export function explicitProjectFixture(source: ProjectFile): ExplicitFixture {
-  const p = structuredClone(source);
+export function explicitProjectFixture(source: unknown): ExplicitFixture {
+  const p = structuredClone(source) as ProjectFile;
   p.kind = 'ivac-project';
   p.version = 9;
-  delete p.fsContext;
+  delete (p as unknown as Record<string, unknown>).fsContext;
   p.imports ??= [];
   p.operations ??= [];
   p.tools ??= [];
   p.machine = {
     ...defaultProjectMachine(),
     ...p.machine,
-    physicalId:
-      p.machine?.physicalId ?? p.machine?.fsLocalIdentity?.id ?? 'software-fixture-machine',
+    physicalId: p.machine?.physicalId ?? 'software-fixture-machine',
   };
   p.tools = p.tools.map((t) => ({
     ...t,
-    physicalId: t.physicalId ?? t.fsLocalIdentity?.id ?? `software-fixture-tool-${t.id}`,
+    physicalId: t.physicalId ?? `software-fixture-tool-${t.id}`,
   }));
   p.operations = p.operations.map((op) => {
     const next = { ...op };
-    delete next.appliedCutting;
+    delete (next as unknown as Record<string, unknown>).appliedCutting;
+    delete (next as unknown as Record<string, unknown>).fsFullWidth;
+    delete (next as unknown as Record<string, unknown>).appliedContextKey;
     delete next.feedRateOverride;
     delete next.plungeRateOverride;
     if (!isProgramOnlyOp(next.kind) && p.machine?.mode === 'mill')

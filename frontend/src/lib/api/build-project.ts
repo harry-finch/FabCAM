@@ -204,7 +204,7 @@ interface ProjectStateView {
   /// text, not the work area. NO stock outline (that would loop). Optional;
   /// falls back to `transformedImport`.
   stockSizingImport?: ImportResponse | null;
-  material?: Schemas['FsIdentity'];
+  material?: Schemas['MaterialIdentity'];
   machine: MachineSettings;
   tools: FrontToolEntry[];
   operations: OpEntry[];
@@ -732,8 +732,6 @@ function buildOp(opIn: OpEntry, machine: MachineSettings): WireOp {
     ...(opIn.side === 'back' ? { side: 'back' as const } : {}),
     params: {
       ...(op.cutting ? { cutting: op.cutting } : {}),
-      ...(op.appliedCutting ? { applied_cutting: op.appliedCutting } : {}),
-      ...(op.fsFullWidth ? { fs_full_width: true } : {}),
       // Program-only ops (Pause, Homing, Probe, CycleMarker,
       // GcodeInclude) construct without `depth` / `startDepth` —
       // they have no meaningful depth schedule. Emit explicit 0

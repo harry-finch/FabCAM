@@ -926,6 +926,8 @@ mod tests {
 
     fn endmill(diameter: f64) -> ToolEntry {
         ToolEntry {
+            physical_id: None,
+            max_rpm: None,
             id: 1,
             name: "test endmill".into(),
             kind: ToolKind::Endmill,

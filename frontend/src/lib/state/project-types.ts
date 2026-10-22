@@ -14,9 +14,10 @@ import type { ImportResponse } from '../api/types';
 import type { MachineMode, OpEntry, OpKind, ToolKind } from './op_types';
 
 /** Display label is project UI metadata; matching uses id/revision only. */
-export type MaterialIdentity = import('../api/generated').components['schemas']['FsIdentity'] & {
-  label?: string;
-};
+export type MaterialIdentity =
+  import('../api/generated').components['schemas']['MaterialIdentity'] & {
+    label?: string;
+  };
 
 export function prettyOpKind(kind: OpKind): string {
   switch (kind) {
@@ -160,10 +161,6 @@ export interface FormProfileSample {
 export interface ToolEntry {
   physicalId?: string;
   maxRpm?: number;
-  /** Explicit reference compatibility, never inferred from physical dimensions. */
-  fsIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
-  /** Stable lab identity, independent of the selected reference pack. */
-  fsLocalIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
   id: number;
   name: string;
   kind: ToolKind;
@@ -350,10 +347,6 @@ export function migrateMachineSettings(raw: unknown): MachineSettings {
 
 export interface MachineSettings {
   physicalId?: string;
-  /** Explicit source-machine compatibility, separate from the physical machine. */
-  fsIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
-  /** Stable lab identity, independent of the selected reference pack. */
-  fsLocalIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
   /// Free-text identifier for this machine ("Shop CNC",
   /// "Garage MPCNC"). Surfaces in the MachineDialog header + the
   /// .ivac-machine.json save file. Empty by default.
@@ -801,20 +794,11 @@ export function placementFileTransform(
 }
 
 export interface ProjectFile {
-  kind:
-    | 'ivac-project'
-    | 'ivac-project-fs'
-    | 'ivac-project-cutting'
-    | 'ivac-project-knowledge'
-    | 'ivac-project-cad'
-    | 'ivac-project-surfacing'
-    | 'ivac-project-geometry'
-    | 'ivac-project-experimental';
-  version: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+  kind: 'ivac-project';
+  version: 9;
   drawing?: import('./drawing').DrawingState;
   cornerRelief?: import('./corner-relief').CornerReliefModifier;
   material?: MaterialIdentity;
-  fsContext?: import('../api/generated').components['schemas']['FsContext'];
   imports: ImportEntry[];
   visibleLayers: string[];
   selectedEntities: number[];

@@ -14,8 +14,6 @@ import type {
   GenerateRequest,
   GenerateResponse,
   TwoSidedGenerateResponse,
-  FsCamRequest,
-  FsCamResponse,
   HelixRadiusRequest,
   HelixRadiusResponse,
   ImportResponse,
@@ -27,17 +25,10 @@ import type {
   VersionResponse,
 } from './types';
 
-type SourcePack = import('./generated').components['schemas']['FsSourcePack'];
-type LabCapture = import('./generated').components['schemas']['FsLabCapture'];
 export type WasmModule = {
   presetCommand?: (json: string) => string;
   evaluateDrawing?: (request: DrawingRequest) => DrawingResponse;
   generateDrawing?: (request: DrawingGenerationRequest) => GenerateResponse;
-  captureLabPreset?: (
-    project: import('./generated').components['schemas']['Project'],
-    opId: number,
-  ) => LabCapture;
-  validateSourcePack?: (json: string) => SourcePack;
   default?: () => Promise<unknown>;
   healthz: () => { ok: boolean };
   listPosts?: () => unknown;
@@ -54,7 +45,6 @@ export type WasmModule = {
   generateTwoSided?: (request: GenerateRequest) => TwoSidedGenerateResponse;
   renderText: (request: RenderTextRequest) => RenderTextResponse;
   renderTextLayer: (layer: WireTextLayer) => RenderTextLayerResponse;
-  feedsSpeeds?: (request: FsCamRequest) => FsCamResponse;
   cornerRelief: (request: CornerReliefRequest) => CornerReliefResponse;
   computeHelixRadius: (request: HelixRadiusRequest) => HelixRadiusResponse;
   /// Rasterize an STL byte stream to a relief height grid — the serialized
@@ -85,9 +75,6 @@ const GUARDED_EXPORTS = new Set([
   'generateStreaming',
   'renderText',
   'renderTextLayer',
-  'captureLabPreset',
-  'validateSourcePack',
-  'feedsSpeeds',
   'evaluateDrawing',
   'generateDrawing',
   'cornerRelief',
@@ -235,26 +222,6 @@ export class WasmWiacClient implements WiacClient {
   async renderTextLayer(layer: WireTextLayer): Promise<RenderTextLayerResponse> {
     const m = await loadModule();
     return m.renderTextLayer(layer);
-  }
-
-  async captureLabPreset(
-    project: import('./generated').components['schemas']['Project'],
-    opId: number,
-  ): Promise<LabCapture> {
-    const m = await loadModule();
-    if (!m.captureLabPreset) throw new Error('Lab capture unavailable in this WASM build');
-    return m.captureLabPreset(project, opId);
-  }
-  async validateSourcePack(json: string): Promise<SourcePack> {
-    const m = await loadModule();
-    if (!m.validateSourcePack) throw new Error('Source packs unavailable in this WASM build');
-    return m.validateSourcePack(json);
-  }
-
-  async feedsSpeeds(request: FsCamRequest): Promise<FsCamResponse> {
-    const m = await loadModule();
-    if (!m.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this WASM build');
-    return m.feedsSpeeds(request);
   }
 
   async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {

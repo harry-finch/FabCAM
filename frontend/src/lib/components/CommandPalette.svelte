@@ -314,7 +314,7 @@
               <dd>{currentTool.tipAngleDeg}°</dd>{/if}
           </dl>
           {#if assignReason}<p class="reason">{assignReason}</p>{:else}<p>
-              {t(operation?.appliedCutting ? 'palette.manual' : 'palette.legacy')}
+              {t('palette.manual')}
             </p>{/if}
           {#if operation}<p>{operation.name}</p>{/if}
           <div class="actions">

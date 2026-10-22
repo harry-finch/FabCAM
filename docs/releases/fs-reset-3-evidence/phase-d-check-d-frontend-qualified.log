@@ -1,0 +1,8 @@
+
+> ivac-frontend@ check /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+> svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json
+
+Loading svelte-check in workspace: /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings

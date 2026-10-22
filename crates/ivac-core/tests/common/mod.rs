@@ -184,7 +184,6 @@ pub fn build_project(
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     }
 }
 

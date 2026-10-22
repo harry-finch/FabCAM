@@ -200,7 +200,6 @@ fn snapshot_drill_with_stufenfase_and_toolchange() {
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     };
     let actual = run_to_gcode(project);
     // Structural pin — the brief asks for a snapshot covering the op
@@ -292,7 +291,6 @@ fn snapshot_profile_rectangle_tabs_and_helix_entry() {
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     };
     let actual = run_to_gcode(project);
     assert!(actual.contains("; OP 1"), "missing op marker:\n{actual}");
@@ -367,7 +365,6 @@ fn snapshot_profile_ramp_tabs() {
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     };
     let actual = run_to_gcode(project);
     assert!(actual.contains("; OP 1"), "missing op marker:\n{actual}");
@@ -433,7 +430,6 @@ fn snapshot_whirl_walks_closed_contour() {
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     };
     let actual = run_to_gcode(project);
     assert!(actual.contains("; OP 1"), "missing op marker:\n{actual}");

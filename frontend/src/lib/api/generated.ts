@@ -4,23 +4,6 @@
  */
 
 export interface paths {
-    "/feeds-speeds": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Preview or explicitly apply a milling cutting proposal */
-        post: operations["feedsSpeeds"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/healthz": {
         parameters: {
             query?: never;
@@ -302,29 +285,6 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        AppliedCutting: {
-            /** @description Saved native context after Apply; never used to overwrite parameters. */
-            context_key: string;
-            doc_origin: components["schemas"]["CuttingOrigin"];
-            experimental_recipe?: components["schemas"]["ExperimentalRecipe"] | null;
-            knowledge?: components["schemas"]["FsKnowledgeSummary"] | null;
-            /** @description Optional evidence snapshot; manually entered operation rates need no proposal. */
-            proposal?: components["schemas"]["FsRecommendation"] | null;
-            slots: components["schemas"]["AppliedRateSlot"][];
-            stepover_origin?: components["schemas"]["CuttingOrigin"] | null;
-        };
-        AppliedRateSlot: {
-            /** Format: uint32 */
-            feed_mm_min: number;
-            origins: components["schemas"]["RateOrigins"];
-            pass: components["schemas"]["FsPass"];
-            /** Format: uint32 */
-            plunge_mm_min: number;
-            /** Format: uint32 */
-            rpm: number;
-            /** Format: uint32 */
-            tool_id: number;
-        };
         /**
          * @description Planar circular-arc descriptor attached to the chord segments a `G2`/`G3` tessellates into. `(cx, cy)` is the arc center in world XY; the radius is implied by the segment's `from` point (`R = |from − center|`). `ccw` is the sweep direction (G3 = `true`, G2 = `false`).
          *
@@ -423,11 +383,6 @@ export interface components {
         } | {
             /** @enum {string} */
             kind: "all";
-        };
-        CatalogEntry: {
-            identity: components["schemas"]["FsIdentity"];
-            label: string;
-            notes: string;
         };
         Contour: {
             edges: components["schemas"]["Edge"][];
@@ -544,20 +499,7 @@ export interface components {
             warnings: string[];
         };
         /** @enum {string} */
-        CuttingOrigin: "recommendation" | "manual" | "legacy_snapshot";
-        /** @enum {string} */
         CuttingRole: "rough" | "finish" | "drill" | "spot" | "chamfer";
-        /** @description Self-contained authoring document; no implicit inheritance or remote references. */
-        DatasetDocument: {
-            description: string;
-            /** Format: uint32 */
-            format_version: number;
-            license: string;
-            machines: components["schemas"]["CatalogEntry"][];
-            materials: components["schemas"]["CatalogEntry"][];
-            profile_set: components["schemas"]["FsProfileSet"];
-            tools: components["schemas"]["ToolDefinition"][];
-        };
         DepthSchedule: {
             /** Format: double */
             finish_step?: number | null;
@@ -739,13 +681,6 @@ export interface components {
             /** Format: uint32 */
             version: number;
         };
-        /** @description Portable allowlist: no source bodies, labels, notes, URLs or filesystem paths. */
-        ExperimentalRecipe: {
-            applied_values: components["schemas"]["TrialValues"];
-            kind: components["schemas"]["TrialKind"];
-            source: components["schemas"]["FsSelectedRecord"];
-            target: components["schemas"]["TrialTarget"];
-        };
         Finding: {
             contour: components["schemas"]["Identity"];
             message: string;
@@ -830,553 +765,6 @@ export interface components {
          * @enum {string}
          */
         FrameShape: "rectangle" | "rounded_rectangle";
-        FsAdaptationScope: {
-            machines: components["schemas"]["FsIdentity"][];
-            material_taxa: string[];
-            policy: string;
-            slot_to_pocket: boolean;
-            /** @description Explicit interchangeable physical classifications, never inferred from labels. */
-            tools: components["schemas"]["FsIdentity"][];
-        };
-        FsAdjustment: {
-            /** Format: double */
-            after: number;
-            /** Format: double */
-            before: number;
-            field: string;
-            reason: string;
-            rule?: components["schemas"]["FsIdentity"] | null;
-        };
-        /** @enum {string} */
-        FsAggressiveness: "prudent" | "normal" | "rapid";
-        /** @enum {string} */
-        FsApplicability: "within_declared_profile" | "adjusted_outside_evidence";
-        FsCamRequest: {
-            aggressiveness: components["schemas"]["FsAggressiveness"];
-            /** @description False previews only; true explicitly applies. Never called by generation. */
-            apply: boolean;
-            dataset_json: string;
-            experimental_trial?: boolean;
-            /** Format: uint32 */
-            op_id: number;
-            project: components["schemas"]["Project"];
-            /** @description Absent preserves automatic recommendation; present pins an original eligible record. */
-            selected_record?: components["schemas"]["FsSelectedRecord"] | null;
-            trial_acknowledged?: boolean;
-        };
-        FsCamResponse: {
-            /** @description Native op with authoritative geometry/rates only on explicit Apply. */
-            applied_op?: components["schemas"]["Op"] | null;
-            knowledge?: components["schemas"]["FsKnowledgeExplanation"] | null;
-            recommendation: components["schemas"]["FsFeedsSpeedsRecommendation"];
-            /** @description Optional transient explanation; never persisted with cutting parameters. */
-            scope_rejections?: components["schemas"]["FsProfileRejection"][];
-            trial?: components["schemas"]["TrialPreview"] | null;
-        };
-        FsContext: {
-            machine_identity?: components["schemas"]["FsIdentity"] | null;
-            /** @description Physical lab identity, independent of reference-pack compatibility. */
-            machine_local_identity?: components["schemas"]["FsIdentity"] | null;
-            tools: components["schemas"]["FsToolBinding"][];
-        };
-        /** @description Each profile supplies its own mode/operation-specific values. No hidden factors. */
-        FsCuttingData: {
-            /** Format: double */
-            chipload_mm_tooth: number;
-            /** Format: double */
-            doc_mm: number;
-            /** @enum {string} */
-            kind: "chipload_target";
-            /** Format: double */
-            plunge_mm_min: number;
-            /** Format: double */
-            rpm: number;
-            /** Format: double */
-            stepover_ratio?: number | null;
-        } | {
-            /** Format: double */
-            doc_mm: number;
-            /** Format: double */
-            feed_mm_min: number;
-            /** @enum {string} */
-            kind: "exact_values";
-            /** Format: double */
-            plunge_mm_min: number;
-            /** Format: double */
-            rpm: number;
-            /** Format: double */
-            stepover_ratio?: number | null;
-        };
-        /**
-         * @description Cutting family, deliberately distinct from CAM geometry families.
-         * @enum {string}
-         */
-        FsCuttingFamily: "flat_endmill" | "compression" | "v_bit" | "other";
-        FsDerivation: {
-            /** Format: double */
-            chipload_factor: number;
-            /** Format: double */
-            doc_factor: number;
-            /** Format: double */
-            interpolation_weight?: number | null;
-            machine_transfer: boolean;
-            material_transfer: boolean;
-            method: string;
-            policy: string;
-            quality: components["schemas"]["FsMatchQuality"];
-            /** Format: double */
-            relative_delta: number;
-            /** Format: double */
-            requested_diameter_mm: number;
-            slot_basis_for_pocket: boolean;
-            source_diameters_mm: number[];
-            source_profiles: components["schemas"]["FsProfile"][];
-        };
-        FsDiagnostic: {
-            field: string;
-            /** @enum {string} */
-            kind: "unknown_limit";
-        } | {
-            /** @enum {string} */
-            kind: "unknown_engagement_full_width_assumption";
-        } | {
-            /** @enum {string} */
-            kind: "nominal_engagement_not_maximum";
-        } | {
-            /** @enum {string} */
-            kind: "unknown_entry_strategy";
-        } | {
-            /** @enum {string} */
-            kind: "unknown_doc";
-        } | {
-            /** Format: double */
-            chipload_mm_tooth: number;
-            /** @enum {string} */
-            kind: "low_effective_chipload";
-            /** Format: double */
-            target_chipload_mm_tooth: number;
-        } | {
-            /** @enum {string} */
-            kind: "generic_profile_direct_entry";
-        };
-        /** @enum {string} */
-        FsDistribution: "bundled" | "local_only" | "external_reference";
-        /** @description Nominal stepover is not a bound on instantaneous physical engagement. */
-        FsEngagement: {
-            /** @enum {string} */
-            kind: "known_full_width";
-        } | {
-            /** @enum {string} */
-            kind: "nominal";
-            /** Format: double */
-            ratio: number;
-        } | {
-            /** @enum {string} */
-            kind: "unknown";
-        };
-        /** @description Authored unknown-safe data is a separate scope, not an assumed low WOC. */
-        FsEngagementScope: {
-            /** @enum {string} */
-            kind: "full_width";
-        } | {
-            /** @enum {string} */
-            kind: "nominal";
-            ratio: components["schemas"]["FsRange"];
-        } | {
-            /** @enum {string} */
-            kind: "unknown_safe";
-        };
-        /** @enum {string} */
-        FsEntryStrategy: "direct" | "ramp" | "helix" | "unknown";
-        /** @enum {string} */
-        FsEvidence: "theoretical" | "reference_data" | "tested" | "validated";
-        FsEvidenceRecord: {
-            trial_reference: string;
-            validation_criteria_reference?: string | null;
-        };
-        /** @description Explicit membership, never inferred from names or supplied as a wildcard. */
-        FsFamilyMembership: {
-            id: string;
-            members: components["schemas"]["FsIdentity"][];
-        };
-        FsFeedsSpeedsRecommendation: {
-            recommendation: components["schemas"]["FsRecommendation"];
-            /** @enum {string} */
-            status: "available";
-        } | {
-            reason: components["schemas"]["FsUnavailableReason"];
-            /** @enum {string} */
-            status: "unavailable";
-        };
-        /** @description Immutable milling-only context. There is no generic process parameter bag. */
-        FsFeedsSpeedsRequest: {
-            aggressiveness: components["schemas"]["FsAggressiveness"];
-            dataset: components["schemas"]["FsIdentity"];
-            machine: components["schemas"]["FsMachineSnapshot"];
-            material: components["schemas"]["FsMaterialSnapshot"];
-            operation: components["schemas"]["FsOperationContext"];
-            /** Format: uint32 */
-            schema_version: number;
-            tool: components["schemas"]["FsToolSnapshot"];
-        };
-        /** @description Immutable identity: labels never participate in matching. */
-        FsIdentity: {
-            id: string;
-            revision: string;
-        };
-        FsIdentitySelector: {
-            /** @enum {string} */
-            kind: "any";
-        } | {
-            identity: components["schemas"]["FsIdentity"];
-            /** @enum {string} */
-            kind: "exact";
-        } | {
-            id: string;
-            /** @enum {string} */
-            kind: "family";
-        };
-        FsKnowledgeContributor: {
-            pack: components["schemas"]["FsIdentity"];
-            record_id: string;
-        };
-        FsKnowledgeExplanation: {
-            disagreement: boolean;
-            records: components["schemas"]["FsKnowledgeRecord"][];
-            reference_chipload_range?: components["schemas"]["FsRange"] | null;
-            selection_reason: string;
-            summary: components["schemas"]["FsKnowledgeSummary"];
-        };
-        FsKnowledgeRecord: {
-            derivation?: components["schemas"]["FsDerivation"] | null;
-            evidence: components["schemas"]["FsEvidence"];
-            local_only: boolean;
-            normalized: components["schemas"]["FsNormalizedQuantities"];
-            origin: components["schemas"]["FsRecordOrigin"];
-            pack: components["schemas"]["FsIdentity"];
-            profile: components["schemas"]["FsIdentity"];
-            rank: number[];
-            record_id: string;
-        };
-        /** @description Safe to save/share: no original records, source notes, paths or derived source quantities. */
-        FsKnowledgeSummary: {
-            /** Format: uint32 */
-            compatible_sources: number;
-            contributors?: components["schemas"]["FsKnowledgeContributor"][];
-            engine_version: string;
-            evidence: components["schemas"]["FsEvidence"];
-            local_only: boolean;
-            match_quality?: components["schemas"]["FsMatchQuality"] | null;
-            policy: string;
-            selected_pack: components["schemas"]["FsIdentity"];
-            selected_record: string;
-        };
-        FsLabCapture: {
-            /** Format: uint32 */
-            feed_mm_min: number;
-            finishing_context: string;
-            machine_name: string;
-            operation_name: string;
-            /** Format: uint32 */
-            plunge_mm_min: number;
-            request: components["schemas"]["FsFeedsSpeedsRequest"];
-            /** Format: uint32 */
-            rpm: number;
-            tool_name: string;
-        };
-        FsLabPreset: {
-            created_at: string;
-            deleted: boolean;
-            detailed_notes: string;
-            enabled: boolean;
-            finishing_context: string;
-            job_reference: string;
-            name: string;
-            no_critical_failure: boolean;
-            observations: string;
-            operator: string;
-            physically_tested: boolean;
-            review?: components["schemas"]["FsLabReview"] | null;
-            state: components["schemas"]["FsLabState"];
-            tested_at?: string | null;
-            updated_at: string;
-        };
-        FsLabReview: {
-            acceptable_finish_and_behavior: boolean;
-            no_overheating_chatter_or_overload: boolean;
-            notes: string;
-            policy: string;
-            reviewed_at: string;
-            suitable_for_lab_use: boolean;
-        };
-        FsLabRevision: {
-            metadata: components["schemas"]["FsLabPreset"];
-            profile: components["schemas"]["FsProfile"];
-        };
-        /** @enum {string} */
-        FsLabState: "draft" | "tested" | "validated";
-        FsMachineSnapshot: {
-            identity?: components["schemas"]["FsIdentity"] | null;
-            /** @description Physical lab identity; reference compatibility remains in `identity`. */
-            local_identity?: components["schemas"]["FsIdentity"] | null;
-            /** Format: uint32 */
-            max_feed_mm_min?: number | null;
-            /** Format: uint32 */
-            max_plunge_mm_min?: number | null;
-            /** Format: uint32 */
-            rpm_max?: number | null;
-            /** Format: uint32 */
-            rpm_min?: number | null;
-        };
-        /** @enum {string} */
-        FsMatchQuality: "close" | "approximate" | "extrapolated" | "interpolated" | "exact" | "generic" | "theoretical";
-        FsMaterialSnapshot: {
-            /** @description Grade/condition are part of immutable material identity. */
-            identity?: components["schemas"]["FsIdentity"] | null;
-            /** Format: double */
-            thickness_mm?: number | null;
-        };
-        FsMaterialTaxon: {
-            id: string;
-            label: string;
-            parent?: string | null;
-        };
-        FsNormalizedQuantities: {
-            chipload_derived: boolean;
-            /** Format: double */
-            chipload_mm_tooth?: number | null;
-            /** Format: double */
-            cutting_speed_m_min?: number | null;
-            /** @description The block is normalized; these flags distinguish copied source values. */
-            derived: boolean;
-            /** Format: double */
-            doc_ratio?: number | null;
-            radial_engagement_derived: boolean;
-            /** Format: double */
-            radial_engagement_ratio?: number | null;
-        };
-        FsOperationContext: {
-            /** Format: double */
-            doc_mm?: number | null;
-            engagement: components["schemas"]["FsEngagement"];
-            entry: components["schemas"]["FsEntryStrategy"];
-            kind: components["schemas"]["FsOperationKind"];
-        };
-        /** @enum {string} */
-        FsOperationKind: "profile" | "pocket" | "full_slot" | "finish" | "surfacing" | "engraving";
-        FsPackManifest: {
-            attribution: string;
-            default_evidence: components["schemas"]["FsEvidence"];
-            distribution: components["schemas"]["FsDistribution"];
-            identity: components["schemas"]["FsIdentity"];
-            license: string;
-            license_url?: string | null;
-            name: string;
-            notes: string;
-            origin: string;
-            publisher: string;
-            redistributable: boolean;
-            /** Format: uint32 */
-            schema_version: number;
-            source_url?: string | null;
-            transformation_permitted: boolean;
-            visibility: components["schemas"]["FsVisibility"];
-        };
-        /** @enum {string} */
-        FsPass: "rough" | "finish";
-        FsProfile: {
-            aggressiveness: components["schemas"]["FsAggressiveness"];
-            category: components["schemas"]["FsProfileCategory"];
-            data: components["schemas"]["FsCuttingData"];
-            evidence: components["schemas"]["FsEvidence"];
-            identity: components["schemas"]["FsIdentity"];
-            /** @description Ordered; order is retained in provenance. Empty for exact presets. */
-            reductions: components["schemas"]["FsReductionRule"][];
-            scope: components["schemas"]["FsProfileScope"];
-            source: components["schemas"]["FsSource"];
-        };
-        /** @enum {string} */
-        FsProfileCategory: "exact_preset" | "machine_family" | "reference" | "theoretical";
-        FsProfileRejection: {
-            mismatches: components["schemas"]["FsScopeMismatch"][];
-            profile: components["schemas"]["FsIdentity"];
-        };
-        FsProfileScope: {
-            cutting_family: components["schemas"]["FsCuttingFamily"];
-            diameter_mm: components["schemas"]["FsRange"];
-            doc_mm?: components["schemas"]["FsRange"] | null;
-            engagement: components["schemas"]["FsEngagementScope"];
-            entry?: components["schemas"]["FsEntryStrategy"] | null;
-            /** Format: uint8 */
-            flute_count?: number | null;
-            machine: components["schemas"]["FsIdentitySelector"];
-            material: components["schemas"]["FsIdentitySelector"];
-            operation: components["schemas"]["FsOperationKind"];
-            thickness_mm?: components["schemas"]["FsRange"] | null;
-            tool?: components["schemas"]["FsIdentity"] | null;
-        };
-        /** @description FS1 in-memory domain input, not the FS2 distribution/authoring file format. */
-        FsProfileSet: {
-            identity: components["schemas"]["FsIdentity"];
-            machine_families: components["schemas"]["FsFamilyMembership"][];
-            material_families: components["schemas"]["FsFamilyMembership"][];
-            profiles: components["schemas"]["FsProfile"][];
-            /** Format: uint32 */
-            schema_version: number;
-        };
-        FsProvenance: {
-            adjustments: components["schemas"]["FsAdjustment"][];
-            dataset: components["schemas"]["FsIdentity"];
-            derivation?: components["schemas"]["FsDerivation"] | null;
-            engine_version: string;
-            /** @description Selected family membership snapshots keep matching explainable offline. */
-            machine_family?: components["schemas"]["FsFamilyMembership"] | null;
-            material_family?: components["schemas"]["FsFamilyMembership"] | null;
-            /** @description Full selected profile preserves source, scope, data and rule revisions. */
-            profile: components["schemas"]["FsProfile"];
-            request: components["schemas"]["FsFeedsSpeedsRequest"];
-            /** Format: uint32 */
-            schema_version: number;
-            /** Format: uint8 */
-            selection_tier: number;
-        };
-        /** @description Inclusive range with explicit units in its containing field name. */
-        FsRange: {
-            /** Format: double */
-            max: number;
-            /** Format: double */
-            min: number;
-        };
-        FsRecommendation: {
-            aggressiveness: components["schemas"]["FsAggressiveness"];
-            applicability: components["schemas"]["FsApplicability"];
-            diagnostics: components["schemas"]["FsDiagnostic"][];
-            parameters: components["schemas"]["FsRecommendedParameters"];
-            provenance: components["schemas"]["FsProvenance"];
-            source_evidence: components["schemas"]["FsEvidence"];
-        };
-        FsRecommendedParameters: {
-            /** Format: double */
-            doc_mm: number;
-            /** Format: double */
-            effective_chipload_mm_tooth: number;
-            /** Format: uint32 */
-            feed_mm_min: number;
-            /** Format: uint32 */
-            plunge_mm_min: number;
-            /** Format: uint32 */
-            rpm: number;
-            /** Format: double */
-            stepover_ratio?: number | null;
-        };
-        FsRecordOrigin: {
-            adaptation?: components["schemas"]["FsAdaptationScope"] | null;
-            lab?: components["schemas"]["FsLabPreset"] | null;
-            lab_history?: components["schemas"]["FsLabRevision"][];
-            /** @description Explicit taxonomy applicability, including descendants. None preserves original identity. */
-            material_taxon?: string | null;
-            original_classification: string;
-            profile: components["schemas"]["FsIdentity"];
-            source_record_id: string;
-            tool?: components["schemas"]["FsToolClassification"] | null;
-        };
-        /** @description Named empirical reductions apply only within the enclosing profile's scope. FS1 allows factors (0,1]; expansions require a separately qualified policy. */
-        FsReductionRule: {
-            /** Format: double */
-            chipload_factor: number;
-            /** Format: double */
-            doc_factor: number;
-            identity: components["schemas"]["FsIdentity"];
-            /** Format: double */
-            plunge_factor: number;
-            source_reference: string;
-        };
-        /** @description Presentation-only explanation of a refused scope; values are JSON-encoded. */
-        FsScopeMismatch: {
-            actual: string;
-            field: string;
-            required: string;
-        };
-        /** @description Exact, transient source selection. Never persisted as a replacement source pack. */
-        FsSelectedRecord: {
-            pack: components["schemas"]["FsIdentity"];
-            profile: components["schemas"]["FsIdentity"];
-            record_id: string;
-        };
-        FsSource: {
-            author: string;
-            date: string;
-            evidence_record?: components["schemas"]["FsEvidenceRecord"] | null;
-            notes: string;
-            permission_or_license: string;
-            reference: string;
-        };
-        FsSourcePack: {
-            dataset: components["schemas"]["DatasetDocument"];
-            manifest: components["schemas"]["FsPackManifest"];
-            records: components["schemas"]["FsRecordOrigin"][];
-        };
-        FsToolBinding: {
-            identity: components["schemas"]["FsIdentity"];
-            local_identity?: components["schemas"]["FsIdentity"] | null;
-            /** Format: uint32 */
-            max_rpm?: number | null;
-            /** Format: uint32 */
-            tool_id: number;
-        };
-        FsToolClassification: {
-            coating?: string | null;
-            family: components["schemas"]["FsCuttingFamily"];
-            helix?: string | null;
-            material?: string | null;
-            shape?: string | null;
-        };
-        FsToolSnapshot: {
-            cutting_family: components["schemas"]["FsCuttingFamily"];
-            /** Format: double */
-            diameter_mm: number;
-            /** Format: uint8 */
-            flute_count: number;
-            identity?: components["schemas"]["FsIdentity"] | null;
-            /** @description Physical lab identity; reference compatibility remains in `identity`. */
-            local_identity?: components["schemas"]["FsIdentity"] | null;
-            /** Format: uint32 */
-            max_rpm?: number | null;
-        };
-        FsUnavailableReason: {
-            issues: components["schemas"]["FsValidationIssue"][];
-            /** @enum {string} */
-            kind: "invalid_request";
-        } | {
-            /** @enum {string} */
-            kind: "dataset_mismatch";
-        } | {
-            /** @enum {string} */
-            kind: "missing_material";
-        } | {
-            /** @enum {string} */
-            kind: "unsupported_tool";
-        } | {
-            /** @enum {string} */
-            kind: "unsupported_operation";
-        } | {
-            /** @enum {string} */
-            kind: "missing_cutting_data";
-        } | {
-            identities: components["schemas"]["FsIdentity"][];
-            /** @enum {string} */
-            kind: "ambiguous_profiles";
-        } | {
-            field: string;
-            /** @enum {string} */
-            kind: "unrepresentable_output";
-        };
-        FsValidationIssue: {
-            field: string;
-            message: string;
-        };
-        /** @enum {string} */
-        FsVisibility: "public" | "private";
         /** @description Lookup table the frontend uses to wire the gcode text panel to the 3D toolpath: line N in the gcode corresponds to `segments[lines_to_segment[N]]`, and `segments_to_line[i]` is the 1-based gcode line that produced segment `i`. Both vectors are dense — gcode lines that don't move the tool map to `usize::MAX` so callers can detect the gap. */
         GcodeIndex: {
             lines_to_segment: number[];
@@ -1685,6 +1073,11 @@ export interface components {
             work_area?: components["schemas"]["AxisLimits"];
         };
         MachineMode: ("mill" | "laser" | "drag") | "plasma";
+        /** @description Exact material identity. Display labels never establish compatibility. */
+        MaterialIdentity: {
+            id: string;
+            revision: string;
+        };
         MillConfig: {
             active: boolean;
             /**
@@ -2171,8 +1564,6 @@ export interface components {
          *     (The flat-junk-drawer `OpParams` was reduced to this common struct after readers and writers all moved to the variant structs.)
          */
         OpParams: {
-            /** @description Milling applied values; absent preserves legacy inheritance. */
-            applied_cutting?: components["schemas"]["AppliedCutting"] | null;
             /** @description Explicit operation values; no tool-default lookup during v9 generation. */
             cutting?: components["schemas"]["MillingCutting"] | null;
             /**
@@ -2203,8 +1594,6 @@ export interface components {
              * @description Optional smaller step for the FINAL Z pass, for a cleaner bottom finish. None = use the same `step` for the last pass too. Negative just like `step`.
              */
             finish_step?: number | null;
-            /** @description Operator-confirmed full-width profile cutting; never inferred from an offset. */
-            fs_full_width?: boolean;
             /**
              * @description Cut-order strategy for multiple objects.
              * @default nearest
@@ -2249,8 +1638,6 @@ export interface components {
          *     (The flat-junk-drawer `OpParams` was reduced to this common struct after readers and writers all moved to the variant structs.)
          */
         OpParamsCommon: {
-            /** @description Milling applied values; absent preserves legacy inheritance. */
-            applied_cutting?: components["schemas"]["AppliedCutting"] | null;
             /** @description Explicit operation values; no tool-default lookup during v9 generation. */
             cutting?: components["schemas"]["MillingCutting"] | null;
             /**
@@ -2281,8 +1668,6 @@ export interface components {
              * @description Optional smaller step for the FINAL Z pass, for a cleaner bottom finish. None = use the same `step` for the last pass too. Negative just like `step`.
              */
             finish_step?: number | null;
-            /** @description Operator-confirmed full-width profile cutting; never inferred from an offset. */
-            fs_full_width?: boolean;
             /**
              * @description Cut-order strategy for multiple objects.
              * @default nearest
@@ -2817,12 +2202,11 @@ export interface components {
             cutting_version?: number | null;
             /** @description Fixtures (clamps, dogs, vise jaws, hold-downs) the cutter must avoid throughout the entire program — including rapids. The sim pass tests every toolpath segment against this set and emits `SimWarning::FixtureCollision` on overlap. Default empty: a project with no fixtures behaves exactly as before. */
             fixtures?: components["schemas"]["Fixture"][];
-            fs_context?: components["schemas"]["FsContext"] | null;
             /** @description When `true`, the pipeline runs an optional tool-change-order optimization that groups consecutive same-tool work so a `T1 / T2 / T1` program emits `T1, T1, T2` with ONE tool change instead of two. Matters most on manual machines, where every swap is minutes + a re-probe + operator-error risk. The reorder is barrier-aware: program-only ops (Pause / Homing / …) and any op with [`Op::pin_order`] stay put and nothing moves across them, so a deliberate cut order (tabs, thin walls) is preserved. `false` (default) keeps the declared op order unchanged. See `order_ops_by_tool` in the pipeline. */
             group_ops_by_tool?: boolean;
             machine: components["schemas"]["MachineConfig"];
             /** @description Cutting identity is distinct from stock geometry. */
-            material?: components["schemas"]["FsIdentity"] | null;
+            material?: components["schemas"]["MaterialIdentity"] | null;
             operations: components["schemas"]["Op"][];
             /** @description Relief / 3-axis surfacing sources — the target Z(x,y) surfaces that [`OpKind::ReliefMill`] ops finish. Stored at project level (like `text_layers`) and referenced by `source_id`, not embedded in the op, because a surface grid is large and ops get cloned + hashed. Each carries a normalized-brightness grid; the op maps it to Z at planning time. Default empty: projects with no relief ops are unchanged. */
             relief_sources?: components["schemas"]["ReliefSource"][];
@@ -2874,11 +2258,6 @@ export interface components {
         RapidCollisionSubkind: "tip" | "shank";
         /** @description How consecutive raster rows are connected. */
         RasterLink: "lift_between" | "bidirectional";
-        RateOrigins: {
-            feed: components["schemas"]["CuttingOrigin"];
-            plunge: components["schemas"]["CuttingOrigin"];
-            rpm: components["schemas"]["CuttingOrigin"];
-        };
         /** @description One filled region attached to a specific operation. `outer` is the outer boundary; `holes` are the islands the cutter must avoid. Both in project units (typically mm). */
         RegionPreview: {
             holes?: components["schemas"]["Point2"][][];
@@ -3540,18 +2919,6 @@ export interface components {
              */
             whirl_stepover: number;
         };
-        ToolDefinition: {
-            cutting_family: components["schemas"]["FsCuttingFamily"];
-            /** Format: double */
-            diameter_mm: number;
-            /** Format: uint8 */
-            flute_count: number;
-            identity: components["schemas"]["FsIdentity"];
-            label: string;
-            /** Format: uint32 */
-            max_rpm?: number | null;
-            notes: string;
-        };
         ToolEntry: {
             /** @description Free-text comment / description. Surfaced as the tooltip on the tool dropdown in `OpPropertiesPanel` and as an expandable text area in `ToolLibraryDialog`. Empty / None = no comment; doesn't affect any pipeline output. */
             comment?: string | null;
@@ -3815,36 +3182,6 @@ export interface components {
         };
         /** @enum {string} */
         TransportKind: "python-bridge" | "rust-server" | "tauri" | "wasm";
-        /** @enum {string} */
-        TrialKind: "theoretical_untested";
-        TrialPreview: {
-            context_differences: string[];
-            operation: components["schemas"]["Op"];
-        };
-        TrialTarget: {
-            /** Format: double */
-            diameter_mm: number;
-            /** Format: uint8 */
-            flute_count: number;
-            machine: components["schemas"]["FsIdentity"];
-            material: components["schemas"]["FsIdentity"];
-            operation: components["schemas"]["FsOperationKind"];
-            tool: components["schemas"]["FsIdentity"];
-            /** Format: uint32 */
-            tool_id: number;
-        };
-        TrialValues: {
-            /** Format: double */
-            doc_mm: number;
-            /** Format: uint32 */
-            feed_mm_min: number;
-            /** Format: uint32 */
-            plunge_mm_min: number;
-            /** Format: uint32 */
-            rpm: number;
-            /** Format: double */
-            stepover_ratio?: number | null;
-        };
         /** @description Result of a two-sided emission: the front program plus, for a genuine two-sided job, the back program. `back` is `None` for a single-sided project — the orchestrator then returns the front field unchanged from the ordinary single-program path, so single-sided callers see byte-identical output. */
         TwoSidedGenerateResponse: {
             /** @description The back program — present only when the job is two-sided (stock flip registration set and at least one enabled `Back` op). Its geometry is mirrored and its header carries the flip + Z-re-zero instructions. */
@@ -4008,37 +3345,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    feedsSpeeds: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["FsCamRequest"];
-            };
-        };
-        responses: {
-            /** @description Proposal and optional explicitly applied operation */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FsCamResponse"];
-                };
-            };
-            /** @description Invalid milling context, dataset or saved cutting roles */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     health: {
         parameters: {
             query?: never;

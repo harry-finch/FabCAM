@@ -12,7 +12,6 @@
 
 mod commands;
 mod preset_collections;
-mod source_packs;
 mod watcher;
 
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
@@ -226,16 +225,10 @@ fn run_app() -> tauri::Result<()> {
             commands::corner_relief_cmd,
             commands::evaluate_drawing_cmd,
             commands::generate_drawing_cmd,
-            commands::feeds_speeds_cmd,
             commands::preset_command,
             preset_collections::list_preset_collections,
             preset_collections::save_preset_collection,
             preset_collections::delete_preset_collection,
-            source_packs::import_source_pack,
-            source_packs::save_lab_pack,
-            source_packs::save_adapted_lab_pack,
-            source_packs::remove_source_pack,
-            source_packs::list_source_packs,
             commands::rasterize_stl_cmd,
             commands::read_workspace_file,
             commands::write_workspace_file,

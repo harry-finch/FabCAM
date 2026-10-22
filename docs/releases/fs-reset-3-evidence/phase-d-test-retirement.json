@@ -1,0 +1,72 @@
+[
+  {
+    "file": "crates/ivac-tauri/src/source_packs.rs",
+    "tests": [
+      "adapted_copy_checks_source_and_destination_under_shared_locks",
+      "removal_checks_head_and_removes_all_revisions_only_for_the_selected_id",
+      "removal_rejects_symlinks_before_deleting_any_revision",
+      "audit_15_16_lab_rejects_variable_width_and_text_revisions",
+      "lab_revisions_use_compare_and_append_not_overwrite",
+      "named_packs_keep_independent_heads_locks_and_import_history",
+      "stores_only_valid_local_json_and_refuses_duplicate_version",
+      "rejects_repository_storage"
+    ],
+    "removed_behavior": "Immutable source-pack revisions and local source-store APIs; actual existing user files are left intact.",
+    "embedded_safety": "Atomic storage, concurrent revision conflict, traversal/symlink refusal, independent collections, malformed import bounds.",
+    "replacement": "crates/ivac-tauri/src/preset_collections.rs::tests (atomic_current_document_and_conflicts; malformed_oversized_busy_and_traversal_preserve_original; symlink_destination_and_directory_refused); crates/ivac-file-export/src/lib.rs tests; frontend/src/lib/services/preset-collection-files.test.ts",
+    "qualification": "Phase D native/core/frontend logs. Initial wire/native-bridge fixture failures repaired without weakening assertions; final-source full gate pending phase H."
+  },
+  {
+    "file": "crates/ivac-core/src/feeds_speeds.rs",
+    "tests": [
+      "lab_capture_names_only_missing_identities",
+      "lab_capture_reads_manual_resolved_rates_without_mutating_operation",
+      "lab_capture_preserves_unknown_engagement_and_rejects_missing_identity",
+      "capture_uses_physical_identities_without_replacing_reference_links",
+      "lab_capture_uses_applied_manual_slot_instead_of_original_recommendation",
+      "explicit_record_preview_apply_reopen_and_legacy_request_contract",
+      "approximate_proposal_apply_and_reopen_keep_resolved_values_authoritative",
+      "private_pack_apply_saves_values_and_ids_without_record_body",
+      "public_pack_migration_preserves_single_source_values",
+      "rejected_scope_is_transient_and_old_responses_remain_readable",
+      "preview_is_immutable_apply_is_explicit_and_roundtrip_offline",
+      "manual_slots_survive_tool_data_changes_and_context_becomes_stale",
+      "missing_duplicate_new_tool_and_wrong_process_roles_refuse",
+      "native_geometry_context_uses_depth_schedule_and_nominal_overlap",
+      "legacy_serialization_omits_fs_fields_and_inheritance_survives",
+      "explicit_apply_can_resolve_a_changed_tool_without_live_inheritance",
+      "pocket_uses_nominal_overlap_and_keeps_secondary_pass_origins"
+    ],
+    "removed_behavior": "Recommendation/Trial adaptation, source matching and v1\u20138 serialization; no generator consumer remains.",
+    "embedded_safety": "Explicit resolved values, actual roles, no live defaults, known limits, exact physical/material context, reviewed copies, malformed metadata refusal and independent provenance.",
+    "replacement": "crates/ivac-core/src/cutting_parameters.rs::tests; crates/ivac-core/src/presets.rs::tests; crates/ivac-core/src/pipeline/cutting_v9_tests.rs; crates/ivac-core/tests/explicit_contract.rs; frontend/src/lib/state/cutting-v9-wasm.test.ts; fixed 23-program fs_reset_outputs corpus",
+    "qualification": "Phase D native/core/frontend logs. Initial wire/native-bridge fixture failures repaired without weakening assertions; final-source full gate pending phase H."
+  },
+  {
+    "file": "crates/ivac-core/src/feeds_speeds/experimental.rs",
+    "tests": [],
+    "removed_behavior": "Recommendation/Trial adaptation, source matching and v1\u20138 serialization; no generator consumer remains.",
+    "embedded_safety": "Explicit resolved values, actual roles, no live defaults, known limits, exact physical/material context, reviewed copies, malformed metadata refusal and independent provenance.",
+    "replacement": "crates/ivac-core/src/cutting_parameters.rs::tests; crates/ivac-core/src/presets.rs::tests; crates/ivac-core/src/pipeline/cutting_v9_tests.rs; crates/ivac-core/tests/explicit_contract.rs; frontend/src/lib/state/cutting-v9-wasm.test.ts; fixed 23-program fs_reset_outputs corpus",
+    "qualification": "Phase D native/core/frontend logs. Initial wire/native-bridge fixture failures repaired without weakening assertions; final-source full gate pending phase H."
+  },
+  {
+    "file": "crates/ivac-core/src/feeds_speeds/trial_tests.rs",
+    "tests": [
+      "trial_exact_private_portable_and_no_source_dependency",
+      "trial_does_not_enable_suggestion_and_requires_acknowledgment",
+      "trial_refuses_fractional_rates_and_scaling",
+      "trial_refuses_missing_and_exceeded_limits",
+      "trial_refuses_deleted_stale_and_missing_source",
+      "trial_generation_revalidates_manual_edits_context_and_metadata",
+      "trial_direct_json_refuses_private_extensions_and_invalid_discriminator",
+      "trial_pocket_snapshots_both_roles_and_refuses_unknown_stepover",
+      "trial_refuses_unsupported_tool_or_process_without_relaxing_shopbot",
+      "trial_refuses_duplicate_binding_before_application"
+    ],
+    "removed_behavior": "Recommendation/Trial adaptation, source matching and v1\u20138 serialization; no generator consumer remains.",
+    "embedded_safety": "Explicit resolved values, actual roles, no live defaults, known limits, exact physical/material context, reviewed copies, malformed metadata refusal and independent provenance.",
+    "replacement": "crates/ivac-core/src/cutting_parameters.rs::tests; crates/ivac-core/src/presets.rs::tests; crates/ivac-core/src/pipeline/cutting_v9_tests.rs; crates/ivac-core/tests/explicit_contract.rs; frontend/src/lib/state/cutting-v9-wasm.test.ts; fixed 23-program fs_reset_outputs corpus",
+    "qualification": "Phase D native/core/frontend logs. Initial wire/native-bridge fixture failures repaired without weakening assertions; final-source full gate pending phase H."
+  }
+]

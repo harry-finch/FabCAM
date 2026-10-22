@@ -1085,7 +1085,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1172,7 +1171,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1239,7 +1237,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1324,7 +1321,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1404,7 +1400,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1477,7 +1472,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1608,7 +1602,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1670,7 +1663,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1712,7 +1704,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1750,7 +1741,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1796,7 +1786,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1875,7 +1864,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1927,7 +1915,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -1980,7 +1967,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -2027,7 +2013,6 @@ mod tests {
                 relief_sources: Vec::new(),
                 group_ops_by_tool: false,
                 material: None,
-                fs_context: None,
             };
             let cut_max_x = |toolpath: &[crate::gcode::preview::ToolpathSegment]| -> f64 {
                 toolpath
@@ -2107,7 +2092,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -2153,13 +2137,9 @@ mod tests {
                     "source": { "kind": "objects", "ids": [1] },
                     "params": {
                         "depth": -2.0, "start_depth": 0.0, "step": -1.0, "fast_move_z": 5.0,
-                        "helix": false, "reverse": false, "objectorder": "nearest", "overcut": false,
-                        "pocket_islands": true, "pocket_nocontour": false,
-                        "tabs": { "active": false, "width": 10.0, "height": 1.0, "tab_type": "rectangle" },
-                        "leads": { "in": "off", "out": "off", "in_lenght": 5.0, "out_lenght": 5.0 }
+                        "objectorder": "nearest"
                     }
-                }],
-                "tabs": {}
+                }]
             }
         });
         let req: PipelineRequest = serde_json::from_value(raw).expect("wire JSON");
@@ -2200,13 +2180,9 @@ mod tests {
                     "source": { "kind": "all" },
                     "params": {
                         "depth": -2.0, "start_depth": 0.0, "step": -1.0, "fast_move_z": 5.0,
-                        "helix": false, "reverse": false, "objectorder": "nearest", "overcut": false,
-                        "pocket_islands": false, "pocket_nocontour": false,
-                        "tabs": { "active": false, "width": 10.0, "height": 1.0, "tab_type": "rectangle" },
-                        "leads": { "in": "off", "out": "off", "in_lenght": 5.0, "out_lenght": 5.0 }
+                        "objectorder": "nearest"
                     }
-                }],
-                "tabs": {}
+                }]
             }
         });
         let req: PipelineRequest = serde_json::from_value(raw).expect("wire JSON deserialization");
@@ -2257,7 +2233,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         for offset in [ToolOffset::Outside, ToolOffset::Inside] {
             let resp = run_pipeline(
@@ -2306,7 +2281,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let cut_max_x = |toolpath: &[crate::gcode::preview::ToolpathSegment]| -> f64 {
             toolpath
@@ -2402,7 +2376,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let annulus_project = Project {
             cutting_version: None,
@@ -2424,7 +2397,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let baseline = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -2513,7 +2485,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -2595,7 +2566,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -2692,7 +2662,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -2807,7 +2776,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -2900,7 +2868,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3016,7 +2983,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3126,7 +3092,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let err = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3178,7 +3143,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3254,7 +3218,6 @@ mod tests {
                 relief_sources: Vec::new(),
                 group_ops_by_tool: false,
                 material: None,
-                fs_context: None,
             };
             run_pipeline(
                 crate::fixture_support::request(PipelineRequest {
@@ -3316,7 +3279,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3398,7 +3360,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3466,7 +3427,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3532,7 +3492,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3579,7 +3538,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3632,7 +3590,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3825,7 +3782,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3882,7 +3838,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -3959,7 +3914,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4044,7 +3998,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4102,7 +4055,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let mut spiral_project = cascade_project.clone();
         spiral_project.operations[0].kind = OpKind::Pocket {
@@ -4196,7 +4148,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let gcode = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4288,7 +4239,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let strategies = [
             PocketStrategy::Cascade,
@@ -4388,7 +4338,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let cut_total = |toolpath: &[preview::ToolpathSegment]| -> f64 {
             toolpath
@@ -4490,7 +4439,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4550,7 +4498,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4657,7 +4604,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let auto = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4766,7 +4712,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4862,7 +4807,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         let resp = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
@@ -4945,7 +4889,6 @@ mod tests {
             relief_sources: Vec::new(),
             group_ops_by_tool: false,
             material: None,
-            fs_context: None,
         };
         // Baseline: nocontour + allowance=0.
         let baseline = run_pipeline(

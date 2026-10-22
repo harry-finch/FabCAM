@@ -98,7 +98,7 @@ it('the real snapshot/restore path preserves incomplete values and rejects v8 wi
   } as unknown as ProjectState;
   const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
   expect(saved.version).toBe(9);
-  expect(saved.fsContext).toBeUndefined();
+  expect('fsContext' in saved).toBe(false);
   restoreProject(p, saved);
   expect(snapshotProject(p).operations).toEqual(saved.operations);
   expect(p.data.tools[0].maxRpm).toBe(24000);
@@ -106,4 +106,16 @@ it('the real snapshot/restore path preserves incomplete values and rejects v8 wi
   const before = JSON.stringify(snapshotProject(p));
   expect(() => restoreProject(p, { ...saved, version: 8 })).toThrow();
   expect(JSON.stringify(snapshotProject(p))).toBe(before);
+});
+
+it('refuses obsolete context/recipe fields even when null rather than silently loading them', () => {
+  for (const field of ['fsContext']) {
+    const p = { ...fixture(), [field]: null };
+    expect(() => validateProjectV9(p)).toThrow('Legacy');
+  }
+  for (const field of ['appliedCutting', 'fsFullWidth', 'appliedContextKey']) {
+    const p = fixture();
+    Object.assign(p.operations![0], { [field]: null });
+    expect(() => validateProjectV9(p)).toThrow('Legacy');
+  }
 });

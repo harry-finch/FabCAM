@@ -125,9 +125,7 @@ describe('Sorbonne ShopBot M3 snapshot', () => {
     }
     const profile = profileFromCurrent(machine, [], [], 'mp-sorbonne-shopbot');
     expect(profilePayload(profile)).toMatchObject({ machine, tools: [] });
-    expect(profilePayload(profile).machine.fsLocalIdentity).toEqual(
-      profile.machine.fsLocalIdentity,
-    );
+    expect(profilePayload(profile).machine.physicalId).toEqual(profile.machine.physicalId);
     await saveMachine();
     const saved = JSON.parse(io.write.mock.calls[0][1] as string);
     expect(saved.kind).toBe('machine');

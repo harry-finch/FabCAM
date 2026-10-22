@@ -45,18 +45,25 @@ use serde::{Deserialize, Serialize};
 
 use crate::geometry::Segment;
 
+/// Exact material identity. Display labels never establish compatibility.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct MaterialIdentity {
+    pub id: String,
+    pub revision: String,
+}
+
 // ─── top level ─────────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct Project {
     /// Native cutting contract. V9 clients must explicitly send 9.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cutting_version: Option<u32>,
     /// Cutting identity is distinct from stock geometry.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub material: Option<ivac_feeds_speeds::Identity>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fs_context: Option<crate::feeds_speeds::FsContext>,
+    pub material: Option<MaterialIdentity>,
     /// Imported geometry — the same `segments` the existing pipeline
     /// consumes. We keep it inline rather than referencing it by id so the
     /// project file is self-contained.
@@ -398,11 +405,6 @@ impl Wcs {
 /// a same-file edit; `crate::schema::components_schemas` composes these.
 pub(crate) fn register_schemas(map: &mut crate::schema::SchemaMap) {
     crate::schema::insert::<Project>(map, "Project");
-    crate::schema::insert::<crate::feeds_speeds::FsLabCapture>(map, "FsLabCapture");
-    crate::schema::insert::<ivac_feeds_speeds::SourcePack>(map, "FsSourcePack");
-    crate::schema::insert::<ivac_feeds_speeds::MaterialTaxon>(map, "FsMaterialTaxon");
-    crate::schema::insert::<crate::feeds_speeds::FsCamRequest>(map, "FsCamRequest");
-    crate::schema::insert::<crate::feeds_speeds::FsCamResponse>(map, "FsCamResponse");
     crate::schema::insert::<Op>(map, "Op");
     crate::schema::insert::<OpKind>(map, "OpKind");
     crate::schema::insert::<DrillCycle>(map, "DrillCycle");

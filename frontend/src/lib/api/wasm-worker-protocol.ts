@@ -18,7 +18,6 @@ export type WorkerMethod =
   | 'generateTwoSided'
   | 'renderText'
   | 'renderTextLayer'
-  | 'feedsSpeeds'
   | 'computeHelixRadius'
   | 'cornerRelief'
   | 'evaluateDrawing'

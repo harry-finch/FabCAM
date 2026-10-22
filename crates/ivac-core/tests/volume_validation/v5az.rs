@@ -153,7 +153,6 @@ fn chamfer_after_pocket_does_not_dip_below_pocket_floor() {
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     };
 
     let resp = run_pipeline(
@@ -338,7 +337,6 @@ fn profile_after_pocket_does_not_dip_below_pocket_floor() {
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     };
     let resp = run(project, PostProcessorKind::Linuxcnc);
 

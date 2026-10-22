@@ -317,7 +317,6 @@ pub(in crate::pipeline) fn project_with_segments(
         relief_sources: Vec::new(),
         group_ops_by_tool: false,
         material: None,
-        fs_context: None,
     }
 }
 

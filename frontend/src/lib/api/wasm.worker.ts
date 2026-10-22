@@ -21,7 +21,6 @@ import type { WasmModule } from './wasm';
 import type { WorkerRequest, WorkerResponse } from './wasm-worker-protocol';
 import type {
   GenerateRequest,
-  FsCamRequest,
   HelixRadiusRequest,
   RenderTextRequest,
   WireTextLayer,
@@ -124,10 +123,6 @@ ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
         break;
       case 'renderTextLayer':
         post({ id, type: 'result', value: m.renderTextLayer(args[0] as WireTextLayer) });
-        break;
-      case 'feedsSpeeds':
-        if (!m.feedsSpeeds) throw new Error('Feeds & speeds unavailable in this WASM build');
-        post({ id, type: 'result', value: m.feedsSpeeds(args[0] as FsCamRequest) });
         break;
       case 'evaluateDrawing':
         if (!m.evaluateDrawing) throw new Error('WASM does not support GEOM1');

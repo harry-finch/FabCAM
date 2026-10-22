@@ -907,7 +907,7 @@
               ? t('fs35.advanced_feed')
               : t('opprops.feeds')}</legend
           >
-          {#if !op.appliedCutting && project.data.machine.mode !== 'mill'}
+          {#if project.data.machine.mode !== 'mill'}
             <label class="row" title={t('opprops.feeds.feed_rate.title')}>
               <span>{t('opprops.feeds.feed_rate')}</span>
               <div class="num-cell">
