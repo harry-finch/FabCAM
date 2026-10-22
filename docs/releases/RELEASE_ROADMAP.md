@@ -1,5 +1,24 @@
 # FabCAM release roadmap — approved direction
 
+## FabCAM V1.1 — FS-RESET (current direction, 2026-10-22)
+
+The maintainer explicitly replaces FabCAM recommendations/source packs with direct operation
+cutting values and tested workshop presets. Calculation belongs to independent FabSpeed.
+The [FS-RESET architecture](FS_RESET_ARCHITECTURE.md) supersedes the earlier V1.1 FS/PRESET
+product direction without rewriting its historical qualification or the frozen V1 baseline.
+
+| Milestone | Scope | Current boundary |
+|---|---|---|
+| FS-RESET-1 | Dependency/safety audit, operation/preset/storage models and proposed ADR-0030 | Report delivered; **HARD STOP for human architecture approval** |
+| FS-RESET-2 | Approved core contracts, direct inspector, simple library and actual tool/pass roles | Unstarted; requires explicit approval of FS-RESET-1, qualified local slice commits |
+| FS-RESET-3 | Remove legacy engine/APIs/assets/formats and qualify retained software/output/UX | Unstarted; functional tested replacement first, final human acceptance stop |
+
+No old source-pack/project/recipe migration is required. User files and generic inventory
+remain protected. No FabSpeed integration, PRESET-5, V1 workflow change, merge or release.
+Full scope, safety gates and decisions: [ADR-0030](../shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md).
+Subsequent historical PRESET sections describe delivered work, not the next implementation task.
+
+
 Approved direction: **2026-10-15**, `ivac-zgmds`; V1 requires macOS, Windows
 and Linux. Approval of scope is not release acceptance.
 

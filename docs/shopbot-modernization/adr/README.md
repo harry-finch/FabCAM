@@ -1,5 +1,10 @@
 # Architectural decisions
 
+[ADR-0030 — FabCAM/FabSpeed separation](ADR-0030-fabcam-fabspeed-separation.md) is
+**proposed, awaiting FS-RESET-1 architecture approval**. Product separation is authorized;
+implementation is stopped. Earlier FS decisions remain historical pending this bounded replacement.
+
+
 [Documentation index](../../README.md) · [Fork architecture](../ARCHITECTURE.md) ·
 [Current gates](../../releases/V1_READINESS.md).
 

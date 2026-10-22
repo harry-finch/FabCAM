@@ -1,5 +1,19 @@
 # FabCAM — current status
 
+## Current checkpoint — FS-RESET-1, 2026-10-22
+
+The maintainer has authorized separating FabSpeed calculation from FabCAM CAM/presets.
+[Architecture audit](../releases/FS_RESET_ARCHITECTURE.md) and
+[proposed ADR-0030](adr/ADR-0030-fabcam-fabspeed-separation.md) are ready for human review.
+Audited code: `FabCAM-v1.1` at `e48241c89dbd911841eaf93dc72553f2763aa45f`.
+Documentation only; baseline checks: core adapter 30, setup resolver 21, frontend 59 PASS.
+No production change, source-pack reset, physical operation or V1 modification.
+**HARD STOP for architecture approval; FS-RESET-2/3 have not started.**
+
+The snapshot below records the preceding PRESET/MAT-1 checkpoint and retained independent
+gates; it does not authorize continued recommendation-system development.
+
+
 Snapshot **2026-10-21**, recorded on `FabCAM-v1.1` only.
 [Release plan](../releases/RELEASE_ROADMAP.md) ·
 [V1 readiness](../releases/V1_READINESS.md) ·

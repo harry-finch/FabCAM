@@ -1,5 +1,11 @@
 # FabCAM documentation
 
+Current V1.1 architecture review: [FS-RESET-1](releases/FS_RESET_ARCHITECTURE.md) —
+explicit operation cutting parameters and tested presets, independent FabSpeed calculation.
+[ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md) is proposed;
+**HARD STOP before implementation**.
+
+
 Start with [current STATUS](shopbot-modernization/STATUS.md), then select a route.
 This index separates product setup, engineering contracts, plans and evidence.
 Source/qualification snapshot: [V1 readiness](releases/V1_READINESS.md).

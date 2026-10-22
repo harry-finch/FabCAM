@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "audited_head": "e48241c89dbd911841eaf93dc72553f2763aa45f",
+  "branch": "FabCAM-v1.1",
+  "tracked_files_checked": 3101,
+  "changed_tracked_paths": [
+    "docs/README.md",
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md",
+    "docs/shopbot-modernization/adr/README.md"
+  ],
+  "production_files_changed": 0,
+  "preexisting_canonical_content_preserved": true,
+  "document_local_targets_exist": true,
+  "initial_status_counts": {
+    " M": 2,
+    "??": 985
+  },
+  "baseline_tests": {
+    "core_adapter": 30,
+    "rate_resolution": 21,
+    "frontend": 59,
+    "frontend_files": 6
+  },
+  "full_release_qualification": false,
+  "physical_validation": false,
+  "human_gate": "ivac-909v6 OPEN",
+  "evidence_normalization": "Trailing blank lines removed from console logs/worktree listing; unified diffs preserved verbatim inside JSON strings to avoid patch-context whitespace diagnostics."
+}

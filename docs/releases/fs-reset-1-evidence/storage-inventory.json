@@ -1,0 +1,39 @@
+{
+  "native_app_data_root": "/Users/mugen/Library/Application Support/org.opcenter.ivacam",
+  "exists": true,
+  "files": [
+    {
+      "path": ".window-state.json",
+      "bytes": 211
+    },
+    {
+      "path": "feeds-speeds/sources/private-amana-single-o-flute-reference@2026-10-16.1.json",
+      "bytes": 189409
+    },
+    {
+      "path": "feeds-speeds/sources/private-datron-high-speed-aluminum@2026-10-16.1.json",
+      "bytes": 23858
+    },
+    {
+      "path": "feeds-speeds/sources/private-onsrud-router-reference@2026-10-16.1.json",
+      "bytes": 319410
+    },
+    {
+      "path": "feeds-speeds/sources/private-sorotec-2f-reference@2026-10-16.1.json",
+      "bytes": 830739
+    },
+    {
+      "path": "feeds-speeds/sources/private-sorotec-3f-reference@2026-10-16.1.json",
+      "bytes": 830929
+    },
+    {
+      "path": "feeds-speeds/sources/private-sorotec-generic-reference@2026-10-16.1.json",
+      "bytes": 830683
+    },
+    {
+      "path": "ivacam/workspace.json",
+      "bytes": 3068
+    }
+  ],
+  "browser_storage": "Not read; per-origin IndexedDB and localStorage code inventory only. No destructive cleanup."
+}

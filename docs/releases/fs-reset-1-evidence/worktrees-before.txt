@@ -1,0 +1,11 @@
+worktree /Users/mugen/Documents/01_Projets/FabCAM/ivacam
+HEAD e48241c89dbd911841eaf93dc72553f2763aa45f
+branch refs/heads/FabCAM-v1.1
+
+worktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-docs-consolidation
+HEAD 7e1c24b937e9bc01aa320537c835ffc30fc9389c
+branch refs/heads/codex/sec1-roadmap
+
+worktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-v1-freeze
+HEAD 85a93c4a467ff5965655d5737354d9500c2e94fc
+branch refs/heads/codex/v1-freeze-readiness

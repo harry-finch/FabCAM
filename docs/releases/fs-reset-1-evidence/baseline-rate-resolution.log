@@ -1,0 +1,27 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-79e46ac25832bcaf)
+
+running 21 tests
+test pipeline::setup_resolver::tests::effective_step_warns_when_both_unset ... ok
+test pipeline::setup_resolver::tests::effective_step_rejects_tiny_or_nonfinite_instead_of_single_full_depth_pass ... ok
+test pipeline::setup_resolver::tests::effective_step_rejects_non_negative ... ok
+test pipeline::setup_resolver::tests::effective_step_falls_back_to_tool_default ... ok
+test pipeline::setup_resolver::tests::effective_step_op_override_wins ... ok
+test pipeline::setup_resolver::tests::resolve_tool_rates_honors_per_pass_overrides ... ok
+test pipeline::setup_resolver::tests::resolve_tool_rates_falls_back_when_unset ... ok
+test pipeline::setup_resolver::tests::resolve_vcarve_lead_in_angle_handles_edge_cases ... ok
+test pipeline::setup_resolver::tests::header_setup_fallback_branch_reads_tool_pause ... ok
+test pipeline::setup_resolver::tests::header_setup_skips_leading_pause_op ... ok
+test pipeline::setup_resolver::tests::header_setup_reads_tool_pause ... ok
+test pipeline::setup_resolver::tests::pierce_params_resolve_only_for_plasma_torch_kind ... ok
+test pipeline::setup_resolver::tests::wear_offset_shrinks_effective_cut_diameter ... ok
+test pipeline::setup_resolver::tests::plasma_and_laser_kerf_override_effective_cut_diameter ... ok
+test pipeline::setup_resolver::tests::lot7_rpm_clamp_preserves_manual_feeds_but_explains_chipload_factor ... ok
+test pipeline::setup_resolver::tests::zero_feed_rate_is_refused ... ok
+test pipeline::setup_resolver::tests::run_pipeline_emits_step_unspecified_warning ... ok
+test pipeline::setup_resolver::tests::zero_spindle_speed_emits_warning ... ok
+test pipeline::setup_resolver::tests::rpm_above_machine_max_clamps_and_warns ... ok
+test pipeline::setup_resolver::tests::feed_above_machine_max_clamps_and_warns ... ok
+test pipeline::setup_resolver::tests::feed_override_above_machine_max_clamps ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 1182 filtered out; finished in 0.04s
