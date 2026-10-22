@@ -1,0 +1,11 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-79e46ac25832bcaf)
+
+running 5 tests
+test presets::tests::empty_named_collection_roundtrip ... ok
+test presets::tests::bounded_strict_collection_parser ... ok
+test presets::tests::different_context_limits_or_unattested_data_refused ... ok
+test presets::tests::exact_reviewed_load_is_a_copy_without_private_notes ... ok
+test presets::tests::local_tool_numbers_do_not_establish_physical_compatibility ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 1210 filtered out; finished in 0.00s

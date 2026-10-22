@@ -12,7 +12,6 @@
   } from '../state/project.svelte';
   import { untrack } from 'svelte';
   import Modal from './Modal.svelte';
-  import FeedsSpeedsCompatibility from './FeedsSpeedsCompatibility.svelte';
   import { deepEqual } from './dialog-draft';
   import PostProcessorEditor from './PostProcessorEditor.svelte';
   import CpsPostConfigEditor from './CpsPostConfig.svelte';
@@ -48,7 +47,6 @@
     saveLabel,
     section = 'all',
     scopeKey = 'project',
-    inheritedIdentity,
     onDraftState,
   }: Props = $props();
   const source = $derived(sourceMachine ?? project.data.machine);
@@ -522,13 +520,11 @@
       <p class="help">
         {t('ux6.unknown_limits_stay_unset_workspace_dimensions_and_clearance_are')}
       </p>
-      <FeedsSpeedsCompatibility
-        kind="machines"
-        value={draft.fsIdentity !== undefined ? draft.fsIdentity : inheritedIdentity}
-        localIdentity={draft.fsLocalIdentity}
-        onLocalChange={(identity) => (draft.fsLocalIdentity = identity)}
-        onChange={(identity) => (draft.fsIdentity = identity)}
-      />
+      <p class="help">
+        Workshop machine identity: {draft.physicalId ??
+          draft.fsLocalIdentity?.id ??
+          'Assign a named workshop machine before saving presets'}
+      </p>
     {/if}
     {#if section === 'output' || section === 'all'}
       {#if isShopBot}<p class="help">{t('ux6.shopbot_context')}</p>

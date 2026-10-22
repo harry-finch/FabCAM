@@ -213,6 +213,7 @@ pub fn version() -> VersionResponse {
     let mut capabilities = vec![
         "import-dxf",
         "generate-gcode",
+        "cutting-parameters-v9",
         "feeds-speeds",
         "post-linuxcnc",
         "post-grbl",

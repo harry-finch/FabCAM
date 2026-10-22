@@ -1,3 +1,4 @@
+import { assertCuttingCapability } from './cutting-contract';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // `WiacClient` that runs the wasm CAM pipeline in a Web Worker, so
@@ -232,11 +233,13 @@ export class WasmWorkerClient implements WiacClient {
     return this.call('importBytes', [file.name, new Uint8Array(buf), scale], { transfer: [buf] });
   }
 
-  generate(request: GenerateRequest): Promise<GenerateResponse> {
+  async generate(request: GenerateRequest): Promise<GenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     return this.call('generate', [request]);
   }
 
-  generateTwoSided(request: GenerateRequest): Promise<TwoSidedGenerateResponse> {
+  async generateTwoSided(request: GenerateRequest): Promise<TwoSidedGenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     return this.call('generateTwoSided', [request]);
   }
 
@@ -244,17 +247,19 @@ export class WasmWorkerClient implements WiacClient {
     request: GenerateRequest,
     onProgress: (e: ProgressEvent) => void,
   ): Promise<GenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     onProgress({ phase: 'import', fraction: 0.05, message: 'in-browser core (worker)' });
     const r = await this.generate(request);
     onProgress({ phase: 'done', fraction: 1.0, message: 'complete' });
     return r;
   }
 
-  generateStreaming(
+  async generateStreaming(
     request: GenerateRequest,
     onEvent: (event: PipelineEvent) => void,
     cancelToken?: AbortSignal,
   ): Promise<GenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     return this.call('generateStreaming', [request], { onEvent, signal: cancelToken });
   }
 
@@ -273,7 +278,9 @@ export class WasmWorkerClient implements WiacClient {
   evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
     return this.call('evaluateDrawing', [request]);
   }
-  generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
+  async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
+    if (request.machining.project?.cutting_version === 9)
+      assertCuttingCapability(await this.version());
     return this.call('generateDrawing', [request]);
   }
   cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse> {

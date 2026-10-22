@@ -1,0 +1,20 @@
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend
+
+ ✓ src/lib/api/client.test.ts (16 tests) 9ms
+ ✓ src/lib/api/wasm-worker-client.test.ts (14 tests) 5ms
+ ✓ src/lib/state/op_defaults.test.ts (20 tests) 8ms
+ ✓ src/lib/state/commands.test.ts (51 tests) 12ms
+ ✓ src/lib/state/operation-tool.test.ts (6 tests) 12ms
+ ✓ src/lib/state/operation-templates.test.ts (11 tests) 9ms
+ ✓ src/lib/state/generation-context.test.ts (5 tests) 47ms
+ ✓ src/lib/state/project-v9.test.ts (6 tests) 8ms
+ ✓ src/lib/state/program-qualification.test.ts (12 tests) 4ms
+ ✓ src/lib/api/cutting-contract.test.ts (2 tests) 3ms
+ ✓ src/lib/state/cutting-v9-wasm.test.ts (2 tests) 44ms
+ ✓ src/lib/state/cutting-workflow.test.ts (5 tests) 4ms
+
+ Test Files  12 passed (12)
+      Tests  150 passed (150)
+   Start at  15:49:40
+   Duration  579ms (transform 638ms, setup 0ms, collect 1.25s, tests 165ms, environment 1ms, prepare 581ms)

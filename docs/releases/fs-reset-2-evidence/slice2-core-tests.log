@@ -1,0 +1,13 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src/lib.rs (target/debug/deps/ivac_core-79e46ac25832bcaf)
+
+running 7 tests
+test cutting_parameters::tests::no_duplicate_missing_stray_or_misassigned_role ... ok
+test cutting_parameters::tests::explicit_rates_survive_default_changes ... ok
+test cutting_parameters::tests::invalid_geometry_numeric_and_depth_rejected ... ok
+test cutting_parameters::tests::known_limits_reject_without_mutation_unknowns_disclosed ... ok
+test cutting_parameters::tests::pocket_overlap_is_a_fraction_and_cannot_inherit_defaults ... ok
+test cutting_parameters::tests::wire_refuses_unknown_fractional_overflow_roles ... ok
+test cutting_parameters::tests::incomplete_is_editable_but_cannot_generate ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 1208 filtered out; finished in 0.02s

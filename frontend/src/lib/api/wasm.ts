@@ -1,3 +1,4 @@
+import { assertCuttingCapability } from './cutting-contract';
 import { isFatalWasmError, WasmFatalError } from './wasm-fatal';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
@@ -168,11 +169,13 @@ export class WasmWiacClient implements WiacClient {
   }
 
   async generate(request: GenerateRequest): Promise<GenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     const m = await loadModule();
     return m.generate(request);
   }
 
   async generateTwoSided(request: GenerateRequest): Promise<TwoSidedGenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     const m = await loadModule();
     if (!m.generateTwoSided) {
       throw new Error('this wasm build predates two-sided generation');
@@ -184,6 +187,7 @@ export class WasmWiacClient implements WiacClient {
     request: GenerateRequest,
     onProgress: (e: ProgressEvent) => void,
   ): Promise<GenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     onProgress({ phase: 'import', fraction: 0.05, message: 'in-browser core' });
     const r = await this.generate(request);
     onProgress({ phase: 'done', fraction: 1.0, message: 'complete' });
@@ -203,6 +207,7 @@ export class WasmWiacClient implements WiacClient {
     onEvent: (event: PipelineEvent) => void,
     cancelToken?: AbortSignal,
   ): Promise<GenerateResponse> {
+    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
     if (cancelToken?.aborted) throw new CancelledError();
     const m = await loadModule();
     if (!m.generateStreaming) {
@@ -258,6 +263,8 @@ export class WasmWiacClient implements WiacClient {
     return m.evaluateDrawing(request);
   }
   async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
+    if (request.machining.project?.cutting_version === 9)
+      assertCuttingCapability(await this.version());
     const m = await loadModule();
     if (!m.generateDrawing) throw new Error('WASM does not support GEOM1');
     return m.generateDrawing(request);

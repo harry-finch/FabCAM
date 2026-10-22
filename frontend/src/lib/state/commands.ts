@@ -1,3 +1,4 @@
+import { rebindCutting } from './cutting-parameters';
 import { selectedBinding } from './drawing';
 /// Command builders for every undoable project mutation. Each builder
 /// returns a `Command { label, apply, revert, coalesce_key? }`. The
@@ -151,6 +152,7 @@ export function updateOperationCommand(opId: number, patch: Partial<OpEntry>): C
       const t = s as CommandTarget;
       const cur = t.operations.find((o) => o.id === opId);
       if (!cur) return;
+      patch = rebindCutting(cur, patch);
       if (!t.drawing && ('sourceObjects' in patch || 'sourceLayers' in patch))
         patch = { ...patch, geometryBinding: undefined };
       if (t.drawing && ('sourceObjects' in patch || 'sourceLayers' in patch)) {

@@ -69,6 +69,7 @@ export function validateCuttingStructure(op: OpEntry): void {
     throw new Error(`${op.name}: missing cutting values`);
   if (Object.keys(c).some((k) => !['rates', 'preset_snapshot'].includes(k)))
     throw new Error('Unknown cutting field');
+  if (c.preset_snapshot != null) validateLoadedSnapshot(c.preset_snapshot);
   const expected = cuttingRoles(op)
     .map((r) => `${r.role}/${r.tool_id}`)
     .sort();
@@ -88,4 +89,109 @@ export function validateCuttingStructure(op: OpEntry): void {
         throw new Error(`${op.name}: invalid ${r.role} ${field}`);
     }
   }
+}
+
+/** Existing roles keep their numbers; newly enabled roles are visibly incomplete. */
+export function rebindCutting(op: OpEntry, patch: Partial<OpEntry>): Partial<OpEntry> {
+  if (!op.cutting || patch.cutting !== undefined) return patch;
+  const next = { ...op, ...patch } as OpEntry;
+  const roles = cuttingRoles(next);
+  if (
+    JSON.stringify(roles) ===
+    JSON.stringify(op.cutting.rates.map(({ role, tool_id }) => ({ role, tool_id })))
+  )
+    return patch;
+  const rates = roles.map((r) => {
+    const old = op.cutting!.rates.find((v) => v.role === r.role);
+    return old
+      ? { ...old, tool_id: r.tool_id }
+      : { ...r, rpm: null, feed_mm_min: null, plunge_mm_min: null };
+  });
+  return { ...patch, cutting: { ...op.cutting, rates } };
+}
+
+export function validateLoadedSnapshot(
+  value: NonNullable<MillingCutting['preset_snapshot']>,
+): void {
+  const object = (v: unknown, keys: string[]) => {
+    if (
+      !v ||
+      typeof v !== 'object' ||
+      Array.isArray(v) ||
+      Object.keys(v).some((k) => !keys.includes(k))
+    )
+      throw new Error('Invalid loaded preset snapshot');
+  };
+  const text = (v: unknown, max: number) =>
+    typeof v === 'string' && v.trim().length > 0 && new TextEncoder().encode(v).length <= max;
+  object(value, [
+    'collection_id',
+    'collection_name',
+    'preset_id',
+    'preset_name',
+    'context',
+    'parameters',
+  ]);
+  if (
+    ![value.collection_id, value.preset_id].every(
+      (v) => typeof v === 'string' && /^[a-zA-Z0-9_-]{1,96}$/.test(v),
+    ) ||
+    ![value.collection_name, value.preset_name].every((v) => text(v, 160))
+  )
+    throw new Error('Invalid loaded preset identity');
+  const c = value.context;
+  object(c, ['machine_id', 'machine_label', 'material_id', 'material_label', 'signature']);
+  if (
+    ![c.machine_id, c.material_id].every((v) => text(v, 256)) ||
+    ![c.machine_label, c.material_label].every((v) => text(v, 160)) ||
+    !text(c.signature, 65536)
+  )
+    throw new Error('Invalid loaded preset context');
+  JSON.parse(c.signature);
+  const p = value.parameters;
+  object(p, ['rates', 'schedule', 'pocket_overlap', 'planar_stepover_mm']);
+  if (!Array.isArray(p.rates) || !p.rates.length || p.rates.length > 5)
+    throw new Error('Invalid loaded preset roles');
+  const roles = new Set<string>();
+  for (const r of p.rates) {
+    object(r, ['role', 'tool_id', 'rpm', 'feed_mm_min', 'plunge_mm_min']);
+    if (
+      !['rough', 'finish', 'drill', 'spot', 'chamfer'].includes(r.role) ||
+      roles.has(r.role) ||
+      ![r.tool_id, r.rpm, r.feed_mm_min, r.plunge_mm_min].every(
+        (v) => typeof v === 'number' && Number.isInteger(v) && v > 0 && v <= 0xffffffff,
+      )
+    )
+      throw new Error('Invalid loaded preset values');
+    roles.add(r.role);
+  }
+  const schedule = p.schedule;
+  object(
+    schedule,
+    schedule?.kind === 'step' ? ['kind', 'step', 'finish_step'] : ['kind', 'depths'],
+  );
+  if (schedule.kind === 'step') {
+    for (const v of [schedule.step, schedule.finish_step])
+      if (v !== null && (typeof v !== 'number' || !Number.isFinite(v) || v >= -1e-9))
+        throw new Error('Invalid preset depth per pass');
+  } else if (schedule.kind === 'explicit') {
+    const d = schedule.depths;
+    if (
+      !Array.isArray(d) ||
+      !d.length ||
+      d.length > 4096 ||
+      d.some((v, i) => !Number.isFinite(v) || (i > 0 && v >= d[i - 1]))
+    )
+      throw new Error('Invalid preset depth schedule');
+  } else throw new Error('Unknown preset depth schedule');
+  if (
+    p.pocket_overlap != null &&
+    (!Number.isFinite(p.pocket_overlap) || p.pocket_overlap <= 0 || p.pocket_overlap >= 1)
+  )
+    throw new Error('Invalid preset overlap');
+  if (
+    p.planar_stepover_mm != null &&
+    (!Number.isFinite(p.planar_stepover_mm) || p.planar_stepover_mm <= 0)
+  )
+    throw new Error('Invalid preset stepover');
 }

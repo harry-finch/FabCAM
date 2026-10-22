@@ -154,7 +154,7 @@ fn validate_parameters(p: &PresetParameters) -> Result<(), String> {
         }
     }
     if p.pocket_overlap
-        .is_some_and(|v| !v.is_finite() || v <= 0.0 || v >= 100.0)
+        .is_some_and(|v| !v.is_finite() || v <= 0.0 || v >= 1.0)
         || p.planar_stepover_mm
             .is_some_and(|v| !v.is_finite() || v <= 0.0)
     {
@@ -260,10 +260,25 @@ pub fn context(project: &Project, op: &Op) -> Result<PresetContext, String> {
     {
         p.remove("spot_tool_id");
     }
-    let signature=serde_json::to_string(&serde_json::json!({"machine":machine_id,"mode":project.machine.mode,"material":material,"tools":tools,"operation":kind,"plunge":op.params.plunge})).map_err(|e|e.to_string())?;
+    let mut machine_setup = serde_json::to_value(&project.machine).map_err(|e| e.to_string())?;
+    if let Some(map) = machine_setup.as_object_mut() {
+        for key in [
+            "name",
+            "spindle_rpm_min",
+            "spindle_rpm_max",
+            "max_feed_mm_min",
+        ] {
+            map.remove(key);
+        }
+    }
+    let signature=serde_json::to_string(&serde_json::json!({"machine":machine_id,"machine_setup":machine_setup,"mode":project.machine.mode,"material":material,"tools":tools,"operation":kind,"plunge":op.params.plunge})).map_err(|e|e.to_string())?;
     Ok(PresetContext {
-        machine_id,
-        machine_label: project.machine.name.clone(),
+        machine_id: machine_id.clone(),
+        machine_label: if project.machine.name.trim().is_empty() {
+            machine_id.clone()
+        } else {
+            project.machine.name.clone()
+        },
         material_id: material.id.clone(),
         material_label: material.id.clone(),
         signature,

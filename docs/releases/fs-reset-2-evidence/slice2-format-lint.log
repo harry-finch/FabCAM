@@ -1,0 +1,31 @@
+src/lib/api/build-project.ts 65ms (unchanged)
+src/lib/api/cutting-contract.test.ts 4ms (unchanged)
+src/lib/api/cutting-contract.ts 1ms (unchanged)
+src/lib/api/http.ts 28ms (unchanged)
+src/lib/api/tauri.ts 10ms (unchanged)
+src/lib/api/wasm-worker-client.ts 9ms (unchanged)
+src/lib/api/wasm.ts 8ms (unchanged)
+src/lib/components/MachineDialog.svelte 154ms (unchanged)
+src/lib/components/OpPropertiesPanel.svelte 88ms (unchanged)
+src/lib/components/ToolRowExpandedEditor.svelte 55ms (unchanged)
+src/lib/components/op_properties/CuttingParameters.svelte 39ms (unchanged)
+src/lib/components/op_properties/PlanarSurfaceSection.svelte 12ms (unchanged)
+src/lib/services/file_ops.ts 33ms (unchanged)
+src/lib/state/commands.ts 31ms (unchanged)
+src/lib/state/cutting-parameters.ts 6ms (unchanged)
+src/lib/state/cutting-v9-wasm.test.ts 4ms
+src/lib/state/cutting-workflow.test.ts 3ms (unchanged)
+src/lib/state/cutting-workflow.ts 3ms
+src/lib/state/generation-context.ts 2ms (unchanged)
+src/lib/state/op_defaults.ts 4ms (unchanged)
+src/lib/state/operation-templates.test.ts 10ms (unchanged)
+src/lib/state/operation-templates.ts 9ms (unchanged)
+src/lib/state/project-file-ops.ts 6ms (unchanged)
+src/lib/state/project-types.ts 13ms (unchanged)
+src/lib/state/project-v9.test.ts 4ms
+
+/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/src/lib/components/op_properties/CuttingParameters.svelte
+  212:9   error  Each block should have a key  svelte/require-each-key
+  216:10  error  Each block should have a key  svelte/require-each-key
+
+✖ 2 problems (2 errors, 0 warnings)

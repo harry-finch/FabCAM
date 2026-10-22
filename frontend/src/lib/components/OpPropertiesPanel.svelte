@@ -16,14 +16,13 @@
   import { depthFields, storedPassDepth } from '../state/inspector-policy';
   import { generationContextKey, coerceGenerationPost } from '../state/generation-context';
   import { workspace } from '../state/workspace.svelte';
-  import SavedCuttingRates from './op_properties/SavedCuttingRates.svelte';
   import { defaultClient } from '../api/http';
   import type { HelixRadiusResponse } from '../api/types';
   import { prettyOpKind } from '../state/project-types';
   import { formatExpectedToolKinds, isToolKindAcceptable } from '../state/op_tool_constraint';
   import { effectiveDiameterHint } from '../state/tool_wear';
   import { t } from '../i18n';
-  import FeedsSpeedsSection from './op_properties/FeedsSpeedsSection.svelte';
+  import CuttingParameters from './op_properties/CuttingParameters.svelte';
   import VCarveCompatibility from './op_properties/VCarveCompatibility.svelte';
   import { vcarveDepthPresentation } from '../state/vcarve-strategy-ui';
   import VCarveSection from './op_properties/VCarveSection.svelte';
@@ -261,6 +260,7 @@
       </div>
     </label>
     <ReliefMillSection {op} {patch} />
+    {#key op.id}<CuttingParameters {op} />{/key}
   {:else if op.kind === 'waterline_rough'}
     <!-- Waterline roughing slices an STL height grid level-by-level, not
          source geometry — name + tool + the waterline section only. -->
@@ -301,6 +301,7 @@
       </div>
     </label>
     <WaterlineRoughSection {op} {patch} />
+    {#key op.id}<CuttingParameters {op} />{/key}
   {:else if op.kind === 'raster_engrave'}
     <!-- Laser raster engraving follows an image-derived power
          field, not source geometry — name + tool + the raster section. -->
@@ -849,13 +850,7 @@
       {/if}
     </fieldset>
 
-    {#if project.data.machine.mode === 'mill' && (op.kind === 'profile' || op.kind === 'pocket')}
-      {#key op.id}<FeedsSpeedsSection {op} />{/key}
-    {/if}
-
-    {#if project.data.machine.mode === 'mill' && op.kind !== 'profile' && op.kind !== 'pocket'}<SavedCuttingRates
-        {op}
-      />{/if}
+    {#if project.data.machine.mode === 'mill'}{#key op.id}<CuttingParameters {op} />{/key}{/if}
 
     {#if op.kind === 'profile' || op.kind === 'pocket'}
       <details

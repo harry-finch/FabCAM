@@ -1,4 +1,3 @@
-import { referenceContext } from '../state/feeds-speeds';
 // Adapter from the frontend ProjectState shape to the wire Project the
 // ivac_core pipeline consumes. Camel-case → snake-case, and the
 // kind-specific Operation params get materialized from the per-op
@@ -732,6 +731,7 @@ function buildOp(opIn: OpEntry, machine: MachineSettings): WireOp {
     // single-sided projects serialize byte-identically, matching serde).
     ...(opIn.side === 'back' ? { side: 'back' as const } : {}),
     params: {
+      ...(op.cutting ? { cutting: op.cutting } : {}),
       ...(op.appliedCutting ? { applied_cutting: op.appliedCutting } : {}),
       ...(op.fsFullWidth ? { fs_full_width: true } : {}),
       // Program-only ops (Pause, Homing, Probe, CycleMarker,
@@ -864,7 +864,7 @@ function buildReliefSource(rs: ReliefSource): WireReliefSource {
 /// Construct the wire `project` field for PipelineRequest. Returns null
 /// if the frontend has no operations defined yet — caller should fall
 /// back to the legacy segments+setup path.
-export function buildProject(state: ProjectStateView): WireProject | null {
+export function buildProject(state: ProjectStateView, allowEmpty = false): WireProject | null {
   if (state.operations.length === 0) return null;
   // Prefer the augmented view (imports + selectable stock outline)
   // so an op targeting the stock edge is cut. Falls back to the raw
@@ -874,6 +874,7 @@ export function buildProject(state: ProjectStateView): WireProject | null {
   // text_layers in a pre-pass. Only bail when there's truly nothing.
   const hasText = (state.textLayers?.length ?? 0) > 0;
   if (
+    !allowEmpty &&
     !imp &&
     !hasText &&
     !state.operations.some((op) => op.enabled && op.kind === 'planar_surface')
@@ -882,18 +883,20 @@ export function buildProject(state: ProjectStateView): WireProject | null {
   const workOffset = state.workOffset ? buildWorkOffset(state.workOffset) : null;
   const stock = buildStock(state);
   return {
+    cutting_version: 9,
     segments: imp?.segments ?? [],
     ...(state.material
       ? { material: { id: state.material.id, revision: state.material.revision } }
       : {}),
-    ...(state.fsContext ||
-    state.machine.fsIdentity ||
-    state.machine.fsLocalIdentity ||
-    state.tools.some((t) => t.fsIdentity || t.fsLocalIdentity)
-      ? { fs_context: referenceContext(state.machine, state.tools, state.fsContext) }
-      : {}),
-    machine: buildMachine(state.machine),
-    tools: state.tools.map(buildTool),
+    machine: {
+      ...buildMachine(state.machine),
+      physical_id: state.machine.physicalId ?? state.machine.fsLocalIdentity?.id,
+    },
+    tools: state.tools.map((t) => ({
+      ...buildTool(t),
+      physical_id: t.physicalId ?? t.fsLocalIdentity?.id,
+      max_rpm: t.maxRpm,
+    })),
     operations: state.operations.map((op) => buildOp(op, state.machine)),
     ...(state.fixtures && state.fixtures.length > 0 ? { fixtures: state.fixtures } : {}),
     ...(state.textLayers && state.textLayers.length > 0

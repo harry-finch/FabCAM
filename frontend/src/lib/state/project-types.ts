@@ -158,6 +158,8 @@ export interface FormProfileSample {
 }
 
 export interface ToolEntry {
+  physicalId?: string;
+  maxRpm?: number;
   /** Explicit reference compatibility, never inferred from physical dimensions. */
   fsIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
   /** Stable lab identity, independent of the selected reference pack. */
@@ -347,6 +349,7 @@ export function migrateMachineSettings(raw: unknown): MachineSettings {
 }
 
 export interface MachineSettings {
+  physicalId?: string;
   /** Explicit source-machine compatibility, separate from the physical machine. */
   fsIdentity?: import('../api/generated').components['schemas']['FsIdentity'] | null;
   /** Stable lab identity, independent of the selected reference pack. */

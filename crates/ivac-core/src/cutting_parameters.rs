@@ -218,8 +218,7 @@ pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
             .push("Set explicit depth per pass or an explicit depth schedule".into());
     }
     if let Some(pocket) = op.pocket_params() {
-        if !pocket.xy_overlap.is_finite() || pocket.xy_overlap <= 0.0 || pocket.xy_overlap >= 100.0
-        {
+        if !pocket.xy_overlap.is_finite() || pocket.xy_overlap <= 0.0 || pocket.xy_overlap >= 1.0 {
             out.errors.push(
                 "Pocket overlap must be explicit, finite and between 0 and 100 percent".into(),
             );
@@ -441,6 +440,18 @@ mod tests {
                 _ => p.tools[0].flute_length_mm = Some(0.1),
             };
             assert!(validate_project(&p).is_err(), "case {case}");
+        }
+    }
+    #[test]
+    fn pocket_overlap_is_a_fraction_and_cannot_inherit_defaults() {
+        let mut p = project();
+        p.operations[0].kind =
+            serde_json::from_str(r#"{"type":"pocket","strategy":"cascade"}"#).unwrap();
+        p.operations[0].pocket_params_mut().unwrap().xy_overlap = 0.5;
+        assert!(validate_project(&p).is_ok());
+        for overlap in [0.0, 1.0, 1.5, f64::NAN] {
+            p.operations[0].pocket_params_mut().unwrap().xy_overlap = overlap;
+            assert!(validate_project(&p).is_err());
         }
     }
     #[test]

@@ -213,6 +213,7 @@ async fn version() -> Json<VersionResponse> {
             let mut caps = vec![
                 "import-dxf",
                 "generate-gcode",
+                "cutting-parameters-v9",
                 "feeds-speeds",
                 "stream-gcode",
                 "post-linuxcnc",

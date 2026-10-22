@@ -1,4 +1,10 @@
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
+vi.mock('./text_preview.svelte', () => ({ resetPreviewCache: vi.fn() }));
+vi.mock('./workspace.svelte', () => ({ workspace: {} }));
+import { snapshotProject, restoreProject } from './project-file-ops';
+import { History } from './history';
+import type { ProjectState } from './project.svelte';
+import { defaultWorkOffset } from './project-types';
 import { validateProjectV9 } from './project-v9';
 import { defaultProjectMachine, defaultProjectTools } from './project-defaults';
 import { buildOpEntry } from './op_defaults';
@@ -70,4 +76,34 @@ it('seed is a one-time copy with distinct finish values', () => {
   op.cutting = seedCutting(op, p.tools!);
   p.tools![0].feedRateFinish = 999;
   expect(op.cutting.rates.find((r) => r.role === 'finish')?.feed_mm_min).toBe(400);
+});
+
+it('the real snapshot/restore path preserves incomplete values and rejects v8 without mutation', () => {
+  const file = fixture();
+  file.operations![0].cutting!.rates[0].rpm = null;
+  file.machine!.physicalId = 'lab-router';
+  file.tools![0].physicalId = 'lab-bit';
+  file.tools![0].maxRpm = 24000;
+  const p = {
+    data: {
+      ...file,
+      fixtures: [],
+      textLayers: [],
+      reliefSources: [],
+      workOffset: defaultWorkOffset(),
+      serializedExtensions: {},
+    },
+    sel: {},
+    history: new History(),
+  } as unknown as ProjectState;
+  const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
+  expect(saved.version).toBe(9);
+  expect(saved.fsContext).toBeUndefined();
+  restoreProject(p, saved);
+  expect(snapshotProject(p).operations).toEqual(saved.operations);
+  expect(p.data.tools[0].maxRpm).toBe(24000);
+  expect(p.data.machine.physicalId).toBe('lab-router');
+  const before = JSON.stringify(snapshotProject(p));
+  expect(() => restoreProject(p, { ...saved, version: 8 })).toThrow();
+  expect(JSON.stringify(snapshotProject(p))).toBe(before);
 });

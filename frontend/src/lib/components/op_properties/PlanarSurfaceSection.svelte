@@ -5,14 +5,13 @@
   import type { PlanarSurfaceOp } from '../../state/op_types';
   import { effectiveDiameterMm } from '../../state/tool_wear';
   import { surfaceBounds } from '../../state/planar-surface';
-  import { editOperationRate, operationRates } from '../../state/feeds-speeds';
+  import CuttingParameters from './CuttingParameters.svelte';
   import { computeFootprint } from '../../sim/footprint';
   import { t } from '../../i18n';
   let { op }: { op: PlanarSurfaceOp } = $props();
   const tool = $derived(project.data.tools.find((tool) => tool.id === op.toolId));
   const diameter = $derived(tool ? effectiveDiameterMm(tool) : 0);
   const bounds = $derived(surfaceBounds(op, diameter));
-  const rates = $derived(tool ? operationRates(op, tool, 'rough') : null);
   const flatTools = $derived(
     project.data.tools.filter((tool) => ['endmill', 'compression'].includes(tool.kind)),
   );
@@ -25,7 +24,6 @@
   );
   const dimensions = ['width_mm', 'height_mm', 'stepover_mm'] as const;
   const extras = ['margin_mm', 'overtravel_mm'] as const;
-  const rateFields = ['rpm', 'feed_mm_min', 'plunge_mm_min'] as const;
   function changeSurface(patch: Partial<PlanarSurfaceOp['surface']>) {
     project.updateOperation(op.id, { surface: { ...op.surface, ...patch } });
   }
@@ -33,12 +31,6 @@
     const xy = [...op.surface.origin];
     xy[axis] = value;
     changeSurface({ origin: xy });
-  }
-  function changeRate(field: (typeof rateFields)[number], value: number) {
-    if (!Number.isInteger(value) || value <= 0 || value > 0xffffffff) return;
-    project.updateOperation(op.id, {
-      appliedCutting: editOperationRate(op, project.data.tools, op.toolId, 'rough', field, value),
-    });
   }
   function useStock() {
     const b = computeFootprint(
@@ -120,21 +112,12 @@
       type="number"
       min="0.01"
       step="0.1"
-      value={-(op.step ?? tool?.defaultStep ?? 0)}
+      value={op.step === null ? '' : -op.step}
       oninput={(e) => project.updateOperation(op.id, { step: -Number(e.currentTarget.value) })}
     /><span class="unit">mm</span></label
   >
-  {#each rateFields as field (field)}<label class="inspector-field"
-      ><span>{t(`surface.${field}`)}</span><input
-        type="number"
-        min="1"
-        max="4294967295"
-        step="1"
-        value={rates?.[field] ?? ''}
-        oninput={(e) => changeRate(field, Number(e.currentTarget.value))}
-      /><span class="unit">{field === 'rpm' ? 'rpm' : 'mm/min'}</span></label
-    >{/each}
 </section>
+{#key op.id}<CuttingParameters {op} />{/key}
 {#if invalid}<p class="warn-chip" role="alert">
     {t('surface.invalid')}
   </p>{/if}

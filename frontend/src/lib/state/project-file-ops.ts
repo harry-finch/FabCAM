@@ -5,7 +5,7 @@ import {
   defaultProjectStock,
 } from './project-defaults';
 import { computeUnsavedWork } from './unsaved';
-import { validateProjectFile, hasFeedsSpeedsData } from './feeds-speeds-persistence';
+import { validateProjectV9 as validateProjectFile } from './project-v9';
 // Project-file / workspace lifecycle extracted from the ProjectState
 // god root. Save/load of .ivac-project files, the
 // project-boundary reset, and the per-project workspace view state all
@@ -147,40 +147,23 @@ export function snapshotProject(p: ProjectState): ProjectFile {
     ...p.data.serializedExtensions,
     ...(p.data.drawing ? { drawing: p.data.drawing } : {}),
     ...(p.data.cornerRelief ? { cornerRelief: p.data.cornerRelief } : {}),
-    kind: p.data.operations.some((op) => op.appliedCutting?.experimental_recipe)
-      ? 'ivac-project-experimental'
-      : p.data.drawing
-        ? 'ivac-project-geometry'
-        : p.data.operations.some((op) => op.kind === 'planar_surface')
-          ? 'ivac-project-surfacing'
-          : p.data.cornerRelief
-            ? 'ivac-project-cad'
-            : p.data.operations.some((op) => op.appliedCutting?.knowledge)
-              ? 'ivac-project-knowledge'
-              : hasFeedsSpeedsData(p.data)
-                ? 'ivac-project-cutting'
-                : 'ivac-project',
-    version: p.data.operations.some((op) => op.appliedCutting?.experimental_recipe)
-      ? 8
-      : p.data.drawing
-        ? 7
-        : p.data.operations.some((op) => op.kind === 'planar_surface')
-          ? 6
-          : p.data.cornerRelief
-            ? 5
-            : p.data.operations.some((op) => op.appliedCutting?.knowledge)
-              ? 4
-              : hasFeedsSpeedsData(p.data)
-                ? 3
-                : 1,
+    kind: 'ivac-project',
+    version: 9,
     ...(p.data.material ? { material: p.data.material } : {}),
-    ...(p.data.fsContext ? { fsContext: p.data.fsContext } : {}),
+
     imports: p.data.imports,
     visibleLayers: [],
     selectedEntities: [],
     stock: p.data.stock,
-    tools: p.data.tools,
-    machine: p.data.machine,
+    tools: p.data.tools.map((t) => ({
+      ...t,
+      physicalId: t.physicalId ?? t.fsLocalIdentity?.id,
+      maxRpm: t.maxRpm,
+    })),
+    machine: {
+      ...p.data.machine,
+      physicalId: p.data.machine.physicalId ?? p.data.machine.fsLocalIdentity?.id,
+    },
     operations: p.data.operations,
     fixtures: p.data.fixtures,
     textLayers: p.data.textLayers,

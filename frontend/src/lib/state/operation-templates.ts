@@ -1,6 +1,6 @@
 import type { OpEntry, ToolKind } from './op_types';
 import type { ToolEntry } from './project-types';
-import { operationRates } from './feeds-speeds';
+import { cuttingRoles } from './cutting-parameters';
 
 export type TemplateKind = 'profile' | 'pocket' | 'planar_surface';
 type Rates = { rpm: number; feed_mm_min: number; plunge_mm_min: number };
@@ -70,15 +70,18 @@ function keys(kind: TemplateKind) {
   ];
 }
 function rates(op: OpEntry, tool: ToolEntry, pass: 'rough' | 'finish'): Rates {
-  const value = operationRates(op, tool, pass);
+  const value =
+    op.cutting?.rates.find((r) => r.role === pass && r.tool_id === tool.id) ??
+    op.cutting?.rates.find((r) => r.tool_id === tool.id) ??
+    (op.cutting?.rates.length === 1 ? op.cutting.rates[0] : undefined);
   if (
     !value ||
     ![value.rpm, value.feed_mm_min, value.plunge_mm_min].every(
-      (v) => Number.isInteger(v) && v > 0 && v <= 0xffffffff,
+      (v) => typeof v === 'number' && Number.isInteger(v) && v > 0 && v <= 0xffffffff,
     )
   )
     throw new Error('templates.invalid_rates');
-  return { rpm: value.rpm, feed_mm_min: value.feed_mm_min, plunge_mm_min: value.plunge_mm_min };
+  return { rpm: value.rpm!, feed_mm_min: value.feed_mm_min!, plunge_mm_min: value.plunge_mm_min! };
 }
 export function captureTemplate(
   op: OpEntry,
@@ -129,7 +132,7 @@ export function captureTemplate(
       finish: rates(op, tool, 'finish'),
     };
   };
-  settings.step = op.step ?? tools.find((tool) => tool.id === op.toolId)?.defaultStep ?? null;
+  settings.step = op.step;
   const result: OperationTemplate = {
     version: 1,
     id,
@@ -330,11 +333,7 @@ export function instantiateTemplate(
     };
   } else if (!ids.length || ids.some((id) => !binding.availableObjectIds.includes(id)))
     throw new Error('templates.choose_geometry');
-  const slots = [[tool, template.tool], ...(finish ? [[finish, template.finishTool!]] : [])] as [
-    ToolEntry,
-    TemplateTool,
-  ][];
-  return {
+  const op = {
     ...settings,
     id: binding.nextId,
     name: template.name,
@@ -344,17 +343,14 @@ export function instantiateTemplate(
     sourceLayers: null,
     ...(settings.kind === 'planar_surface' ? {} : { sourceObjects: ids }),
     side: 'front',
-    appliedCutting: {
-      context_key: '',
-      doc_origin: 'manual',
-      slots: slots.flatMap(([tool, r]) =>
-        (['rough', 'finish'] as const).map((pass) => ({
-          tool_id: tool.id,
-          pass,
-          ...copy(r[pass]),
-          origins: { rpm: 'manual', feed: 'manual', plunge: 'manual' },
-        })),
-      ),
-    },
   } as OpEntry;
+  op.cutting = {
+    rates: cuttingRoles(op).map((r) => ({
+      ...r,
+      ...copy(
+        r.role === 'finish' ? (template.finishTool ?? template.tool).finish : template.tool.rough,
+      ),
+    })),
+  };
+  return op;
 }

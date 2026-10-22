@@ -5,6 +5,7 @@
 // method is now a thin wrapper: gather the context, call `buildOpEntry`,
 // push it through the command bus.
 
+import { seedCutting, cuttingRoles } from './cutting-parameters';
 import type { MachineMode, OpEntry, OpKind } from './op_types';
 import { prettyOpKind, type DrillCycle, type ReliefSource, type ToolEntry } from './project-types';
 import { partitionToolsForModes, pickBestToolForOp } from './tool_picker';
@@ -35,7 +36,7 @@ export interface OpDefaultsCtx {
 /// Build the default `OpEntry` for `kind`. Pure: no `$state`, no command bus,
 /// no selection side effects — the caller owns those. Mirrors the historical
 /// `addOperation` branches field-for-field (locked by `op_defaults.test.ts`).
-export function buildOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
+function buildUnseededOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
   const { nextId, reliefSources, selectionIds, objectMeta, modes } = ctx;
   // Mode-compatible tools first so every "first / best library tool"
   // fallback below lands on something the machine can run. Library
@@ -184,4 +185,14 @@ export function buildOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
       } as OpEntry;
     }
   }
+}
+
+export function buildOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
+  const op = buildUnseededOpEntry(kind, ctx);
+  if ((!ctx.modes || ctx.modes.includes('mill')) && cuttingRoles(op).length) {
+    op.cutting = seedCutting(op, [...ctx.tools]);
+    const tool = ctx.tools.find((t) => t.id === op.toolId);
+    if (op.step === null && tool?.defaultStep !== undefined) op.step = tool.defaultStep;
+  }
+  return op;
 }

@@ -10,7 +10,6 @@
   /// Stays a pure view: it never touches `project` or the draft directly —
   /// every edit routes back through a callback; the parent owns the draft,
   /// the expand toggle, and the calibration modal.
-  import FeedsSpeedsCompatibility from './FeedsSpeedsCompatibility.svelte';
   import { t } from '../i18n';
   import type { ToolEntry, HolderShape, CoolantMode } from '../state/project.svelte';
   import { attrApplies } from '../state/tool_family';
@@ -111,13 +110,25 @@
     <ToolHolderEditor holder={tool.holder} groupId={tool.id} onChange={(h) => onSetHolder(h)} />
   {/if}
   {#if section === 'advanced' || section === 'all'}
-    {#if tool.kind === 'endmill'}<FeedsSpeedsCompatibility
-        kind="tools"
-        value={tool.fsIdentity}
-        localIdentity={tool.fsLocalIdentity}
-        onLocalChange={(identity) => onUpdateField('fsLocalIdentity', identity)}
-        onChange={(identity) => onUpdateField('fsIdentity', identity)}
-      />{/if}
+    <p class="help">
+      Workshop tool identity: {tool.physicalId ??
+        tool.fsLocalIdentity?.id ??
+        'Save this tool in the workshop library'}
+    </p>
+    <label
+      ><span>Maximum spindle speed</span><input
+        type="number"
+        min="1"
+        step="1"
+        placeholder="Unknown"
+        value={tool.maxRpm ?? ''}
+        onchange={(e) =>
+          onUpdateField(
+            'maxRpm',
+            e.currentTarget.value === '' ? undefined : Number(e.currentTarget.value),
+          )}
+      /><span>rpm</span></label
+    >}
   {/if}
   {#if section === 'legacy' || section === 'all'}
     <details>

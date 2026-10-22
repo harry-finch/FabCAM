@@ -17,23 +17,26 @@ export function generationContextKey(p: ProjectState, post: string): string {
   });
 }
 
-export function buildGenerationProject(p: ProjectState) {
-  return buildProject({
-    material: p.data.material,
-    fsContext: p.data.fsContext,
-    transformedImport: p.transformedImport,
-    geometryView: p.geometryView,
-    stockSizingImport: p.stockSizingImport,
-    machine: p.data.machine,
-    tools: p.data.tools,
-    operations: p.data.operations,
-    fixtures: p.data.fixtures,
-    textLayers: p.data.textLayers,
-    workOffset: p.data.workOffset,
-    stock: p.data.stock,
-    reliefSources: p.data.reliefSources,
-    groupOpsByTool: p.data.groupOpsByTool,
-  });
+export function buildGenerationProject(p: ProjectState, allowEmpty = false) {
+  return buildProject(
+    {
+      material: p.data.material,
+      fsContext: p.data.fsContext,
+      transformedImport: p.transformedImport,
+      geometryView: p.geometryView,
+      stockSizingImport: p.stockSizingImport,
+      machine: p.data.machine,
+      tools: p.data.tools,
+      operations: p.data.operations,
+      fixtures: p.data.fixtures,
+      textLayers: p.data.textLayers,
+      workOffset: p.data.workOffset,
+      stock: p.data.stock,
+      reliefSources: p.data.reliefSources,
+      groupOpsByTool: p.data.groupOpsByTool,
+    },
+    allowEmpty,
+  );
 }
 
 export function cornerReliefGenerationError(p: ProjectState): string | null {

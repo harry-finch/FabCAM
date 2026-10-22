@@ -6,7 +6,7 @@ Engineering tracker: `ivac-jcr1o`. This report is updated with each qualified sl
 
 ## Implementation state
 
-Slice 1 establishes the replacement contracts and storage. Slices 2–4 remain in progress;
+Slices 1–2 establish the contracts/storage and explicit operation workflow. Slices 3–4 remain pending;
 this intermediate commit does not claim that the product UI or every driver has switched.
 The legacy engine is retained temporarily; there is no new recommendation wrapper.
 FS-RESET-3 removal, FabSpeed integration, publication and physical operation are unauthorized.
@@ -80,3 +80,36 @@ Storage limitations: atomic replacement is per collection, not a multi-document 
 or a claim of crash durability. A process killed while holding the native lock can leave a
 busy lock requiring deliberate recovery; original collections remain recoverable. No active
 application-data reset or recovery was attempted.
+
+## Slice 2 — explicit editing, reviewed copying, v9 activation
+
+Source: `ac9e389` (qualified slice 1). The inspector now exposes each declared role's
+RPM/feed/plunge directly, with editable missing values and a separate software-validation
+result. New operations copy tool defaults once. Adding a secondary role produces missing
+values; changing its assigned tool retains authored values and revalidates the context.
+Operation templates copy explicit values; they do not confer tested-preset attestation.
+
+Load previews rates and depth/engagement changes, pins the complete operation/setup during
+async validation, and applies one Undo/Redo command. Save requires an unchecked, current-context
+workshop-test attestation independent of validator success. Loaded baselines distinguish manual,
+loaded and modified values; private notes do not enter the operation snapshot. Generic tool and
+machine editors expose workshop identity, without recommendation compatibility controls.
+
+Save/open uses v9 exclusively. Incomplete values round-trip. Old versions are rejected before
+mutation. Machine/tool physical identity and maximum RPM persist; generating does not read
+live defaults. HTTP/Tauri/WASM/worker clients require `cutting-parameters-v9` from the engine
+before submitting v9 machining requests, preventing an older running engine from ignoring them.
+Public server-side old-payload refusal and specialized actual-role dispatch remain slice 4.
+
+Qualification: **150 frontend tests PASS** across 12 affected files, including actual rebuilt
+WASM inspect/load JSON, snapshot/restore, stale target rejection, Undo/Redo, templates, client
+capabilities and program qualification. Core explicit-value tests **7 PASS**, preset contracts
+**5 PASS**. Strict pedantic affected-library Clippy, targeted ESLint (two keyed-loop findings
+corrected), frontend typecheck **0 errors / 0 warnings**, fresh WASM and production build PASS.
+The pocket-overlap fractional bound is corrected to 0–1; negative cases cover 0, 1, >1 and NaN.
+Exact preset context now includes machine configuration while rechecking mutable ratings.
+
+Visual browser QA is pending: port 5173 was unavailable; opening a local listener is denied by
+the sandbox (EPERM). The maintainer has been asked to start the existing dev script. No user
+application-data file was modified for UI testing. Source-pack settings and the old library
+remain temporarily active until the immediately following slice 3.

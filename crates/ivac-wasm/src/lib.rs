@@ -70,6 +70,7 @@ pub fn version() -> Result<JsValue, JsValue> {
         "movement-tool-provenance-1",
         "import-dxf",
         "generate-gcode",
+        "cutting-parameters-v9",
         "feeds-speeds",
         "post-linuxcnc",
         "post-grbl",
