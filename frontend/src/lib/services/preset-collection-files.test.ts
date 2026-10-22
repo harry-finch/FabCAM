@@ -61,3 +61,18 @@ it('import validates exact selected bytes before returning an uncommitted collec
   expect(validateCollection).toHaveBeenCalledWith('selected bytes');
   expect(writeTextFile).not.toHaveBeenCalled();
 });
+
+it('native stat or read refusal and malformed imports preserve storage', async () => {
+  vi.mocked(open).mockResolvedValue('/selected/qa.json');
+  vi.mocked(stat).mockRejectedValueOnce(new Error('Command denied'));
+  await expect(importCollectionFile()).rejects.toThrow('Command denied');
+  expect(readTextFile).not.toHaveBeenCalled();
+  vi.mocked(stat).mockResolvedValue({ size: 100 } as Awaited<ReturnType<typeof stat>>);
+  vi.mocked(readTextFile).mockRejectedValueOnce(new Error('Scope denied'));
+  await expect(importCollectionFile()).rejects.toThrow('Scope denied');
+  expect(validateCollection).not.toHaveBeenCalled();
+  vi.mocked(readTextFile).mockResolvedValue('{broken');
+  vi.mocked(validateCollection).mockRejectedValueOnce(new Error('Malformed'));
+  await expect(importCollectionFile()).rejects.toThrow('Malformed');
+  expect(writeTextFile).not.toHaveBeenCalled();
+});
