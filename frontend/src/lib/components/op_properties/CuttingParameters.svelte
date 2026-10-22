@@ -1,5 +1,11 @@
 <script lang="ts">
   import { t } from '../../i18n';
+  import { Info } from '@lucide/svelte';
+  import {
+    cuttingRoleLabels as label,
+    cuttingRoleHint,
+    cuttingWarningGroups,
+  } from '../../state/cutting-ui';
   import { parameterSummary } from '../../state/preset-library-v9';
   import { onDestroy } from 'svelte';
   import { project, type OpEntry } from '../../state/project.svelte';
@@ -160,13 +166,7 @@
       busy = false;
     }
   }
-  const label: Record<CuttingRole, string> = {
-    rough: 'Main / roughing',
-    finish: 'Finishing',
-    drill: 'Drilling',
-    spot: 'Spotting',
-    chamfer: 'Hole chamfer',
-  };
+  const warningGroups = $derived(cuttingWarningGroups(inspection?.check.warnings ?? []));
   const fields = [
     { key: 'rpm' as const, label: 'Spindle speed', unit: 'rpm' },
     { key: 'feed_mm_min' as const, label: 'Feed rate', unit: 'mm/min' },
@@ -186,74 +186,81 @@
 {#if roles.length}
   <fieldset class="cutting">
     <legend>{t('fsreset.ui.cutting.parameters')}</legend>
-    {#if roles.length > 1}<label class="row"
-        ><span>{t('fsreset.ui.pass')}</span><select
+    {#if roles.length > 1}<label class="role-row"
+        ><span>{t('fsreset.ux.role')}</span><select
           aria-label={t('fsreset.ui.cutting.pass')}
           value={activeRole}
           onchange={(e) => (selection = { id: op.id, role: e.currentTarget.value as CuttingRole })}
-          >{#each roles as r (r.role)}<option value={r.role}>{label[r.role]} · T{r.tool_id}</option
+          >{#each roles as r (r.role)}<option value={r.role}
+              >{op.kind === 'profile' && r.role === 'rough' ? 'Stored main values' : label[r.role]} ·
+              T{r.tool_id}</option
             >{/each}</select
         ></label
       >{/if}
-    {#if op.kind === 'profile'}<p class="basis">
-        Profile contours use the finishing values. Main values are stored separately; they do not
-        set the contour feed.
+    {#if cuttingRoleHint(op.kind, activeRole)}<p class="basis role-hint">
+        {cuttingRoleHint(op.kind, activeRole)}
       </p>{/if}
-    {#each fields as field (field.key)}<label class="row"
-        ><span>{field.label}</span><input
-          aria-label={field.label}
-          type="number"
-          min="1"
-          step="1"
-          value={slot?.[field.key] ?? ''}
-          placeholder={t('fsreset.ui.required')}
-          onchange={(e) => edit(field.key, e.currentTarget.value)}
-        /><span class="unit">{field.unit}</span></label
-      >{/each}
-    {#if ['profile', 'pocket', 'engrave'].includes(op.kind) && !op.depthList?.length}<label
-        class="row"
-        ><span>{t('fsreset.ui.depth.per.pass')}</span><input
-          aria-label={t('fsreset.ui.depth.per.pass')}
-          type="number"
-          min="0.000001"
-          step="0.1"
-          value={op.step === null ? '' : Math.abs(op.step)}
-          onchange={(e) =>
-            project.updateOperation(op.id, {
-              step: e.currentTarget.value === '' ? null : -Number(e.currentTarget.value),
-            })}
-        /><span class="unit">{t('fsreset.ui.mm')}</span></label
-      >{/if}
-    {#if usesEntryAngle(op)}<label class="row"
-        ><span>{t('fsreset.ui.entry.angle2')}</span><input
-          type="number"
-          min="1"
-          max={op.kind === 'drill' ? 45 : 89}
-          step="any"
-          value={op.cutting?.entry_angle_deg ?? ''}
-          onchange={(e) =>
-            project.updateOperation(op.id, {
-              cutting: {
-                ...op.cutting!,
-                entry_angle_deg:
-                  e.currentTarget.value === '' ? null : Number(e.currentTarget.value),
-              },
-            })}
-        /><span class="unit">°</span></label
-      >{/if}
-    <p class="basis">{presetStatus(op, inspection)}</p>
-    {#if inspection?.check.errors.length}<ul class="errors">
+    <div class="numeric-fields">
+      {#each fields as field (field.key)}<label class="cutting-field"
+          ><span>{field.label}</span><input
+            aria-label={field.label}
+            type="number"
+            min="1"
+            step="1"
+            value={slot?.[field.key] ?? ''}
+            placeholder={t('fsreset.ui.required')}
+            onchange={(e) => edit(field.key, e.currentTarget.value)}
+          /><span class="unit">{field.unit}</span></label
+        >{/each}
+      {#if ['profile', 'pocket', 'engrave'].includes(op.kind) && !op.depthList?.length}<label
+          class="cutting-field"
+          ><span>{t('fsreset.ui.depth.per.pass')}</span><input
+            aria-label={t('fsreset.ui.depth.per.pass')}
+            type="number"
+            min="0.000001"
+            step="0.1"
+            value={op.step === null ? '' : Math.abs(op.step)}
+            onchange={(e) =>
+              project.updateOperation(op.id, {
+                step: e.currentTarget.value === '' ? null : -Number(e.currentTarget.value),
+              })}
+          /><span class="unit">{t('fsreset.ui.mm')}</span></label
+        >{/if}
+      {#if usesEntryAngle(op)}<label class="cutting-field"
+          ><span>{t('fsreset.ui.entry.angle2')}</span><input
+            type="number"
+            min="1"
+            max={op.kind === 'drill' ? 45 : 89}
+            step="any"
+            value={op.cutting?.entry_angle_deg ?? ''}
+            onchange={(e) =>
+              project.updateOperation(op.id, {
+                cutting: {
+                  ...op.cutting!,
+                  entry_angle_deg:
+                    e.currentTarget.value === '' ? null : Number(e.currentTarget.value),
+                },
+              })}
+          /><span class="unit">°</span></label
+        >{/if}
+    </div>
+    <p class="basis origin" title={presetStatus(op, inspection)}>{presetStatus(op, inspection)}</p>
+    {#if inspection?.check.errors.length}<ul class="errors" aria-label={t('fsreset.ux.errors')}>
         {#each inspection.check.errors as issue, index (index)}<li>{issue}</li>{/each}
       </ul>{/if}
-    {#if inspection?.check.warnings.length}<details>
-        <summary>{t('fsreset.ui.unknown.machine.tool.limits')}</summary
-        >{#each inspection.check.warnings as warning, index (index)}<p class="basis">
-            {warning}
+    {#if warningGroups.length}<details class="limits">
+        <summary><Info size={13} />{t('fsreset.ux.unknown')}</summary>
+        {#each warningGroups as group, index (index)}<p class="basis">
+            {#if group.roles.length}<strong>{group.roles.join(' / ')}:</strong>
+            {/if}{group.message}
           </p>{/each}
       </details>{/if}
     <div class="actions">
-      <button onclick={() => open('load')} disabled={busy}>{t('fsreset.ui.load.preset')}</button
-      ><button onclick={() => open('save')} disabled={busy}>{t('fsreset.ui.save.preset')}</button>
+      <button class="btn-secondary" onclick={() => open('load')} disabled={busy}
+        >{t('fsreset.ui.load.preset')}</button
+      ><button class="btn-secondary" onclick={() => open('save')} disabled={busy}
+        >{t('fsreset.ui.save.preset')}</button
+      >
     </div>
     {#if panel}
       <section
@@ -262,6 +269,7 @@
       >
         <div class="actions">
           <strong>{panel === 'load' ? 'Load tested preset' : 'Save tested preset'}</strong><button
+            class="btn-secondary"
             onclick={() => {
               panel = null;
               prepared = null;
@@ -275,7 +283,7 @@
           </p>
           <div class="choices">
             {#each testedRows(collections.map((c) => c.data)) as row (row.key)}<button
-                class="choice"
+                class="choice btn-secondary"
                 disabled={busy}
                 onclick={() => review(row.collection, row.preset.id)}
                 ><strong>{row.preset.name}</strong><small
@@ -325,7 +333,8 @@
             {#each parameterSummary(prepared.parameters) as line (line)}<p class="basis">
                 {line}
               </p>{/each}
-            <button class="primary" onclick={apply}>{t('fsreset.ui.replace.parameters')}</button>
+            <button class="btn-primary" onclick={apply}>{t('fsreset.ui.replace.parameters')}</button
+            >
           {/if}
         {:else}
           <label class="row"
@@ -357,7 +366,7 @@
           <p class="basis">
             {t('fsreset.ui.software.validation.does.not.establish.a.workshop.test')}
           </p>
-          <button class="primary" disabled={busy || attestedKey !== key} onclick={save}
+          <button class="btn-primary" disabled={busy || attestedKey !== key} onclick={save}
             >{t('fsreset.ui.save.tested.preset')}</button
           >
         {/if}
@@ -371,6 +380,81 @@
 <style>
   .cutting {
     min-width: 0;
+  }
+  .cutting {
+    container-type: inline-size;
+  }
+  .numeric-fields {
+    display: grid;
+    gap: 4px;
+  }
+  .cutting-field {
+    display: grid;
+    grid-template-columns: minmax(80px, 1fr) 82px 48px;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--inspector-font-field);
+  }
+  .cutting-field input {
+    width: 100%;
+    min-width: 0;
+    height: var(--inspector-control-height);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .unit {
+    font-size: var(--inspector-font-meta);
+    color: var(--text-muted);
+  }
+  .role-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--inspector-font-meta);
+    margin: 0 0 4px;
+  }
+  .role-row select {
+    width: auto;
+    max-width: 100%;
+    min-height: var(--inspector-control-height);
+  }
+  .role-hint {
+    margin: 2px 0 8px;
+  }
+  .limits {
+    font-size: var(--inspector-font-meta);
+    margin: 4px 0;
+  }
+  .limits summary {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    color: var(--text-muted);
+    min-height: 24px;
+  }
+  .limits summary::after {
+    content: '▸';
+    margin-left: auto;
+  }
+  .limits[open] summary::after {
+    content: '▾';
+  }
+  .limits p {
+    padding-left: 18px;
+  }
+  .limits strong {
+    margin-right: 4px;
+  }
+  .actions button {
+    min-height: var(--inspector-control-height);
+  }
+  @container (min-width: 540px) {
+    .numeric-fields {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 16px;
+    }
   }
   .row {
     display: grid;
@@ -389,23 +473,26 @@
   }
   .actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     gap: 6px;
     margin: 8px 0;
     align-items: center;
   }
   .basis {
-    font-size: 11px;
-    color: var(--text-secondary, #aaa);
+    font-size: var(--inspector-font-meta);
+    color: var(--text-muted);
+    margin: 4px 0;
+    line-height: 1.4;
     overflow-wrap: anywhere;
   }
   .errors {
     font-size: 11px;
-    color: var(--error, #f88);
+    color: var(--error);
     padding-left: 14px;
   }
   .editor {
-    border-top: 1px solid var(--border, #444);
+    border-top: 1px solid var(--border);
     margin-top: 8px;
     padding-top: 4px;
   }
@@ -422,7 +509,7 @@
   .choice small {
     display: block;
     font-size: 10px;
-    color: var(--text-secondary, #aaa);
+    color: var(--text-muted);
   }
   .attestation {
     display: flex;
@@ -440,6 +527,6 @@
   th {
     text-align: left;
     padding: 5px;
-    border-bottom: 1px solid var(--border, #444);
+    border-bottom: 1px solid var(--border);
   }
 </style>

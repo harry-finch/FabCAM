@@ -1,0 +1,71 @@
+
+> build
+> node scripts/ensure-wasm-fresh.mjs && vite build
+
+[ensure-wasm] complete ivac-wasm package fingerprint verified
+vite v8.0.10 building client environment for production...
+[2K
+transforming...[33m[PLUGIN_TIMINGS] Warning:[0m Your build spent significant time in plugin `vite:resolve-builtin:get-environment`. See https://rolldown.rs/options/checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] Warning:[0m Your build spent significant time in plugin `vite:worker`. See https://rolldown.rs/options/checks#plugintimings for more details.
+
+✓ 4572 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   2.07 kB │ gzip:     0.66 kB
+dist/assets/qualification.worker-BliwUhHZ.js     22.53 kB
+dist/assets/wasm.worker-XEZFJJ9F.js              24.61 kB
+dist/assets/ivac_wasm_bg-Bx0Jf1YA.wasm        6,639.17 kB │ gzip: 2,361.54 kB
+dist/assets/Scene3D-BBqyjIFX.css                  2.01 kB │ gzip:     0.73 kB
+dist/assets/ReportDialog-DfTZZiF-.css             2.68 kB │ gzip:     0.76 kB
+dist/assets/SettingsDialog-B5_9_ipF.css           3.36 kB │ gzip:     0.94 kB
+dist/assets/AboutDialog-BaILN9aX.css              3.73 kB │ gzip:     0.93 kB
+dist/assets/AddTextDialog-BJlzrc0R.css            4.02 kB │ gzip:     1.07 kB
+dist/assets/GcodePanel-CpuoXhYj.css               4.43 kB │ gzip:     1.23 kB
+dist/assets/MachineWorkspace-D6SMeSGf.css        14.70 kB │ gzip:     2.87 kB
+dist/assets/ToolLibraryDialog-u5IMaWUZ.css       15.46 kB │ gzip:     2.89 kB
+dist/assets/index-WamItWSF.css                  123.00 kB │ gzip:    20.63 kB
+dist/assets/dist-js-NQ67qQMm.js                   0.12 kB │ gzip:     0.13 kB
+dist/assets/dist-js-D-Dd5-GQ.js                   0.13 kB │ gzip:     0.14 kB
+dist/assets/rolldown-runtime-lhHHWwHU.js          0.15 kB │ gzip:     0.15 kB
+dist/assets/env-P19VVBwe.js                       0.17 kB │ gzip:     0.15 kB
+dist/assets/wasm-fatal-Cq8arUKL.js                0.20 kB │ gzip:     0.17 kB
+dist/assets/dist-js-D1o1A8ji.js                   0.29 kB │ gzip:     0.18 kB
+dist/assets/path-D3f-EPQq.js                      0.84 kB │ gzip:     0.44 kB
+dist/assets/event-BbJMfFeU.js                     1.05 kB │ gzip:     0.55 kB
+dist/assets/preload-helper-ca-nBW7U.js            1.19 kB │ gzip:     0.68 kB
+dist/assets/cutting-contract-B2QSyRFo.js          1.27 kB │ gzip:     0.63 kB
+dist/assets/dialog-draft.svelte-C6FNBmBf.js       1.33 kB │ gzip:     0.56 kB
+dist/assets/core-C_uWAgQK.js                      1.90 kB │ gzip:     0.79 kB
+dist/assets/project-types-BpHPJJEL.js             2.10 kB │ gzip:     0.95 kB
+dist/assets/tauri-DTJZltHA.js                     3.31 kB │ gzip:     1.31 kB
+dist/assets/wasm-worker-client-A_mzLzX0.js        3.56 kB │ gzip:     1.41 kB
+dist/assets/wasm-BPYZwmtu.js                      3.89 kB │ gzip:     1.38 kB
+dist/assets/dist-js-BjV1Yaj9.js                   6.71 kB │ gzip:     1.71 kB
+dist/assets/GcodePanel-B_diqMua.js                7.95 kB │ gzip:     3.08 kB
+dist/assets/AboutDialog-34V0M6IU.js              10.52 kB │ gzip:     4.78 kB
+dist/assets/text_preview.svelte-Dn2wsSNt.js      12.33 kB │ gzip:     3.45 kB
+dist/assets/AddTextDialog-0oURRQnC.js            16.23 kB │ gzip:     5.74 kB
+dist/assets/ReportDialog-CdiK2wSg.js             17.17 kB │ gzip:     5.58 kB
+dist/assets/SettingsDialog-lUf35joZ.js           17.60 kB │ gzip:     4.91 kB
+dist/assets/ivac_wasm-BUx-QOix.js                20.61 kB │ gzip:     5.41 kB
+dist/assets/import-ops-BJZtBnPb.js               31.99 kB │ gzip:     9.74 kB
+dist/assets/Scene3D-CzeajY8J.js                  41.30 kB │ gzip:    14.36 kB
+dist/assets/driver-BX9CKTF4.js                   52.36 kB │ gzip:    15.29 kB
+dist/assets/index-client-DVoIp7bL.js             53.27 kB │ gzip:    20.33 kB
+dist/assets/MachineWorkspace-Cv4fnBE1.js         70.64 kB │ gzip:    20.58 kB
+dist/assets/ToolLibraryDialog-CtlSUUXr.js        77.26 kB │ gzip:    19.15 kB
+dist/assets/three-bcSkbUAg.js                   597.98 kB │ gzip:   152.42 kB
+dist/assets/index-BZZFwIlT.js                 1,084.59 kB │ gzip:   319.41 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 600 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] Warning:[0m Your build spent significant time in plugins. Here is a breakdown:
+  - ivac-about-md (76%)
+  - vite-plugin-svelte:compile (20%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+✓ built in 7.14s

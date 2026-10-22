@@ -18,7 +18,7 @@
   } = $props();
   // The parent remounts this editor for every explicit edit action.
   // svelte-ignore state_referenced_locally
-  let draft = $state<TestedPreset>(structuredClone(initial));
+  let draft = $state<TestedPreset>(structuredClone($state.snapshot(initial)));
   let attested = $state(''),
     error = $state(''),
     busy = $state(false);
@@ -47,7 +47,7 @@
     busy = true;
     error = '';
     try {
-      await onSave(editTestedPreset(original, draft, attested));
+      await onSave(editTestedPreset($state.snapshot(original), $state.snapshot(draft), attested));
       onClose();
     } catch (e) {
       error = String(e);

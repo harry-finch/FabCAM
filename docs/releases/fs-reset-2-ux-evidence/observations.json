@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-22",
+  "base": "3d00dea",
+  "transport": "actual WASM",
+  "storage": "disposable localhost:18815 and 127.0.0.1:18815 only",
+  "synthetic_presets": 220,
+  "page_size": 50,
+  "pages": 5,
+  "search_220_results": 1,
+  "profile_before": {
+    "width_px": 295.015625,
+    "height_px": 321
+  },
+  "profile_after": {
+    "width_px": 295.015625,
+    "height_px": 288.859375,
+    "scroll_width_px": 295
+  },
+  "table_row_height_px": 33,
+  "responsive_frame": {
+    "viewport_width_px": 760,
+    "library_client_width_px": 760,
+    "library_scroll_width_px": 760,
+    "expanded_operation_inspector_px": 695,
+    "cutting_grid_height_px": 224.859375
+  },
+  "round_trip": "actual project.snapshot()/restore() through isolated test fixture control; not OS file round-trip",
+  "confirmed": [
+    "empty states distinct",
+    "search/pagination/keyboard selection",
+    "rename",
+    "delete confirmation and cancellation",
+    "metadata editing/save",
+    "load preview/copy",
+    "modified-from-preset",
+    "Undo/Redo",
+    "missing rate error",
+    "known feed maximum error",
+    "unchecked attestation disables save",
+    "Pocket Rough T1 / Finish T2",
+    "Drill T1 / Spot T3 / Chamfer T3"
+  ],
+  "final_console_errors": [],
+  "limits": [
+    "browser filechooser.setFiles failed: detached input backend node",
+    "export control reports request; no downloaded file verified",
+    "native watcher/import-stat/report defects not changed"
+  ]
+}

@@ -540,7 +540,6 @@ export type MsgKey =
   | "fsreset.ui.new.collection"
   | "fsreset.ui.new.collection2"
   | "fsreset.ui.next"
-  | "fsreset.ui.no.tested.presets.match.create.a.collection.then"
   | "fsreset.ui.no.tested.presets.yet.save.a.tested.configuration"
   | "fsreset.ui.operation"
   | "fsreset.ui.pass"
@@ -567,15 +566,30 @@ export type MsgKey =
   | "fsreset.ui.specialized.cycle.and.engagement.values.are.copied.with"
   | "fsreset.ui.surface.stepover.mm"
   | "fsreset.ui.test.date.optional"
-  | "fsreset.ui.tested.presets"
   | "fsreset.ui.this.setup.still.requests.automatic.dowel.holes.and"
   | "fsreset.ui.tool"
   | "fsreset.ui.unchanged.values.retain.the.original.author.s.attestation"
   | "fsreset.ui.unknown"
-  | "fsreset.ui.unknown.machine.tool.limits"
   | "fsreset.ui.use.selected.operation.s.configuration.and.values"
   | "fsreset.ui.workshop.notes.optional"
-  | "fsreset.ui.workshop.tested.configurations.in.named.collections.author.attestations"
+  | "fsreset.ux.all"
+  | "fsreset.ux.browse"
+  | "fsreset.ux.clear"
+  | "fsreset.ux.create_help"
+  | "fsreset.ux.details"
+  | "fsreset.ux.empty"
+  | "fsreset.ux.empty_help"
+  | "fsreset.ux.errors"
+  | "fsreset.ux.manage"
+  | "fsreset.ux.no_collections"
+  | "fsreset.ux.no_matches"
+  | "fsreset.ux.operation_help"
+  | "fsreset.ux.presets"
+  | "fsreset.ux.role"
+  | "fsreset.ux.select_operation"
+  | "fsreset.ux.state"
+  | "fsreset.ux.subtitle"
+  | "fsreset.ux.unknown"
   | "gcode.label"
   | "gcode.line_sync_unavailable"
   | "gcode.line_sync_unavailable.title"
@@ -3172,7 +3186,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fsreset.ui.new.collection",
   "fsreset.ui.new.collection2",
   "fsreset.ui.next",
-  "fsreset.ui.no.tested.presets.match.create.a.collection.then",
   "fsreset.ui.no.tested.presets.yet.save.a.tested.configuration",
   "fsreset.ui.operation",
   "fsreset.ui.pass",
@@ -3199,15 +3212,30 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fsreset.ui.specialized.cycle.and.engagement.values.are.copied.with",
   "fsreset.ui.surface.stepover.mm",
   "fsreset.ui.test.date.optional",
-  "fsreset.ui.tested.presets",
   "fsreset.ui.this.setup.still.requests.automatic.dowel.holes.and",
   "fsreset.ui.tool",
   "fsreset.ui.unchanged.values.retain.the.original.author.s.attestation",
   "fsreset.ui.unknown",
-  "fsreset.ui.unknown.machine.tool.limits",
   "fsreset.ui.use.selected.operation.s.configuration.and.values",
   "fsreset.ui.workshop.notes.optional",
-  "fsreset.ui.workshop.tested.configurations.in.named.collections.author.attestations",
+  "fsreset.ux.all",
+  "fsreset.ux.browse",
+  "fsreset.ux.clear",
+  "fsreset.ux.create_help",
+  "fsreset.ux.details",
+  "fsreset.ux.empty",
+  "fsreset.ux.empty_help",
+  "fsreset.ux.errors",
+  "fsreset.ux.manage",
+  "fsreset.ux.no_collections",
+  "fsreset.ux.no_matches",
+  "fsreset.ux.operation_help",
+  "fsreset.ux.presets",
+  "fsreset.ux.role",
+  "fsreset.ux.select_operation",
+  "fsreset.ux.state",
+  "fsreset.ux.subtitle",
+  "fsreset.ux.unknown",
   "gcode.label",
   "gcode.line_sync_unavailable",
   "gcode.line_sync_unavailable.title",
