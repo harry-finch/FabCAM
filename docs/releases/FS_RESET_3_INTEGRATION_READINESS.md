@@ -218,9 +218,13 @@ Node 24.21.0; Rust offline with RUSTC_WRAPPER empty. Previous repair/UX logs are
 | `cargo test --offline -p ivac-cli --features cps --test cutting_v9` | **1 PASS** |
 | `cargo test --offline -p ivac-file-export` | **11 PASS**, 0 doc tests |
 | Schema/client affected-file comparison | No schema/type changes between UX baseline and integrated source; no regeneration required |
-| Scoped whitespace, pending patch and component hash checks | PASS |
+| Authored report whitespace, pending patch and component hash checks | PASS |
 
 [Logs and SHA-256 inventory](fs-reset-3-readiness-evidence/SHA256SUMS.json).
+Raw command logs are preserved verbatim: Git whitespace checking reports their trailing
+blank lines and one Vite trailing space. These are evidence formatting, not source defects;
+the authored report passes its scoped whitespace check.
+
 No new complete workspace/all-features/strict-Clippy/pre-release/TEST1-C2/corpus run is
 claimed. Their complete final-source execution is mandatory after FS-RESET-3 changes.
 No new installed application or physical machine qualification.
