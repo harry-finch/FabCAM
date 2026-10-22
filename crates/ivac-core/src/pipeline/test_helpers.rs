@@ -73,6 +73,8 @@ pub(in crate::pipeline) fn closed_circle(center: Point2, radius: f64) -> Vec<Seg
 
 pub(in crate::pipeline) fn endmill(id: u32, diameter: f64) -> ToolEntry {
     ToolEntry {
+        max_rpm: None,
+        physical_id: None,
         id,
         name: format!("{diameter:.1}mm endmill"),
         kind: ToolKind::Endmill,
@@ -126,6 +128,8 @@ pub(in crate::pipeline) fn endmill(id: u32, diameter: f64) -> ToolEntry {
 
 pub(in crate::pipeline) fn vbit() -> ToolEntry {
     ToolEntry {
+        max_rpm: None,
+        physical_id: None,
         id: 1,
         name: "60° V".into(),
         kind: ToolKind::VBit,
@@ -301,6 +305,7 @@ pub(in crate::pipeline) fn project_with_segments(
     tools: Vec<ToolEntry>,
 ) -> Project {
     Project {
+        cutting_version: None,
         segments,
         machine: MachineConfig::default(),
         tools,

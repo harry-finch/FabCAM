@@ -161,6 +161,8 @@ mod tests {
         holder: Option<HolderShape>,
     ) -> ToolEntry {
         ToolEntry {
+            max_rpm: None,
+            physical_id: None,
             id: 1,
             name: "t".into(),
             kind: ToolKind::Endmill,

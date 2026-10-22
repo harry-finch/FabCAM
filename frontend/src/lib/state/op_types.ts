@@ -111,6 +111,7 @@ export type LeadKind = 'off' | 'straight' | 'arc';
 /// Fields every op carries, regardless of kind. New op kinds extend
 /// this; per-kind fields live on the kind-specific interfaces.
 export interface OpBase {
+  cutting?: import('../api/generated').components['schemas']['MillingCutting'];
   geometryBinding?: import('./drawing').GeometryBinding;
   appliedCutting?: import('../api/generated').components['schemas']['AppliedCutting'];
   fsFullWidth?: boolean;

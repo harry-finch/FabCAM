@@ -125,7 +125,11 @@ fn list_local_packs(dir: &Path) -> Result<Vec<String>, String> {
     for entry in &paths {
         let name = entry.file_name().to_string_lossy().into_owned();
         if let Some((id, _)) = name.split_once('@') {
-            if is_lab_pack_id(id) && name.ends_with(".json") {
+            if is_lab_pack_id(id)
+                && Path::new(&name)
+                    .extension()
+                    .is_some_and(|ext| ext == "json")
+            {
                 lab_heads.insert(id.to_string(), name);
             }
         }
@@ -194,6 +198,8 @@ pub struct SourceRevision {
     id: String,
     revision: String,
 }
+// Retained legacy helper mirrors owned command arguments during staged replacement.
+#[allow(clippy::needless_pass_by_value)]
 fn save_lab_guarded(
     dir: &Path,
     json: &str,
@@ -306,7 +312,9 @@ fn remove_source(dir: &Path, id: &str, expected_head: &str) -> Result<(), String
             && e.path().extension().is_some_and(|v| v == "json")
     });
     entries.sort_by_key(std::fs::DirEntry::file_name);
-    if entries.last().map(|e| e.file_name()) != Some(format!("{id}@{expected_head}.json").into()) {
+    if entries.last().map(std::fs::DirEntry::file_name)
+        != Some(format!("{id}@{expected_head}.json").into())
+    {
         return Err("Source changed; refresh and retry".into());
     }
     // Preflight every entry; do not follow links, descend into directories, or touch other ids.

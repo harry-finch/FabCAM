@@ -47,6 +47,10 @@ macro_rules! tool_entry_model {
 }
 
 tool_entry_model! {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub physical_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub max_rpm: Option<u32>,
     pub id: u32,
     pub name: String,
     pub kind: ToolKind,
@@ -375,6 +379,8 @@ fn is_default_spindle_direction(d: &SpindleDirection) -> bool {
 impl Default for ToolEntry {
     fn default() -> Self {
         Self {
+            physical_id: None,
+            max_rpm: None,
             id: 1,
             name: "3mm endmill".into(),
             kind: ToolKind::Endmill,
@@ -611,8 +617,8 @@ impl ToolKind {
             | ToolKind::Compression
             | ToolKind::FormProfile
             | ToolKind::Kegel
-            | ToolKind::ThreadMill => &[MachineMode::Mill],
-            ToolKind::Engraver => &[MachineMode::Mill],
+            | ToolKind::ThreadMill
+            | ToolKind::Engraver => &[MachineMode::Mill],
             ToolKind::DragKnife => &[MachineMode::Drag],
             ToolKind::LaserBeam => &[MachineMode::Laser],
             ToolKind::PlasmaTorch => &[MachineMode::Plasma],

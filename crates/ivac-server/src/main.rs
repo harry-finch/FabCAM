@@ -70,6 +70,7 @@ async fn main() -> Result<()> {
         .route("/drawing", post(drawing_handler))
         .route("/generate-drawing", post(generate_drawing_handler))
         .route("/feeds-speeds", post(feeds_speeds_handler))
+        .route("/presets/command", post(preset_command_handler))
         .route("/relief/stl", post(relief_stl_handler));
     // Post-library surfaces exist only in cps builds; the /version
     // capabilities probe ("post-cps") tells clients which world this is.
@@ -774,6 +775,14 @@ impl From<axum::extract::multipart::MultipartError> for AppError {
     fn from(e: axum::extract::multipart::MultipartError) -> Self {
         Self::bad_request(e.to_string())
     }
+}
+
+async fn preset_command_handler(
+    Json(req): Json<ivac_core::presets::PresetCommand>,
+) -> Result<Json<serde_json::Value>, AppError> {
+    ivac_core::presets::command(req)
+        .map(Json)
+        .map_err(|e| AppError::bad_request(e))
 }
 
 async fn feeds_speeds_handler(

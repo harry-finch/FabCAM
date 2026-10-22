@@ -774,3 +774,10 @@ mod sec1_tests {
         }
     }
 }
+
+#[tauri::command]
+pub fn preset_command(
+    request: ivac_core::presets::PresetCommand,
+) -> Result<serde_json::Value, String> {
+    ivac_core::presets::command(request)
+}

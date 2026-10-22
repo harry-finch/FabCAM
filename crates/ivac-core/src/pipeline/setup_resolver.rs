@@ -216,7 +216,7 @@ pub(in crate::pipeline) fn synthesize_op_setup(
             warnings.push(PipelineWarning::for_op(op.id, "feeds_speeds_stale", "Cutting context changed since Apply. Saved/manual values are retained; review or recalculate explicitly."));
         }
     }
-    let machine = crate::feeds_speeds::effective_machine(project, tool.id);
+    let machine = crate::cutting_parameters::effective_machine(project, tool.id);
     if machine.spindle_rpm_max == Some(0)
         || machine
             .spindle_rpm_min
@@ -254,7 +254,7 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         crate::project::PassKind::Rough
     };
     let (rough_speed_raw, rough_plunge, rough_feed) =
-        crate::feeds_speeds::saved_rates(op, tool, main_pass)
+        crate::cutting_parameters::saved_rates(op, tool, main_pass)
             .map_err(|e| PipelineError::AppliedCutting(op.id, e))?;
     let (finish_speed_raw, finish_plunge, finish_feed) = if matches!(op.kind, OpKind::Drill { .. })
     {
@@ -263,7 +263,7 @@ pub(in crate::pipeline) fn synthesize_op_setup(
         // sees consistent values.
         (rough_speed_raw, rough_plunge, rough_feed)
     } else {
-        crate::feeds_speeds::saved_rates(op, tool, crate::project::PassKind::Finish)
+        crate::cutting_parameters::saved_rates(op, tool, crate::project::PassKind::Finish)
             .map_err(|e| PipelineError::AppliedCutting(op.id, e))?
     };
     // Clamp each pass's resolved RPM into the machine's
@@ -755,11 +755,11 @@ pub(super) fn header_setup_for(project: &Project) -> Setup {
                 crate::project::PassKind::Rough
             };
             let (rs_raw, rp, rf) =
-                crate::feeds_speeds::saved_rates(op, tool, main_pass).unwrap_or((0, 0, 0));
+                crate::cutting_parameters::saved_rates(op, tool, main_pass).unwrap_or((0, 0, 0));
             let (fs_raw, fp, ff) = if matches!(op.kind, OpKind::Drill { .. }) {
                 (rs_raw, rp, rf)
             } else {
-                crate::feeds_speeds::saved_rates(op, tool, crate::project::PassKind::Finish)
+                crate::cutting_parameters::saved_rates(op, tool, crate::project::PassKind::Finish)
                     .unwrap_or((0, 0, 0))
             };
             // Keep the header S<x> consistent with the per-op
@@ -769,14 +769,14 @@ pub(super) fn header_setup_for(project: &Project) -> Setup {
             // RPM in its M3 command.
             let rs = clamp_rpm_silent(
                 rs_raw,
-                &crate::feeds_speeds::effective_machine(project, tool.id),
+                &crate::cutting_parameters::effective_machine(project, tool.id),
             );
             let fs = if matches!(op.kind, OpKind::Drill { .. }) {
                 rs
             } else {
                 clamp_rpm_silent(
                     fs_raw,
-                    &crate::feeds_speeds::effective_machine(project, tool.id),
+                    &crate::cutting_parameters::effective_machine(project, tool.id),
                 )
             };
             let pierce_sec = if matches!(tool.kind, crate::project::ToolKind::LaserBeam) {

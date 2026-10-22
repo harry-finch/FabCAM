@@ -1057,6 +1057,7 @@ mod tests {
         params.start_depth = 0.0;
         params.plunge = PlungeStrategy::Ramp { angle_deg: 10.0 };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(100.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1143,6 +1144,7 @@ mod tests {
         params.start_depth = 0.0;
         params.plunge = PlungeStrategy::Ramp { angle_deg: 10.0 };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(100.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1209,6 +1211,7 @@ mod tests {
             radius_mm: Some(3.0),
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1293,6 +1296,7 @@ mod tests {
             radius_mm: Some(1.0),
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(100.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 6.0)],
@@ -1372,6 +1376,7 @@ mod tests {
             radius_mm: None,
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(8.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 6.0)],
@@ -1444,6 +1449,7 @@ mod tests {
             radius_mm: None,
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 0.5)],
@@ -1574,6 +1580,7 @@ mod tests {
             ..crate::project::ContourParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(100.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1635,6 +1642,7 @@ mod tests {
         params.depth = -1.0;
         params.step = Some(-1.0);
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1692,6 +1700,7 @@ mod tests {
     #[test]
     fn lead_in_arc_emits_g2_or_g3_before_first_cut() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1729,6 +1738,7 @@ mod tests {
     #[test]
     fn lead_in_off_emits_no_lead() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1770,6 +1780,7 @@ mod tests {
     #[test]
     fn lead_in_straight_emits_a_straight_segment() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1836,6 +1847,7 @@ mod tests {
         params.start_depth = 0.0;
         params.finish_step = Some(-0.2);
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1887,6 +1899,7 @@ mod tests {
         params.step = Some(-1.0);
         params.through_depth = 0.5;
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1939,6 +1952,7 @@ mod tests {
         params.step = Some(-1.0);
         params.depth_list = vec![-0.5, -1.5, -3.0];
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2001,6 +2015,7 @@ mod tests {
             .collect();
         for (winding_label, segments) in &[("CCW", &ccw_segments), ("CW", &cw_segments)] {
             let mk = |offset: ToolOffset| Project {
+                cutting_version: None,
                 segments: (*segments).clone(),
                 machine: MachineConfig::default(),
                 tools: vec![endmill(1, 3.0)],
@@ -2061,6 +2076,7 @@ mod tests {
         let inner = closed_circle(Point2::new(50.0, 50.0), 10.0);
         let segments: Vec<_> = outer.into_iter().chain(inner).collect();
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2229,6 +2245,7 @@ mod tests {
             Segment::line(Point2::new(50.0, 30.0), Point2::new(100.0, 0.0), "0", 7),
         ];
         let mk = |offset: ToolOffset| Project {
+            cutting_version: None,
             segments: segments.clone(),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2277,6 +2294,7 @@ mod tests {
         use crate::pipeline::test_helpers::{closed_square_offset, endmill, profile_op};
         let segments = closed_square_offset(100.0, 0.0, 0.0);
         let mk = |offset: ToolOffset| Project {
+            cutting_version: None,
             segments: segments.clone(),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2365,6 +2383,7 @@ mod tests {
         // The annulus pocket should emit *fewer* offset segments than
         // pocketing the whole outer because the middle is left intact.
         let baseline_project = Project {
+            cutting_version: None,
             segments: segments.clone(),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2386,6 +2405,7 @@ mod tests {
             fs_context: None,
         };
         let annulus_project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2462,6 +2482,7 @@ mod tests {
         let mut segments = closed_square_offset(50.0, 0.0, 0.0);
         segments.extend(closed_square_offset(20.0, 15.0, 15.0));
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2543,6 +2564,7 @@ mod tests {
             ..crate::project::PocketParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2639,6 +2661,7 @@ mod tests {
             ..crate::project::PocketParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 6.0)], // 6 mm Ø ⇒ 3 mm radius
@@ -2727,6 +2750,7 @@ mod tests {
     fn pocket_then_pocket_outside_produces_disjoint_cuts() {
         let segments = closed_square_offset(50.0, 0.0, 0.0);
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2848,6 +2872,7 @@ mod tests {
             ..crate::project::ContourParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -2963,6 +2988,7 @@ mod tests {
     #[test]
     fn pocket_with_oversized_tool_emits_tool_too_large_warning() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(4.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 6.0)],
@@ -3020,6 +3046,8 @@ mod tests {
     #[test]
     fn pocket_with_drill_bit_warns_about_tool_kind() {
         let drill = ToolEntry {
+            max_rpm: None,
+            physical_id: None,
             id: 1,
             name: "drill".into(),
             kind: ToolKind::Drill,
@@ -3070,6 +3098,7 @@ mod tests {
             vcarve_lead_in_angle_deg: None,
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![drill],
@@ -3121,6 +3150,7 @@ mod tests {
     #[test]
     fn pocket_with_just_fitting_tool_warns_about_incomplete_fill() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(10.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 6.0)],
@@ -3196,6 +3226,7 @@ mod tests {
                 ..crate::project::PocketParams::default()
             };
             let project = Project {
+                cutting_version: None,
                 segments: closed_square_offset(50.0, 0.0, 0.0),
                 machine: MachineConfig::default(),
                 tools: vec![endmill(1, 3.0)],
@@ -3257,6 +3288,7 @@ mod tests {
             ..crate::project::PocketParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -3336,6 +3368,7 @@ mod tests {
             ..crate::project::PocketParams::default()
         };
         let project = Project {
+            cutting_version: None,
             // 6×6 with a 3mm tool: boundary inset by 1.5mm leaves a
             // 3×3 path; cascade inflate by 2.85mm → empty → 0 rings.
             segments: closed_square_offset(6.0, 0.0, 0.0),
@@ -3405,6 +3438,7 @@ mod tests {
             Segment::line(Point2::new(s, 0.0), Point2::new(0.0, 0.0), "0", 7),
         ];
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -3470,6 +3504,7 @@ mod tests {
         params.feed_rate_override = Some(123);
         params.plunge_rate_override = Some(45);
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -3532,6 +3567,7 @@ mod tests {
         tool.feed_rate_finish = Some(400);
 
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -3584,6 +3620,7 @@ mod tests {
         tool.feed_rate = 1500;
         // no finish overrides set
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -3760,6 +3797,7 @@ mod tests {
             ..crate::project::PocketParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -3816,6 +3854,7 @@ mod tests {
         let mut params = OpParams::mill_default();
         params.stock_to_leave_mm = 1.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 2.0)],
@@ -3892,6 +3931,7 @@ mod tests {
             ..crate::project::ContourParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 1.0)],
@@ -3976,6 +4016,7 @@ mod tests {
             ..crate::project::ContourParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -4033,6 +4074,7 @@ mod tests {
                 .count()
         }
         let cascade_project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -4126,6 +4168,7 @@ mod tests {
             Segment::line(p5, p0, "0", 7),
         ];
         let project = Project {
+            cutting_version: None,
             segments: l_shape,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -4211,6 +4254,7 @@ mod tests {
         // Selection contains only object 1 (the outer ring) — same
         // value in both runs since chaining puts the outer first.
         let mk = |segments: Vec<Segment>, strategy: PocketStrategy, pocket_islands: bool| Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -4310,6 +4354,7 @@ mod tests {
             Segment::line(p3, p0, "0", 7),
         ];
         let mk = |strategy: PocketStrategy| Project {
+            cutting_version: None,
             segments: rect.clone(),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 6.0)],
@@ -4414,6 +4459,7 @@ mod tests {
             ..crate::project::ContourParams::default()
         };
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -4470,6 +4516,7 @@ mod tests {
     fn trochoidal_with_direct_plunge_emits_plunge_overridden_warning() {
         let segments = closed_square_offset(50.0, 0.0, 0.0);
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -4577,6 +4624,7 @@ mod tests {
         let inner = closed_circle(Point2::new(30.0, 30.0), 8.0);
         let segments: Vec<Segment> = outer.iter().cloned().chain(inner.iter().cloned()).collect();
         let mk = |pocket_islands: bool| Project {
+            cutting_version: None,
             segments: segments.clone(),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -4685,6 +4733,7 @@ mod tests {
         let tool_diameter = 3.0;
         let tool_radius = tool_diameter * 0.5;
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, tool_diameter)],
@@ -4783,6 +4832,7 @@ mod tests {
         tool.speed_finish = Some(8_000);
         tool.feed_rate_finish = Some(400);
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -4857,6 +4907,7 @@ mod tests {
         use crate::project::PocketStrategy;
         let tool_diameter = 3.0;
         let mk = |allowance: f64, nocontour: bool| Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, tool_diameter)],

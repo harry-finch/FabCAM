@@ -539,8 +539,14 @@ export interface components {
          * @enum {string}
          */
         CutDirection: "conventional" | "climb";
+        CuttingCheck: {
+            errors: string[];
+            warnings: string[];
+        };
         /** @enum {string} */
         CuttingOrigin: "recommendation" | "manual" | "legacy_snapshot";
+        /** @enum {string} */
+        CuttingRole: "rough" | "finish" | "drill" | "spot" | "chamfer";
         /** @description Self-contained authoring document; no implicit inheritance or remote references. */
         DatasetDocument: {
             description: string;
@@ -551,6 +557,18 @@ export interface components {
             materials: components["schemas"]["CatalogEntry"][];
             profile_set: components["schemas"]["FsProfileSet"];
             tools: components["schemas"]["ToolDefinition"][];
+        };
+        DepthSchedule: {
+            /** Format: double */
+            finish_step?: number | null;
+            /** @enum {string} */
+            kind: "step";
+            /** Format: double */
+            step?: number | null;
+        } | {
+            depths: number[];
+            /** @enum {string} */
+            kind: "explicit";
         };
         /** @description Rejected path for inspection only. Deliberately contains no executable text. */
         DiagnosticPreview: {
@@ -1562,6 +1580,14 @@ export interface components {
              */
             out_lenght: number;
         };
+        LoadedPresetSnapshot: {
+            collection_id: string;
+            collection_name: string;
+            context: components["schemas"]["PresetContext"];
+            parameters: components["schemas"]["PresetParameters"];
+            preset_id: string;
+            preset_name: string;
+        };
         MachineConfig: {
             /** @description Per-axis acceleration in mm/s². When None the kinematic time estimator falls back to 250 mm/s² per axis (`LinuxCNC` default). */
             accel?: components["schemas"]["AxisLimits"] | null;
@@ -1603,6 +1629,7 @@ export interface components {
                 number,
                 number
             ] | null;
+            physical_id?: string | null;
             /** @description Plot-mode Z (Estlcam `c_PP.Z_Up_Dn)`: when true, the pipeline collapses every cut to ONE pass at the op's cut depth and skips the multi-step descent / ramp / helix machinery. Z values written into gcode are restricted to `fast_move_z` (pen up between cuts) and the op's `depth` (pen down on cut moves). Right setting for laser / plasma / pen plotters / 3D-printer extrusion and drag-knife controllers. */
             plot_mode_z?: boolean;
             /** @description How the post re-establishes the new tool's Z tip position after a tool change. A manual hand-swap leaves the new tool's length unknown; the default `PostChangeZStrategy::None` applies only the static per-tool `ToolEntry.z_shift_mm`, which assumes perfectly repeatable collet seating + pre-known lengths — false for most hobby swaps. Best practice re-measures Z after every change. Maps onto grblHAL `$341` modes / Estlcam's tool-measure policies. Applied by `emit_toolchange_envelope` to NON-first changes (the first tool is operator-loaded at program start); `None` keeps existing output byte-for-byte. */
@@ -1710,6 +1737,10 @@ export interface components {
              * @default 0
              */
             through_depth: number;
+        };
+        MillingCutting: {
+            preset_snapshot?: components["schemas"]["LoadedPresetSnapshot"] | null;
+            rates: components["schemas"]["RoleRates"][];
         };
         /** @enum {string} */
         MoveKind: "rapid" | "cut" | "plunge" | "retract" | "arc";
@@ -2140,6 +2171,8 @@ export interface components {
         OpParams: {
             /** @description Milling applied values; absent preserves legacy inheritance. */
             applied_cutting?: components["schemas"]["AppliedCutting"] | null;
+            /** @description Explicit operation values; no tool-default lookup during v9 generation. */
+            cutting?: components["schemas"]["MillingCutting"] | null;
             /**
              * Format: double
              * @description Final cut depth (negative number — a depth, not a height).
@@ -2216,6 +2249,8 @@ export interface components {
         OpParamsCommon: {
             /** @description Milling applied values; absent preserves legacy inheritance. */
             applied_cutting?: components["schemas"]["AppliedCutting"] | null;
+            /** @description Explicit operation values; no tool-default lookup during v9 generation. */
+            cutting?: components["schemas"]["MillingCutting"] | null;
             /**
              * Format: double
              * @description Final cut depth (negative number — a depth, not a height).
@@ -2702,6 +2737,50 @@ export interface components {
             /** Format: uint32 */
             power: number;
         };
+        PresetCollection: {
+            format: string;
+            id: string;
+            name: string;
+            presets: components["schemas"]["TestedPreset"][];
+            /** Format: uint32 */
+            version: number;
+        };
+        /** @description Identical pure validation/copy contract across native, HTTP and WASM. */
+        PresetCommand: {
+            /** @enum {string} */
+            action: "validate_collection";
+            json: string;
+        } | {
+            /** @enum {string} */
+            action: "inspect";
+            /** Format: uint32 */
+            op_id: number;
+            project: components["schemas"]["Project"];
+        } | {
+            /** @enum {string} */
+            action: "load";
+            collection: components["schemas"]["PresetCollection"];
+            /** Format: uint32 */
+            op_id: number;
+            preset_id: string;
+            project: components["schemas"]["Project"];
+        };
+        PresetContext: {
+            machine_id: string;
+            machine_label: string;
+            material_id: string;
+            material_label: string;
+            /** @description Canonical relevant setup, tool geometry, strategy and entry snapshot. */
+            signature: string;
+        };
+        PresetParameters: {
+            /** Format: double */
+            planar_stepover_mm?: number | null;
+            /** Format: double */
+            pocket_overlap?: number | null;
+            rates: components["schemas"]["RoleRates"][];
+            schedule: components["schemas"]["DepthSchedule"];
+        };
         /**
          * @description Axis selector for `OpKind::Probe`. Serializes as the bare lowercase letter (`"x"` / `"y"` / `"z"`) for a wire-friendly payload that drops straight into the G38.2 word.
          * @enum {string}
@@ -2726,6 +2805,11 @@ export interface components {
             reverse: boolean;
         };
         Project: {
+            /**
+             * Format: uint32
+             * @description Native cutting contract. V9 clients must explicitly send 9.
+             */
+            cutting_version?: number | null;
             /** @description Fixtures (clamps, dogs, vise jaws, hold-downs) the cutter must avoid throughout the entire program — including rapids. The sim pass tests every toolpath segment against this set and emits `SimWarning::FixtureCollision` on overlap. Default empty: a project with no fixtures behaves exactly as before. */
             fixtures?: components["schemas"]["Fixture"][];
             fs_context?: components["schemas"]["FsContext"] | null;
@@ -2920,6 +3004,17 @@ export interface components {
             edge: components["schemas"]["Identity"];
             /** @enum {string} */
             kind: "simplify";
+        };
+        RoleRates: {
+            /** Format: uint32 */
+            feed_mm_min?: number | null;
+            /** Format: uint32 */
+            plunge_mm_min?: number | null;
+            role: components["schemas"]["CuttingRole"];
+            /** Format: uint32 */
+            rpm?: number | null;
+            /** Format: uint32 */
+            tool_id: number;
         };
         /**
          * @description Direction the parallel finishing scanlines run. `AlongX` lines sweep in X and step over in Y; `AlongY` is the transpose. (Diagonal raster is a future addition — X/Y cover the common cases and keep coverage math simple.)
@@ -3184,6 +3279,15 @@ export interface components {
             width: number;
             /** @description Missing in saved projects means the historical centre-path zone. */
             width_mode?: components["schemas"]["TabWidthMode"];
+        };
+        TestedPreset: {
+            context: components["schemas"]["PresetContext"];
+            id: string;
+            name: string;
+            notes?: string | null;
+            parameters: components["schemas"]["PresetParameters"];
+            test_date?: string | null;
+            tested: boolean;
         };
         /** @enum {string} */
         TextAlignment: "left" | "center" | "right";
@@ -3515,12 +3619,15 @@ export interface components {
              * @description Overall / usable tool length (mm), tip → where the shank enters the collet (Estlcam `Length`). Display + 3D-preview only in v1 — it does NOT affect emitted gcode (reach / collision is driven by `flute_length_mm` + `stickout_length_mm` + `holder`). It sets the preview mesh's total height so the rendered tool matches the real tool's proportions. None = the preview falls back to its diameter-derived heuristic.
              */
             length_mm?: number | null;
+            /** Format: uint32 */
+            max_rpm?: number | null;
             name: string;
             /**
              * Format: uint32
              * @description Spindle warm-up pause in seconds applied once per used tool by the time estimator. Mirrors `ToolConfig.pause`.
              */
             pause?: number;
+            physical_id?: string | null;
             /**
              * Format: double
              * @description Plasma pierce delay in seconds. Honored only when `kind == PlasmaTorch`, like `pierce_height_mm`. The torch dwells at `pierce_height_mm` for this many seconds before dropping to `cut_height_mm`. Long enough to pierce the stock; too long and the arc starts to undercut the rim of the pierce hole. Typical 0.4 s for 1 mm steel, up to ~1.5 s for 6 mm. None ⇒ 0.5 s default.

@@ -127,6 +127,7 @@ mod tests {
             ..MachineConfig::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine,
             tools: vec![rough_tool, finish_tool],
@@ -192,6 +193,7 @@ mod tests {
     #[test]
     fn dual_tool_same_id_skips_toolchange() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -242,6 +244,7 @@ mod tests {
     #[test]
     fn dual_tool_none_uses_single_tool() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -279,6 +282,7 @@ mod tests {
             ..MachineConfig::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine,
             tools: vec![rough_tool, finish_tool],

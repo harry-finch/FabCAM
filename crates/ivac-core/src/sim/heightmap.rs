@@ -735,6 +735,8 @@ mod tests {
 
     fn make_tool(kind: ToolKind, diameter: f64) -> ToolEntry {
         ToolEntry {
+            max_rpm: None,
+            physical_id: None,
             id: 1,
             name: "t".into(),
             kind,

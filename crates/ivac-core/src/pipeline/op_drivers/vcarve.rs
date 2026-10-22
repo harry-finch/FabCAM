@@ -288,6 +288,7 @@ mod tests {
             side: crate::project::WorkpieceSide::Front,
         };
         let project = Project {
+            cutting_version: None,
             segments: vec![
                 Segment::line(Point2::new(0.0, 0.0), Point2::new(20.0, 0.0), "0", 7),
                 Segment::line(
@@ -360,6 +361,7 @@ mod tests {
         // A single LINE segment doesn't form a closed contour. No
         // region → expect the warning.
         let project = Project {
+            cutting_version: None,
             segments: vec![Segment::line(
                 Point2::new(0.0, 0.0),
                 Point2::new(50.0, 0.0),
@@ -424,6 +426,7 @@ mod tests {
         };
         // 30x30 closed square — incircle radius 15mm.
         let project = Project {
+            cutting_version: None,
             segments: vec![
                 Segment::line(Point2::new(0.0, 0.0), Point2::new(30.0, 0.0), "0", 7),
                 Segment::line(Point2::new(30.0, 0.0), Point2::new(30.0, 30.0), "0", 7),
@@ -499,6 +502,7 @@ mod tests {
         // R = 3.175 mm (vbit tool reach) → expect a ~23.65×23.65 square
         // loop centred on (15, 15).
         let project = Project {
+            cutting_version: None,
             segments: vec![
                 Segment::line(Point2::new(0.0, 0.0), Point2::new(30.0, 0.0), "0", 7),
                 Segment::line(Point2::new(30.0, 0.0), Point2::new(30.0, 30.0), "0", 7),
@@ -607,6 +611,7 @@ mod tests {
         };
         let run = |op: Op| -> crate::pipeline::PipelineResponse {
             let project = Project {
+                cutting_version: None,
                 segments: square.clone(),
                 machine: MachineConfig::default(),
                 tools: vec![vbit()],
@@ -685,6 +690,7 @@ mod tests {
             side: crate::project::WorkpieceSide::Front,
         };
         let project = Project {
+            cutting_version: None,
             segments: vec![
                 Segment::line(Point2::new(0.0, 0.0), Point2::new(30.0, 0.0), "0", 7),
                 Segment::line(Point2::new(30.0, 0.0), Point2::new(30.0, 30.0), "0", 7),

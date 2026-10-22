@@ -497,3 +497,11 @@ mod test1_bridge {
         }
     }
 }
+
+/// JSON text preserves explicit null values identically to native serde.
+#[wasm_bindgen(js_name = presetCommand)]
+pub fn preset_command(json: &str) -> Result<String, JsValue> {
+    let req = serde_json::from_str(json).map_err(into_js_error)?;
+    let value = ivac_core::presets::command(req).map_err(into_js_error)?;
+    serde_json::to_string(&value).map_err(into_js_error)
+}

@@ -428,6 +428,7 @@ mod tests {
     #[test]
     fn drill_op_emits_gcode_for_circle_smaller_than_tool() {
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(5.0, 7.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -476,6 +477,7 @@ mod tests {
         // (10,5)-(30,25). Bbox center = (20, 15).
         let segments = closed_square_offset(20.0, 10.0, 5.0);
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -523,6 +525,7 @@ mod tests {
     #[test]
     fn drill_peck_emits_g83() {
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(0.0, 0.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -568,6 +571,7 @@ mod tests {
     #[test]
     fn drill_chip_break_emits_g73() {
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(0.0, 0.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -609,6 +613,7 @@ mod tests {
     #[test]
     fn drill_grbl_falls_back_to_g0g1_sequence() {
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(0.0, 0.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -668,6 +673,7 @@ mod tests {
         let mut segments = closed_circle(Point2::new(0.0, 0.0), 0.5);
         segments.extend(closed_circle(Point2::new(20.0, 0.0), 0.5));
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -746,6 +752,7 @@ mod tests {
         tool.plunge_rate_drill = Some(30);
 
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(5.0, 7.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -792,6 +799,7 @@ mod tests {
         tool.kind = ToolKind::Drill;
         tool.default_peck_step_mm = Some(1.25);
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(5.0, 7.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -843,6 +851,7 @@ mod tests {
         params.start_depth = 0.0;
         params.fast_move_z = 5.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(center, 0.5),
             machine: MachineConfig::default(),
             tools: vec![vbit_drill],
@@ -917,6 +926,7 @@ mod tests {
         params.start_depth = 0.0;
         params.fast_move_z = 5.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(center, 0.5),
             machine: MachineConfig::default(),
             tools: vec![vbit_drill],
@@ -994,6 +1004,7 @@ mod tests {
         params.depth = -3.0;
         params.start_depth = 0.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(center, 0.5),
             machine,
             tools: vec![drill, vbit_finish],
@@ -1047,6 +1058,7 @@ mod tests {
     #[test]
     fn drill_op_emits_g80_before_next_op() {
         let project = Project {
+            cutting_version: None,
             segments: {
                 // One closed circle (the drill target) plus a closed
                 // square (the profile target) so build_op_offsets gets
@@ -1143,6 +1155,7 @@ mod tests {
         params.start_depth = 0.0;
         params.fast_move_z = 5.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(center, 0.5),
             machine: MachineConfig::default(),
             tools: vec![vbit_drill],
@@ -1269,6 +1282,7 @@ mod tests {
         params.start_depth = 0.0;
         params.fast_move_z = 5.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(center, 0.5),
             machine: MachineConfig::default(),
             tools: vec![vbit_drill],
@@ -1344,6 +1358,7 @@ mod tests {
     #[test]
     fn drill_without_chamfer_after_emits_no_revolution() {
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(5.0, 7.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -1402,6 +1417,7 @@ mod tests {
         params.start_depth = 0.0;
         params.fast_move_z = 5.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(center, 0.5),
             machine,
             tools: vec![main_drill, spot_tool],
@@ -1486,6 +1502,7 @@ mod tests {
     #[test]
     fn drill_without_spot_first_emits_no_spot_block() {
         let project = Project {
+            cutting_version: None,
             segments: closed_circle(Point2::new(5.0, 7.0), 0.5),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],

@@ -357,6 +357,8 @@ mod tests {
 
     fn tool_with(holder: Option<HolderShape>, shank: Option<f64>, flute: Option<f64>) -> ToolEntry {
         ToolEntry {
+            max_rpm: None,
+            physical_id: None,
             id: 1,
             name: "t".into(),
             kind: ToolKind::Endmill,

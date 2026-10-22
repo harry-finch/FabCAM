@@ -29,6 +29,7 @@ import type {
 type SourcePack = import('./generated').components['schemas']['FsSourcePack'];
 type LabCapture = import('./generated').components['schemas']['FsLabCapture'];
 export type WasmModule = {
+  presetCommand?: (json: string) => string;
   evaluateDrawing?: (request: DrawingRequest) => DrawingResponse;
   generateDrawing?: (request: DrawingGenerationRequest) => GenerateResponse;
   captureLabPreset?: (
@@ -74,6 +75,7 @@ let mainThreadFatal: WasmFatalError | null = null;
 /// Request/response exports routed through the trap guard. The simulator's
 /// classes are not wrapped (it owns its own instance lifecycle).
 const GUARDED_EXPORTS = new Set([
+  'presetCommand',
   'healthz',
   'version',
   'importBytes',
@@ -275,4 +277,14 @@ export class WasmWiacClient implements WiacClient {
     if (!m.fromStl) throw new Error('STL rasterization is unavailable in this build');
     return (m.fromStl(bytes, maxDim) as SurfaceField | null) ?? null;
   }
+}
+
+/** Pure core validation, independent of the generation transport or any data source. */
+export async function presetCommand(
+  request: import('./generated').components['schemas']['PresetCommand'],
+): Promise<unknown> {
+  const mod = await loadModule();
+  if (!mod.presetCommand)
+    throw new Error('Refresh FabCAM: the cutting-parameter core is unavailable');
+  return JSON.parse(mod.presetCommand(JSON.stringify(request)));
 }

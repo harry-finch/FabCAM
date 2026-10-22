@@ -211,6 +211,9 @@ pub struct VCarveParams {
 /// structs.)
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 pub struct OpParamsCommon {
+    /// Explicit operation values; no tool-default lookup during v9 generation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cutting: Option<crate::cutting_parameters::MillingCutting>,
     /// Milling applied values; absent preserves legacy inheritance.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub applied_cutting: Option<crate::feeds_speeds::AppliedCutting>,
@@ -324,6 +327,7 @@ impl OpParamsCommon {
     #[must_use]
     pub fn mill_default() -> Self {
         Self {
+            cutting: None,
             applied_cutting: None,
             fs_full_width: false,
             depth: -2.0,

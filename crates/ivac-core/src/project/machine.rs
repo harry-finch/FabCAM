@@ -123,6 +123,8 @@ where
 
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct MachineConfig {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub physical_id: Option<String>,
     pub unit: UnitSystem,
     pub mode: MachineMode,
     pub comments: bool,
@@ -487,6 +489,7 @@ fn is_false_bool(v: &bool) -> bool {
 impl Default for MachineConfig {
     fn default() -> Self {
         Self {
+            physical_id: None,
             unit: UnitSystem::Mm,
             mode: MachineMode::Mill,
             comments: true,

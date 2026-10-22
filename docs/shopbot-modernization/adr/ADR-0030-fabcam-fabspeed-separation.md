@@ -1,10 +1,10 @@
 # ADR-0030: FabCAM operation parameters and independent FabSpeed calculation
 
-Status: **Proposed — product separation authorized; FS-RESET-1 architecture approval pending**
+Status: **Accepted — explicit maintainer approval, 2026-10-22**
 Date: 2026-10-22
 Branch: `FabCAM-v1.1`
 Audit: [FS_RESET_ARCHITECTURE](../../releases/FS_RESET_ARCHITECTURE.md), `ivac-j47dy`.
-Human architecture gate: **`ivac-909v6` OPEN**.
+Human architecture gate: **`ivac-909v6` CLOSED by explicit approval**.
 
 ## Context
 
@@ -23,7 +23,7 @@ PRESET-1 library organization and MAT-1 material discovery remain useful. PRESET
 recipes, evidence promotion and source registry complexity are superseded for the new product.
 Old reports and ADRs remain truthful historical records, not implementation requirements.
 
-## Proposed decision
+## Accepted decision
 
 1. FabCAM core owns **explicit operation cutting parameters per actual tool/pass role**.
    Preserve rough/finish, distinct Pocket finish tool, Drill/spot/chamfer and specialized
@@ -121,3 +121,7 @@ Keep native scope checks, truthful two-sided partial publication and CLI streami
 Human desktop/narrow UX acceptance follows software qualification; merge/release and installed
 platform/physical acceptance remain separate. Revisit the design if it cannot represent an
 existing supported role without hidden defaults or duplicate executable values.
+
+## Implementation status — FS-RESET-2
+
+Explicit maintainer approval received on 2026-10-22. The four bounded slices are authorized; implementation and qualification are in progress. Acceptance of this architecture is not a claim that the replacement is implemented. Legacy removal (FS-RESET-3) remains subject to a separate human review.

@@ -520,6 +520,7 @@ mod tests {
         params.depth = -3.0;
         params.start_depth = 0.0;
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 1.0)],
@@ -596,6 +597,7 @@ mod tests {
             params.depth = -2.0;
             params.start_depth = 0.0;
             let project = Project {
+                cutting_version: None,
                 segments: closed_circle(center, 5.0),
                 machine: MachineConfig::default(),
                 tools: vec![tool],
@@ -687,6 +689,7 @@ mod tests {
         // (Previously the helix would have walked at 5 + 0.5 = 5.5 —
         // tangent to the stud, zero cut.)
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 1.0)],
@@ -760,6 +763,7 @@ mod tests {
         // 1mm pitch ⇒ ISO depth = 0.6495 mm.
         // Internal helix = 5 - 0.5 + 0.6495 = 5.1495 mm.
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 1.0)],
@@ -823,6 +827,7 @@ mod tests {
     #[test]
     fn thread_op_without_circle_warns() {
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 1.0)],
@@ -879,6 +884,7 @@ mod tests {
         params.depth = -1.0;
         params.start_depth = 0.0;
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             // helix_r = bore - tool + thread_depth.
@@ -945,6 +951,7 @@ mod tests {
         params.depth = -3.0;
         params.start_depth = 0.0;
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 1.0)], // 1mm cutter → 0.5mm radius
@@ -1020,6 +1027,7 @@ mod tests {
         params.depth = -3.0;
         params.start_depth = 0.0;
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -1113,6 +1121,7 @@ mod tests {
         params_thread.depth = -3.0;
         params_thread.start_depth = 0.0;
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine,
             tools: vec![t1, t2],
@@ -1213,6 +1222,7 @@ mod tests {
         params.depth = -3.0;
         params.start_depth = 0.0;
         let project = Project {
+            cutting_version: None,
             segments,
             machine: MachineConfig::default(),
             tools: vec![tool],

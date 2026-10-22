@@ -705,7 +705,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         }
     }
     let mut project = req.project;
-    crate::feeds_speeds::validate_applied_project(&project)?;
+    crate::cutting_parameters::validate_project(&project)?;
     work_origin::validate_fixtures(&project)?;
     work_origin::resolve(&mut project)?;
     safe_z::validate(&project)?;
@@ -780,6 +780,18 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         .count()
         .max(1);
     let mut warnings: Vec<PipelineWarning> = Vec::new();
+    if project.cutting_version == Some(9) {
+        for op in project.operations.iter().filter(|o| o.enabled) {
+            warnings.extend(
+                crate::cutting_parameters::validate_operation(&project, op)
+                    .warnings
+                    .into_iter()
+                    .map(|message| {
+                        PipelineWarning::for_op(op.id, "cutting_limits_unknown", message)
+                    }),
+            );
+        }
+    }
     // Warnings computable from the project alone (no assembled toolpath).
     // Shared with the streaming entry so both surfaces raise the same set.
     push_pre_emit_warnings(&project, post_kind, &mut warnings);
@@ -1387,7 +1399,7 @@ fn prepare_stream(
     }
     validate_direct_output(&request.project)?;
     let mut project = request.project;
-    crate::feeds_speeds::validate_applied_project(&project)?;
+    crate::cutting_parameters::validate_project(&project)?;
     work_origin::validate_fixtures(&project)?;
     work_origin::resolve(&mut project)?;
     safe_z::validate(&project)?;
@@ -1429,6 +1441,18 @@ fn prepare_stream(
         .count()
         .max(1);
     let mut warnings: Vec<PipelineWarning> = Vec::new();
+    if project.cutting_version == Some(9) {
+        for op in project.operations.iter().filter(|o| o.enabled) {
+            warnings.extend(
+                crate::cutting_parameters::validate_operation(&project, op)
+                    .warnings
+                    .into_iter()
+                    .map(|message| {
+                        PipelineWarning::for_op(op.id, "cutting_limits_unknown", message)
+                    }),
+            );
+        }
+    }
     push_pre_emit_warnings(&project, post_kind, &mut warnings);
     warnings::two_sided_guard(&project, &objects, &mut warnings)?;
 
@@ -2639,7 +2663,10 @@ where
         // per-op effects live in compute_op_cache_key / apply_cached_op /
         // store_op_cache; this loop keeps only the control flow (hit ⇒
         // bookkeep + continue; miss ⇒ emit + store + fall through).
-        let cache_key = if op.params.applied_cutting.is_some() || project.fs_context.is_some() {
+        let cache_key = if op.params.cutting.is_some()
+            || op.params.applied_cutting.is_some()
+            || project.fs_context.is_some()
+        {
             None
         } else {
             compute_op_cache_key(
@@ -3067,7 +3094,7 @@ fn next_prev_tool_id(op: &Op, internal_swap_emitted: bool) -> u32 {
 pub(crate) fn effective_step(op: &Op, tool: &ToolEntry) -> Result<f64, PipelineWarning> {
     op.params
         .step
-        .or(tool.default_step)
+        .or_else(|| if op.params.cutting.is_some() { None } else { tool.default_step })
         .filter(|v| v.is_finite() && *v <= -1e-9)
         .ok_or_else(|| {
             PipelineWarning::for_op(

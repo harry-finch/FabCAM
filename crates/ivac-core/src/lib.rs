@@ -15,6 +15,7 @@
 pub mod cam;
 pub mod cancel;
 pub mod corner_relief;
+pub mod cutting_parameters;
 pub mod drawing;
 pub mod errors;
 pub mod feeds_speeds;
@@ -24,6 +25,7 @@ pub mod input;
 pub mod math;
 pub mod pipeline;
 pub mod pipeline_cache;
+pub mod presets;
 #[cfg(all(feature = "profiling", not(target_arch = "wasm32")))]
 pub mod profiling;
 pub mod project;
@@ -155,6 +157,9 @@ pub fn compute_helix_radius(req: HelixRadiusRequest) -> HelixRadiusResponse {
 /// Co-located with the type definitions so adding a wire type is
 /// a same-file edit; `crate::schema::components_schemas` composes these.
 pub(crate) fn register_schemas(map: &mut schema::SchemaMap) {
+    schema::insert::<presets::PresetCommand>(map, "PresetCommand");
+    schema::insert::<presets::PresetCollection>(map, "PresetCollection");
+    schema::insert::<cutting_parameters::CuttingCheck>(map, "CuttingCheck");
     schema::insert::<ImportOutput>(map, "ImportResponse");
     schema::insert::<drawing::api::DrawingRequest>(map, "DrawingRequest");
     schema::insert::<drawing::api::DrawingResponse>(map, "DrawingResponse");

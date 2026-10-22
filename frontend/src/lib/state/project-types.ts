@@ -807,7 +807,7 @@ export interface ProjectFile {
     | 'ivac-project-surfacing'
     | 'ivac-project-geometry'
     | 'ivac-project-experimental';
-  version: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  version: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   drawing?: import('./drawing').DrawingState;
   cornerRelief?: import('./corner-relief').CornerReliefModifier;
   material?: MaterialIdentity;

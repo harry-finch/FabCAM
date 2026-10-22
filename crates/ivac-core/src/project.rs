@@ -49,6 +49,9 @@ use crate::geometry::Segment;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 pub struct Project {
+    /// Native cutting contract. V9 clients must explicitly send 9.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cutting_version: Option<u32>,
     /// Cutting identity is distinct from stock geometry.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub material: Option<ivac_feeds_speeds::Identity>,

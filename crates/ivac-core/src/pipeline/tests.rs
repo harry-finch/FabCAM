@@ -75,6 +75,7 @@ fn pipeline_relief_mill_emits_varying_z_ballnose_surface() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![ball],
@@ -127,6 +128,7 @@ fn pipeline_relief_mill_emits_varying_z_ballnose_surface() {
     let mut flat = endmill(2, 4.0); // Endmill, not BallNose
     flat.id = 2;
     let project2 = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![flat],
@@ -216,6 +218,7 @@ fn pipeline_relief_mill_heightgrid_cuts_real_z_without_depth_range() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![ball],
@@ -317,6 +320,7 @@ fn pipeline_waterline_rough_emits_level_chains_over_stl_basin() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![tool],
@@ -420,6 +424,7 @@ fn pipeline_waterline_rough_rejects_grayscale_source() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![tool],
@@ -493,6 +498,7 @@ fn pipeline_renders_text_layers_and_routes_via_synthetic_layer() {
         width_scale: 1.0,
     };
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(), // pipeline pre-pass appends the rendered text
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 1.0)],
@@ -676,6 +682,7 @@ fn post_profile_overrides_program_start_and_end() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![{
@@ -754,6 +761,7 @@ fn post_profile_axes_config_drives_axis_emission() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -837,6 +845,7 @@ fn post_profile_disabled_axis_drops_the_word() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -889,6 +898,7 @@ fn post_profile_without_axes_keeps_legacy_output() {
     };
     let machine_without = MachineConfig::default();
     let project = |m: crate::project::MachineConfig| Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: m,
         tools: vec![endmill(1, 3.0)],
@@ -975,6 +985,7 @@ fn plot_mode_emits_only_two_z_values() {
     params.fast_move_z = 5.0;
     params.step = Some(-1.0);
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -1075,6 +1086,7 @@ fn laser_op_emits_pierce_dwell_before_cut() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![tool],
@@ -1130,6 +1142,7 @@ fn non_laser_tool_ignores_pierce_field() {
     // doesn't appear, not anything else.
     tool.laser_pierce_sec = Some(0.7);
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![tool],
@@ -1189,6 +1202,7 @@ fn raster_engrave_emits_power_modulated_scanlines() {
         },
     };
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine,
         tools: vec![tool],
@@ -1255,6 +1269,7 @@ fn raster_scan_direction_sets_scanline_count() {
         let mut tool = endmill(1, 0.1);
         tool.kind = ToolKind::LaserBeam;
         let project = Project {
+            cutting_version: None,
             segments: Vec::new(),
             machine: MachineConfig {
                 mode: crate::project::MachineMode::Laser,
@@ -1365,6 +1380,7 @@ fn raster_streaming_alongx_reproduces_whole_grid_powers() {
     let mut tool = endmill(1, 0.1);
     tool.kind = ToolKind::LaserBeam;
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig {
             mode: crate::project::MachineMode::Laser,
@@ -1515,6 +1531,7 @@ fn raster_streaming_alongy_reproduces_whole_grid_powers() {
     let mut tool = endmill(1, 0.1);
     tool.kind = ToolKind::LaserBeam;
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig {
             mode: crate::project::MachineMode::Laser,
@@ -1635,6 +1652,7 @@ fn first_tool_z_shift_emits_g92_after_program_begin() {
     let mut tool = endmill(1, 3.0);
     tool.z_shift_mm = Some(-0.5);
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![tool],
@@ -1668,6 +1686,7 @@ fn first_tool_z_shift_emits_g92_after_program_begin() {
 #[test]
 fn no_z_shift_emits_no_g92() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -1706,6 +1725,7 @@ fn comma_decimal_separator_emits_commas_in_numbers() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.5, 0.5),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -1756,6 +1776,7 @@ fn line_numbering_prefixes_every_line() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -1802,6 +1823,7 @@ fn line_numbering_prefixes_every_line() {
 #[test]
 fn no_line_numbering_by_default() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -1843,6 +1865,7 @@ fn no_line_numbering_by_default() {
 fn chamfer_op_emits_constant_z_pass_at_computed_depth() {
     let vbit = vbit();
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![vbit],
@@ -1908,6 +1931,7 @@ fn chamfer_after_deep_profile_keeps_own_depth() {
     profile_params.depth = -5.0;
     profile_params.start_depth = 0.0;
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![bit, em],
@@ -2015,6 +2039,7 @@ fn chamfer_finish_pass_emits_second_pass_at_finish_feed() {
     vbit.feed_rate = 1200;
     vbit.feed_rate_finish = Some(400);
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![vbit],
@@ -2061,6 +2086,7 @@ fn chamfer_finish_pass_emits_second_pass_at_finish_feed() {
 #[test]
 fn chamfer_with_non_vbit_warns() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -2112,6 +2138,7 @@ fn chamfer_with_non_vbit_warns() {
 fn chamfer_deep_chamfer_uses_multi_pass_stepdown() {
     let vbit = vbit();
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![vbit],
@@ -2183,6 +2210,7 @@ fn chamfer_step_larger_than_depth_clamps_to_chamfer_z() {
     // The bug-trigger: |step| > |chamfer_depth|.
     params.step = Some(-3.0);
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![vbit],
@@ -2254,6 +2282,7 @@ fn chamfer_step_larger_than_depth_clamps_to_chamfer_z() {
 fn chamfer_oversize_width_clamped_to_tool_reach() {
     let vbit = vbit();
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![vbit],
@@ -2390,6 +2419,7 @@ fn unknown_post_processor_is_a_deserialization_failure() {
 #[test]
 fn generate_streaming_emits_op_events_in_order() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square(20.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -2449,6 +2479,7 @@ fn generate_streaming_emits_op_events_in_order() {
 #[test]
 fn generate_streaming_done_event_carries_aggregated_stats() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square(20.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -2496,6 +2527,7 @@ fn generate_streaming_cancellation() {
     use std::time::{Duration, Instant};
 
     let project = Project {
+        cutting_version: None,
         segments: vec![
             Segment::line(Point2::new(0.0, 0.0), Point2::new(20.0, 0.0), "0", 7),
             Segment::line(
@@ -2601,6 +2633,7 @@ fn collect_cached_flags(project: Project) -> Vec<(u32, bool)> {
 #[test]
 fn regenerate_with_no_edits_hits_cache() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(91, 3.0)],
@@ -2665,6 +2698,7 @@ fn edit_one_op_misses_only_that() {
         })
         .collect();
     let mut project = Project {
+        cutting_version: None,
         segments: closed_square_offset(30.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools,
@@ -2700,6 +2734,7 @@ fn edit_one_op_misses_only_that() {
 #[test]
 fn cache_hit_produces_identical_response() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(77, 3.0)],
@@ -2887,6 +2922,7 @@ fn pipeline_emits_m0_for_pause_op() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -2967,6 +3003,7 @@ fn pause_op_skips_tool_validation() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -3083,6 +3120,7 @@ fn pipeline_emits_g28_for_homing_op() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3167,6 +3205,7 @@ fn pipeline_homing_without_retract_skips_safe_z_move() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3264,6 +3303,7 @@ fn pipeline_emits_g38_2_for_probe_op() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3345,6 +3385,7 @@ fn pipeline_emits_comment_only_for_cycle_marker_op() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3491,6 +3532,7 @@ fn pipeline_emits_gcode_include_with_variable_expansion() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(8.0, 6.0),
@@ -3619,6 +3661,7 @@ fn gcode_include_unknown_variable_warns_and_passes_through() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3709,6 +3752,7 @@ fn gcode_include_empty_content_warns() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3796,6 +3840,7 @@ fn gcode_include_mixed_body_emits_counted_skipped_summary() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3909,6 +3954,7 @@ fn gcode_include_multi_axis_line_classified_unsimulated() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -3996,6 +4042,7 @@ fn gcode_include_comment_only_body_emits_no_classification_warning() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -4082,6 +4129,7 @@ fn gcode_include_verbose_mode_fans_out_per_line_warnings() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -4190,6 +4238,7 @@ fn pipeline_emits_group_boundary_markers() {
     };
     // rough, rough, finish, (no group), finish
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -4248,6 +4297,7 @@ fn pipeline_emits_group_boundary_markers() {
 #[test]
 fn pipeline_emits_no_group_markers_when_field_unset() {
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -4298,6 +4348,7 @@ fn pipeline_treats_empty_group_string_as_no_group() {
         op
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -4421,6 +4472,7 @@ fn project_with_pause_between_cuts_decodes_and_runs() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: vec![Segment::line(
             crate::geometry::Point2::new(0.0, 0.0),
             crate::geometry::Point2::new(10.0, 0.0),
@@ -4526,6 +4578,7 @@ fn multi_op_different_tools_emit_m6_at_each_boundary() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -4579,6 +4632,7 @@ fn multi_op_same_tool_emits_at_most_one_m6() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -4622,6 +4676,7 @@ fn no_toolchange_machine_omits_m6() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -4699,6 +4754,7 @@ fn rectangle_tab_drop_uses_plunge_feedrate() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(40.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![tool],
@@ -4783,6 +4839,7 @@ fn laser_pierce_dwells_at_cut_z() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![tool],
@@ -4857,6 +4914,7 @@ fn multi_op_toolchange_envelope_has_m5_before_m6_and_m3_after() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -4915,6 +4973,7 @@ fn dual_tool_internal_change_uses_full_envelope() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine,
         tools: vec![rough_tool, finish_tool],
@@ -5004,6 +5063,7 @@ fn drill_stufenfase_change_uses_full_envelope() {
     params.depth = -3.0;
     params.start_depth = 0.0;
     let project = Project {
+        cutting_version: None,
         segments: closed_circle(center, 0.5),
         machine,
         tools: vec![drill_bit, vbit_finish],
@@ -5077,6 +5137,7 @@ fn coolant_off_before_spindle_off_in_inter_op_toolchange() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![tool_a, tool_b],
@@ -5136,6 +5197,7 @@ fn first_tool_envelope_omits_leading_coolant_off() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![tool],
@@ -5178,6 +5240,7 @@ fn same_tool_consecutive_ops_skip_envelope_entirely() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -5226,6 +5289,7 @@ fn non_toolchange_machine_pauses_for_manual_swap() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5284,6 +5348,7 @@ fn manual_multitool_emits_g53_move_to_toolchange_position() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5338,6 +5403,7 @@ fn unset_toolchange_position_emits_no_mid_program_g53() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5387,6 +5453,7 @@ fn atc_multitool_emits_g53_move_before_m6() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5434,6 +5501,7 @@ fn multi_tool_manual_machine_warns_with_change_count() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5504,6 +5572,7 @@ fn single_tool_and_atc_machines_omit_manual_toolchange_warning() {
             )
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine,
             tools,
@@ -5559,6 +5628,7 @@ fn grbl_atc_without_template_warns() {
             ..MachineConfig::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine,
             tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5638,6 +5708,7 @@ fn grbl_fixed_sensor_without_template_warns() {
             ..MachineConfig::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine,
             tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5699,6 +5770,7 @@ fn tool_length_offsets_emit_g43_and_skip_zshift() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![
@@ -5755,6 +5827,7 @@ fn tool_length_offsets_off_emits_no_g43() {
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -5801,6 +5874,7 @@ fn two_tool_manual_gcode(
         ..MachineConfig::default()
     };
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![
@@ -6016,6 +6090,7 @@ fn inch_units_emit_scaled_numbers() {
     profile.params.step = Some(-1.0);
     profile.params.depth = -1.0;
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -6098,6 +6173,7 @@ fn toolchange_envelope_routes_ccw_tool_through_m4() {
         ..MachineConfig::default()
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![t1, t2],
@@ -6157,6 +6233,7 @@ fn toolchange_envelope_keeps_m3_for_default_cw_tool() {
         ..MachineConfig::default()
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -6240,6 +6317,7 @@ fn prev_tool_id_stays_unchanged_when_dual_tool_skips_finish() {
     // its M6 envelope because prev_tool_id was biased to 2.
     let follow_up = profile_op(2, 1, ToolOffset::Outside);
     let project = crate::project::Project {
+        cutting_version: None,
         segments: closed_square_offset(50.0, 0.0, 0.0),
         machine,
         tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -6366,6 +6444,7 @@ fn prev_tool_id_unchanged_after_drill_skips_chamfer_swap() {
     };
     let follow_up = profile_op(2, 1, ToolOffset::Outside);
     let project = crate::project::Project {
+        cutting_version: None,
         segments: {
             let mut s = closed_square_offset(50.0, 0.0, 0.0);
             // Add a small drill target circle inside the square.
@@ -6456,6 +6535,7 @@ fn pause_op_does_not_lock_spindle_direction() {
     };
     let profile_after = profile_op(3, 1, ToolOffset::Outside);
     let project = crate::project::Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine: MachineConfig::default(),
         tools: vec![ccw_tool],
@@ -6548,6 +6628,7 @@ fn laser_mode_toolchange_envelope_emits_no_spindle_commands() {
         ..MachineConfig::default()
     };
     let project = crate::project::Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 0.0, 0.0),
         machine,
         tools: vec![t1, t2],
@@ -6663,6 +6744,7 @@ fn laser_mode_toolchange_envelope_emits_no_spindle_commands() {
 #[test]
 fn run_pipeline_flags_cuts_outside_work_area() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 250.0, 0.0),
         machine: MachineConfig::default(), // 200×300×50
         tools: vec![endmill(1, 3.0)],
@@ -6699,6 +6781,7 @@ fn run_pipeline_flags_cuts_outside_work_area() {
 #[test]
 fn run_pipeline_no_work_area_warning_when_in_bounds() {
     let project = Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 50.0, 50.0),
         machine: MachineConfig::default(),
         tools: vec![endmill(1, 3.0)],
@@ -6771,6 +6854,7 @@ fn tslot_project(tool: ToolEntry, depth: f64) -> Project {
     params.fast_move_z = 5.0;
     params.step = Some(-1.0);
     Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 30.0, 30.0),
         machine: MachineConfig::default(),
         tools: vec![tool],
@@ -6977,6 +7061,7 @@ fn dovetail_project(tool: ToolEntry, depth: f64) -> Project {
     params.fast_move_z = 5.0;
     params.step = Some(-1.0);
     Project {
+        cutting_version: None,
         segments: closed_square_offset(20.0, 30.0, 30.0),
         machine: MachineConfig::default(),
         tools: vec![tool],
@@ -7134,6 +7219,7 @@ fn tessellated_circle_profile_project(arcs: bool) -> Project {
         ..MachineConfig::default()
     };
     Project {
+        cutting_version: None,
         segments: tessellated_circle(20.0, 20.0, 10.0, 180),
         machine,
         tools: vec![endmill(1, 3.0)],
@@ -7312,6 +7398,7 @@ fn group_ops_by_tool_collapses_redundant_toolchange() {
             ..MachineConfig::default()
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine,
             tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -7380,6 +7467,7 @@ fn optional_stop_swaps_pause_m0_for_m1() {
             message: String::new(),
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine,
             tools: vec![endmill(1, 6.0)],
@@ -7433,6 +7521,7 @@ fn optional_stop_swaps_manual_toolchange_m0_for_m1() {
             ..MachineConfig::default() // tool_change defaults to ManualM0Pause
         };
         let project = Project {
+            cutting_version: None,
             segments: closed_square_offset(20.0, 0.0, 0.0),
             machine,
             tools: vec![endmill(1, 6.0), endmill(2, 3.0)],
@@ -8055,6 +8144,7 @@ fn audit_waterline_open_slice_is_an_error_without_output() {
         side: crate::project::WorkpieceSide::Front,
     };
     let project = Project {
+        cutting_version: None,
         segments: Vec::new(),
         machine: MachineConfig::default(),
         tools: vec![tool],

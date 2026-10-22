@@ -300,6 +300,7 @@ mod tests {
             ..crate::project::PocketParams::default()
         };
         let project_with_tool = |tool: ToolEntry| Project {
+            cutting_version: None,
             segments: closed_square_offset(80.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![tool],
@@ -399,6 +400,7 @@ mod tests {
         params.start_depth = 0.0;
         params.step = Some(-2.0);
         let project = Project {
+            cutting_version: None,
             segments: segments_8w,
             machine: MachineConfig::default(),
             tools: vec![ball],
@@ -483,6 +485,7 @@ mod tests {
         params.start_depth = 0.0;
         params.step = Some(-2.0);
         let project = Project {
+            cutting_version: None,
             segments: segments_8w,
             machine: MachineConfig::default(),
             tools: vec![ball],
@@ -557,6 +560,7 @@ mod tests {
         params.start_depth = 0.0;
         params.step = Some(-2.0);
         let project = Project {
+            cutting_version: None,
             segments: segs,
             machine: MachineConfig::default(),
             tools: vec![ball],

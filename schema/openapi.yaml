@@ -896,11 +896,34 @@ components:
       - conventional
       - climb
       type: string
+    CuttingCheck:
+      additionalProperties: false
+      properties:
+        errors:
+          items:
+            type: string
+          type: array
+        warnings:
+          items:
+            type: string
+          type: array
+      required:
+      - errors
+      - warnings
+      type: object
     CuttingOrigin:
       enum:
       - recommendation
       - manual
       - legacy_snapshot
+      type: string
+    CuttingRole:
+      enum:
+      - rough
+      - finish
+      - drill
+      - spot
+      - chamfer
       type: string
     DatasetDocument:
       additionalProperties: false
@@ -937,6 +960,42 @@ components:
       - profile_set
       - tools
       type: object
+    DepthSchedule:
+      oneOf:
+      - additionalProperties: false
+        properties:
+          finish_step:
+            format: double
+            type:
+            - number
+            - 'null'
+          kind:
+            enum:
+            - step
+            type: string
+          step:
+            format: double
+            type:
+            - number
+            - 'null'
+        required:
+        - kind
+        type: object
+      - additionalProperties: false
+        properties:
+          depths:
+            items:
+              format: double
+              type: number
+            type: array
+          kind:
+            enum:
+            - explicit
+            type: string
+        required:
+        - depths
+        - kind
+        type: object
     DiagnosticPreview:
       description: Rejected path for inspection only. Deliberately contains no executable text.
       properties:
@@ -3520,6 +3579,29 @@ components:
       - out
       - out_lenght
       type: object
+    LoadedPresetSnapshot:
+      additionalProperties: false
+      properties:
+        collection_id:
+          type: string
+        collection_name:
+          type: string
+        context:
+          $ref: '#/components/schemas/PresetContext'
+        parameters:
+          $ref: '#/components/schemas/PresetParameters'
+        preset_id:
+          type: string
+        preset_name:
+          type: string
+      required:
+      - collection_id
+      - collection_name
+      - context
+      - parameters
+      - preset_id
+      - preset_name
+      type: object
     MachineConfig:
       properties:
         accel:
@@ -3592,6 +3674,10 @@ components:
           minItems: 2
           type:
           - array
+          - 'null'
+        physical_id:
+          type:
+          - string
           - 'null'
         plot_mode_z:
           description: 'Plot-mode Z (Estlcam `c_PP.Z_Up_Dn)`: when true, the pipeline collapses every cut to ONE pass at the op''s cut depth and skips the multi-step descent / ramp / helix machinery. Z values written into gcode are restricted to `fast_move_z` (pen up between cuts) and the op''s `depth` (pen down on cut moves). Right setting for laser / plasma / pen plotters / 3D-printer extrusion and drag-knife controllers.'
@@ -3756,6 +3842,20 @@ components:
       - reverse
       - start_depth
       - step
+      type: object
+    MillingCutting:
+      additionalProperties: false
+      properties:
+        preset_snapshot:
+          anyOf:
+          - $ref: '#/components/schemas/LoadedPresetSnapshot'
+          - type: 'null'
+        rates:
+          items:
+            $ref: '#/components/schemas/RoleRates'
+          type: array
+      required:
+      - rates
       type: object
     MoveKind:
       enum:
@@ -4333,6 +4433,11 @@ components:
           - $ref: '#/components/schemas/AppliedCutting'
           - type: 'null'
           description: Milling applied values; absent preserves legacy inheritance.
+        cutting:
+          anyOf:
+          - $ref: '#/components/schemas/MillingCutting'
+          - type: 'null'
+          description: Explicit operation values; no tool-default lookup during v9 generation.
         depth:
           default: 0.0
           description: |-
@@ -4423,6 +4528,11 @@ components:
           - $ref: '#/components/schemas/AppliedCutting'
           - type: 'null'
           description: Milling applied values; absent preserves legacy inheritance.
+        cutting:
+          anyOf:
+          - $ref: '#/components/schemas/MillingCutting'
+          - type: 'null'
+          description: Explicit operation values; no tool-default lookup during v9 generation.
         depth:
           default: 0.0
           description: |-
@@ -5327,6 +5437,129 @@ components:
         - matrix_size
         - power
         type: object
+    PresetCollection:
+      additionalProperties: false
+      properties:
+        format:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        presets:
+          items:
+            $ref: '#/components/schemas/TestedPreset'
+          type: array
+        version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - format
+      - id
+      - name
+      - presets
+      - version
+      type: object
+    PresetCommand:
+      description: Identical pure validation/copy contract across native, HTTP and WASM.
+      oneOf:
+      - additionalProperties: false
+        properties:
+          action:
+            enum:
+            - validate_collection
+            type: string
+          json:
+            type: string
+        required:
+        - action
+        - json
+        type: object
+      - additionalProperties: false
+        properties:
+          action:
+            enum:
+            - inspect
+            type: string
+          op_id:
+            format: uint32
+            minimum: 0.0
+            type: integer
+          project:
+            $ref: '#/components/schemas/Project'
+        required:
+        - action
+        - op_id
+        - project
+        type: object
+      - additionalProperties: false
+        properties:
+          action:
+            enum:
+            - load
+            type: string
+          collection:
+            $ref: '#/components/schemas/PresetCollection'
+          op_id:
+            format: uint32
+            minimum: 0.0
+            type: integer
+          preset_id:
+            type: string
+          project:
+            $ref: '#/components/schemas/Project'
+        required:
+        - action
+        - collection
+        - op_id
+        - preset_id
+        - project
+        type: object
+    PresetContext:
+      additionalProperties: false
+      properties:
+        machine_id:
+          type: string
+        machine_label:
+          type: string
+        material_id:
+          type: string
+        material_label:
+          type: string
+        signature:
+          description: Canonical relevant setup, tool geometry, strategy and entry snapshot.
+          type: string
+      required:
+      - machine_id
+      - machine_label
+      - material_id
+      - material_label
+      - signature
+      type: object
+    PresetParameters:
+      additionalProperties: false
+      properties:
+        planar_stepover_mm:
+          format: double
+          type:
+          - number
+          - 'null'
+        pocket_overlap:
+          format: double
+          type:
+          - number
+          - 'null'
+        rates:
+          items:
+            $ref: '#/components/schemas/RoleRates'
+          type: array
+        schedule:
+          $ref: '#/components/schemas/DepthSchedule'
+      required:
+      - rates
+      - schedule
+      type: object
     ProbeAxis:
       description: Axis selector for `OpKind::Probe`. Serializes as the bare lowercase letter (`"x"` / `"y"` / `"z"`) for a wire-friendly payload that drops straight into the G38.2 word.
       enum:
@@ -5352,6 +5585,13 @@ components:
       type: object
     Project:
       properties:
+        cutting_version:
+          description: Native cutting contract. V9 clients must explicitly send 9.
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
         fixtures:
           description: 'Fixtures (clamps, dogs, vise jaws, hold-downs) the cutter must avoid throughout the entire program — including rapids. The sim pass tests every toolpath segment against this set and emits `SimWarning::FixtureCollision` on overlap. Default empty: a project with no fixtures behaves exactly as before.'
           items:
@@ -5833,6 +6073,37 @@ components:
         - edge
         - kind
         type: object
+    RoleRates:
+      additionalProperties: false
+      properties:
+        feed_mm_min:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
+        plunge_mm_min:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
+        role:
+          $ref: '#/components/schemas/CuttingRole'
+        rpm:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
+        tool_id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - role
+      - tool_id
+      type: object
     ScanDirection:
       description: Direction the parallel finishing scanlines run. `AlongX` lines sweep in X and step over in Y; `AlongY` is the transpose. (Diagonal raster is a future addition — X/Y cover the common cases and keep coverage math simple.)
       enum:
@@ -6348,6 +6619,34 @@ components:
       - tab_type
       - width
       type: object
+    TestedPreset:
+      additionalProperties: false
+      properties:
+        context:
+          $ref: '#/components/schemas/PresetContext'
+        id:
+          type: string
+        name:
+          type: string
+        notes:
+          type:
+          - string
+          - 'null'
+        parameters:
+          $ref: '#/components/schemas/PresetParameters'
+        test_date:
+          type:
+          - string
+          - 'null'
+        tested:
+          type: boolean
+      required:
+      - context
+      - id
+      - name
+      - parameters
+      - tested
+      type: object
     TextAlignment:
       enum:
       - left
@@ -6813,6 +7112,12 @@ components:
           type:
           - number
           - 'null'
+        max_rpm:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
         name:
           type: string
         pause:
@@ -6820,6 +7125,10 @@ components:
           format: uint32
           minimum: 0.0
           type: integer
+        physical_id:
+          type:
+          - string
+          - 'null'
         pierce_delay_sec:
           description: Plasma pierce delay in seconds. Honored only when `kind == PlasmaTorch`, like `pierce_height_mm`. The torch dwells at `pierce_height_mm` for this many seconds before dropping to `cut_height_mm`. Long enough to pierce the stock; too long and the arc starts to undercut the rim of the pierce hole. Typical 0.4 s for 1 mm steel, up to ~1.5 s for 6 mm. None ⇒ 0.5 s default.
           format: double

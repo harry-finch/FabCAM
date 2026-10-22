@@ -28,6 +28,8 @@ workspace = true
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+sha2 = "0.10"
+tempfile = "3"
 ivac-file-export = { path = "../ivac-file-export" }
 ivac-core = { workspace = true }
 ivac-cps = { workspace = true, optional = true }

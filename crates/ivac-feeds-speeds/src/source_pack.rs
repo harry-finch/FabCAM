@@ -83,6 +83,7 @@ pub struct RecordOrigin {
 }
 pub const LAB_PACK_ID: &str = "sorbonne-fablab";
 /// Legacy Sorbonne packs and new named lab packs share the same authoring contract.
+#[must_use]
 pub fn is_lab_pack_id(id: &str) -> bool {
     id == LAB_PACK_ID
         || id.strip_prefix("lab-").is_some_and(|uuid| {
