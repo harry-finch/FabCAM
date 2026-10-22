@@ -22,7 +22,7 @@ or physical machine operation was performed.
 | 1 — core/contracts/storage | `ac9e38961be7b047a35a0f8612c670f437b22321` |
 | 2 — direct editing/reviewed copy/v9 | `b6a41d6251c490a26620b9f0e376debff8de2b7a` |
 | 3 — collection library/neutral MAT-1 | `f681737760e7a63903ec3927a36962cfee4985c5` |
-| 4 — actual-role dispatch/neutral safety/qualification | This implementation commit; exact SHA recorded in the final handoff update. |
+| 4 — actual-role dispatch/neutral safety/qualification | `356e1730a37172a03b0a40054927075ea28525b5` |
 
 Earlier slice sections record what was qualified at that point. The final contracts and
 qualification matrix below supersede their then-pending implementation notes.
@@ -355,3 +355,15 @@ worktree modification was performed. The two pre-existing local documentation ed
 unstaged; task-only checkpoint edits are staged separately. Existing untracked historical
 reports/evidence and the other worktrees remain in place. The final preservation receipt
 records the inventory comparison. **Stop here; FS-RESET-3 has not begun.**
+
+
+## Final local handoff
+
+The four implementation commits above are complete; this subsequent documentation-only
+handoff records their final hashes without rewriting their history. Engineering `ivac-jcr1o`
+and its four slices are closed; human review **`ivac-y25vq` remains OPEN**. Qualification is
+bound to the slice-4 source file hashes and logs; only handoff documentation changed afterward.
+[Preservation receipt](fs-reset-2-evidence/final-preservation.json) verifies the original tracked
+file inventory, presence of pre-existing untracked entries, unchanged other worktree heads and
+V1 branch, and the two preserved unstaged documentation edits. Those inventory checks do not
+claim byte hashes for every originally untracked file or any installed user-data directory.

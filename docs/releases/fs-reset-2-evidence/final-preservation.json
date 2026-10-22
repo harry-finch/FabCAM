@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-22",
+  "implementation_sha": "356e1730a37172a03b0a40054927075ea28525b5",
+  "implementation_commits": [
+    "ac9e38961be7b047a35a0f8612c670f437b22321",
+    "b6a41d6251c490a26620b9f0e376debff8de2b7a",
+    "f681737760e7a63903ec3927a36962cfee4985c5",
+    "356e1730a37172a03b0a40054927075ea28525b5"
+  ],
+  "branch": "FabCAM-v1.1",
+  "tracked_files_at_start": 3119,
+  "missing_original_tracked_files": [],
+  "untracked_entries_at_start": 8272,
+  "missing_original_untracked_entries": [],
+  "pre_existing_document_bodies_preserved": {
+    "docs/shopbot-modernization/STATUS.md": true,
+    "docs/releases/RELEASE_ROADMAP.md": true
+  },
+  "pre_existing_document_hashes_match_initial_snapshot": {
+    "docs/shopbot-modernization/STATUS.md": true,
+    "docs/releases/RELEASE_ROADMAP.md": true
+  },
+  "other_worktrees_unchanged": true,
+  "other_worktrees": [
+    "worktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-docs-consolidation\nHEAD 7e1c24b937e9bc01aa320537c835ffc30fc9389c\nbranch refs/heads/codex/sec1-roadmap",
+    "worktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-v1-freeze\nHEAD 85a93c4a467ff5965655d5737354d9500c2e94fc\nbranch refs/heads/codex/v1-freeze-readiness"
+  ],
+  "main_sha": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "native_watcher_source_unchanged": true,
+  "native_file_export_and_capabilities_unchanged": true,
+  "human_gate": {
+    "id": "ivac-y25vq",
+    "status": "open"
+  },
+  "limits": [
+    "Original untracked inventory presence is verified, not original content hashes",
+    "No installed app-data inventory or reset performed",
+    "Documentation-only handoff changes follow the implementation SHA; no code changed after final qualification"
+  ],
+  "pre_existing_unstaged_paths": [
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md"
+  ],
+  "handoff_changes": [
+    "docs/releases/FS_RESET_2_IMPLEMENTATION.md",
+    "docs/releases/fs-reset-2-evidence/final-preservation.json"
+  ]
+}
