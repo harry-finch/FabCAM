@@ -1,0 +1,82 @@
+[
+  {
+    "issue": "vcarve-parity",
+    "initial_disposition": "OPEN DEFECT",
+    "starting_evidence": "Two pre-existing executable-output differences; quantify first divergent stage before proposing any motion fix",
+    "acceptance": "same request bytes and source hashes; actual geometry/sequencing and output impact; existing guard stays failing if unresolved",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "cancellation",
+    "initial_disposition": "BASELINE LIMITATION",
+    "starting_evidence": "Previous functional cancellation passed but p95 exceeded 200 ms; controlled fixed-sample current/baseline rerun",
+    "acceptance": "original 200 ms p95; no stale success or partial publication",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "watcher",
+    "initial_disposition": "ENVIRONMENT BLOCKED",
+    "starting_evidence": "Two tests fail pre/post FS2; no unrestricted native runtime currently available",
+    "acceptance": "same unmodified tests on permitted native host; no polling fallback or timeout changes",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "pnpm",
+    "initial_disposition": "ENVIRONMENT BLOCKED",
+    "starting_evidence": "Node24 now available; clean checkout install will be attempted",
+    "acceptance": "frozen lockfile, Node24, no existing node_modules/cache mutation",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "cargo-deny",
+    "initial_disposition": "ENVIRONMENT BLOCKED",
+    "starting_evidence": "Read-only default advisory lock; investigate documented writable db-path",
+    "acceptance": "online fresh advisory retrieval, all bans/licenses/sources/advisories unchanged",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "ui-smoke",
+    "initial_disposition": "ENVIRONMENT BLOCKED",
+    "starting_evidence": "Chrome now available; test existing script with isolated profile",
+    "acceptance": "unmodified smoke script; ports/browser runtime must start",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "browser-files",
+    "initial_disposition": "ENVIRONMENT BLOCKED",
+    "starting_evidence": "Earlier file-transfer denial remains in force; no bypass",
+    "acceptance": "actual v9 and collection file protocol; otherwise NOT TESTED",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "native-files",
+    "initial_disposition": "ENVIRONMENT BLOCKED",
+    "starting_evidence": "No qualified installed runtime identified",
+    "acceptance": "actual dialogs/stat/size/cancel/conflict/preservation on authorized runtime",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "three-platform",
+    "initial_disposition": "HUMAN DECISION",
+    "starting_evidence": "Not tested; no installer authorized",
+    "acceptance": "separate installed macOS/Windows/Ubuntu acceptance",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  },
+  {
+    "issue": "physical-shopbot",
+    "initial_disposition": "HUMAN DECISION",
+    "starting_evidence": "Not tested; no hardware authorization",
+    "acceptance": "separate supervised physical qualification",
+    "source": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+    "prior_report": "FS_RESET_3_RESULTS.md"
+  }
+]

@@ -1,0 +1,79 @@
+diff --git a/crates/ivac-core/examples/perf1_probe.rs b/crates/ivac-core/examples/perf1_probe.rs
+index 05e1df4..d488267 100644
+--- a/crates/ivac-core/examples/perf1_probe.rs
++++ b/crates/ivac-core/examples/perf1_probe.rs
+@@ -44,7 +44,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+             clone.cancel();
+             requested
+         });
+-        let result = ivac_core::pipeline::generate_streaming(request, &cancel, &mut |_| {});
++        let result = ivac_core::pipeline::generate_streaming(request, &cancel, &mut |ev| { eprintln!("QUAL1 progress {:.3} {:?}",start.elapsed().as_secs_f64()*1000.,ev); });
+         let returned_ms = start.elapsed().as_secs_f64() * 1000.;
+         let requested_ms = worker.join().unwrap();
+         fs::write(
+diff --git a/crates/ivac-cps/src/engine.rs b/crates/ivac-cps/src/engine.rs
+index 97d493b..4022d5a 100644
+--- a/crates/ivac-cps/src/engine.rs
++++ b/crates/ivac-cps/src/engine.rs
+@@ -154,7 +154,10 @@ impl Engine {
+     }
+ 
+     pub(crate) fn with_cancel(cancel: Option<Arc<AtomicBool>>) -> Self {
++        let qual1_start=std::time::Instant::now();
++        eprintln!("QUAL1 context-start");
+         let mut context = Context::default();
++        eprintln!("QUAL1 context-end {:.3}",qual1_start.elapsed().as_secs_f64()*1000.);
+         let sink: EmitSink = Gc::new(GcRefCell::new(EmitBuffer::default()));
+ 
+         let emit = NativeFunction::from_copy_closure_with_captures(
+@@ -234,6 +237,7 @@ impl Engine {
+             .register_global_property(JsString::from("__ivac"), ivac, Attribute::all())
+             .expect("fresh context: __ivac cannot already exist");
+ 
++        eprintln!("QUAL1 engine-end {:.3}",qual1_start.elapsed().as_secs_f64()*1000.);
+         Self {
+             context,
+             sink,
+diff --git a/crates/ivac-cps/src/run.rs b/crates/ivac-cps/src/run.rs
+index 7805ed8..a8104d1 100644
+--- a/crates/ivac-cps/src/run.rs
++++ b/crates/ivac-cps/src/run.rs
+@@ -167,8 +167,13 @@ fn eval_bundled(
+     script: &str,
+     script_name: &str,
+ ) -> Result<SourceMap, PostError> {
++    let qual1_start=std::time::Instant::now();
++    eprintln!("QUAL1 bundle-start");
+     let (text, map) = build_bundle(script, script_name);
+-    match engine.eval_named(BUNDLE_NAME, &text) {
++    eprintln!("QUAL1 bundle-built {:.3}",qual1_start.elapsed().as_secs_f64()*1000.);
++    let qual1_eval=engine.eval_named(BUNDLE_NAME, &text);
++    eprintln!("QUAL1 bundle-eval-end {:.3}",qual1_start.elapsed().as_secs_f64()*1000.);
++    match qual1_eval {
+         Ok(_) => Ok(map),
+         Err(e) => {
+             let raw = e.to_string();
+@@ -355,16 +360,23 @@ fn run_post_inner(
+     check_cancel()?;
+     let map = evaluated?;
+ 
++    let qual1_convert=std::time::Instant::now();
++    eprintln!("QUAL1 conversion-start");
+     let program_json =
+         serde_json::to_value(program).map_err(|e| PostError::Contract(e.to_string()))?;
++    eprintln!("QUAL1 json-end {:.3}",qual1_convert.elapsed().as_secs_f64()*1000.);
+     let program_js = JsValue::from_json(&program_json, engine.context_mut())
+         .map_err(|e| PostError::Contract(e.to_string()))?;
++    eprintln!("QUAL1 js-end {:.3}",qual1_convert.elapsed().as_secs_f64()*1000.);
+     let overrides_js = JsValue::from_json(properties, engine.context_mut())
+         .map_err(|e| PostError::Contract(e.to_string()))?;
+ 
+     check_cancel()?;
++    let qual1_execute=std::time::Instant::now();
++    eprintln!("QUAL1 execute-start");
+     let executed = call_export(&mut engine, "execute", &[program_js, overrides_js]);
+     check_cancel()?;
++    eprintln!("QUAL1 execute-end {:.3}",qual1_execute.elapsed().as_secs_f64()*1000.);
+     let envelope = executed.map_err(|e| {
+         let message = e.to_string();
+         if is_budget_error(&e) {

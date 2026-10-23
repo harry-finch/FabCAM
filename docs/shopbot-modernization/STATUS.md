@@ -1,5 +1,19 @@
 # FabCAM — current status
 
+## Latest checkpoint — QUAL-1 investigation, 2026-10-23
+
+[QUAL-1 report](../releases/QUAL_1_SOFTWARE_QUALIFICATION.md) records final software
+source `558efc4f7e7cfb5d008c88cf7469a958cc8dc053`: bounded CPS cancellation polling
+improvement, unchanged output corpus, quantified native/WASM V-Carve arithmetic
+divergence. **17/20 mandatory gates; NO-GO for unconditional final qualification.**
+Strict parity and the 200 ms cancellation target remain failed; watcher, current
+advisory audit, headless smoke and actual installed/file-transfer gates remain open.
+TEST1/C2: 256 PASS. No production geometry or post safety-preflight change.
+Engineering QUAL-1 stops here; human review `ivac-y25vq` remains OPEN.
+Separate approval is required for the proposed motion/preflight corrections and
+final V1.1 acceptance. No next milestone, push, release, installer or hardware.
+Earlier checkpoints retain their source-bound historical findings.
+
 ## Latest checkpoint — FS-RESET-3 removal, 2026-10-22
 
 The maintainer authorized the complete reset. Legacy recommendation, source-pack,

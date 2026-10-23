@@ -1,0 +1,252 @@
+[
+  {
+    "case": "square-medial-linuxcnc",
+    "native": {
+      "moves": 5376,
+      "extents": {
+        "x": [
+          0.0,
+          44.95
+        ],
+        "y": [
+          0.0,
+          44.95
+        ],
+        "z": [
+          -1.0,
+          15.0
+        ]
+      },
+      "length_by_kind": {
+        "cut": 796.1834146132574,
+        "plunge": 45.0,
+        "rapid": 208.94269470123018
+      },
+      "move_counts": {
+        "cut": 5365,
+        "plunge": 3,
+        "rapid": 8
+      },
+      "tool_refs": [
+        "1"
+      ],
+      "modal_commands": [
+        "M3 S10000",
+        "F200",
+        "F600",
+        "F200",
+        "F600",
+        "F200",
+        "F600",
+        "M5",
+        "M30"
+      ]
+    },
+    "wasm": {
+      "moves": 5368,
+      "extents": {
+        "x": [
+          0,
+          44.95
+        ],
+        "y": [
+          0,
+          44.95
+        ],
+        "z": [
+          -1,
+          15
+        ]
+      },
+      "length_by_kind": {
+        "cut": 796.1834146132575,
+        "plunge": 45.0,
+        "rapid": 208.94269470123018
+      },
+      "move_counts": {
+        "cut": 5357,
+        "plunge": 3,
+        "rapid": 8
+      },
+      "tool_refs": [
+        "1"
+      ],
+      "modal_commands": [
+        "M3 S10000",
+        "F200",
+        "F600",
+        "F200",
+        "F600",
+        "F200",
+        "F600",
+        "M5",
+        "M30"
+      ]
+    },
+    "first_ordered_divergence": 364,
+    "non_cut_moves_exact": true,
+    "first_endpoint_distance_mm": 0.014424978336208377,
+    "max_sampled_matched_block_distance_mm": 7.944109290391274e-15,
+    "scope": "Exact sequence matching; sample at vertices and quarter points of differing blocks. Observational distance, NOT a certified continuous Hausdorff bound or approved machining tolerance.",
+    "changed_blocks": 8
+  },
+  {
+    "case": "text-Test-medial-linuxcnc",
+    "native": {
+      "moves": 18342,
+      "extents": {
+        "x": [
+          0.0,
+          52.2561
+        ],
+        "y": [
+          0.0,
+          26.5313
+        ],
+        "z": [
+          -1.0,
+          15.0
+        ]
+      },
+      "length_by_kind": {
+        "cut": 949.5927299939198,
+        "plunge": 300.0,
+        "rapid": 529.1583874894823
+      },
+      "move_counts": {
+        "cut": 18280,
+        "plunge": 20,
+        "rapid": 42
+      },
+      "tool_refs": [
+        "1"
+      ],
+      "modal_commands": [
+        "M3 S12000",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "M5",
+        "M30"
+      ]
+    },
+    "wasm": {
+      "moves": 18351,
+      "extents": {
+        "x": [
+          0,
+          52.2561
+        ],
+        "y": [
+          0,
+          26.5313
+        ],
+        "z": [
+          -1,
+          15
+        ]
+      },
+      "length_by_kind": {
+        "cut": 949.5927312039327,
+        "plunge": 300.0,
+        "rapid": 529.1583874894823
+      },
+      "move_counts": {
+        "cut": 18289,
+        "plunge": 20,
+        "rapid": 42
+      },
+      "tool_refs": [
+        "1"
+      ],
+      "modal_commands": [
+        "M3 S12000",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "F150",
+        "F600",
+        "M5",
+        "M30"
+      ]
+    },
+    "first_ordered_divergence": 136,
+    "non_cut_moves_exact": true,
+    "first_endpoint_distance_mm": 0.012374570699624348,
+    "max_sampled_matched_block_distance_mm": 8.45152017735806e-05,
+    "scope": "Exact sequence matching; sample at vertices and quarter points of differing blocks. Observational distance, NOT a certified continuous Hausdorff bound or approved machining tolerance.",
+    "changed_blocks": 25
+  }
+]

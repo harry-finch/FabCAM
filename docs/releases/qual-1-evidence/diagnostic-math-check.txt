@@ -1,0 +1,1 @@
+6 analytical point/segment distance checks PASS: on-segment, perpendicular, each outside endpoint, degenerate segment and depth-only difference. No continuous-polyline or swept-volume bound is implied.

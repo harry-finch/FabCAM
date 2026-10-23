@@ -1,0 +1,3 @@
+558efc4f7e7cfb5d008c88cf7469a958cc8dc053
+Isolated clone FabCAM-v1.1 HEAD matches; tracked worktree/index clean. All diagnostic instrumentation removed.
+Original HEAD/index synchronization first failed because the new test was untracked, then succeeded after adding exactly the four committed files; bytes were unchanged throughout the final gate.

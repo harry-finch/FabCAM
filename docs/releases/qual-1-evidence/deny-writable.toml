@@ -1,0 +1,110 @@
+# cargo-deny configuration. Run with `cargo deny check` (CI: see ci.yml).
+# Docs: https://embarkstudios.github.io/cargo-deny/
+#
+# .cps POST RUNTIME LICENSE NOTE (audited 2026-07-29, ivac-yhdf.11):
+# `crates/ivac-cps` reimplements an API surface described by Autodesk's
+# PUBLISHED `globals.d.ts` declarations. No Autodesk kernel code is
+# vendored, copied, or derived: the prelude is written from the
+# declarations plus documented behavior, and the bundled posts under
+# `crates/ivac-cps/posts/` are ivaCAM-authored (GPL-3.0-or-later).
+#
+# The Autodesk-copyrighted material under `refs/cam-posteditor` (the
+# FANUC test post, `globals.d.ts`) is a TEST ORACLE only. It is
+# referenced exclusively from tests — `crates/ivac-cps/tests/golden_fanuc.rs`,
+# `crates/ivac-core/tests/cps_posts.rs`, `tools/extract-symbols.mjs` —
+# each of which SKIPS when `refs/` is absent, and `refs/` is not part of
+# any build artifact (no include_str!, no build script reads it).
+# `cargo deny check licenses` therefore sees no Autodesk-licensed crate,
+# and no shipped binary or bundle carries their text.
+
+[graph]
+all-features = true
+
+[advisories]
+db-path = "/private/tmp/fabcam-qual1-advisory-dbs"
+yanked = "deny"
+# Unmaintained advisories we accept. None of these have active
+# vulnerabilities; they're flagged as "no longer maintained" by their
+# authors (gtk3-rs has migrated to gtk4, etc.). All remaining entries are
+# transitive and can't be dropped without retiring Tauri's GTK webview /
+# the icu pipeline / the older proc-macro2 helpers, which is way out of
+# scope. (The one direct dep here, ttf-parser / RUSTSEC-2026-0192, was
+# migrated to the maintained skrifa in ivac-kz7r, so its ignore is gone.)
+ignore = [
+    "RUSTSEC-2024-0370",  # proc-macro-error unmaintained (transitive)
+    # paste (proc-macro) unmaintained, transitive via boa_engine — the
+    # .cps runtime's JS engine. Unmaintained, not vulnerable: it's a
+    # compile-time macro helper with no runtime surface, and dropping it
+    # means dropping boa. Revisit when boa migrates off it.
+    "RUSTSEC-2024-0436",  # paste unmaintained (transitive via boa_engine)
+    "RUSTSEC-2024-0411",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0412",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0413",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0414",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0415",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0416",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0417",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0418",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0419",  # gtk3-rs unmaintained
+    "RUSTSEC-2024-0420",  # gtk3-rs unmaintained
+    "RUSTSEC-2025-0075",  # unic-char-range unmaintained
+    "RUSTSEC-2025-0080",  # unic-common unmaintained
+    "RUSTSEC-2025-0081",  # unic-char-property unmaintained
+    "RUSTSEC-2025-0098",  # unic-ucd-version unmaintained
+    "RUSTSEC-2025-0100",  # unic-ucd-ident unmaintained
+    # --- Added 2026-10-19 (release-gate closure; human-approved). All four are
+    # "unmaintained" notices, NOT vulnerabilities. Verified: no compatible
+    # (semver-minor) update clears them.
+    # unsafe-libyaml: path xtask -> serde_yaml 0.9 -> unsafe-libyaml. Build
+    # tooling only (schema generation), never shipped. Replacing serde_yaml
+    # risks changing generated schema/openapi.yaml formatting; the maintained
+    # fork serde_yaml_ng still uses unsafe-libyaml.
+    # Review trigger: xtask drops serde_yaml, or a safe-Rust YAML emitter
+    # (e.g. serde-saphyr) is adopted; or the advisory becomes a vulnerability.
+    "RUSTSEC-2024-0449",  # unsafe-libyaml unmaintained (xtask-only)
+    # zvariant / zbus_names / zvariant_derive: path ivac-tauri ->
+    # tauri-plugin-opener (2.5.x–2.7.x all require zbus ^5.9) -> zbus 5 ->
+    # {zvariant, zbus_names, zvariant_derive}. The crates were merged into
+    # zbus >= 6, so the fix is a major zbus migration upstream in Tauri's
+    # plugin, deliberately not forced here.
+    # Review trigger: tauri-plugin-opener (or Tauri) adopts zbus >= 6, or any of
+    # these crates gets a vulnerability advisory; remove all three together.
+    "RUSTSEC-2026-0370",  # zvariant unmaintained (via tauri-plugin-opener -> zbus 5)
+    "RUSTSEC-2026-0371",  # zbus_names unmaintained (same path)
+    "RUSTSEC-2026-0372",  # zvariant_derive unmaintained (same path)
+]
+
+[licenses]
+# Allow GPL-compatible licenses for our GPL-3 derivative work.
+allow = [
+    "GPL-3.0",
+    "GPL-3.0-or-later",
+    "LGPL-3.0",
+    "LGPL-3.0-or-later",
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",          # clipper2-rust (pure-Rust polygon offsetter)
+    "ISC",
+    "Unicode-DFS-2016",
+    "Unicode-3.0",
+    "Zlib",
+    "MPL-2.0",
+    "CC0-1.0",
+    "CDLA-Permissive-2.0",  # webpki-root-certs (transitive via reqwest in Tauri)
+]
+confidence-threshold = 0.8
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# Workspace-internal `ivac-core = { path = "..." }` declarations look like
+# wildcards to cargo-deny; allow them.
+allow-wildcard-paths = true
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

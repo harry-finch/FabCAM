@@ -1,0 +1,10 @@
+✔ live cancellation is observed within 64 subsequent record checkpoints (5.843ms)
+✔ uncancelled record checkpoints preserve output and do not halt (6.1205ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55.770792

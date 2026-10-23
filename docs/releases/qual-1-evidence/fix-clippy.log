@@ -1,0 +1,5 @@
+    Checking bytemuck v1.25.0
+    Checking itertools v0.14.0
+    Checking boa_engine v0.21.1
+    Checking ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cps)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.44s

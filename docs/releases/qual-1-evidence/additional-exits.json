@@ -1,0 +1,65 @@
+[
+  {
+    "name": "final-workspace",
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--workspace",
+      "--all-features",
+      "--no-fail-fast"
+    ],
+    "exit_code": 101
+  },
+  {
+    "name": "final-test1",
+    "command": [
+      "python3",
+      "scripts/test1/run.py",
+      "--binary",
+      "/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/target/release/deps/test1_properties-fec01085c2e3072a",
+      "--output",
+      "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1/final-test1",
+      "--frontend"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "final-real-wasm",
+    "command": [
+      "pnpm",
+      "--dir",
+      "frontend",
+      "exec",
+      "vitest",
+      "run",
+      "src/lib/sim/qualification-wasm.test.ts",
+      "src/lib/state/cutting-v9-wasm.test.ts",
+      "src/lib/api/cutting-contract.test.ts"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "final-cli-corpus",
+    "command": [
+      "python3",
+      "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1/final-cli-compare.py"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "final-strict-parity",
+    "command": [
+      "python3",
+      "scripts/perf1-b2-wasm-check.py",
+      "--output",
+      "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1/strict-parity",
+      "--native-records",
+      "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1/native-records",
+      "--native-responses",
+      "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1/perf-fixed-output"
+    ],
+    "exit_code": 1
+  }
+]

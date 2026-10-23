@@ -1,0 +1,206 @@
+[
+  {
+    "case": "missing-layer-cps.json",
+    "success": true,
+    "request_sha256": "dc2af80fd2ff3c478620854021b96f9f6932aa1ba245d2f7d9293beb6fbdbc6f",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "missing-layer-linuxcnc.json",
+    "success": true,
+    "request_sha256": "2d673ae711b85fec241c07b4ee8b6378df062729267c8ab463d4da63c15d9af8",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "pocket-islands-cps.json",
+    "success": true,
+    "request_sha256": "517e45a6813dacf34525238b5557e1c2c20ddf5d97988a5317a03d0c3ed07756",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "pocket-islands-linuxcnc.json",
+    "success": true,
+    "request_sha256": "dd9be856dda30e181087112bf3d168b168845839c96a7f9ab49f7cea2fff5608",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-contours-cps.json",
+    "success": true,
+    "request_sha256": "b3773472760dcca6b036cba1a96ddd5afa7089dcceaa52f6eeeffebe76ae7efc",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-contours-linuxcnc.json",
+    "success": true,
+    "request_sha256": "4910cb93de491df5a24f434f64a7fbacf720a6587d3cfff050210f519b539931",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-many-segments-cps.json",
+    "success": true,
+    "request_sha256": "cb37ce64aac97570d4ca11dc7cb0f267eae976d6419e96be984bacbbee1386af",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "profile-many-segments-linuxcnc.json",
+    "success": true,
+    "request_sha256": "7caf801aef28d0c0916159b9139232bd38e71cc0fc1864f6859ddc7405c0ceba",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-medial-cps.json",
+    "success": true,
+    "request_sha256": "6e869f2871dd0389bf6376762e535c04dc6c71fde31c6571cc6e81840c579019",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-medial-linuxcnc.json",
+    "success": true,
+    "request_sha256": "90c4c3432655b9840dbcc73357c03cf0cd2f8f7bcefef8d9653bfe5e8de4acec",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-outline-cps.json",
+    "success": true,
+    "request_sha256": "07cba889365b5c28832461400bc2fb3e76555014e66b418f2ec38d7cff5c83e5",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "square-outline-linuxcnc.json",
+    "success": true,
+    "request_sha256": "4998edb08b19765a178b5b33c6e3e951bf47b607c62b78741ac2144fb901ccfd",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-B8-medial-cps.json",
+    "success": false,
+    "request_sha256": "f324e2da8d2c3353e366fc95c61e1deae9f35f059b968ff7fa5937adbb48e62a",
+    "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated."
+  },
+  {
+    "case": "text-B8-medial-linuxcnc.json",
+    "success": false,
+    "request_sha256": "76df3a6f62ed9e4c195b8de5056235e02054ca43f6c4dd87205ab104ff66cf8e",
+    "error": "operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated."
+  },
+  {
+    "case": "text-Test-medial-cps.json",
+    "success": true,
+    "request_sha256": "87caed9bb01b468988293c7391be2a0d048c98fd64c34e131b97ba4e6a645135",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-Test-medial-linuxcnc.json",
+    "success": true,
+    "request_sha256": "44245ed015c4294af355d4c3a7df8597ac1583ac1f24e3cc890227b3b5b8e478",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-Test-outline-cps.json",
+    "success": true,
+    "request_sha256": "52f935a94a692d8e3909e9e5405ecb8043bf4246cd794695a4f2bae5398722ec",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  },
+  {
+    "case": "text-Test-outline-linuxcnc.json",
+    "success": true,
+    "request_sha256": "771c2155e9d8567fdad102758a5ae80141ae4335fe38e4d0ceba10196a4aaa69",
+    "equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    }
+  }
+]

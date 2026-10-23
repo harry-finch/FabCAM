@@ -1,0 +1,136 @@
+diff --git a/crates/ivac-core/examples/perf1_probe.rs b/crates/ivac-core/examples/perf1_probe.rs
+index 05e1df4..27e3f66 100644
+--- a/crates/ivac-core/examples/perf1_probe.rs
++++ b/crates/ivac-core/examples/perf1_probe.rs
+@@ -116,6 +116,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+     if let Some(response) = first_response {
+         fs::write(format!("{}.response.json", args[2]), response)?;
+     }
++    fs::write(format!("{}.trace.json",args[2]),serde_json::to_vec(&ivac_core::qual1_trace::take())?)?;
+     let report = json!({"request":args[1],"profile":if cfg!(debug_assertions){"debug"}else{"release"},"instrumented":cfg!(feature="profiling"),"parse_ms":parse_ms,"request_bytes":bytes.len(),"input_segments":request.project.segments.len(),"text_layers":request.project.text_layers.len(),"post":request.post_processor,"runs":runs});
+     fs::write(&args[2], serde_json::to_vec_pretty(&report)?)?;
+     Ok(())
+diff --git a/crates/ivac-core/src/cam/vcarve.rs b/crates/ivac-core/src/cam/vcarve.rs
+index 041de54..e5a5560 100644
+--- a/crates/ivac-core/src/cam/vcarve.rs
++++ b/crates/ivac-core/src/cam/vcarve.rs
+@@ -190,6 +190,7 @@ pub fn medial_axis_cancellable(
+     for h in &region.holes {
+         samples.extend(densify_ring(h, BOUNDARY_SAMPLE_MM));
+     }
++    crate::qual1_trace::record("samples",serde_json::json!(samples));
+     crate::profile_count!("medial.samples", samples.len());
+     if samples.len() < 3 {
+         return Vec::new();
+@@ -219,6 +220,7 @@ pub fn medial_axis_cancellable(
+     // for V-bit / ball-nose halfpipe ops downstream. We instead compute
+     // the actual distance from each circumcenter to the nearest
+     // boundary segment below.
++    crate::qual1_trace::record("triangulation",serde_json::json!({"triangles":tri.triangles,"halfedges":tri.halfedges}));
+     let n_tri = tri.len();
+     crate::profile_count!("medial.triangles", n_tri);
+     let mut centers: Vec<Option<Point2>> = Vec::with_capacity(n_tri);
+@@ -239,6 +241,7 @@ pub fn medial_axis_cancellable(
+     // Boundary segments — used to compute the true inscribed-circle
+     // radius at each medial-axis vertex (perpendicular distance to the
+     // nearest input edge, not to the discrete sample points).
++    crate::qual1_trace::record("centers",serde_json::json!(centers));
+     let boundary_segments = collect_boundary_segments(region);
+     // Build spatial indexes ONCE per region so the per-circumcenter
+     // probes below are ~O(1) instead of O(B). Without these the loop is
+diff --git a/crates/ivac-core/src/cam/vcarve_plan.rs b/crates/ivac-core/src/cam/vcarve_plan.rs
+index 2dc9a8f..87f3569 100644
+--- a/crates/ivac-core/src/cam/vcarve_plan.rs
++++ b/crates/ivac-core/src/cam/vcarve_plan.rs
+@@ -108,6 +108,7 @@ pub fn plan(
+         });
+     }
+     let slope = angle.to_radians().tan();
++    crate::qual1_trace::record("plan-start",serde_json::json!({"axis":axis,"step":step,"angle":angle,"slope":slope,"lengths":axis.windows(2).map(|p|(p[1].0-p[0].0).hypot(p[1].1-p[0].1)).collect::<Vec<_>>()}));
+     let mut out = vec![(knots[0].x, knots[0].y, 0.)];
+     for _ in 0..MAX_SWEEPS {
+         let mut traveled = 0.;
+@@ -169,6 +170,7 @@ pub fn plan(
+         }
+         // The final sweep visits every interval at its target, not just its
+         // deepest sample. PL functions agree between the union of all knots.
++        crate::qual1_trace::record("sweep-before-simplify",serde_json::json!(next.iter().map(|p|[p.x,p.y,p.target,p.cut]).collect::<Vec<_>>()));
+         let complete = next.iter().all(|p| (p.cut - p.target).abs() <= DEPTH_EPS);
+         out.extend(next.iter().skip(1).map(|p| (p.x, p.y, -p.cut)));
+         if out.len() > MAX_POINTS {
+@@ -178,6 +180,7 @@ pub fn plan(
+             return Ok(out);
+         }
+         simplify(&mut next);
++        crate::qual1_trace::record("sweep-after-simplify",serde_json::json!(next.iter().map(|p|[p.x,p.y,p.target,p.cut]).collect::<Vec<_>>()));
+         next.reverse();
+         knots = next;
+     }
+diff --git a/crates/ivac-core/src/lib.rs b/crates/ivac-core/src/lib.rs
+index f7d558b..d61ac39 100644
+--- a/crates/ivac-core/src/lib.rs
++++ b/crates/ivac-core/src/lib.rs
+@@ -236,3 +236,6 @@ extern crate self as ivac_core;
+ #[cfg(test)]
+ #[path = "../tests/support/explicit.rs"]
+ pub(crate) mod fixture_support;
++
++#[doc(hidden)]
++pub mod qual1_trace;
+diff --git a/crates/ivac-core/src/pipeline/op_drivers/vcarve.rs b/crates/ivac-core/src/pipeline/op_drivers/vcarve.rs
+index 66026a9..362764f 100644
+--- a/crates/ivac-core/src/pipeline/op_drivers/vcarve.rs
++++ b/crates/ivac-core/src/pipeline/op_drivers/vcarve.rs
+@@ -37,6 +37,7 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
+         .iter()
+         .find(|t| t.id == op.tool_id)
+         .ok_or(PipelineError::UnknownTool(op.id, op.tool_id))?;
++    crate::qual1_trace::record("parsed-input", serde_json::json!({"segments":project.segments,"tool":tool,"op":op,"machine":project.machine}));
+     let diameter = tool.effective_diameter();
+     let tip = tool.tip_diameter.unwrap_or(0.);
+     if tool.kind != ToolKind::VBit || !matches!(project.machine.mode, MachineMode::Mill) {
+@@ -104,6 +105,7 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
+             "Explicit V-Carve radius cap exceeds the cutter radius; values are not clamped.",
+         ));
+     }
++    crate::qual1_trace::record("tool-tan", serde_json::json!([tool.tip_angle_deg.to_radians(),tan]));
+     let r_cap = params.carve_max_width_mm.unwrap_or(reach).min(reach);
+     let max_depth = if op.params.depth < 0. {
+         -op.params.depth
+@@ -154,6 +156,7 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
+             region.boundary.as_slice()
+         };
+         let holes = &region.holes;
++        crate::qual1_trace::record("prepared-region", serde_json::json!({"boundary":boundary,"holes":holes}));
+         let mut targets = Vec::new();
+         if params.full_medial_axis {
+             let vc = crate::cam::vcarve::VcRegion {
+@@ -169,6 +172,7 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
+             if axes.is_empty() {
+                 return Err(invalid("No medial axis could be resolved at the 0.1 mm sampling spacing. Geometry is unsupported; no output generated."));
+             }
++            crate::qual1_trace::record("medial-axes", serde_json::json!(axes.iter().map(|a|a.iter().map(|p|[p.x,p.y,p.r]).collect::<Vec<_>>()).collect::<Vec<_>>()));
+             for axis in &axes {
+                 let (path, limited, zero) = crate::profile_measure!(
+                     "vcarve.target_depth",
+@@ -234,7 +238,9 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
+             check_depth_levels(op.id, deepest, dpp)?;
+             vcarve_validate::check_envelope(&target, &rings, tip_r, tan)
+                 .map_err(|e| invalid(&e))?;
++            crate::qual1_trace::record("target",serde_json::json!(target));
+             let path = vcarve_plan::plan(&target, dpp, angle).map_err(|e| invalid(&e))?;
++            crate::qual1_trace::record("planned-path",serde_json::json!(path));
+             crate::profile_count!("vcarve.planned_points", path.len());
+             total += path.len();
+             if total > 1_000_000 {
+diff --git a/crates/ivac-wasm/src/lib.rs b/crates/ivac-wasm/src/lib.rs
+index cfc5ede..6bccf52 100644
+--- a/crates/ivac-wasm/src/lib.rs
++++ b/crates/ivac-wasm/src/lib.rs
+@@ -480,3 +480,6 @@ pub fn preset_command(json: &str) -> Result<String, JsValue> {
+     let value = ivac_core::presets::command(req).map_err(into_js_error)?;
+     serde_json::to_string(&value).map_err(into_js_error)
+ }
++
++#[wasm_bindgen]
++pub fn qual1_take_trace() -> String { serde_json::to_string(&ivac_core::qual1_trace::take()).unwrap() }

@@ -1,0 +1,14 @@
+{
+  "start_sha": "932ee4f6d5cfae4b2e08ebf008e8f850d635ad4f",
+  "production_sha": "64d75849e3bdc05a2d3ce47c50486ad169058507",
+  "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)\nbinary: rustc\ncommit-hash: 6b00bc3880198600130e1cf62b8f8a93494488cc\ncommit-date: 2025-06-23\nhost: aarch64-apple-darwin\nrelease: 1.88.0\nLLVM version: 20.1.5\n",
+  "node24": "v24.21.0",
+  "time": "2026-10-23T08:20:33.408861+00:00",
+  "hashes": {
+    "Cargo.lock": "0a1c5c39a57566f98ccc05a5d4f78631ff2b85f6495ac492fcc328e50a684532",
+    "frontend/pnpm-lock.yaml": "4377f8e3d35d186d69a02bca15df020074e0efba66e7913fb6a54e2aaad80cb4",
+    "scripts/pre-release.sh": "7086e5781df2e985e8bb24b4a5b632832539af845b5cf4baa8789d7c3145bad3",
+    "scripts/ui-smoke.sh": "cb01189a394f77619eb0cbd73035bb98f82b83ecac5460a6b9625a20310708b2",
+    "crates/ivac-wasm/pkg/ivac_wasm_bg.wasm": "f400b7c0b198e4f20b67c786dd89f8532f2681d898da77af214892d075a9010f"
+  }
+}

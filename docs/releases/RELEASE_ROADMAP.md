@@ -1,5 +1,18 @@
 # FabCAM release roadmap — approved direction
 
+## QUAL-1 — investigation delivered, 2026-10-23
+
+[Qualification report and evidence](QUAL_1_SOFTWARE_QUALIFICATION.md) supersede the
+software-gate status below: source `558efc4f7e7cfb5d008c88cf7469a958cc8dc053`,
+**17/20 mandatory gates, NO-GO for unconditional final qualification/release**.
+Only cooperative CPS polling changed; outputs remain unchanged. Native/WASM
+V-Carve parity and cancellation p95 remain open despite quantified diagnosis.
+Next, subject to separate human approval: deterministic V-Carve arithmetic design,
+cancellable ShopBot safety preflight, unrestricted-host gates and actual file/runtime
+acceptance. These proposals are unstarted; no new CAM feature, FabSpeed, PRESET-5,
+report redesign, installer, publication or hardware work is authorized.
+Human architectural/final acceptance `ivac-y25vq` remains OPEN.
+
 ## FS-RESET-3 removal — implementation delivered, 2026-10-22
 
 The full removal was explicitly authorized and is implemented locally on

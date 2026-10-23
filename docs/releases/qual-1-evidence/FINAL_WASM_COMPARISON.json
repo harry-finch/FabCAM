@@ -1,0 +1,137 @@
+[
+  {
+    "case": "missing-layer-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "2d673ae711b85fec241c07b4ee8b6378df062729267c8ab463d4da63c15d9af8",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 1,
+    "wasm_moves": 1
+  },
+  {
+    "case": "pocket-islands-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "dd9be856dda30e181087112bf3d168b168845839c96a7f9ab49f7cea2fff5608",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 1720,
+    "wasm_moves": 1720
+  },
+  {
+    "case": "profile-contours-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "4910cb93de491df5a24f434f64a7fbacf720a6587d3cfff050210f519b539931",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 246,
+    "wasm_moves": 246
+  },
+  {
+    "case": "profile-many-segments-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "7caf801aef28d0c0916159b9139232bd38e71cc0fc1864f6859ddc7405c0ceba",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 41602,
+    "wasm_moves": 41602
+  },
+  {
+    "case": "square-medial-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "90c4c3432655b9840dbcc73357c03cf0cd2f8f7bcefef8d9653bfe5e8de4acec",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": false,
+    "native_moves": 5376,
+    "wasm_moves": 5368
+  },
+  {
+    "case": "square-outline-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "4998edb08b19765a178b5b33c6e3e951bf47b607c62b78741ac2144fb901ccfd",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 85,
+    "wasm_moves": 85
+  },
+  {
+    "case": "text-B8-medial-linuxcnc.json",
+    "success": false,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "76df3a6f62ed9e4c195b8de5056235e02054ca43f6c4dd87205ab104ff66cf8e",
+    "same_error": true
+  },
+  {
+    "case": "text-Test-medial-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "44245ed015c4294af355d4c3a7df8597ac1583ac1f24e3cc890227b3b5b8e478",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": false,
+    "native_moves": 18342,
+    "wasm_moves": 18351
+  },
+  {
+    "case": "text-Test-outline-linuxcnc.json",
+    "success": true,
+    "wasm_sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df",
+    "request_sha256": "771c2155e9d8567fdad102758a5ae80141ae4335fe38e4d0ceba10196a4aaa69",
+    "before_after_equal": {
+      "gcode": true,
+      "toolpath": true,
+      "tool_provenance": true,
+      "gcode_index": true,
+      "stats": true
+    },
+    "native_wasm_program_equal": true,
+    "native_moves": 9585,
+    "wasm_moves": 9585
+  }
+]

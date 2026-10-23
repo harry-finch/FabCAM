@@ -1,0 +1,123 @@
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cps)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.12s
+     Running unittests src/lib.rs (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/target/debug/deps/ivac_cps-5e4ae4a12b229157)
+
+running 49 tests
+test golden_fanuc::fanuc_machine_paths_run_on_three_axis ... ok
+test cancellation::pre_cancelled_returns_no_output_and_never_parses_script ... ok
+test golden_fanuc::fixture_a_two_sections_toolchange ... ok
+test golden_fanuc::fixture_b_canned_cycles ... ok
+test golden_fanuc::fixture_c_full_circle_and_helix ... ok
+test golden_fanuc::fixture_c_use_radius_override ... ok
+test golden_fanuc::inspect_post_returns_fanuc_property_sheet ... ok
+test golden_fanuc::ir_version_gate ... ok
+test engine::cancellation_tests::host_probe_reads_live_atomic_and_default_stays_false ... ok
+fresh format_expected.json
+fresh scenarios_expected.json
+test golden_fanuc::syntax_error_maps_to_parse_with_line ... ok
+✔ live cancellation is observed within 64 subsequent record checkpoints (9.229458ms)
+✔ uncancelled record checkpoints preserve output and do not halt (13.469666ms)
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (8.179583ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (4.061042ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (1.588584ms)
+✔ abcFormat: scale DEG converts radians to degrees (1.627125ms)
+✔ oFormat: width 4 zeropad (program numbers) (2.517709ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (2.589792ms)
+✔ clamping applies after rounding (2.008833ms)
+✔ trimLeadZero renders FANUC-style bare fractions (2.516ms)
+✔ forceSign marks positives, never zero (2.950542ms)
+✔ getResultingValue/areDifferent compare on the output grid (3.189667ms)
+✔ differential fixtures are fresh (committed == recomputed) (11.97475ms)
+test cancellation::live_cancel_reaches_host_within_64_record_checkpoints ... ok
+test ir::tests::five_d_tags ... ok
+test ir::tests::round_trip ... ok
+test ir::tests::version_gate_rejects_mismatch ... ok
+test ir::tests::wire_shape_is_camel_case_and_kind_tagged ... ok
+test differential::format_matrix_matches_v8 ... ok
+test meta::tests::wire_shape ... ok
+test constants_consistency::recorder_codes_match_prelude_constants ... ok
+test run::audit_15_16::positions_do_not_rewrite_polyline_text ... ok
+✔ every Euler convention round-trips a rotation matrix (21.480416ms)
+✔ Euler extraction handles the gimbal-lock singularity (8.274458ms)
+✔ rotation factories agree with axis-angle (2.892708ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (22.641459ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (14.109ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (10.870083ms)
+✔ unreachable orientation throws (7.071375ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (2.866709ms)
+✔ remapToABC takes the shortest path from the current angles (2.647959ms)
+✔ getPreferredABC honors a positive axis preference (1.439459ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (5.033ms)
+✔ isABCSupported reflects axis ranges (3.170833ms)
+✔ multi-axis feed: inverse time and DPM (3.449708ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (7.176583ms)
+✔ reset forces the next output; force outputs every time (5.692375ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (5.204958ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (2.72375ms)
+✔ modal carries the format's address letter and getCurrent (3.57425ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (2.451625ms)
+✔ createOutputVariable: control + incremental type (2.602958ms)
+✔ ModalGroup enforces per-group exclusivity (3.595083ms)
+✔ formatWords flattens arguments objects and nested arrays (8.725333ms)
+✔ writeWords drops empty lines entirely (4.626084ms)
+✔ writeWords2 outputs only when args 2+ produce text (2.756708ms)
+✔ word separator and EOL are honored (2.265666ms)
+✔ redirection captures words; close returns to normal output (3.174375ms)
+✔ nested redirection pops innermost first (1.464416ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (2.554875ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 188.41325
+test differential::node_harness_agrees ... ok
+test golden_fanuc::runaway_script_hits_budget ... ok
+test probe3::property_binding_probe ... ok
+test golden_fanuc::validate_throw_maps_to_runtime_error ... ok
+test golden_fanuc::error_call_halts_with_partial_output ... ok
+test golden_fanuc::five_d_records_dispatch_with_solved_abc ... ok
+test run::audit_15_16::unfinished_script_points_to_user_eof ... ok
+test shopbot_guards::machine_home_park_must_not_be_silently_dropped ... ok
+test differential::scenarios_match_v8 ... ok
+test spike::arguments_object_semantics ... ok
+test spike::boa_new_after_prototype_assignment_bug ... ok
+test spike::define_property_accessors ... ok
+test spike::json_round_trip ... ok
+test spike::minimal_post_end_to_end ... ok
+test spike::named_source_errors_carry_line_info ... ok
+test spike::native_function_sink ... ok
+test spike::regexp_literal_and_constructor ... ok
+test spike::script_can_overwrite_host_global ... ok
+test spike::substr_annex_b ... ok
+test library::tests::bundled_posts_inspect_cleanly ... ok
+test cancellation::uncancelled_output_matches_legacy_and_error_text_cannot_forge_cancel ... ok
+test shopbot_guards::lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test symbol_audit::undeclared_but_used_symbols_are_defined ... ok
+test symbol_audit::every_declared_symbol_is_defined ... ok
+test shopbot_guards::positive_output_and_comment_injection ... ok
+test shopbot_guards::planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test shopbot_guards::lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test shopbot_guards::scaffold_work_plane_and_tools_fail_closed ... ok
+test shopbot_guards::vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test shopbot_guards::unsupported_records_fail_before_export ... ok
+
+test result: ok. 49 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.63s
+
+     Running tests/v1_trust.rs (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/target/debug/deps/v1_trust-554ac14a670cd13e)
+
+running 3 tests
+test every_external_entry_refuses_before_parsing_or_evaluation ... ok
+test properties_are_data_and_prototype_keys_are_refused ... ok
+test registry_is_the_only_authority ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+   Doc-tests ivac_cps
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

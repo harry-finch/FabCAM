@@ -1,0 +1,6 @@
+{
+  "docs/releases/RELEASE_ROADMAP.md": true,
+  "docs/shopbot-modernization/STATUS.md": true,
+  "frontend/src/App.svelte": true,
+  "frontend/src/app.css": true
+}

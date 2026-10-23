@@ -1,0 +1,283 @@
+{
+  "software_source": "558efc4f7e7cfb5d008c88cf7469a958cc8dc053",
+  "clean_clone_tracked_source": true,
+  "source_tree": "9a72ca119f7a4d4642cdaf14a76b7aeb4a106d46",
+  "files": [
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/Cargo.lock",
+      "bytes": 171850,
+      "sha256": "0a1c5c39a57566f98ccc05a5d4f78631ff2b85f6495ac492fcc328e50a684532"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/crates/ivac-wasm/pkg/ivac_wasm_bg.wasm",
+      "bytes": 5309107,
+      "sha256": "f400b7c0b198e4f20b67c786dd89f8532f2681d898da77af214892d075a9010f"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/fs-reset3/perf-baseline-951b12f",
+      "bytes": 12025168,
+      "sha256": "dcd6a603249d070919959f3a8e7ab0145e5e0dcef2e3c5b374a4536c2357e55e"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1/perf-current",
+      "bytes": 11643776,
+      "sha256": "962ad6e2383770c4de1bb1e4e403cf9f8dce63da26c0b779aa3df544433bc919"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1/perf-fixed",
+      "bytes": 11643776,
+      "sha256": "a98a9d11e6683db15e07033afc6c6cae7b4b3aff54b75da1050a0512a96df1a6"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/frontend/pnpm-lock.yaml",
+      "bytes": 93960,
+      "sha256": "4377f8e3d35d186d69a02bca15df020074e0efba66e7913fb6a54e2aaad80cb4"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/scripts/perf1-b2-wasm-check.py",
+      "bytes": 2355,
+      "sha256": "ca6ba14a1f7432204cf94a1113d9be988f902115efc8b8fb03b77bcf218347fb"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/scripts/perf1-cancel.py",
+      "bytes": 2363,
+      "sha256": "fa513046713f76b9a4804d94d8e1dfe5fed6086e30090eed18e17f5b00722682"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/scripts/pre-release.sh",
+      "bytes": 6336,
+      "sha256": "7086e5781df2e985e8bb24b4a5b632832539af845b5cf4baa8789d7c3145bad3"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/scripts/ui-smoke.sh",
+      "bytes": 2276,
+      "sha256": "cb01189a394f77619eb0cbd73035bb98f82b83ecac5460a6b9625a20310708b2"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/SHA256SUMS.json",
+      "bytes": 2059,
+      "sha256": "94d34fff2b4ec5fd700bbc490f42c3bf643032e532b32799f24a04f248ed0db8"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/chamfer-grbl.json",
+      "bytes": 10766,
+      "sha256": "9a320003ed54ce51effb194e998cee07c9afaa727384153c072414e79c201d61"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/chamfer.json",
+      "bytes": 10759,
+      "sha256": "3e26b5047e8737e4cf0c7e0776561579543c27b8d6bc5772fa72ad200bf5ba6e"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/dovetail.json",
+      "bytes": 9482,
+      "sha256": "f17f4bccb49c547e290dacf89112935bffe36851619cd2399f694237954c4478"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/drill-shared-false.json",
+      "bytes": 26727,
+      "sha256": "4e97b6c987bef28274f230a09ba92080ec027d750280f0db8ec6ff6dcb3219d5"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/drill-shared-true.json",
+      "bytes": 22988,
+      "sha256": "e986f4137f3aa3331baccd549d78233f8a42abd9136d3545766736e12fd334db"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/dual-pocket.json",
+      "bytes": 39186,
+      "sha256": "2aecd225d0df621671d4cddf198847a305a56b7c0deb06182ccb442c43a66ed2"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/engrave-grbl.json",
+      "bytes": 9804,
+      "sha256": "ff5036ca9c760fd7a0eba6aae813a113bf674235431e2672fe791642226ff49e"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/engrave.json",
+      "bytes": 9797,
+      "sha256": "9336efe55707f3fe45bf77f6d555e0dbd9dae68dfb633ad89096e2bceab7db68"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/halfpipe.json",
+      "bytes": 693877,
+      "sha256": "724e918fc984697d2ceb3a812c8ce83a9aa71543c225e59bc4a5712d69428343"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/planar.json",
+      "bytes": 27879,
+      "sha256": "181e99efce44d1fa0f9f50881e05f92f785e89ca1b8d91c455a6ac58aafe45d7"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/pocket-grbl.json",
+      "bytes": 33437,
+      "sha256": "e04cf4f80d7cb1f30bb194ff4b518260b3357d7340c30ba7ea60e432086e0444"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/pocket.json",
+      "bytes": 33430,
+      "sha256": "8404f3e2b06607074bbffff448864c12eebd7a082479140e016b4764bcb25fd0"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/profile-grbl.json",
+      "bytes": 32710,
+      "sha256": "cf2c591089b60e81b5a34a033cca26094ebe7c8027b81008097cdc598d1f2cdb"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/profile-inside-grbl.json",
+      "bytes": 11014,
+      "sha256": "d96471bcf3873d2600ff2361689769ac4da4fd64768411e5f42aa06a6df64063"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/profile-inside.json",
+      "bytes": 11007,
+      "sha256": "fc17690b84db71094df2cf7e83596d4a1e0991dff80559c92430fb1f5c2e911c"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/profile.json",
+      "bytes": 32703,
+      "sha256": "2b5eb2c79512987c0ad0f994887fa4ef5693adea054e9bbb2ae7f259008c8f63"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/relief.json",
+      "bytes": 31965,
+      "sha256": "a5e1cfe8a3fa1fa3b416db129bc6a97b86428e9532f40624043c59b36a12d3bb"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/shopbot-profile.json",
+      "bytes": 27699,
+      "sha256": "0fc5a446d6c029e7bb08012545e5c90a8c4cad487ecd30ca1ba0d4594deb562d"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/shopbot-vcarve.json",
+      "bytes": 16089,
+      "sha256": "187e2941d22cdf687f309404573d7d66549b022b455f79402f60d9f123cb5b71"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/thread.json",
+      "bytes": 111901,
+      "sha256": "dac8755addc5dd2c8b2d4b081c762c907f7fc81a8465853b008aafce7b78aa4a"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/tslot.json",
+      "bytes": 9483,
+      "sha256": "24afcffade3b27cee75ebd818b5008a8aa926102068067f111cfcb4ee0ba66f6"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/two-sided.json",
+      "bytes": 70842,
+      "sha256": "fcdafb7149671234fda0cd5584f80378e6153b9a7bdc06d0a1bee3793f9c6c46"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/fs-reset3-output/waterline.json",
+      "bytes": 13454,
+      "sha256": "8c7a4c4a1b20bbb0eed2821badff9d5708892353b34b2ee06d0b5fe9945862be"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/manifest.json",
+      "bytes": 9919,
+      "sha256": "e44dd5d23a5b5066ab54aa0060e77906b0954d75fddbf37bc85762fc77177426"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/missing-layer-cps.json",
+      "bytes": 3751,
+      "sha256": "dc2af80fd2ff3c478620854021b96f9f6932aa1ba245d2f7d9293beb6fbdbc6f"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/missing-layer-linuxcnc.json",
+      "bytes": 3700,
+      "sha256": "2d673ae711b85fec241c07b4ee8b6378df062729267c8ab463d4da63c15d9af8"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/pocket-islands-cps.json",
+      "bytes": 6458,
+      "sha256": "517e45a6813dacf34525238b5557e1c2c20ddf5d97988a5317a03d0c3ed07756"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/pocket-islands-linuxcnc.json",
+      "bytes": 6407,
+      "sha256": "dd9be856dda30e181087112bf3d168b168845839c96a7f9ab49f7cea2fff5608"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/profile-contours-cps.json",
+      "bytes": 3759,
+      "sha256": "b3773472760dcca6b036cba1a96ddd5afa7089dcceaa52f6eeeffebe76ae7efc"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/profile-contours-linuxcnc.json",
+      "bytes": 3708,
+      "sha256": "4910cb93de491df5a24f434f64a7fbacf720a6587d3cfff050210f519b539931"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/profile-many-segments-cps.json",
+      "bytes": 637237,
+      "sha256": "cb37ce64aac97570d4ca11dc7cb0f267eae976d6419e96be984bacbbee1386af"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/profile-many-segments-linuxcnc.json",
+      "bytes": 637186,
+      "sha256": "7caf801aef28d0c0916159b9139232bd38e71cc0fc1864f6859ddc7405c0ceba"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/square-medial-cps.json",
+      "bytes": 2036,
+      "sha256": "6e869f2871dd0389bf6376762e535c04dc6c71fde31c6571cc6e81840c579019"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/square-medial-linuxcnc.json",
+      "bytes": 1985,
+      "sha256": "90c4c3432655b9840dbcc73357c03cf0cd2f8f7bcefef8d9653bfe5e8de4acec"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/square-outline-cps.json",
+      "bytes": 2037,
+      "sha256": "07cba889365b5c28832461400bc2fb3e76555014e66b418f2ec38d7cff5c83e5"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/square-outline-linuxcnc.json",
+      "bytes": 1986,
+      "sha256": "4998edb08b19765a178b5b33c6e3e951bf47b607c62b78741ac2144fb901ccfd"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/text-B8-medial-cps.json",
+      "bytes": 1014954,
+      "sha256": "f324e2da8d2c3353e366fc95c61e1deae9f35f059b968ff7fa5937adbb48e62a"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/text-B8-medial-linuxcnc.json",
+      "bytes": 1014903,
+      "sha256": "76df3a6f62ed9e4c195b8de5056235e02054ca43f6c4dd87205ab104ff66cf8e"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/text-Test-medial-cps.json",
+      "bytes": 1014920,
+      "sha256": "87caed9bb01b468988293c7391be2a0d048c98fd64c34e131b97ba4e6a645135"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/text-Test-medial-linuxcnc.json",
+      "bytes": 1014869,
+      "sha256": "44245ed015c4294af355d4c3a7df8597ac1583ac1f24e3cc890227b3b5b8e478"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/text-Test-outline-cps.json",
+      "bytes": 1014921,
+      "sha256": "52f935a94a692d8e3909e9e5405ecb8043bf4246cd794695a4f2bae5398722ec"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/tests/fixtures/perf-v9/text-Test-outline-linuxcnc.json",
+      "bytes": 1014870,
+      "sha256": "771c2155e9d8567fdad102758a5ae80141ae4335fe38e4d0ceba10196a4aaa69"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-wasm/pkg/ivac_wasm_bg.wasm",
+      "bytes": 5309252,
+      "sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df"
+    },
+    {
+      "path": "/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/target/debug/ivac",
+      "bytes": 46792184,
+      "sha256": "942f722fa5359798ba7ac40c5d7096bc7877328f0beab83d07fc4eab6fe5e806"
+    }
+  ],
+  "note": "CLI built at exact source; copied native perf-fixed binary qualified before commit with identical source bytes. Starting/default browser WASM and final CPS-enabled build identities are recorded separately."
+}

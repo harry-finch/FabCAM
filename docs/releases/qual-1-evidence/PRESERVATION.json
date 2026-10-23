@@ -1,0 +1,26 @@
+{
+  "software_source": "558efc4f7e7cfb5d008c88cf7469a958cc8dc053",
+  "files": {
+    "docs/releases/RELEASE_ROADMAP.md": {
+      "original_sha256": "9ed899fd17b9e54d9af2e33abf618901d44a798f91df559e3cc9d7ee519c6d4c",
+      "original_body_preserved": true,
+      "only_qual1_prefix_added": true
+    },
+    "docs/shopbot-modernization/STATUS.md": {
+      "original_sha256": "1016d659fe841056867d4ffd39c84cafcaa1b99a6262c8d5c90bfafb56ec2816",
+      "original_body_preserved": true,
+      "only_qual1_prefix_added": true
+    },
+    "frontend/src/App.svelte": {
+      "original_sha256": "a2cc8cae58e4fbeb8472a3c51ba6ace06cf8b1d0b153dcd4123bf79b77fecc6d",
+      "original_body_preserved": true,
+      "only_qual1_prefix_added": false
+    },
+    "frontend/src/app.css": {
+      "original_sha256": "0e9e1dabef5920a9f3ef5a5d85fdeec1c39e0f52a72a0a494fcb755d4a6a05de",
+      "original_body_preserved": true,
+      "only_qual1_prefix_added": false
+    }
+  },
+  "staging_policy": "Only prefix diff relative to committed HEAD; pre-existing document edits and frontend accents excluded."
+}

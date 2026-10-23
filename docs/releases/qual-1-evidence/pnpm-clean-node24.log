@@ -1,0 +1,80 @@
+ ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/pnpm: request to https://registry.npmjs.org/pnpm failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+
+   ╭──────────────────────────────────────────────────────────────────────╮
+   │                                                                      │
+   │                 Update available! 10.34.7 → 12.14.0.                 │
+   │                 Changelog: https://pnpm.io/v/12.14.0                 │
+   │   To update, run: curl -fsSL https://get.pnpm.io/install.sh | sh -   │
+   │                                                                      │
+   ╰──────────────────────────────────────────────────────────────────────╯
+
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +226
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ WARN  GET https://registry.npmjs.org/acorn/-/acorn-8.16.0.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@types/estree/-/estree-1.0.8.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/axobject-query/-/axobject-query-4.1.0.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/aria-query/-/aria-query-5.3.1.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/devalue/-/devalue-5.8.0.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/esm-env/-/esm-env-1.2.2.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@typescript-eslint/types/-/types-8.60.0.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/svelte/-/svelte-5.55.5.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/is-reference/-/is-reference-3.0.3.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.5.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/zimmerframe/-/zimmerframe-1.1.4.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/api/-/api-2.11.0.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-dialog/-/plugin-dialog-2.7.1.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-opener/-/plugin-opener-2.5.4.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-process/-/plugin-process-2.3.1.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-store/-/plugin-store-2.4.3.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/three/-/three-0.184.0.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint/js/-/js-10.0.1.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/eslint/-/eslint-10.4.0.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.9.1.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.12.2.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint/config-array/-/config-array-0.23.5.tgz error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+Progress: resolved 226, reused 0, downloaded 0, added 0
+ WARN  GET https://registry.npmjs.org/acorn/-/acorn-8.16.0.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@types/estree/-/estree-1.0.8.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/axobject-query/-/axobject-query-4.1.0.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/aria-query/-/aria-query-5.3.1.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/devalue/-/devalue-5.8.0.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/esm-env/-/esm-env-1.2.2.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@typescript-eslint/types/-/types-8.60.0.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/svelte/-/svelte-5.55.5.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/is-reference/-/is-reference-3.0.3.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.5.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/zimmerframe/-/zimmerframe-1.1.4.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/api/-/api-2.11.0.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-dialog/-/plugin-dialog-2.7.1.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-opener/-/plugin-opener-2.5.4.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-process/-/plugin-process-2.3.1.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@tauri-apps/plugin-store/-/plugin-store-2.4.3.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/three/-/three-0.184.0.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint/js/-/js-10.0.1.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/eslint/-/eslint-10.4.0.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.9.1.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.12.2.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ WARN  GET https://registry.npmjs.org/@eslint/config-array/-/config-array-0.23.5.tgz error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ ENOTFOUND  request to https://registry.npmjs.org/acorn/-/acorn-8.16.0.tgz failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+
+FetchError: request to https://registry.npmjs.org/acorn/-/acorn-8.16.0.tgz failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+    at ClientRequest.<anonymous> (/Users/mugen/.local/pnpm-10/node_modules/pnpm/dist/pnpm.cjs:39562:18)
+    at ClientRequest.emit (node:events:514:28)
+    at emitErrorEvent (node:_http_client:114:11)
+    at TLSSocket.socketErrorListener (node:_http_client:766:5)
+    at TLSSocket.emit (node:events:526:24)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)

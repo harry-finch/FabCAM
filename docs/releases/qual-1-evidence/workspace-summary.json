@@ -1,0 +1,15 @@
+{
+  "source": "558efc4f7e7cfb5d008c88cf7469a958cc8dc053",
+  "exit_code": 101,
+  "totals": {
+    "passed": 1576,
+    "failed": 2,
+    "ignored": 1
+  },
+  "failures": [
+    "watcher::tests::debounce_collapses_rapid_writes",
+    "watcher::tests::single_path_emits_event"
+  ],
+  "ignored": "TEST1 worker executed separately by watchdog",
+  "note": "Optional external FANUC oracle files are absent in both original and clone. Those existing tests may early-return; no new exclusion or oracle fixture update."
+}

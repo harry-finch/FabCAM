@@ -1,0 +1,15 @@
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/frontend
+
+ ✓ src/lib/api/cutting-contract.test.ts (2 tests) 5ms
+stdout | src/lib/sim/qualification-wasm.test.ts > real Rust/WASM simulator distinguishes clean and colliding complete programs on both faces
+WASM verification measurement {"baselineHeapBytes":1507328,"finalHeapBytes":1638400,"elapsedMs":8.353083999999996,"scope":"direct Node/WASM; not whole-browser RSS or native installation"}
+
+ ✓ src/lib/sim/qualification-wasm.test.ts (2 tests) 29ms
+ ✓ src/lib/state/cutting-v9-wasm.test.ts (3 tests) 107ms
+
+ Test Files  3 passed (3)
+      Tests  7 passed (7)
+   Start at  11:00:29
+   Duration  315ms (transform 134ms, setup 0ms, collect 162ms, tests 141ms, environment 0ms, prepare 96ms)
+

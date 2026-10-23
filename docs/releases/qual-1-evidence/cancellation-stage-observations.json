@@ -1,0 +1,94 @@
+[
+  {
+    "case": "profile-many-segments-cps-0",
+    "events": {
+      "onOpen begin": 1792745117401.851,
+      "onOpen end": 1792745117539.642,
+      "cancel observed at record checkpoint": 1792745117542.911
+    },
+    "onOpen_ms": 137.791015625,
+    "latency": {
+      "cancelled": true,
+      "latency_ms": 129.989458,
+      "requested_ms": 55.033041999999995,
+      "returned_ms": 185.0225,
+      "returned_valid_result": false
+    }
+  },
+  {
+    "case": "profile-many-segments-cps-1",
+    "events": {
+      "onOpen begin": 1792745117599.288,
+      "onOpen end": 1792745117734.808,
+      "cancel observed at record checkpoint": 1792745117738.307
+    },
+    "onOpen_ms": 135.52001953125,
+    "latency": {
+      "cancelled": true,
+      "latency_ms": 131.412166,
+      "requested_ms": 50.534542,
+      "returned_ms": 181.946708,
+      "returned_valid_result": false
+    }
+  },
+  {
+    "case": "profile-many-segments-cps-2",
+    "events": {
+      "onOpen begin": 1792745117794.237,
+      "onOpen end": 1792745117930.353,
+      "cancel observed at record checkpoint": 1792745117933.911
+    },
+    "onOpen_ms": 136.115966796875,
+    "latency": {
+      "cancelled": true,
+      "latency_ms": 128.729959,
+      "requested_ms": 55.036165999999994,
+      "returned_ms": 183.766125,
+      "returned_valid_result": false
+    }
+  },
+  {
+    "case": "text-Test-medial-cps-0",
+    "events": {},
+    "onOpen_ms": null,
+    "latency": {
+      "cancelled": true,
+      "latency_ms": 6.395167000000001,
+      "requested_ms": 55.095,
+      "returned_ms": 61.490167,
+      "returned_valid_result": false
+    }
+  },
+  {
+    "case": "text-Test-medial-cps-1",
+    "events": {
+      "onOpen begin": 1792745116948.729,
+      "onOpen end": 1792745117124.52,
+      "cancel observed at record checkpoint": 1792745117126.137
+    },
+    "onOpen_ms": 175.791015625,
+    "latency": {
+      "cancelled": true,
+      "latency_ms": 160.57462500000003,
+      "requested_ms": 54.541833,
+      "returned_ms": 215.11645800000002,
+      "returned_valid_result": false
+    }
+  },
+  {
+    "case": "text-Test-medial-cps-2",
+    "events": {
+      "onOpen begin": 1792745117172.339,
+      "onOpen end": 1792745117348.299,
+      "cancel observed at record checkpoint": 1792745117349.935
+    },
+    "onOpen_ms": 175.9599609375,
+    "latency": {
+      "cancelled": true,
+      "latency_ms": 158.86275,
+      "requested_ms": 55.039833,
+      "returned_ms": 213.90258300000002,
+      "returned_valid_result": false
+    }
+  }
+]

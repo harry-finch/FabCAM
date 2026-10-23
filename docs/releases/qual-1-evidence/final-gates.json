@@ -1,0 +1,88 @@
+{
+  "source": "558efc4f7e7cfb5d008c88cf7469a958cc8dc053",
+  "exit_code": 1,
+  "passed": 17,
+  "mandatory": 20,
+  "gates": [
+    {
+      "gate": "Rust formatting",
+      "result": "PASS"
+    },
+    {
+      "gate": "Workspace strict pedantic Clippy, all targets/features",
+      "result": "PASS"
+    },
+    {
+      "gate": "Workspace tests, all features",
+      "result": "FAIL \u2014 two unchanged native watcher tests"
+    },
+    {
+      "gate": "Schema check",
+      "result": "PASS"
+    },
+    {
+      "gate": "Version check",
+      "result": "PASS"
+    },
+    {
+      "gate": "README parity",
+      "result": "PASS"
+    },
+    {
+      "gate": "pnpm frozen install, Node24/copied cache",
+      "result": "PASS"
+    },
+    {
+      "gate": "Generated TypeScript drift",
+      "result": "PASS"
+    },
+    {
+      "gate": "i18n key drift",
+      "result": "PASS"
+    },
+    {
+      "gate": "Frontend lint/Prettier",
+      "result": "PASS"
+    },
+    {
+      "gate": "Frontend Svelte/TypeScript",
+      "result": "PASS \u2014 0 errors / 0 warnings"
+    },
+    {
+      "gate": "Full frontend tests",
+      "result": "PASS \u2014 1492, 1 existing optional locale skip; 171 files"
+    },
+    {
+      "gate": "Frontend production build",
+      "result": "PASS \u2014 existing large-chunk advisory retained"
+    },
+    {
+      "gate": "WASM web release build",
+      "result": "PASS"
+    },
+    {
+      "gate": "WASM CPS size guard",
+      "result": "PASS \u2014 +1589 KiB gzip; unchanged 1700 KiB limit"
+    },
+    {
+      "gate": "cargo-deny, all four checks",
+      "result": "FAIL \u2014 default advisory lock read-only; alternate writable path blocked by GitHub DNS"
+    },
+    {
+      "gate": "Unmodified headless UI smoke",
+      "result": "FAIL \u2014 Chrome aborts, CDP connect EPERM; no supported sandbox execution"
+    },
+    {
+      "gate": "Real CLI SEC1 + NUMSAFE3 probes",
+      "result": "PASS"
+    },
+    {
+      "gate": "SEC1 release-boundary regressions",
+      "result": "PASS"
+    },
+    {
+      "gate": "Candidate identity regressions",
+      "result": "PASS \u2014 4 tests"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+2026-10-23 08:09:30 [ERROR] failed to fetch advisory database https://github.com/RustSec/advisory-db with cli: failed to clone: ["clone", "--depth=1", "--branch", "main", "https://github.com/RustSec/advisory-db", "/private/tmp/fabcam-qual1-advisory-dbs/advisory-db-3157b0e258782691"]
+Cloning into '/private/tmp/fabcam-qual1-advisory-dbs/advisory-db-3157b0e258782691'...
+fatal: unable to access 'https://github.com/RustSec/advisory-db/': Could not resolve host: github.com
+

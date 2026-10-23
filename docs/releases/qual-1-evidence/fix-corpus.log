@@ -1,0 +1,10 @@
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cps)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 11.19s
+     Running tests/fs_reset_outputs.rs (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/target/debug/deps/fs_reset_outputs-b753c5d3618788bf)
+
+running 1 test
+test retained_explicit_programs_toolpaths_and_provenance_match_pre_removal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+

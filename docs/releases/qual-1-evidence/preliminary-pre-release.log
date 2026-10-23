@@ -1,0 +1,458 @@
+━━ cargo fmt --check
+━━ cargo clippy -Dwarnings (with pedantic)
+    Checking ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cps)
+    Checking ivac-file-export v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-file-export)
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-tauri)
+    Checking ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-core)
+    Checking xtask v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/xtask)
+    Checking ivac-wasm v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-wasm)
+    Checking ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cli)
+    Checking ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-server)
+error: proc macro panicked
+   --> crates/ivac-tauri/src/lib.rs:280:16
+    |
+280 |         .build(tauri::generate_context!())?
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: message: The `frontendDist` configuration is set to `"../../frontend/dist"` but this path doesn't exist
+
+error: could not compile `ivac-tauri` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `ivac-tauri` (lib test) due to 1 previous error
+━━ cargo test --workspace
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cps)
+   Compiling ivac-file-export v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-file-export)
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-tauri)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-core)
+   Compiling ivac-wasm v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-wasm)
+error: proc macro panicked
+   --> crates/ivac-tauri/src/lib.rs:280:16
+    |
+280 |         .build(tauri::generate_context!())?
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: message: The `frontendDist` configuration is set to `"../../frontend/dist"` but this path doesn't exist
+
+error: could not compile `ivac-tauri` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `ivac-tauri` (lib test) due to 1 previous error
+━━ xtask schema-check
+schema/openapi.yaml is up to date
+━━ xtask version-check
+tauri.conf.json version matches workspace (0.9.0-beta.3)
+━━ readme parity
+readme-parity: ok (README.md and README_de.md share 12 headings)
+━━ pnpm install
+Lockfile is up to date, resolution step is skipped
+ ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/pnpm: request to https://registry.npmjs.org/pnpm failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+
+   ╭──────────────────────────────────────────────────────────────────────╮
+   │                                                                      │
+   │                 Update available! 10.34.7 → 12.14.0.                 │
+   │                 Changelog: https://pnpm.io/v/12.14.0                 │
+   │   To update, run: curl -fsSL https://get.pnpm.io/install.sh | sh -   │
+   │                                                                      │
+   ╰──────────────────────────────────────────────────────────────────────╯
+
+Already up to date
+
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: esbuild@0.21.5.                                     │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 319ms using pnpm v10.34.7
+━━ codegen drift
+━━ i18n keys drift
+━━ pnpm run lint
+
+> ivac-frontend@ lint /Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/frontend
+> eslint . && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+━━ pnpm run check
+
+> ivac-frontend@ check /Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/frontend
+> svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json
+
+Loading svelte-check in workspace: /Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/frontend
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings
+━━ pnpm run test
+
+> ivac-frontend@ test /Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/frontend
+> node --test scripts/wasm-package-state.test.mjs && vitest run
+
+✔ incomplete package rejected: ivac_wasm_bg.wasm (4.329875ms)
+✔ incomplete package rejected: ivac_wasm.js (2.755125ms)
+✔ incomplete package rejected: ivac_wasm.d.ts (2.945ms)
+✔ incomplete package rejected: ivac_wasm_bg.wasm.d.ts (2.664209ms)
+✔ incomplete package rejected: package.json (3.035542ms)
+✔ content fingerprints detect old timestamps, changed bindings and lockfile; unchanged package passes (3.868792ms)
+✔ concurrent source edit prevents stamping successful old build (2.694167ms)
+✔ release CLI fails closed without toolchain; only explicit dev accepts complete stale package (135.0435ms)
+✔ empty assets and malformed manifest are never complete (3.196875ms)
+✔ embedded font/data changes and file deletion invalidate the package (4.39625ms)
+✔ neutral cutting and preset sources remain freshness inputs after recommendation removal (9.889375ms)
+✔ unused old source-pack files are not required runtime inputs (3.530708ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 220.617625
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/frontend
+
+ ✓ src/lib/state/workspace.test.ts (12 tests) 5ms
+ ✓ src/lib/sim/heightfield_mesh.test.ts (17 tests) 7ms
+ ✓ src/lib/api/build-project.test.ts (49 tests) 9ms
+ ✓ src/lib/state/commands.test.ts (51 tests) 9ms
+ ✓ src/lib/state/operation-templates.test.ts (11 tests) 11ms
+ ✓ src/lib/sim/driver.test.ts (29 tests) 5ms
+ ✓ src/lib/sim/driver.deviation.test.ts (4 tests) 15ms
+ ✓ src/lib/sim/driver.two_sided_conflict.test.ts (5 tests) 19ms
+ ✓ src/lib/api/client.test.ts (16 tests) 6ms
+ ✓ src/lib/api/wasm-worker-client.test.ts (14 tests) 4ms
+ ✓ src/lib/scene3d/toolpath_buffers.test.ts (19 tests) 8ms
+ ✓ src/lib/services/document-lifecycle.test.ts (25 tests) 84ms
+ ✓ src/lib/state/file-transform.test.ts (11 tests) 5ms
+ ✓ src/lib/state/geometry-source-ui.test.ts (11 tests) 7ms
+ ✓ src/lib/sim/undercut_mesh.test.ts (6 tests) 2ms
+ ✓ src/lib/canvas/spatial-index.test.ts (14 tests) 43ms
+ ✓ src/lib/services/qualification-export.test.ts (16 tests) 15ms
+ ✓ src/lib/state/history.test.ts (18 tests) 7ms
+ ✓ src/lib/state/tool_picker.test.ts (21 tests) 5ms
+ ✓ src/lib/components/Modal.test.ts (15 tests) 5ms
+ ✓ src/lib/cam/raster_preview.test.ts (18 tests) 5ms
+ ✓ src/lib/components/anchored-popover.test.ts (12 tests) 7ms
+ ✓ src/lib/canvas/viewport.test.ts (15 tests) 3ms
+ ✓ src/lib/state/generation-context.test.ts (5 tests) 29ms
+ ✓ src/lib/state/drawing-layers.test.ts (8 tests) 7ms
+ ✓ src/lib/services/shopbot-machine-load.test.ts (4 tests) 23ms
+ ✓ src/lib/components/AddTextDialog.test.ts (15 tests) 8ms
+ ✓ src/lib/cam/post-profile-preview.test.ts (23 tests) 6ms
+ ✓ src/lib/services/project-replacement.test.ts (5 tests) 6ms
+ ✓ src/lib/state/tool_family.test.ts (9 tests) 4ms
+ ✓ src/lib/canvas/osnap.test.ts (13 tests) 7ms
+ ✓ src/lib/components/cps-post-form.test.ts (13 tests) 7ms
+ ✓ src/lib/components/component-size-guard.test.ts (3 tests) 1ms
+ ✓ src/lib/state/operation-template-ui.test.ts (6 tests) 8ms
+ ✓ src/lib/canvas/fixture-gesture.test.ts (6 tests) 6ms
+ ✓ src/lib/sim/playhead.test.ts (13 tests) 4ms
+ ✓ src/lib/sim/qualification.test.ts (10 tests) 6ms
+ ✓ src/lib/components/ErrorToast.test.ts (12 tests) 3ms
+ ✓ src/lib/canvas/pointer-move.test.ts (20 tests) 3ms
+ ✓ src/lib/canvas/selection-geometry.test.ts (24 tests) 4ms
+ ✓ src/lib/state/op_defaults.test.ts (20 tests) 3ms
+ ✓ src/lib/state/cutting-v9-wasm.test.ts (3 tests) 129ms
+ ✓ src/lib/components/warning-display.test.ts (7 tests) 9ms
+ ✓ src/lib/state/drawing.test.ts (7 tests) 6ms
+ ✓ src/lib/state/app-menu.test.ts (12 tests) 4ms
+ ✓ src/lib/state/program-qualification.test.ts (12 tests) 5ms
+ ✓ src/lib/api/pipeline-warnings.test.ts (26 tests) 3ms
+ ✓ src/lib/state/status-bar-text.test.ts (19 tests) 2ms
+ ✓ src/lib/state/project-types.test.ts (16 tests) 5ms
+ ✓ src/lib/state/planar-surface.test.ts (8 tests) 6ms
+ ✓ src/lib/state/tool_table.test.ts (11 tests) 16ms
+ ✓ src/lib/services/import-review-flow.test.ts (5 tests) 162ms
+stdout | src/lib/sim/qualification-wasm.test.ts > real Rust/WASM simulator distinguishes clean and colliding complete programs on both faces
+WASM verification measurement {"baselineHeapBytes":1507328,"finalHeapBytes":1638400,"elapsedMs":9.00645799999998,"scope":"direct Node/WASM; not whole-browser RSS or native installation"}
+
+ ✓ src/lib/sim/qualification-wasm.test.ts (2 tests) 35ms
+ ✓ src/lib/state/import-units.test.ts (6 tests) 3ms
+ ✓ src/lib/state/tool_validation.test.ts (14 tests) 2ms
+ ✓ src/lib/state/corner-relief.test.ts (6 tests) 6ms
+ ✓ src/lib/state/report-cutting.test.ts (5 tests) 6ms
+ ✓ src/lib/state/operation-tool.test.ts (6 tests) 12ms
+ ✓ src/lib/state/project-v9.test.ts (7 tests) 4ms
+ ✓ src/lib/sim/deviation_target.test.ts (9 tests) 4ms
+ ✓ src/lib/state/preparation.test.ts (7 tests) 3ms
+ ✓ src/lib/canvas/tab-hit.test.ts (13 tests) 3ms
+ ✓ src/lib/components/dh1n-regression.test.ts (1 test) 12ms
+ ✓ src/lib/canvas/stock-gizmo.test.ts (15 tests) 3ms
+ ✓ src/lib/canvas/touch-gestures.test.ts (10 tests) 4ms
+ ✓ src/lib/cam/tabs.test.ts (8 tests) 2ms
+ ✓ src/lib/state/material-presentation.test.ts (5 tests) 11ms
+ ✓ src/lib/state/warnings-summary.test.ts (8 tests) 2ms
+ ✓ src/lib/state/vcarve-controls.test.ts (6 tests) 6ms
+ ✓ src/lib/scene3d/flip_gizmo.test.ts (10 tests) 3ms
+ ✓ src/lib/state/op_tool_constraint.test.ts (23 tests) 6ms
+ ✓ src/lib/state/preset-library-v9.test.ts (3 tests) 3ms
+ ✓ src/lib/state/material-picker-presentation.test.ts (12 tests) 4ms
+ ✓ src/lib/services/preset-collection-files.test.ts (5 tests) 17ms
+ ✓ src/lib/state/mode_switch.test.ts (8 tests) 3ms
+ ✓ src/lib/state/stock-outline.test.ts (6 tests) 4ms
+ ✓ src/lib/state/cutting-workflow.test.ts (5 tests) 4ms
+ ✓ src/lib/sim/two_sided_conflict.test.ts (6 tests) 4ms
+ ✓ src/lib/state/palette-search.test.ts (20 tests) 5ms
+ ✓ src/lib/canvas/render/chrome.test.ts (19 tests) 5ms
+ ✓ src/lib/canvas/entity-selection.test.ts (12 tests) 4ms
+ ✓ src/lib/canvas/context-menu.test.ts (8 tests) 9ms
+ ✓ src/lib/state/vcarve-strategy-ui.test.ts (8 tests) 6ms
+ ✓ src/lib/components/report-markdown.test.ts (5 tests) 2ms
+ ✓ src/lib/canvas/pointer-down.test.ts (9 tests) 2ms
+ ✓ src/lib/state/palette-dispatch.test.ts (6 tests) 9ms
+ ✓ src/lib/state/gcode_window.test.ts (9 tests) 4ms
+ ✓ src/lib/state/tool-library-review.test.ts (4 tests) 10ms
+ ✓ src/lib/canvas/ghost-tab.test.ts (6 tests) 3ms
+ ✓ src/lib/canvas/touch-tracker.test.ts (7 tests) 8ms
+ ✓ src/lib/state/tool_inventory.test.ts (8 tests) 12ms
+ ✓ src/lib/services/toolset-draft-io.test.ts (2 tests) 13ms
+ ✓ src/lib/state/throttle.test.ts (7 tests) 7ms
+ ✓ src/lib/state/tool_presets.test.ts (7 tests) 4ms
+ ✓ src/lib/canvas/render/tabs.test.ts (6 tests) 5ms
+ ✓ src/lib/state/tool_naming.test.ts (6 tests) 4ms
+ ✓ src/lib/state/import-reload.test.ts (2 tests) 9ms
+ ✓ src/lib/i18n/coverage.test.ts (7 tests | 1 skipped) 1179ms
+   ✓ i18n no dead keys > every catalog key is referenced in src/ 1146ms
+ ✓ src/lib/canvas/fixture-hit.test.ts (5 tests) 1ms
+ ✓ src/lib/scene3d/picker.test.ts (4 tests) 7ms
+ ✓ src/lib/state/selection.test.ts (12 tests) 4ms
+ ✓ src/lib/state/gcode_chapters.test.ts (8 tests) 2ms
+ ✓ src/lib/components/floating-panel.test.ts (9 tests) 2ms
+ ✓ src/lib/canvas/render/entities.test.ts (4 tests) 3ms
+ ✓ src/lib/state/machine_profiles.test.ts (5 tests) 4ms
+ ✓ src/lib/state/tool_wear.test.ts (8 tests) 5ms
+ ✓ src/lib/state/palette-tool.test.ts (6 tests) 3ms
+ ✓ src/lib/state/relief_image.test.ts (5 tests) 10ms
+ ✓ src/lib/state/activities.test.ts (8 tests) 5ms
+ ✓ src/lib/state/machine-profile-review.test.ts (4 tests) 4ms
+ ✓ src/lib/canvas/text-hit.test.ts (8 tests) 6ms
+ ✓ src/lib/state/generation-run.test.ts (9 tests) 5ms
+ ✓ src/lib/state/bottom-panel-fold.test.ts (9 tests) 11ms
+ ✓ src/lib/sim/tool-provenance.test.ts (8 tests) 6ms
+ ✓ src/lib/state/work-frame.test.ts (4 tests) 5ms
+ ✓ src/lib/state/inspector-policy.test.ts (4 tests) 5ms
+ ✓ src/lib/canvas/pointer-up.test.ts (7 tests) 3ms
+ ✓ src/lib/i18n/i18n-core.test.ts (7 tests) 3ms
+ ✓ src/lib/sim/warnings.test.ts (5 tests) 4ms
+ ✓ src/lib/canvas/render/regions.test.ts (3 tests) 5ms
+ ✓ src/lib/canvas/render/segment.test.ts (5 tests) 5ms
+ ✓ src/lib/api/removed-legacy-contract.test.ts (2 tests) 100ms
+ ✓ src/lib/state/workspace-layout.test.ts (12 tests) 4ms
+ ✓ src/lib/state/relief_stl.test.ts (3 tests) 9ms
+ ✓ src/lib/services/shopbot-offline-demo.test.ts (1 test) 6ms
+ ✓ src/lib/canvas/box_select.test.ts (5 tests) 2ms
+ ✓ src/lib/state/cutting-ui.test.ts (3 tests) 2ms
+ ✓ src/lib/scene3d/raster_heatmap.test.ts (6 tests) 5ms
+ ✓ src/lib/state/publication-guard.test.ts (5 tests) 3ms
+ ✓ src/lib/scene3d/tessellate.test.ts (5 tests) 2ms
+ ✓ src/lib/scene3d/warning_position.test.ts (5 tests) 3ms
+ ✓ src/lib/services/gcode-export.test.ts (8 tests) 2ms
+ ✓ src/lib/state/tool-dimensions.test.ts (3 tests) 4ms
+ ✓ src/lib/state/entry-support.test.ts (3 tests) 2ms
+ ✓ src/lib/state/op_source.test.ts (5 tests) 2ms
+ ✓ src/lib/state/tool-migration.test.ts (4 tests) 4ms
+ ✓ src/lib/state/tool_mode_defaults.test.ts (5 tests) 4ms
+ ✓ src/lib/components/markdown-lite.test.ts (9 tests) 4ms
+ ✓ src/lib/api/wasm-fatal.test.ts (2 tests) 15ms
+ ✓ src/lib/canvas/aci-color.test.ts (6 tests) 3ms
+ ✓ src/lib/sim/dual_surface.test.ts (4 tests) 1ms
+ ✓ src/lib/state/performance-probe.test.ts (3 tests) 2ms
+ ✓ src/lib/state/generate-palette-policy.test.ts (6 tests) 1ms
+ ✓ src/lib/state/physical-identities.test.ts (3 tests) 4ms
+ ✓ src/lib/state/test1-lifecycle.test.ts (32 tests) 11ms
+ ✓ src/lib/state/relief.test.ts (5 tests) 3ms
+ ✓ src/lib/state/tool_form_profiles.test.ts (4 tests) 4ms
+ ✓ src/lib/state/op_types.test.ts (2 tests) 2ms
+ ✓ src/lib/state/layout.test.ts (5 tests) 3ms
+ ✓ src/lib/components/material-browser-focus.test.ts (3 tests) 2ms
+ ✓ src/lib/state/machine-identity.test.ts (8 tests) 5ms
+ ✓ src/lib/scene3d/dispose.test.ts (3 tests) 6ms
+ ✓ src/lib/scene3d/lod.test.ts (4 tests) 2ms
+ ✓ src/lib/state/unsaved.test.ts (4 tests) 1ms
+ ✓ src/lib/components/palette-discoverability.test.ts (3 tests) 3ms
+ ✓ src/lib/state/palette-keyboard.test.ts (4 tests) 3ms
+ ✓ src/lib/actions/longpress-tooltip.test.ts (4 tests) 2ms
+ ✓ src/lib/state/remaining-material.test.ts (3 tests) 3ms
+ ✓ src/lib/api/cutting-contract.test.ts (2 tests) 4ms
+ ✓ src/lib/state/fixture-collisions.test.ts (2 tests) 3ms
+ ✓ src/lib/state/op-color.test.ts (4 tests) 6ms
+ ✓ src/lib/api/error-notification.test.ts (2 tests) 2ms
+ ✓ src/lib/state/sidebar-pane.test.ts (6 tests) 3ms
+ ✓ src/lib/components/LoadingOverlay.test.ts (4 tests) 3ms
+ ✓ src/lib/components/dialog-draft.test.ts (5 tests) 2ms
+ ✓ src/lib/state/generated-progress.test.ts (2 tests) 2ms
+ ✓ src/lib/scene3d/work-zero.test.ts (1 test) 6ms
+ ✓ src/lib/state/palette-shortcut.test.ts (9 tests) 2ms
+ ✓ src/lib/actions/swipe-horizontal.test.ts (5 tests) 2ms
+ ✓ src/lib/state/preview-polish.test.ts (2 tests) 2ms
+ ✓ src/lib/services/file-kind.test.ts (2 tests) 1ms
+
+ Test Files  171 passed (171)
+      Tests  1492 passed | 1 skipped (1493)
+   Start at  10:25:56
+   Duration  4.17s (transform 2.61s, setup 0ms, collect 6.36s, tests 2.61s, environment 17ms, prepare 7.39s)
+
+━━ pnpm run build
+
+> ivac-frontend@ build /Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/frontend
+> node scripts/ensure-wasm-fresh.mjs && vite build
+
+[ensure-wasm] ivac-wasm pkg is stale — rebuilding (offline, --mode no-install)…
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-core)
+   Compiling ivac-wasm v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-wasm)
+    Finished `release` profile [optimized] target(s) in 53.03s
+[INFO]: found wasm-opt at "/Users/mugen/Library/Caches/.wasm-pack/wasm-opt-50385c9e73ccee70/bin/wasm-opt"
+[INFO]: Optimizing wasm binaries with `wasm-opt`...
+[INFO]: ✨   Done in 1m 01s
+[INFO]: 📦   Your wasm pkg is ready to publish at crates/ivac-wasm/pkg.
+[ensure-wasm] rebuilt package verified
+vite v8.0.10 building client environment for production...
+[2Ktransforming...✓ 4570 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   2.07 kB │ gzip:     0.66 kB
+dist/assets/qualification.worker-CubXTk8l.js     21.69 kB
+dist/assets/wasm.worker-BwJFB6vR.js              23.62 kB
+dist/assets/ivac_wasm_bg-B_kGpILl.wasm        5,309.25 kB │ gzip: 1,928.25 kB
+dist/assets/Scene3D-BBqyjIFX.css                  2.01 kB │ gzip:     0.73 kB
+dist/assets/ReportDialog-DfTZZiF-.css             2.68 kB │ gzip:     0.76 kB
+dist/assets/SettingsDialog-B5_9_ipF.css           3.36 kB │ gzip:     0.94 kB
+dist/assets/AboutDialog-BaILN9aX.css              3.73 kB │ gzip:     0.93 kB
+dist/assets/AddTextDialog-BJlzrc0R.css            4.02 kB │ gzip:     1.07 kB
+dist/assets/GcodePanel-CpuoXhYj.css               4.43 kB │ gzip:     1.23 kB
+dist/assets/MachineWorkspace-D6SMeSGf.css        14.70 kB │ gzip:     2.87 kB
+dist/assets/ToolLibraryDialog-u5IMaWUZ.css       15.46 kB │ gzip:     2.89 kB
+dist/assets/index-WamItWSF.css                  123.00 kB │ gzip:    20.63 kB
+dist/assets/dist-js-NQ67qQMm.js                   0.12 kB │ gzip:     0.13 kB
+dist/assets/dist-js-D-Dd5-GQ.js                   0.13 kB │ gzip:     0.14 kB
+dist/assets/rolldown-runtime-lhHHWwHU.js          0.15 kB │ gzip:     0.15 kB
+dist/assets/env-P19VVBwe.js                       0.17 kB │ gzip:     0.15 kB
+dist/assets/wasm-fatal-Cq8arUKL.js                0.20 kB │ gzip:     0.17 kB
+dist/assets/dist-js-D1o1A8ji.js                   0.29 kB │ gzip:     0.18 kB
+dist/assets/path-D3f-EPQq.js                      0.84 kB │ gzip:     0.44 kB
+dist/assets/event-BbJMfFeU.js                     1.05 kB │ gzip:     0.55 kB
+dist/assets/preload-helper-ca-nBW7U.js            1.19 kB │ gzip:     0.68 kB
+dist/assets/cutting-contract-B2QSyRFo.js          1.27 kB │ gzip:     0.63 kB
+dist/assets/dialog-draft.svelte-C6FNBmBf.js       1.33 kB │ gzip:     0.56 kB
+dist/assets/core-C_uWAgQK.js                      1.90 kB │ gzip:     0.79 kB
+dist/assets/project-types-BpHPJJEL.js             2.10 kB │ gzip:     0.95 kB
+dist/assets/tauri-5Jq12O34.js                     3.25 kB │ gzip:     1.30 kB
+dist/assets/wasm-D3Q1PXJ_.js                      3.38 kB │ gzip:     1.28 kB
+dist/assets/wasm-worker-client-BLcLgkbj.js        3.51 kB │ gzip:     1.40 kB
+dist/assets/dist-js-BjV1Yaj9.js                   6.71 kB │ gzip:     1.71 kB
+dist/assets/GcodePanel-BtW8KpfX.js                7.95 kB │ gzip:     3.08 kB
+dist/assets/AboutDialog-DwTehu9M.js              10.51 kB │ gzip:     4.78 kB
+dist/assets/text_preview.svelte-5WcLn3Qa.js      11.87 kB │ gzip:     3.38 kB
+dist/assets/AddTextDialog-CjWNTHZK.js            16.23 kB │ gzip:     5.74 kB
+dist/assets/ReportDialog-D5GVTK8R.js             16.86 kB │ gzip:     5.59 kB
+dist/assets/SettingsDialog-CueEIJPx.js           17.60 kB │ gzip:     4.91 kB
+dist/assets/ivac_wasm-Tqscnzpx.js                19.79 kB │ gzip:     5.31 kB
+dist/assets/import-ops-C7_-OPT1.js               31.99 kB │ gzip:     9.75 kB
+dist/assets/Scene3D-CXIYKKdO.js                  41.30 kB │ gzip:    14.36 kB
+dist/assets/driver-DnPtWm2C.js                   52.21 kB │ gzip:    15.23 kB
+dist/assets/index-client-DVoIp7bL.js             53.27 kB │ gzip:    20.33 kB
+dist/assets/MachineWorkspace-DxYm_uKL.js         70.52 kB │ gzip:    20.54 kB
+dist/assets/ToolLibraryDialog-BEWG3BtE.js        77.06 kB │ gzip:    19.09 kB
+dist/assets/three-bcSkbUAg.js                   597.98 kB │ gzip:   152.42 kB
+dist/assets/index-B7-Xa1C5.js                 1,031.65 kB │ gzip:   303.08 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 600 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.03s
+━━ wasm-pack build (web)
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+    Finished `release` profile [optimized] target(s) in 0.13s
+[INFO]: found wasm-opt at "/Users/mugen/Library/Caches/.wasm-pack/wasm-opt-50385c9e73ccee70/bin/wasm-opt"
+[INFO]: Optimizing wasm binaries with `wasm-opt`...
+[INFO]: ✨   Done in 8.86s
+[INFO]: 📦   Your wasm pkg is ready to publish at crates/ivac-wasm/pkg.
+━━ wasm cps size guard
+building ivac-wasm (baseline)…
+building ivac-wasm (cps)…
+
+build                       raw KiB   gzip KiB
+without cps                    5185       1851
+with cps                      10237       3440
+delta                          5052       1589
+budget (gzip)                             1700
+
+OK: cps adds 1589 KiB gzipped (budget 1700 KiB).
+━━ cargo-deny check
+2026-10-23 08:28:38 [ERROR] failed to acquire advisory database lock: failed to obtain lock file '/Users/mugen/.cargo/advisory-dbs/db.lock': attempted to take an exclusive lock on a read-only path
+━━ ui smoke (headless)
+scripts/ui-smoke.sh: line 46: 40499 Abort trap: 6           "$CHROME" --headless=new --remote-debugging-port="$CDP_PORT" --no-first-run --no-sandbox --user-data-dir="$PROFILE" about:blank > /dev/null 2>&1
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect EPERM 127.0.0.1:9233 - Local (0.0.0.0:0)
+      at internalConnect (node:net:1406:16)
+      at defaultTriggerAsyncIdScope (node:internal/async_hooks:473:18)
+      at node:net:1729:9
+      at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+    errno: -1,
+    code: 'EPERM',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 9233
+  }
+}
+
+Node.js v24.21.0
+━━ CLI trust and transactional export
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cps)
+   Compiling ivac-file-export v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-file-export)
+   Compiling ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-core)
+   Compiling ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/qual-1-checkout/crates/ivac-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 11.75s
+PASS: CLI inspection/generation refuse renamed, malicious and exact-copy external posts; bundled listing succeeds.
+PASS: target preservation, cleanup, byte identity, new-only pairs, both-side staging.
+━━ SEC1 release boundary regressions
+........
+----------------------------------------------------------------------
+Ran 8 tests in 4.824s
+
+OK
+━━ candidate identity regressions
+✔ macos: exact artifact bytes, checksum and unqualified status (4.543542ms)
+✔ windows: exact artifact bytes, checksum and unqualified status (1.831625ms)
+✔ ubuntu: exact artifact bytes, checksum and unqualified status (1.565959ms)
+✔ reject missing, wrong version, wrong target and ambiguous stale installers (1.017791ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 64.417833
+
+━━━ summary ━━━
+  ✓ cargo fmt --check
+  ✗ cargo clippy -Dwarnings (with pedantic)
+  ✗ cargo test --workspace
+  ✓ xtask schema-check
+  ✓ xtask version-check
+  ✓ readme parity
+  ✓ pnpm install
+  ✓ codegen drift
+  ✓ i18n keys drift
+  ✓ pnpm run lint
+  ✓ pnpm run check
+  ✓ pnpm run test
+  ✓ pnpm run build
+  ✓ wasm-pack build (web)
+  ✓ wasm cps size guard
+  ✗ cargo-deny check
+  ✗ ui smoke (headless)
+  ✓ CLI trust and transactional export
+  ✓ SEC1 release boundary regressions
+  ✓ candidate identity regressions
+
+pre-release: failures above. Fix before tagging / shipping.
