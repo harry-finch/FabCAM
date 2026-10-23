@@ -300,7 +300,7 @@ pub fn run_post_with_limits(
     run_post_inner(script, script_name, program, properties, limits, None)
 }
 
-/// Cooperative cancellation at existing driver checkpoints (every 1024 records).
+/// Cooperative cancellation at existing driver checkpoints (every 64 records).
 /// Long individual post callbacks and script parsing are not preemptible. The
 /// host owns a monotonic false→true flag; cancellation never exposes partial text.
 ///

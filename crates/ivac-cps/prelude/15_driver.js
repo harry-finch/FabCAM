@@ -95,7 +95,9 @@ function validate(condition, message) {
 
 function __ivacCheckAbort() {
   __ivacRun.recordsSinceAbortCheck += 1;
-  if (__ivacRun.recordsSinceAbortCheck >= 1024) {
+  // Bound cooperative polling work between callbacks. QUAL-1 observed >200 ms
+  // for 1024 ShopBot records; callbacks and IR conversion remain non-preemptible.
+  if (__ivacRun.recordsSinceAbortCheck >= 64) {
     __ivacRun.recordsSinceAbortCheck = 0;
     if (__ivac.abortCheck()) {
       throw new Error("__IVAC_CANCELLED__");
