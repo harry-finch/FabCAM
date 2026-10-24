@@ -9,7 +9,10 @@ M0–M4 are the completed ShopBot foundation; M4 baseline is
 Use named future tracks: FS (Feeds & Speeds), UX (milling workflow), CAD
 (geometry preparation), WJ (ProtoMAX/waterjet), VINYL (drag knife, lower priority).
 The FS foundation is historical/completed; current sequencing follows the canonical
-release plan (V1.1 qualification, optional V1.2 integration, deferred CAM/WJ/VINYL).
+release plan (V1.1 macOS Personal Alpha, optional V1.2 integration, deferred CAM/WJ/VINYL).
+Personal evaluation, supervised physical acceptance, Workshop Beta and public release
+are separate decisions. Public/multiplatform distribution is deferred for V1.1;
+canonical safety tests and failed outcomes are not waived by the limited alpha scope.
 Every milestone ends at human approval; recording a roadmap does not authorize
 restarting completed FS0 or implementing any later milestone.
 

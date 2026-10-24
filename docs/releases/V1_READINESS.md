@@ -15,7 +15,10 @@ local tested collections and independent CAM validators after FS-RESET.
 [Current STATUS](../shopbot-modernization/STATUS.md) and [qualification roadmap](RELEASE_ROADMAP.md)
 own its current gates; QUAL-1A.4 is IN PROGRESS, not accepted by this document.
 Historical FS/PRESET implementation and size-guard snapshots remain in their dated
-reports. Optional V1.2 FabSpeed integration is not a V1/V1.1 blocker. No V1 scope,
+reports. Its current target is a limited **macOS Personal Alpha**, followed by
+supervised ShopBot cases; general public/fablab distribution and Windows/Linux
+qualification are deferred for V1.1, without changing this frozen V1 register.
+Optional V1.2 FabSpeed integration is not a V1/V1.1 blocker. No V1 scope,
 freeze, platform/physical acceptance or release state changes in this cleanup.
 
 ## Historical V1-FREEZE register — retained evidence and gates

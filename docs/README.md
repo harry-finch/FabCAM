@@ -1,10 +1,16 @@
 # FabCAM documentation
 
+Current focus: **FabCAM V1.1 — macOS Personal Alpha**, on the maintainer's own
+Mac, with supervised ShopBot cases accepted progressively. General fablab/public
+distribution, Windows/Linux installers and public signing/notarization are deferred;
+canonical safety gates and actual failures remain. [FabApps vision](FABAPPS_VISION.md)
+records independent product maturity and future shared design/website initiatives.
+
 Current V1.1 implementation uses explicit operation values and local tested
 collections; the integrated recommendation engine is removed. QUAL-1A.4 is
 IN PROGRESS; [STATUS](shopbot-modernization/STATUS.md) owns current source/limits.
 [Release roadmap](releases/RELEASE_ROADMAP.md) separates frozen V1, V1.1
-qualification, planned optional V1.2 FabSpeed integration and deferred CAM work.
+Personal Alpha qualification, planned optional V1.2 FabSpeed integration and deferred CAM work.
 [Accepted ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
 records separation; [proposed ADR-0031](shopbot-modernization/adr/ADR-0031-optional-one-way-fabspeed-catalogue.md)
 records approved one-way product principles and OPEN technical contracts.

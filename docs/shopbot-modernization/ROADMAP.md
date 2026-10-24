@@ -7,8 +7,9 @@ for frozen V1 gates; dated reports retain source-bound facts and acceptance limi
 | Track | Authoritative entry | Boundary |
 |---|---|---|
 | Frozen V1 / RC1 | [V1 scope](../releases/FABCAM_V1_SCOPE.md), [readiness](../releases/V1_READINESS.md) | Existing frozen baseline; no inferred physical/publication acceptance |
-| V1.1 stabilization | [Qualification path](../releases/RELEASE_ROADMAP.md#v11--explicit-cutting-parameters-and-qualification) | QUAL-1A.4 IN PROGRESS; QUAL-1B/1C/2 and RC planned, final-source evidence and human decisions required |
+| V1.1 macOS Personal Alpha | [Qualification path](../releases/RELEASE_ROADMAP.md#v11--explicit-cutting-parameters-and-qualification) | QUAL-1A.4 IN PROGRESS; QUAL-1B → QUAL-1C macOS → QUAL-2 supervised pilot → scoped alpha decision; public/multiplatform release deferred |
 | Optional V1.2 | [INT-0–3](../releases/RELEASE_ROADMAP.md#v12--optional-one-way-fabspeed-integration), [proposed ADR-0031](adr/ADR-0031-optional-one-way-fabspeed-catalogue.md) | One-way FabSpeed → FabCAM; no sync implemented, no V1.1 blocker |
+| FabApps portfolio | [Vision](../FABAPPS_VISION.md) | Independent lifecycles; future design principles and website, no shared-package mandate or implementation |
 | Later CAM / WJ / VINYL | [Deferred backlog](../releases/RELEASE_ROADMAP.md#later-cam-enhancements) | Separate architecture/process/software/platform/physical approvals; no automatic launch |
 | Historical FS/PRESET | [Disposition ledger](../releases/ROADMAP_CONSOLIDATION.md#milestone-disposition) | Completed engineering subsequently superseded by ADR-0030; no restart or migration requirement |
 

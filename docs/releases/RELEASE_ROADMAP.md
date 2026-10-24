@@ -6,92 +6,139 @@ active work; [consolidation/classification](ROADMAP_CONSOLIDATION.md) owns this
 cleanup's provenance. Planning does not authorize implementation or release.
 Status vocabulary: **COMPLETED**, **IN PROGRESS**, **PLANNED**, **BLOCKED**,
 **SUPERSEDED**, **DEFERRED**, **HISTORICAL**. COMPLETED engineering is not human,
-installed-platform, physical or publication acceptance.
+installed-platform, physical or publication acceptance. The Personal Alpha strategy
+below supersedes the earlier immediate public-RC plan; dated reports keep their
+original outcomes and scope.
 
-## V1 — frozen ShopBot baseline
+## Current focus — FabCAM V1.1 macOS Personal Alpha
 
-**HISTORICAL frozen baseline; release/physical acceptance not inferred.**
-`main` and `origin/main` were inspected at
-`ef807cf8250ddc4bdf795c75bb9bf9f011db9bca`; RC1-ef807cf-39492251757,
-beta.3/pipeline63. Retain [V1 scope](FABCAM_V1_SCOPE.md),
-[V1 readiness](V1_READINESS.md),
-[freeze report](V1_FREEZE_READINESS_2026_10_20.md) and their exact-source limits.
-RC1 CI/packaging success does not accept clean installs, supervised ShopBot work
-or publication. No V1 functionality, frozen ref, acceptance or release state is
-changed here. macOS/Windows/Linux acceptance and existing human gates remain
-separate; do not apply V1.1 results retroactively to V1.
+**Approved product strategy:** personal evaluation on the maintainer's own Mac,
+local desktop, ShopBot-focused, followed by progressive supervised qualification
+on their actual machine. No immediate public release or general university-fablab
+deployment. Fast implementation does not imply product readiness: distinguish
+implementation → software qualification → personal operational evaluation →
+supervised physical qualification → controlled workshop availability → public
+distribution. These are independent acceptance decisions.
 
-## V1.1 — explicit cutting parameters and qualification
+QUAL-1A.4 remains **IN PROGRESS** pending its owner's committed final receipt and
+integration/human disposition. Next is separately authorized QUAL-1B, then focused
+QUAL-1C macOS, QUAL-2 supervised pilot and scoped Personal Alpha acceptance.
+[Current evidence and preservation](MACOS_ALPHA_ROADMAP_UPDATE.md) records the
+isolated source and provisional handoff. [FabApps vision](../FABAPPS_VISION.md)
+explains the broader family without creating suite-wide release dependencies.
 
-**COMPLETED implementation, final acceptance BLOCKED by qualification/evidence.**
+<a id="v11--explicit-cutting-parameters-and-qualification"></a>
+
+## V1.1 — macOS Personal Alpha qualification
+
+FS-RESET implementation is **COMPLETED**, not final operational acceptance.
 [Accepted ADR-0030](../shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
-and [FS-RESET-3 results](FS_RESET_3_RESULTS.md) establish the current product:
-explicit per-actual-role spindle/feed/plunge values, project v9, direct editing,
-reviewed preset copies, local tested collections, simplified Presets/MAT-1 UX,
-independent CAM validators and explicit-input CLI. The integrated recommendation
-engine, ranking/source packs and Draft/Trial promotion lifecycle are removed.
-Legacy implementations completed historically before supersession; no restart or
-old-format migration is scheduled. See the [classification ledger](ROADMAP_CONSOLIDATION.md#milestone-disposition).
+and [removal results](FS_RESET_3_RESULTS.md) retain explicit actual-role cutting
+values, v9, tested local collections, direct editing/reviewed copy, MAT-1,
+independent CAM validation and modern explicit-input CLI. Recommendations/source
+packs and Draft/Trial promotion are removed; old FS/PRESET work is historical.
+
+Target one verified installation: maintainer's own Mac, actual architecture/OS,
+local storage/dialogs and chosen installation method. Observed development host
+is **arm64 / macOS 26.5.2**; confirm it is the intended installation target and
+record the actual installed configuration in QUAL-1C. No other-Mac compatibility
+claim follows. A local application build may be separately authorized after its
+relevant source/safety gates; avoid public-packaging machinery unless needed for
+that installation. This planning task builds nothing.
 
 ### QUAL-1A.4 — Deterministic V-Carve production integration
 
-**IN PROGRESS** in isolated `codex/qual-1a4-production`, owned by the chat
-“Astra élevé”, tracker `ivac-awe23`. Scope: portable V-Carve arithmetic, correctly
-rounded JSON numeric input, strict P1 exact-context preset refusal with review
-guidance, accepted motion differences and full final-source qualification.
-Predecessor prototype/design passes do not establish production acceptance.
-Completion requires reviewed production commits, comparison with accepted motion
-and refusal evidence, full qualification bound to the actual combined source and
-explicit human disposition of failures/limits. Current evidence is catalogued in
-[the consolidation report](ROADMAP_CONSOLIDATION.md#source-bound-evidence).
-No integration/acceptance is inferred from two isolated production commits.
+**IN PROGRESS**, `ivac-awe23`, chat “Astra élevé”, isolated
+`codex/qual-1a4-production`. Portable arithmetic, correctly rounded JSON parsing,
+strict P1 compatibility/context review, reviewed motion differences and
+current-source regressions. A provisional uncommitted report names `8e2c9ce` and
+17/20 mandatory gates; this is evidence to review, not verified closure or primary
+integration. Require the owner's exact-source receipt and explicit disposition of
+limits; isolated predecessor passes do not accept production or physical use.
 
-### QUAL-1B — Cooperative ShopBot cancellation
+### QUAL-1B — Safe cooperative cancellation
 
-**PLANNED**, after reviewed QUAL-1A.4 disposition. Add cooperative cancellation
-points in ShopBot/CPS safety-preflight traversal while retaining every security
-and machining check. Acceptance: non-cancelled output unchanged; cancellation
-suppresses partial/stale publication; fresh source-bound measurement of the
-unchanged **200 ms p95** target. Preserve failed cases and explain residual
-uninterruptible work. Distinct from QUAL-1's COMPLETED bounded polling-frequency
-improvement; the historical Test-medial 200.353 ms p95 remains an observed failure,
-not a new universal measurement or a relaxed threshold.
+**PLANNED**, separately authorized after QUAL-1A.4 disposition. Investigate/improve
+ShopBot/CPS safety-preflight cancellation while preserving every check, propagation,
+no stale-result acceptance, no partially validated successful program and unchanged
+non-cancelled output. Distinct from QUAL-1's completed bounded polling improvement.
+Keep **200 ms p95** as the unchanged engineering target; historical Test-medial
+200.353 ms remains a failed observation, not a new measurement or raised threshold.
+Avoid open-ended timing optimization: a characterized non-critical latency limit
+may be explicitly accepted for a named alpha workflow only if cancellation
+correctness, safe publication and intended use are independently established.
+Record risk, evidence, scope and human decision; no exception is granted here.
 
-### QUAL-1C — Software, environment and installed-platform qualification
+### QUAL-1C — Focused macOS software and runtime acceptance
 
-**PLANNED**; protocol preparation may overlap earlier work, final evidence must
-name one consistent source. Acceptance includes unrestricted-host native watcher
-tests, current cargo-deny advisory audit, unmodified Chromium headless smoke,
-complete canonical pre-release gate, reproducible Node24 environment, final-source
-provenance, TEST1/C2, output corpus and security gates. Also prove actual browser
-project save/reopen and collection export/import, native Tauri dialogs/storage and
-macOS/Windows/Linux installed-runtime behavior. Mock/temp-file/ACL tests do not
-qualify installed dialogs or real file transfer. Retain every actual failure,
-platform/signing limitation and unavailable check; no software-only shortcut.
+**PLANNED.** On the identified maintainer Mac, prove native startup; project
+create/save/close/reopen; geometry import; local machine/tool/material libraries;
+preset collection import/export; explicit actual-role values; generation/simulation;
+actual-value machining reports; native permissions/storage/dialogs; refusal of
+invalid/stale qualified export. Keep canonical CAM/ShopBot/SAFE-Z/NUMSAFE/provenance,
+output/security regressions and the unmodified automated safety/test gates.
 
-### QUAL-2 — Physical ShopBot acceptance
+Keep the observed watcher failures, cargo-deny failure and Chromium/CDP failure
+unchanged in their source-bound receipts. Distinguish actual product defect,
+known baseline failure, environment limitation, unexecuted acceptance task and
+explicitly accepted alpha limitation. Use a suitable unrestricted host where needed;
+assess unresolved risk before granting any scoped exception. Never disable tests,
+mark an unexecuted check PASS or reinterpret a failure as PASS. Windows/Linux
+installed-runtime and browser-only distribution checks are deferred unless needed
+to establish the selected desktop workflow's safety; their existing gaps remain
+recorded. Actual native persistence/file transfer cannot be replaced by mocks.
 
-**PLANNED / NOT PHYSICALLY QUALIFIED.** Separate supervised evidence gate:
-setup/work origin → SAFE-Z/fixtures → non-cutting movement → Profile/Pocket →
-multiple tools and actual-role values → Drill/Spot/Chamfer → V-Carve/specialized
-operations → supported two-sided work with explicit registration preparation.
-Use controller preview, air cuts, sacrificial material and measured outcomes with
-actual machine/controller/tool/stock/zero/rates recorded. v9 supports no automatic
-dowel-hole injection; explicit Drill preparation and registration must be reviewed.
-Physical acceptance is limited to tested combinations, not inferred from software.
+### QUAL-2 — Supervised ShopBot pilot qualification
 
-### RC V1.1 — reviewed candidate and release decision
+**PLANNED / NOT PHYSICALLY QUALIFIED.** Define a small representative fixture set:
+work origin/WCS/setup; SAFE-Z/clearance/fixtures/tool dimensions; program inspection
+and supervised non-cutting movement; simple Profile then Pocket; distinct rough/
+finish tools; Drill/Spot/Chamfer; representative V-Carve; other supported operations
+when ready. Two-sided work stays within explicit registration constraints; no
+automatic dowel-hole injection, use reviewed explicit preparation.
 
-**PLANNED**, gated by necessary software/physical acceptance decisions above.
-Freeze reviewed source, separately authorize candidate construction, validate
-installer integrity and installed behavior, finish regression/documentation review,
-then decide main integration/promotion and obtain explicit human release authority.
-Never merge/promote solely because an isolated prototype or V1 passed. No candidate,
-version/pipeline change, installer, release or hardware action occurs in this task.
+Per case retain exact program, source SHA, machine/tool configuration and rates,
+simulation/controller preview, observed physical result, anomalies/limits and human
+acceptance. Initial runs require a competent supervising operator and machine-specific
+precautions. Untried operations remain outside approved physical scope. This task
+authorizes no hardware. Expand only through later accepted cases, not universal
+machining certification or an exhaustive study before useful personal evaluation.
+
+### Personal Alpha acceptance and later maturity
+
+**PLANNED human decision:** accept the installed macOS app, qualified software
+scope, documented limitations, supported workflows and safety preconditions.
+Software preparation/simulation evaluation may begin once its relevant gates are
+accepted; local installation/build requires separate authorization. The alpha may
+remain software-only until physical cases are approved. Machine movement, including
+air cuts, belongs to supervised QUAL-2, not desktop build acceptance.
+
+Do not require one enormous cross-platform campaign before any personal evaluation.
+Use successive bounded evidence checkpoints; affected results must still name the
+actual consistent source, and safety-critical discrepancies cannot be waived.
+Windows/Linux installers, general platform acceptance, public distribution signing/
+notarization and public packaging are **DEFERRED**, unless required for the chosen
+local install method. No public launch date or immediate public RC campaign.
+After meaningful personal use, **Workshop Beta** means a separate human decision
+for controlled supervised fablab evaluation. **Public Release** is deferred, with
+new explicit audience/platform scope and qualification; neither stage is automatic.
+
+### Risk-based acceptance policy
+
+| Blocks the personal-alpha workflow | May be accepted only with explicit limited scope |
+|---|---|
+| Unexplained safety-critical motion, wrong generation-affecting machine/tool values, broken known-limit/SAFE-Z refusal, unsafe/stale publication, corrupted persistence or critical target-Mac failure | Unsupported operation families excluded from the pilot; minor cosmetics; characterized non-critical performance; deferred platforms/optional integrations; environment tests with independently assessed risk |
+| Unsupported physical claims | Software-only evaluation, with no machining acceptance claim until physical cases pass |
+
+A scope-limited decision records the failed/unexecuted result, affected workflow,
+independent evidence, consequence, restrictions and maintainer acceptance. It does
+not change the test outcome. Unresolved safety risk requires a narrower supported
+workflow or a retained blocker; personal use never excuses a safety-critical defect.
 
 ## V1.2 — optional one-way FabSpeed integration
 
-**PLANNED**, product principles approved, implementation absent.
+**PLANNED**, likely V1.2 allocation, not a publication commitment. Product principles
+approved, implementation absent; separate from Personal Alpha stabilization.
 [Proposed ADR-0031](../shopbot-modernization/adr/ADR-0031-optional-one-way-fabspeed-catalogue.md)
 records approved ownership/direction; transport/storage specifics remain OPEN.
 FabSpeed owns calculation/optimization, experiments, upstream validation and shared
@@ -157,20 +204,33 @@ by ID, return to a separate product/API decision; do not invent reverse data flo
 
 ```mermaid
 flowchart LR
-  A[QUAL-1A.4 in progress] --> B[QUAL-1B planned]
-  B --> C[QUAL-1C planned]
-  C --> D[QUAL-2 physical gate]
-  D --> E[RC V1.1 human decision]
+  A[QUAL-1A.4] --> B[QUAL-1B]
+  B --> C[QUAL-1C macOS]
+  C --> D[QUAL-2 scoped pilot disposition]
+  D --> E[Personal Alpha acceptance]
+  C --> P[Accepted software-only personal evaluation]
+  E -. later human decision .-> W[Workshop Beta]
+  W -. new release scope .-> R[Public Release deferred]
   F[INT-0 documentation] --> G[INT-1]
-  E --> G
   G --> H[INT-2]
   H --> I[INT-3 contract gate]
 ```
 
-Final qualification always applies to consistent combined source. INT-0 may run
-in parallel by separate authorization; INT-1/2/3 are **not V1.1 blockers** and are
-not IN PROGRESS. V1 remains frozen. Later V1 hotfix integration needs review and
-combined-source qualification, without importing feature work into frozen V1.
+Non-conflicting protocol preparation may overlap. QUAL-2 may be recorded NOT TESTED
+with a software-only alpha restriction; physical claims require approved actual
+cases. Synchronization code starts separately from an appropriately qualified V1.1
+baseline; INT-0 research can be separately authorized in parallel. INT-1/2/3 are not
+V1.1 blockers. Frozen V1 is unchanged; later hotfix integration needs review and
+combined-source qualification. No public release is needed to begin scoped use.
+
+## FabApps portfolio
+
+[FabApps vision](../FABAPPS_VISION.md) defines independent FabCAM, FabSpeed,
+FabVents, FabParts and FabWeave products, their identities and maturity boundaries.
+FabCAM Personal Alpha is the primary stabilization effort; other apps are not its
+mandatory dependencies. Shared design principles/tokens/accessibility and a future
+portfolio website are separate planned initiatives, not a shared-package mandate
+or permission to build them. Do not embed their individual roadmaps here.
 
 ## Later CAM enhancements
 
@@ -201,6 +261,19 @@ not V1.1 blockers or algorithm changes. Detailed prior scope is retained in the
 <a id="fabcam-11--presets-and-materials-ux"></a>
 <a id="mat-1--material-families-variants-and-synonyms"></a>
 <a id="existing-human-gates"></a>
+
+## V1 — frozen ShopBot baseline
+
+**HISTORICAL frozen baseline; release/physical acceptance not inferred.**
+`main` and `origin/main` were inspected at
+`ef807cf8250ddc4bdf795c75bb9bf9f011db9bca`; RC1-ef807cf-39492251757,
+beta.3/pipeline63. Retain [V1 scope](FABCAM_V1_SCOPE.md),
+[V1 readiness](V1_READINESS.md),
+[freeze report](V1_FREEZE_READINESS_2026_10_20.md) and their exact-source limits.
+RC1 CI/packaging success does not accept clean installs, supervised ShopBot work
+or publication. No V1 functionality, frozen ref, acceptance or release state is
+changed here. macOS/Windows/Linux acceptance and existing human gates remain
+separate; do not apply V1.1 results retroactively to V1.
 
 ## Historical and superseded directions
 

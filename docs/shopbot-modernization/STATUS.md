@@ -1,42 +1,45 @@
 # FabCAM — current status
 
-Documentation consolidation inspected `FabCAM-v1.1` at
-`6148b1059ab6020f751069d5c3a7d64b8047fb6b`. Work is isolated on
-`codex/roadmap-fabspeed`; primary user edits and QUAL-1A.4 are preserved.
-[Release roadmap](../releases/RELEASE_ROADMAP.md) ·
-[Source/ownership and evidence inventory](../releases/ROADMAP_CONSOLIDATION.md).
+**Current focus: FabCAM V1.1 — macOS Personal Alpha**, for the maintainer's own
+Mac and controlled ShopBot-focused evaluation. Public release, general university
+fablab deployment and Windows/Linux distribution are deferred. Fast development
+is distinct from software, personal, physical, workshop and public acceptance.
+[Release plan](../releases/RELEASE_ROADMAP.md) · [FabApps vision](../FABAPPS_VISION.md) ·
+[Update/evidence report](../releases/MACOS_ALPHA_ROADMAP_UPDATE.md).
 
-| Line / milestone | Status | Evidence / immediate boundary |
-|---|---|---|
-| V1 / RC1 | HISTORICAL frozen baseline `ef807cf`; no release or physical acceptance inferred | [V1 readiness](../releases/V1_READINESS.md); frozen refs unchanged |
-| V1.1 FS-RESET-1/2/3, v9, explicit-input CLI | COMPLETED engineering; final acceptance BLOCKED by remaining gates | [ADR-0030](adr/ADR-0030-fabcam-fabspeed-separation.md), [removal results](../releases/FS_RESET_3_RESULTS.md). Explicit actual-role parameters, tested collections, independent CAM validation; no recommendation engine |
-| QUAL-1 | COMPLETED investigation / bounded polling correction | [Source `558efc4` receipt](../releases/QUAL_1_SOFTWARE_QUALIFICATION.md): 17/20 mandatory gates, not unconditional qualification; historical V-Carve/cancellation gaps retained |
-| QUAL-1A.4 | IN PROGRESS, `ivac-awe23`, chat “Astra élevé”, isolated `codex/qual-1a4-production` | Observed commits `c74f5e9`, `61c00ba`; no verified final report/integration at inspection. Prototype results do not accept production |
-| QUAL-1B / QUAL-1C / QUAL-2 / RC V1.1 | PLANNED; physical ShopBot NOT QUALIFIED | Cancellation preflight, full software/host/file/platform gates, supervised acceptance, then candidate/human release decisions |
-| V1.2 INT-0–3 | PLANNED; no synchronization implemented | [Proposed ADR-0031](adr/ADR-0031-optional-one-way-fabspeed-catalogue.md); approved one-way ownership, transport/storage OPEN; not V1.1 blockers |
+| Work | Status and immediate boundary |
+|---|---|
+| QUAL-1A.4 | IN PROGRESS, `ivac-awe23`, chat “Astra élevé”, isolated `codex/qual-1a4-production`. Provisional uncommitted handoff names `8e2c9ce`, 17/20 gates; no verified closure/primary integration |
+| QUAL-1B | PLANNED: correct cooperative preflight cancellation and safe publication; retain 200 ms p95 target, explicit scoped latency disposition only with independent correctness evidence |
+| QUAL-1C macOS | PLANNED: actual maintainer-Mac startup, import/libraries, project/preset persistence, explicit parameters, generation/simulation, reports, stale/invalid-export refusal and native permissions/dialogs |
+| QUAL-2 / Personal Alpha | PLANNED supervised representative pilot and human scope acceptance; NOT PHYSICALLY QUALIFIED. Software-only evaluation can precede accepted machining cases |
+| V1.2 INT-0–3 | PLANNED optional FabSpeed → FabCAM integration; not an alpha blocker. [ADR-0031](adr/ADR-0031-optional-one-way-fabspeed-catalogue.md) remains Proposed; no sync implemented |
 
-Known qualification gaps: unrestricted-host native watcher tests, current advisory
-audit, unmodified Chromium smoke, actual browser project/collection transfers,
-installed Tauri dialogs/storage and macOS/Windows/Linux runtimes. Historical
-ShopBot Test-medial cancellation p95 **200.353 ms** exceeds the unchanged 200 ms
-target. QUAL-1A.4 must bind final arithmetic, JSON parsing, strict P1 and motion
-results to actual integrated source; no stale prototype acceptance is assumed.
-No new software tests/builds ran for this documentation-only task.
+FS-RESET/v9/explicit roles, neutral CAM validation and tested local collections
+are delivered; old FS/PRESET engine/recipe work is completed/superseded history.
+Frozen V1/RC1 stays at `ef807cf`, without new release or physical acceptance.
+Historical [QUAL-1](../releases/QUAL_1_SOFTWARE_QUALIFICATION.md) and the provisional
+A4 report retain watcher failures, blocked current advisory audit and Chromium/CDP
+smoke; none becomes PASS due to the reduced release scope. Historical Test-medial
+p95 **200.353 ms > 200 ms** remains open. Actual installed native persistence and
+file workflows, SAFE-Z/NUMSAFE/provenance/security/output regressions remain gates.
+Classify product defects, baseline failures, environment limits, unexecuted tasks
+and explicitly accepted restrictions separately; no safety exception is granted here.
 
-FabCAM owns explicit operation values, local independent resources and tested
-collections, simulation/generation/validation/export. FabSpeed owns calculation,
-experiments and its catalogue/validation. Optional future sync is FabSpeed → FabCAM
-only; no CAM payload upload, automatic application or live runtime dependency.
-FS/PRESET historical engineering is not incomplete because it was intentionally
-superseded; retained MAT-1 presentation is not a new task.
+Observed development host: **arm64, macOS 26.5.2**. Confirm intended installation
+target and actual installed configuration at QUAL-1C. No inference for other Macs.
+General signing/notarization, public packaging and other-platform installers are
+deferred unless required by the chosen local installation method. Workshop Beta
+and Public Release need later distinct decisions; no immediate public RC objective.
 
-Next: let QUAL-1A.4's owner finish its exact-source receipt and human handoff.
-Separately authorize QUAL-1B, followed by QUAL-1C/QUAL-2 and reviewed RC V1.1.
-INT-0 documentation may be studied separately in parallel; synchronization code
-starts only after contract review on an appropriately qualified future branch.
-The isolated documentation commit requires semantic reconciliation with any later
-QUAL-1A.4 status changes; it is not automatically integrated into primary/main.
+Next: finish the owner-reviewed exact-source QUAL-1A.4 handoff, then separately
+authorize QUAL-1B. Plan bounded macOS acceptance and representative pilot fixtures;
+software preparation may be accepted while physical use remains excluded.
+No hardware, build or installer action is authorized by this documentation update.
 
-[Historical status and preserved user notes](history/STATUS_BEFORE_FABSPEED_CONSOLIDATION.md)
-retain old checkpoints. No human gate is closed by this task.
-**HARD STOP after documentation; no software, push, merge, release or hardware.**
+Planning lives on isolated `codex/roadmap-fabspeed`, extending documentation commit
+`f9316eb`; it is not integrated into primary `FabCAM-v1.1` (inspected `6148b10`).
+Primary user edits and A4 source/evidence are untouched. Future application needs
+semantic reconciliation with A4's final receipt, not replacement of owner files.
+[Prior consolidation](../releases/ROADMAP_CONSOLIDATION.md) and historical snapshots
+retain previous decisions; no human gate is closed here. **HARD STOP after docs.**
