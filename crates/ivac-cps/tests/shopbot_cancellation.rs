@@ -55,7 +55,7 @@ impl Subscriber for Observer {
 pub(crate) fn program(records: usize) -> Program {
     let mut v = super::shopbot_guards::fixture();
     v["sections"][0]["records"] = json!((0..records)
-        .map(|i| json!({"kind":"linear","x":i as f64 / 10.,"y":0,"z":-1,"feed":600,"movement":2}))
+        .map(|i| json!({"kind":"linear","x":f64::from(u32::try_from(i).expect("fixture index fits u32")) / 10.,"y":0,"z":-1,"feed":600,"movement":2}))
         .collect::<Vec<_>>());
     serde_json::from_value(v).unwrap()
 }

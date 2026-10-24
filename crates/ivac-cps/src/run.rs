@@ -301,7 +301,7 @@ pub fn run_post_with_limits(
 }
 
 /// Cooperative cancellation at existing driver checkpoints (every 64 records).
-/// Bundled ShopBot also polls its safety preflight. Other individual callbacks
+/// Bundled `ShopBot` also polls its safety preflight. Other individual callbacks
 /// and script parsing remain non-preemptible. The
 /// host owns a monotonic false→true flag; cancellation never exposes partial text.
 ///
