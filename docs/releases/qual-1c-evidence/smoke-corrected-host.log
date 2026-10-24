@@ -1,0 +1,23 @@
+boot (7 areas): OK
+welcome shown, workspace hidden: OK
+click "New project": OK
+project created, workspace visible: OK
+area tools: responsive, one panel, workspace hidden: OK
+area presets: responsive, one panel, workspace hidden: OK
+area machine: responsive, one panel, workspace hidden: OK
+area settings: responsive, one panel, workspace hidden: OK
+area help: responsive, one panel, workspace hidden: OK
+area about: responsive, one panel, workspace hidden: OK
+machine > general: settings form: OK
+machine > tools: tooling rendered: OK
+project area: workspace visible again: OK
+page exceptions: none
+boot: OK
+page1: {"items":50,"first":"#1 tool-001 Plasma torch · Ø0.5 mm","pager":"Page 1 of 3","hasPager":true,"count":"120 tools"}
+filtered: {"items":12,"first":"#1 tool-001 Plasma torch · Ø0.5 mm","pager":null,"hasPager":false,"count":"12 of 120 tools"}
+sorted: {"items":50,"first":"#1 tool-001 Plasma torch · Ø0.5 mm","pager":"Page 1 of 3","hasPager":true,"count":"120 tools"}
+page2: {"items":50,"first":"#6 tool-006 Endmill · Ø3 mm· 2 flutes","pager":"Page 2 of 3","hasPager":true,"count":"120 tools"}
+selected: {"id":"6","pressed":"true","heading":"#6 tool-006"}
+page exceptions: none
+TABLE SMOKE: PASS
+ui-smoke: all passed

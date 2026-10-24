@@ -1,0 +1,95 @@
+{
+  "source_sha": "700de73a5cf5a378b8465e5f38950a61d6cce4c3",
+  "canonical_gate_exit": 1,
+  "gates": [
+    {
+      "passed": true,
+      "gate": "cargo fmt --check"
+    },
+    {
+      "passed": true,
+      "gate": "cargo clippy -Dwarnings (with pedantic)"
+    },
+    {
+      "passed": true,
+      "gate": "cargo test --workspace"
+    },
+    {
+      "passed": true,
+      "gate": "xtask schema-check"
+    },
+    {
+      "passed": true,
+      "gate": "xtask version-check"
+    },
+    {
+      "passed": true,
+      "gate": "readme parity"
+    },
+    {
+      "passed": true,
+      "gate": "pnpm install"
+    },
+    {
+      "passed": true,
+      "gate": "codegen drift"
+    },
+    {
+      "passed": true,
+      "gate": "i18n keys drift"
+    },
+    {
+      "passed": true,
+      "gate": "pnpm run lint"
+    },
+    {
+      "passed": true,
+      "gate": "pnpm run check"
+    },
+    {
+      "passed": true,
+      "gate": "pnpm run test"
+    },
+    {
+      "passed": true,
+      "gate": "pnpm run build"
+    },
+    {
+      "passed": true,
+      "gate": "wasm-pack build (web)"
+    },
+    {
+      "passed": true,
+      "gate": "wasm cps size guard"
+    },
+    {
+      "passed": false,
+      "gate": "cargo-deny check"
+    },
+    {
+      "passed": true,
+      "gate": "ui smoke (headless)"
+    },
+    {
+      "passed": true,
+      "gate": "CLI trust and transactional export"
+    },
+    {
+      "passed": true,
+      "gate": "SEC1 release boundary regressions"
+    },
+    {
+      "passed": true,
+      "gate": "candidate identity regressions"
+    }
+  ],
+  "passed": 19,
+  "total": 20,
+  "rust_totals": {
+    "passed": 1592,
+    "failed": 0,
+    "ignored": 1
+  },
+  "desktop_launch": "NOT RUN \u2014 separate-account decision",
+  "recommendation": "NOT READY for QUAL-1C acceptance"
+}

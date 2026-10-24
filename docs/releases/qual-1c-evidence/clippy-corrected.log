@@ -1,0 +1,67 @@
+    Checking ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-cps)
+   Compiling tauri-plugin v2.6.0
+   Compiling tauri-build v2.6.0
+    Checking objc2-web-kit v0.3.2
+    Checking tao v0.35.2
+   Compiling tauri-codegen v2.6.0
+    Checking muda v0.19.1
+    Checking window-vibrancy v0.6.0
+   Compiling wasm-bindgen-macro v0.2.120
+    Checking rfd v0.16.0
+    Checking cpufeatures v0.2.17
+    Checking fsevent-sys v4.1.0
+    Checking sync_wrapper v1.0.2
+    Checking atomic-waker v1.1.2
+    Checking httpdate v1.0.3
+    Checking notify v8.2.0
+    Checking tauri-runtime v2.11.0
+    Checking wry v0.55.1
+    Checking hyper v1.9.0
+    Checking wasm-bindgen v0.2.120
+   Compiling tauri-plugin-fs v2.5.1
+   Compiling tauri-plugin-store v2.4.3
+   Compiling tauri-plugin-log v2.8.0
+   Compiling tauri-plugin-dialog v2.7.1
+    Checking tauri-runtime-wry v2.11.0
+   Compiling tauri-plugin-opener v2.5.4
+   Compiling tauri-plugin-window-state v2.4.1
+   Compiling tauri-plugin-process v2.3.1
+    Checking sha2 v0.10.9
+   Compiling tauri v2.11.0
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-tauri)
+    Checking http-body-util v0.1.3
+   Compiling async-trait v0.1.89
+    Checking spin v0.9.9
+    Checking hyper-util v0.1.20
+    Checking tower v0.5.3
+    Checking serde_urlencoded v0.7.1
+    Checking multer v3.1.0
+    Checking ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-core)
+    Checking futures-executor v0.3.32
+    Checking tokio-util v0.7.18
+   Compiling axum-macros v0.4.2
+    Checking serde_path_to_error v0.1.20
+    Checking matchit v0.7.3
+    Checking js-sys v0.3.97
+    Checking unsafe-libyaml v0.2.11
+    Checking tokio-stream v0.1.18
+    Checking console_error_panic_hook v0.1.7
+    Checking futures v0.3.32
+    Checking tower-http v0.6.8
+   Compiling tauri-macros v2.6.0
+    Checking axum-core v0.4.5
+    Checking serde_yaml v0.9.34+deprecated
+    Checking ivac-file-export v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-file-export)
+    Checking serde-wasm-bindgen v0.6.5
+error: casting `usize` to `f64` causes a loss of precision on targets with 64-bit wide pointers (`usize` is 64 bits wide, but `f64`'s mantissa is only 52 bits wide)
+  --> crates/ivac-cps/src/../tests/shopbot_cancellation.rs:58:45
+   |
+58 |         .map(|i| json!({"kind":"linear","x":i as f64 / 10.,"y":0,"z":-1,"feed":600,"movement":2}))
+   |                                             ^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_precision_loss
+   = note: `-D clippy::cast-precision-loss` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::cast_precision_loss)]`
+
+error: could not compile `ivac-cps` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

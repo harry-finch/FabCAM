@@ -1,0 +1,153 @@
+   Compiling zerocopy-derive v0.8.48
+   Compiling serde v1.0.228
+   Compiling serde_json v1.0.149
+   Compiling regex-automata v0.4.14
+   Compiling bytemuck v1.25.0
+   Compiling itertools v0.14.0
+   Compiling num-bigint v0.4.6
+   Compiling indexmap v1.9.3
+   Compiling schemars v0.8.22
+   Compiling tinytemplate v1.2.1
+   Compiling zerocopy v0.8.48
+   Compiling regex v1.12.3
+   Compiling boa_ast v0.21.1
+   Compiling boa_parser v0.21.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling half v2.7.1
+   Compiling rand_chacha v0.9.0
+   Compiling ciborium-ll v0.2.2
+   Compiling rand v0.9.5
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+   Compiling boa_engine v0.21.1
+   Compiling ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-cps)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.21s
+     Running unittests src/lib.rs (target/debug/deps/ivac_cps-82063e5adedc6a65)
+
+running 52 tests
+test golden_fanuc::fanuc_machine_paths_run_on_three_axis ... ok
+test cancellation::pre_cancelled_returns_no_output_and_never_parses_script ... ok
+test golden_fanuc::fixture_a_two_sections_toolchange ... ok
+test golden_fanuc::fixture_b_canned_cycles ... ok
+test golden_fanuc::fixture_c_full_circle_and_helix ... ok
+test golden_fanuc::fixture_c_use_radius_override ... ok
+test golden_fanuc::inspect_post_returns_fanuc_property_sheet ... ok
+test golden_fanuc::ir_version_gate ... ok
+test engine::cancellation_tests::host_probe_reads_live_atomic_and_default_stays_false ... ok
+fresh format_expected.json
+fresh scenarios_expected.json
+test golden_fanuc::syntax_error_maps_to_parse_with_line ... ok
+test constants_consistency::recorder_codes_match_prelude_constants ... ok
+test ir::tests::five_d_tags ... ok
+test ir::tests::round_trip ... ok
+test ir::tests::version_gate_rejects_mismatch ... ok
+test ir::tests::wire_shape_is_camel_case_and_kind_tagged ... ok
+test cancellation::live_cancel_reaches_host_within_64_record_checkpoints ... ok
+test meta::tests::wire_shape ... ok
+✔ live cancellation is observed within 64 subsequent record checkpoints (3.939666ms)
+✔ uncancelled record checkpoints preserve output and do not halt (9.365125ms)
+test differential::format_matrix_matches_v8 ... ok
+test run::audit_15_16::positions_do_not_rewrite_polyline_text ... ok
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (18.928875ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (5.631084ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (1.456959ms)
+✔ abcFormat: scale DEG converts radians to degrees (7.6435ms)
+✔ oFormat: width 4 zeropad (program numbers) (2.555ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (2.065875ms)
+✔ clamping applies after rounding (1.269ms)
+✔ trimLeadZero renders FANUC-style bare fractions (2.267792ms)
+✔ forceSign marks positives, never zero (3.042584ms)
+✔ getResultingValue/areDifferent compare on the output grid (3.020125ms)
+✔ differential fixtures are fresh (committed == recomputed) (37.097959ms)
+test golden_fanuc::error_call_halts_with_partial_output ... ok
+test golden_fanuc::runaway_script_hits_budget ... ok
+test probe3::property_binding_probe ... ok
+✔ every Euler convention round-trips a rotation matrix (21.87ms)
+✔ Euler extraction handles the gimbal-lock singularity (3.110375ms)
+✔ rotation factories agree with axis-angle (3.099792ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (58.566708ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (23.815166ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (18.28625ms)
+✔ unreachable orientation throws (9.044958ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.264458ms)
+✔ remapToABC takes the shortest path from the current angles (4.668708ms)
+✔ getPreferredABC honors a positive axis preference (2.981458ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (5.890416ms)
+✔ isABCSupported reflects axis ranges (3.104542ms)
+✔ multi-axis feed: inverse time and DPM (2.850416ms)
+✔ ShopBot records observes cancellation within 32 subsequent work items (12.852834ms)
+✔ ShopBot drill-points observes cancellation within 32 subsequent work items (1.946125ms)
+✔ ShopBot helix-scan observes cancellation within 32 subsequent work items (1.613292ms)
+✔ ShopBot parameters observes cancellation within 32 subsequent work items (3.63825ms)
+✔ last-record refusal still occurs before any ShopBot output (3.932459ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (35.359625ms)
+✔ reset forces the next output; force outputs every time (1.906584ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (1.365542ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (1.311625ms)
+✔ modal carries the format's address letter and getCurrent (2.803625ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (2.828833ms)
+✔ createOutputVariable: control + incremental type (3.061083ms)
+✔ ModalGroup enforces per-group exclusivity (6.90975ms)
+✔ formatWords flattens arguments objects and nested arrays (8.251042ms)
+✔ writeWords drops empty lines entirely (3.68175ms)
+✔ writeWords2 outputs only when args 2+ produce text (1.78575ms)
+✔ word separator and EOL are honored (1.317541ms)
+✔ redirection captures words; close returns to normal output (2.3495ms)
+✔ nested redirection pops innermost first (2.656041ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (3.216041ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 263.924916
+test differential::node_harness_agrees ... ok
+test golden_fanuc::validate_throw_maps_to_runtime_error ... ok
+test golden_fanuc::five_d_records_dispatch_with_solved_abc ... ok
+test run::audit_15_16::unfinished_script_points_to_user_eof ... ok
+test shopbot_cancellation::last_invalid_record_is_still_validated_without_cancellation ... ok
+test differential::scenarios_match_v8 ... ok
+test shopbot_guards::machine_home_park_must_not_be_silently_dropped ... ok
+test library::tests::bundled_posts_inspect_cleanly ... ok
+test cancellation::uncancelled_output_matches_legacy_and_error_text_cannot_forge_cancel ... ok
+test spike::arguments_object_semantics ... ok
+test spike::boa_new_after_prototype_assignment_bug ... ok
+test spike::define_property_accessors ... ok
+test spike::json_round_trip ... ok
+test spike::minimal_post_end_to_end ... ok
+test spike::named_source_errors_carry_line_info ... ok
+test spike::native_function_sink ... ok
+test spike::regexp_literal_and_constructor ... ok
+test spike::script_can_overwrite_host_global ... ok
+test spike::substr_annex_b ... ok
+test shopbot_guards::lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test symbol_audit::every_declared_symbol_is_defined ... ok
+test shopbot_guards::positive_output_and_comment_injection ... ok
+test shopbot_cancellation::nested_preflight_loops_observe_real_cancellation ... ok
+test symbol_audit::undeclared_but_used_symbols_are_defined ... ok
+test shopbot_guards::planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test shopbot_guards::lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test shopbot_guards::scaffold_work_plane_and_tools_fail_closed ... ok
+test shopbot_guards::vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test shopbot_guards::unsupported_records_fail_before_export ... ok
+test shopbot_cancellation::cancellation_at_each_shopbot_phase_never_returns_partial_success_and_retry_is_exact ... ok
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.16s
+
+     Running tests/v1_trust.rs (target/debug/deps/v1_trust-bfe2a9ce93607a2b)
+
+running 3 tests
+test every_external_entry_refuses_before_parsing_or_evaluation ... ok
+test properties_are_data_and_prototype_keys_are_refused ... ok
+test registry_is_the_only_authority ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+   Doc-tests ivac_cps
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

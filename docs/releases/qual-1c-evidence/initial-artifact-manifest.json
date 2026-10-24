@@ -1,0 +1,18 @@
+{
+  "source_sha": "aeae8202b385e46fdee9ff5827f5ca05702d14c3",
+  "git_describe": "v0.4.0-119-gaeae820",
+  "target": "aarch64-apple-darwin",
+  "version": "0.9.0-beta.3",
+  "bundle": "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/dist-test/qual1c/initial-aeae820/FabCAM.app",
+  "bundle_manifest_sha256": "6458109bdc459940401a52dc37098f898218afd5264c6a62ece7668913cee8f9",
+  "manifest_algorithm": "SHA256 of UTF-8 compact sort_keys JSON mapping bundle-relative regular files to SHA256; no directory metadata",
+  "files": {
+    "Contents/Info.plist": "7dd746c92c225518d5e3b4a2239f860163b3104799a4da846dadd55d67059494",
+    "Contents/MacOS/ivac-desktop": "055ed0b137d1af9b6dbdfc7f8878c496591524d5521cb3fe9a1fddd0153c8626",
+    "Contents/Resources/icon.icns": "fbdb75adefb593a4e5592d429fdf1abc0dcd2e49010b4a14f3699d07a52bbef0",
+    "Contents/_CodeSignature/CodeResources": "80f2c9404ded38fb3323807d58688c705526b2b2552a3b7bccd6ba17b4082371"
+  },
+  "launched": false,
+  "notarized": false,
+  "original_build_bundle": "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/target/release/bundle/macos/FabCAM.app"
+}

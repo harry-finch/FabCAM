@@ -1,0 +1,19 @@
+{
+  "source": "700de73a5cf5a378b8465e5f38950a61d6cce4c3",
+  "files": {
+    "Cargo.lock": "3d9c55cba7ba5db04f1b073f64593188d67697014a7fa49e1a2eb5bdb96edc2b",
+    "frontend/pnpm-lock.yaml": "4377f8e3d35d186d69a02bca15df020074e0efba66e7913fb6a54e2aaad80cb4",
+    "crates/ivac-tauri/tauri.conf.json": "86ac5c0bf7ee5b5b083eb543159f2fa62e3974e7077c9f9c5e80551033b25572",
+    "crates/ivac-tauri/tauri.dev-signing.conf.json": "917b01849fc932923d1f399dfd8f3ae5489b4ef33f2ffcfa8eb75cdf9ef89f61",
+    "crates/ivac-tauri/capabilities/default.json": "93c1ce519517e84c4b6ff4a1dde62776d718bb595ad7d3c26cb2143bf2e0fc7f",
+    "scripts/pre-release.sh": "7086e5781df2e985e8bb24b4a5b632832539af845b5cf4baa8789d7c3145bad3"
+  },
+  "native_build_stamp": "cargo:rustc-env=GIT_SHA=v0.4.0-121-g700de73",
+  "rustsec_db_sha": "21d909e4c8bd4e14c7aea58bf980c881a0053ab1",
+  "starting_source": "aeae8202b385e46fdee9ff5827f5ca05702d14c3",
+  "implementation_changes": [
+    "Rust doc comment formatting",
+    "checked test-fixture conversion",
+    "canonical smoke seven-area expectations and Presets walkthrough"
+  ]
+}

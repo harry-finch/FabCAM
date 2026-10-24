@@ -1,0 +1,16 @@
+    Checking tauri-plugin-fs v2.5.1
+    Checking tauri-plugin-opener v2.5.4
+    Checking tauri-plugin-log v2.8.0
+    Checking tauri-plugin-process v2.3.1
+   Compiling ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-tauri)
+    Checking tauri-plugin-window-state v2.4.1
+    Checking tauri-plugin-store v2.4.3
+    Checking axum v0.7.9
+    Checking ivac-wasm v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-wasm)
+    Checking xtask v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/xtask)
+    Checking ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-cli)
+    Checking ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-core)
+    Checking tauri-plugin-dialog v2.7.1
+    Checking ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-cps)
+    Checking ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1c/crates/ivac-server)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.63s

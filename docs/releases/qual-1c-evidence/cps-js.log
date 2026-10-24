@@ -1,0 +1,56 @@
+fresh format_expected.json
+fresh scenarios_expected.json
+✔ live cancellation is observed within 64 subsequent record checkpoints (9.508083ms)
+✔ uncancelled record checkpoints preserve output and do not halt (7.655709ms)
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (11.868375ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (7.57225ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (3.266458ms)
+✔ abcFormat: scale DEG converts radians to degrees (3.104375ms)
+✔ oFormat: width 4 zeropad (program numbers) (3.037208ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (1.399583ms)
+✔ clamping applies after rounding (1.282125ms)
+✔ trimLeadZero renders FANUC-style bare fractions (2.189084ms)
+✔ forceSign marks positives, never zero (3.042625ms)
+✔ getResultingValue/areDifferent compare on the output grid (2.763792ms)
+✔ differential fixtures are fresh (committed == recomputed) (9.640625ms)
+✔ every Euler convention round-trips a rotation matrix (26.049416ms)
+✔ Euler extraction handles the gimbal-lock singularity (5.415667ms)
+✔ rotation factories agree with axis-angle (1.449667ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (7.301333ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (6.540791ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (5.693125ms)
+✔ unreachable orientation throws (2.038959ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.347875ms)
+✔ remapToABC takes the shortest path from the current angles (1.120417ms)
+✔ getPreferredABC honors a positive axis preference (1.176709ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (2.23425ms)
+✔ isABCSupported reflects axis ranges (1.084209ms)
+✔ multi-axis feed: inverse time and DPM (1.126208ms)
+✔ ShopBot records observes cancellation within 32 subsequent work items (7.439625ms)
+✔ ShopBot drill-points observes cancellation within 32 subsequent work items (4.858042ms)
+✔ ShopBot helix-scan observes cancellation within 32 subsequent work items (1.902583ms)
+✔ ShopBot parameters observes cancellation within 32 subsequent work items (2.52ms)
+✔ last-record refusal still occurs before any ShopBot output (1.892708ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (4.176875ms)
+✔ reset forces the next output; force outputs every time (3.377167ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (3.029583ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (3.744458ms)
+✔ modal carries the format's address letter and getCurrent (4.958667ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (3.104875ms)
+✔ createOutputVariable: control + incremental type (3.142417ms)
+✔ ModalGroup enforces per-group exclusivity (2.339125ms)
+✔ formatWords flattens arguments objects and nested arrays (5.465209ms)
+✔ writeWords drops empty lines entirely (3.534666ms)
+✔ writeWords2 outputs only when args 2+ produce text (6.92775ms)
+✔ word separator and EOL are honored (1.492625ms)
+✔ redirection captures words; close returns to normal output (4.614792ms)
+✔ nested redirection pops innermost first (2.367209ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (1.560666ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 124.337083
