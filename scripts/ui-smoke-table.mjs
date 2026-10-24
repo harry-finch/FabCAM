@@ -26,7 +26,7 @@ await evalIn(`
   true
 `);
 await sleep(5000);
-const booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 7`);
+const booted = await evalIn(`['Project', 'Machine', 'Tool library', 'Presets', 'Settings', 'Help', 'About'].every(name => [...document.querySelectorAll('${MAIN_NAV} button')].some(b => (b.getAttribute('aria-label') || b.textContent).trim().startsWith(name)))`);
 console.log('boot:', booted ? 'OK' : 'FAILED');
 if (!booted) process.exit(1);
 
