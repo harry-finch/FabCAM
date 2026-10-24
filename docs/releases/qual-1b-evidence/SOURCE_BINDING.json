@@ -1,0 +1,22 @@
+{
+  "software_sha": "fd8fed652ab98ef801595d6cf12f378a8f28bf89",
+  "starting_sha": "f2b0427b2361ae33064eb9caa5a874716880ee4d",
+  "production_post_sha256": "e283b7d8ad89dd77ce21727fc647ef0274353113b14f70e323008dd8d7f2d1ce",
+  "binary_sha256": {
+    "perf-candidate": "4188197e72bbe704dbf15f98dd9622631ae75ef12834e7ac5926af75cd9003a0",
+    "ivac-candidate": "555c965bffa8940434cc6b26527635bc7b221e55c2a3491c954d441234d06f76",
+    "perf-diagnostic-control": "ed8599544350c548e419976939885d1a61c08224ec0580f777f31edaedf904b2",
+    "perf-diagnostic-candidate": "d0c5d6513fca33a2b86b20556721c4e06eae88903004d1382abc48d34c358e9d"
+  },
+  "diagnostic_common_files_sha256": {
+    "crates/ivac-cps/src/engine.rs": "b9c62e481928a5635f500553510ab2a4d25014f585e23b2ab3eb95a1ebc0a7a9",
+    "crates/ivac-cps/src/run.rs": "fcb364777ed414f14a62ff1cea4d21273369d31f688b386136b131903f2356f2",
+    "crates/ivac-core/examples/perf1_probe.rs": "17af67d55201980d980e6f520b31b6e6b3f4414a66eb3f2c0874b6e31210d04d"
+  },
+  "diagnostic_posts_sha256": {
+    "diagnostic-control-post.cps": "0486728daca105a8acedbcb27d930d3d300ead10f6e6f6d3572f75137ac7599c",
+    "diagnostic-candidate-post.cps": "86bd852bc9c9e1cb9cf70b119643c49dd6299f1d68c43980b2523f214e47eb3b"
+  },
+  "new_privileged_production_api": false,
+  "production_engine_and_registry_unchanged": true
+}

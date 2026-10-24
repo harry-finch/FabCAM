@@ -1,0 +1,37 @@
+{
+  "campaigns": 2,
+  "warmups": "one discarded run per case/mode/binary each campaign",
+  "samples": {
+    "fixed-delay": {
+      "profile-many-segments-cps": 10,
+      "text-Test-medial-cps": 20,
+      "square-medial-cps": 10
+    },
+    "preflight-injected": {
+      "profile-many-segments-cps": 10,
+      "text-Test-medial-cps": 20,
+      "square-medial-cps": 10
+    },
+    "pre-cancelled": 10,
+    "uncancelled": 10
+  },
+  "order": "alternate control/candidate each sample; reverse initial order in campaign 2",
+  "p95": "nearest rank ceil(.95*n)",
+  "target_ms": 200,
+  "source": "f2b0427b2361ae33064eb9caa5a874716880ee4d",
+  "runtime_diff_sha256": "f8835e599848230068072b8d043b086e3b672281c276097520c0dd7b59ec9f59",
+  "host": "macOS-26.5.2-arm64-arm-64bit",
+  "start_utc": "2026-10-24T12:29:25.718186+00:00",
+  "conditions": "release, no task-owned compilation/tests during campaigns; OS/background user load uncontrolled; no retry based on outcome",
+  "binaries": {
+    "control": "c79a19c4a3c2606ccbf2efea497c8c62f6f5e538f49c122586ab3caacd34cfde",
+    "candidate": "4188197e72bbe704dbf15f98dd9622631ae75ef12834e7ac5926af75cd9003a0",
+    "diagnostic-control": "ed8599544350c548e419976939885d1a61c08224ec0580f777f31edaedf904b2",
+    "diagnostic-candidate": "d0c5d6513fca33a2b86b20556721c4e06eae88903004d1382abc48d34c358e9d"
+  },
+  "fixtures": {
+    "profile-many-segments-cps": "cb37ce64aac97570d4ca11dc7cb0f267eae976d6419e96be984bacbbee1386af",
+    "text-Test-medial-cps": "87caed9bb01b468988293c7391be2a0d048c98fd64c34e131b97ba4e6a645135",
+    "square-medial-cps": "6e869f2871dd0389bf6376762e535c04dc6c71fde31c6571cc6e81840c579019"
+  }
+}

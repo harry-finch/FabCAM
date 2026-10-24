@@ -1,0 +1,19 @@
+{
+  "from": "f2b0427b2361ae33064eb9caa5a874716880ee4d",
+  "to": "fd8fed652ab98ef801595d6cf12f378a8f28bf89",
+  "method": "git merge --ff-only into FabCAM-v1.1",
+  "preserved_primary_files": 8473,
+  "primary_tracked_dirty": [
+    "crates/ivac-core/src/pipeline/offset_builder.rs",
+    "crates/ivac-core/src/pipeline/warnings.rs",
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md",
+    "frontend/src/App.svelte",
+    "frontend/src/app.css",
+    "frontend/src/lib/components/AppNavigation.svelte",
+    "frontend/src/lib/components/LayerList.svelte",
+    "frontend/src/lib/state/import-ops.ts",
+    "frontend/src/lib/state/project-types.ts"
+  ],
+  "no_push_main_merge_rebase_release_installer_hardware": true
+}

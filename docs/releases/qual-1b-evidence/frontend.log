@@ -1,0 +1,14 @@
+
+ RUN  v2.1.9 /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1b/frontend
+
+ ✓ src/lib/state/generated-progress.test.ts (2 tests) 2ms
+ ✓ src/lib/state/generation-run.test.ts (9 tests) 2ms
+ ✓ src/lib/services/gcode-export.test.ts (8 tests) 2ms
+ ✓ src/lib/state/test1-lifecycle.test.ts (32 tests) 4ms
+ ✓ src/lib/services/qualification-export.test.ts (16 tests) 6ms
+
+ Test Files  5 passed (5)
+      Tests  67 passed (67)
+   Start at  14:14:19
+   Duration  442ms (transform 274ms, setup 0ms, collect 401ms, tests 17ms, environment 0ms, prepare 279ms)
+

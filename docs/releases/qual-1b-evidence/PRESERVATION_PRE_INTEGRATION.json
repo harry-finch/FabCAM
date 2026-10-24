@@ -1,0 +1,59 @@
+{
+  "worktrees": {
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam": {
+      "count": 8473,
+      "mismatches": [],
+      "head_now": "f2b0427b2361ae33064eb9caa5a874716880ee4d"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-docs-consolidation": {
+      "count": 0,
+      "mismatches": [],
+      "head_now": "7e1c24b937e9bc01aa320537c835ffc30fc9389c"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs": {
+      "count": 0,
+      "mismatches": [],
+      "head_now": "d6b08fe82011c54d0166a6559b329804c2e56cee"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a": {
+      "count": 8,
+      "mismatches": [],
+      "head_now": "7f55b2e8fdc7850234a90e456efa2f02de21c322"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a2": {
+      "count": 8,
+      "mismatches": [],
+      "head_now": "aa846fc6ac01af586e660e43f13488bef3c8064d"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a3": {
+      "count": 87,
+      "mismatches": [],
+      "head_now": "aa846fc6ac01af586e660e43f13488bef3c8064d"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4": {
+      "count": 0,
+      "mismatches": [],
+      "head_now": "f2b0427b2361ae33064eb9caa5a874716880ee4d"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1b": {
+      "count": 0,
+      "mismatches": [],
+      "head_now": "fd8fed652ab98ef801595d6cf12f378a8f28bf89"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-roadmap-fabspeed": {
+      "count": 0,
+      "mismatches": [],
+      "head_now": "ff6486b1795bb95994ad97d7cb799011e276fded"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-v1-freeze": {
+      "count": 0,
+      "mismatches": [],
+      "head_now": "85a93c4a467ff5965655d5737354d9500c2e94fc"
+    }
+  },
+  "historical_raw": {
+    "count": 13431,
+    "mismatches": []
+  },
+  "primary_head": "f2b0427b2361ae33064eb9caa5a874716880ee4d"
+}

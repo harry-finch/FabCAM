@@ -1,0 +1,76 @@
+fresh format_expected.json
+fresh scenarios_expected.json
+✔ live cancellation is observed within 64 subsequent record checkpoints (4.521167ms)
+✔ uncancelled record checkpoints preserve output and do not halt (9.751458ms)
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (6.670459ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (2.61075ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (1.471541ms)
+✔ abcFormat: scale DEG converts radians to degrees (1.260834ms)
+✔ oFormat: width 4 zeropad (program numbers) (1.963917ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (1.626625ms)
+✔ clamping applies after rounding (2.841792ms)
+✔ trimLeadZero renders FANUC-style bare fractions (2.719292ms)
+✔ forceSign marks positives, never zero (1.267375ms)
+✔ getResultingValue/areDifferent compare on the output grid (1.319584ms)
+✔ differential fixtures are fresh (committed == recomputed) (10.275958ms)
+✔ every Euler convention round-trips a rotation matrix (13.397875ms)
+✔ Euler extraction handles the gimbal-lock singularity (2.077792ms)
+✔ rotation factories agree with axis-angle (2.383458ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (10.195125ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (7.511708ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (5.839375ms)
+✔ unreachable orientation throws (2.049209ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.27525ms)
+✔ remapToABC takes the shortest path from the current angles (1.141458ms)
+✔ getPreferredABC honors a positive axis preference (1.062ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (2.044292ms)
+✔ isABCSupported reflects axis ranges (1.07525ms)
+✔ multi-axis feed: inverse time and DPM (1.05675ms)
+✔ ShopBot records observes cancellation within 32 subsequent work items (9.56125ms)
+✔ ShopBot drill-points observes cancellation within 32 subsequent work items (2.210833ms)
+✔ ShopBot helix-scan observes cancellation within 32 subsequent work items (1.679042ms)
+✖ ShopBot parameters observes cancellation within 32 subsequent work items (2.358208ms)
+✔ last-record refusal still occurs before any ShopBot output (1.992708ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (6.044417ms)
+✔ reset forces the next output; force outputs every time (1.761625ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (1.286625ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (1.242459ms)
+✔ modal carries the format's address letter and getCurrent (1.548791ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (1.645584ms)
+✔ createOutputVariable: control + incremental type (1.250167ms)
+✔ ModalGroup enforces per-group exclusivity (1.8535ms)
+✔ formatWords flattens arguments objects and nested arrays (5.471208ms)
+✔ writeWords drops empty lines entirely (3.23775ms)
+✔ writeWords2 outputs only when args 2+ produce text (3.371417ms)
+✔ word separator and EOL are honored (2.385959ms)
+✔ redirection captures words; close returns to normal output (2.012625ms)
+✔ nested redirection pops innermost first (1.35875ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (2.27425ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 45
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 104.5345
+
+✖ failing tests:
+
+test at crates/ivac-cps/prelude/tests/shopbot-cancellation.test.mjs:33:3
+✖ ShopBot parameters observes cancellation within 32 subsequent work items (2.358208ms)
+  AssertionError [ERR_ASSERTION]: parameters: 400
+      at TestContext.<anonymous> (file:///Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1b/crates/ivac-cps/prelude/tests/shopbot-cancellation.test.mjs:48:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

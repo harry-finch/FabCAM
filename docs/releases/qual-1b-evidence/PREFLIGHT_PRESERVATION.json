@@ -1,0 +1,9 @@
+{
+  "baseline_sha256": "8c9cbf7a299a3ceee4b39fb87dfcfc3e6dfddeb41f18e48f07eac23c77d61279",
+  "candidate_sha256": "e283b7d8ad89dd77ce21727fc647ef0274353113b14f70e323008dd8d7f2d1ce",
+  "only_additions": true,
+  "added_lines": 14,
+  "removing_added_hunks_recovers_exact_original": true,
+  "no_changed_validation_statement": true,
+  "host_api_unchanged": true
+}

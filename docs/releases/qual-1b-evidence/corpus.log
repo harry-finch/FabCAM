@@ -1,0 +1,23 @@
+chamfer-grbl.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+chamfer.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+dovetail.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+drill-shared-false.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+drill-shared-true.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+dual-pocket.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+engrave-grbl.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+engrave.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+halfpipe.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+planar.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+pocket-grbl.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+pocket.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+profile-grbl.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+profile-inside-grbl.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+profile-inside.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+profile.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+relief.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+shopbot-profile.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+shopbot-vcarve.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+thread.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+tslot.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}
+two-sided.json {'front.gcode': True, 'back.gcode': True}
+waterline.json {'gcode': True, 'toolpath': True, 'tool_provenance': True, 'gcode_index': True, 'stats': True}

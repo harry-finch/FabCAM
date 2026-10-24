@@ -1,0 +1,2698 @@
+{
+  "generator": "SplitMix64-v1",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "planned": 256,
+  "executed": 256,
+  "elapsed_seconds": 27.772836709,
+  "results": [
+    {
+      "case": {
+        "property": "A1",
+        "index": 0,
+        "seed": 12686021333937624676,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 1.061146417
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 1,
+        "seed": 14813428255707889300,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.00794454099999986
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 2,
+        "seed": 11193693347432196058,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.005807083000000102
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 3,
+        "seed": 17269463403865390852,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.006173290999999859
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 4,
+        "seed": 17469211389408232062,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.005316416999999962
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 5,
+        "seed": 10193842593589408603,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.005761416999999991
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 6,
+        "seed": 16283346232572291684,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004526583999999945
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 7,
+        "seed": 10986180693514313310,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.005116124999999805
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 8,
+        "seed": 16240931121153791159,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0046221250000000325
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 9,
+        "seed": 2293009531872230162,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004354750000000074
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 10,
+        "seed": 3887148720409324947,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004273167000000022
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 11,
+        "seed": 18080604681830207311,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004084291999999934
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 12,
+        "seed": 4768231754866748363,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0040682499999999955
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 13,
+        "seed": 3048022002354110828,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0039543749999999545
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 14,
+        "seed": 7029553542499726910,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003613540999999998
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 15,
+        "seed": 12171479042954041554,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004298415999999916
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 16,
+        "seed": 8596342960834731809,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0036033749999999642
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 17,
+        "seed": 8201412190172670352,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0037696250000001097
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 18,
+        "seed": 2605713604028690172,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.00367116600000017
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 19,
+        "seed": 5256449487443100473,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003471000000000002
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 20,
+        "seed": 18394785791777912928,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003271583000000078
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 21,
+        "seed": 2176439109860963745,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0034300419999999665
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 22,
+        "seed": 11669585784679043845,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003294667000000029
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 23,
+        "seed": 4603578922949472717,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0034917499999997936
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 24,
+        "seed": 3248805607272404587,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0033289999999999154
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 25,
+        "seed": 2323179706089271074,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003284540999999974
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 26,
+        "seed": 15184351705771820693,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0034359170000000105
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 27,
+        "seed": 3235143428853718212,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003498334000000103
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 28,
+        "seed": 6614405898535235593,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003351915999999955
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 29,
+        "seed": 4501005921356217000,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.00326133400000006
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 30,
+        "seed": 7765484751503040489,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.003224125000000022
+    },
+    {
+      "case": {
+        "property": "A1",
+        "index": 31,
+        "seed": 11039335792590915176,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0034511669999999217
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 0,
+        "seed": 11059558133857084622,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.023799874999999915
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 1,
+        "seed": 14853946583463016878,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03967279199999996
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 2,
+        "seed": 504146799292440360,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0406999589999999
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 3,
+        "seed": 11124208053860346037,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.039750583000000006
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 4,
+        "seed": 8067907309266887470,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03642400000000001
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 5,
+        "seed": 5657261871727711772,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.036454291999999944
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 6,
+        "seed": 7858114603505873118,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03598879099999985
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 7,
+        "seed": 3819462290395821073,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03672008299999985
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 8,
+        "seed": 6434010590198418286,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04030900000000015
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 9,
+        "seed": 11130234074542708164,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.039136583000000114
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 10,
+        "seed": 88314114411730376,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03953683400000019
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 11,
+        "seed": 6228214554516928382,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0394000000000001
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 12,
+        "seed": 12758126243668794033,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.036111333999999884
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 13,
+        "seed": 15505354773106653867,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03571029200000009
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 14,
+        "seed": 17831753541380740696,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03646174999999996
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 15,
+        "seed": 2890234547495614262,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03652587500000015
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 16,
+        "seed": 12660891641664414301,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04023670899999998
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 17,
+        "seed": 4393485561819698139,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03954716599999997
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 18,
+        "seed": 1859117290715918563,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0397337499999999
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 19,
+        "seed": 12599873637712690167,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.040426708999999894
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 20,
+        "seed": 4442576346566374334,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03766212499999977
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 21,
+        "seed": 13398521564800309435,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.038315332999999896
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 22,
+        "seed": 3654059367511145591,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.037176499999999724
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 23,
+        "seed": 6493785595177177239,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03887591699999993
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 24,
+        "seed": 12972790774094917469,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04186500000000004
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 25,
+        "seed": 5620254271304253723,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04100779100000018
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 26,
+        "seed": 6829025843807537813,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03969762500000007
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 27,
+        "seed": 1653318873281634344,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03946004099999989
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 28,
+        "seed": 16617404783145577495,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.036896083000000246
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 29,
+        "seed": 16026905203544473714,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03803454099999959
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 30,
+        "seed": 8005953489544463805,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03703320900000007
+    },
+    {
+      "case": {
+        "property": "A2",
+        "index": 31,
+        "seed": 5220998069001503596,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0377156249999997
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 0,
+        "seed": 16812281854747428055,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.024153332999999666
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 1,
+        "seed": 11021942839081389088,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.026957208000000232
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 2,
+        "seed": 3798522883426876152,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.028676749999999807
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 3,
+        "seed": 13971950974265245543,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0457572909999997
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 4,
+        "seed": 5664100798404662004,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021759874999999873
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 5,
+        "seed": 6535316216966916115,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.026909125000000422
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 6,
+        "seed": 4925316778106641894,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.329796875
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 7,
+        "seed": 6088220548846774597,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04546020800000017
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 8,
+        "seed": 5544091001105426231,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.024098667000000074
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 9,
+        "seed": 14053385549084744852,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02656379100000006
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 10,
+        "seed": 6215838424883438561,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.028052624999999942
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 11,
+        "seed": 15774448674507932426,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04670991699999982
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 12,
+        "seed": 8353946761573896261,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.022052749999999843
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 13,
+        "seed": 9664425193376236831,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02607562500000027
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 14,
+        "seed": 664756691152518548,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.32877458400000004
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 15,
+        "seed": 15370276570904491134,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04673287500000001
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 16,
+        "seed": 3006217747084851383,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.024648749999999886
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 17,
+        "seed": 274383058767201003,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02858966599999979
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 18,
+        "seed": 4672976512204591394,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02916141700000008
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 19,
+        "seed": 2279492900727558992,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04566166700000007
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 20,
+        "seed": 16700546994322052953,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.023549082999999804
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 21,
+        "seed": 14619239929358737794,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.027749625000000222
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 22,
+        "seed": 4888628867393402761,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.33196645800000013
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 23,
+        "seed": 4635727014242105452,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04371529099999982
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 24,
+        "seed": 14826204787969191584,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.023896708000000544
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 25,
+        "seed": 15453622557872046106,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.027762833000000597
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 26,
+        "seed": 5178079828742931499,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.029628209000000183
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 27,
+        "seed": 12168997634992116982,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.045542375000000135
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 28,
+        "seed": 4699587643506127563,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021543084000000157
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 29,
+        "seed": 3235487447568073943,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02650254200000024
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 30,
+        "seed": 12791084235531495643,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.320106
+    },
+    {
+      "case": {
+        "property": "B1",
+        "index": 31,
+        "seed": 13316555368998108944,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.04225316700000015
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 0,
+        "seed": 4204518007331385486,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021062541000000046
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 1,
+        "seed": 7380971903715346892,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.16588941699999982
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 2,
+        "seed": 2580593237495329724,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.034112957999999693
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 3,
+        "seed": 13465653633754737041,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.18653399999999998
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 4,
+        "seed": 6121979406381614991,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02107033299999994
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 5,
+        "seed": 9741632043714156356,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.08912495799999931
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 6,
+        "seed": 1229182024640089041,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021072042000000124
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 7,
+        "seed": 10246771863348354739,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06928204200000021
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 8,
+        "seed": 2548001666009473331,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021143291999999647
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 9,
+        "seed": 6992200988591043236,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.17184183300000022
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 10,
+        "seed": 5678882769072854007,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03283129200000001
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 11,
+        "seed": 14285983975706465704,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.14176999999999929
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 12,
+        "seed": 17813603621804294909,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.022030917000000372
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 13,
+        "seed": 12254734337464014545,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.11983804200000048
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 14,
+        "seed": 6674923656743146518,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02141720799999991
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 15,
+        "seed": 6863519988515416059,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.07345049999999986
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 16,
+        "seed": 14330784554943433698,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021411749999999508
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 17,
+        "seed": 3950232987807076552,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.1001861660000003
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 18,
+        "seed": 15818495822686418490,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.031104209000000438
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 19,
+        "seed": 13457271288302497200,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.13889104200000002
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 20,
+        "seed": 17113578344366900938,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02088400000000057
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 21,
+        "seed": 429298230600776547,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.11482949999999992
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 22,
+        "seed": 10554502833635150014,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021515583000000227
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 23,
+        "seed": 14823028006882468824,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.08650016599999955
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 24,
+        "seed": 9465774167771830015,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02087137500000047
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 25,
+        "seed": 11196855559816322116,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.1682508339999993
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 26,
+        "seed": 10546673496364186706,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.033798375000000824
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 27,
+        "seed": 15080073025358834580,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.1908455420000008
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 28,
+        "seed": 2609593672970587535,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020747709000000114
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 29,
+        "seed": 7465296039625677860,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.09109675000000017
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 30,
+        "seed": 16319102030552706011,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021688709000000195
+    },
+    {
+      "case": {
+        "property": "B2",
+        "index": 31,
+        "seed": 9371584108432541387,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.08859937500000026
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 0,
+        "seed": 4817853328006305762,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 1.2580654999999998
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 1,
+        "seed": 5343437373126688807,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.6683202920000006
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 2,
+        "seed": 9818940087377469908,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.07490970899999994
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 3,
+        "seed": 6457852917303982950,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.12117120800000158
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 4,
+        "seed": 12013181066641378575,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06989212500000086
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 5,
+        "seed": 18346443033083473272,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06791495799999936
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 6,
+        "seed": 12154379384100934053,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 1.1698256249999996
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 7,
+        "seed": 5198791795252523544,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.19947195800000017
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 8,
+        "seed": 9538496164307474886,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03980037500000044
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 9,
+        "seed": 4824405242820851976,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.12998579200000115
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 10,
+        "seed": 12998291160971376428,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06867533299999984
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 11,
+        "seed": 4542616264447872005,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.07311399999999857
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 12,
+        "seed": 10023390567105097357,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 3.5511940830000004
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 13,
+        "seed": 12458812000435121467,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.6850954999999992
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 14,
+        "seed": 13481565654279928066,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0695667499999999
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 15,
+        "seed": 12087285654023987897,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.12463441600000102
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 16,
+        "seed": 4192224549762549323,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06913154100000085
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 17,
+        "seed": 7950143758058183788,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.040545500000000345
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 18,
+        "seed": 6249112557268006997,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.6596115830000002
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 19,
+        "seed": 9657001470175309374,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.34846312499999854
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 20,
+        "seed": 4421390049732974040,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.068863750000002
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 21,
+        "seed": 1793560940702852674,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.11639862499999865
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 22,
+        "seed": 13649884060865520759,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06795991599999951
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 23,
+        "seed": 8135606685941655702,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06485987499999979
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 24,
+        "seed": 11543376001324348806,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 1.2544722079999993
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 25,
+        "seed": 8484001429561776742,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.7131528749999987
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 26,
+        "seed": 7026555575566067045,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.07492487500000067
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 27,
+        "seed": 11774745536270544421,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06371541700000094
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 28,
+        "seed": 13208638554220317393,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.03787333300000029
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 29,
+        "seed": 9569551596311511204,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.06645154200000292
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 30,
+        "seed": 3183311348090898244,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 1.2438944159999998
+    },
+    {
+      "case": {
+        "property": "C1",
+        "index": 31,
+        "seed": 14861694462025772170,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.666646415999999
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 0,
+        "seed": 6784387292641815921,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.31481587500000074
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 1,
+        "seed": 15094318251498315567,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.16956970800000093
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 2,
+        "seed": 17163336149026076174,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.022735167000000445
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 3,
+        "seed": 3893924614628394051,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020418083999999226
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 4,
+        "seed": 16880341870194247263,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.6101182089999995
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 5,
+        "seed": 14435546960946167573,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.31740941700000036
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 6,
+        "seed": 14673007982250182272,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021174042000001947
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 7,
+        "seed": 5345872094276921397,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021028459000000055
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 8,
+        "seed": 3013795979594437044,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.3138159579999993
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 9,
+        "seed": 11350636844937415415,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.16931266599999972
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 10,
+        "seed": 9344111018956161212,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.022503458999999282
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 11,
+        "seed": 16206969722854127771,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02006045799999967
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 12,
+        "seed": 163672305326833404,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.6018856660000012
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 13,
+        "seed": 3348501921146310479,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.32343674999999905
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 14,
+        "seed": 16571889260326622672,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.022846375000000307
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 15,
+        "seed": 17010895048767505183,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02123579199999881
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 16,
+        "seed": 13864767115364181670,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.32272329199999916
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 17,
+        "seed": 14579191860087898788,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.16932579199999864
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 18,
+        "seed": 11906824564095927474,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.023051833000000244
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 19,
+        "seed": 1905947584194385516,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02037174999999891
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 20,
+        "seed": 17847558233750625870,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.6020805829999993
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 21,
+        "seed": 3871897027035855932,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.31813158299999955
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 22,
+        "seed": 1651192589977017291,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021280042000000776
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 23,
+        "seed": 6908238443677476080,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021258417000002083
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 24,
+        "seed": 14988480213634722317,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.3253333340000033
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 25,
+        "seed": 2035135667561736377,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.17075466600000055
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 26,
+        "seed": 5086900967881356645,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02291533300000026
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 27,
+        "seed": 11740406492187078928,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02052208299999947
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 28,
+        "seed": 13613923026949376774,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.5935452499999982
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 29,
+        "seed": 12267900541853505358,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.3202560410000004
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 30,
+        "seed": 13959503461493851425,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020905291999998354
+    },
+    {
+      "case": {
+        "property": "D1",
+        "index": 31,
+        "seed": 16756559847377253059,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020492707999999027
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 0,
+        "seed": 16631816117422407279,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.02214562500000028
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 1,
+        "seed": 15085237165361294051,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0045365000000003874
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 2,
+        "seed": 15609584948303433488,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020229249999999865
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 3,
+        "seed": 10656924052589884955,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004539584000003316
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 4,
+        "seed": 3801406800876143003,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.019554125000002642
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 5,
+        "seed": 17693388606782621792,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004347124999998897
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 6,
+        "seed": 4782922288586276353,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.01952395800000062
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 7,
+        "seed": 639133008312352332,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.00429641599999897
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 8,
+        "seed": 14449658184834464430,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020512499999998823
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 9,
+        "seed": 10528960636368490863,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004410833000001446
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 10,
+        "seed": 15663263676404786995,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.022525874999999473
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 11,
+        "seed": 1066708574817997273,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004474417000000841
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 12,
+        "seed": 12721555296673767977,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020025042000000326
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 13,
+        "seed": 11495593800383060112,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004490374999999602
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 14,
+        "seed": 18441904723176631834,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.01925625000000153
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 15,
+        "seed": 9506089932666569597,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004288083000002274
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 16,
+        "seed": 2548241315692682310,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021865707999999984
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 17,
+        "seed": 2481294215020219188,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.0042214590000000385
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 18,
+        "seed": 6136663444927298019,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021514708000001548
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 19,
+        "seed": 3184940211518900375,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004205082999998666
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 20,
+        "seed": 17534714812413778993,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.019537290999998902
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 21,
+        "seed": 9286544094678809753,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004115416000001204
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 22,
+        "seed": 17550177568591932375,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.01953791700000096
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 23,
+        "seed": 14321036428305069560,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004336792000000145
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 24,
+        "seed": 12261199637540389668,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.021768291999997302
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 25,
+        "seed": 8198584837598443895,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004187958999999353
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 26,
+        "seed": 9602719903516885097,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.020380916999997112
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 27,
+        "seed": 8585715075692242357,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.00453854099999873
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 28,
+        "seed": 7204290431303479896,
+        "complexity": 1,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.019447040999999388
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 29,
+        "seed": 6441980111986306149,
+        "complexity": 2,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004435332999999986
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 30,
+        "seed": 8118416026647749570,
+        "complexity": 3,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.019778583000000793
+    },
+    {
+      "case": {
+        "property": "D2",
+        "index": 31,
+        "seed": 10121259505789584598,
+        "complexity": 4,
+        "scale": 0.25
+      },
+      "status": "pass",
+      "elapsed_seconds": 0.004361375000001999
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 0
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 1
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 2
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 3
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 4
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 5
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 6
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 7
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 8
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 9
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 10
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 11
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 12
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 13
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 14
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 15
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 16
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 17
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 18
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 19
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 20
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 21
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 22
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 23
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 24
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 25
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 26
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 27
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 28
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 29
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 30
+      },
+      "status": "pass"
+    },
+    {
+      "case": {
+        "property": "C2",
+        "index": 31
+      },
+      "status": "pass"
+    }
+  ],
+  "scope": "bounded software properties; full SAFE-Z qualification NOT included"
+}

@@ -1,0 +1,52 @@
+missing-layer-linuxcnc.json exact
+pocket-islands-linuxcnc.json exact
+profile-contours-linuxcnc.json exact
+profile-many-segments-linuxcnc.json exact
+square-medial-linuxcnc.json exact
+square-outline-linuxcnc.json exact
+text-B8-medial-linuxcnc.json exact
+text-Test-medial-linuxcnc.json exact
+text-Test-outline-linuxcnc.json exact
+rectangle.json exact
+collinear.json exact
+near-collinear.json exact
+short-edge.json exact
+coincident-edge.json exact
+dense-circle.json exact
+acute-triangle.json exact
+narrow-channel.json exact
+tight-hole.json exact
+tiny-island.json exact
+disconnected-island.json exact
+degenerate.json exact
+bow-tie.json exact
+near-degenerate.json exact
+scale-0.0001.json exact
+scale-0.01.json exact
+scale-1.0.json exact
+scale-10.0.json exact
+large-translation.json exact
+coordinate-budget.json exact
+angle-1.0.json exact
+angle-15.0.json exact
+angle-30.0.json exact
+angle-60.0.json exact
+angle-90.0.json exact
+angle-120.0.json exact
+angle-179.0.json exact
+diameter-1.0.json exact
+diameter-3.0.json exact
+diameter-12.0.json exact
+depth-1e-08.json exact
+depth-4.9e-05.json exact
+depth-5.1e-05.json exact
+depth-0.05.json exact
+depth-3.0.json exact
+depth-5.0.json exact
+radius-cap.json exact
+radius-exceeds-tool.json exact
+flute-reach.json exact
+Traceback (most recent call last):
+  File "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1b/scripts/qual1b/compare-outputs.py", line 18, in <module>
+    (out/(label+'-'+req.name+'.stderr')).write_bytes(result.stderr);assert result.returncode==0
+AssertionError

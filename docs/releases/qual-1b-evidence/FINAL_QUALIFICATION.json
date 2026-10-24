@@ -1,0 +1,292 @@
+{
+  "source_sha": "fd8fed652ab98ef801595d6cf12f378a8f28bf89",
+  "totals": {
+    "passed": 1553,
+    "failed": 0,
+    "ignored": 1
+  },
+  "suites": [
+    {
+      "binary": "Running unittests src/main.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/ivac-55b0417eb574e195)",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/cutting_v9.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/cutting_v9-dcf9a995fda47017)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/generate_v9.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/generate_v9-c7d0b4b182efc1bb)",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/ivac_core-4832f010cd8b5b94)",
+      "result": "ok",
+      "passed": 1232,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/arc_sweep_parity.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/arc_sweep_parity-136ab67ffa8fab62)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/cad1_qualification.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/cad1_qualification-8b5acb12b000a544)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/comment_safety.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/comment_safety-198db7357c38a294)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/cps_posts.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/cps_posts-c3c8d11ab26c38f1)",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/drawing_audit.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/drawing_audit-25d52bda56bfca83)",
+      "result": "ok",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/explicit_contract.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/explicit_contract-1203c368bdf8b35b)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/fs_reset_outputs.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/fs_reset_outputs-9d399e5d927485e9)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/geom1_contract.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/geom1_contract-4ec7327ea9f9f2d1)",
+      "result": "ok",
+      "passed": 23,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/geometry_source_ux.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/geometry_source_ux-5a8cce8a45fcda82)",
+      "result": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/golden_corpus.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/golden_corpus-7f5c1910a780ae76)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/hatch_safe_z.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/hatch_safe_z-4c3ab0090a505899)",
+      "result": "ok",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/import_correctness.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/import_correctness-d7ffc6361622ac44)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/numsafe.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/numsafe-9d75b4f2f2976239)",
+      "result": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/numsafe2.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/numsafe2-980f5e70784876fa)",
+      "result": "ok",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/numsafe3.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/numsafe3-c3e7b518db9f7efb)",
+      "result": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/qual1a2_numeric.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/qual1a2_numeric-8d39685ef16b775f)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/qual1a_planner.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/qual1a_planner-86a6c8fe9ba49721)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/safe_z_extended.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/safe_z_extended-5004baf5d0dcf77f)",
+      "result": "ok",
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/shopbot_m1_qualification.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/shopbot_m1_qualification-f88cf7fb45df0d0e)",
+      "result": "ok",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/shopbot_m2_post.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/shopbot_m2_post-dfd2ea044712b423)",
+      "result": "ok",
+      "passed": 31,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/snapshots_drill_tabs_whirl.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/snapshots_drill_tabs_whirl-d47581e0063ea67f)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/tessellation_tolerance.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/tessellation_tolerance-2aaeec036e087c27)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/test1_properties.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/test1_properties-d85809a0df0a7b73)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "Running tests/text_rendering.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/text_rendering-1ff964b6034215c0)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/tool_provenance.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/tool_provenance-5b42c6c136398044)",
+      "result": "ok",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/ux3_qualification.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/ux3_qualification-05a44cbc390afe44)",
+      "result": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/ux_inspector_contracts.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/ux_inspector_contracts-bbeb68fc7f2aaa62)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/v1_stabilization.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/v1_stabilization-d741b960fee7136c)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/vcarve_qualification.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/vcarve_qualification-9bc57fbe4fff19be)",
+      "result": "ok",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/volume_validation.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/volume_validation-ad2d1828e9dc1454)",
+      "result": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/waterline_acceptance.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/waterline_acceptance-eb15460478361e6f)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/ivac_cps-b894ae90e3a1a130)",
+      "result": "ok",
+      "passed": 52,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running tests/v1_trust.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/v1_trust-9eed7ae4e6b432e8)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/lib.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/ivac_file_export-7f0e7653aa93c7c7)",
+      "result": "ok",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "Running unittests src/main.rs (/Users/mugen/Documents/01_Projets/FabCAM/ivacam/target/release/deps/ivac_server-48f5a53901723c81)",
+      "result": "ok",
+      "passed": 21,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "not_a_complete_pre_release_gate": true,
+  "native_file_export": 11,
+  "cli": 13,
+  "server": 21,
+  "cps_unit_and_trust": 55,
+  "v8": 46,
+  "frontend_targeted": 81,
+  "test1_c2": 256,
+  "source_runtime_unchanged_after_measurement": true
+}
