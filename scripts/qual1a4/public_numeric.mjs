@@ -20,7 +20,7 @@ const req = JSON.parse(
     ),
   ),
 );
-const p = req.project,
+const p = structuredClone(req.project),
   op = p.operations[0];
 op.params.cutting.entry_angle_deg = "__LEXEME__";
 const template = JSON.stringify({
@@ -60,6 +60,9 @@ fs.writeFileSync(
   JSON.stringify(rows, null, 2) + "\n",
 );
 const rejects = [];
+// A valid control must reach generation; the inspector's lexeme placeholder
+// must never leak into these independent CAM-validation requests.
+generate(req);
 for (const [field, value] of [
   ["step", 0],
   ["step", 1],
@@ -72,6 +75,11 @@ for (const [field, value] of [
     throw new Error("accepted invalid CAM request");
   } catch (e) {
     if (String(e).includes("accepted invalid")) throw e;
+    const expected = value === 0
+      ? "Set explicit depth per pass or an explicit depth schedule"
+      : "Depth per pass must be finite and positive";
+    if (!e || typeof e !== "object" || e.kind !== "misconfigured" || e.message !== expected)
+      throw new Error(`Wrong CAM refusal for ${field}=${value}: ${JSON.stringify(e)}`);
     rejects.push({
       field,
       value,
