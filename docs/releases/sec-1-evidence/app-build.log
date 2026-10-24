@@ -1,0 +1,90 @@
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `pnpm --dir ../frontend build`
+
+> ivac-frontend@ build $WORKSPACE/FabCAM-sec-1/frontend
+> node scripts/ensure-wasm-fresh.mjs && vite build
+
+[ensure-wasm] complete ivac-wasm package fingerprint verified
+vite v8.0.10 building client environment for production...
+[2K
+transforming...✓ 4575 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   2.07 kB │ gzip:     0.66 kB
+dist/assets/qualification.worker-Ce0Wtozo.js     21.69 kB
+dist/assets/wasm.worker-CBpXBblj.js              23.62 kB
+dist/assets/ivac_wasm_bg-DgQt4P4T.wasm        5,368.37 kB │ gzip: 1,946.81 kB
+dist/assets/Scene3D-BBqyjIFX.css                  2.01 kB │ gzip:     0.73 kB
+dist/assets/ReportDialog-DfTZZiF-.css             2.68 kB │ gzip:     0.76 kB
+dist/assets/SettingsDialog-B5_9_ipF.css           3.36 kB │ gzip:     0.94 kB
+dist/assets/AboutDialog-BaILN9aX.css              3.73 kB │ gzip:     0.93 kB
+dist/assets/AddTextDialog-BJlzrc0R.css            4.02 kB │ gzip:     1.07 kB
+dist/assets/GcodePanel-CpuoXhYj.css               4.43 kB │ gzip:     1.23 kB
+dist/assets/MachineWorkspace-D6SMeSGf.css        14.70 kB │ gzip:     2.87 kB
+dist/assets/ToolLibraryDialog-u5IMaWUZ.css       15.46 kB │ gzip:     2.89 kB
+dist/assets/index-B5XOqIJt.css                  123.74 kB │ gzip:    20.78 kB
+dist/assets/dist-js-NQ67qQMm.js                   0.12 kB │ gzip:     0.13 kB
+dist/assets/dist-js-D-Dd5-GQ.js                   0.13 kB │ gzip:     0.14 kB
+dist/assets/rolldown-runtime-lhHHWwHU.js          0.15 kB │ gzip:     0.15 kB
+dist/assets/env-P19VVBwe.js                       0.17 kB │ gzip:     0.15 kB
+dist/assets/wasm-fatal-Cq8arUKL.js                0.20 kB │ gzip:     0.17 kB
+dist/assets/dist-js-D1o1A8ji.js                   0.29 kB │ gzip:     0.18 kB
+dist/assets/path-D3f-EPQq.js                      0.84 kB │ gzip:     0.44 kB
+dist/assets/event-BbJMfFeU.js                     1.05 kB │ gzip:     0.55 kB
+dist/assets/preload-helper-ca-nBW7U.js            1.19 kB │ gzip:     0.68 kB
+dist/assets/cutting-contract-B2QSyRFo.js          1.27 kB │ gzip:     0.63 kB
+dist/assets/dialog-draft.svelte-C6FNBmBf.js       1.33 kB │ gzip:     0.56 kB
+dist/assets/core-C_uWAgQK.js                      1.90 kB │ gzip:     0.79 kB
+dist/assets/project-types-BpHPJJEL.js             2.10 kB │ gzip:     0.95 kB
+dist/assets/tauri-5Jq12O34.js                     3.25 kB │ gzip:     1.30 kB
+dist/assets/wasm-CSre-1IN.js                      3.38 kB │ gzip:     1.28 kB
+dist/assets/wasm-worker-client-qswwkCMW.js        3.51 kB │ gzip:     1.40 kB
+dist/assets/dist-js-BjV1Yaj9.js                   6.71 kB │ gzip:     1.71 kB
+dist/assets/GcodePanel-CJl18qYk.js                7.95 kB │ gzip:     3.08 kB
+dist/assets/AboutDialog-EtdFXD_b.js              10.51 kB │ gzip:     4.78 kB
+dist/assets/text_preview.svelte-DA0ukAM7.js      11.87 kB │ gzip:     3.38 kB
+dist/assets/AddTextDialog--pAhDQ4r.js            16.23 kB │ gzip:     5.74 kB
+dist/assets/ReportDialog-fg13O5Yu.js             16.86 kB │ gzip:     5.59 kB
+dist/assets/SettingsDialog-n_hNE2nc.js           17.60 kB │ gzip:     4.91 kB
+dist/assets/ivac_wasm-TqPsj_sV.js                19.79 kB │ gzip:     5.31 kB
+dist/assets/import-ops-D-rfHSui.js               31.99 kB │ gzip:     9.75 kB
+dist/assets/Scene3D-CrPyo7wD.js                  41.30 kB │ gzip:    14.36 kB
+dist/assets/driver-Cif2mNAk.js                   52.21 kB │ gzip:    15.23 kB
+dist/assets/index-client-DVoIp7bL.js             53.27 kB │ gzip:    20.33 kB
+dist/assets/MachineWorkspace-DAWVMKT8.js         70.52 kB │ gzip:    20.54 kB
+dist/assets/ToolLibraryDialog-B8Nq4Tgx.js        77.06 kB │ gzip:    19.09 kB
+dist/assets/three-bcSkbUAg.js                   597.98 kB │ gzip:   152.42 kB
+dist/assets/index-DY1S47UL.js                 1,037.64 kB │ gzip:   304.88 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 600 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.06s
+   Compiling tokio v1.53.3
+   Compiling ivac-cps v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-cps)
+   Compiling ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri)
+   Compiling ivac-file-export v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-file-export)
+   Compiling tauri v2.11.0
+   Compiling ivac-core v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-core)
+   Compiling tauri-plugin-fs v2.5.1
+   Compiling tauri-plugin-log v2.8.0
+   Compiling tauri-plugin-process v2.3.1
+   Compiling tauri-plugin-store v2.4.3
+   Compiling tauri-plugin-opener v2.5.4
+   Compiling tauri-plugin-window-state v2.4.1
+   Compiling tauri-plugin-dialog v2.7.1
+    Finished `release` profile [optimized] target(s) in 2m 34s
+       Built application at: $WORKSPACE/FabCAM-sec-1/target/release/ivac-desktop
+    Bundling FabCAM.app ($WORKSPACE/FabCAM-sec-1/target/release/bundle/macos/FabCAM.app)
+     Signing with identity "-"
+Signing with identity "-"
+Signing $WORKSPACE/FabCAM-sec-1/target/release/bundle/macos/FabCAM.app/Contents/MacOS/ivac-desktop
+$WORKSPACE/FabCAM-sec-1/target/release/bundle/macos/FabCAM.app/Contents/MacOS/ivac-desktop: replacing existing signature
+Signing with identity "-"
+Signing $WORKSPACE/FabCAM-sec-1/target/release/bundle/macos/FabCAM.app
+$WORKSPACE/FabCAM-sec-1/target/release/bundle/macos/FabCAM.app: replacing existing signature
+        Warn skipping app notarization, no APPLE_ID & APPLE_PASSWORD & APPLE_TEAM_ID or APPLE_API_KEY & APPLE_API_ISSUER & APPLE_API_KEY_PATH environment variables found
+    Finished 1 bundle at:
+        $WORKSPACE/FabCAM-sec-1/target/release/bundle/macos/FabCAM.app

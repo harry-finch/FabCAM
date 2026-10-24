@@ -1,0 +1,128 @@
+[
+  {
+    "branch": "FabCAM-v1.1",
+    "head": "aeae8202b385e46fdee9ff5827f5ca05702d14c3",
+    "worktree": "ivacam",
+    "dirty_files": 8496,
+    "v11_only_branch_only": "0 / 0",
+    "disposition": "ACTIVE / RECONCILE",
+    "reason": "Main development checkout; all 8496 pre-existing dirty/untracked files fingerprinted; pending executable edits excluded."
+  },
+  {
+    "branch": "codex/docs-consolidation",
+    "head": "744774d161d1a02b7dda00cdbe70a2360d8279b8",
+    "worktree": null,
+    "dirty_files": 0,
+    "v11_only_branch_only": "68 / 0",
+    "disposition": "ALREADY INTEGRATED / cleanup candidate",
+    "reason": "No unique commits. Worktree removal only after complete ignored-file inspection and source/evidence recoverability."
+  },
+  {
+    "branch": "codex/fs-reset-2-repairs",
+    "head": "d6b08fe82011c54d0166a6559b329804c2e56cee",
+    "worktree": "FabCAM-fs-reset-2-repairs",
+    "dirty_files": 0,
+    "v11_only_branch_only": "20 / 0",
+    "disposition": "ALREADY INTEGRATED / cleanup candidate",
+    "reason": "No unique commits. Worktree removal only after complete ignored-file inspection and source/evidence recoverability."
+  },
+  {
+    "branch": "codex/qual-1a-deterministic-vcarve",
+    "head": "7f55b2e8fdc7850234a90e456efa2f02de21c322",
+    "worktree": "FabCAM-qual-1a",
+    "dirty_files": 8,
+    "v11_only_branch_only": "6 / 2",
+    "disposition": "EXPERIMENTAL / HISTORICAL",
+    "reason": "Unique diagnostic commits and dirty numerical prototypes; accepted production path is A4. Preserve source and ignored evidence."
+  },
+  {
+    "branch": "codex/qual-1a2-numeric-input",
+    "head": "aa846fc6ac01af586e660e43f13488bef3c8064d",
+    "worktree": "FabCAM-qual-1a2",
+    "dirty_files": 8,
+    "v11_only_branch_only": "6 / 4",
+    "disposition": "EXPERIMENTAL / HISTORICAL",
+    "reason": "Unique diagnostic commits and dirty numerical prototypes; accepted production path is A4. Preserve source and ignored evidence."
+  },
+  {
+    "branch": "codex/qual-1a3-motion-presets",
+    "head": "aa846fc6ac01af586e660e43f13488bef3c8064d",
+    "worktree": "FabCAM-qual-1a3",
+    "dirty_files": 87,
+    "v11_only_branch_only": "6 / 4",
+    "disposition": "EXPERIMENTAL / HISTORICAL",
+    "reason": "Unique diagnostic commits and dirty numerical prototypes; accepted production path is A4. Preserve source and ignored evidence."
+  },
+  {
+    "branch": "codex/qual-1a4-production",
+    "head": "f2b0427b2361ae33064eb9caa5a874716880ee4d",
+    "worktree": "FabCAM-qual-1a4",
+    "dirty_files": 0,
+    "v11_only_branch_only": "2 / 0",
+    "disposition": "ALREADY INTEGRATED / HISTORICAL",
+    "reason": "A4/B source and reports are ancestors; retain raw evidence and preview/artifact paths."
+  },
+  {
+    "branch": "codex/qual-1b-cancellation",
+    "head": "aeae8202b385e46fdee9ff5827f5ca05702d14c3",
+    "worktree": "FabCAM-qual-1b",
+    "dirty_files": 0,
+    "v11_only_branch_only": "0 / 0",
+    "disposition": "ALREADY INTEGRATED / HISTORICAL",
+    "reason": "A4/B source and reports are ancestors; retain raw evidence and preview/artifact paths."
+  },
+  {
+    "branch": "codex/qual-1c-personal-alpha",
+    "head": "9520d98b7966745253c0a0401c800ef4831bc79b",
+    "worktree": "FabCAM-qual-1c",
+    "dirty_files": 0,
+    "v11_only_branch_only": "0 / 3",
+    "disposition": "MERGE",
+    "reason": "Three reviewed descendants: test/doc lint fix, seven-area smoke fix, source-bound report. No production CAM change; final bundle/evidence retained."
+  },
+  {
+    "branch": "codex/roadmap-fabspeed",
+    "head": "ff6486b1795bb95994ad97d7cb799011e276fded",
+    "worktree": "FabCAM-roadmap-fabspeed",
+    "dirty_files": 0,
+    "v11_only_branch_only": "6 / 2",
+    "disposition": "MERGE / RECONCILE",
+    "reason": "Two unique documentation commits. Reconcile A4/B/C status and pending local drawing checkpoint, keep ADR-0031 Proposed."
+  },
+  {
+    "branch": "codex/sec1-roadmap",
+    "head": "7e1c24b937e9bc01aa320537c835ffc30fc9389c",
+    "worktree": "FabCAM-docs-consolidation",
+    "dirty_files": 0,
+    "v11_only_branch_only": "60 / 0",
+    "disposition": "ALREADY INTEGRATED / cleanup candidate",
+    "reason": "No unique commits. Worktree removal only after complete ignored-file inspection and source/evidence recoverability."
+  },
+  {
+    "branch": "codex/v1-freeze-readiness",
+    "head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+    "worktree": "FabCAM-v1-freeze",
+    "dirty_files": 0,
+    "v11_only_branch_only": "50 / 0",
+    "disposition": "HISTORICAL",
+    "reason": "Frozen V1/main and foundational publication references; preserve unchanged."
+  },
+  {
+    "branch": "feature/shopbot-mvp",
+    "head": "c9d3f3b925087ee042a61158a393c3206c7dd3c0",
+    "worktree": null,
+    "dirty_files": 0,
+    "v11_only_branch_only": "91 / 0",
+    "disposition": "HISTORICAL",
+    "reason": "Frozen V1/main and foundational publication references; preserve unchanged."
+  },
+  {
+    "branch": "main",
+    "head": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+    "worktree": null,
+    "dirty_files": 0,
+    "v11_only_branch_only": "49 / 0",
+    "disposition": "HISTORICAL",
+    "reason": "Frozen V1/main and foundational publication references; preserve unchanged."
+  }
+]

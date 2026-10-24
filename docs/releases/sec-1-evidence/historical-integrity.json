@@ -1,0 +1,22 @@
+[
+  {
+    "manifest": "FabCAM-qual-1c/docs/releases/qual-1c-evidence/artifact-manifest.json",
+    "checked": 4,
+    "mismatches": []
+  },
+  {
+    "manifest": "FabCAM-qual-1c/docs/releases/qual-1c-evidence/raw-evidence-manifest.json",
+    "checked": 1716,
+    "mismatches": []
+  },
+  {
+    "manifest": "ivacam/dist-test/qual1b/RAW_SHA256SUMS.json",
+    "checked": 7661,
+    "mismatches": []
+  },
+  {
+    "manifest": "FabCAM-qual-1b/dist-test/qual1b/RAW_SHA256SUMS.json",
+    "checked": 7661,
+    "mismatches": []
+  }
+]

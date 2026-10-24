@@ -22,10 +22,10 @@ distribution. These are independent acceptance decisions.
 
 QUAL-1A.4 and QUAL-1B are **COMPLETED** software checkpoints with bounded
 acceptance. QUAL-1C produced the macOS arm64 app and a 19/20 software gate;
-its Tokio advisory and native user walkthrough remained open. **SEC-1 is IN
-PROGRESS**: targeted Tokio 1.53.3 correction, reviewed repository consolidation,
-final-source qualification, local app rebuild and authorized development-branch
-push. No version promotion or public release. The immediate next product milestone
+its Tokio advisory and native user walkthrough remained open. **SEC-1 software is QUALIFIED** at `1350953`: targeted Tokio 1.53.3 correction,
+reviewed repository consolidation, 20/20 canonical gates and local app rebuild.
+[The final report and companion receipt](SEC_1_REPOSITORY_CONSOLIDATION.md) record
+the authorized development-branch push and exact remote head. No version promotion or public release. The immediate next product milestone
 is **Personal Alpha — Actual macOS Launch & Native Workflow Acceptance**, using
 the separate test account chosen by the maintainer. Supervised QUAL-2 follows
 only after separate human authorization.
@@ -86,14 +86,15 @@ explicit authorization. Windows/Linux runtime acceptance remains deferred.
 
 ### SEC-1 — Tokio security and repository consolidation
 
-**IN PROGRESS**, authorized 2026-10-24. Focused security commit `f0e4746` changes
-only Tokio 1.52.2 → 1.53.3 in the lockfile. Current full cargo-deny and focused
-native/output checks pass; final consolidated canonical qualification and local
-macOS rebuild are pending at this integration checkpoint. Integrate reviewed
-QUAL-1C and roadmap work; preserve pending local pocket/drawing/header edits,
-experimental branches, app data and historical evidence. Clean only verified
-reproducible/redundant outputs. Push only the qualified `FabCAM-v1.1` development
-branch, without force, main merge, tags or public release. Stop after its report.
+**COMPLETED software qualification**, authorized 2026-10-24. Security commit
+`f0e4746` changes only Tokio 1.52.2 → 1.53.3. Integrated source `1350953` passes
+20/20 canonical gates, current full cargo-deny, 77 native/WASM comparisons, the
+23 fixed CLI references and TEST1/C2 (256 cases). The local arm64 app is rebuilt,
+ad hoc signed, not notarized and not launched. [Report](SEC_1_REPOSITORY_CONSOLIDATION.md)
+records reviewed QUAL-1C/roadmap integration, preserved pending edits/experiments,
+verified cleanup and exact source/artifact hashes. Its local post-push receipt
+records publication of only `FabCAM-v1.1`; no force, main merge, tags or public
+release. Actual native acceptance and supervised machining remain separate.
 
 The uncommitted drawing-placement, fixed-stock/narrow-pocket and header lots remain
 **PRESERVED / PENDING**. Their local reports retain tests and outstanding human UX

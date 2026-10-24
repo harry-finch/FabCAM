@@ -1,0 +1,101 @@
+{
+  "source": "135095392c2a5711acc79f5286aae7599214585a",
+  "canonical_command": "scripts/pre-release.sh",
+  "stage_count": 20,
+  "stages": [
+    {
+      "name": "cargo fmt --check",
+      "pass": true
+    },
+    {
+      "name": "cargo clippy -Dwarnings (with pedantic)",
+      "pass": true
+    },
+    {
+      "name": "cargo test --workspace",
+      "pass": true
+    },
+    {
+      "name": "xtask schema-check",
+      "pass": true
+    },
+    {
+      "name": "xtask version-check",
+      "pass": true
+    },
+    {
+      "name": "readme parity",
+      "pass": true
+    },
+    {
+      "name": "pnpm install",
+      "pass": true
+    },
+    {
+      "name": "codegen drift",
+      "pass": true
+    },
+    {
+      "name": "i18n keys drift",
+      "pass": true
+    },
+    {
+      "name": "pnpm run lint",
+      "pass": true
+    },
+    {
+      "name": "pnpm run check",
+      "pass": true
+    },
+    {
+      "name": "pnpm run test",
+      "pass": true
+    },
+    {
+      "name": "pnpm run build",
+      "pass": true
+    },
+    {
+      "name": "wasm-pack build (web)",
+      "pass": true
+    },
+    {
+      "name": "wasm cps size guard",
+      "pass": true
+    },
+    {
+      "name": "cargo-deny check",
+      "pass": true
+    },
+    {
+      "name": "ui smoke (headless)",
+      "pass": true
+    },
+    {
+      "name": "CLI trust and transactional export",
+      "pass": true
+    },
+    {
+      "name": "SEC1 release boundary regressions",
+      "pass": true
+    },
+    {
+      "name": "candidate identity regressions",
+      "pass": true
+    }
+  ],
+  "exit": 0,
+  "rust_totals": {
+    "pass": 1592,
+    "fail": 0,
+    "ignored": 1
+  },
+  "rust_result_summaries": 48,
+  "frontend_summary": [
+    "Test Files  172 passed (172)",
+    "Tests  1498 passed | 1 skipped (1499)"
+  ],
+  "lockfile_sha256": "ad742a037a0b8bc7edcd8cbfbe969f325b5e5bed9df23348f092b8d8b3ab752f",
+  "gate_sha256": "7086e5781df2e985e8bb24b4a5b632832539af845b5cf4baa8789d7c3145bad3",
+  "head_status_during_run": ""
+}

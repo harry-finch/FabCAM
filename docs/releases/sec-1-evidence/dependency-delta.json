@@ -1,0 +1,24 @@
+{
+  "removed": [
+    [
+      "tokio",
+      "1.52.2",
+      "registry+https://github.com/rust-lang/crates.io-index"
+    ]
+  ],
+  "added": [
+    [
+      "tokio",
+      "1.53.3",
+      "registry+https://github.com/rust-lang/crates.io-index"
+    ]
+  ],
+  "tokio": [
+    {
+      "name": "tokio",
+      "version": "1.53.3",
+      "rust_version": "1.71",
+      "source": "registry+https://github.com/rust-lang/crates.io-index"
+    }
+  ]
+}

@@ -2819,3 +2819,22 @@ legacy migration and physical-identity separation. Existing resolver priority an
 manual-rate authority are retained. Implementation remains uncommitted on FabCAM-v1.1;
 UX review is still the next human checkpoint. Validation is recorded in the
 [v1.1 report](../releases/FABCAM_V1_1_UX_2026_10_21.md).
+
+
+## 2026-10-24 — SEC-1 security and reviewed repository consolidation
+
+Tokio 1.52.2 → 1.53.3 is the only dependency change (`f0e4746`), resolving
+RUSTSEC-2026-0386 without selecting affected 1.54.0. QUAL-1C and reviewed
+FabSpeed/FabApps planning are integrated; current A4/B/C statuses are reconciled,
+ADR-0031 stays Proposed, and pending local pocket/drawing/header work is preserved.
+Clean integrated worktrees and verified compilation caches were removed with
+source/evidence preservation receipts. Main/frozen V1 and app data stay untouched.
+
+Source `1350953`: 20/20 unchanged canonical gates, Rust 1,592 PASS / 0 FAIL /
+1 ignored worker, frontend 1,498 PASS / 1 optional skip, 23 exact CLI references,
+77 native/WASM cases, 328 public numeric inputs and TEST1/C2 256 PASS. The local
+macOS arm64 app is rebuilt and signature-verified, ad hoc/non-notarized, not launched.
+[SEC-1 report](../releases/SEC_1_REPOSITORY_CONSOLIDATION.md) and its post-push
+receipt own full hashes, limitations and development publication outcome.
+Next is actual native Personal Alpha acceptance in the separate test account;
+QUAL-2 requires separate authorization. No release, installer distribution or hardware.

@@ -1,0 +1,9 @@
+{
+  "source": "135095392c2a5711acc79f5286aae7599214585a",
+  "wasm_sha256": "410ec5166635398c97bbb0b4a41796d1c63be0ea80d5d8e6308021fbe274fb64",
+  "matching_frontend_assets": [
+    "frontend/dist/assets/ivac_wasm_bg-DgQt4P4T.wasm"
+  ],
+  "source_changes_after_qualification": "documentation and evidence only; build source stays fixed",
+  "raw_files": 2157
+}

@@ -1,0 +1,10 @@
+{
+  "base": "origin/main",
+  "head": "135095392c2a5711acc79f5286aae7599214585a",
+  "unique_blobs": 1349,
+  "total_blob_bytes": 54773900,
+  "large_over_5MiB": [],
+  "suspicious_path_names": [],
+  "credential_pattern_matches": [],
+  "scope": "Heuristic review of all unique unpushed blobs; not proof of absence of every possible secret."
+}

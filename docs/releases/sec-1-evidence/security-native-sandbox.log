@@ -1,0 +1,327 @@
+   Compiling phf_macros v0.13.1
+   Compiling serde v1.0.228
+   Compiling zerofrom v0.1.7
+   Compiling thiserror v2.0.18
+   Compiling string_cache_codegen v0.6.1
+   Compiling thiserror v1.0.69
+   Compiling phf_macros v0.11.3
+   Compiling uuid v1.10.0
+   Compiling swift-rs v1.0.7
+   Compiling jsonptr v0.6.3
+   Compiling web_atoms v0.2.4
+   Compiling cfb v0.7.3
+   Compiling indexmap v1.9.3
+   Compiling cargo_metadata v0.19.2
+   Compiling phf v0.13.1
+   Compiling phf v0.11.3
+   Compiling plist v1.10.0
+   Compiling infer v0.19.0
+   Compiling json-patch v3.0.1
+   Compiling serde_with v3.19.0
+   Compiling cargo_toml v0.22.3
+   Compiling tokio v1.53.3
+   Compiling yoke v0.8.2
+   Compiling zerocopy v0.8.48
+   Compiling bytemuck v1.25.0
+   Compiling dpi v0.1.2
+   Compiling tracing v0.1.44
+   Compiling cssparser v0.36.0
+   Compiling num-bigint v0.4.6
+   Compiling markup5ever v0.38.0
+   Compiling html5ever v0.38.0
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling boa_macros v0.21.1
+   Compiling foreign-types v0.5.0
+   Compiling selectors v0.36.1
+   Compiling boa_gc v0.21.1
+   Compiling keyboard-types v0.7.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling core-graphics v0.25.0
+   Compiling equator v0.4.2
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling icu_locale_core v2.2.0
+   Compiling icu_collections v2.0.0
+   Compiling muda v0.19.1
+   Compiling rand_chacha v0.9.0
+   Compiling pin-project v1.1.13
+   Compiling serialize-to-javascript v0.1.2
+   Compiling num_enum_derive v0.7.6
+   Compiling icu_provider v2.2.0
+   Compiling dom_query v0.27.0
+   Compiling icu_properties v2.0.2
+   Compiling icu_normalizer v2.0.1
+   Compiling dynify v0.1.2
+   Compiling num_enum v0.7.6
+   Compiling futures-concurrency v7.7.1
+   Compiling aligned-vec v0.6.4
+   Compiling idna_adapter v1.2.1
+   Compiling idna v1.1.0
+   Compiling rand v0.9.5
+   Compiling url v2.5.8
+   Compiling font-types v0.9.0
+   Compiling schemars v0.8.22
+   Compiling num-rational v0.4.2
+   Compiling urlpattern v0.3.0
+   Compiling boa_interner v0.21.1
+   Compiling image v0.25.5
+   Compiling boa_ast v0.21.1
+   Compiling num v0.4.3
+   Compiling futures-util v0.3.32
+   Compiling tiny-skia-path v0.11.4
+   Compiling wry v0.55.1
+   Compiling tao v0.35.2
+   Compiling chrono v0.4.44
+   Compiling tauri-utils v2.9.0
+   Compiling boa_parser v0.21.1
+   Compiling read-fonts v0.34.0
+   Compiling usvg v0.45.1
+   Compiling dxf v0.6.1
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ivac-file-export v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-file-export)
+   Compiling ciborium v0.2.2
+   Compiling tinytemplate v1.2.1
+   Compiling hyper v1.9.0
+   Compiling serde_urlencoded v0.7.1
+   Compiling boa_engine v0.21.1
+   Compiling criterion v0.5.1
+   Compiling multer v3.1.0
+   Compiling axum-core v0.4.5
+   Compiling hyper-util v0.1.20
+   Compiling tower v0.5.3
+   Compiling futures-executor v0.3.32
+   Compiling tokio-util v0.7.18
+   Compiling tracing-subscriber v0.3.23
+   Compiling futures v0.3.32
+   Compiling tower-http v0.6.8
+   Compiling tokio-stream v0.1.18
+   Compiling axum v0.7.9
+   Compiling tauri-runtime v2.11.0
+   Compiling tauri-runtime-wry v2.11.0
+   Compiling skrifa v0.36.0
+   Compiling tauri-plugin v2.6.0
+   Compiling tauri-build v2.6.0
+   Compiling tauri-codegen v2.6.0
+   Compiling tauri v2.11.0
+   Compiling tauri-macros v2.6.0
+   Compiling tauri-plugin-fs v2.5.1
+   Compiling tauri-plugin-log v2.8.0
+   Compiling tauri-plugin-store v2.4.3
+   Compiling tauri-plugin-process v2.3.1
+   Compiling tauri-plugin-window-state v2.4.1
+   Compiling tauri-plugin-dialog v2.7.1
+   Compiling tauri-plugin-opener v2.5.4
+   Compiling ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri)
+   Compiling ivac-cps v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-cps)
+   Compiling ivac-core v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-core)
+   Compiling ivac-server v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 32.66s
+     Running unittests src/lib.rs (target/debug/deps/ivac_cps-04b069a792efa7a7)
+
+running 52 tests
+test golden_fanuc::fanuc_machine_paths_run_on_three_axis ... ok
+test cancellation::pre_cancelled_returns_no_output_and_never_parses_script ... ok
+test golden_fanuc::fixture_a_two_sections_toolchange ... ok
+test golden_fanuc::fixture_b_canned_cycles ... ok
+test golden_fanuc::fixture_c_full_circle_and_helix ... ok
+test golden_fanuc::fixture_c_use_radius_override ... ok
+test golden_fanuc::inspect_post_returns_fanuc_property_sheet ... ok
+test golden_fanuc::ir_version_gate ... ok
+test engine::cancellation_tests::host_probe_reads_live_atomic_and_default_stays_false ... ok
+test golden_fanuc::syntax_error_maps_to_parse_with_line ... ok
+test cancellation::live_cancel_reaches_host_within_64_record_checkpoints ... ok
+test ir::tests::five_d_tags ... ok
+test ir::tests::round_trip ... ok
+test ir::tests::version_gate_rejects_mismatch ... ok
+test ir::tests::wire_shape_is_camel_case_and_kind_tagged ... ok
+test constants_consistency::recorder_codes_match_prelude_constants ... ok
+test meta::tests::wire_shape ... ok
+fresh format_expected.json
+fresh scenarios_expected.json
+test differential::format_matrix_matches_v8 ... ok
+test run::audit_15_16::positions_do_not_rewrite_polyline_text ... ok
+test golden_fanuc::error_call_halts_with_partial_output ... ok
+test golden_fanuc::runaway_script_hits_budget ... ok
+test golden_fanuc::validate_throw_maps_to_runtime_error ... ok
+test probe3::property_binding_probe ... ok
+✔ live cancellation is observed within 64 subsequent record checkpoints (8.595125ms)
+✔ uncancelled record checkpoints preserve output and do not halt (5.969791ms)
+✔ gFormat: width 2, zeropad, decimals 1 (FANUC G-words) (6.732875ms)
+✔ xyzFormat: 3 decimals, forceDecimal, trailing-zero trim (2.418625ms)
+✔ feedFormat: 0 decimals, forceDecimal (FANUC F-words) (1.082541ms)
+✔ abcFormat: scale DEG converts radians to degrees (0.953875ms)
+✔ oFormat: width 4 zeropad (program numbers) (2.267708ms)
+✔ cyclic mapping: sign 1 wraps into [0, limit) before scaling (2.230083ms)
+✔ clamping applies after rounding (2.053834ms)
+✔ trimLeadZero renders FANUC-style bare fractions (2.45ms)
+✔ forceSign marks positives, never zero (2.020709ms)
+✔ getResultingValue/areDifferent compare on the output grid (2.038375ms)
+✔ differential fixtures are fresh (committed == recomputed) (18.817958ms)
+✔ every Euler convention round-trips a rotation matrix (11.153709ms)
+✔ Euler extraction handles the gimbal-lock singularity (3.21025ms)
+✔ rotation factories agree with axis-angle (2.993833ms)
+✔ AC table: getOrientation(getABC(m)).forward === m.forward (62.721833ms)
+✔ BC table: getOrientation(getABC(m)).forward === m.forward (15.204667ms)
+✔ AB head: getOrientation(getABC(m)).forward === m.forward (8.883542ms)
+✔ unreachable orientation throws (1.7905ms)
+✔ remapABC wraps cyclic axes and rejects out-of-range ones (1.733625ms)
+✔ remapToABC takes the shortest path from the current angles (2.090958ms)
+✔ getPreferredABC honors a positive axis preference (2.046166ms)
+✔ getRemainingOrientation leaves nothing when the machine can reach it (4.575291ms)
+✔ isABCSupported reflects axis ranges (1.932541ms)
+✔ multi-axis feed: inverse time and DPM (2.24ms)
+✔ ShopBot records observes cancellation within 32 subsequent work items (20.833667ms)
+✔ ShopBot drill-points observes cancellation within 32 subsequent work items (3.418167ms)
+✔ ShopBot helix-scan observes cancellation within 32 subsequent work items (3.15325ms)
+✔ ShopBot parameters observes cancellation within 32 subsequent work items (3.475416ms)
+✔ last-record refusal still occurs before any ShopBot output (3.762084ms)
+✔ variable suppresses repeats on the OUTPUT grid, not raw values (6.575584ms)
+✔ reset forces the next output; force outputs every time (2.264458ms)
+✔ onchange fires exactly when text is produced (FANUC retracted) (2.215084ms)
+✔ ReferenceVariable: 2-arg format suppresses against the reference (2.337042ms)
+✔ modal carries the format's address letter and getCurrent (2.666ms)
+✔ modal onchange resets a sibling modal (gPlane → gMotion pattern) (2.301666ms)
+✔ createOutputVariable: control + incremental type (2.31275ms)
+✔ ModalGroup enforces per-group exclusivity (2.597417ms)
+✔ formatWords flattens arguments objects and nested arrays (8.312ms)
+✔ writeWords drops empty lines entirely (2.525291ms)
+✔ writeWords2 outputs only when args 2+ produce text (2.261708ms)
+✔ word separator and EOL are honored (2.117833ms)
+✔ redirection captures words; close returns to normal output (2.456667ms)
+✔ nested redirection pops innermost first (1.165125ms)
+✔ text helpers: subst/conditional/filterText/strict parsers (1.203958ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 256.942084
+test differential::node_harness_agrees ... ok
+test golden_fanuc::five_d_records_dispatch_with_solved_abc ... ok
+test run::audit_15_16::unfinished_script_points_to_user_eof ... ok
+test differential::scenarios_match_v8 ... ok
+test shopbot_cancellation::last_invalid_record_is_still_validated_without_cancellation ... ok
+test library::tests::bundled_posts_inspect_cleanly ... ok
+test shopbot_guards::machine_home_park_must_not_be_silently_dropped ... ok
+test cancellation::uncancelled_output_matches_legacy_and_error_text_cannot_forge_cancel ... ok
+test spike::arguments_object_semantics ... ok
+test spike::boa_new_after_prototype_assignment_bug ... ok
+test spike::define_property_accessors ... ok
+test spike::json_round_trip ... ok
+test spike::minimal_post_end_to_end ... ok
+test spike::named_source_errors_carry_line_info ... ok
+test spike::native_function_sink ... ok
+test spike::regexp_literal_and_constructor ... ok
+test spike::script_can_overwrite_host_global ... ok
+test spike::substr_annex_b ... ok
+test shopbot_guards::lab_spindle_sequence_is_ordered_and_has_no_blocking_setup_pause ... ok
+test symbol_audit::every_declared_symbol_is_defined ... ok
+test shopbot_guards::positive_output_and_comment_injection ... ok
+test symbol_audit::undeclared_but_used_symbols_are_defined ... ok
+test shopbot_cancellation::nested_preflight_loops_observe_real_cancellation ... ok
+test shopbot_guards::planar_surfacing_is_explicit_flat_only_and_does_not_enable_3d_parallel ... ok
+test shopbot_guards::lab_spindle_rejects_unreviewed_tools_rpm_and_operator_stops ... ok
+test shopbot_guards::scaffold_work_plane_and_tools_fail_closed ... ok
+test shopbot_guards::vcarve_is_a_narrow_strategy_tool_and_linear_motion_pair ... ok
+test shopbot_guards::unsupported_records_fail_before_export ... ok
+test shopbot_cancellation::cancellation_at_each_shopbot_phase_never_returns_partial_success_and_retry_is_exact ... ok
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.24s
+
+     Running tests/v1_trust.rs (target/debug/deps/v1_trust-be4b334fcafecd17)
+
+running 3 tests
+test every_external_entry_refuses_before_parsing_or_evaluation ... ok
+test properties_are_data_and_prototype_keys_are_refused ... ok
+test registry_is_the_only_authority ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running unittests src/lib.rs (target/debug/deps/ivac_file_export-3070f02b3979c0a8)
+
+running 11 tests
+test tests::missing_parent_and_directory_target_fail_without_artifacts ... ok
+test tests::readonly_destination_is_not_replaced_via_directory_permissions ... ok
+test tests::failed_generation_preserves_target_and_removes_staging ... ok
+test tests::two_sided_preflight_preserves_both_old_generations ... ok
+test tests::failed_publication_preserves_existing_target ... ok
+test tests::symlink_destination_is_never_followed ... ok
+test tests::new_only_refuses_existing_and_concurrent_destination ... ok
+test cleanup_tests::cleanup_failure_reports_published_bytes_and_keeps_other_side_publishable ... ok
+test tests::write_error_after_prefix_preserves_target_and_cleans_temporary ... ok
+test tests::valid_bytes_replace_only_after_publication ... ok
+test cleanup_tests::second_side_failure_is_unpublished_and_first_remains_complete ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running unittests src/main.rs (target/debug/deps/ivac_server-df6f488bc37b8ac0)
+
+running 21 tests
+test tests::bad_request_helper_synthesizes_structured_error ... ok
+test tests::generate_gcode_stream_rejects_hpgl_with_400 ... ok
+test tests::fixtures_refuse_direct_stream_before_success_status ... ok
+test tests::every_generation_http_route_refuses_legacy_before_emission ... ok
+test tests::internal_helper_synthesizes_structured_error ... ok
+test tests::generate_rejects_cps_path_source ... ok
+test tests::http_error_response_carries_full_structured_shape ... ok
+test tests::pipeline_cancelled_maps_to_408_with_structured_body ... ok
+test tests::relief_stl_rejects_malformed_stl_with_400 ... ok
+test tests::pipeline_unknown_tool_promotes_auto_fix_into_http_body ... ok
+test tests::relief_stl_returns_204_for_a_footprintless_mesh ... ok
+test tests::generate_gcode_stream_serves_grbl_too ... ok
+test qual1a2_tests::numeric_text_reaches_authoritative_http_inspector ... ok
+test tests::relief_stl_rasterizes_a_flat_quad_to_a_surface_field ... ok
+test tests::status_for_kind_matches_legacy_mapping ... ok
+test tests::generate_gcode_stream_matches_the_buffered_program ... ok
+test tests::safe_z_refusal_is_structured_and_stream_has_no_program ... ok
+test tests::audit_15_16_import_memory_and_format_validation ... ok
+test tests::buffered_collision_returns_error_with_preview_without_program ... ok
+test qual1a2_tests::corrected_http_generation_matches_buffered_pipeline_and_refuses_invalid_values ... ok
+test tests::posts_routes_list_inspect_and_guard ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running unittests src/lib.rs (target/debug/deps/ivac_tauri_lib-0fd8a1c03d6037d6)
+
+running 15 tests
+test audit_15_16::helper_identity_uses_only_exact_executable_basename ... ok
+test commands::sec1_tests::external_inspection_refuses_before_evaluation ... ok
+test commands::audit_15_16::drawing_failures_keep_structured_contract ... ok
+test commands::audit_15_16_tool::drawing_missing_tool_keeps_assign_tool_action ... ok
+test preset_collections::tests::symlink_destination_and_directory_refused ... ok
+test watcher::tests::audit_15_16_missing_source_does_not_disable_existing_sources ... ok
+test preset_collections::tests::malformed_oversized_busy_and_traversal_preserve_original ... ok
+test preset_collections::tests::qual1a2_numeric_reopen_preserves_original_token_until_explicit_save ... ok
+test preset_collections::tests::atomic_current_document_and_conflicts ... ok
+test commands::audit_15_16::qual1a2_json_value_command_decoding_preserves_numeric_bits ... ok
+test commands::audit_15_16::collision_error_retains_preview_without_executable_program ... ok
+test watcher::tests::unwatch_all_clears_set ... ok
+test watcher::tests::set_paths_replaces_old_watches ... ok
+test watcher::tests::debounce_collapses_rapid_writes ... FAILED
+test watcher::tests::single_path_emits_event ... FAILED
+
+failures:
+
+---- watcher::tests::debounce_collapses_rapid_writes stdout ----
+
+thread 'watcher::tests::debounce_collapses_rapid_writes' panicked at crates/ivac-tauri/src/watcher.rs:295:9:
+debounced 5 rapid writes; got 0 events for path
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watcher::tests::single_path_emits_event stdout ----
+
+thread 'watcher::tests::single_path_emits_event' panicked at crates/ivac-tauri/src/watcher.rs:268:14:
+event within 2s: Timeout
+
+
+failures:
+    watcher::tests::debounce_collapses_rapid_writes
+    watcher::tests::single_path_emits_event
+
+test result: FAILED. 13 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.14s
+
+error: test failed, to rerun pass `-p ivac-tauri --lib`

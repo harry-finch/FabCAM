@@ -1,0 +1,77 @@
+tokio v1.53.3
+├── tokio feature "bytes"
+│   └── tokio feature "io-util"
+│       └── tauri v2.11.0
+│           ├── tauri-plugin-dialog v2.7.1
+│           │   ├── tauri-plugin-dialog feature "default"
+│           │   │   └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri)
+│           │   │       ├── ivac-tauri feature "cps"
+│           │   │       │   └── ivac-tauri feature "default" (command-line)
+│           │   │       └── ivac-tauri feature "default" (command-line)
+│           │   └── tauri-plugin-dialog feature "gtk3"
+│           │       └── tauri-plugin-dialog feature "default" (*)
+│           ├── tauri-plugin-fs v2.5.1
+│           │   └── tauri-plugin-fs feature "default"
+│           │       ├── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           │       └── tauri-plugin-dialog v2.7.1 (*)
+│           ├── tauri-plugin-log v2.8.0
+│           │   └── tauri-plugin-log feature "default"
+│           │       └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           ├── tauri-plugin-opener v2.5.4
+│           │   └── tauri-plugin-opener feature "default"
+│           │       └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           ├── tauri-plugin-process v2.3.1
+│           │   └── tauri-plugin-process feature "default"
+│           │       └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           ├── tauri-plugin-store v2.4.3
+│           │   └── tauri-plugin-store feature "default"
+│           │       └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           └── tauri-plugin-window-state v2.4.1
+│               └── tauri-plugin-window-state feature "default"
+│                   └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           ├── tauri feature "common-controls-v6"
+│           │   └── tauri feature "default"
+│           │       └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           ├── tauri feature "compression"
+│           │   └── tauri feature "default" (*)
+│           ├── tauri feature "dbus"
+│           │   └── tauri feature "default" (*)
+│           ├── tauri feature "default" (*)
+│           ├── tauri feature "devtools"
+│           │   └── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│           ├── tauri feature "dynamic-acl"
+│           │   └── tauri feature "default" (*)
+│           ├── tauri feature "tauri-runtime-wry"
+│           │   └── tauri feature "wry"
+│           │       └── tauri feature "default" (*)
+│           ├── tauri feature "webkit2gtk"
+│           │   └── tauri feature "wry" (*)
+│           ├── tauri feature "webview2-com"
+│           │   └── tauri feature "wry" (*)
+│           ├── tauri feature "wry" (*)
+│           └── tauri feature "x11"
+│               └── tauri feature "default" (*)
+├── tokio feature "default"
+│   ├── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│   ├── tauri v2.11.0 (*)
+│   └── tauri-plugin-store v2.4.3 (*)
+├── tokio feature "fs"
+│   └── tauri v2.11.0 (*)
+├── tokio feature "io-util" (*)
+├── tokio feature "macros"
+│   ├── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│   └── tauri-plugin-store v2.4.3 (*)
+├── tokio feature "rt"
+│   └── tauri v2.11.0 (*)
+│   └── tokio feature "rt-multi-thread"
+│       ├── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│       └── tauri v2.11.0 (*)
+├── tokio feature "rt-multi-thread" (*)
+├── tokio feature "sync"
+│   ├── tauri v2.11.0 (*)
+│   └── tauri-plugin-store v2.4.3 (*)
+├── tokio feature "time"
+│   ├── ivac-tauri v0.9.0-beta.3 ($WORKSPACE/FabCAM-sec-1/crates/ivac-tauri) (*)
+│   └── tauri-plugin-store v2.4.3 (*)
+└── tokio feature "tokio-macros"
+    └── tokio feature "macros" (*)

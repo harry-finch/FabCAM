@@ -12,8 +12,9 @@ collections; the integrated recommendation engine is removed.
 [QUAL-1B](releases/QUAL_1B_COOPERATIVE_CANCELLATION.md) are implemented and qualified
 within their recorded software limits. [QUAL-1C](releases/QUAL_1C_MACOS_PERSONAL_ALPHA.md)
 built the macOS app; native user acceptance remains pending. SEC-1 corrects Tokio
-and consolidates this source; [STATUS](shopbot-modernization/STATUS.md) owns its
-final qualification and publication disposition.
+and consolidates this source. [SEC-1](releases/SEC_1_REPOSITORY_CONSOLIDATION.md)
+records 20/20 canonical gates, the rebuilt local app and publication receipt;
+[STATUS](shopbot-modernization/STATUS.md) owns current source/limits.
 [Release roadmap](releases/RELEASE_ROADMAP.md) separates frozen V1, V1.1
 Personal Alpha qualification, planned optional V1.2 FabSpeed integration and deferred CAM work.
 [Accepted ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)

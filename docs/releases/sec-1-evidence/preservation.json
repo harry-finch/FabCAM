@@ -1,0 +1,9 @@
+{
+  "checked": 8599,
+  "changed_or_lost": [],
+  "intentionally_reconciled_originals_verified_in_archive": [
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md"
+  ],
+  "primary_head": "135095392c2a5711acc79f5286aae7599214585a"
+}

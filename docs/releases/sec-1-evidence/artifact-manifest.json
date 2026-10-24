@@ -1,0 +1,26 @@
+{
+  "source_sha": "135095392c2a5711acc79f5286aae7599214585a",
+  "git_describe": "v0.4.0-126-g1350953",
+  "target": "aarch64-apple-darwin",
+  "version": "0.9.0-beta.3",
+  "identifier": "org.opcenter.ivacam",
+  "bundle": "FabCAM-sec-1/target/release/bundle/macos/FabCAM.app",
+  "bundle_manifest_sha256": "9a8c617c8ab08b8672f5bcf196a6efaf927c5dc2d326ec3435837e71cfc53f1a",
+  "manifest_algorithm": "SHA256 of UTF-8 compact sort_keys JSON mapping bundle-relative regular files to SHA256; no directory metadata",
+  "files": {
+    "Contents/Info.plist": "7dd746c92c225518d5e3b4a2239f860163b3104799a4da846dadd55d67059494",
+    "Contents/MacOS/ivac-desktop": "a2d2666e70ca8e73f44001b8472d71c61cd9710da67b1e400f719463ecb7eb0f",
+    "Contents/Resources/icon.icns": "fbdb75adefb593a4e5592d429fdf1abc0dcd2e49010b4a14f3699d07a52bbef0",
+    "Contents/_CodeSignature/CodeResources": "80f2c9404ded38fb3323807d58688c705526b2b2552a3b7bccd6ba17b4082371"
+  },
+  "executable_sha256": "a2d2666e70ca8e73f44001b8472d71c61cd9710da67b1e400f719463ecb7eb0f",
+  "frontend_source_stamp_files": [
+    "frontend/dist/assets/index-DY1S47UL.js",
+    "frontend/dist/assets/ReportDialog-fg13O5Yu.js",
+    "frontend/dist/assets/AboutDialog-EtdFXD_b.js"
+  ],
+  "signature_verification_exit": 0,
+  "architecture": "Mach-O 64-bit executable arm64",
+  "notarized": false,
+  "launched": false
+}
