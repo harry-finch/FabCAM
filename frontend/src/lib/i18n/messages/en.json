@@ -2317,5 +2317,13 @@
   "fsreset.ux.role": "Cutting role",
   "fsreset.ux.errors": "Cutting parameter errors",
   "fsreset.ux.unknown": "Some machine or tool limits are unknown",
-  "fsreset.ux.select_operation": "Select an operation in Project to preview these values."
+  "fsreset.ux.select_operation": "Select an operation in Project to preview these values.",
+  "preset.review.title": "Preset context needs review",
+  "preset.review.mismatch": "This preset's saved context differs from the current operation. Review the recorded machine, tool, material and operation before using its values. The original preset has been preserved.",
+  "preset.review.context": "Recorded compatibility context",
+  "preset.review.recorded": "Read-only fields from the saved preset, including role assignments and recorded geometry. These are not the current operation or verified machine limits.",
+  "preset.review.unavailable": "The recorded context cannot be safely displayed in this view. The original record is preserved; exact compatibility is still required before loading.",
+  "preset.review.manual": "You may review these values and enter them manually in the operation. Review is not workshop testing. Save a new tested preset only after actual testing and a fresh explicit attestation.",
+  "preset.review.claim": "Recorded values and author's test claim; not proof of testing on the current workshop machine.",
+  "preset.review.rates": "{role} · T{tool}: {rpm} rpm · feed {feed} mm/min · plunge {plunge} mm/min"
 }

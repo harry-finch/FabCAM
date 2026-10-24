@@ -1,4 +1,6 @@
 <script lang="ts">
+  import RecordedPresetContext from '../RecordedPresetContext.svelte';
+  import PresetReviewError from '../PresetReviewError.svelte';
   import { t } from '../../i18n';
   import { Info } from '@lucide/svelte';
   import {
@@ -28,6 +30,7 @@
     validateCollection,
     saveCollection,
     type PresetCollection,
+    type TestedPreset,
   } from '../../state/preset-collections';
   import { testedRows } from '../../state/preset-library-v9';
   import './op-properties.css';
@@ -49,6 +52,7 @@
   let collections = $state<{ data: PresetCollection; token: string }[]>([]);
   let prepared = $state<Awaited<ReturnType<typeof preparePresetLoad>> | null>(null);
   let selected = $state('');
+  let reviewedPreset = $state<TestedPreset | null>(null);
   let name = $state('');
   let collectionName = $state('Workshop');
   let attestedKey = $state('');
@@ -94,6 +98,7 @@
   }
   async function open(next: 'load' | 'save') {
     panel = next;
+    reviewedPreset = null;
     error = '';
     message = '';
     prepared = null;
@@ -115,6 +120,7 @@
     }
   }
   async function review(collection: PresetCollection, id: string) {
+    reviewedPreset = collection.presets.find((p) => p.id === id) ?? null;
     busy = true;
     error = '';
     prepared = null;
@@ -295,6 +301,25 @@
           {#if !busy && !collections.some((c) => c.data.presets.length)}<p class="basis">
               {t('fsreset.ui.no.tested.presets.yet.save.a.tested.configuration')}
             </p>{/if}
+          {#if reviewedPreset}
+            <strong>{reviewedPreset.name}</strong>
+            <p class="basis">{t('preset.review.claim')}</p>
+            {#each reviewedPreset.parameters.rates as rate (rate.role)}
+              <p class="basis">
+                {t('preset.review.rates', {
+                  role: label[rate.role],
+                  tool: rate.tool_id,
+                  rpm: rate.rpm ?? '—',
+                  feed: rate.feed_mm_min ?? '—',
+                  plunge: rate.plunge_mm_min ?? '—',
+                })}
+              </p>
+            {/each}
+            {#each parameterSummary(reviewedPreset.parameters) as line (line)}<p class="basis">
+                {line}
+              </p>{/each}
+            <RecordedPresetContext preset={reviewedPreset} />
+          {/if}
           {#if prepared}<table>
               <thead
                 ><tr><th>{t('fsreset.ui.pass')}</th><th>{t('fsreset.ui.current.preset')}</th></tr
@@ -372,7 +397,7 @@
         {/if}
       </section>
     {/if}
-    {#if error}<p class="errors" role="alert">{error}</p>{/if}
+    <PresetReviewError {error} />
     {#if message}<p class="basis" role="status">{message}</p>{/if}
   </fieldset>
 {/if}

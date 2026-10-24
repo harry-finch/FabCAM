@@ -33,6 +33,19 @@ operation's current values. Confirm the reviewed copy. The tool, machine and mat
 are not silently replaced. A matching local tool number alone is not matching physical
 tool identity or geometry. Different context is refused; there is no automatic transfer.
 
+A refusal titled **Preset context needs review** preserves the original record,
+signature and author claim. Open **Recorded compatibility context** in the load
+review or library details to inspect the saved machine configuration, physical
+cutter geometry/roles, material revision and operation strategy. This read-only
+view uses the saved record, never the current operation. Unknown or unsafe-to-display
+contexts get an explanation; they are not reconstructed or made compatible.
+
+You can inspect the recorded rates after a refusal and explicitly enter chosen
+values in the operation editor. This remains manual authoring, not workshop testing.
+Create a new tested preset only after testing the exact current configuration and
+providing a fresh explicit attestation. Even a small context difference still refuses;
+there is no numeric normalization, automatic migration or renewed test claim.
+
 After copying, the operation shows **Loaded preset**. Editing values shows **Modified
 from preset**. Undo/Redo restores the authored state. Editing, duplicating or deleting
 the library entry does not change values already copied into a project. A context

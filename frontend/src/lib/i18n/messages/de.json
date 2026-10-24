@@ -1978,5 +1978,13 @@
   "fsreset.ux.role": "Bearbeitungsrolle",
   "fsreset.ux.errors": "Fehler bei Schnittparametern",
   "fsreset.ux.unknown": "Einige Maschinen- oder Werkzeuggrenzen sind unbekannt",
-  "fsreset.ux.select_operation": "Wählen Sie unter Projekt eine Operation, um diese Werte zu prüfen."
+  "fsreset.ux.select_operation": "Wählen Sie unter Projekt eine Operation, um diese Werte zu prüfen.",
+  "preset.review.title": "Preset-Kontext muss geprüft werden",
+  "preset.review.mismatch": "Der gespeicherte Kontext dieses Presets unterscheidet sich von der aktuellen Operation. Prüfen Sie die aufgezeichnete Maschine, das Werkzeug, das Material und die Operation, bevor Sie die Werte verwenden. Das ursprüngliche Preset bleibt erhalten.",
+  "preset.review.context": "Gespeicherter Kompatibilitätskontext",
+  "preset.review.recorded": "Schreibgeschützte Felder des gespeicherten Presets, einschließlich Rollenzuordnung und Geometrie. Dies sind weder die aktuelle Operation noch verifizierte Maschinengrenzen.",
+  "preset.review.unavailable": "Der gespeicherte Kontext kann in dieser Ansicht nicht sicher dargestellt werden. Der ursprüngliche Datensatz bleibt erhalten; zum Laden ist weiterhin exakte Kompatibilität erforderlich.",
+  "preset.review.manual": "Sie können diese Werte prüfen und manuell in die Operation eingeben. Eine Prüfung ist kein Werkstatttest. Speichern Sie ein neues getestetes Preset erst nach tatsächlichem Test und erneuter ausdrücklicher Bestätigung.",
+  "preset.review.claim": "Gespeicherte Werte und Testaussage des Autors; kein Nachweis eines Tests an der aktuellen Werkstattmaschine.",
+  "preset.review.rates": "{role} · T{tool}: {rpm} U/min · Vorschub {feed} mm/min · Eintauchen {plunge} mm/min"
 }

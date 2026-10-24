@@ -1,4 +1,6 @@
 <script lang="ts">
+  import RecordedPresetContext from './RecordedPresetContext.svelte';
+  import PresetReviewError from './PresetReviewError.svelte';
   import { t } from '../i18n';
   import { Plus, Import, Ellipsis, FolderOpen, Search } from '@lucide/svelte';
   import { presetLibraryState } from '../state/cutting-ui';
@@ -366,7 +368,7 @@
       >
     </div>
   {/if}
-  {#if error}<p role="alert">{error}</p>{/if}{#if message}<p role="status">{message}</p>{/if}
+  <PresetReviewError {error} />{#if message}<p role="status">{message}</p>{/if}
   {#if view.kind !== 'results'}
     <section class="empty-state" aria-label={t('fsreset.ux.state')}>
       {#if view.kind === 'no-collections'}
@@ -446,6 +448,7 @@
           {#each parameterSummary(selected.preset.parameters) as detail (detail)}<p>
               {detail}
             </p>{/each}
+          <RecordedPresetContext preset={selected.preset} />
           {#if selected.preset.notes}<p class="notes">{selected.preset.notes}</p>{/if}
           <div class="actions">
             <button class="btn-secondary" disabled={busy} onclick={() => edit(selected)}
@@ -559,7 +562,7 @@
         {deletion.preset ? 'This preset' : 'This collection and its presets'} will be removed from the
         library. Existing operations keep their copied values. Export a backup first if needed.
       </p>
-      {#if error}<p role="alert">{error}</p>{/if}<button
+      <PresetReviewError {error} /><button
         class="btn-danger"
         disabled={busy}
         onclick={confirmDelete}>{t('fsreset.ui.delete')}</button
@@ -580,7 +583,7 @@
         {incoming.presets.length} presets. Imported attestations belong to their recorded workshop configurations;
         importing does not establish local testing.
       </p>
-      {#if error}<p role="alert">{error}</p>{/if}{#if collision}<p>
+      <PresetReviewError {error} />{#if collision}<p>
           Collection ID already exists as “{collision.data.name}”. Replace that reviewed collection
           or create an independent copy.
         </p>

@@ -1496,6 +1496,14 @@ export type MsgKey =
   | "post.tokens.tools"
   | "post.tokens.version"
   | "post.tool_change"
+  | "preset.review.claim"
+  | "preset.review.context"
+  | "preset.review.manual"
+  | "preset.review.mismatch"
+  | "preset.review.rates"
+  | "preset.review.recorded"
+  | "preset.review.title"
+  | "preset.review.unavailable"
   | "preset2.material_help"
   | "preset3.current"
   | "presets.all"
@@ -3818,6 +3826,14 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "post.tokens.tools",
   "post.tokens.version",
   "post.tool_change",
+  "preset.review.claim",
+  "preset.review.context",
+  "preset.review.manual",
+  "preset.review.mismatch",
+  "preset.review.rates",
+  "preset.review.recorded",
+  "preset.review.title",
+  "preset.review.unavailable",
   "preset2.material_help",
   "preset3.current",
   "presets.all",
