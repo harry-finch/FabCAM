@@ -1,0 +1,129 @@
+{
+  "workspace-all-targets.log": {
+    "passed": 1587,
+    "failed": 2,
+    "ignored": 1
+  },
+  "workspace-doc.log": {
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0
+  },
+  "gates": [
+    {
+      "gate": "cargo fmt --check",
+      "pass": true
+    },
+    {
+      "gate": "cargo clippy -Dwarnings (with pedantic)",
+      "pass": true
+    },
+    {
+      "gate": "cargo test --workspace",
+      "pass": false
+    },
+    {
+      "gate": "xtask schema-check",
+      "pass": true
+    },
+    {
+      "gate": "xtask version-check",
+      "pass": true
+    },
+    {
+      "gate": "readme parity",
+      "pass": true
+    },
+    {
+      "gate": "pnpm install",
+      "pass": true
+    },
+    {
+      "gate": "codegen drift",
+      "pass": true
+    },
+    {
+      "gate": "i18n keys drift",
+      "pass": true
+    },
+    {
+      "gate": "pnpm run lint",
+      "pass": true
+    },
+    {
+      "gate": "pnpm run check",
+      "pass": true
+    },
+    {
+      "gate": "pnpm run test",
+      "pass": true
+    },
+    {
+      "gate": "pnpm run build",
+      "pass": true
+    },
+    {
+      "gate": "wasm-pack build (web)",
+      "pass": true
+    },
+    {
+      "gate": "wasm cps size guard",
+      "pass": true
+    },
+    {
+      "gate": "cargo-deny check",
+      "pass": false
+    },
+    {
+      "gate": "ui smoke (headless)",
+      "pass": false
+    },
+    {
+      "gate": "CLI trust and transactional export",
+      "pass": true
+    },
+    {
+      "gate": "SEC1 release boundary regressions",
+      "pass": true
+    },
+    {
+      "gate": "candidate identity regressions",
+      "pass": true
+    }
+  ],
+  "frontend": {
+    "files": 172,
+    "passed": 1498,
+    "optional_locale_skipped": 1,
+    "wasm_package_tests": 12,
+    "svelte_errors": 0,
+    "svelte_warnings": 0
+  },
+  "test1": {
+    "generator": "SplitMix64-v1",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "planned": 256,
+    "executed": 256,
+    "elapsed_seconds": 2.028292208,
+    "scope": "bounded software properties; full SAFE-Z qualification NOT included"
+  },
+  "environment": {
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+    "node": "v24.21.0",
+    "source": "8e2c9ce427007f9c5a3787b34dd28647b8cdcf95"
+  },
+  "final_workspace_all_targets": {
+    "passed": 1587,
+    "failed": 2,
+    "ignored": 1
+  },
+  "final_test1": {
+    "generator": "SplitMix64-v1",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "planned": 256,
+    "executed": 256,
+    "elapsed_seconds": 1.1044252079999999,
+    "scope": "bounded software properties; full SAFE-Z qualification NOT included"
+  }
+}

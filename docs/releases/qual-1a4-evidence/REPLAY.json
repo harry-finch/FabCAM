@@ -1,0 +1,1626 @@
+{
+  "seconds": 31.065867792,
+  "cases": [
+    {
+      "name": "missing-layer-linuxcnc.json",
+      "request_sha256": "2d673ae711b85fec241c07b4ee8b6378df062729267c8ab463d4da63c15d9af8",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "pocket-islands-linuxcnc.json",
+      "request_sha256": "dd9be856dda30e181087112bf3d168b168845839c96a7f9ab49f7cea2fff5608",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "profile-contours-linuxcnc.json",
+      "request_sha256": "4910cb93de491df5a24f434f64a7fbacf720a6587d3cfff050210f519b539931",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "profile-many-segments-linuxcnc.json",
+      "request_sha256": "7caf801aef28d0c0916159b9139232bd38e71cc0fc1864f6859ddc7405c0ceba",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": false,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "square-medial-linuxcnc.json",
+      "request_sha256": "90c4c3432655b9840dbcc73357c03cf0cd2f8f7bcefef8d9653bfe5e8de4acec",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "square-outline-linuxcnc.json",
+      "request_sha256": "4998edb08b19765a178b5b33c6e3e951bf47b607c62b78741ac2144fb901ccfd",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "text-B8-medial-linuxcnc.json",
+      "request_sha256": "76df3a6f62ed9e4c195b8de5056235e02054ca43f6c4dd87205ab104ff66cf8e",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.\n"
+    },
+    {
+      "name": "text-Test-medial-linuxcnc.json",
+      "request_sha256": "44245ed015c4294af355d4c3a7df8597ac1583ac1f24e3cc890227b3b5b8e478",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "text-Test-outline-linuxcnc.json",
+      "request_sha256": "771c2155e9d8567fdad102758a5ae80141ae4335fe38e4d0ceba10196a4aaa69",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "rectangle.json",
+      "request_sha256": "ef5b13d80fb6674a53c0b65c5cd1661a0c593ff27559ddb40f40fa2d6411d74d",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "collinear.json",
+      "request_sha256": "3f5d1ec625615ed805e4a5cb020b4331287337b314815cd6cae8da516587884b",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "near-collinear.json",
+      "request_sha256": "38cb147a9832f819e12a3267d08028c0768e8d5c9877565d1c2720e01f915e81",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "short-edge.json",
+      "request_sha256": "8ac62913e3914d4d45ae742c93aaf553e2df16d4eb987680b27231bd3f7ae844",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n"
+    },
+    {
+      "name": "coincident-edge.json",
+      "request_sha256": "89db0ad6d363ecf319a9f373c419759d48994483f4d9af7d7adf5213c3641153",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve contour contains nonfinite, disconnected, zero-length or out-of-budget geometry (coordinates must be below 1000000 mm in magnitude).\n"
+    },
+    {
+      "name": "dense-circle.json",
+      "request_sha256": "7fe2d768b9ff91dbd5a0171e5d14ea5e5d75e46dd2d09098aa053c9b0bb628bb",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "acute-triangle.json",
+      "request_sha256": "354ad83726a39809505914abd52773e1ecf8126e4e3eba52f80795b5fec82ec2",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "narrow-channel.json",
+      "request_sha256": "e968c7bdcfd154d5b858d038a6ab17c51f9f29ace11e8f4d85838f871a3fad12",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "tight-hole.json",
+      "request_sha256": "30be689d473563d36ff7a0c24484a2fb73e343e9a25bf534a9bf02fba7b54f49",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "tiny-island.json",
+      "request_sha256": "d4e8120117aa6b08788c804c1c90ab00baca7f552c0d273c15b9851623ee57bc",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "disconnected-island.json",
+      "request_sha256": "1b3301b57726ae9ad99563b194ee790b033c1257f6082cbb5c47a9afbc605bdd",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "degenerate.json",
+      "request_sha256": "eb560a0f35d06ad623c76b9d57a265ea74bcf3674d4c00730f2503a50b24b582",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n"
+    },
+    {
+      "name": "bow-tie.json",
+      "request_sha256": "efbb6d69ebd2e9b391c5848b3974751211b62e64a76ff830e3798c877787f64b",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n"
+    },
+    {
+      "name": "near-degenerate.json",
+      "request_sha256": "a6f88ea675acfb67e02ee1e1b59f90a53736401ddb32aa23056a8b7491d4c18b",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n"
+    },
+    {
+      "name": "scale-0.0001.json",
+      "request_sha256": "3d6dfbd7e532cb9ff70bca1fec004208502a42e3f1c4356158a6342b49dc4485",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: Undercut: a degenerate medial chain cannot be completed.\n"
+    },
+    {
+      "name": "scale-0.01.json",
+      "request_sha256": "f207fd12da43785dd7a02d7ca58cf8c605e71d7b2b1080c6c64ed47363834922",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: Undercut: a degenerate medial chain cannot be completed.\n"
+    },
+    {
+      "name": "scale-1.0.json",
+      "request_sha256": "ef5b13d80fb6674a53c0b65c5cd1661a0c593ff27559ddb40f40fa2d6411d74d",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "scale-10.0.json",
+      "request_sha256": "2bb04bb7e4049c410b9fd11b84218d5a6dfcbeca79ccd7828c60ab0afec9a6a1",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "large-translation.json",
+      "request_sha256": "b14739e0a0712591cb095580b87a4b379f544713d3b9bdf19a779aaee46fa54d",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "coordinate-budget.json",
+      "request_sha256": "680d357a93abb74aad6a443e150443c06d65972ced979818a1f31a218a16cb2f",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve contour contains nonfinite, disconnected, zero-length or out-of-budget geometry (coordinates must be below 1000000 mm in magnitude).\n"
+    },
+    {
+      "name": "angle-1.0.json",
+      "request_sha256": "c26bcea73c5b730dde7444f6c585302a984834d2756411bc2b1cc8915f75319b",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-15.0.json",
+      "request_sha256": "814f70b5a3a91f865307c8e97b9a73eca4b4db9a6fbf08c05d43e2f8738143b8",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-30.0.json",
+      "request_sha256": "e04ce271b5ad3bdf7cb394437d78d1d30b4c334782bd82fb6bc4afa0f66c5d70",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-60.0.json",
+      "request_sha256": "484862cc129f0a4ad3b8b862f7fa179157118aefbc801f2bfffc7a9e1c62e808",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-90.0.json",
+      "request_sha256": "ef5b13d80fb6674a53c0b65c5cd1661a0c593ff27559ddb40f40fa2d6411d74d",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-120.0.json",
+      "request_sha256": "ea02fb627ea25c48cc056cb5503c7bf31f1d1d1ff680c418395faef54e5ef7a5",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-179.0.json",
+      "request_sha256": "8b1a039415fbcbc31d3528dfd9ac4126006adbf0054fdc9b1c665188f0f64eb3",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "diameter-1.0.json",
+      "request_sha256": "2ed781330c3337e30d9615c496df57cde7ba4c7246b621730bde6ecc172916a7",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "diameter-3.0.json",
+      "request_sha256": "f30ac558c9553ae8be413b345ab816397b03cde43f6ebdbd7f611b08dfe0bfbb",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "diameter-12.0.json",
+      "request_sha256": "fb0ed54fb9d43ab489c455066f8624ffca70d7c65cc12d5886fd502f12ed72c2",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "depth-1e-08.json",
+      "request_sha256": "148049a45864c5902a571da381e0b0e314bab61d1cc7962538b63b642c225b42",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "depth-4.9e-05.json",
+      "request_sha256": "c94092af13f4938c4cd308ae80b55d1fd99e63396804ec66cad5f8d4995402c9",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "depth-5.1e-05.json",
+      "request_sha256": "343f66e73b24b8c85f4e49bc1516651e8a29f11205354d725c73cebbe1deee3d",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "depth-0.05.json",
+      "request_sha256": "dea772039ab9efe3d720066b953eee5c103ea5a014f6f4b9e462ba6e6d2f69bd",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "depth-3.0.json",
+      "request_sha256": "ed387be0886cb27f43f6c5cca7ee08a8fb34f81f43dbc7e74af659b19361549e",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "depth-5.0.json",
+      "request_sha256": "e40d04d8bc1d9bb66021462e3534dcd79957eed1383c76921ee7342407e5c3ce",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "radius-cap.json",
+      "request_sha256": "36d2975e3661143d7aa2b9ae4c760852ba6981f9dd179bd1dd367471def5b810",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "radius-exceeds-tool.json",
+      "request_sha256": "6b2570dc800ce5fed685fe08d21ce8839eff7be5798a68a934c6e5c5f7251994",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n"
+    },
+    {
+      "name": "flute-reach.json",
+      "request_sha256": "fb8f1cd67bf44b8adfd13f0643af6d2d0e6a1843853f6a6f1c4f11060e1580df",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: Rough: depth per pass exceeds usable flute length\n"
+    },
+    {
+      "name": "invalid-tool.json",
+      "request_sha256": "eb45671f06ea455552db41ee49ba802f28655d3323741e0ea7276eb1a44c683d",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 1
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: Invalid v9 request\n\nCaused by:\n    unknown variant `end_mill`, expected one of `endmill`, `ball_nose`, `v_bit`, `engraver`, `drag_knife`, `drill`, `laser_beam`, `bull_nose`, `compression`, `form_profile`, `kegel`, `thread_mill`, `plasma_torch` at line 1 column 929\n"
+    },
+    {
+      "name": "invalid-angle.json",
+      "request_sha256": "dae5530ee16be1c4355f74c7da1d04ce00a92983ee1094f61bc2edc5d2ed63f8",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n"
+    },
+    {
+      "name": "flat-tip.json",
+      "request_sha256": "174e85921c37d8e7deb8e6be0e11fac338a03a3bce7023e417e407a8340a8b1d",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "refine-unsupported.json",
+      "request_sha256": "5a6b4ec9158c1791e2e431187750dd0b6179203a80aca2bcd358150ff4a402fa",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n"
+    },
+    {
+      "name": "staged-start.json",
+      "request_sha256": "2a127842ea898b3823cb624cf77dfcf6a39823564b7baf4a87e22a4604259410",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n"
+    },
+    {
+      "name": "nonfinite-depth.json",
+      "request_sha256": "eb3781358b390bb6481461a5eb0c45d5ff039ac45433d80dbe2dde13dffc9de7",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 1
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 1
+        }
+      },
+      "public_cli_refusal": "Error: Invalid PipelineRequest JSON\n\nCaused by:\n    expected value at line 1 column 1296\n"
+    },
+    {
+      "name": "depth-level-budget.json",
+      "request_sha256": "4e1838c146c4cb56844382a840a71ebd963898fdaec0894ce521ec20e3582e89",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: Depth per pass must be finite and positive\n"
+    },
+    {
+      "name": "entry-1e-08.json",
+      "request_sha256": "8436c65ec867f81cdc9247773c1a6afc9d088389898c0a75f8e5088d23dedc45",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: Set an explicit entry angle between 1 and 89 degrees\n"
+    },
+    {
+      "name": "entry-1.0.json",
+      "request_sha256": "70aaaaddcb8fb541657d0aaac92907ff83b7653416dec98807a77c97d18a6f60",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "entry-89.99999999999999.json",
+      "request_sha256": "441c670e7f18efee9c18dd0c9d8ccc402603dc0fa8a2c4d384c102161e229c02",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: Set an explicit entry angle between 1 and 89 degrees\n"
+    },
+    {
+      "name": "perimeter.json",
+      "request_sha256": "afb10815299312b5207a0806ec930fef2d6679329b7c7e4b5e033d5f87e23cb4",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "unsupported-endmill.json",
+      "request_sha256": "fb5bb7f90478e05b198f3ee00a4a561ef03e2bf8792d9eea0f4bc4cf79012688",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n"
+    },
+    {
+      "name": "depth-count-budget.json",
+      "request_sha256": "d45508bbe41fefbe090735002f83ac39bfbd369fd923fdf59e36dc2bed661641",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: 1.0 mm at 1e-5 mm per pass needs 100000.0 depth levels, more than the 1000-pass limit. No program generated.\n"
+    },
+    {
+      "name": "circle-255.json",
+      "request_sha256": "1cfc45c9f820669036a2b39a5cfe3517c57f286f1f784dc149f33c70f6bd300e",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "circle-257.json",
+      "request_sha256": "92b16e65931a0c343b9df67d13bf29d3e5447b9b3aa47b0f508ad6a38b7c3056",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "circle-128.json",
+      "request_sha256": "d8ce75c193dfce368d90a669bf76fb89829eb3c300232d0871a204de4af6bcf2",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "circle-512.json",
+      "request_sha256": "f95bb41ccbbbe46abbf3040abe9078f3001e5822ac637487076cd722d007f0b0",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: Undercut: a degenerate medial chain cannot be completed.\n"
+    },
+    {
+      "name": "vertex-0-1e-12.json",
+      "request_sha256": "5bdaea9d4373da085e407810089032b55aeae57153b4604e4d6c923bfdf70a2a",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "vertex-32-1e-12.json",
+      "request_sha256": "12503985ba51e241d442cf453007cd08f41be25075694d57f8a5fee6f2131a9a",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "vertex-91-5e-05.json",
+      "request_sha256": "70f9ed129ea05e6ede9a883c40d1daea4f7e961ba8f8445efd3cbfafad540915",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "vertex-91--5e-05.json",
+      "request_sha256": "61641412790aa998b46fbba2bfe8823d13fedd079595202ee12d8a10ca2dab98",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "near-circular-ellipse.json",
+      "request_sha256": "648ad1cabaf0c3d252232b25546beab59ffc6cae24e9a7e663aa5d2ee7eab1bc",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "narrow-neck-0.001.json",
+      "request_sha256": "cdcaf5129b09fa828629d50d2099ae4ef3a246baa071e84cd345fe195653f4b2",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.\n"
+    },
+    {
+      "name": "narrow-neck-0.1.json",
+      "request_sha256": "2cc62812ff262e9009494280c4f1e04e77ddba88703382c38291834724b872b2",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.\n"
+    },
+    {
+      "name": "near-coincident-entry.json",
+      "request_sha256": "4c97c636fc12be13b93db9c90f1168b1b1529997c4c917578d51c670adc5ba1d",
+      "runtimes": {
+        "candidate-native": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": false,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "public_cli_refusal": "Error: operation #1: V-Carve: V-Carve contour contains nonfinite, disconnected, zero-length or out-of-budget geometry (coordinates must be below 1000000 mm in magnitude).\n"
+    },
+    {
+      "name": "angle-60-depth-1.json",
+      "request_sha256": "85215b0be62b92521759ca97203edab7ebc8b317781c8ace9bdf8d731ac6dda0",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-120-depth-1.json",
+      "request_sha256": "714538b0312c644704fc018eb8fe16d3aa6d92aa3724d8cf54130dc39e24f2ae",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-90-depth-2.json",
+      "request_sha256": "27f081986acf9b62be5455877b75d71d6af20f2329c64b9165c4657b9cd03eff",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    },
+    {
+      "name": "angle-90-depth-0.2.json",
+      "request_sha256": "c3cb1a537eda11185653554e95ec1032360f1027efde2c65b3e0c0e2ef06adb3",
+      "runtimes": {
+        "candidate-native": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        },
+        "candidate-wasm": {
+          "success": true,
+          "reviewed_result_exact": true,
+          "exit": 0
+        }
+      },
+      "parity": {
+        "gcode": true,
+        "toolpath": true,
+        "gcode_index": true,
+        "stats": true
+      },
+      "public_cli_exact": true
+    }
+  ]
+}

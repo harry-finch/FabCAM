@@ -1,0 +1,385 @@
+{
+  "results": [
+    {
+      "runtime": "old-wasm",
+      "name": "old-created-old-loaded",
+      "expected": true,
+      "success": true,
+      "ms": 1.5238750000000039
+    },
+    {
+      "runtime": "old-native",
+      "name": "old-created-old-loaded",
+      "expected": true,
+      "success": true,
+      "ms": 3.1914159999999896
+    },
+    {
+      "runtime": "old-native",
+      "name": "new-signature-under-old-parser",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 2.9205420000000117
+    },
+    {
+      "runtime": "old-native",
+      "name": "unchanged-compatible-old",
+      "expected": true,
+      "success": true,
+      "ms": 3.1570840000000118
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "new-created-new-loaded",
+      "expected": true,
+      "success": true,
+      "ms": 2.0352919999999983
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "old-numeric-signature-mismatch",
+      "expected": false,
+      "success": false,
+      "error": "Preset context differs: review machine, material, tool geometry and operation",
+      "ms": 0.2687080000000037
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "unchanged-compatible-old",
+      "expected": true,
+      "success": true,
+      "ms": 0.1717079999999953
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "real-diameter-change",
+      "expected": false,
+      "success": false,
+      "error": "Preset context differs: review machine, material, tool geometry and operation",
+      "ms": 0.11424999999999841
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "machine-configuration",
+      "expected": false,
+      "success": false,
+      "error": "Preset context differs: review machine, material, tool geometry and operation",
+      "ms": 0.10341700000000742
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "material-revision",
+      "expected": false,
+      "success": false,
+      "error": "Preset context differs: review machine, material, tool geometry and operation",
+      "ms": 0.10791699999998627
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "operation-strategy",
+      "expected": false,
+      "success": false,
+      "error": "Preset context differs: review machine, material, tool geometry and operation",
+      "ms": 0.1049160000000029
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "physical-tool",
+      "expected": false,
+      "success": false,
+      "error": "Preset context differs: review machine, material, tool geometry and operation",
+      "ms": 0.09850000000000136
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "machine-limit",
+      "expected": false,
+      "success": false,
+      "error": "Rough: Spindle 10000 rpm exceeds the machine maximum; Finish: Spindle 10000 rpm exceeds the machine maximum",
+      "ms": 0.23729200000001072
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "tool-limit",
+      "expected": false,
+      "success": false,
+      "error": "Rough: Spindle 10000 rpm exceeds tool 2 maximum; Finish: Spindle 10000 rpm exceeds tool 2 maximum",
+      "ms": 0.14945799999999565
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "renaming-duplicating-cannot-bypass",
+      "expected": false,
+      "success": false,
+      "error": "Preset context differs: review machine, material, tool geometry and operation",
+      "ms": 0.10145799999999383
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "import-author-claim-with-unrelated-entry",
+      "expected": true,
+      "success": true,
+      "ms": 0.2804999999999893
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "deletion-does-not-change-copied-operation",
+      "success": true,
+      "expected": true
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "incomplete-operation-inspection",
+      "expected": true,
+      "success": true,
+      "ms": 1.098708000000002
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "reviewed-load-can-complete-operation",
+      "expected": true,
+      "success": true,
+      "ms": 0.4672089999999969
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "incomplete-preset-refused",
+      "expected": false,
+      "success": false,
+      "error": "Preset roles must be unique and complete with positive integer values",
+      "ms": 0.14658299999999258
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "duplicate-id-refused",
+      "expected": false,
+      "success": false,
+      "error": "Presets require unique safe IDs, a name and explicit tested attestation",
+      "ms": 0.08166599999999846
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "missing-author-attestation",
+      "expected": false,
+      "success": false,
+      "error": "Presets require unique safe IDs, a name and explicit tested attestation",
+      "ms": 0.08658400000000199
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "malformed-document",
+      "expected": false,
+      "success": false,
+      "error": "EOF while parsing an object at line 1 column 1",
+      "ms": 0.10004200000000196
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "oversized-document",
+      "expected": false,
+      "success": false,
+      "error": "Collection exceeds 2 MiB",
+      "ms": 5.8407080000000065
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "edited-overlimit-rates-refused",
+      "expected": false,
+      "success": false,
+      "error": "Rough: Spindle 999999 rpm exceeds the machine maximum",
+      "ms": 0.36479099999999676
+    },
+    {
+      "runtime": "corrected-wasm",
+      "name": "external-edited-valid-author-claim-is-not-proof",
+      "expected": true,
+      "success": true,
+      "ms": 0.17525000000000546
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "new-created-new-loaded",
+      "expected": true,
+      "success": true,
+      "ms": 7.012083000000004
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "old-numeric-signature-mismatch",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 3.379708000000008
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "unchanged-compatible-old",
+      "expected": true,
+      "success": true,
+      "ms": 2.7648339999999934
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "real-diameter-change",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 2.5330000000000013
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "machine-configuration",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 2.5725419999999986
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "material-revision",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 2.784334000000001
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "operation-strategy",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 2.3723329999999976
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "physical-tool",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 2.4083339999999964
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "machine-limit",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Rough: Spindle 10000 rpm exceeds the machine maximum; Finish: Spindle 10000 rpm exceeds the machine maximum\"\n",
+      "ms": 2.380375000000015
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "tool-limit",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Rough: Spindle 10000 rpm exceeds tool 2 maximum; Finish: Spindle 10000 rpm exceeds tool 2 maximum\"\n",
+      "ms": 2.8422920000000147
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "renaming-duplicating-cannot-bypass",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset context differs: review machine, material, tool geometry and operation\"\n",
+      "ms": 2.211207999999999
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "import-author-claim-with-unrelated-entry",
+      "expected": true,
+      "success": true,
+      "ms": 2.241041999999993
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "deletion-does-not-change-copied-operation",
+      "success": true,
+      "expected": true
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "incomplete-operation-inspection",
+      "expected": true,
+      "success": true,
+      "ms": 2.3095419999999933
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "reviewed-load-can-complete-operation",
+      "expected": true,
+      "success": true,
+      "ms": 2.156708000000009
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "incomplete-preset-refused",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Preset roles must be unique and complete with positive integer values\"\n",
+      "ms": 2.2949999999999875
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "duplicate-id-refused",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Presets require unique safe IDs, a name and explicit tested attestation\"\n",
+      "ms": 2.5087919999999997
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "missing-author-attestation",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Presets require unique safe IDs, a name and explicit tested attestation\"\n",
+      "ms": 2.1425419999999917
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "malformed-document",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"EOF while parsing an object at line 1 column 1\"\n",
+      "ms": 1.972500000000025
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "oversized-document",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Collection exceeds 2 MiB\"\n",
+      "ms": 6.007958000000002
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "edited-overlimit-rates-refused",
+      "expected": false,
+      "success": false,
+      "error": "Error: Error: \"Rough: Spindle 999999 rpm exceeds the machine maximum\"\n",
+      "ms": 2.5897080000000017
+    },
+    {
+      "runtime": "corrected-native",
+      "name": "external-edited-valid-author-claim-is-not-proof",
+      "expected": true,
+      "success": true,
+      "ms": 2.2555419999999913
+    }
+  ],
+  "original_files_before": {
+    "compatible.json": "11cc08497e2bd6af14229c28799c65f8dec991502db81e4dbdc1ba8cbdf02cbc",
+    "current.json": "6ca668c7f3f4361f2c75ac5ccb711144e672a83c305985e596f78eb514cecbf9",
+    "old.json": "0bd855de0b13a2dfbc1c76dca5a4761e1ed4dc6bf09435bd7601f3126150b549"
+  },
+  "original_files_after": {
+    "compatible.json": "11cc08497e2bd6af14229c28799c65f8dec991502db81e4dbdc1ba8cbdf02cbc",
+    "current.json": "6ca668c7f3f4361f2c75ac5ccb711144e672a83c305985e596f78eb514cecbf9",
+    "old.json": "0bd855de0b13a2dfbc1c76dca5a4761e1ed4dc6bf09435bd7601f3126150b549"
+  },
+  "original_signatures": {
+    "old": "{\"machine\":\"synthetic-lab-machine\",\"machine_setup\":{\"accel\":{\"x\":250.0,\"y\":250.0,\"z\":250.0},\"arcs\":false,\"comments\":true,\"mode\":\"mill\",\"physical_id\":\"synthetic-lab-machine\",\"rapid_speed\":9144.0,\"tool_change\":\"manual_m0_pause\",\"unit\":\"mm\",\"work_area\":{\"x\":1200.0,\"y\":600.0,\"z\":203.0}},\"material\":{\"id\":\"synthetic-material\",\"revision\":\"1\"},\"mode\":\"mill\",\"operation\":{\"contour\":{\"leads\":{\"in\":\"off\",\"in_lenght\":5.0,\"out\":\"off\",\"out_lenght\":5.0},\"tabs\":{\"active\":false,\"height\":1.0,\"tab_type\":\"rectangle\",\"width\":10.0}},\"offset\":\"outside\",\"profile\":{\"helix\":false,\"overcut\":false,\"reverse\":false},\"type\":\"profile\"},\"plunge\":{\"kind\":\"direct\"},\"tools\":[{\"geometry\":{\"coolant\":\"off\",\"diameter\":15.12270614261456,\"flutes\":1,\"kind\":\"endmill\",\"physical_id\":\"synthetic-bit-2\",\"tip_angle_deg\":60.0},\"physical_id\":\"synthetic-bit-2\",\"role\":\"rough\"},{\"geometry\":{\"coolant\":\"off\",\"diameter\":15.12270614261456,\"flutes\":1,\"kind\":\"endmill\",\"physical_id\":\"synthetic-bit-2\",\"tip_angle_deg\":60.0},\"physical_id\":\"synthetic-bit-2\",\"role\":\"finish\"}]}",
+    "current": "{\"machine\":\"synthetic-lab-machine\",\"machine_setup\":{\"accel\":{\"x\":250.0,\"y\":250.0,\"z\":250.0},\"arcs\":false,\"comments\":true,\"mode\":\"mill\",\"physical_id\":\"synthetic-lab-machine\",\"rapid_speed\":9144.0,\"tool_change\":\"manual_m0_pause\",\"unit\":\"mm\",\"work_area\":{\"x\":1200.0,\"y\":600.0,\"z\":203.0}},\"material\":{\"id\":\"synthetic-material\",\"revision\":\"1\"},\"mode\":\"mill\",\"operation\":{\"contour\":{\"leads\":{\"in\":\"off\",\"in_lenght\":5.0,\"out\":\"off\",\"out_lenght\":5.0},\"tabs\":{\"active\":false,\"height\":1.0,\"tab_type\":\"rectangle\",\"width\":10.0}},\"offset\":\"outside\",\"profile\":{\"helix\":false,\"overcut\":false,\"reverse\":false},\"type\":\"profile\"},\"plunge\":{\"kind\":\"direct\"},\"tools\":[{\"geometry\":{\"coolant\":\"off\",\"diameter\":15.122706142614561,\"flutes\":1,\"kind\":\"endmill\",\"physical_id\":\"synthetic-bit-2\",\"tip_angle_deg\":60.0},\"physical_id\":\"synthetic-bit-2\",\"role\":\"rough\"},{\"geometry\":{\"coolant\":\"off\",\"diameter\":15.122706142614561,\"flutes\":1,\"kind\":\"endmill\",\"physical_id\":\"synthetic-bit-2\",\"tip_angle_deg\":60.0},\"physical_id\":\"synthetic-bit-2\",\"role\":\"finish\"}]}"
+  },
+  "same_corrected_native_wasm_context": true,
+  "limits": "Real commands on Node/WASM and native. No installed WebView, browser file dialogs, author authentication or physical test claim."
+}

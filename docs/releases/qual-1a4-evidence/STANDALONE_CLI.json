@@ -1,0 +1,566 @@
+{
+  "source": "61c00ba59a3f2b9373f5760205a698f4c7413799",
+  "binary_sha256": "c2eb4221cacac885c1c5c76c1089a13e7424dc0a86968bd4c626f9c78386785e",
+  "cases": [
+    {
+      "case": "missing-layer-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "170753686e227868cba4ab3d1bee0a27b83dc3c9ad66ff485cf8efabaa02b171",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "pocket-islands-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "72a0f02a92b56dfc89ad9a4e2f3822587209e32740dc815312080603158a0962",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "profile-contours-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "d629512cfa1e0dbff5676e8199b998101edeb3263bc1019d1138f7f2f06369d7",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "profile-many-segments-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "723a5db739b9a7e81f25c3c6d31afc3165e963525fd668cdb135dc7a1a1a28b0",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "square-medial-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "27d7162b3df186c80ca7339787842d828ad4c95c90b39f416f7e6a8e8023efd3",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "square-outline-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "ad719d326d95342f78f2e84cd96f749fa8396fc6eae088d2c577c1b95dac6af9",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "text-B8-medial-linuxcnc.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "text-Test-medial-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "4677373026e79a49d2c7bd2f920f189c9aff0bcc2b969f8cbc9b08941e9f80fa",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "text-Test-outline-linuxcnc.json",
+      "exit": 0,
+      "output_sha256": "8a918e48bc13cef082d71cd7587db9557cff0efe3887fb87261fcc5ec699b31c",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "rectangle.json",
+      "exit": 0,
+      "output_sha256": "0f04a8da38bbde2aebb8af8199ac311cd3ba590a3424bdc5091183f93643d80c",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "collinear.json",
+      "exit": 0,
+      "output_sha256": "59aea9ebd0dec859169fc2c4af34b855557f34d04da146bdc1c6026642144d82",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "near-collinear.json",
+      "exit": 0,
+      "output_sha256": "3471344be59c67ce46fcaaa69658c874f760e486adb5aa605216bccbd8b0e4fc",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "short-edge.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "coincident-edge.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve contour contains nonfinite, disconnected, zero-length or out-of-budget geometry (coordinates must be below 1000000 mm in magnitude).\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "dense-circle.json",
+      "exit": 0,
+      "output_sha256": "90ee88ed2b024c43d42fc77928100b7665357a1c345c042dbaeaa42058b8f596",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "acute-triangle.json",
+      "exit": 0,
+      "output_sha256": "e5abcaea8117f00ddbc020ebc30fcd6271e19ea858d654f80b79c675c40c6488",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "narrow-channel.json",
+      "exit": 0,
+      "output_sha256": "78ab883ee74545574cc6a5d5da7834c372054ed5dd0191efc6e7afb7084bb26a",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "tight-hole.json",
+      "exit": 0,
+      "output_sha256": "be6152188f103ef0d321a4626b87404d19b5494088ffa2b6fca2af313dca1b4d",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "tiny-island.json",
+      "exit": 0,
+      "output_sha256": "b5df633f414dd9eae74bb3501e2aef64e653b574474a517aec33006c5e9e7845",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "disconnected-island.json",
+      "exit": 0,
+      "output_sha256": "0fca01c96de18522e14c5dc47b736cabc46327441e289a62a40608ab6b901f8e",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "degenerate.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "bow-tie.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "near-degenerate.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve requires simple nonzero-area contours; self-intersections are unsupported.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "scale-0.0001.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: Undercut: a degenerate medial chain cannot be completed.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "scale-0.01.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: Undercut: a degenerate medial chain cannot be completed.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "scale-1.0.json",
+      "exit": 0,
+      "output_sha256": "0f04a8da38bbde2aebb8af8199ac311cd3ba590a3424bdc5091183f93643d80c",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "scale-10.0.json",
+      "exit": 0,
+      "output_sha256": "212e88de1a1bf59188b863a989fe8a17256c8c3adeaa1fc81bc2f1c3d1993d43",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "large-translation.json",
+      "exit": 0,
+      "output_sha256": "4e29145eee831166bec726beec3a4b0387474c2162b03f4581a892c940d54ce7",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "coordinate-budget.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve contour contains nonfinite, disconnected, zero-length or out-of-budget geometry (coordinates must be below 1000000 mm in magnitude).\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-1.0.json",
+      "exit": 0,
+      "output_sha256": "f99186583ed3b13b259c98ee5934f46efcdaf8ba2ade468cbab546621778cc88",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-15.0.json",
+      "exit": 0,
+      "output_sha256": "7aef44210c30ea834ec8feffea5bd0fed8d581bd9a38dbc9218b0ea7d3202569",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-30.0.json",
+      "exit": 0,
+      "output_sha256": "227936c165cd10734254c012f1177c7f1d5a145db6ec4a8d95a520f12568a944",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-60.0.json",
+      "exit": 0,
+      "output_sha256": "21e2e9d87776ae2e9cbbaac23d23f3088bde7a03b13c23831a0c5deca79bb6a5",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-90.0.json",
+      "exit": 0,
+      "output_sha256": "0f04a8da38bbde2aebb8af8199ac311cd3ba590a3424bdc5091183f93643d80c",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-120.0.json",
+      "exit": 0,
+      "output_sha256": "b78322010905074c8c9285b924fcc1ded9b09b57f3984f02cdd1f8cb3ae14377",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-179.0.json",
+      "exit": 0,
+      "output_sha256": "ecafefaebec6a64470f28ff839dd2e341a65d0a95b2696a4037c9e3dc0abc6d9",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "diameter-1.0.json",
+      "exit": 0,
+      "output_sha256": "273de9357319dd9f47ec3dd136b1315fe9da259264c44bc37979adb6c5994df6",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "diameter-3.0.json",
+      "exit": 0,
+      "output_sha256": "5438927ebb7a0f136e0af555cf08f333a07b739cec2803d276c8dcf36249fbbc",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "diameter-12.0.json",
+      "exit": 0,
+      "output_sha256": "916979e7fd8193b3af6813575d0960a28fb50f165ed8e41f515fbbbd898630c2",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-1e-08.json",
+      "exit": 0,
+      "output_sha256": "08d57b5a45937e57e5d941a751d4c502f0bc17d3e1d66cc936f09769871b9d3b",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-4.9e-05.json",
+      "exit": 0,
+      "output_sha256": "de4ac28494e06818d356d8fb57c561af5c1b4087f622afcb99f747ed3f79ed66",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-5.1e-05.json",
+      "exit": 0,
+      "output_sha256": "ad7bb085fd77b3ea8af2c187352df3300da473262a6cf65db8a748ec4d076f5f",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-0.05.json",
+      "exit": 0,
+      "output_sha256": "4c8296cdc906e4dd00b7c1c8f5ff939f684ec63a2025cb787d3628eaf5a346d8",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-3.0.json",
+      "exit": 0,
+      "output_sha256": "07a1d7055820b10feff9d6a108b18a0a132f87e02c67b0b5d3e252f3e7fab1d9",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-5.0.json",
+      "exit": 0,
+      "output_sha256": "c7b726bb2ebf7dba34adadecbc1b1f8d6690c1ffd450869724a4c8432c58a733",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "radius-cap.json",
+      "exit": 0,
+      "output_sha256": "b2966f07901140075b02822442c3498f80d1957ec59a7dd12f4346acd1e64a1a",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "radius-exceeds-tool.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "flute-reach.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: Rough: depth per pass exceeds usable flute length\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "invalid-tool.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: Invalid v9 request\n\nCaused by:\n    unknown variant `end_mill`, expected one of `endmill`, `ball_nose`, `v_bit`, `engraver`, `drag_knife`, `drill`, `laser_beam`, `bull_nose`, `compression`, `form_profile`, `kegel`, `thread_mill`, `plasma_torch` at line 1 column 929\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "invalid-angle.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "flat-tip.json",
+      "exit": 0,
+      "output_sha256": "6e22e05e989090f184895aebb5c5a777173f8b7003c42d2983e2b249d66a6dde",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "refine-unsupported.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "staged-start.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "nonfinite-depth.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: Invalid PipelineRequest JSON\n\nCaused by:\n    expected value at line 1 column 1296\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-level-budget.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: Depth per pass must be finite and positive\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "entry-1e-08.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: Set an explicit entry angle between 1 and 89 degrees\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "entry-1.0.json",
+      "exit": 0,
+      "output_sha256": "104b421890c19193e58885c67d1298436ace9563f5458e50ac97fcce5998da7f",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "entry-89.99999999999999.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: Set an explicit entry angle between 1 and 89 degrees\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "perimeter.json",
+      "exit": 0,
+      "output_sha256": "8c7cd64fc69521a80f6ca5e60747628f189f0b3bddaa7d246be8d90f068ac3ad",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "unsupported-endmill.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: invalid applied cutting parameters: V-Carve requires valid V-bit geometry, stock-top start, explicit passes and a radius cap within the cutter; alternate schedules/refine are unsupported\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "depth-count-budget.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: 1.0 mm at 1e-5 mm per pass needs 100000.0 depth levels, more than the 1000-pass limit. No program generated.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "circle-255.json",
+      "exit": 0,
+      "output_sha256": "12d15d51c1144eac324d1876903c70d901d69c2c5da25bb85e34f9b0abbc3e77",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "circle-257.json",
+      "exit": 0,
+      "output_sha256": "008c894c5c6335257bfac869e8b7790a5fe0a1b682005ed9032b2b7c5dc466dd",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "circle-128.json",
+      "exit": 0,
+      "output_sha256": "82257f018297f96e851109def9164b5d810d77a5ccbd8b858c034560b85510da",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "circle-512.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: Undercut: a degenerate medial chain cannot be completed.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "vertex-0-1e-12.json",
+      "exit": 0,
+      "output_sha256": "27e4dc5fdb29e25ba17f389c63eb1ea64030c44788da977a8d34ea49a4d8f4c3",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "vertex-32-1e-12.json",
+      "exit": 0,
+      "output_sha256": "52bf1f6c290de8bc2cac8c7fb4b976ecd4d46981392a5dd30447c0b1f4ce50a8",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "vertex-91-5e-05.json",
+      "exit": 0,
+      "output_sha256": "81e1da48a0b349be1d61a4f7376feaae794659d86b01316660577c59d04d0913",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "vertex-91--5e-05.json",
+      "exit": 0,
+      "output_sha256": "120869cded4e42582ab161e7cf302766e3b713622125ac97ff69e7f9a168ca78",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "near-circular-ellipse.json",
+      "exit": 0,
+      "output_sha256": "a464bf79ec9535a988f49b77fde72283569467e884abe85b1034d5c282006ea1",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "narrow-neck-0.001.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "narrow-neck-0.1.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "near-coincident-entry.json",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve contour contains nonfinite, disconnected, zero-length or out-of-budget geometry (coordinates must be below 1000000 mm in magnitude).\n",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-60-depth-1.json",
+      "exit": 0,
+      "output_sha256": "c8dea40ce02959e414e5a715cc0cfff1d07d4e2ef49b9aaafa735752c2f63651",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-120-depth-1.json",
+      "exit": 0,
+      "output_sha256": "f8818c00fe9a6843c76bbb9a5e2a72c42945e5bfc8b5e99a0916e43257fe5774",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-90-depth-2.json",
+      "exit": 0,
+      "output_sha256": "6f43c455661b05fe1b635f58af11710f6f6b7c2e59ad2318457d194f07e0e4c6",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "angle-90-depth-0.2.json",
+      "exit": 0,
+      "output_sha256": "1ed5a4b292bb5ec741ce631776b2588d37b746c24cc391d646ecae7303f70dd1",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "square-medial-cps",
+      "exit": 0,
+      "output_sha256": "6f4208bdafcccddc6e8943c62918c4f536472375f371c0daa055d06f97177600",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "text-Test-medial-cps",
+      "exit": 0,
+      "output_sha256": "071aff3ba1749f4a79f63e9143d516b63042f46232226efa7e7e95f9c78008ec",
+      "stderr": "",
+      "reviewed_result_exact": true
+    },
+    {
+      "case": "text-B8-medial-cps",
+      "exit": 1,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: operation #1: V-Carve: V-Carve overcut: interpolated cutter envelope crosses a region boundary or island. Refine or simplify the geometry; no output generated.\n",
+      "reviewed_result_exact": true
+    }
+  ]
+}

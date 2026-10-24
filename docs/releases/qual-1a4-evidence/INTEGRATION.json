@@ -1,0 +1,54 @@
+{
+  "before": "6148b1059ab6020f751069d5c3a7d64b8047fb6b",
+  "after": "8e2c9ce427007f9c5a3787b34dd28647b8cdcf95",
+  "branch": "FabCAM-v1.1",
+  "method": "local git merge --ff-only; no main merge, push, rebase or release",
+  "overlap": [],
+  "protected_before": {
+    "primary": {
+      "checked": 8473,
+      "changed": []
+    },
+    "historical_raw": {
+      "checked": 10281,
+      "changed": []
+    },
+    "FabCAM-qual-1a": {
+      "checked": 8,
+      "changed": []
+    },
+    "FabCAM-qual-1a2": {
+      "checked": 8,
+      "changed": []
+    },
+    "FabCAM-qual-1a3": {
+      "checked": 87,
+      "changed": []
+    }
+  },
+  "protected_after": {
+    "primary": {
+      "checked": 8473,
+      "changed": []
+    },
+    "historical_raw": {
+      "checked": 10281,
+      "changed": []
+    },
+    "FabCAM-qual-1a": {
+      "checked": 8,
+      "changed": []
+    },
+    "FabCAM-qual-1a2": {
+      "checked": 8,
+      "changed": []
+    },
+    "FabCAM-qual-1a3": {
+      "checked": 87,
+      "changed": []
+    }
+  },
+  "remaining_tracked_dirty": "M crates/ivac-core/src/pipeline/offset_builder.rs\n M crates/ivac-core/src/pipeline/warnings.rs\n M docs/releases/RELEASE_ROADMAP.md\n M docs/shopbot-modernization/STATUS.md\n M frontend/src/App.svelte\n M frontend/src/app.css\n M frontend/src/lib/components/AppNavigation.svelte\n M frontend/src/lib/components/LayerList.svelte\n M frontend/src/lib/state/import-ops.ts\n M frontend/src/lib/state/project-types.ts",
+  "merge_output": "Updating 6148b10..8e2c9ce\nFast-forward\n Cargo.lock                                         |    7 +\n Cargo.toml                                         |    2 +-\n crates/ivac-core/Cargo.toml                        |    2 +\n crates/ivac-core/examples/qual1a2_command.rs       |   11 +\n crates/ivac-core/examples/qual1a_input_bits.rs     |   32 +\n .../examples/qual1a_structured_refusal.rs          |   12 +\n crates/ivac-core/src/cam.rs                        |    1 +\n crates/ivac-core/src/cam/vcarve.rs                 |    2 +-\n crates/ivac-core/src/cam/vcarve_math.rs            |   42 +\n crates/ivac-core/src/cam/vcarve_plan.rs            |    6 +-\n crates/ivac-core/src/pipeline/op_drivers/vcarve.rs |   18 +-\n .../ivac-core/tests/fixtures/qual1a4-numeric.json  | 2298 ++++++++++++++++++++\n crates/ivac-core/tests/qual1a2_numeric.rs          |   74 +\n crates/ivac-core/tests/qual1a_planner.rs           |   40 +\n crates/ivac-server/src/main.rs                     |    3 +\n crates/ivac-server/src/qual1a2_tests.rs            |   98 +\n crates/ivac-tauri/src/commands.rs                  |   28 +\n crates/ivac-tauri/src/preset_collections.rs        |   25 +\n docs/DETERMINISTIC_NUMERICS.md                     |   35 +\n docs/TESTED_PRESETS.md                             |   13 +\n .../src/lib/components/PresetReviewError.svelte    |   28 +\n .../lib/components/RecordedPresetContext.svelte    |   62 +\n .../src/lib/components/TestedPresetsLibrary.svelte |    9 +-\n .../op_properties/CuttingParameters.svelte         |   27 +-\n frontend/src/lib/i18n/keys.ts                      |   16 +\n frontend/src/lib/i18n/messages/de.json             |   10 +-\n frontend/src/lib/i18n/messages/en.json             |   10 +-\n .../src/lib/state/preset-context-review.test.ts    |  121 ++\n frontend/src/lib/state/preset-context-review.ts    |   78 +\n frontend/src/lib/state/project-v9.test.ts          |   61 +-\n scripts/qual1a4/README.md                          |   30 +\n scripts/qual1a4/corpus.py                          |   37 +\n scripts/qual1a4/native_numeric.py                  |   26 +\n scripts/qual1a4/presets.mjs                        |  277 +++\n scripts/qual1a4/public_numeric.mjs                 |   96 +\n scripts/qual1a4/replay.py                          |   80 +\n scripts/qual1a4/worker_numeric.mjs                 |  105 +\n 37 files changed, 3801 insertions(+), 21 deletions(-)\n create mode 100644 crates/ivac-core/examples/qual1a2_command.rs\n create mode 100644 crates/ivac-core/examples/qual1a_input_bits.rs\n create mode 100644 crates/ivac-core/examples/qual1a_structured_refusal.rs\n create mode 100644 crates/ivac-core/src/cam/vcarve_math.rs\n create mode 100644 crates/ivac-core/tests/fixtures/qual1a4-numeric.json\n create mode 100644 crates/ivac-core/tests/qual1a2_numeric.rs\n create mode 100644 crates/ivac-core/tests/qual1a_planner.rs\n create mode 100644 crates/ivac-server/src/qual1a2_tests.rs\n create mode 100644 docs/DETERMINISTIC_NUMERICS.md\n create mode 100644 frontend/src/lib/components/PresetReviewError.svelte\n create mode 100644 frontend/src/lib/components/RecordedPresetContext.svelte\n create mode 100644 frontend/src/lib/state/preset-context-review.test.ts\n create mode 100644 frontend/src/lib/state/preset-context-review.ts\n create mode 100644 scripts/qual1a4/README.md\n create mode 100644 scripts/qual1a4/corpus.py\n create mode 100644 scripts/qual1a4/native_numeric.py\n create mode 100644 scripts/qual1a4/presets.mjs\n create mode 100644 scripts/qual1a4/public_numeric.mjs\n create mode 100644 scripts/qual1a4/replay.py\n create mode 100644 scripts/qual1a4/worker_numeric.mjs\n",
+  "worktrees_after": "worktree /Users/mugen/Documents/01_Projets/FabCAM/ivacam\nHEAD 8e2c9ce427007f9c5a3787b34dd28647b8cdcf95\nbranch refs/heads/FabCAM-v1.1\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-docs-consolidation\nHEAD 7e1c24b937e9bc01aa320537c835ffc30fc9389c\nbranch refs/heads/codex/sec1-roadmap\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-fs-reset-2-repairs\nHEAD d6b08fe82011c54d0166a6559b329804c2e56cee\nbranch refs/heads/codex/fs-reset-2-repairs\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a\nHEAD 7f55b2e8fdc7850234a90e456efa2f02de21c322\nbranch refs/heads/codex/qual-1a-deterministic-vcarve\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a2\nHEAD aa846fc6ac01af586e660e43f13488bef3c8064d\nbranch refs/heads/codex/qual-1a2-numeric-input\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a3\nHEAD aa846fc6ac01af586e660e43f13488bef3c8064d\nbranch refs/heads/codex/qual-1a3-motion-presets\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4\nHEAD 8e2c9ce427007f9c5a3787b34dd28647b8cdcf95\nbranch refs/heads/codex/qual-1a4-production\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-roadmap-fabspeed\nHEAD ff6486b1795bb95994ad97d7cb799011e276fded\nbranch refs/heads/codex/roadmap-fabspeed\n\nworktree /Users/mugen/Documents/01_Projets/FabCAM/FabCAM-v1-freeze\nHEAD 85a93c4a467ff5965655d5737354d9500c2e94fc\nbranch refs/heads/codex/v1-freeze-readiness"
+}

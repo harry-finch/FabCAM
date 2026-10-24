@@ -1,0 +1,17 @@
+{
+  "QUAL_1A_DETERMINISTIC_VCARVE.md": {
+    "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/releases/QUAL_1A_DETERMINISTIC_VCARVE.md",
+    "sha256": "77fd6e7753a9e6661881e0db8945c75adc529b04a88fc8c30c9b8e333b6f3516",
+    "preserved_local_only": true
+  },
+  "QUAL_1A_2_DETERMINISTIC_NUMERIC_INPUT.md": {
+    "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/releases/QUAL_1A_2_DETERMINISTIC_NUMERIC_INPUT.md",
+    "sha256": "fe99c218f787029dc184bebe7225f02646cc3a33d20f325105b68609c0de50a3",
+    "preserved_local_only": true
+  },
+  "QUAL_1A_3_MOTION_PRESET_ACCEPTANCE.md": {
+    "path": "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/releases/QUAL_1A_3_MOTION_PRESET_ACCEPTANCE.md",
+    "sha256": "d5587d5d5bc1f8513359eefa523454010ee85b865e0d66f0847a6c30f63fa058",
+    "preserved_local_only": true
+  }
+}

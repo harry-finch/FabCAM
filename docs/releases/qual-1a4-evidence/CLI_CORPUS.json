@@ -1,0 +1,279 @@
+{
+  "binary_sha256": "c2eb4221cacac885c1c5c76c1089a13e7424dc0a86968bd4c626f9c78386785e",
+  "cases": [
+    {
+      "case": "chamfer-grbl.json",
+      "fixture_sha256": "9a320003ed54ce51effb194e998cee07c9afaa727384153c072414e79c201d61",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "chamfer.json",
+      "fixture_sha256": "3e26b5047e8737e4cf0c7e0776561579543c27b8d6bc5772fa72ad200bf5ba6e",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "dovetail.json",
+      "fixture_sha256": "f17f4bccb49c547e290dacf89112935bffe36851619cd2399f694237954c4478",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "drill-shared-false.json",
+      "fixture_sha256": "4e97b6c987bef28274f230a09ba92080ec027d750280f0db8ec6ff6dcb3219d5",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "drill-shared-true.json",
+      "fixture_sha256": "e986f4137f3aa3331baccd549d78233f8a42abd9136d3545766736e12fd334db",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "dual-pocket.json",
+      "fixture_sha256": "2aecd225d0df621671d4cddf198847a305a56b7c0deb06182ccb442c43a66ed2",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "engrave-grbl.json",
+      "fixture_sha256": "ff5036ca9c760fd7a0eba6aae813a113bf674235431e2672fe791642226ff49e",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "engrave.json",
+      "fixture_sha256": "9336efe55707f3fe45bf77f6d555e0dbd9dae68dfb633ad89096e2bceab7db68",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "halfpipe.json",
+      "fixture_sha256": "724e918fc984697d2ceb3a812c8ce83a9aa71543c225e59bc4a5712d69428343",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "planar.json",
+      "fixture_sha256": "181e99efce44d1fa0f9f50881e05f92f785e89ca1b8d91c455a6ac58aafe45d7",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "pocket-grbl.json",
+      "fixture_sha256": "e04cf4f80d7cb1f30bb194ff4b518260b3357d7340c30ba7ea60e432086e0444",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "pocket.json",
+      "fixture_sha256": "8404f3e2b06607074bbffff448864c12eebd7a082479140e016b4764bcb25fd0",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "profile-grbl.json",
+      "fixture_sha256": "cf2c591089b60e81b5a34a033cca26094ebe7c8027b81008097cdc598d1f2cdb",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "profile-inside-grbl.json",
+      "fixture_sha256": "d96471bcf3873d2600ff2361689769ac4da4fd64768411e5f42aa06a6df64063",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "profile-inside.json",
+      "fixture_sha256": "fc17690b84db71094df2cf7e83596d4a1e0991dff80559c92430fb1f5c2e911c",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "profile.json",
+      "fixture_sha256": "2b5eb2c79512987c0ad0f994887fa4ef5693adea054e9bbb2ae7f259008c8f63",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "relief.json",
+      "fixture_sha256": "a5e1cfe8a3fa1fa3b416db129bc6a97b86428e9532f40624043c59b36a12d3bb",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "shopbot-profile.json",
+      "fixture_sha256": "0fc5a446d6c029e7bb08012545e5c90a8c4cad487ecd30ca1ba0d4594deb562d",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "shopbot-vcarve.json",
+      "fixture_sha256": "187e2941d22cdf687f309404573d7d66549b022b455f79402f60d9f123cb5b71",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "thread.json",
+      "fixture_sha256": "dac8755addc5dd2c8b2d4b081c762c907f7fc81a8465853b008aafce7b78aa4a",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "tslot.json",
+      "fixture_sha256": "24afcffade3b27cee75ebd818b5008a8aa926102068067f111cfcb4ee0ba66f6",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    },
+    {
+      "case": "two-sided.json",
+      "fixture_sha256": "fcdafb7149671234fda0cd5584f80378e6153b9a7bdc06d0a1bee3793f9c6c46",
+      "returncode": 0,
+      "fields": {
+        "front.gcode": true,
+        "back.gcode": true
+      }
+    },
+    {
+      "case": "waterline.json",
+      "fixture_sha256": "8c7a4c4a1b20bbb0eed2821badff9d5708892353b34b2ee06d0b5fe9945862be",
+      "returncode": 0,
+      "fields": {
+        "gcode": true,
+        "toolpath": true,
+        "tool_provenance": true,
+        "gcode_index": true,
+        "stats": true
+      }
+    }
+  ],
+  "scope": "22 public buffered v9 requests and one two-sided publication; no installed-native or physical claim."
+}

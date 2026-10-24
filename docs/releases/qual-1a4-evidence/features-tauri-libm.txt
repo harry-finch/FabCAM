@@ -1,0 +1,10 @@
+libm v0.2.16
+└── libm feature "force-soft-floats"
+    └── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core)
+        ├── ivac-core feature "cps"
+        │   └── ivac-tauri feature "cps"
+        │       └── ivac-tauri feature "default" (command-line)
+        └── ivac-core feature "default"
+            └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri)
+                ├── ivac-tauri feature "cps" (*)
+                └── ivac-tauri feature "default" (command-line)

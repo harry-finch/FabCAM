@@ -1,0 +1,53 @@
+{
+  "qualified_source": "8e2c9ce427007f9c5a3787b34dd28647b8cdcf95",
+  "application_implementation_source": "61c00ba59a3f2b9373f5760205a698f4c7413799",
+  "tree_identity": {
+    "crates": {
+      "61c00ba": "9f709e9e9a0c5fdb3fb6a70bee5a7065daed7378",
+      "final": "9f709e9e9a0c5fdb3fb6a70bee5a7065daed7378"
+    },
+    "frontend": {
+      "61c00ba": "5a4f4ef265cd0ac3a648d14f12ce10343f27e502",
+      "final": "5a4f4ef265cd0ac3a648d14f12ce10343f27e502"
+    },
+    "Cargo.toml": {
+      "61c00ba": "79c9c661cef2577a8fa4c2b95552b1975fe649c3",
+      "final": "79c9c661cef2577a8fa4c2b95552b1975fe649c3"
+    },
+    "Cargo.lock": {
+      "61c00ba": "62e8ef12ed49fa15a4f7acfc39dee226195d6954",
+      "final": "62e8ef12ed49fa15a4f7acfc39dee226195d6954"
+    },
+    "schema": {
+      "61c00ba": "8d45b8ee81f55deac34fad11fd8a95eb05da0117",
+      "final": "8d45b8ee81f55deac34fad11fd8a95eb05da0117"
+    }
+  },
+  "dirty_during_report_authoring": " M docs/README.md\n?? docs/releases/QUAL_1A_4_PRODUCTION_INTEGRATION.md\n",
+  "artifacts": {
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1a4/standalone-cli/ivac": {
+      "bytes": 12067920,
+      "sha256": "c2eb4221cacac885c1c5c76c1089a13e7424dc0a86968bd4c626f9c78386785e"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1a4/perf": {
+      "bytes": 11693648,
+      "sha256": "c79a19c4a3c2606ccbf2efea497c8c62f6f5e538f49c122586ab3caacd34cfde"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1a4/preset-command": {
+      "bytes": 1531504,
+      "sha256": "e657caec2435fa4cd205faba7e9b6fa056e3fa11b91fc3d933a99892999ea51f"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1a4/number-final": {
+      "bytes": 624544,
+      "sha256": "cd72836da323c519fe4dc15ca78232cc34abd0ac9e5c0ce02d61156a26d8a522"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-wasm/pkg/ivac_wasm_bg.wasm": {
+      "bytes": 5368390,
+      "sha256": "690b2286b5d2e98e19575855874e3118e90cc508a448541d7aacfb98af2d9c58"
+    },
+    "/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/scripts/qual1a4/public_numeric.mjs": {
+      "bytes": 2980,
+      "sha256": "d4a0469a36b9d0bafeef1b0fab193cd0452e9266cecdf9f9d8e80e37b2bc2b92"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "origin": "http://127.0.0.1:5174/?api=wasm",
+  "server_started_by": "maintainer",
+  "all_data": "new disposable local origin; synthetic author claim only; no physical testing",
+  "passed": [
+    "new Pocket with rough 950 and finish 400 / plunge 100",
+    "new synthetic collection and compatible review",
+    "strict strategy mismatch with neutral guidance",
+    "stored context disclosure shows original cascade",
+    "old rates preserved after manual finish 450",
+    "Save tested preset disabled without fresh attestation",
+    "Undo compatible / Redo refused",
+    "I plus stock-outline actual V-Carve, 2102 moves after work-origin review",
+    "feed 800 to 700 makes program stale; regenerate refreshes report",
+    "report current, full-program simulation complete, 18000 rpm / 700 feed / 100 plunge, 0 critical / 3 warnings"
+  ],
+  "blocked": [
+    "browser project download was denied by browser authorization; no bypass",
+    "no file save/reopen or old numeric collection UI import exercised",
+    "no actual browser program export after denial",
+    "no installed Tauri WebView/file dialogs or platform acceptance"
+  ],
+  "negative_result": "different manually authored Text/Test overcut refused before output; unchanged guard retained",
+  "automation_note": "use native text/AX value events; fill/selectOption transient DOM display was not treated as persistence proof",
+  "screenshots": [
+    "ui-p1-refusal.png",
+    "ui-report.png",
+    "ui-stale.png",
+    "ui-vcarve.png",
+    "ui-handoff.png"
+  ],
+  "stamp": "Vite retains c74f5e9-dirty server-start stamp; final builds and source identity checked separately",
+  "after_final_build": "Codegen/rebuild reload discarded the unsaved disposable project; persisted synthetic collection reopened unchanged and recorded context left visible. No file saving bypass."
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "case": "dense-circle.json",
+    "full_response_exact": true
+  },
+  {
+    "case": "square-medial-linuxcnc.json",
+    "full_response_exact": true
+  },
+  {
+    "worker_json_negative_zero_becomes_positive_zero": true,
+    "notice": "Existing JSON.stringify de-proxy behavior. No signed-zero preservation claim for worker JSON normalization."
+  }
+]

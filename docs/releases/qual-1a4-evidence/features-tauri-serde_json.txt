@@ -1,0 +1,270 @@
+serde_json v1.0.149
+├── serde_json feature "default"
+│   ├── boa_engine v0.21.1
+│   │   └── boa_engine feature "annex-b"
+│   │       └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps)
+│   │           └── ivac-cps feature "default"
+│   │               ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core)
+│   │               │   ├── ivac-core feature "cps"
+│   │               │   │   └── ivac-tauri feature "cps"
+│   │               │   │       └── ivac-tauri feature "default" (command-line)
+│   │               │   └── ivac-core feature "default"
+│   │               │       └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri)
+│   │               │           ├── ivac-tauri feature "cps" (*)
+│   │               │           └── ivac-tauri feature "default" (command-line)
+│   │               └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   ├── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│   ├── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   ├── schemars v0.8.22
+│   │   ├── schemars feature "default"
+│   │   │   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   │   │   └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│   │   ├── schemars feature "derive"
+│   │   │   └── schemars feature "default" (*)
+│   │   ├── schemars feature "indexmap"
+│   │   │   └── schemars feature "preserve_order"
+│   │   │       ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   │   │       └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│   │   ├── schemars feature "preserve_order" (*)
+│   │   └── schemars feature "schemars_derive"
+│   │       └── schemars feature "derive" (*)
+│   ├── serialize-to-javascript v0.1.2
+│   │   └── serialize-to-javascript feature "default"
+│   │       └── tauri v2.11.0
+│   │           ├── tauri-plugin-dialog v2.7.1
+│   │           │   ├── tauri-plugin-dialog feature "default"
+│   │           │   │   └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           │   └── tauri-plugin-dialog feature "gtk3"
+│   │           │       └── tauri-plugin-dialog feature "default" (*)
+│   │           ├── tauri-plugin-fs v2.5.1
+│   │           │   └── tauri-plugin-fs feature "default"
+│   │           │       ├── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           │       └── tauri-plugin-dialog v2.7.1 (*)
+│   │           ├── tauri-plugin-log v2.8.0
+│   │           │   └── tauri-plugin-log feature "default"
+│   │           │       └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           ├── tauri-plugin-opener v2.5.4
+│   │           │   └── tauri-plugin-opener feature "default"
+│   │           │       └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           ├── tauri-plugin-process v2.3.1
+│   │           │   └── tauri-plugin-process feature "default"
+│   │           │       └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           ├── tauri-plugin-store v2.4.3
+│   │           │   └── tauri-plugin-store feature "default"
+│   │           │       └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           └── tauri-plugin-window-state v2.4.1
+│   │               └── tauri-plugin-window-state feature "default"
+│   │                   └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           ├── tauri feature "common-controls-v6"
+│   │           │   └── tauri feature "default"
+│   │           │       └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           ├── tauri feature "compression"
+│   │           │   └── tauri feature "default" (*)
+│   │           ├── tauri feature "dbus"
+│   │           │   └── tauri feature "default" (*)
+│   │           ├── tauri feature "default" (*)
+│   │           ├── tauri feature "devtools"
+│   │           │   └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│   │           ├── tauri feature "dynamic-acl"
+│   │           │   └── tauri feature "default" (*)
+│   │           ├── tauri feature "tauri-runtime-wry"
+│   │           │   └── tauri feature "wry"
+│   │           │       └── tauri feature "default" (*)
+│   │           ├── tauri feature "webkit2gtk"
+│   │           │   └── tauri feature "wry" (*)
+│   │           ├── tauri feature "webview2-com"
+│   │           │   └── tauri feature "wry" (*)
+│   │           ├── tauri feature "wry" (*)
+│   │           └── tauri feature "x11"
+│   │               └── tauri feature "default" (*)
+│   ├── tauri v2.11.0 (*)
+│   ├── tauri-plugin-dialog v2.7.1 (*)
+│   ├── tauri-plugin-fs v2.5.1 (*)
+│   ├── tauri-plugin-log v2.8.0 (*)
+│   ├── tauri-plugin-opener v2.5.4 (*)
+│   ├── tauri-plugin-store v2.4.3 (*)
+│   ├── tauri-plugin-window-state v2.4.1 (*)
+│   ├── tauri-runtime v2.11.0
+│   │   ├── tauri-runtime feature "default"
+│   │   │   ├── tauri v2.11.0 (*)
+│   │   │   └── tauri-runtime-wry v2.11.0
+│   │   │       └── tauri v2.11.0 (*)
+│   │   │       ├── tauri-runtime-wry feature "common-controls-v6"
+│   │   │       │   └── tauri feature "common-controls-v6" (*)
+│   │   │       ├── tauri-runtime-wry feature "dbus"
+│   │   │       │   └── tauri feature "dbus" (*)
+│   │   │       ├── tauri-runtime-wry feature "devtools"
+│   │   │       │   └── tauri feature "devtools" (*)
+│   │   │       └── tauri-runtime-wry feature "x11"
+│   │   │           └── tauri feature "x11" (*)
+│   │   └── tauri-runtime feature "devtools"
+│   │       ├── tauri feature "devtools" (*)
+│   │       └── tauri-runtime-wry feature "devtools" (*)
+│   └── tauri-utils v2.9.0
+│       ├── tauri-utils feature "brotli"
+│       │   └── tauri-utils feature "compression"
+│       │       └── tauri feature "compression" (*)
+│       ├── tauri-utils feature "compression" (*)
+│       ├── tauri-utils feature "default"
+│       │   ├── tauri v2.11.0 (*)
+│       │   ├── tauri-runtime v2.11.0 (*)
+│       │   └── tauri-runtime-wry v2.11.0 (*)
+│       ├── tauri-utils feature "resources"
+│       │   └── tauri v2.11.0 (*)
+│       └── tauri-utils feature "walkdir"
+│           └── tauri-utils feature "resources" (*)
+├── serde_json feature "float_roundtrip"
+│   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   ├── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│   └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+├── serde_json feature "raw_value"
+│   ├── serialize-to-javascript v0.1.2 (*)
+│   └── tauri v2.11.0 (*)
+└── serde_json feature "std"
+    └── serde_json feature "default" (*)
+
+serde_json v1.0.149
+├── serde_json feature "alloc"
+│   └── jsonptr v0.6.3
+│       ├── jsonptr feature "assign"
+│       │   └── jsonptr feature "default"
+│       │       └── json-patch v3.0.1
+│       │           ├── json-patch feature "default"
+│       │           │   ├── tauri-build v2.6.0
+│       │           │   │   [build-dependencies]
+│       │           │   │   └── tauri v2.11.0 (*)
+│       │           │   │   ├── tauri-build feature "config-json"
+│       │           │   │   │   └── tauri-build feature "default"
+│       │           │   │   │       [build-dependencies]
+│       │           │   │   │       └── ivac-tauri v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-tauri) (*)
+│       │           │   │   └── tauri-build feature "default" (*)
+│       │           │   ├── tauri-codegen v2.6.0
+│       │           │   │   └── tauri-macros v2.6.0 (proc-macro)
+│       │           │   │       ├── tauri-macros feature "compression"
+│       │           │   │       │   └── tauri feature "compression" (*)
+│       │           │   │       └── tauri-macros feature "default"
+│       │           │   │           └── tauri v2.11.0 (*)
+│       │           │   │   ├── tauri-codegen feature "brotli"
+│       │           │   │   │   └── tauri-codegen feature "compression"
+│       │           │   │   │       └── tauri-macros feature "compression" (*)
+│       │           │   │   └── tauri-codegen feature "compression" (*)
+│       │           │   ├── tauri-utils v2.9.0
+│       │           │   │   ├── tauri-utils feature "brotli"
+│       │           │   │   │   └── tauri-utils feature "compression"
+│       │           │   │   │       ├── tauri feature "compression" (*)
+│       │           │   │   │       └── tauri-codegen feature "compression" (*)
+│       │           │   │   ├── tauri-utils feature "build-2"
+│       │           │   │   │   ├── tauri-build v2.6.0 (*)
+│       │           │   │   │   ├── tauri-codegen v2.6.0 (*)
+│       │           │   │   │   └── tauri-plugin v2.6.0
+│       │           │   │   │       ├── tauri-plugin feature "build"
+│       │           │   │   │       │   [build-dependencies]
+│       │           │   │   │       │   ├── tauri-plugin-dialog v2.7.1 (*)
+│       │           │   │   │       │   ├── tauri-plugin-fs v2.5.1 (*)
+│       │           │   │   │       │   ├── tauri-plugin-log v2.8.0 (*)
+│       │           │   │   │       │   ├── tauri-plugin-opener v2.5.4 (*)
+│       │           │   │   │       │   ├── tauri-plugin-process v2.3.1 (*)
+│       │           │   │   │       │   ├── tauri-plugin-store v2.4.3 (*)
+│       │           │   │   │       │   └── tauri-plugin-window-state v2.4.1 (*)
+│       │           │   │   │       └── tauri-plugin feature "default"
+│       │           │   │   │           [build-dependencies]
+│       │           │   │   │           ├── tauri-plugin-dialog v2.7.1 (*)
+│       │           │   │   │           ├── tauri-plugin-fs v2.5.1 (*)
+│       │           │   │   │           ├── tauri-plugin-log v2.8.0 (*)
+│       │           │   │   │           ├── tauri-plugin-opener v2.5.4 (*)
+│       │           │   │   │           ├── tauri-plugin-process v2.3.1 (*)
+│       │           │   │   │           ├── tauri-plugin-store v2.4.3 (*)
+│       │           │   │   │           └── tauri-plugin-window-state v2.4.1 (*)
+│       │           │   │   │   [build-dependencies]
+│       │           │   │   │   └── tauri v2.11.0 (*)
+│       │           │   │   ├── tauri-utils feature "cargo_metadata"
+│       │           │   │   │   └── tauri-utils feature "build-2" (*)
+│       │           │   │   ├── tauri-utils feature "compression" (*)
+│       │           │   │   ├── tauri-utils feature "default"
+│       │           │   │   │   ├── tauri-build v2.6.0 (*)
+│       │           │   │   │   ├── tauri-codegen v2.6.0 (*)
+│       │           │   │   │   └── tauri-macros v2.6.0 (proc-macro) (*)
+│       │           │   │   │   [build-dependencies]
+│       │           │   │   │   ├── tauri v2.11.0 (*)
+│       │           │   │   │   └── tauri-plugin-fs v2.5.1 (*)
+│       │           │   │   ├── tauri-utils feature "html-manipulation-2"
+│       │           │   │   │   └── tauri-utils feature "build-2" (*)
+│       │           │   │   ├── tauri-utils feature "proc-macro2"
+│       │           │   │   │   └── tauri-utils feature "build-2" (*)
+│       │           │   │   ├── tauri-utils feature "quote"
+│       │           │   │   │   └── tauri-utils feature "build-2" (*)
+│       │           │   │   ├── tauri-utils feature "resources"
+│       │           │   │   │   └── tauri-build v2.6.0 (*)
+│       │           │   │   ├── tauri-utils feature "schema"
+│       │           │   │   │   └── tauri-utils feature "build-2" (*)
+│       │           │   │   ├── tauri-utils feature "schemars"
+│       │           │   │   │   └── tauri-utils feature "schema" (*)
+│       │           │   │   ├── tauri-utils feature "swift-rs"
+│       │           │   │   │   └── tauri-utils feature "build-2" (*)
+│       │           │   │   └── tauri-utils feature "walkdir"
+│       │           │   │       └── tauri-utils feature "resources" (*)
+│       │           │   └── tauri-utils v2.9.0 (*)
+│       │           └── json-patch feature "diff"
+│       │               └── json-patch feature "default" (*)
+│       ├── jsonptr feature "default" (*)
+│       ├── jsonptr feature "delete"
+│       │   └── jsonptr feature "default" (*)
+│       ├── jsonptr feature "json"
+│       │   └── jsonptr feature "default" (*)
+│       ├── jsonptr feature "resolve"
+│       │   ├── jsonptr feature "default" (*)
+│       │   └── jsonptr feature "delete" (*)
+│       ├── jsonptr feature "serde"
+│       │   ├── jsonptr feature "default" (*)
+│       │   ├── jsonptr feature "json" (*)
+│       │   └── jsonptr feature "std"
+│       │       └── jsonptr feature "default" (*)
+│       └── jsonptr feature "std" (*)
+├── serde_json feature "default"
+│   ├── cargo_metadata v0.19.2
+│   │   └── cargo_metadata feature "default"
+│   │       └── tauri-utils v2.9.0 (*)
+│   ├── json-patch v3.0.1 (*)
+│   ├── jsonptr v0.6.3 (*)
+│   ├── schemars v0.8.22
+│   │   ├── schemars feature "default"
+│   │   │   ├── tauri-build v2.6.0 (*)
+│   │   │   ├── tauri-plugin v2.6.0 (*)
+│   │   │   └── tauri-utils v2.9.0 (*)
+│   │   │   [build-dependencies]
+│   │   │   ├── tauri-plugin-fs v2.5.1 (*)
+│   │   │   └── tauri-plugin-opener v2.5.4 (*)
+│   │   ├── schemars feature "derive"
+│   │   │   └── schemars feature "default" (*)
+│   │   ├── schemars feature "indexmap"
+│   │   │   └── schemars feature "preserve_order"
+│   │   │       ├── tauri-build v2.6.0 (*)
+│   │   │       └── tauri-plugin v2.6.0 (*)
+│   │   ├── schemars feature "preserve_order" (*)
+│   │   ├── schemars feature "schemars_derive"
+│   │   │   └── schemars feature "derive" (*)
+│   │   ├── schemars feature "url"
+│   │   │   └── tauri-utils v2.9.0 (*)
+│   │   └── schemars feature "uuid1"
+│   │       └── tauri-utils v2.9.0 (*)
+│   ├── swift-rs v1.0.7
+│   │   ├── swift-rs feature "build"
+│   │   │   └── tauri-utils v2.9.0 (*)
+│   │   ├── swift-rs feature "default"
+│   │   │   └── tauri-utils v2.9.0 (*)
+│   │   ├── swift-rs feature "serde"
+│   │   │   └── swift-rs feature "build" (*)
+│   │   └── swift-rs feature "serde_json"
+│   │       └── swift-rs feature "build" (*)
+│   ├── tauri-build v2.6.0 (*)
+│   ├── tauri-codegen v2.6.0 (*)
+│   ├── tauri-plugin v2.6.0 (*)
+│   └── tauri-utils v2.9.0 (*)
+│   [build-dependencies]
+│   └── swift-rs v1.0.7 (*)
+├── serde_json feature "std"
+│   ├── jsonptr feature "std" (*)
+│   └── serde_json feature "default" (*)
+└── serde_json feature "unbounded_depth"
+    └── cargo_metadata v0.19.2 (*)

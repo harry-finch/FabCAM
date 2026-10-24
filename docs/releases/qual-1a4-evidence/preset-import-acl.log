@@ -1,0 +1,1 @@
+PASS: stat command granted without added path scope; old ACL counterexample reproduced.

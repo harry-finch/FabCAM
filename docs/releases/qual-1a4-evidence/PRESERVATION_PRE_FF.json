@@ -1,0 +1,22 @@
+{
+  "primary": {
+    "checked": 8473,
+    "changed": []
+  },
+  "historical_raw": {
+    "checked": 10281,
+    "changed": []
+  },
+  "FabCAM-qual-1a": {
+    "checked": 8,
+    "changed": []
+  },
+  "FabCAM-qual-1a2": {
+    "checked": 8,
+    "changed": []
+  },
+  "FabCAM-qual-1a3": {
+    "checked": 87,
+    "changed": []
+  }
+}

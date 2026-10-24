@@ -1,0 +1,4 @@
+2026-10-24 11:10:44 [ERROR] failed to fetch advisory database https://github.com/RustSec/advisory-db with cli: failed to clone: ["clone", "--depth=1", "--branch", "main", "https://github.com/RustSec/advisory-db", "/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1a4/advisory-db/advisory-db-3157b0e258782691"]
+Cloning into '/Users/mugen/Documents/01_Projets/FabCAM/ivacam/dist-test/qual1a4/advisory-db/advisory-db-3157b0e258782691'...
+fatal: unable to access 'https://github.com/RustSec/advisory-db/': Could not resolve host: github.com
+

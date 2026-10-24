@@ -1,0 +1,113 @@
+Load tested preset
+Cancel
+
+Choose an exact machine, tool and material configuration, then review the replacement.
+
+SOFTWARE QA ONLY — never machined
+Disposable QUAL-1A.4 synthetic claims · lab-machine-4c1291c9-69c0-4e03-a3bb-88aac460ba9d · lab-tool-9401a594-63af-4906-87f4-51f876f8aabe · material/wood.mdf · pocket
+SOFTWARE QA ONLY — never machined
+
+Recorded values and author's test claim; not proof of testing on the current workshop machine.
+
+Main / roughing · T1: 18000 rpm · feed 950 mm/min · plunge 100 mm/min
+
+Finishing · T1: 18000 rpm · feed 400 mm/min · plunge 100 mm/min
+
+Depth per pass: 1 mm
+
+Pocket overlap: 50%
+
+Recorded compatibility context
+
+Read-only fields from the saved preset, including role assignments and recorded geometry. These are not the current operation or verified machine limits.
+
+machine
+lab-machine-4c1291c9-69c0-4e03-a3bb-88aac460ba9d
+machine setup / accel / x
+250
+machine setup / accel / y
+250
+machine setup / accel / z
+250
+machine setup / arcs
+true
+machine setup / comments
+true
+machine setup / mode
+mill
+machine setup / physical id
+lab-machine-4c1291c9-69c0-4e03-a3bb-88aac460ba9d
+machine setup / rapid speed
+5000
+machine setup / tool change
+manual_m0_pause
+machine setup / unit
+mm
+material / id
+material/wood.mdf
+material / revision
+1
+mode
+mill
+operation / contour / leads / in
+off
+operation / contour / leads / in lenght
+5
+operation / contour / leads / out
+off
+operation / contour / leads / out lenght
+5
+operation / contour / tabs / active
+false
+operation / contour / tabs / height
+1
+operation / contour / tabs / tab type
+rectangle
+operation / contour / tabs / width
+10
+operation / contour / tabs / width mode
+material_v1
+operation / pocket / pocket islands
+true
+operation / pocket / pocket nocontour
+false
+operation / strategy
+cascade
+operation / type
+pocket
+plunge / kind
+direct
+tools / [1] / geometry / coolant
+off
+tools / [1] / geometry / diameter
+3
+tools / [1] / geometry / flutes
+2
+tools / [1] / geometry / kind
+endmill
+tools / [1] / geometry / physical id
+lab-tool-9401a594-63af-4906-87f4-51f876f8aabe
+tools / [1] / geometry / tip angle deg
+60
+tools / [1] / physical id
+lab-tool-9401a594-63af-4906-87f4-51f876f8aabe
+tools / [1] / role
+rough
+tools / [2] / geometry / coolant
+off
+tools / [2] / geometry / diameter
+3
+tools / [2] / geometry / flutes
+2
+tools / [2] / geometry / kind
+endmill
+tools / [2] / geometry / physical id
+lab-tool-9401a594-63af-4906-87f4-51f876f8aabe
+tools / [2] / geometry / tip angle deg
+60
+tools / [2] / physical id
+lab-tool-9401a594-63af-4906-87f4-51f876f8aabe
+tools / [2] / role
+finish
+
+You may review these values and enter them manually in the operation. Review is not workshop testing. Save a new tested preset only after actual testing and a fresh explicit attestation.

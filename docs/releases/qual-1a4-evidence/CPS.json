@@ -1,0 +1,17 @@
+[
+  {
+    "case": "square-medial-cps",
+    "reviewed_exact": true,
+    "success": true
+  },
+  {
+    "case": "text-Test-medial-cps",
+    "reviewed_exact": true,
+    "success": true
+  },
+  {
+    "case": "text-B8-medial-cps",
+    "reviewed_exact": true,
+    "success": false
+  }
+]

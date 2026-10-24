@@ -1,6 +1,8 @@
 # FabCAM documentation
 
-Current V1.1 implementation: [FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md).
+Current V1.1 software checkpoint: [QUAL-1A.4 deterministic production integration](releases/QUAL_1A_4_PRODUCTION_INTEGRATION.md)
+(17/20 mandatory gates; final human acceptance remains open).
+The underlying reset is documented in [FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md).
 FabCAM owns explicit operation values and tested collections;
 [Accepted ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
 separates optional future FabSpeed calculation. Legacy recommendation infrastructure

@@ -1,0 +1,4899 @@
+[
+  {
+    "id": "dense-000",
+    "category": "known-coordinate",
+    "lexeme": "15.122706142614561",
+    "oracle_bits": "402e3ed356eb1880",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-001",
+    "category": "known-coordinate",
+    "lexeme": "15.122706142614561",
+    "oracle_bits": "402e3ed356eb1880",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-002",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-003",
+    "category": "known-coordinate",
+    "lexeme": "19.903926402016154",
+    "oracle_bits": "4033e767b87ea67c",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-004",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-005",
+    "category": "known-coordinate",
+    "lexeme": "19.903926402016154",
+    "oracle_bits": "4033e767b87ea67c",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-006",
+    "category": "known-coordinate",
+    "lexeme": "19.619397662556434",
+    "oracle_bits": "40339e90d85fe613",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-007",
+    "category": "known-coordinate",
+    "lexeme": "19.619397662556434",
+    "oracle_bits": "40339e90d85fe613",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-008",
+    "category": "known-coordinate",
+    "lexeme": "18.786044232532422",
+    "oracle_bits": "4032c93a31dfefa9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-009",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-010",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774798",
+    "oracle_bits": "4032b46add60ab74",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab74",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab74",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-011",
+    "category": "known-coordinate",
+    "lexeme": "18.786044232532422",
+    "oracle_bits": "4032c93a31dfefa9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-012",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-013",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774798",
+    "oracle_bits": "4032b46add60ab74",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab74",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab74",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-014",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774794",
+    "oracle_bits": "4032b46add60ab73",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-015",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-016",
+    "category": "known-coordinate",
+    "lexeme": "18.786044232532422",
+    "oracle_bits": "4032c93a31dfefa9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-017",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774794",
+    "oracle_bits": "4032b46add60ab73",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-018",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-019",
+    "category": "known-coordinate",
+    "lexeme": "18.786044232532422",
+    "oracle_bits": "4032c93a31dfefa9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-020",
+    "category": "known-coordinate",
+    "lexeme": "19.619397662556434",
+    "oracle_bits": "40339e90d85fe613",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-021",
+    "category": "known-coordinate",
+    "lexeme": "19.619397662556434",
+    "oracle_bits": "40339e90d85fe613",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-022",
+    "category": "known-coordinate",
+    "lexeme": "19.903926402016154",
+    "oracle_bits": "4033e767b87ea67c",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-023",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-024",
+    "category": "known-coordinate",
+    "lexeme": "19.903926402016154",
+    "oracle_bits": "4033e767b87ea67c",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-025",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-026",
+    "category": "known-coordinate",
+    "lexeme": "15.122706142614561",
+    "oracle_bits": "402e3ed356eb1880",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-027",
+    "category": "known-coordinate",
+    "lexeme": "15.122706142614561",
+    "oracle_bits": "402e3ed356eb1880",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-028",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385439",
+    "oracle_bits": "402dc12ca914e780",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-029",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385439",
+    "oracle_bits": "402dc12ca914e780",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-030",
+    "category": "known-coordinate",
+    "lexeme": "14.145190556198493",
+    "oracle_bits": "402c4a566aa51f04",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402c4a566aa51f04",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402c4a566aa51f04",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-031",
+    "category": "known-coordinate",
+    "lexeme": "19.903926402016154",
+    "oracle_bits": "4033e767b87ea67c",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-032",
+    "category": "known-coordinate",
+    "lexeme": "14.145190556198493",
+    "oracle_bits": "402c4a566aa51f04",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402c4a566aa51f04",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402c4a566aa51f04",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-033",
+    "category": "known-coordinate",
+    "lexeme": "19.903926402016154",
+    "oracle_bits": "4033e767b87ea67c",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4033e767b87ea67c",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-034",
+    "category": "known-coordinate",
+    "lexeme": "13.431591298005543",
+    "oracle_bits": "402adcf988dc5810",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-035",
+    "category": "known-coordinate",
+    "lexeme": "13.431591298005543",
+    "oracle_bits": "402adcf988dc5810",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-036",
+    "category": "known-coordinate",
+    "lexeme": "13.200524817325059",
+    "oracle_bits": "402a66ab3058e51f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-037",
+    "category": "known-coordinate",
+    "lexeme": "19.619397662556434",
+    "oracle_bits": "40339e90d85fe613",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-038",
+    "category": "known-coordinate",
+    "lexeme": "13.200524817325059",
+    "oracle_bits": "402a66ab3058e51f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-039",
+    "category": "known-coordinate",
+    "lexeme": "19.619397662556434",
+    "oracle_bits": "40339e90d85fe613",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40339e90d85fe613",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-040",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774794",
+    "oracle_bits": "4032b46add60ab73",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-041",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774794",
+    "oracle_bits": "4032b46add60ab73",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-042",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242667",
+    "oracle_bits": "4026c1ed6e850022",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-043",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242667",
+    "oracle_bits": "4026c1ed6e850022",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-044",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-045",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-046",
+    "category": "known-coordinate",
+    "lexeme": "10.912075934242083",
+    "oracle_bits": "4025d2fb9dea13a8",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-047",
+    "category": "known-coordinate",
+    "lexeme": "10.912075934242083",
+    "oracle_bits": "4025d2fb9dea13a8",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-048",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-049",
+    "category": "known-coordinate",
+    "lexeme": "10.590393678258225",
+    "oracle_bits": "40252e481487c4b9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-050",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-051",
+    "category": "known-coordinate",
+    "lexeme": "10.590393678258225",
+    "oracle_bits": "40252e481487c4b9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-052",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-053",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-054",
+    "category": "known-coordinate",
+    "lexeme": "10.335036005826305",
+    "oracle_bits": "4024ab89d6e0034d",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-055",
+    "category": "known-coordinate",
+    "lexeme": "10.292279674084897",
+    "oracle_bits": "402495a5ae72f5d9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402495a5ae72f5d9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402495a5ae72f5d9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-056",
+    "category": "known-coordinate",
+    "lexeme": "10.335036005826305",
+    "oracle_bits": "4024ab89d6e0034d",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-057",
+    "category": "known-coordinate",
+    "lexeme": "10.292279674084897",
+    "oracle_bits": "402495a5ae72f5d9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402495a5ae72f5d9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402495a5ae72f5d9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-058",
+    "category": "known-coordinate",
+    "lexeme": "10.121489349807359",
+    "oracle_bits": "40243e33da207846",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-059",
+    "category": "known-coordinate",
+    "lexeme": "10.121489349807359",
+    "oracle_bits": "40243e33da207846",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-060",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-061",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-062",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-063",
+    "category": "known-coordinate",
+    "lexeme": "15.122706142614561",
+    "oracle_bits": "402e3ed356eb1880",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-064",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-065",
+    "category": "known-coordinate",
+    "lexeme": "15.122706142614561",
+    "oracle_bits": "402e3ed356eb1880",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-066",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-067",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385439",
+    "oracle_bits": "402dc12ca914e780",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-068",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-069",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385439",
+    "oracle_bits": "402dc12ca914e780",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e780",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-070",
+    "category": "known-coordinate",
+    "lexeme": "14.145190556198495",
+    "oracle_bits": "402c4a566aa51f05",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402c4a566aa51f05",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402c4a566aa51f05",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-071",
+    "category": "known-coordinate",
+    "lexeme": "14.145190556198495",
+    "oracle_bits": "402c4a566aa51f05",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402c4a566aa51f05",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402c4a566aa51f05",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-072",
+    "category": "known-coordinate",
+    "lexeme": "10.335036005826305",
+    "oracle_bits": "4024ab89d6e0034d",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-073",
+    "category": "known-coordinate",
+    "lexeme": "13.200524817325059",
+    "oracle_bits": "402a66ab3058e51f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-074",
+    "category": "known-coordinate",
+    "lexeme": "10.335036005826305",
+    "oracle_bits": "4024ab89d6e0034d",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-075",
+    "category": "known-coordinate",
+    "lexeme": "13.200524817325059",
+    "oracle_bits": "402a66ab3058e51f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402a66ab3058e51f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-076",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-077",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-078",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-079",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-080",
+    "category": "known-coordinate",
+    "lexeme": "10.912075934242083",
+    "oracle_bits": "4025d2fb9dea13a8",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-081",
+    "category": "known-coordinate",
+    "lexeme": "10.912075934242083",
+    "oracle_bits": "4025d2fb9dea13a8",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4025d2fb9dea13a8",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-082",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242665",
+    "oracle_bits": "4026c1ed6e850021",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-083",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242665",
+    "oracle_bits": "4026c1ed6e850021",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-084",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242667",
+    "oracle_bits": "4026c1ed6e850022",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-085",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242667",
+    "oracle_bits": "4026c1ed6e850022",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850022",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-086",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-087",
+    "category": "known-coordinate",
+    "lexeme": "10.590393678258225",
+    "oracle_bits": "40252e481487c4b9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-088",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-089",
+    "category": "known-coordinate",
+    "lexeme": "10.590393678258225",
+    "oracle_bits": "40252e481487c4b9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40252e481487c4b9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-090",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-091",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-092",
+    "category": "known-coordinate",
+    "lexeme": "10.335036005826305",
+    "oracle_bits": "4024ab89d6e0034d",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-093",
+    "category": "known-coordinate",
+    "lexeme": "10.335036005826305",
+    "oracle_bits": "4024ab89d6e0034d",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024ab89d6e0034d",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-094",
+    "category": "known-coordinate",
+    "lexeme": "13.431591298005543",
+    "oracle_bits": "402adcf988dc5810",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-095",
+    "category": "known-coordinate",
+    "lexeme": "13.431591298005543",
+    "oracle_bits": "402adcf988dc5810",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-096",
+    "category": "known-coordinate",
+    "lexeme": "13.785099100483679",
+    "oracle_bits": "402b91f882616491",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-097",
+    "category": "known-coordinate",
+    "lexeme": "10.121489349807359",
+    "oracle_bits": "40243e33da207846",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-098",
+    "category": "known-coordinate",
+    "lexeme": "13.785099100483679",
+    "oracle_bits": "402b91f882616491",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-099",
+    "category": "known-coordinate",
+    "lexeme": "10.121489349807359",
+    "oracle_bits": "40243e33da207846",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40243e33da207846",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-100",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385437",
+    "oracle_bits": "402dc12ca914e77f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-101",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-102",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385437",
+    "oracle_bits": "402dc12ca914e77f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-103",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-104",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-105",
+    "category": "known-coordinate",
+    "lexeme": "10.001505906518979",
+    "oracle_bits": "402400c561d67fec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402400c561d67fec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-106",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-107",
+    "category": "known-coordinate",
+    "lexeme": "15.854809443801507",
+    "oracle_bits": "402fb5a9955ae0fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402fb5a9955ae0fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-108",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-109",
+    "category": "known-coordinate",
+    "lexeme": "10.428951221482347",
+    "oracle_bits": "4024db9f7e97b11e",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4024db9f7e97b11e",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-110",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-111",
+    "category": "known-coordinate",
+    "lexeme": "10.649565044456443",
+    "oracle_bits": "40254c93ca1d2163",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "40254c93ca1d2163",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-112",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-113",
+    "category": "known-coordinate",
+    "lexeme": "18.265864214768882",
+    "oracle_bits": "4032440fad5b9bec",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032440fad5b9bec",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-114",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242665",
+    "oracle_bits": "4026c1ed6e850021",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-115",
+    "category": "known-coordinate",
+    "lexeme": "11.378764585242665",
+    "oracle_bits": "4026c1ed6e850021",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4026c1ed6e850021",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-116",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774794",
+    "oracle_bits": "4032b46add60ab73",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-117",
+    "category": "known-coordinate",
+    "lexeme": "18.786044232532422",
+    "oracle_bits": "4032c93a31dfefa9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-118",
+    "category": "known-coordinate",
+    "lexeme": "18.704755626774794",
+    "oracle_bits": "4032b46add60ab73",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032b46add60ab73",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-119",
+    "category": "known-coordinate",
+    "lexeme": "18.786044232532422",
+    "oracle_bits": "4032c93a31dfefa9",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4032c93a31dfefa9",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-120",
+    "category": "known-coordinate",
+    "lexeme": "13.431591298005543",
+    "oracle_bits": "402adcf988dc5810",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-121",
+    "category": "known-coordinate",
+    "lexeme": "13.431591298005543",
+    "oracle_bits": "402adcf988dc5810",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402adcf988dc5810",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-122",
+    "category": "known-coordinate",
+    "lexeme": "13.785099100483679",
+    "oracle_bits": "402b91f882616491",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-123",
+    "category": "known-coordinate",
+    "lexeme": "13.785099100483679",
+    "oracle_bits": "402b91f882616491",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402b91f882616491",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-124",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385437",
+    "oracle_bits": "402dc12ca914e77f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "dense-125",
+    "category": "known-coordinate",
+    "lexeme": "14.877293857385437",
+    "oracle_bits": "402dc12ca914e77f",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402dc12ca914e77f",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-126",
+    "category": "edge",
+    "lexeme": "0",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-127",
+    "category": "edge",
+    "lexeme": "-0",
+    "oracle_bits": "8000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-128",
+    "category": "edge",
+    "lexeme": "0.0",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-129",
+    "category": "edge",
+    "lexeme": "-0.0",
+    "oracle_bits": "8000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-130",
+    "category": "edge",
+    "lexeme": "0e300",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-131",
+    "category": "edge",
+    "lexeme": "-0e-999",
+    "oracle_bits": "8000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-132",
+    "category": "edge",
+    "lexeme": "1",
+    "oracle_bits": "3ff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-133",
+    "category": "edge",
+    "lexeme": "-1",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-134",
+    "category": "edge",
+    "lexeme": "0.1",
+    "oracle_bits": "3fb999999999999a",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-135",
+    "category": "edge",
+    "lexeme": "1e3",
+    "oracle_bits": "408f400000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "408f400000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "408f400000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-136",
+    "category": "edge",
+    "lexeme": "1E-3",
+    "oracle_bits": "3f50624dd2f1a9fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3f50624dd2f1a9fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3f50624dd2f1a9fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-137",
+    "category": "edge",
+    "lexeme": "15.122706142614561",
+    "oracle_bits": "402e3ed356eb1880",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "402e3ed356eb1880",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-138",
+    "category": "edge",
+    "lexeme": "1.234567890123456789012345678901234567890123456789",
+    "oracle_bits": "3ff3c0ca428c59fb",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff3c0ca428c59fb",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff3c0ca428c59fb",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-139",
+    "category": "edge",
+    "lexeme": "1e-324",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-140",
+    "category": "edge",
+    "lexeme": "-1e-324",
+    "oracle_bits": "8000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-141",
+    "category": "edge",
+    "lexeme": "5e-324",
+    "oracle_bits": "0000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-142",
+    "category": "edge",
+    "lexeme": "2.2250738585072014e-308",
+    "oracle_bits": "0010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-143",
+    "category": "edge",
+    "lexeme": "1.7976931348623157e308",
+    "oracle_bits": "7fefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-144",
+    "category": "edge",
+    "lexeme": "1.7976931348623159e308",
+    "oracle_bits": "7ff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3292"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4051)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "edge-145",
+    "category": "edge",
+    "lexeme": "-1e309",
+    "oracle_bits": "fff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3276"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4035)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "edge-146",
+    "category": "edge",
+    "lexeme": "1e400",
+    "oracle_bits": "7ff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3275"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4034)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "edge-147",
+    "category": "edge",
+    "lexeme": "1e-999",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-148",
+    "category": "edge",
+    "lexeme": "9007199254740991",
+    "oracle_bits": "433fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "433fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "433fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-149",
+    "category": "edge",
+    "lexeme": "9007199254740992",
+    "oracle_bits": "4340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-150",
+    "category": "edge",
+    "lexeme": "9007199254740993",
+    "oracle_bits": "4340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-151",
+    "category": "edge",
+    "lexeme": "9007199254740994",
+    "oracle_bits": "4340000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-152",
+    "category": "edge",
+    "lexeme": "18446744073709551615",
+    "oracle_bits": "43f0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "43f0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "43f0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-153",
+    "category": "edge",
+    "lexeme": "18446744073709551616",
+    "oracle_bits": "43f0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "43f0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "43f0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-154",
+    "category": "edge",
+    "lexeme": "4294967295",
+    "oracle_bits": "41efffffffe00000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "41efffffffe00000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "41efffffffe00000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-155",
+    "category": "edge",
+    "lexeme": "4294967296",
+    "oracle_bits": "41f0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "41f0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "41f0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-156",
+    "category": "edge",
+    "lexeme": "1e100",
+    "oracle_bits": "54b249ad2594c37d",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "54b249ad2594c37d",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "54b249ad2594c37d",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-157",
+    "category": "edge",
+    "lexeme": "1000000.0000000001",
+    "oracle_bits": "412e848000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "412e848000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "412e848000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-158",
+    "category": "edge",
+    "lexeme": "-0.0000001",
+    "oracle_bits": "be7ad7f29abcaf48",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "be7ad7f29abcaf48",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "be7ad7f29abcaf48",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-159",
+    "category": "edge",
+    "lexeme": "-0.00000009999999999999999",
+    "oracle_bits": "be7ad7f29abcaf48",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "be7ad7f29abcaf48",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "be7ad7f29abcaf48",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-160",
+    "category": "edge",
+    "lexeme": "-1.0000000000000001",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-161",
+    "category": "edge",
+    "lexeme": "-1.0000000000000003",
+    "oracle_bits": "bff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "edge-162",
+    "category": "edge",
+    "lexeme": "0.0020000000000000001",
+    "oracle_bits": "3f60624dd2f1a9fc",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3f60624dd2f1a9fc",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3f60624dd2f1a9fc",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-163",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-164",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-165",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024655033693835642975998696597232531374857964759367183068503348023227068771003581269840646130937108604108988726501246265674172029198426292574196671949366165988529264105493078878293868415309651353025872580373547495253855327467184187253096388859050186133456022786773067047064298425635537794637538537355709661967146212433469662131253299145766081374520341229392201401004082984953832674613290318736214077236578229152869595842824895556847547324417789472842058857448553986917995780445985884310013405462336012290597910924943084762234109217021805700289709430463340528685807891590074843254485563106526504067008726818203499157089836059977175353505853055092581522062533840219071349158877790651541796239346816870636061455607571023750622385417585746836266480386257171630859375",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-166",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024655033693835642975998696597232531374857964759367183068503348023227068771003581269840646130937108604108988726501246265674172029198426292574196671949366165988529264105493078878293868415309651353025872580373547495253855327467184187253096388859050186133456022786773067047064298425635537794637538537355709661967146212433469662131253299145766081374520341229392201401004082984953832674613290318736214077236578229152869595842824895556847547324417789472842058857448553986917995780445985884310013405462336012290597910924943084762234109217021805700289709430463340528685807891590074843254485563106526504067008726818203499157089836059977175353505853055092581522062533840219071349158877790651541796239346816870636061455607571023750622385417585746836266480386257171630859375",
+    "oracle_bits": "8000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-167",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024703282292062327208828439643411068618252990130716238221279284125033775363510437593264991818081799618989828234772285886546332835517796989819938739800539093906315035659515570226392290858392449105184435931802849936536152500319370457678249219365623669863658480757001585769269903706311928279558551332927834338409351978015531246597263579574622766465272827220056374006485499977096599470454020828166226237857393450736339007967761930577506740176324673600968951340535537458516661134223766678604162159680461914467291840300530057530849048765391711386591646239524912623653881879636239373280423891018672348497668235089863388587925628302755995657524455507255189313690836254779186948667994968324049705821028513185451396213837722826145437693412532098591327667236328125",
+    "oracle_bits": "0000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-168",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024703282292062327208828439643411068618252990130716238221279284125033775363510437593264991818081799618989828234772285886546332835517796989819938739800539093906315035659515570226392290858392449105184435931802849936536152500319370457678249219365623669863658480757001585769269903706311928279558551332927834338409351978015531246597263579574622766465272827220056374006485499977096599470454020828166226237857393450736339007967761930577506740176324673600968951340535537458516661134223766678604162159680461914467291840300530057530849048765391711386591646239524912623653881879636239373280423891018672348497668235089863388587925628302755995657524455507255189313690836254779186948667994968324049705821028513185451396213837722826145437693412532098591327667236328125",
+    "oracle_bits": "8000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-169",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024751530890289011441658182689589605861648015502065293374055220226840481956017293916689337505226490633870667743043325507418493641837167687065680807651712021824100807213538061574490713301475246857342999283232152377818449673171556728103402049872197153593860938727230104491475508986988318764479564128499959014851557743597592831063273860003479451556025313210720546611966916969239366266294751337596238398478208672319808420092698965598165933028231557729095843823622520930115326488001547472898310913898587816643985769676117030299463988313761617072893583048586484718621955867682403903306362218930818192928327743361523278018761420545534815961543057959417797105319138669339302548177112145996557615402710209500266730972067874628540253001407478450346388854086399078369140625",
+    "oracle_bits": "0000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-170",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024751530890289011441658182689589605861648015502065293374055220226840481956017293916689337505226490633870667743043325507418493641837167687065680807651712021824100807213538061574490713301475246857342999283232152377818449673171556728103402049872197153593860938727230104491475508986988318764479564128499959014851557743597592831063273860003479451556025313210720546611966916969239366266294751337596238398478208672319808420092698965598165933028231557729095843823622520930115326488001547472898310913898587816643985769676117030299463988313761617072893583048586484718621955867682403903306362218930818192928327743361523278018761420545534815961543057959417797105319138669339302548177112145996557615402710209500266730972067874628540253001407478450346388854086399078369140625",
+    "oracle_bits": "8000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-171",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625",
+    "oracle_bits": "0000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-172",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625",
+    "oracle_bits": "8000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-173",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625",
+    "oracle_bits": "0000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-174",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625",
+    "oracle_bits": "8000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-175",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074061598277960297393655575884054668611363945020799659511061916273294619498024456456370629767100707842088645196045818038766837700234020272214074151550444353801159335424524219331078450132094549563394744443979247368326160328105925102609594827590297525860772984300776238585604105838259394353754641203211378338785850168464532155325780458295011614305065995669504949413975082939147031615521331975068666552951365130625547611778348756711861027677067136674779961538519628903951318048893519241518337724823259841225181591526003199823932206747805228473473001909513165775993571650862553589815333345143871201062345196997930276332941092665489166668554764069602960149444206349777445246494867727299641207881403843241538853883283016676041497772242649944018921814858913421630859375",
+    "oracle_bits": "0000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-176",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074061598277960297393655575884054668611363945020799659511061916273294619498024456456370629767100707842088645196045818038766837700234020272214074151550444353801159335424524219331078450132094549563394744443979247368326160328105925102609594827590297525860772984300776238585604105838259394353754641203211378338785850168464532155325780458295011614305065995669504949413975082939147031615521331975068666552951365130625547611778348756711861027677067136674779961538519628903951318048893519241518337724823259841225181591526003199823932206747805228473473001909513165775993571650862553589815333345143871201062345196997930276332941092665489166668554764069602960149444206349777445246494867727299641207881403843241538853883283016676041497772242649944018921814858913421630859375",
+    "oracle_bits": "8000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-177",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074109846876186981626485318930233205854758970392148714663837852375101326090531312779794975454245398856969484704316857659638998506553390969459816219401617281718945106978546710679176872575177347315553307795408549809608457500958111373034747658096871009590975442271004757307809711118935784838675653998783503015228055934046593739791790738723868299395818481660169122019456499931289798411362062484498678713572180352209017023903285791732520220528974020802906854021606612375549983402671300035812486479041385743401875520901590172592547146296175134159774938718574737870961645638908718119841271673056017045493004705269590165763776884908267986972573366521765567941072508764337560846003984904972149117463085539556354188641513168478436313080237596295773983001708984375",
+    "oracle_bits": "0000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-178",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074109846876186981626485318930233205854758970392148714663837852375101326090531312779794975454245398856969484704316857659638998506553390969459816219401617281718945106978546710679176872575177347315553307795408549809608457500958111373034747658096871009590975442271004757307809711118935784838675653998783503015228055934046593739791790738723868299395818481660169122019456499931289798411362062484498678713572180352209017023903285791732520220528974020802906854021606612375549983402671300035812486479041385743401875520901590172592547146296175134159774938718574737870961645638908718119841271673056017045493004705269590165763776884908267986972573366521765567941072508764337560846003984904972149117463085539556354188641513168478436313080237596295773983001708984375",
+    "oracle_bits": "8000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-179",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074158095474413665859315061976411743098153995763497769816613788476908032683038169103219321141390089871850324212587897280511159312872761666705558287252790209636730878532569202027275295018260145067711871146837852250890754673810297643459900488603444493321177900241233276030015316399612175323596666794355627691670261699628655324257801019152724984486570967650833294624937916923432565207202792993928690874192995573792486436028222826753179413380880904931033746504693595847148648756449080830106635233259511645578569450277177145361162085844545039846076875527636309965929719626954882649867210000968162889923664213541250055194612677151046807276591968973928175732700811178897676445513102082644657027044767235871169523399743320280831128388232542647529044188559055328369140625",
+    "oracle_bits": "0000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-180",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074158095474413665859315061976411743098153995763497769816613788476908032683038169103219321141390089871850324212587897280511159312872761666705558287252790209636730878532569202027275295018260145067711871146837852250890754673810297643459900488603444493321177900241233276030015316399612175323596666794355627691670261699628655324257801019152724984486570967650833294624937916923432565207202792993928690874192995573792486436028222826753179413380880904931033746504693595847148648756449080830106635233259511645578569450277177145361162085844545039846076875527636309965929719626954882649867210000968162889923664213541250055194612677151046807276591968973928175732700811178897676445513102082644657027044767235871169523399743320280831128388232542647529044188559055328369140625",
+    "oracle_bits": "8000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-181",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000988131291682493088353137585736442744730119605228649528851171365001351014540417503730599672723271984759593129390891435461853313420711879592797549592021563756252601426380622809055691634335697964207377437272113997461446100012774818307129968774624946794546339230280063430770796148252477131182342053317113373536374079120621249863890543182984910658610913088802254960259419999083863978818160833126649049514295738029453560318710477223100269607052986944038758053621421498340666445368950667144166486387218476578691673612021202301233961950615668455463665849580996504946155275185449574931216955640746893939906729403594535543517025132110239826300978220290207572547633450191167477946719798732961988232841140527418055848553508913045817507736501283943653106689453125",
+    "oracle_bits": "0000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-182",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000988131291682493088353137585736442744730119605228649528851171365001351014540417503730599672723271984759593129390891435461853313420711879592797549592021563756252601426380622809055691634335697964207377437272113997461446100012774818307129968774624946794546339230280063430770796148252477131182342053317113373536374079120621249863890543182984910658610913088802254960259419999083863978818160833126649049514295738029453560318710477223100269607052986944038758053621421498340666445368950667144166486387218476578691673612021202301233961950615668455463665849580996504946155275185449574931216955640746893939906729403594535543517025132110239826300978220290207572547633450191167477946719798732961988232841140527418055848553508913045817507736501283943653106689453125",
+    "oracle_bits": "8000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-183",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000988131291682493088353137585736442744730119605228649528851171365001351014540417503730599672723271984759593129390891435461853313420711879592797549592021563756252601426380622809055691634335697964207377437272113997461446100012774818307129968774624946794546339230280063430770796148252477131182342053317113373536374079120621249863890543182984910658610913088802254960259419999083863978818160833126649049514295738029453560318710477223100269607052986944038758053621421498340666445368950667144166486387218476578691673612021202301233961950615668455463665849580996504946155275185449574931216955640746893939906729403594535543517025132110239826300978220290207572547633450191167477946719798732961988232841140527418055848553508913045817507736501283943653106689453125",
+    "oracle_bits": "0000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-184",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000988131291682493088353137585736442744730119605228649528851171365001351014540417503730599672723271984759593129390891435461853313420711879592797549592021563756252601426380622809055691634335697964207377437272113997461446100012774818307129968774624946794546339230280063430770796148252477131182342053317113373536374079120621249863890543182984910658610913088802254960259419999083863978818160833126649049514295738029453560318710477223100269607052986944038758053621421498340666445368950667144166486387218476578691673612021202301233961950615668455463665849580996504946155275185449574931216955640746893939906729403594535543517025132110239826300978220290207572547633450191167477946719798732961988232841140527418055848553508913045817507736501283943653106689453125",
+    "oracle_bits": "8000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-185",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000123468162862084951811312455170876805847869925282232135953620484523362170225045331642900613403264307080068301665590389811859503371269614251853951631151522541613789406743555359783863031848879447773763616307584947241398465328744666017966093266321544865588089945814779410124143913250883250912871743869067047015604554124495594648520307617444257147235611650109617697426946082893340230556429373631401119028666152032098225627713872617866874508029716483876717864219590703820984640317341052598726662044184183670159765272127063314885630304278588651246656294388562991023301335410135032336376181127181215898057681667177657053508792349271001157983603675084113338776825878859335819143830857663947740619523460869612441646310958462328332373159067714141201577149331569671630859375",
+    "oracle_bits": "0000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-186",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000123468162862084951811312455170876805847869925282232135953620484523362170225045331642900613403264307080068301665590389811859503371269614251853951631151522541613789406743555359783863031848879447773763616307584947241398465328744666017966093266321544865588089945814779410124143913250883250912871743869067047015604554124495594648520307617444257147235611650109617697426946082893340230556429373631401119028666152032098225627713872617866874508029716483876717864219590703820984640317341052598726662044184183670159765272127063314885630304278588651246656294388562991023301335410135032336376181127181215898057681667177657053508792349271001157983603675084113338776825878859335819143830857663947740619523460869612441646310958462328332373159067714141201577149331569671630859375",
+    "oracle_bits": "8000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-187",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000123516411460311636044142198217055343091264950653581191106396420625168876817552187966324959090408998094949141173861429432731664177588984949099693699002695469531575178297577851131961454291962245525922179659014249682680762501596852288391246096828118349318292403785007928846349518531559641397792756664639171692046759890077656232986317897873113832326364136100281870032427499885482997352270104140831131189286967253681695039838809652887533700881623368004844756702677687292583305671118833393020810798402309572336459201502650287654245243826958556932958231197624563118269409398181196866402119455093361742488341175449316942939628141513779978287622277536275946568454181273895934743339974841620248529105142565927256981069188614130727188467062660492956638336181640625",
+    "oracle_bits": "0000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-188",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000123516411460311636044142198217055343091264950653581191106396420625168876817552187966324959090408998094949141173861429432731664177588984949099693699002695469531575178297577851131961454291962245525922179659014249682680762501596852288391246096828118349318292403785007928846349518531559641397792756664639171692046759890077656232986317897873113832326364136100281870032427499885482997352270104140831131189286967253681695039838809652887533700881623368004844756702677687292583305671118833393020810798402309572336459201502650287654245243826958556932958231197624563118269409398181196866402119455093361742488341175449316942939628141513779978287622277536275946568454181273895934743339974841620248529105142565927256981069188614130727188467062660492956638336181640625",
+    "oracle_bits": "8000000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-189",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000123564660058538320276971941263233880334659976024930246259172356726975583410059044289749304777553689109829980682132469053603824983908355646345435766853868397449360949851600342480059876735045043278080743010443552123963059674449038558816398927334691833048494861755236447568555123812236031882713769460211296368488965655659717817452328178301970517417116622090946042637908916877625764148110834650261143349907782475265164451963746687908192893733530252132971649185764670764181971024896614187314959552620435474513153130878237260422860183375328462619260168006686135213237483386227361396428057783005507586919000683720976832370463933756558798591640879988438554360082483688456050342849092019292756438686824262242072315827418765933122003775057606844711699523031711578369140625",
+    "oracle_bits": "0000000000000003",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000003",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000003",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-190",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000123564660058538320276971941263233880334659976024930246259172356726975583410059044289749304777553689109829980682132469053603824983908355646345435766853868397449360949851600342480059876735045043278080743010443552123963059674449038558816398927334691833048494861755236447568555123812236031882713769460211296368488965655659717817452328178301970517417116622090946042637908916877625764148110834650261143349907782475265164451963746687908192893733530252132971649185764670764181971024896614187314959552620435474513153130878237260422860183375328462619260168006686135213237483386227361396428057783005507586919000683720976832370463933756558798591640879988438554360082483688456050342849092019292756438686824262242072315827418765933122003775057606844711699523031711578369140625",
+    "oracle_bits": "8000000000000003",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000003",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000003",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-191",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014821969375237396325297063786046641170951794078429742932767570475020265218106262555958995090849079771393896940863371531927799701310678193891963243880323456343789021395709342135835374515035469463110661559081709961921691500191622274606949531619374201918195088454200951461561942223787156967735130799756700603045611186809318747958358147744773659879163696332033824403891299986257959682272412496899735742714436070441803404780657158346504044105794804160581370804321322475109996680534260007162497295808277148680375104180318034518509429259235026831954987743714947574192329127781743623968254334611203409098600941053918033152755376981653597394514673304353113588214501752867512169200796980994429823492617107911270837728302633695687262616047519259154796600341796875",
+    "oracle_bits": "0000000000000003",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0000000000000003",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0000000000000003",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-192",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014821969375237396325297063786046641170951794078429742932767570475020265218106262555958995090849079771393896940863371531927799701310678193891963243880323456343789021395709342135835374515035469463110661559081709961921691500191622274606949531619374201918195088454200951461561942223787156967735130799756700603045611186809318747958358147744773659879163696332033824403891299986257959682272412496899735742714436070441803404780657158346504044105794804160581370804321322475109996680534260007162497295808277148680375104180318034518509429259235026831954987743714947574192329127781743623968254334611203409098600941053918033152755376981653597394514673304353113588214501752867512169200796980994429823492617107911270837728302633695687262616047519259154796600341796875",
+    "oracle_bits": "8000000000000003",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8000000000000003",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8000000000000003",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-193",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507200394958941034839315711081630244019587100433722188237675583642553194503268618595007289964394616459051051412023043270117998255542591673498126023581185971968246077878183766819774580380287229348978296356771103136809189170558146173902184049999817014701706089569539838241444028984739501272818269238398287937541863482503350197395249647392622007205322474852963190178391854932391064931720791430455764953943127215325436859833344767109289929102154994338687742727610729450624487971196675896144263447425089844325111161570498002959146187656616550482084690619235135756396957006047593447154776156167693340095043268338435252390549256952840748419828640113148805198563919935252207510837343961185884248936392555587988206944151446491086954182492263498716056346893310546875",
+    "oracle_bits": "000ffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "000ffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "000ffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-194",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507200394958941034839315711081630244019587100433722188237675583642553194503268618595007289964394616459051051412023043270117998255542591673498126023581185971968246077878183766819774580380287229348978296356771103136809189170558146173902184049999817014701706089569539838241444028984739501272818269238398287937541863482503350197395249647392622007205322474852963190178391854932391064931720791430455764953943127215325436859833344767109289929102154994338687742727610729450624487971196675896144263447425089844325111161570498002959146187656616550482084690619235135756396957006047593447154776156167693340095043268338435252390549256952840748419828640113148805198563919935252207510837343961185884248936392555587988206944151446491086954182492263498716056346893310546875",
+    "oracle_bits": "800ffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "800ffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "800ffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-195",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720064150927797319574547106859621634490084901336978190950626867603342677395632863081998837085592583013709250191030828258065499726288365776105176554790546562990596317082482175056336331897138244549182661549690687228414170911142084574405658096370560520356742412976770597211449962772375762819621561378366149463848315396547453209187095992561346486613622005637548410040586497322091447004753756335895231608389958110772838852930319535824549757762823851658247114819930393616435715115448035600310654755914446768523406754960725238999380999770872070014169351632944038980224386412650934790320870102332440536008393842570343442554082785120134819158217517167935612437914056059060970155083554996379076435435494905615691330476600256679719168871611767457352470955811440944671630859375",
+    "oracle_bits": "000ffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "000ffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "000ffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-196",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720064150927797319574547106859621634490084901336978190950626867603342677395632863081998837085592583013709250191030828258065499726288365776105176554790546562990596317082482175056336331897138244549182661549690687228414170911142084574405658096370560520356742412976770597211449962772375762819621561378366149463848315396547453209187095992561346486613622005637548410040586497322091447004753756335895231608389958110772838852930319535824549757762823851658247114819930393616435715115448035600310654755914446768523406754960725238999380999770872070014169351632944038980224386412650934790320870102332440536008393842570343442554082785120134819158217517167935612437914056059060970155083554996379076435435494905615691330476600256679719168871611767457352470955811440944671630859375",
+    "oracle_bits": "800ffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "800ffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "800ffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-197",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720064199176395546258779936602667813027328296362349540005779643539444484102225369938322261431279727704724131030539099297686371887094685146802422296858397735918514102854036197547684430319581327346934820113042116530855453208314936760676083249201067093840472615434740825730172168377656439210106482391161721588524757602313035270771562002841775343298712758123539074213191978739083589771549597066404661620550578925994422322342444472859570416955675758542375241712413480599907313780801813381104948904668664894425583448890100825972149614710420439919855653569753100552319354486638980954850896040660352681852824502078615102443513620912377597978521535770387775045705684361475530270683064113556748943345076587312006145811358486831521563686919762403704226016998291015625",
+    "oracle_bits": "000ffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "000ffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "000ffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-198",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720064199176395546258779936602667813027328296362349540005779643539444484102225369938322261431279727704724131030539099297686371887094685146802422296858397735918514102854036197547684430319581327346934820113042116530855453208314936760676083249201067093840472615434740825730172168377656439210106482391161721588524757602313035270771562002841775343298712758123539074213191978739083589771549597066404661620550578925994422322342444472859570416955675758542375241712413480599907313780801813381104948904668664894425583448890100825972149614710420439919855653569753100552319354486638980954850896040660352681852824502078615102443513620912377597978521535770387775045705684361475530270683064113556748943345076587312006145811358486831521563686919762403704226016998291015625",
+    "oracle_bits": "800ffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "800ffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "800ffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-199",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720064247424993772943012766345713991564571691387720889060932419475546290808817876794645685776966872395739011870047370337307244047901004517499668038926248908846431888625590220039032528742024410144686978676393545833296735505487788946946508402031573667324202817892711054248894373982937115600591403403957293713201199808078617332356028013122204199983803510609529738385797460156075732538345437796914091632711199741216005791754569409894591076148527665426503368604896567583378912446155591161899243053422883020327760142819476412944918229649968809825541955506562162124414322560627027119380921978988264827697255161586886762332944456704620376798825554372839937653497312663890090386282573230734421451254658269008320961146116716983323958502227757350055981078185141086578369140625",
+    "oracle_bits": "000fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-200",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720064247424993772943012766345713991564571691387720889060932419475546290808817876794645685776966872395739011870047370337307244047901004517499668038926248908846431888625590220039032528742024410144686978676393545833296735505487788946946508402031573667324202817892711054248894373982937115600591403403957293713201199808078617332356028013122204199983803510609529738385797460156075732538345437796914091632711199741216005791754569409894591076148527665426503368604896567583378912446155591161899243053422883020327760142819476412944918229649968809825541955506562162124414322560627027119380921978988264827697255161586886762332944456704620376798825554372839937653497312663890090386282573230734421451254658269008320961146116716983323958502227757350055981078185141086578369140625",
+    "oracle_bits": "800fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-201",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022250738585072008890245868760858598876504231122409594654935248025624400092282356951787758888037591552642309780950434312085877387158357291821993020294379224223559819827501242041788969571311791082261043971979604000454897391938079198936081525613113376149842043271751033627391549782731594143828136275113838604094249464942286316695429105080201815926642134996606517803095075913058719846423906068637102005108723282784678843631944515866135041223479014792369585208321597621066375401613736583044193603714778355306682834535634005074073040135602968046375918583163124224521599262546494300836851861719422417646455137135420132217031370496583210154654068035397417906022589503023501937519773030945763173210852507299305089761582519159720757232455434770912461317493580281734466552734375",
+    "oracle_bits": "000fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-202",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022250738585072008890245868760858598876504231122409594654935248025624400092282356951787758888037591552642309780950434312085877387158357291821993020294379224223559819827501242041788969571311791082261043971979604000454897391938079198936081525613113376149842043271751033627391549782731594143828136275113838604094249464942286316695429105080201815926642134996606517803095075913058719846423906068637102005108723282784678843631944515866135041223479014792369585208321597621066375401613736583044193603714778355306682834535634005074073040135602968046375918583163124224521599262546494300836851861719422417646455137135420132217031370496583210154654068035397417906022589503023501937519773030945763173210852507299305089761582519159720757232455434770912461317493580281734466552734375",
+    "oracle_bits": "800fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-203",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022250738585072008890245868760858598876504231122409594654935248025624400092282356951787758888037591552642309780950434312085877387158357291821993020294379224223559819827501242041788969571311791082261043971979604000454897391938079198936081525613113376149842043271751033627391549782731594143828136275113838604094249464942286316695429105080201815926642134996606517803095075913058719846423906068637102005108723282784678843631944515866135041223479014792369585208321597621066375401613736583044193603714778355306682834535634005074073040135602968046375918583163124224521599262546494300836851861719422417646455137135420132217031370496583210154654068035397417906022589503023501937519773030945763173210852507299305089761582519159720757232455434770912461317493580281734466552734375",
+    "oracle_bits": "000fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-204",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022250738585072008890245868760858598876504231122409594654935248025624400092282356951787758888037591552642309780950434312085877387158357291821993020294379224223559819827501242041788969571311791082261043971979604000454897391938079198936081525613113376149842043271751033627391549782731594143828136275113838604094249464942286316695429105080201815926642134996606517803095075913058719846423906068637102005108723282784678843631944515866135041223479014792369585208321597621066375401613736583044193603714778355306682834535634005074073040135602968046375918583163124224521599262546494300836851861719422417646455137135420132217031370496583210154654068035397417906022589503023501937519773030945763173210852507299305089761582519159720757232455434770912461317493580281734466552734375",
+    "oracle_bits": "800fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-205",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720113557492381444228964763738908456627321407317239623427069426171592744946359883957185367069228746612947229847500372829838592391959401370084816432270147641178408947153801206196789116478855029447393030421554292928287243216142723315321014594809291767696469729938284600382988502579788386676180678481032005132525134100503484271680290519720495732146552551291988522788599468322045640203694664377551564060865672897674311530946255059685704771243176501005449052722611464691352748437716483133667863080233807692352341338641326299114442697868402853436942534925423088805471694176410207269067430950114477880705389179040523169331258636376740331149532566078950122816541437731570528528980890986315724534847136962642062233269027932125371459746998592521549653611145913600921630859375",
+    "oracle_bits": "000fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "000fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-206",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720113557492381444228964763738908456627321407317239623427069426171592744946359883957185367069228746612947229847500372829838592391959401370084816432270147641178408947153801206196789116478855029447393030421554292928287243216142723315321014594809291767696469729938284600382988502579788386676180678481032005132525134100503484271680290519720495732146552551291988522788599468322045640203694664377551564060865672897674311530946255059685704771243176501005449052722611464691352748437716483133667863080233807692352341338641326299114442697868402853436942534925423088805471694176410207269067430950114477880705389179040523169331258636376740331149532566078950122816541437731570528528980890986315724534847136962642062233269027932125371459746998592521549653611145913600921630859375",
+    "oracle_bits": "800fffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "800fffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-207",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720113605740979670913197593481954635164564802342610972482222202107694551652952390813508791414915891303962110687008643869459464552765720740782062174337998814106326732925355228688137214901298112245145188984905722230728525513315575501591439747639798341180199932396254828901710708185069063066665599493827577257201576306269066333264756530000924588831643303777979186961204949739037782970490505108060994073026293712895895000358379996720725430436028407889577179615094551674824347103070260914462157228988025818254518032570701886087211312807951223342628836862232150377566662250398253433597456888442390026549819838548794829220689472168983109969836584681402285424333066033985088644580400103493397042756718644338377048603786162277173854562306587467901408672332763671875",
+    "oracle_bits": "0010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-208",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720113605740979670913197593481954635164564802342610972482222202107694551652952390813508791414915891303962110687008643869459464552765720740782062174337998814106326732925355228688137214901298112245145188984905722230728525513315575501591439747639798341180199932396254828901710708185069063066665599493827577257201576306269066333264756530000924588831643303777979186961204949739037782970490505108060994073026293712895895000358379996720725430436028407889577179615094551674824347103070260914462157228988025818254518032570701886087211312807951223342628836862232150377566662250398253433597456888442390026549819838548794829220689472168983109969836584681402285424333066033985088644580400103493397042756718644338377048603786162277173854562306587467901408672332763671875",
+    "oracle_bits": "8010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-209",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720113653989577897597430423225000813701808197367982321537374978043796358359544897669832215760603035994976991526516914909080336713572040111479307916405849987034244518696909251179485313323741195042897347548257151533169807810488427687861864900470304914663930134854225057420432913790349739457150520506623149381878018512034648394849222540281353445516734056263969851133810431156029925737286345838570424085186914528117478469770504933755746089628880314773705306507577638658295945768424038695256451377742243944156694726500077473059979927747499593248315138799041211949661630324386299598127482826770302172394250498057066489110120307961225888790140603283854448032124694336399648760179909220671069550666300326034691863938544392428976249377614582414253163733519613742828369140625",
+    "oracle_bits": "0010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-210",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720113653989577897597430423225000813701808197367982321537374978043796358359544897669832215760603035994976991526516914909080336713572040111479307916405849987034244518696909251179485313323741195042897347548257151533169807810488427687861864900470304914663930134854225057420432913790349739457150520506623149381878018512034648394849222540281353445516734056263969851133810431156029925737286345838570424085186914528117478469770504933755746089628880314773705306507577638658295945768424038695256451377742243944156694726500077473059979927747499593248315138799041211949661630324386299598127482826770302172394250498057066489110120307961225888790140603283854448032124694336399648760179909220671069550666300326034691863938544392428976249377614582414253163733519613742828369140625",
+    "oracle_bits": "8010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-211",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507201383090232717332404064219215980462331830553327416887204434813918195854283159012511020564067339731035811005152434161553460108856012385377718821130777993532002330479610147442583636071921565046942503734208375250806650616658158948720491179968591639648500635908770118304874799780887753749949451580451605050915399856582470818645113537935804992115981085766051992433352114352390148795699609591288891602992641511063466313393663477586513029371762047325631781485664350872122828637642044846811407613911477062801689853244110024161447421618567166150540154285084716752901903161322778896729707373123334086988983175067838846926092773977972858659654941091369095406136467568702398678315290680984617210924625396728515625",
+    "oracle_bits": "0010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-212",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507201383090232717332404064219215980462331830553327416887204434813918195854283159012511020564067339731035811005152434161553460108856012385377718821130777993532002330479610147442583636071921565046942503734208375250806650616658158948720491179968591639648500635908770118304874799780887753749949451580451605050915399856582470818645113537935804992115981085766051992433352114352390148795699609591288891602992641511063466313393663477586513029371762047325631781485664350872122828637642044846811407613911477062801689853244110024161447421618567166150540154285084716752901903161322778896729707373123334086988983175067838846926092773977972858659654941091369095406136467568702398678315290680984617210924625396728515625",
+    "oracle_bits": "8010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-213",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507201383090232717332404064219215980462331830553327416887204434813918195854283159012511020564067339731035811005152434161553460108856012385377718821130777993532002330479610147442583636071921565046942503734208375250806650616658158948720491179968591639648500635908770118304874799780887753749949451580451605050915399856582470818645113537935804992115981085766051992433352114352390148795699609591288891602992641511063466313393663477586513029371762047325631781485664350872122828637642044846811407613911477062801689853244110024161447421618567166150540154285084716752901903161322778896729707373123334086988983175067838846926092773977972858659654941091369095406136467568702398678315290680984617210924625396728515625",
+    "oracle_bits": "0010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-214",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507201383090232717332404064219215980462331830553327416887204434813918195854283159012511020564067339731035811005152434161553460108856012385377718821130777993532002330479610147442583636071921565046942503734208375250806650616658158948720491179968591639648500635908770118304874799780887753749949451580451605050915399856582470818645113537935804992115981085766051992433352114352390148795699609591288891602992641511063466313393663477586513029371762047325631781485664350872122828637642044846811407613911477062801689853244110024161447421618567166150540154285084716752901903161322778896729707373123334086988983175067838846926092773977972858659654941091369095406136467568702398678315290680984617210924625396728515625",
+    "oracle_bits": "8010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-215",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720162964056965568883382420618195278764557913297501055903511984739842812497086904832371897052864910212185209503969917401611685057630436964064456309749748719366221577225120237337241901060571814345603399293417898628160315521143362056236371093248023015036197046899798603554527042387201010532739795583697860801201952804459515334173485046879644977679483096946428635536612439321999833402635572419207896513341387684575784208962190583546859784723529150352650990625292535766269781759984930667025071404553168616181275922321927359229504395965933636859715718217902138630719001940169479747813991797896515225402384515510702896108434487633345843140847614989964633195168819404080086902878226976252372634258779019668433136061455607571023750622385417585746836266480386257171630859375",
+    "oracle_bits": "0010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-216",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720162964056965568883382420618195278764557913297501055903511984739842812497086904832371897052864910212185209503969917401611685057630436964064456309749748719366221577225120237337241901060571814345603399293417898628160315521143362056236371093248023015036197046899798603554527042387201010532739795583697860801201952804459515334173485046879644977679483096946428635536612439321999833402635572419207896513341387684575784208962190583546859784723529150352650990625292535766269781759984930667025071404553168616181275922321927359229504395965933636859715718217902138630719001940169479747813991797896515225402384515510702896108434487633345843140847614989964633195168819404080086902878226976252372634258779019668433136061455607571023750622385417585746836266480386257171630859375",
+    "oracle_bits": "8010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-217",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720163012305563795567615250361241457301801308322872404958664760675944619203679411688695321398552054903200090343478188441232557218436756334761702051817599892294139362996674259828589999483014897143355557856769327930601597818316214242506796246078529588519927249357768832073249247992481686923224716596493432925878395010225097395757951057160073834364573849432419299709217920738991976169431413149717326525502008499797367678374315520581880443916381057236779117517775622749741380425338708447819365553307386742083452616251302946202273010905482006765402020154711200202813970014157525912344017736224427371246815175018974555997865323425588621961151633592416795802960447706494647018477736093430045142168360701364747951396213837722826145437693412532098591327667236328125",
+    "oracle_bits": "0010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-218",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720163012305563795567615250361241457301801308322872404958664760675944619203679411688695321398552054903200090343478188441232557218436756334761702051817599892294139362996674259828589999483014897143355557856769327930601597818316214242506796246078529588519927249357768832073249247992481686923224716596493432925878395010225097395757951057160073834364573849432419299709217920738991976169431413149717326525502008499797367678374315520581880443916381057236779117517775622749741380425338708447819365553307386742083452616251302946202273010905482006765402020154711200202813970014157525912344017736224427371246815175018974555997865323425588621961151633592416795802960447706494647018477736093430045142168360701364747951396213837722826145437693412532098591327667236328125",
+    "oracle_bits": "8010000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-219",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720163060554162022251848080104287635839044703348243754013817536612046425910271918545018745744239199594214971182986459480853429379243075705458947793885451065222057148768228282319938097905457979941107716420120757233042880115489066428777221398909036162003657451815739060591971453597762363313709637609289005050554837215990679457342417067440502691049664601918409963881823402155984118936227253880226756537662629315018951147786440457616901103109232964120907244410258709733212979090692486228613659702061604867985629310180678533175041625845030376671088322091520261774908938088145572076874043674552339517091245834527246215887296159217831400781455652194868958410752076008909207134077245210607717650077942383061062766730972067874628540253001407478450346388854086399078369140625",
+    "oracle_bits": "0010000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-220",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000222507385850720163060554162022251848080104287635839044703348243754013817536612046425910271918545018745744239199594214971182986459480853429379243075705458947793885451065222057148768228282319938097905457979941107716420120757233042880115489066428777221398909036162003657451815739060591971453597762363313709637609289005050554837215990679457342417067440502691049664601918409963881823402155984118936227253880226756537662629315018951147786440457616901103109232964120907244410258709733212979090692486228613659702061604867985629310180678533175041625845030376671088322091520261774908938088145572076874043674552339517091245834527246215887296159217831400781455652194868958410752076008909207134077245210607717650077942383061062766730972067874628540253001407478450346388854086399078369140625",
+    "oracle_bits": "8010000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-221",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022250738585072018771558785585789482407880088486837041956131300312119688603996006965297904292212628858639037013670281908017171296072711910355127227413175152199055740043138804567803233377539881639177387328959246074229270113078053813397081653361296447449529789521218979090783852583365901851789618799885150427514782636076021680436220311292700454832073964845713103912225963935608322440623896907276890186717054549275173986589324810401738228328251245795065655738191038008646911615828719989708647293221449796971546706720399791990809160347625980385995424739847678861180095072511543762389603716215171729816011544604359531284325406441938645324905389137795680915804792405099227413854274942620542640408839836919187418172987793340279242767544565229087538682506419718265533447265625",
+    "oracle_bits": "0010000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "0010000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "0010000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-222",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022250738585072018771558785585789482407880088486837041956131300312119688603996006965297904292212628858639037013670281908017171296072711910355127227413175152199055740043138804567803233377539881639177387328959246074229270113078053813397081653361296447449529789521218979090783852583365901851789618799885150427514782636076021680436220311292700454832073964845713103912225963935608322440623896907276890186717054549275173986589324810401738228328251245795065655738191038008646911615828719989708647293221449796971546706720399791990809160347625980385995424739847678861180095072511543762389603716215171729816011544604359531284325406441938645324905389137795680915804792405099227413854274942620542640408839836919187418172987793340279242767544565229087538682506419718265533447265625",
+    "oracle_bits": "8010000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "8010000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "8010000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-223",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.000000000000000055511151231257827021181583404541015625",
+    "oracle_bits": "3c90000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3c90000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3c90000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-224",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.000000000000000055511151231257827021181583404541015625",
+    "oracle_bits": "bc90000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bc90000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bc90000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-225",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000005551115123125783317212034329127552132252955413061162358106213898789604854755452834069728851318359375",
+    "oracle_bits": "3c90000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3c90000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3c90000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-226",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000005551115123125783317212034329127552132252955413061162358106213898789604854755452834069728851318359375",
+    "oracle_bits": "bc90000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bc90000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bc90000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-227",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000005551115123125783318415740544369574540412941627176741932192527428924222476780414581298828125",
+    "oracle_bits": "3c90000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3c90000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3c90000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-228",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000005551115123125783318415740544369574540412941627176741932192527428924222476780414581298828125",
+    "oracle_bits": "bc90000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bc90000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bc90000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-229",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.00000000000000005551115123125783319619446759611596948572927841292321506278840959058840098805376328527927398681640625",
+    "oracle_bits": "3c90000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3c90000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3c90000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-230",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.00000000000000005551115123125783319619446759611596948572927841292321506278840959058840098805376328527927398681640625",
+    "oracle_bits": "bc90000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bc90000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bc90000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-231",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.0000000000000000555111512312578393471332274828504751832588325435348386438505485784844495356082916259765625",
+    "oracle_bits": "3c90000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3c90000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3c90000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-232",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.0000000000000000555111512312578393471332274828504751832588325435348386438505485784844495356082916259765625",
+    "oracle_bits": "bc90000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bc90000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bc90000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-233",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.09999999999999999167332731531132594682276248931884765625",
+    "oracle_bits": "3fb9999999999999",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fb9999999999999",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fb9999999999999",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-234",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.09999999999999999167332731531132594682276248931884765625",
+    "oracle_bits": "bfb9999999999999",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bfb9999999999999",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bfb9999999999999",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-235",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.099999999999999998598668692062485519045367254875600337982177734375",
+    "oracle_bits": "3fb9999999999999",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fb9999999999999",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fb9999999999999",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-236",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.099999999999999998598668692062485519045367254875600337982177734375",
+    "oracle_bits": "bfb9999999999999",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bfb9999999999999",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bfb9999999999999",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-237",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.099999999999999998612221219218554324470460414886474609375",
+    "oracle_bits": "3fb999999999999a",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-238",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.099999999999999998612221219218554324470460414886474609375",
+    "oracle_bits": "bfb999999999999a",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bfb999999999999a",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bfb999999999999a",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-239",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.099999999999999998625773746374623129895553574897348880767822265625",
+    "oracle_bits": "3fb999999999999a",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-240",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.099999999999999998625773746374623129895553574897348880767822265625",
+    "oracle_bits": "bfb999999999999a",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bfb999999999999a",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bfb999999999999a",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-241",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.1000000000000000055511151231257827021181583404541015625",
+    "oracle_bits": "3fb999999999999a",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fb999999999999a",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-242",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.1000000000000000055511151231257827021181583404541015625",
+    "oracle_bits": "bfb999999999999a",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bfb999999999999a",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bfb999999999999a",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-243",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.99999999999999988897769753748434595763683319091796875",
+    "oracle_bits": "3fefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-244",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.99999999999999988897769753748434595763683319091796875",
+    "oracle_bits": "bfefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bfefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bfefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-245",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.999999999999999944380428551493622535417671315371990203857421875",
+    "oracle_bits": "3fefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3fefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3fefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-246",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.999999999999999944380428551493622535417671315371990203857421875",
+    "oracle_bits": "bfefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bfefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bfefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-247",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.999999999999999944488848768742172978818416595458984375",
+    "oracle_bits": "3ff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-248",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.999999999999999944488848768742172978818416595458984375",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-249",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "0.999999999999999944597268985990723422219161875545978546142578125",
+    "oracle_bits": "3ff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-250",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-0.999999999999999944597268985990723422219161875545978546142578125",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-251",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1",
+    "oracle_bits": "3ff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-252",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-253",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1",
+    "oracle_bits": "3ff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-254",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-255",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.00000000000000011080546202801855315556167624890804290771484375",
+    "oracle_bits": "3ff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-256",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.00000000000000011080546202801855315556167624890804290771484375",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-257",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.00000000000000011102230246251565404236316680908203125",
+    "oracle_bits": "3ff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-258",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.00000000000000011102230246251565404236316680908203125",
+    "oracle_bits": "bff0000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-259",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.00000000000000011123914289701275492916465736925601959228515625",
+    "oracle_bits": "3ff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-260",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.00000000000000011123914289701275492916465736925601959228515625",
+    "oracle_bits": "bff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-261",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.0000000000000002220446049250313080847263336181640625",
+    "oracle_bits": "3ff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-262",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.0000000000000002220446049250313080847263336181640625",
+    "oracle_bits": "bff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-263",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.0000000000000002220446049250313080847263336181640625",
+    "oracle_bits": "3ff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-264",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.0000000000000002220446049250313080847263336181640625",
+    "oracle_bits": "bff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-265",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.00000000000000033285006695304986124028800986707210540771484375",
+    "oracle_bits": "3ff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-266",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.00000000000000033285006695304986124028800986707210540771484375",
+    "oracle_bits": "bff0000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-267",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.00000000000000033306690738754696212708950042724609375",
+    "oracle_bits": "3ff0000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-268",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.00000000000000033306690738754696212708950042724609375",
+    "oracle_bits": "bff0000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-269",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.00000000000000033328374782204406301389099098742008209228515625",
+    "oracle_bits": "3ff0000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-270",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.00000000000000033328374782204406301389099098742008209228515625",
+    "oracle_bits": "bff0000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-271",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "1.000000000000000444089209850062616169452667236328125",
+    "oracle_bits": "3ff0000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "3ff0000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "3ff0000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-272",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-1.000000000000000444089209850062616169452667236328125",
+    "oracle_bits": "bff0000000000002",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "bff0000000000002",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "bff0000000000002",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-273",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "2",
+    "oracle_bits": "4000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-274",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-2",
+    "oracle_bits": "c000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-275",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "2.0000000000000002216109240560371063111233524978160858154296875",
+    "oracle_bits": "4000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-276",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-2.0000000000000002216109240560371063111233524978160858154296875",
+    "oracle_bits": "c000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-277",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "2.0000000000000002220446049250313080847263336181640625",
+    "oracle_bits": "4000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-278",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-2.0000000000000002220446049250313080847263336181640625",
+    "oracle_bits": "c000000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c000000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c000000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-279",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "2.0000000000000002224782857940255098583293147385120391845703125",
+    "oracle_bits": "4000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-280",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-2.0000000000000002224782857940255098583293147385120391845703125",
+    "oracle_bits": "c000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-281",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "2.000000000000000444089209850062616169452667236328125",
+    "oracle_bits": "4000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-282",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-2.000000000000000444089209850062616169452667236328125",
+    "oracle_bits": "c000000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c000000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c000000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-283",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "9007199254740992",
+    "oracle_bits": "4340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-284",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-9007199254740992",
+    "oracle_bits": "c340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-285",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "9007199254740992.998046875",
+    "oracle_bits": "4340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-286",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-9007199254740992.998046875",
+    "oracle_bits": "c340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-287",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "9007199254740993",
+    "oracle_bits": "4340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-288",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-9007199254740993",
+    "oracle_bits": "c340000000000000",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c340000000000000",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c340000000000000",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-289",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "9007199254740993.001953125",
+    "oracle_bits": "4340000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-290",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-9007199254740993.001953125",
+    "oracle_bits": "c340000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c340000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c340000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-291",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "9007199254740994",
+    "oracle_bits": "4340000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "4340000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "4340000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-292",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-9007199254740994",
+    "oracle_bits": "c340000000000001",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "c340000000000001",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "c340000000000001",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-293",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231550856124328384506240234343437157459335924404872448581845754556114388470639943126220321960804027157371570809852884964511743044087662767600909594331927728237078876188760579532563768698654064825262115771015791463983014857704008123419459386245141723703148097529108423358883457665451722744025579520",
+    "oracle_bits": "7feffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7feffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7feffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-294",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231550856124328384506240234343437157459335924404872448581845754556114388470639943126220321960804027157371570809852884964511743044087662767600909594331927728237078876188760579532563768698654064825262115771015791463983014857704008123419459386245141723703148097529108423358883457665451722744025579520",
+    "oracle_bits": "ffeffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "ffeffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "ffeffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-295",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231560815835248035305300355500237565901789639908720910679538213556513660104201906413697041819401358571856499071477273464170626539359265005163025197034944559768873637154569935048000296645681975660090732332200327225166223764385087876981653939028756732986004407478165195930536575294270694480246996992",
+    "oracle_bits": "7feffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7feffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7feffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-296",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231560815835248035305300355500237565901789639908720910679538213556513660104201906413697041819401358571856499071477273464170626539359265005163025197034944559768873637154569935048000296645681975660090732332200327225166223764385087876981653939028756732986004407478165195930536575294270694480246996992",
+    "oracle_bits": "ffeffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "ffeffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "ffeffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-297",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231560835325876058105298516207002341652166261661174625869553267292326574530099287946549246750631490335877017522087105926987962906277604735569213290190919152394180476217125334960946356387261286640198029037799514183602981511756283727771403830521483963923935633133642802139091669457927874464075218944",
+    "oracle_bits": "7feffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7feffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7feffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-298",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231560835325876058105298516207002341652166261661174625869553267292326574530099287946549246750631490335877017522087105926987962906277604735569213290190919152394180476217125334960946356387261286640198029037799514183602981511756283727771403830521483963923935633133642802139091669457927874464075218944",
+    "oracle_bits": "ffeffffffffffffe",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "ffeffffffffffffe",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "ffeffffffffffffe",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-299",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231560854816504080905296676913767117402542883413628341059568321028139488955996669479401451681861622099897535972696938389805299273195944465975401383346893745019487315279680734873892416128840597620305325743398701142039739259127479578561153722014211194861866858789120408347646763621585054447903440896",
+    "oracle_bits": "7fefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-300",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231560854816504080905296676913767117402542883413628341059568321028139488955996669479401451681861622099897535972696938389805299273195944465975401383346893745019487315279680734873892416128840597620305325743398701142039739259127479578561153722014211194861866858789120408347646763621585054447903440896",
+    "oracle_bits": "ffefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-301",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368",
+    "oracle_bits": "7fefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-302",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368",
+    "oracle_bits": "ffefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-303",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368",
+    "oracle_bits": "7fefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-304",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368",
+    "oracle_bits": "ffefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-305",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231580774238343382503416919227367934287450314421325265254953239028938032223120596054354891399056284928867392495945715389123066263739148941099632588752927408083076837211299445904765472022896419289962558865767772664406157072489639085685542827581441213427579478687233953490952998879222997920346275840",
+    "oracle_bits": "7fefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "7fefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-306",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231580774238343382503416919227367934287450314421325265254953239028938032223120596054354891399056284928867392495945715389123066263739148941099632588752927408083076837211299445904765472022896419289962558865767772664406157072489639085685542827581441213427579478687233953490952998879222997920346275840",
+    "oracle_bits": "ffefffffffffffff",
+    "classification": "finite",
+    "wasm_public": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": "ffefffffffffffff",
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-307",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231580793728971405303415079934132710037826936173778980444968292764750946649017977587207096330286416692887910946555547851940402630657488671505820681908902000708383676273854845817711531764475730270069855571366959622842914819860834936475292719074168444365510704342711559699508093042880177904174497792",
+    "oracle_bits": "7ff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3579"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4338)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-308",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231580793728971405303415079934132710037826936173778980444968292764750946649017977587207096330286416692887910946555547851940402630657488671505820681908902000708383676273854845817711531764475730270069855571366959622842914819860834936475292719074168444365510704342711559699508093042880177904174497792",
+    "oracle_bits": "fff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3580"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4339)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-309",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231580813219599428103413240640897485788203557926232695634983346500563861074915359120059301261516548456908429397165380314757738997575828401912008775064876593333690515336410245730657591506055041250177152276966146581279672567232030787265042610566895675303441929998189165908063187206537357888002719744",
+    "oracle_bits": "7ff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3579"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4338)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-310",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231580813219599428103413240640897485788203557926232695634983346500563861074915359120059301261516548456908429397165380314757738997575828401912008775064876593333690515336410245730657591506055041250177152276966146581279672567232030787265042610566895675303441929998189165908063187206537357888002719744",
+    "oracle_bits": "fff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3580"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4339)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-311",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216",
+    "oracle_bits": "7ff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3579"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4338)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "exact-midpoint-neighbor-312",
+    "category": "exact-midpoint-neighbor",
+    "lexeme": "-179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216",
+    "oracle_bits": "fff0000000000000",
+    "classification": "overflow",
+    "wasm_public": {
+      "error": "number out of range at line 1 column 3580"
+    },
+    "native_command": {
+      "error": "Error: Error(\"number out of range\", line: 1, column: 4339)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-313",
+    "category": "malformed-or-schema",
+    "lexeme": "01",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid number at line 1 column 3272"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid number\", line: 1, column: 4031)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-314",
+    "category": "malformed-or-schema",
+    "lexeme": "+1",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "expected value at line 1 column 3271"
+    },
+    "native_command": {
+      "error": "Error: Error(\"expected value\", line: 1, column: 4030)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-315",
+    "category": "malformed-or-schema",
+    "lexeme": ".1",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "expected value at line 1 column 3271"
+    },
+    "native_command": {
+      "error": "Error: Error(\"expected value\", line: 1, column: 4030)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-316",
+    "category": "malformed-or-schema",
+    "lexeme": "1.",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid number at line 1 column 3273"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid number\", line: 1, column: 4032)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-317",
+    "category": "malformed-or-schema",
+    "lexeme": "1e",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid number at line 1 column 3273"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid number\", line: 1, column: 4032)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-318",
+    "category": "malformed-or-schema",
+    "lexeme": "--1",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid number at line 1 column 3272"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid number\", line: 1, column: 4031)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-319",
+    "category": "malformed-or-schema",
+    "lexeme": "NaN",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "expected value at line 1 column 3271"
+    },
+    "native_command": {
+      "error": "Error: Error(\"expected value\", line: 1, column: 4030)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-320",
+    "category": "malformed-or-schema",
+    "lexeme": "Infinity",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "expected value at line 1 column 3271"
+    },
+    "native_command": {
+      "error": "Error: Error(\"expected value\", line: 1, column: 4030)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-321",
+    "category": "malformed-or-schema",
+    "lexeme": "[1,]",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "trailing comma at line 1 column 3274"
+    },
+    "native_command": {
+      "error": "Error: Error(\"trailing comma\", line: 1, column: 4033)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-322",
+    "category": "malformed-or-schema",
+    "lexeme": "{\"x\":1,}",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "trailing comma at line 1 column 3278"
+    },
+    "native_command": {
+      "error": "Error: Error(\"trailing comma\", line: 1, column: 4037)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-323",
+    "category": "malformed-or-schema",
+    "lexeme": "null",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "bits": null,
+      "validation_errors": []
+    },
+    "native_command": {
+      "bits": null,
+      "validation_errors": []
+    }
+  },
+  {
+    "id": "malformed-or-schema-324",
+    "category": "malformed-or-schema",
+    "lexeme": "true",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid type: boolean `true`, expected f64"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid type: boolean `true`, expected f64\", line: 0, column: 0)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-325",
+    "category": "malformed-or-schema",
+    "lexeme": "\"1\"",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid type: string \"1\", expected f64"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid type: string \\\"1\\\", expected f64\", line: 0, column: 0)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-326",
+    "category": "malformed-or-schema",
+    "lexeme": "{}",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid type: map, expected f64"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid type: map, expected f64\", line: 0, column: 0)",
+      "exit_code": 1
+    }
+  },
+  {
+    "id": "malformed-or-schema-327",
+    "category": "malformed-or-schema",
+    "lexeme": "[1]",
+    "oracle_bits": null,
+    "classification": "schema-or-malformed",
+    "wasm_public": {
+      "error": "invalid type: sequence, expected f64"
+    },
+    "native_command": {
+      "error": "Error: Error(\"invalid type: sequence, expected f64\", line: 0, column: 0)",
+      "exit_code": 1
+    }
+  }
+]

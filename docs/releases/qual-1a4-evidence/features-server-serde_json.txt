@@ -1,0 +1,65 @@
+serde_json v1.0.149
+├── serde_json feature "default"
+│   ├── axum v0.7.9
+│   │   ├── axum feature "default"
+│   │   │   └── ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-server)
+│   │   │       ├── ivac-server feature "cps"
+│   │   │       │   └── ivac-server feature "default" (command-line)
+│   │   │       └── ivac-server feature "default" (command-line)
+│   │   ├── axum feature "form"
+│   │   │   └── axum feature "default" (*)
+│   │   ├── axum feature "http1"
+│   │   │   └── axum feature "default" (*)
+│   │   ├── axum feature "json"
+│   │   │   └── axum feature "default" (*)
+│   │   ├── axum feature "macros"
+│   │   │   └── ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-server) (*)
+│   │   ├── axum feature "matched-path"
+│   │   │   └── axum feature "default" (*)
+│   │   ├── axum feature "multipart"
+│   │   │   └── ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-server) (*)
+│   │   ├── axum feature "original-uri"
+│   │   │   └── axum feature "default" (*)
+│   │   ├── axum feature "query"
+│   │   │   └── axum feature "default" (*)
+│   │   ├── axum feature "tokio"
+│   │   │   ├── axum feature "default" (*)
+│   │   │   └── axum feature "tokio" (*)
+│   │   ├── axum feature "tower-log"
+│   │   │   └── axum feature "default" (*)
+│   │   └── axum feature "tracing"
+│   │       └── axum feature "default" (*)
+│   ├── boa_engine v0.21.1
+│   │   └── boa_engine feature "annex-b"
+│   │       └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps)
+│   │           └── ivac-cps feature "default"
+│   │               ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core)
+│   │               │   ├── ivac-core feature "cps"
+│   │               │   │   └── ivac-server feature "cps" (*)
+│   │               │   └── ivac-core feature "default"
+│   │               │       └── ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-server) (*)
+│   │               └── ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-server) (*)
+│   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   ├── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│   ├── ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-server) (*)
+│   └── schemars v0.8.22
+│       ├── schemars feature "default"
+│       │   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│       │   └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│       ├── schemars feature "derive"
+│       │   └── schemars feature "default" (*)
+│       ├── schemars feature "indexmap"
+│       │   └── schemars feature "preserve_order"
+│       │       ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│       │       └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│       ├── schemars feature "preserve_order" (*)
+│       └── schemars feature "schemars_derive"
+│           └── schemars feature "derive" (*)
+├── serde_json feature "float_roundtrip"
+│   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   ├── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│   └── ivac-server v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-server) (*)
+├── serde_json feature "raw_value"
+│   └── axum v0.7.9 (*)
+└── serde_json feature "std"
+    └── serde_json feature "default" (*)

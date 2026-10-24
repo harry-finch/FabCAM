@@ -1,0 +1,37 @@
+serde_json v1.0.149
+├── serde_json feature "default"
+│   ├── boa_engine v0.21.1
+│   │   └── boa_engine feature "annex-b"
+│   │       └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps)
+│   │           └── ivac-cps feature "default"
+│   │               ├── ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cli)
+│   │               │   ├── ivac-cli feature "cps"
+│   │               │   │   └── ivac-cli feature "default" (command-line)
+│   │               │   └── ivac-cli feature "default" (command-line)
+│   │               └── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core)
+│   │                   ├── ivac-core feature "cps"
+│   │                   │   └── ivac-cli feature "cps" (*)
+│   │                   └── ivac-core feature "default"
+│   │                       └── ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cli) (*)
+│   ├── ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cli) (*)
+│   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   ├── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│   └── schemars v0.8.22
+│       ├── schemars feature "default"
+│       │   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│       │   └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│       ├── schemars feature "derive"
+│       │   └── schemars feature "default" (*)
+│       ├── schemars feature "indexmap"
+│       │   └── schemars feature "preserve_order"
+│       │       ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│       │       └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+│       ├── schemars feature "preserve_order" (*)
+│       └── schemars feature "schemars_derive"
+│           └── schemars feature "derive" (*)
+├── serde_json feature "float_roundtrip"
+│   ├── ivac-cli v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cli) (*)
+│   ├── ivac-core v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-core) (*)
+│   └── ivac-cps v0.9.0-beta.3 (/Users/mugen/Documents/01_Projets/FabCAM/FabCAM-qual-1a4/crates/ivac-cps) (*)
+└── serde_json feature "std"
+    └── serde_json feature "default" (*)

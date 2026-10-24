@@ -1,0 +1,32 @@
+[
+  {
+    "field": "step",
+    "value": 0,
+    "error": {
+      "kind": "misconfigured",
+      "params": {},
+      "message": "Set explicit depth per pass or an explicit depth schedule",
+      "recovery_hint": "Apply or edit complete cutting rates for the current tool roles."
+    }
+  },
+  {
+    "field": "step",
+    "value": 1,
+    "error": {
+      "kind": "misconfigured",
+      "params": {},
+      "message": "Depth per pass must be finite and positive",
+      "recovery_hint": "Apply or edit complete cutting rates for the current tool roles."
+    }
+  },
+  {
+    "field": "step",
+    "value": 1e+100,
+    "error": {
+      "kind": "misconfigured",
+      "params": {},
+      "message": "Depth per pass must be finite and positive",
+      "recovery_hint": "Apply or edit complete cutting rates for the current tool roles."
+    }
+  }
+]

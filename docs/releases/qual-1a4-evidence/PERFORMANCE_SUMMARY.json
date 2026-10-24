@@ -1,0 +1,337 @@
+{
+  "protocol": "5 rotated processes per backend/case; 7 calls each: cold, warmup, five warm. Native parse/pipeline separate, WASM init/JSON.parse/generate separate. Parser-only benchmark 5 rotated triplets x22 parses; first two excluded for warm summaries. Repeated-segment large input is parse-only, not a CAM validity or memory-budget waiver.",
+  "generation": [
+    {
+      "case": "square-medial-linuxcnc.json",
+      "runtime": "native",
+      "production": {
+        "parse_ms": 0.068334,
+        "init_ms": null,
+        "cold_ms": 8.116916999999999,
+        "process_user_s": 0.047251999999999995,
+        "process_sys_s": 0.0028409999999999998,
+        "peak_rss_bytes": 13467648,
+        "moves": 5376,
+        "program_bytes": 94015,
+        "warm_median_ms": 5.319584
+      },
+      "experimental": {
+        "parse_ms": 0.066333,
+        "init_ms": null,
+        "cold_ms": 8.023792,
+        "process_user_s": 0.046664,
+        "process_sys_s": 0.0025529999999999997,
+        "peak_rss_bytes": 13598720,
+        "moves": 5368,
+        "program_bytes": 93855,
+        "warm_median_ms": 5.317375
+      },
+      "integrated": {
+        "parse_ms": 0.067,
+        "init_ms": null,
+        "cold_ms": 8.001292,
+        "process_user_s": 0.047313,
+        "process_sys_s": 0.002786,
+        "peak_rss_bytes": 13778944,
+        "moves": 5368,
+        "program_bytes": 93855,
+        "warm_median_ms": 5.274834
+      }
+    },
+    {
+      "case": "square-medial-linuxcnc.json",
+      "runtime": "wasm",
+      "production": {
+        "parse_ms": 0.04729200000000233,
+        "init_ms": 13.156625000000002,
+        "cold_ms": 46.276792,
+        "process_user_s": 0.562789,
+        "process_sys_s": 0.029293999999999997,
+        "peak_rss_bytes": 271843328,
+        "moves": 5368,
+        "program_bytes": 93855,
+        "warm_median_ms": 9.231459000000001
+      },
+      "experimental": {
+        "parse_ms": 0.047125000000001194,
+        "init_ms": 13.074708999999999,
+        "cold_ms": 47.391292,
+        "process_user_s": 0.576083,
+        "process_sys_s": 0.030390999999999998,
+        "peak_rss_bytes": 268648448,
+        "moves": 5368,
+        "program_bytes": 93855,
+        "warm_median_ms": 9.582667
+      },
+      "integrated": {
+        "parse_ms": 0.05450000000000088,
+        "init_ms": 13.549416,
+        "cold_ms": 48.248959,
+        "process_user_s": 0.569692,
+        "process_sys_s": 0.031198,
+        "peak_rss_bytes": 269942784,
+        "moves": 5368,
+        "program_bytes": 93855,
+        "warm_median_ms": 9.411207999999988
+      }
+    },
+    {
+      "case": "text-Test-medial-linuxcnc.json",
+      "runtime": "native",
+      "production": {
+        "parse_ms": 0.370417,
+        "init_ms": null,
+        "cold_ms": 31.714666,
+        "process_user_s": 0.187739,
+        "process_sys_s": 0.004724,
+        "peak_rss_bytes": 31899648,
+        "moves": 18342,
+        "program_bytes": 405731,
+        "warm_median_ms": 22.089042
+      },
+      "experimental": {
+        "parse_ms": 0.38533399999999995,
+        "init_ms": null,
+        "cold_ms": 30.999709,
+        "process_user_s": 0.187726,
+        "process_sys_s": 0.004497999999999999,
+        "peak_rss_bytes": 31883264,
+        "moves": 18351,
+        "program_bytes": 405992,
+        "warm_median_ms": 21.782208
+      },
+      "integrated": {
+        "parse_ms": 0.397667,
+        "init_ms": null,
+        "cold_ms": 31.172042,
+        "process_user_s": 0.188383,
+        "process_sys_s": 0.0043679999999999995,
+        "peak_rss_bytes": 31899648,
+        "moves": 18351,
+        "program_bytes": 405992,
+        "warm_median_ms": 22.025208
+      }
+    },
+    {
+      "case": "text-Test-medial-linuxcnc.json",
+      "runtime": "wasm",
+      "production": {
+        "parse_ms": 1.4761249999999997,
+        "init_ms": 14.24275,
+        "cold_ms": 93.38283299999999,
+        "process_user_s": 1.119044,
+        "process_sys_s": 0.059,
+        "peak_rss_bytes": 459718656,
+        "moves": 18351,
+        "program_bytes": 405992,
+        "warm_median_ms": 36.217792
+      },
+      "experimental": {
+        "parse_ms": 1.4429579999999973,
+        "init_ms": 13.394124999999999,
+        "cold_ms": 93.74587499999998,
+        "process_user_s": 1.137325,
+        "process_sys_s": 0.061915,
+        "peak_rss_bytes": 460390400,
+        "moves": 18351,
+        "program_bytes": 405992,
+        "warm_median_ms": 36.622833000000014
+      },
+      "integrated": {
+        "parse_ms": 1.4164579999999987,
+        "init_ms": 13.377958999999999,
+        "cold_ms": 92.59104099999999,
+        "process_user_s": 1.184771,
+        "process_sys_s": 0.070426,
+        "peak_rss_bytes": 459767808,
+        "moves": 18351,
+        "program_bytes": 405992,
+        "warm_median_ms": 36.98637500000001
+      }
+    },
+    {
+      "case": "text-Test-medial-cps.json",
+      "runtime": "native",
+      "production": {
+        "parse_ms": 0.387583,
+        "init_ms": null,
+        "cold_ms": 800.34675,
+        "process_user_s": 0.8571249999999999,
+        "process_sys_s": 0.013137999999999999,
+        "peak_rss_bytes": 81575936,
+        "moves": 18339,
+        "program_bytes": 497099,
+        "warm_median_ms": 6.720125
+      },
+      "experimental": {
+        "parse_ms": 0.357041,
+        "init_ms": null,
+        "cold_ms": 792.933792,
+        "process_user_s": 0.851927,
+        "process_sys_s": 0.010461999999999999,
+        "peak_rss_bytes": 81870848,
+        "moves": 18348,
+        "program_bytes": 497342,
+        "warm_median_ms": 6.811
+      },
+      "integrated": {
+        "parse_ms": 0.376417,
+        "init_ms": null,
+        "cold_ms": 875.987458,
+        "process_user_s": 0.8899239999999999,
+        "process_sys_s": 0.014802,
+        "peak_rss_bytes": 83623936,
+        "moves": 18348,
+        "program_bytes": 497342,
+        "warm_median_ms": 6.9267080000000005
+      }
+    },
+    {
+      "case": "dense-circle.json",
+      "runtime": "native",
+      "production": {
+        "parse_ms": 0.135125,
+        "init_ms": null,
+        "cold_ms": 24.474667,
+        "process_user_s": 0.156631,
+        "process_sys_s": 0.003181,
+        "peak_rss_bytes": 22036480,
+        "moves": 13996,
+        "program_bytes": 304514,
+        "warm_median_ms": 18.513499999999997
+      },
+      "experimental": {
+        "parse_ms": 0.141292,
+        "init_ms": null,
+        "cold_ms": 25.319541,
+        "process_user_s": 0.15541,
+        "process_sys_s": 0.0037449999999999996,
+        "peak_rss_bytes": 22069248,
+        "moves": 14015,
+        "program_bytes": 304875,
+        "warm_median_ms": 18.468792
+      },
+      "integrated": {
+        "parse_ms": 0.14458400000000002,
+        "init_ms": null,
+        "cold_ms": 25.037708,
+        "process_user_s": 0.156644,
+        "process_sys_s": 0.0032819999999999998,
+        "peak_rss_bytes": 22298624,
+        "moves": 14015,
+        "program_bytes": 304875,
+        "warm_median_ms": 18.863541
+      }
+    },
+    {
+      "case": "dense-circle.json",
+      "runtime": "wasm",
+      "production": {
+        "parse_ms": 0.18016700000000085,
+        "init_ms": 13.224875,
+        "cold_ms": 80.501,
+        "process_user_s": 0.920411,
+        "process_sys_s": 0.050728999999999996,
+        "peak_rss_bytes": 370294784,
+        "moves": 14015,
+        "program_bytes": 304875,
+        "warm_median_ms": 29.41395799999998
+      },
+      "experimental": {
+        "parse_ms": 0.1734170000000006,
+        "init_ms": 13.369416000000001,
+        "cold_ms": 78.20795899999999,
+        "process_user_s": 0.886587,
+        "process_sys_s": 0.044108,
+        "peak_rss_bytes": 370081792,
+        "moves": 14015,
+        "program_bytes": 304875,
+        "warm_median_ms": 28.81383299999999
+      },
+      "integrated": {
+        "parse_ms": 0.1828329999999987,
+        "init_ms": 13.111083,
+        "cold_ms": 77.499208,
+        "process_user_s": 0.89164,
+        "process_sys_s": 0.0428,
+        "peak_rss_bytes": 369524736,
+        "moves": 14015,
+        "program_bytes": 304875,
+        "warm_median_ms": 29.044583999999986
+      }
+    }
+  ],
+  "wasm": {
+    "production-wasm": {
+      "bytes": 5309252,
+      "gzip_bytes": 1895286,
+      "sha256": "0a1266167245fee436ad42eaf968372abaafdf264ba014d77cfbd7c745f169df"
+    },
+    "experimental-wasm": {
+      "bytes": 5368393,
+      "gzip_bytes": 1914631,
+      "sha256": "bce1c94ad78eeef09167ca285f30c1224e640a5a23cd8b4ecad3e93ef2b64b16"
+    },
+    "integrated-wasm": {
+      "bytes": 5368390,
+      "gzip_bytes": 1914769,
+      "sha256": "690b2286b5d2e98e19575855874e3118e90cc508a448541d7aacfb98af2d9c58"
+    }
+  },
+  "parser": [
+    {
+      "case": "ordinary",
+      "production": {
+        "bytes": 42058,
+        "warm_median_ms": 0.1484165,
+        "rounded": false
+      },
+      "experimental": {
+        "bytes": 42058,
+        "warm_median_ms": 0.14675,
+        "rounded": true
+      },
+      "integrated": {
+        "bytes": 42058,
+        "warm_median_ms": 0.17825000000000002,
+        "rounded": true
+      }
+    },
+    {
+      "case": "large-parser-only",
+      "production": {
+        "bytes": 5243469,
+        "warm_median_ms": 17.3328545,
+        "rounded": false
+      },
+      "experimental": {
+        "bytes": 5243469,
+        "warm_median_ms": 17.5027295,
+        "rounded": true
+      },
+      "integrated": {
+        "bytes": 5243469,
+        "warm_median_ms": 17.702896,
+        "rounded": true
+      }
+    }
+  ],
+  "native_binaries": {
+    "production-perf": {
+      "bytes": 11643776,
+      "sha256": "a98a9d11e6683db15e07033afc6c6cae7b4b3aff54b75da1050a0512a96df1a6"
+    },
+    "experimental-perf": {
+      "bytes": 11693680,
+      "sha256": "a52f49de0f96c132ae653f7c75175149a04a6358252e2fc008aa02710220ba5f"
+    },
+    "integrated-perf": {
+      "bytes": 11693648,
+      "sha256": "c79a19c4a3c2606ccbf2efea497c8c62f6f5e538f49c122586ab3caacd34cfde"
+    },
+    "integrated-standalone-cli": {
+      "bytes": 12067920,
+      "sha256": "c2eb4221cacac885c1c5c76c1089a13e7424dc0a86968bd4c626f9c78386785e"
+    }
+  }
+}
