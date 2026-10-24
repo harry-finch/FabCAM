@@ -1,157 +1,47 @@
 # FabCAM — current status
 
-## Latest checkpoint — QUAL-1 investigation, 2026-10-23
+Current focus: **FabCAM V1.1 — macOS Personal Alpha**. SEC-1 is authorized for
+the targeted Tokio correction, reviewed consolidation, source qualification, local
+arm64 app rebuild and a normal push of `FabCAM-v1.1`. Public release, main merge,
+version promotion, FabSpeed integration and hardware operation remain excluded.
+[Release plan](../releases/RELEASE_ROADMAP.md) · [FabApps vision](../FABAPPS_VISION.md).
 
-[QUAL-1 report](../releases/QUAL_1_SOFTWARE_QUALIFICATION.md) records final software
-source `558efc4f7e7cfb5d008c88cf7469a958cc8dc053`: bounded CPS cancellation polling
-improvement, unchanged output corpus, quantified native/WASM V-Carve arithmetic
-divergence. **17/20 mandatory gates; NO-GO for unconditional final qualification.**
-Strict parity and the 200 ms cancellation target remain failed; watcher, current
-advisory audit, headless smoke and actual installed/file-transfer gates remain open.
-TEST1/C2: 256 PASS. No production geometry or post safety-preflight change.
-Engineering QUAL-1 stops here; human review `ivac-y25vq` remains OPEN.
-Separate approval is required for the proposed motion/preflight corrections and
-final V1.1 acceptance. No next milestone, push, release, installer or hardware.
-Earlier checkpoints retain their source-bound historical findings.
+| Work | Current disposition |
+|---|---|
+| FS-RESET-3 | COMPLETED: explicit v9 actual-role parameters, neutral CAM safety and tested collections; legacy recommendation engine removed |
+| QUAL-1A.4 | COMPLETED software integration: `8e2c9ce`, report `f2b0427`; [numerical/motion limits](../releases/QUAL_1A_4_PRODUCTION_INTEGRATION.md) retained |
+| QUAL-1B | COMPLETED software cancellation: `fd8fed6`, report `aeae820`; [fixed campaigns](../releases/QUAL_1B_COOPERATIVE_CANCELLATION.md) meet 200 ms p95, without a universal GUI latency claim |
+| QUAL-1C | BUILT / SOFTWARE TESTED: `700de73`, report `9520d98`, [19/20 gate](../releases/QUAL_1C_MACOS_PERSONAL_ALPHA.md); app not launched, native human acceptance pending |
+| SEC-1 | IN PROGRESS: `f0e4746` patches Tokio to 1.53.3; current cargo-deny and focused native/output checks pass. Final consolidated gate, local app and development push pending |
+| Primary local edits | PRESERVED / PENDING: pocket diagnostics, fixed-stock/drawing placement and header UI; separate uncommitted source and reports, not qualified by SEC-1 |
+| Optional V1.2 | PLANNED one-way FabSpeed → FabCAM; [ADR-0031](adr/ADR-0031-optional-one-way-fabspeed-catalogue.md) Proposed, no implementation |
 
-## Latest checkpoint — FS-RESET-3 removal, 2026-10-22
+Tokio 1.52.2's RUSTSEC-2026-0386 is addressed by the minimal lockfile update;
+1.54.0 is excluded because of the separate Interval race. The security commit
+preserves every other resolved package. Focused tests: native Tauri 15, HTTP 21,
+file export 11, CPS 55, 23 unchanged output references; full audit and strict
+affected pedantic Clippy pass. Final integrated qualification is still pending.
 
-The maintainer authorized the complete reset. Legacy recommendation, source-pack,
-Trial and v1–8 implementation dependencies are removed on `FabCAM-v1.1`.
-Qualified software source: `64d75849e3bdc05a2d3ce47c50486ad169058507`.
-[Final report, gate matrix and remaining acceptance gaps](../releases/FS_RESET_3_RESULTS.md)
-is authoritative. Explicit v9 roles, neutral safety, tested collections, MAT-1 and
-native publication boundaries remain. No FabSpeed integration or user-data deletion.
-**NO-GO for unconditional final qualification/release**: full gate failures and
-pre-existing performance/parity limits remain visible. Architecture implementation
-is ready for human review `ivac-y25vq`; engineering `ivac-wjymz` stops at this handoff.
-No push, main merge, version promotion, installer or physical operation.
-The checkpoints below retain their historical source and now-superseded stop points.
+The earlier watcher failures remain recorded as sandbox failures; the unchanged
+five watcher tests passed on the Mac in QUAL-1C and SEC-1 focused qualification.
+Actual native dialogs, file round-trips and cancellation recovery remain untested
+in the installed app. Static ACL checks or mocks cannot close them. Two-sided
+publication is not pair-atomic; CLI streaming does not acquire full-program
+simulation qualification. Automatic dowel injection remains excluded.
 
-## Latest checkpoint — FS-RESET-3 CLI Option A, 2026-10-22
+MAT-1, tested collections and generic machine/tool libraries remain retained.
+Primary local drawing placement has bounded tests and pending human UX review;
+its reported header translation failure and combined-source qualification remain
+open. Initial dirty source/evidence and original STATUS/roadmap copies are
+fingerprinted and preserved in the local SEC-1 workspace receipt.
 
-Integrated FS2 baseline and CLI Option A explicitly approved. Local implementation
-`030e214` replaces implicit public CLI rates with reviewed v9 requests and the common
-buffered pipeline. CLI: 13 PASS with CPS / 12 without; targeted CAM: 25 PASS; export:
-11 PASS; strict Clippy and SEC1/NUMSAFE3 real probes PASS.
-[Receipt, output comparisons and refreshed inventory](../releases/FS_RESET_3_CLI_MODERNIZATION.md).
-Accepted UX, MAT-1, collections and core safety source are unchanged. **HARD STOP before
-mass removal**; human `ivac-y25vq` remains open for that next decision. Watcher exception,
-installed-native collection acceptance and physical gates remain separate.
+Frozen `main`/V1 remain `ef807cf8250ddc4bdf795c75bb9bf9f011db9bca` with their
+original acceptance limits. Dated reports are unchanged; the earlier
+[roadmap consolidation](../releases/ROADMAP_CONSOLIDATION.md) records planning
+history rather than the current A4/B/C status.
 
-## Latest checkpoint — FS-RESET-2 final acceptance, 2026-10-22
-
-[Final acceptance / preflight](../releases/FS_RESET_2_FINAL_ACCEPTANCE.md): **temporary
-NO-GO** for FS-RESET-3. Equivalent watcher tests reproduce the same two failures before
-FS2; installed-host event delivery remains unqualified. Two acceptance defects need
-separate production-fix authorization: actual-role report values/tools (`ivac-tnu7d`)
-and native import `stat` authorization (`ivac-c93e1`). Browser download authority was
-denied; a manual file round-trip protocol is recorded. Targeted core/preset/native/export/
-frontend/WASM checks pass. No production code or legacy infrastructure was changed.
-The source-bound inventory and proposed removal sequence are complete; `ivac-y25vq`
-remains OPEN. The earlier checkpoint below retains its original qualification context.
-
-## Current checkpoint — FS-RESET-2, 2026-10-22
-
-The four approved implementation slices are complete on `FabCAM-v1.1`.
-[Implementation report](../releases/FS_RESET_2_IMPLEMENTATION.md) records scoped commits,
-v9 operation/preset contracts, actual-role and output comparisons, and preserved boundaries.
-Core with CPS: **1463 PASS**; frontend: **1580 PASS / 1 existing skip**; HTTP: **19 PASS**;
-CLI integration: **1 PASS**. Native suite: **19 PASS / 2 unresolved watcher failures**.
-Typecheck/lint/build/Clippy pass; installed dialogs/browser file round-trip remain limited.
-No release or physical qualification. The maintainer-started web server remains available.
-**HARD STOP: human review `ivac-y25vq` OPEN before FS-RESET-3 legacy removal.**
-ADR-0030 is Accepted. No FabSpeed integration, push, merge, version promotion or installer.
-
-The following FS-RESET-1 checkpoint is the historical architecture handoff; its pending
-approval statements are superseded by the explicitly approved FS-RESET-2 report above.
-
-## Current checkpoint — FS-RESET-1, 2026-10-22
-
-The maintainer has authorized separating FabSpeed calculation from FabCAM CAM/presets.
-[Architecture audit](../releases/FS_RESET_ARCHITECTURE.md) and
-[proposed ADR-0030](adr/ADR-0030-fabcam-fabspeed-separation.md) are ready for human review.
-Audited code: `FabCAM-v1.1` at `e48241c89dbd911841eaf93dc72553f2763aa45f`.
-Documentation only; baseline checks: core adapter 30, setup resolver 21, frontend 59 PASS.
-No production change, source-pack reset, physical operation or V1 modification.
-**HARD STOP for architecture approval; FS-RESET-2/3 have not started.**
-
-The snapshot below records the preceding PRESET/MAT-1 checkpoint and retained independent
-gates; it does not authorize continued recommendation-system development.
-
-
-Snapshot **2026-10-21**, recorded on `FabCAM-v1.1` only.
-[Release plan](../releases/RELEASE_ROADMAP.md) ·
-[V1 readiness](../releases/V1_READINESS.md) ·
-[V1.1 inventory, qualification and policy](../releases/FABCAM_V1_1_ROADMAP_AND_BRANCH_2026_10_21.md).
-
-| Line | Source and state | Next decision |
-|---|---|---|
-| V1 stabilization / `main` | `ef807cf8250ddc4bdf795c75bb9bf9f011db9bca`; RC1-ef807cf-39492251757, beta.3/pipeline63; CI and candidate jobs succeeded | Clean-host installation/runtime and supervised ShopBot evidence, remaining human gates, explicit V1 acceptance |
-| `FabCAM-v1.1` | PRESET API `5ca5632`, guarded native copy `bed3a92`, integrated frontend `b8deaef` | PRESET-1/2/3 software/UX accepted; local commits only, no push/merge/release |
-| Next feature | MAT-1 material families, variants and synonyms remains planned | Requires a separate start instruction; no identity remapping or machining equivalence inferred |
-
-[PRESET-4 final handoff](../releases/FABCAM_PRESET4_EXPERIMENTAL_RECIPES_2026_10_21.md):
-WASM Profile null serialization fixed (`b0920ca`); approved recipe authoring and trial UI
-consolidated (`be9720a`). Actual v8 save/reopen, modified status, Undo/Redo, Browse and
-480px keyboard/scroll replay PASS. Frontend 1556 PASS / 1 existing skip; core adapter 30
-and WASM crate 24 PASS; type/lint/build/Clippy PASS. **HARD STOP for final human UX
-review `ivac-jwwom`**. No physical qualification, push, release or next milestone.
-
-[PRESET integration receipt](../releases/PRESET_INTEGRATION_2026_10_21.md): frontend **1505 PASS / 1 existing skip**,
-WASM package guards **10 PASS**, source storage **8 PASS**, Feeds & Speeds
-**119 + 1 doctest PASS**, core adapter **20 PASS**; type/lint/build, native Clippy,
-Rust formatting and schema/client synchronization PASS. User validation closes
-PRESET-2 `ivac-1oe9l` and PRESET-3 `ivac-ms6rz` within their bounded software/UX scope.
-The earlier branch-wide identity workflow checkpoint `ivac-tnpyz` and independent
-V1/platform/physical gates are not closed by this integration.
-
-RC1 [CI](https://github.com/harry-finch/FabCAM/actions/runs/39487569970) and
-[candidates](https://github.com/harry-finch/FabCAM/actions/runs/39492251757) belong to
-`ef807cf`, not the V1.1 implementation. The detailed
-[local RC1 receipt](../releases/V1_RC1_CANDIDATES_RESULTS_2026_10_20.md) is retained
-untracked; its availability in another checkout requires separate evidence transfer.
-macOS ad-hoc/non-notarized, Windows unsigned and Ubuntu unsigned-package limits
-remain; successful packaging does not establish installed or physical acceptance.
-
-Historical V1.1 verification at `6d4cff0`: frontend **1474 PASS / 1 skip / 1 FAIL**;
-unchanged size guard rejects OperationsList 1008 and FeedsSpeedsSection 1010 lines.
-Both were within budget at RC1; the overages originated in V1.1 `0075317`.
-The current PRESET-1 maintenance extraction restores the unchanged guard;
-[latest checks and source limits](../releases/PRESET_1_READONLY_2026_10_21.md).
-Targeted Rust: Feeds & Speeds 113 integration + 1 doc PASS, adapter 19 PASS,
-tool/process 6 PASS, native source packs 7 PASS. No full integrated V1.1 or
-installed-platform qualification is claimed. See the report for exact commands.
-
-Named packs, physical/reference identity separation, library-tool assignment and
-compact UI changes are implemented with bounded tests; PRESET acceptance is recorded above.
-[Existing implementation report](../releases/FABCAM_V1_1_UX_2026_10_21.md) and
-[ADR-0027](adr/ADR-0027-lab-and-reference-identities.md) retain their limitations,
-including partial native removal on I/O failure and legacy identity ambiguity.
-
-V1 qualification remains source-bound. The [readiness register](../releases/V1_READINESS.md)
-retains human review, supported/refused Pocket RPM, resource/cancellation,
-provenance, platform and workshop gates; this task closes none of them.
-[SEC1 follow-ups](../releases/SEC1_FOLLOWUP_ROADMAP.md) stay independently scoped.
-FS0–FS3.9 and M0–M4 remain delivered within recorded limits; FS4 is deferred for
-software development but physical evidence is required before real recommendation
-claims. [Historical status](history/STATUS_2026_10_20.md) and dated reports retain
-previous checkpoint facts; older no-remote-CI/candidate statements are historical.
-
-Only demonstrated V1 acceptance-blocking defects belong on stabilization, with
-focused regression tests and renewed exact-SHA qualification. Features stay on
-`FabCAM-v1.1`; after V1 acceptance/release decisions, review any V1 hotfix delta
-before integration and qualify the combined V1.1 source independently.
-
-**Current checkpoint:** PRESET-1/2/3 accepted and committed locally; see the
-[integration receipt](../releases/PRESET_INTEGRATION_2026_10_21.md). No push, merge, tag, release,
-packaging or hardware operation. MAT-1 was subsequently authorized; see the current checkpoint below.
-
-## MAT-1 implementation checkpoint — 2026-10-21
-
-Architecture approved; implementation `13b8a95` adds shared presentation/search only.
-[Report and screenshots](../releases/FABCAM_MAT1_MATERIAL_TAXONOMY_2026_10_21.md).
-FS120/frontend1512 PASS (one existing locale skip); types/lint/WASM/build PASS.
-Unknown private catalogs retain source/name/ID browsing. No resolver/schema/V1 changes.
-**HARD STOP for final human UX acceptance.** Optional local classification and scaling
-remain separate future work. No push, release or hardware action.
+Next product milestone: **Personal Alpha — Actual macOS Launch & Native Workflow
+Acceptance**, using the separate macOS test account and
+[test guide](../releases/QUAL_1C_MACOS_TEST_GUIDE.md). No launch in the usual
+application-data profile. Supervised QUAL-2 follows only by separate authorization.
+**HARD STOP after the qualified SEC-1 development push and report.**

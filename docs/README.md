@@ -1,13 +1,25 @@
 # FabCAM documentation
 
-Current V1.1 software checkpoint: [QUAL-1A.4 deterministic production integration](releases/QUAL_1A_4_PRODUCTION_INTEGRATION.md)
-(17/20 mandatory gates; final human acceptance remains open).
-The underlying reset is documented in [FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md).
-FabCAM owns explicit operation values and tested collections;
+Current focus: **FabCAM V1.1 — macOS Personal Alpha**, on the maintainer's own
+Mac, with supervised ShopBot cases accepted progressively. General fablab/public
+distribution, Windows/Linux installers and public signing/notarization are deferred;
+canonical safety gates and actual failures remain. [FabApps vision](FABAPPS_VISION.md)
+records independent product maturity and future shared design/website initiatives.
+
+Current V1.1 implementation uses explicit operation values and local tested
+collections; the integrated recommendation engine is removed.
+[QUAL-1A.4](releases/QUAL_1A_4_PRODUCTION_INTEGRATION.md) and
+[QUAL-1B](releases/QUAL_1B_COOPERATIVE_CANCELLATION.md) are implemented and qualified
+within their recorded software limits. [QUAL-1C](releases/QUAL_1C_MACOS_PERSONAL_ALPHA.md)
+built the macOS app; native user acceptance remains pending. SEC-1 corrects Tokio
+and consolidates this source; [STATUS](shopbot-modernization/STATUS.md) owns its
+final qualification and publication disposition.
+[Release roadmap](releases/RELEASE_ROADMAP.md) separates frozen V1, V1.1
+Personal Alpha qualification, planned optional V1.2 FabSpeed integration and deferred CAM work.
 [Accepted ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
-separates optional future FabSpeed calculation. Legacy recommendation infrastructure
-is removed. Full software/manual acceptance limitations remain in the report.
-**HARD STOP for final human review; no release or next milestone.**
+records separation; [proposed ADR-0031](shopbot-modernization/adr/ADR-0031-optional-one-way-fabspeed-catalogue.md)
+records approved one-way product principles and OPEN technical contracts.
+No synchronization, release or physical acceptance is implied.
 
 Start with [current STATUS](shopbot-modernization/STATUS.md), then select a route.
 Frozen V1 evidence remains in [V1 readiness](releases/V1_READINESS.md). Historical
@@ -48,7 +60,8 @@ acceptance. Link to authoritative reports rather than copying their full content
 Use [history](releases/HISTORY.md) when a document has been superseded.
 
 NUMSAFE/NUMSAFE2 are integrated; use the [reconciliation checkpoint](releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md)
-for current source, Feeds & Speeds acceptance and remaining gates. No evidence retention policy is
+for its historical integrated source, bounded Feeds & Speeds acceptance and gates.
+Use current STATUS for the post-FS-RESET source; the earlier engine is superseded. No evidence retention policy is
 changed by this index; [retention options](releases/DOCUMENTATION_CHECKPOINT_2026_10_20.md)
 are proposals requiring approval. Preserve GPL/upstream attribution and separate
 manufacturer/local data rights in the [licensing matrix](shopbot-modernization/feeds-speeds/DATA_SOURCES.md).
