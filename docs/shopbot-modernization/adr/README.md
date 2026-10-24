@@ -1,21 +1,24 @@
 # Architectural decisions
 
 [ADR-0030 — FabCAM/FabSpeed separation](ADR-0030-fabcam-fabspeed-separation.md) is
-**proposed, awaiting FS-RESET-1 architecture approval**. Product separation is authorized;
-implementation is stopped. Earlier FS decisions remain historical pending this bounded replacement.
+**Accepted** and FS-RESET implementation is delivered; final qualification and
+human/platform/physical acceptance remain separate. [ADR-0031](ADR-0031-optional-one-way-fabspeed-catalogue.md)
+is **Proposed** for optional one-way V1.2 integration: product principles approved,
+transport/storage and implementation contract OPEN. Earlier FS/source/recipe ownership
+is superseded within ADR-0030's scope, not unfinished work to restart.
 
 
 [Documentation index](../../README.md) · [Fork architecture](../ARCHITECTURE.md) ·
 [Current gates](../../releases/V1_READINESS.md).
 
-All 26 decisions are indexed below. The recorded state is quoted from each ADR,
+Decisions ADR-0001–0031 are indexed below. The recorded state is quoted from each ADR,
 including historical pending-review wording. An accepted architecture, implemented
 code, software evidence and human checkpoint acceptance are separate states.
 Use current readiness/explicit acceptance records to resolve later dispositions;
 this index does not approve, revoke or rewrite a decision.
 
 [V1-FREEZE acceptance matrix](../../releases/V1_FREEZE_READINESS_2026_10_20.md#4-compact-human-acceptance-matrix)
-reconciles the current ADR-0024/0025/0026 implementation reviews without rewriting
+records the historical ADR-0024/0025/0026 implementation review checkpoint without rewriting
 accepted ADR text or promoting architecture approval to release acceptance.
 
 Use the [versioned ADR template](../../../.agents/skills/project-documentation/assets/ADR-TEMPLATE.md).
@@ -54,3 +57,11 @@ qualification. M0–M4 are retained; later work uses named tracks, not global M5
 | [ADR-0027](ADR-0027-lab-and-reference-identities.md) | Independent lab identities and reference-pack compatibility | User-authorized v1.1 follow-up, 2026-10-21; UX acceptance pending |
 | [ADR-0028](ADR-0028-preset-duplicate-adapt.md) | Strict preset copy permissions, compatibility and inactive Drafts | User-approved architecture 2026-10-21; implementation human review ivac-1oe9l OPEN |
 | [ADR-0029](ADR-0029-manual-inactive-recipes.md) | Manually editable inactive recipes from presets | User-authorized policy 2026-10-21; supersedes ADR-0028 context/value restrictions; implementation UX acceptance pending |
+| [ADR-0030](ADR-0030-fabcam-fabspeed-separation.md) | FabCAM explicit parameters and independent FabSpeed calculation | Accepted; FS-RESET implemented; final qualification/human acceptance remain separate |
+| [ADR-0031](ADR-0031-optional-one-way-fabspeed-catalogue.md) | Optional One-Way FabSpeed Catalogue for FabCAM | Proposed; product ownership/direction approved, INT-0 transport/storage and implementation contract OPEN |
+
+For current V1.1 architecture, ADR-0030 supersedes the historical recommendation,
+source-pack and inactive-recipe ownership of ADR-0002/3/4/5/6/11/27/28/29 within its
+explicit scope. Those ADRs and their original statuses remain preserved; an index
+entry does not close their historical human gates. ADR-0031 proposes optional
+V1.2 integration and does not reintroduce that engine or imply synchronization exists.

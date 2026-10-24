@@ -1,20 +1,22 @@
 # FabCAM V1 readiness
 
-## Current branch separation — 2026-10-21
+## Frozen V1 and current feature-branch routing
 
 V1 stabilization/RC1 remains `ef807cf8250ddc4bdf795c75bb9bf9f011db9bca`,
 RC1-ef807cf-39492251757 (beta.3/pipeline63). Its
 [CI](https://github.com/harry-finch/FabCAM/actions/runs/39487569970) and
 [candidate workflow](https://github.com/harry-finch/FabCAM/actions/runs/39492251757)
-completed successfully; the retained [local RC1 receipt](V1_RC1_CANDIDATES_RESULTS_2026_10_20.md)
+completed successfully; the retained local RC1 receipt `V1_RC1_CANDIDATES_RESULTS_2026_10_20.md`
 is untracked evidence, not included by this documentation commit. Signing/platform
 and supervised workshop limits remain; no final V1 acceptance is recorded here.
 
-The separate `FabCAM-v1.1` branch contains feature changes beyond RC1 and has a
-known failing frontend size guard. Its [inventory and planned milestones](FABCAM_V1_1_ROADMAP_AND_BRANCH_2026_10_21.md)
-do not change V1 scope or approve any human gate. PRESET-1/PRESET-2/MAT-1 are
-planned, not V1 blockers. V1.1 requires its own combined-source qualification and
-acceptance after reviewed future hotfix reconciliation.
+The separate `FabCAM-v1.1` branch now uses explicit role parameters, project v9,
+local tested collections and independent CAM validators after FS-RESET.
+[Current STATUS](../shopbot-modernization/STATUS.md) and [qualification roadmap](RELEASE_ROADMAP.md)
+own its current gates; QUAL-1A.4 is IN PROGRESS, not accepted by this document.
+Historical FS/PRESET implementation and size-guard snapshots remain in their dated
+reports. Optional V1.2 FabSpeed integration is not a V1/V1.1 blocker. No V1 scope,
+freeze, platform/physical acceptance or release state changes in this cleanup.
 
 ## Historical V1-FREEZE register — retained evidence and gates
 

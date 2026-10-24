@@ -1,11 +1,14 @@
 # FabCAM documentation
 
-Current V1.1 implementation: [FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md).
-FabCAM owns explicit operation values and tested collections;
+Current V1.1 implementation uses explicit operation values and local tested
+collections; the integrated recommendation engine is removed. QUAL-1A.4 is
+IN PROGRESS; [STATUS](shopbot-modernization/STATUS.md) owns current source/limits.
+[Release roadmap](releases/RELEASE_ROADMAP.md) separates frozen V1, V1.1
+qualification, planned optional V1.2 FabSpeed integration and deferred CAM work.
 [Accepted ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
-separates optional future FabSpeed calculation. Legacy recommendation infrastructure
-is removed. Full software/manual acceptance limitations remain in the report.
-**HARD STOP for final human review; no release or next milestone.**
+records separation; [proposed ADR-0031](shopbot-modernization/adr/ADR-0031-optional-one-way-fabspeed-catalogue.md)
+records approved one-way product principles and OPEN technical contracts.
+No synchronization, release or physical acceptance is implied.
 
 Start with [current STATUS](shopbot-modernization/STATUS.md), then select a route.
 Frozen V1 evidence remains in [V1 readiness](releases/V1_READINESS.md). Historical
@@ -46,7 +49,8 @@ acceptance. Link to authoritative reports rather than copying their full content
 Use [history](releases/HISTORY.md) when a document has been superseded.
 
 NUMSAFE/NUMSAFE2 are integrated; use the [reconciliation checkpoint](releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md)
-for current source, Feeds & Speeds acceptance and remaining gates. No evidence retention policy is
+for its historical integrated source, bounded Feeds & Speeds acceptance and gates.
+Use current STATUS for the post-FS-RESET source; the earlier engine is superseded. No evidence retention policy is
 changed by this index; [retention options](releases/DOCUMENTATION_CHECKPOINT_2026_10_20.md)
 are proposals requiring approval. Preserve GPL/upstream attribution and separate
 manufacturer/local data rights in the [licensing matrix](shopbot-modernization/feeds-speeds/DATA_SOURCES.md).

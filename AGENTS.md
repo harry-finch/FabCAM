@@ -8,18 +8,23 @@ M0–M4 are the completed ShopBot foundation; M4 baseline is
 `e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1`. Preserve their names and evidence limits.
 Use named future tracks: FS (Feeds & Speeds), UX (milling workflow), CAD
 (geometry preparation), WJ (ProtoMAX/waterjet), VINYL (drag knife, lower priority).
-Priority: FS foundation → priority milling UX/CAM improvements → WJ → VINYL.
+The FS foundation is historical/completed; current sequencing follows the canonical
+release plan (V1.1 qualification, optional V1.2 integration, deferred CAM/WJ/VINYL).
 Every milestone ends at human approval; recording a roadmap does not authorize
 restarting completed FS0 or implementing any later milestone.
 
-The existing FS assistant is milling-specific, independent of UI and toolpath
-geometry generation, and independently testable. An adapter supplies CAM
-context; accepted or manually edited parameters are explicitly persisted.
-Post-processors must not call the engine dynamically. Manual overrides remain
-authoritative; aggressiveness and evidence are separate. Waterjet/drag knife
-must not depend on FS. See `docs/shopbot-modernization/feeds-speeds/README.md`
-and ADR-0002. Use the architecture/documentation skills; use feeds-speeds only
-if it exists, and do not create that skill without an explicit request.
+Current V1.1 follows Accepted ADR-0030 and FS-RESET: explicit operation cutting
+values per actual role, independent CAM validation, project v9 and local tested
+preset collections. The integrated recommendation/source-pack engine is removed.
+FS0–FS3.9 and older PRESET reports remain historical completed/superseded work, not
+instructions to recreate that engine. FabSpeed owns independent calculation and
+experiments. Optional one-way FabSpeed → FabCAM integration is planned for V1.2;
+ADR-0031 is Proposed and implementation contracts require INT-0 review. CAM
+operation values stay authoritative, and generation/simulation/export must work
+without FabSpeed. Post-processors never call a live calculation engine. Consult
+current STATUS and RELEASE_ROADMAP; qualification, human, platform and physical
+gates remain distinct. Frozen V1 keeps its original source-bound contracts.
+Use architecture/documentation skills for these boundaries.
 
 The published baseline is now `main`; `feature/shopbot-mvp` is retained historically.
 Origin is `harry-finch/FabCAM`, upstream is
