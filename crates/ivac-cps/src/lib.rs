@@ -47,3 +47,7 @@ mod symbol_audit;
 #[cfg(test)]
 #[path = "../tests/probe3.rs"]
 mod probe3;
+
+#[cfg(test)]
+#[path = "../tests/shopbot_cancellation.rs"]
+mod shopbot_cancellation;

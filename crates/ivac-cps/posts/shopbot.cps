@@ -47,6 +47,11 @@ function pause(text) { comment(text); writeln("PAUSE"); }
 function dwell(s) {
   if (!finite(s) || s < 0) fail("invalid dwell");
 }
+// Reuse the existing read-only host probe. Throwing aborts the entire callback;
+// Rust classifies cancellation from the real token and never returns partial NC.
+function checkPreflightAbort() {
+  if (__ivac.abortCheck()) throw new Error("__IVAC_CANCELLED__");
+}
 function cycleCheck(r) {
   if (["drilling", "counter-boring", "deep-drilling"].indexOf(r.cycleType) < 0)
     fail("unsupported drill cycle " + r.cycleType);
@@ -62,11 +67,13 @@ function cycleCheck(r) {
       (!finite(c.incrementalDepth) || c.incrementalDepth <= 0)) fail("invalid peck");
   if (c.dwell !== undefined) dwell(c.dwell);
   for (var i = 0; i < r.points.length; i++) {
+    if ((i & 31) == 0) checkPreflightAbort();
     point(r.points[i]);
     if (r.points[i].z >= c.retract) fail("drill depth must be below retract");
   }
 }
 function preflight() {
+  checkPreflightAbort();
   // ivaCAM-owned post uses versioned IR to catch records the general CPS
   // dispatcher can omit (machine rapids, unknown/reserved record kinds).
   var machineText = getGlobalParameter("ivacam:machine-config");
@@ -85,6 +92,7 @@ function preflight() {
   if (program.version != 1 || program.machine) fail("unsupported IR or kinematics");
   if (!program.sections.length) fail("no milling sections");
   for (var i = 0; i < program.sections.length; i++) {
+    checkPreflightAbort();
     var s = program.sections[i];
     if (["contour2d", "pocket2d", "drill", "milling", "planar_surface", "vcarve"].indexOf(s.strategy) < 0)
       fail("unsupported strategy " + s.strategy);
@@ -105,6 +113,7 @@ function preflight() {
       if (s.workPlane[row][col] != identity[row][col]) fail("rotated work plane unsupported");
     var entry = "direct", entryTabs = false, entryLeads = false, pathHelix = false, entryStartZ;
     for (var k = 0; k < (s.parameters || []).length; k++) {
+      if ((k & 31) == 0) checkPreflightAbort();
       var param = s.parameters[k];
       if (param.name == "ivacam:entry-strategy") entry = param.value;
       if (param.name == "ivacam:entry-start-z") entryStartZ = param.value;
@@ -119,6 +128,7 @@ function preflight() {
     if (entry == "helix" || pathHelix) {
       var helixZ = s.initialPosition.z, hasHelicalMotion = false;
       for (var h = 0; h < s.records.length; h++) {
+        if ((h & 31) == 0) checkPreflightAbort();
         var motion = s.records[h];
         if (motion.kind == "comment" && String(motion.text).indexOf("ENTRY: requested Helix; resolved") == 0)
           fail("operation " + s.id + ": requested Helix was not geometrically realized (entry radius/space or open path); generic motion substituted Ramp/Direct. ShopBot refuses this fallback. Choose another entry explicitly. Operation parameters were kept");
@@ -138,6 +148,9 @@ function preflight() {
     point(s.initialPosition); point(s.finalPosition);
     var p = s.initialPosition;
     for (var j = 0; j < s.records.length; j++) {
+      // A cycle record can contain many points: cycleCheck polls that inner loop.
+      // This 32-item bound is independent of the dispatcher's emission cadence.
+      if ((j & 31) == 0) checkPreflightAbort();
       var r = s.records[j];
       switch (r.kind) {
       case "rapid": case "linear":
@@ -184,6 +197,7 @@ function preflight() {
 }
 function onOpen() {
   preflight(); // whole program checked before any output
+  checkPreflightAbort();
   warning(labSpindle1
     ? "Sorbonne spindle 1 mode: prepare tool 1 and XYZ zero before running. TR/SO4/SO1 wiring from operator macros; 2s startup. Repeat controller/physical qualification for this revision."
     : "ShopBot MVP uses manual spindle start/stop and RPM; verify every operator pause. Arcs linearized at 0.01 mm. No controller/hardware qualification.");

@@ -35,16 +35,18 @@ fn every_external_entry_refuses_before_parsing_or_evaluation() {
                 ),
                 Err(PostError::UntrustedPost)
             ));
-            assert!(matches!(
-                run_post_cancellable(
-                    script,
-                    name,
-                    &program,
-                    &serde_json::json!({}),
-                    Arc::new(AtomicBool::new(false))
-                ),
-                Err(PostError::UntrustedPost)
-            ));
+            for cancelled in [false, true] {
+                assert!(matches!(
+                    run_post_cancellable(
+                        script,
+                        name,
+                        &program,
+                        &serde_json::json!({}),
+                        Arc::new(AtomicBool::new(cancelled))
+                    ),
+                    Err(PostError::UntrustedPost)
+                ));
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 //! Owned `ShopBot` post must reject records the generic dispatcher can omit.
 use ivac_cps::{ir::Program, library::bundled, run_post};
 use serde_json::{json, Value};
-fn fixture() -> Value {
+pub(crate) fn fixture() -> Value {
     json!({"version":1,"header":{"programName":"M2","programComment":"test", "toleranceMm":0.01,
         "parameters":[{"name":"ivacam:machine-config","value":"{\"mode\":\"mill\",\"tool_change\":\"manual_m0_pause\"}"}, {"name":"ivacam:clearance-z","value":5}]},
         "sections":[{"id":1,"strategy":"contour2d","tool":{"number":1,"diameter":6,"toolType":5,"coolant":0},
