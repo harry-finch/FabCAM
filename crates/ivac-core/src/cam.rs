@@ -44,6 +44,7 @@ pub mod trochoidal;
 pub mod two_sided;
 pub mod vcarve;
 pub mod vcarve_emit;
+pub mod vcarve_math;
 pub mod vcarve_plan;
 pub mod vcarve_validate;
 pub mod waterline;

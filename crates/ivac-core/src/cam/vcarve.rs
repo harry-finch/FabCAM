@@ -544,7 +544,7 @@ pub fn polyline_to_z(
     r_cap: Option<f64>,
     z_cap: Option<f64>,
 ) -> (Vec<(f64, f64, f64, f64)>, bool, bool) {
-    let tan_half = (tip_angle_rad * 0.5).tan().max(1e-9);
+    let tan_half = super::vcarve_math::tan(tip_angle_rad * 0.5).max(1e-9);
     let tip_r = tip_radius_mm.max(0.0);
     let mut depth_limited = false;
     let mut all_zero = true;

@@ -96,7 +96,7 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
     {
         return Err(invalid("Radius cap and source inset must be finite and nonnegative (radius cap strictly positive)."));
     }
-    let tan = (tool.tip_angle_deg.to_radians() * 0.5).tan();
+    let tan = crate::cam::vcarve_math::tan(tool.tip_angle_deg.to_radians() * 0.5);
     let tip_r = tip * 0.5;
     let reach = diameter * 0.5;
     if op.params.cutting.is_some() && params.carve_max_width_mm.is_some_and(|r| r > reach) {
@@ -186,10 +186,9 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
                 }
                 let mut target = Vec::new();
                 for (x, y, z, _) in path {
-                    if target
-                        .last()
-                        .is_some_and(|&(px, py, _): &(f64, f64, f64)| (x - px).hypot(y - py) < 1e-7)
-                    {
+                    if target.last().is_some_and(|&(px, py, _): &(f64, f64, f64)| {
+                        crate::cam::vcarve_math::hypot(x - px, y - py) < 1e-7
+                    }) {
                         continue;
                     }
                     target.push((x, y, z));
@@ -211,13 +210,14 @@ pub(in crate::pipeline) fn run_vcarve_op<P: PostProcessor>(
             }
             for ring in rings {
                 let mut target: Vec<_> = ring.iter().map(|p| (p.x, p.y, -z_limit)).collect();
-                target.dedup_by(|a, b| (a.0 - b.0).hypot(a.1 - b.1) < 1e-7);
+                target.dedup_by(|a, b| crate::cam::vcarve_math::hypot(a.0 - b.0, a.1 - b.1) < 1e-7);
                 if target.len() < 3 {
                     return Err(invalid("Degenerate perimeter after V-bit offset."));
                 }
-                if (target[0].0 - target.last().unwrap().0)
-                    .hypot(target[0].1 - target.last().unwrap().1)
-                    > 1e-7
+                if crate::cam::vcarve_math::hypot(
+                    target[0].0 - target.last().unwrap().0,
+                    target[0].1 - target.last().unwrap().1,
+                ) > 1e-7
                 {
                     target.push(target[0]);
                 }

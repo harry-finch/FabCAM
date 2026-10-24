@@ -6,7 +6,11 @@ import { History } from './history';
 import type { ProjectState } from './project.svelte';
 import { defaultWorkOffset } from './project-types';
 import { validateProjectV9 } from './project-v9';
-import { defaultProjectMachine, defaultProjectTools } from './project-defaults';
+import {
+  defaultProjectMachine,
+  defaultProjectTools,
+  defaultProjectStock,
+} from './project-defaults';
 import { buildOpEntry } from './op_defaults';
 import { seedCutting } from './cutting-parameters';
 import type { ProjectFile } from './project-types';
@@ -118,4 +122,59 @@ it('refuses obsolete context/recipe fields even when null rather than silently l
     Object.assign(p.operations![0], { [field]: null });
     expect(() => validateProjectV9(p)).toThrow('Legacy');
   }
+});
+
+it('QUAL-1A.2 saves and reopens all five roles, exact identities and extension decimals', () => {
+  const file = fixture();
+  file.stock = defaultProjectStock();
+  file.machine!.gcodeDialect = 'linuxcnc';
+  const drill = buildOpEntry('drill', {
+    nextId: 2,
+    tools: file.tools!,
+    reliefSources: [],
+    selectionIds: [],
+    objectMeta: [],
+  });
+  if (drill.kind !== 'drill') throw new Error('drill fixture');
+  drill.spotFirst = { spotToolId: drill.toolId, spotDepthMm: -0.5 };
+  drill.chamferAfterWidthMm = 0.5;
+  drill.finishToolId = drill.toolId;
+  drill.cutting = seedCutting(drill, file.tools!);
+  drill.cutting.rates[0].rpm = null;
+  file.operations!.push(drill);
+  file.machine!.physicalId = '9007199254740993';
+  file.tools![0].physicalId = '18446744073709551615';
+  file.material = { id: '9007199254740995', revision: '1' };
+  file.operations![0].step = -15.122706142614561;
+  const p = {
+    data: {
+      ...file,
+      fixtures: [],
+      textLayers: [],
+      reliefSources: [],
+      workOffset: defaultWorkOffset(),
+      serializedExtensions: { vendorMetadata: { coordinate: 15.122706142614561 } },
+    },
+    sel: {},
+    history: new History(),
+  } as unknown as ProjectState;
+  const text = JSON.stringify(snapshotProject(p));
+  const reopened = JSON.parse(text);
+  restoreProject(p, reopened);
+  const saved = snapshotProject(p);
+  expect(saved.operations).toEqual(reopened.operations);
+  expect(saved.operations!.flatMap((o) => o.cutting!.rates.map((r) => r.role))).toEqual([
+    'rough',
+    'finish',
+    'drill',
+    'spot',
+    'chamfer',
+  ]);
+  expect(saved.machine!.physicalId).toBe('9007199254740993');
+  expect(saved.tools![0].physicalId).toBe('18446744073709551615');
+  expect(saved.material).toEqual(file.material);
+  expect(p.data.serializedExtensions).toEqual({
+    vendorMetadata: { coordinate: 15.122706142614561 },
+  });
+  expect(saved).toEqual(reopened);
 });

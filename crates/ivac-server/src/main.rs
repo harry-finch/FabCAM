@@ -1,6 +1,9 @@
 //! `ivac-server` — axum HTTP server exposing the JSON contract from
 //! `schema/openapi.yaml`.
 
+#[cfg(test)]
+mod qual1a2_tests;
+
 use std::collections::HashMap;
 use std::convert::Infallible;
 use std::net::SocketAddr;

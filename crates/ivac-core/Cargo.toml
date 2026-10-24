@@ -21,6 +21,8 @@ cps = ["dep:ivac-cps"]
 profiling = []
 
 [dependencies]
+# Pinned portable arithmetic for deterministic V-Carve tangent and lengths.
+libm = { version = "=0.2.16", default-features = false, features = ["force-soft-floats"] }
 ivac-cps = { workspace = true, optional = true }
 serde = { workspace = true }
 # Existing transitive dependency; exact binary-float orientation fallback for GEOM1.

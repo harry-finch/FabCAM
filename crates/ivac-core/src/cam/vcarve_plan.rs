@@ -94,7 +94,7 @@ pub fn plan(
         }
         if let Some(prev) = knots.last() {
             let p: &Knot = prev;
-            if (x - p.x).hypot(y - p.y) < DEPTH_EPS {
+            if super::vcarve_math::hypot(x - p.x, y - p.y) < DEPTH_EPS {
                 return Err(
                     "V-Carve chain has a zero-length edge; no qualified ramp entry.".into(),
                 );
@@ -107,7 +107,7 @@ pub fn plan(
             cut: 0.,
         });
     }
-    let slope = angle.to_radians().tan();
+    let slope = super::vcarve_math::tan(angle.to_radians());
     let mut out = vec![(knots[0].x, knots[0].y, 0.)];
     for _ in 0..MAX_SWEEPS {
         let mut traveled = 0.;
@@ -115,7 +115,7 @@ pub fn plan(
         for pair in knots.windows(2) {
             let a = pair[0];
             let b = pair[1];
-            let length = (b.x - a.x).hypot(b.y - a.y);
+            let length = super::vcarve_math::hypot(b.x - a.x, b.y - a.y);
             let f = [
                 (a.target, b.target),
                 (a.cut + step, b.cut + step),

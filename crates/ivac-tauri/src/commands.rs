@@ -616,6 +616,34 @@ pub async fn generate_drawing_cmd(
 mod audit_15_16 {
     use super::*;
     #[tokio::test]
+    async fn qual1a2_json_value_command_decoding_preserves_numeric_bits() {
+        // The SDK uses a JSON Value argument. This exercises that conversion
+        // and the command, but does not claim installed WebView/IPC acceptance.
+        let input = include_str!("../../../tests/fixtures/perf-v9/square-medial-linuxcnc.json");
+        let mut value: serde_json::Value = serde_json::from_str(input).unwrap();
+        value["project"]["operations"][0]["params"]["cutting"]["entry_angle_deg"] =
+            serde_json::json!("__LEXEME__");
+        let json = value
+            .to_string()
+            .replace("\"__LEXEME__\"", "15.122706142614561");
+        let value: serde_json::Value = serde_json::from_str(&json).unwrap();
+        let request: PipelineRequest = serde_json::from_value(value).unwrap();
+        assert_eq!(
+            request.project.operations[0]
+                .params
+                .cutting
+                .as_ref()
+                .unwrap()
+                .entry_angle_deg
+                .unwrap()
+                .to_bits(),
+            0x402e_3ed3_56eb_1880
+        );
+        assert!(!generate(request).await.unwrap().gcode.is_empty());
+        let malformed = json.replace("15.122706142614561", "1e309");
+        assert!(serde_json::from_str::<serde_json::Value>(&malformed).is_err());
+    }
+    #[tokio::test]
     async fn collision_error_retains_preview_without_executable_program() {
         let mut request: PipelineRequest = serde_json::from_str(include_str!(
             "../../../tests/fixtures/test1/profile.request.json"

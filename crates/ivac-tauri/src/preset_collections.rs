@@ -166,6 +166,31 @@ pub fn delete_preset_collection(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn qual1a2_numeric_reopen_preserves_original_token_until_explicit_save() {
+        let d = tempfile::tempdir_in(std::env::temp_dir().canonicalize().unwrap()).unwrap();
+        let original = r#"{"format":"fabcam-preset-collection","version":1,"id":"numeric","name":"Numeric","presets":[{"id":"p","name":"P","context":{"machine_id":"9007199254740993","machine_label":"M","material_id":"18446744073709551615","material_label":"S","signature":"{}"},"parameters":{"rates":[{"role":"rough","tool_id":1,"rpm":10000,"feed_mm_min":600,"plunge_mm_min":200}],"schedule":{"kind":"step","step":-15.1227061426145610,"finish_step":null},"pocket_overlap":null,"planar_stepover_mm":null},"tested":true,"test_date":null,"notes":null}]}"#;
+        let path = d.path().join("numeric.json");
+        std::fs::write(&path, original).unwrap();
+        let reopened = read(&path).unwrap().unwrap();
+        assert_eq!(reopened.token, token(original));
+        assert_eq!(reopened.json, original);
+        let c = parse_collection(original).unwrap();
+        assert_eq!(c.presets[0].context.machine_id, "9007199254740993");
+        assert_eq!(c.presets[0].context.material_id, "18446744073709551615");
+        let ivac_core::presets::DepthSchedule::Step { step, .. } = c.presets[0].parameters.schedule
+        else {
+            panic!("step")
+        };
+        assert_eq!(step.unwrap().to_bits(), 0xc02e_3ed3_56eb_1880);
+        let saved = write(d.path(), original, Some(&reopened.token)).unwrap();
+        assert_ne!(saved.token, reopened.token); // Noncanonical trailing zero removed on explicit save.
+        assert_eq!(read(&path).unwrap().unwrap().token, saved.token);
+        assert!(write(d.path(), original, Some(&reopened.token)).is_err());
+        assert_eq!(std::fs::read_to_string(path).unwrap(), saved.json);
+        let canonical = write(d.path(), &saved.json, Some(&saved.token)).unwrap();
+        assert_eq!(canonical.token, saved.token); // Identical canonical bytes keep their token.
+    }
     fn doc(name: &str) -> String {
         serde_json::json!({"format":"fabcam-preset-collection","version":1,"id":"lab","name":name,"presets":[]}).to_string()
     }
