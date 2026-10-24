@@ -14,6 +14,9 @@ within their recorded software limits. [QUAL-1C](releases/QUAL_1C_MACOS_PERSONAL
 built the macOS app; native user acceptance remains pending. SEC-1 corrects Tokio
 and consolidates this source. [SEC-1](releases/SEC_1_REPOSITORY_CONSOLIDATION.md)
 records 20/20 canonical gates, the rebuilt local app and publication receipt;
+[latest local integration](releases/V11_LOCAL_INTEGRATION_2026_10_24.md) now adds
+qualified drawing drag/proportional sizing, fixed stock, pocket diagnostics and
+header UI, with a fresh native test build. Native human acceptance is still open;
 [STATUS](shopbot-modernization/STATUS.md) owns current source/limits.
 [Release roadmap](releases/RELEASE_ROADMAP.md) separates frozen V1, V1.1
 Personal Alpha qualification, planned optional V1.2 FabSpeed integration and deferred CAM work.

@@ -1,11 +1,15 @@
 # FabCAM — current status
 
-Current focus: **FabCAM V1.1 — macOS Personal Alpha**. SEC-1 software is
-qualified at `135095392c2a5711acc79f5286aae7599214585a`: targeted Tokio correction,
-reviewed consolidation, 20/20 canonical gates and rebuilt local arm64 app.
-[SEC-1 report and publication receipt](../releases/SEC_1_REPOSITORY_CONSOLIDATION.md)
-record the normal `FabCAM-v1.1` push separately from the tested build source. Public release, main merge,
-version promotion, FabSpeed integration and hardware operation remain excluded.
+Current focus: **FabCAM V1.1 — macOS Personal Alpha**. Latest integrated local
+software/build source: **`1f353ef3b774382f63e67f93a9bb3a4652007de2`**. Drawing drag,
+proportional dimensions, fixed manual stock, pocket diagnostics and header UI are
+integrated, with **20/20 canonical gates**, 23 exact output references and a rebuilt
+local arm64 app. [Current report and app receipt](../releases/V11_LOCAL_INTEGRATION_2026_10_24.md)
+own this checkpoint. **Native human acceptance remains OPEN.** SEC-1's
+[older source/report and publication receipt](../releases/SEC_1_REPOSITORY_CONSOLIDATION.md)
+remain historical evidence; the new integration is committed locally, without push.
+Public release, main merge, version promotion, FabSpeed integration and hardware
+operation remain excluded.
 [Release plan](../releases/RELEASE_ROADMAP.md) · [FabApps vision](../FABAPPS_VISION.md).
 
 | Work | Current disposition |
@@ -15,14 +19,14 @@ version promotion, FabSpeed integration and hardware operation remain excluded.
 | QUAL-1B | COMPLETED software cancellation: `fd8fed6`, report `aeae820`; [fixed campaigns](../releases/QUAL_1B_COOPERATIVE_CANCELLATION.md) meet 200 ms p95, without a universal GUI latency claim |
 | QUAL-1C | BUILT / SOFTWARE TESTED: `700de73`, report `9520d98`, [19/20 gate](../releases/QUAL_1C_MACOS_PERSONAL_ALPHA.md); app not launched, native human acceptance pending |
 | SEC-1 | QUALIFIED: `1350953`, 20/20 canonical gates, current audit PASS, 77 native/WASM cases exact, TEST1 256 PASS; rebuilt local arm64 app. Publication outcome/exact remote SHA in the report's post-push receipt |
-| Primary local edits | PRESERVED / PENDING: pocket diagnostics, fixed-stock/drawing placement and header UI; separate uncommitted source and reports, not qualified by SEC-1 |
+| Local placement integration | INTEGRATED / SOFTWARE QUALIFIED: `1f353ef`, 20/20 gates, Rust 1,594 PASS / 0 FAIL / 1 intentional ignored worker; frontend 1,510 PASS / 1 optional skip; native build ready for human testing |
 | Optional V1.2 | PLANNED one-way FabSpeed → FabCAM; [ADR-0031](adr/ADR-0031-optional-one-way-fabspeed-catalogue.md) Proposed, no implementation |
 
 Tokio 1.52.2's RUSTSEC-2026-0386 is addressed by the minimal lockfile update;
 1.54.0 is excluded because of the separate Interval race. The security commit
 preserves every other resolved package. Focused tests: native Tauri 15, HTTP 21,
 file export 11, CPS 55, 23 unchanged output references; full audit and strict
-affected pedantic Clippy pass. Final full qualification: Rust 1,592 PASS / 0 FAIL /
+affected pedantic Clippy pass. SEC-1's original full qualification: Rust 1,592 PASS / 0 FAIL /
 1 intentional ignored worker; frontend 1,498 PASS / 1 optional locale skip.
 Native/WASM replay and the 23 fixed CLI references are exact.
 
@@ -34,10 +38,11 @@ publication is not pair-atomic; CLI streaming does not acquire full-program
 simulation qualification. Automatic dowel injection remains excluded.
 
 MAT-1, tested collections and generic machine/tool libraries remain retained.
-Primary local drawing placement has bounded tests and pending human UX review;
-its reported header translation failure and combined-source qualification remain
-open. Initial dirty source/evidence and original STATUS/roadmap copies are
-fingerprinted and preserved in the local SEC-1 workspace receipt.
+Drawing placement has automated and browser replay evidence; native human UX
+acceptance is pending. The header translation failure is fixed without weakening
+the guard. No combined-source pocket acceptance is added. All 8,471 inventoried
+unrelated local files/evidence are preserved; the current report separates this
+integration from SEC-1's earlier dirty-source preservation receipt.
 
 Frozen `main`/V1 remain `ef807cf8250ddc4bdf795c75bb9bf9f011db9bca` with their
 original acceptance limits. Dated reports are unchanged; the earlier
@@ -46,7 +51,7 @@ history rather than the current A4/B/C status.
 
 Next product milestone: **Personal Alpha — Actual macOS Launch & Native Workflow
 Acceptance**, using the separate macOS test account and the newly rebuilt
-[SEC-1 bundle/procedure](../releases/SEC_1_REPOSITORY_CONSOLIDATION.md#remaining-acceptance-and-hard-stop).
-The historical QUAL-1C bundle remains evidence, not the corrected app. No launch in the usual
-application-data profile. Supervised QUAL-2 follows only by separate authorization.
-**HARD STOP after the qualified SEC-1 development push and report.**
+[current local bundle/procedure](../releases/V11_LOCAL_INTEGRATION_2026_10_24.md#preservation-and-next-human-checkpoint).
+Older QUAL-1C/SEC-1 bundles remain preserved. No launch in the usual application-data
+profile. Supervised QUAL-2 follows only by separate authorization.
+**HARD STOP after local integration, native rebuild and report. No push.**

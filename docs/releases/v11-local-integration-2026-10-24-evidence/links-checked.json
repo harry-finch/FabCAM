@@ -1,0 +1,90 @@
+[
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/pre-release-final.log"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/qualification-summary.json"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/output-corpus-summary.json"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/pre-release-first.log"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/clippy-first-msrv.log"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/drawing-review.html"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/browser-replay.json"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/browser-committed.txt"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/browser-roundtrip-committed.txt"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/drawing-placement-committed.png"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/native-build.log"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/codesign-details.log"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/source-binding.json"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/artifact-manifest.json"
+  },
+  {
+    "source": "docs/releases/V11_LOCAL_INTEGRATION_2026_10_24.md",
+    "target": "v11-local-integration-2026-10-24-evidence/preservation-check.json"
+  },
+  {
+    "source": "docs/README.md",
+    "target": "releases/V11_LOCAL_INTEGRATION_2026_10_24.md"
+  },
+  {
+    "source": "docs/releases/RELEASE_ROADMAP.md",
+    "target": "V11_LOCAL_INTEGRATION_2026_10_24.md"
+  },
+  {
+    "source": "docs/releases/V1_READINESS.md",
+    "target": "V11_LOCAL_INTEGRATION_2026_10_24.md"
+  },
+  {
+    "source": "docs/shopbot-modernization/STATUS.md",
+    "target": "../releases/V11_LOCAL_INTEGRATION_2026_10_24.md"
+  },
+  {
+    "source": "docs/shopbot-modernization/STATUS.md",
+    "target": "../releases/SEC_1_REPOSITORY_CONSOLIDATION.md"
+  },
+  {
+    "source": "docs/shopbot-modernization/STATUS.md",
+    "target": "../releases/V11_LOCAL_INTEGRATION_2026_10_24.md#preservation-and-next-human-checkpoint"
+  },
+  {
+    "source": "docs/shopbot-modernization/DEVLOG.md",
+    "target": "../releases/V11_LOCAL_INTEGRATION_2026_10_24.md"
+  }
+]

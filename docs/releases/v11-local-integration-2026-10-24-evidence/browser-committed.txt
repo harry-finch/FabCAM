@@ -1,0 +1,125 @@
+Browser tab: 3, Title: "FabCAM v0.9.0-beta.3 (v0.4.0-129-g1fda7cd)", URL: "http://127.0.0.1:18961/@fs/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/releases/drawing-placement-2026-10-24-evidence/drawing-review.html".
+0 AXWebArea FabCAM v0.9.0-beta.3 (v0.4.0-129-g1fda7cd), URL: 127.0.0.1:18961/@fs/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/releases/drawing-placement-2026-10-24-evidence/drawing-review.html
+	1 container app
+		2 container Main areas
+			3 text FabCAM Toolpath generation
+			4 button Description: Machine: Mill 200×300, Help: Mill 200×300 — Active machine, its tooling, and its settings
+				5 text Machine
+				6 text Mill 200×300
+			7 button Project
+			8 button Tool library, Help: The shop's tool inventory
+			9 button Presets
+			10 pop up button (collapsed, settable) Description: Language, Value: Automatic, Secondary Actions: Expand
+				11 menu
+					12 (selected) Automatic
+					13 EN — English
+					14 DE — Deutsch
+			15 container Theme
+				16 checkbox Description: Auto, Value: 1
+				17 checkbox Description: Light, Value: 0
+				18 checkbox Description: Dark, Value: 0
+			19 button Description: Settings, Help: App settings — theme, sim safety, performance
+			20 button Description: About, Help: Version, license, acknowledgements
+			21 pop up button Description: Help, Help: Keyboard & mouse shortcuts and usage help
+		107 container
+			108 button (collapsed) File, Secondary Actions: Expand
+				109 text File
+		39 button Open, Help: Open a drawing (DXF / SVG) or a saved .ivac-project.json (Ctrl+O)
+		40 button Save, Help: Save the current project (Ctrl+S)
+		41 container placement-review.dxf — Not saved as a project
+			42 text placement-review.dxf Not saved as a project
+		43 button Description: Undo, Help: Undo Edit file transform (Ctrl+Z)
+		44 button (disabled) Description: Redo, Help: Nothing to redo
+		45 button (disabled) Generate toolpaths, Help: Select geometry, then add a machining operation.
+		46 tab group Viewport mode
+			47 tab (selected, settable, boolean) 2D, Value: 1
+			48 tab (selectable, settable, boolean) 3D, Help: Show the 3D preview. Toolpath visibility is controlled separately., Value: 0
+		49 container
+			50 container
+				51 container
+					52 image
+					53 image
+					54 text 1 Click an object to select it → 2 Right-click for new operation
+					55 button Description: Fit view to scene, Help: Fit view to scene (F)
+					56 button Description: Show keyboard and mouse shortcuts, Help: Keyboard & mouse shortcuts (?)
+				57 text Select geometry, then add a machining operation.
+			58 splitter Drag to resize the side panel · double-click to reset
+			59 container Stock
+				60 button (collapsed) ▸ Stock 150 × 100 × 19 mm, Help: Expand stock settings, Secondary Actions: Expand
+					61 text ▸
+					62 text Stock
+					63 text 150 × 100 × 19 mm
+			64 container Drawings
+				65 container
+					66 button Description: Collapse layers panel, Help: Collapse layers
+					67 checkbox (settable, integer) Description: Toggle visibility of all imported layers, Help: Show or hide all imported layers in drawing views and picking. CAM sources are unchanged., Value: 1
+					68 button (expanded) Drawings 1, Secondary Actions: Collapse
+						69 text Drawings
+						70 text 1
+					71 pop up button (collapsed) + Add, Help: Add a drawing or editable text geometry, Secondary Actions: Expand
+					72 button (collapsed) Snap to, Secondary Actions: Expand
+						73 text Snap to
+					74 heading IMPORTED FILES, Value: 3
+						75 text IMPORTED FILES
+					76 text placement-review.dxf 4 segments · 1 layer
+					77 button (expanded) ▾ File transform Transform is active, Secondary Actions: Collapse, Help: Layout convenience: translate / rotate / scale / mirror this drawing. Pivot for rotate / scale / mirror is the drawing's original bbox center.
+						78 text ▾
+						79 text File transform
+						137 container Transform is active
+					138 button Reset, Help: Reset to identity (no transform)
+					110 text Width (X)
+					111 stepper (settable, integer) Width (X) mm, Value: 80
+					112 text mm Height (Y)
+					113 stepper (settable, integer) Height (Y) mm, Value: 40
+					114 text mm Proportions locked · Dimensions along X/Y after rotation. Scale about the drawing center. Select a contour, then drag it to move the whole imported drawing. Esc cancels. Manual stock stays fixed; automatic stock follows.
+					115 container Move this drawing by this many mm in X. Positive = right.
+						116 text X
+						117 stepper (settable, float) X mm, Value: 9.006549835205078, Details: 9,006550218340612
+						118 text mm
+					119 container Move this drawing by this many mm in Y. Positive = up.
+						120 text Y
+						121 stepper (settable, float) Y mm, Value: 5.403930187225342, Details: 5,403930131004367
+						122 text mm
+					123 container Rotate around the drawing's original bbox center. Positive = counter-clockwise.
+						124 text Rotate
+						125 stepper (settable, integer) Rotate °, Value: 0
+						126 text °
+					127 container Uniform scale around the bbox center. 1 = no scale, 2 = twice as big, 0.5 = half size.
+						128 text Scale
+						129 stepper (settable, float) Scale ×, Value: 1.3333333730697632, Details: 1,3333333333333333
+						130 text ×
+					131 container Mirror across the horizontal axis through the bbox center (flip top↔bottom). Negates arc bulges so curvature stays valid.
+						132 checkbox (settable, integer) Description: Flip bottom ↔ top (about X), Value: 0
+						133 text Flip bottom ↔ top (about X)
+					134 container Mirror across the vertical axis through the bbox center (flip left↔right). Negates arc bulges.
+						135 checkbox (settable, integer) Description: Flip left ↔ right (about Y), Value: 0
+						136 text Flip left ↔ right (about Y)
+					80 heading LAYERS 1, Value: 3
+						81 text LAYERS  1
+					82 text Hidden layers are still used by CAM.
+					83 content list Layers
+						84 container
+							85 checkbox Description: Hide layer Review, Help: Hide layer Review in drawing views and picking. CAM sources are unchanged., Value: 1
+							86 image Imported layer color: ACI 7 (read-only; drawing palette). Not a toolpath color.
+							87 text Review
+							88 text 4 segments
+							89 button Description: Delete layer Review, Help: Delete this layer and its geometry from all imported drawings. Undo is available.
+				90 button Drawing cleanup
+				91 button Corner relief, Help: Select closed contours, then choose the corners to relieve
+			93 container Text
+				94 container
+					95 button Description: Activate text panel, Help: Expand text panel
+					96 text Text 0
+					97 button Description: Add text, Help: Add text engraving (T)
+			98 container Operations
+				99 container
+					100 button (collapsed) Description: Activate operations panel, Help: Expand operations panel, Secondary Actions: Expand
+					101 text Operations
+					102 text 0
+					103 button Operation templates
+					104 button Add operation
+		105 container
+			106 text 1 object · center=(59.01, 40.40) · 80.00 × 40.00 mm · Click to select · Shift/Ctrl to multi-select · right-click for context menu · ? for shortcuts
+	36 button Round-trip v9 in memory, ID: fixture
+
+The focused UI element is 0 AXWebArea FabCAM v0.9.0-beta.3 (v0.4.0-129-g1fda7cd), URL: 127.0.0.1:18961/@fs/Users/mugen/Documents/01_Projets/FabCAM/ivacam/docs/releases/drawing-placement-2026-10-24-evidence/drawing-review.html

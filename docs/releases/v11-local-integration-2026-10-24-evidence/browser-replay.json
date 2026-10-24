@@ -1,0 +1,119 @@
+{
+  "fixture": "../drawing-placement-2026-10-24-evidence/drawing-review.html",
+  "runtime": "isolated Vite/browser origin 127.0.0.1:18961; synthetic imports loaded through existing project APIs",
+  "frontend_integrated_commit": "1fda7cd8dc8caf53eb11466c2a2aa514a20ee09c",
+  "observed_browser_stamp": "v0.4.0-127-g98e249f-dirty (Vite started before integration commit; same reviewed frontend bytes)",
+  "observations": [
+    {
+      "action": "Load synthetic rectangle",
+      "dimensions_mm": [
+        60,
+        30
+      ],
+      "manual_stock_mm": [
+        150,
+        100,
+        19
+      ]
+    },
+    {
+      "action": "Change width using numeric control; commit change",
+      "dimensions_mm": [
+        80,
+        40
+      ],
+      "scale": 1.3333333333333333
+    },
+    {
+      "action": "Select contour edge then mouse-drag 55 CSS px right and 33 CSS px up",
+      "translation_mm": [
+        10.036496350364963,
+        6.021897810218977
+      ],
+      "dimensions_mm": [
+        80,
+        40
+      ],
+      "center_mm": [
+        60.03649635036496,
+        41.02189781021898
+      ],
+      "manual_stock_screen_bounds_unchanged": true
+    },
+    {
+      "action": "Undo via Cmd+Z",
+      "center_mm": [
+        50,
+        35
+      ],
+      "dimensions_mm": [
+        80,
+        40
+      ]
+    },
+    {
+      "action": "Redo via Cmd+Shift+Z",
+      "center_mm": [
+        60.03649635036496,
+        41.02189781021898
+      ],
+      "dimensions_mm": [
+        80,
+        40
+      ]
+    },
+    {
+      "action": "JSON snapshot/restore through existing v9 project APIs",
+      "visible_bbox_mm": [
+        20.04,
+        21.02,
+        100.04,
+        61.02
+      ]
+    }
+  ],
+  "limits": [
+    "Browser workflow, not installed Tauri acceptance.",
+    "Synthetic fixture loader bypasses the OS file picker.",
+    "No hardware; no native profile access.",
+    "Escape/capture cancellation and generation invalidation are covered by automated tests, not this manual browser replay."
+  ],
+  "committed_source_replay": {
+    "stamp": "v0.4.0-129-g1fda7cd",
+    "viewport": [
+      1280,
+      800
+    ],
+    "dimensions_before_mm": [
+      60,
+      30
+    ],
+    "dimensions_after_mm": [
+      80,
+      40
+    ],
+    "drag_css_px": [
+      55,
+      -33
+    ],
+    "translation_mm": [
+      9.006550218340612,
+      5.403930131004367
+    ],
+    "undo_center_mm": [
+      50,
+      35
+    ],
+    "redo_center_mm": [
+      59.00655021834061,
+      40.40393013100437
+    ],
+    "v9_roundtrip": "PASS; final visible bbox and numeric transform preserved",
+    "evidence": [
+      "drawing-placement-committed.png",
+      "browser-committed.txt",
+      "browser-roundtrip-committed.txt"
+    ]
+  },
+  "retained_fixture_copy": "drawing-review.html"
+}

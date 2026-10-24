@@ -2838,3 +2838,21 @@ macOS arm64 app is rebuilt and signature-verified, ad hoc/non-notarized, not lau
 receipt own full hashes, limitations and development publication outcome.
 Next is actual native Personal Alpha acceptance in the separate test account;
 QUAL-2 requires separate authorization. No release, installer distribution or hardware.
+
+## 2026-10-24 — Local V1.1 placement integration and native rebuild
+
+Authorized integration commits `ed630cf`, `1fda7cd`, `1f353ef` include the local
+pocket diagnostics, drawing drag/proportional dimensions, fixed manual-stock
+placement and header UI. New strings use the catalogs; the declared MSRV is
+respected. The smoke tests follow accessible header controls and Help's dialog.
+The initial 19/20 pass is retained; final committed source `1f353ef` passes 20/20
+canonical gates, Rust 1,594/0/1 ignored and frontend 1,510/1 optional skip.
+Twenty-three frozen output cases are exact. Browser replay verifies sizing,
+drag, Undo/Redo and v9 snapshot/restore; actual native human acceptance stays open.
+
+The current arm64 app is rebuilt and strict-signature-verified, ad hoc and not
+notarized, with native/frontend stamp `v0.4.0-130-g1f353ef`. SEC-1 and the prior
+primary app are preserved; 8,471 unrelated local evidence files are hash-identical.
+[Source/build report](../releases/V11_LOCAL_INTEGRATION_2026_10_24.md) owns receipts
+and limits. No native launch, push, main merge, public release or hardware.
+HARD STOP for the requested human test checkpoint; QUAL-2 remains separately gated.

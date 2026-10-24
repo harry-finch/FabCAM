@@ -1,0 +1,14 @@
+{
+  "starting_commit": "98e249f",
+  "functional_commits": [
+    "ed630cf",
+    "1fda7cd"
+  ],
+  "final_software_source": "1f353ef",
+  "production_delta_after_1fda7cd": "none; smoke selector only",
+  "first_gate_result": "19/20; UI tool-library boot test retained old CSS-class count",
+  "first_clippy_failure": "Option.is_none_or is newer than declared MSRV; replaced by equivalent map_or(true, ...)",
+  "native_launch": false,
+  "push": false,
+  "physical_acceptance": false
+}

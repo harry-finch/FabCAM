@@ -1,0 +1,39 @@
+{
+  "build_source": "1f353ef3b774382f63e67f93a9bb3a4652007de2",
+  "branch": "FabCAM-v1.1",
+  "stamp": "v0.4.0-130-g1f353ef",
+  "bundle": "/Users/mugen/Documents/01_Projets/FabCAM/builds/v1.1-local-2026-10-24/FabCAM.app",
+  "version": "0.9.0-beta.3",
+  "identifier": "org.opcenter.ivacam",
+  "architecture": "/Users/mugen/Documents/01_Projets/FabCAM/builds/v1.1-local-2026-10-24/FabCAM.app/Contents/MacOS/ivac-desktop: Mach-O 64-bit executable arm64",
+  "executable_sha256": "4c5a449806032747e04959547641ca6d9b6cbfbb0120beebff97e0a94e85089f",
+  "signature_verification": "PASS --deep --strict",
+  "signature": "ad hoc; no TeamIdentifier; hardened runtime",
+  "notarized": false,
+  "native_launched": false,
+  "physical_acceptance": false,
+  "created_utc": "2026-10-24T17:59:25.453958+00:00",
+  "files": [
+    {
+      "path": "Contents/Info.plist",
+      "bytes": 2823,
+      "sha256": "7dd746c92c225518d5e3b4a2239f860163b3104799a4da846dadd55d67059494"
+    },
+    {
+      "path": "Contents/MacOS/ivac-desktop",
+      "bytes": 22655552,
+      "sha256": "4c5a449806032747e04959547641ca6d9b6cbfbb0120beebff97e0a94e85089f"
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "bytes": 144478,
+      "sha256": "fbdb75adefb593a4e5592d429fdf1abc0dcd2e49010b4a14f3699d07a52bbef0"
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "bytes": 2440,
+      "sha256": "80f2c9404ded38fb3323807d58688c705526b2b2552a3b7bccd6ba17b4082371"
+    }
+  ],
+  "bundle_file_manifest_sha256": "9ed106657cedf933ca525655123901c2280385490e67b7d436346feabcdcede2"
+}

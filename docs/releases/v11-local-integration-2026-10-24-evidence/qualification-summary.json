@@ -1,0 +1,13 @@
+{
+  "software_source": "1f353ef3b774382f63e67f93a9bb3a4652007de2",
+  "mandatory_gates_passed": 20,
+  "mandatory_gates_failed": 0,
+  "rust_passed": 1594,
+  "rust_failed": 0,
+  "rust_intentionally_ignored": 1,
+  "frontend_passed": 1510,
+  "frontend_existing_optional_skip": 1,
+  "canonical_script_unchanged": true,
+  "physical_acceptance": false,
+  "native_user_acceptance": false
+}

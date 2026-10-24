@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Drawing placement review</title></head><body><div id="app"></div>
+<button id="fixture" style="position:fixed;bottom:30px;left:20px;z-index:9999">Load synthetic drawing review</button>
+<script type="module">
+import '/src/main.ts';
+import {project} from '/src/lib/state/project.svelte.ts';
+import {snapshotProject, restoreProject} from '/src/lib/state/project-file-ops.ts';
+const points=[[20,20],[80,20],[80,50],[20,50]];
+document.querySelector('#fixture').onclick=()=>{
+project.clearProject();
+project.setImported({filename:'placement-review.dxf',format:'dxf',segments:points.map(([x,y],i)=>({type:'LINE',start:{x,y},end:{x:points[(i+1)%4][0],y:points[(i+1)%4][1]},bulge:0,layer:'Review',color:7})),objects:[1,1,1,1],object_meta:[{id:1,closed:true,layer:'Review',bbox:{min_x:20,min_y:20,max_x:80,max_y:50}}],layers:[{name:'Review',color:7,segment_count:4}],bbox:{min_x:20,min_y:20,max_x:80,max_y:50},unit_scale:1,unit_status:'explicit',unit_source:'review',warnings:[]});
+project.data.stock={...project.data.stock,mode:'manual',customX:150,customY:100,thickness:19,offsetX:0,offsetY:0};
+document.querySelector('#fixture').textContent='Round-trip v9 in memory';
+document.querySelector('#fixture').onclick=()=>{const file=JSON.parse(JSON.stringify(snapshotProject(project)));restoreProject(project,file);};
+};
+</script></body></html>

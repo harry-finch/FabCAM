@@ -29,6 +29,12 @@ the authorized development-branch push and exact remote head. No version promoti
 is **Personal Alpha — Actual macOS Launch & Native Workflow Acceptance**, using
 the separate test account chosen by the maintainer. Supervised QUAL-2 follows
 only after separate human authorization.
+The subsequently authorized [local placement integration](V11_LOCAL_INTEGRATION_2026_10_24.md)
+is software-qualified at `1f353ef` (20/20 gates) and has a fresh native arm64 test
+build. Drawing drag/proportional sizing, fixed stock, pocket diagnostics and header
+UI are integrated locally; no push. It does not close actual native/human acceptance
+or authorize QUAL-2. Older SEC-1/QUAL-1C apps remain source-bound evidence.
+
 [FabApps vision](../FABAPPS_VISION.md) preserves independent product maturity.
 
 <a id="v11--explicit-cutting-parameters-and-qualification"></a>

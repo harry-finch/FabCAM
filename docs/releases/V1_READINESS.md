@@ -15,7 +15,9 @@ local tested collections and independent CAM validators after FS-RESET.
 [Current STATUS](../shopbot-modernization/STATUS.md) and [qualification roadmap](RELEASE_ROADMAP.md)
 own its current gates. QUAL-1A.4/1B software work is complete; QUAL-1C built the
 macOS app with native user acceptance still pending. SEC-1 owns the current
-Tokio correction/consolidation and final-source qualification.
+Tokio correction/consolidation. The later [local placement integration](V11_LOCAL_INTEGRATION_2026_10_24.md)
+owns current V1.1 software/build source `1f353ef`, 20/20 gates and the fresh native
+test bundle; native human acceptance remains open.
 Historical FS/PRESET implementation and size-guard snapshots remain in their dated
 reports. Its current target is a limited **macOS Personal Alpha**, followed by
 supervised ShopBot cases; general public/fablab distribution and Windows/Linux

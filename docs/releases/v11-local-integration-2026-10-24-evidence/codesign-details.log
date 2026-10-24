@@ -1,0 +1,24 @@
+Executable=/Users/mugen/Documents/01_Projets/FabCAM/builds/v1.1-local-2026-10-24/FabCAM.app/Contents/MacOS/ivac-desktop
+Identifier=org.opcenter.ivacam
+Format=app bundle with Mach-O thin (arm64)
+CodeDirectory v=20500 size=44340 flags=0x10002(adhoc,runtime) hashes=1379+3 location=embedded
+VersionPlatform=1
+VersionMin=720896
+VersionSDK=1704448
+Hash type=sha256 size=32
+CandidateCDHash sha256=6c323f2b5b497097d69a2c7d10d8479b90d59d59
+CandidateCDHashFull sha256=6c323f2b5b497097d69a2c7d10d8479b90d59d592fdb6015caf0a921a9b9b8a5
+Hash choices=sha256
+CMSDigest=6c323f2b5b497097d69a2c7d10d8479b90d59d592fdb6015caf0a921a9b9b8a5
+CMSDigestType=2
+Executable Segment base=0
+Executable Segment limit=21708800
+Executable Segment flags=0x1
+Page size=16384
+CDHash=6c323f2b5b497097d69a2c7d10d8479b90d59d59
+Signature=adhoc
+Info.plist entries=16
+TeamIdentifier=not set
+Runtime Version=26.2.0
+Sealed Resources version=2 rules=13 files=1
+Internal requirements count=0 size=12
