@@ -12,13 +12,13 @@ const { evalIn, clickButton, exceptions } = await connect();
 let failed = false;
 const check = (label, ok) => { console.log(`${label}: ${ok ? 'OK' : 'FAIL'}`); if (!ok) failed = true; };
 
-// Boot: the six-area navigation landmark is present.
+// Boot: the seven-area navigation landmark is present.
 let booted = false;
 for (let i = 0; i < 30 && !booted; i++) {
   await sleep(500);
-  booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 6`).catch(() => false);
+  booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 7`).catch(() => false);
 }
-check('boot (6 areas)', booted);
+check('boot (7 areas)', booted);
 if (!booted) process.exit(1);
 
 // Welcome screen with no active project.
@@ -39,7 +39,7 @@ const created = await evalIn(`({
 check('project created, workspace visible', created.welcomeGone && created.workspaceVisible);
 
 // Navigate every major area; each must answer a probe and show one panel.
-for (const [label, name] of [['Tool library', 'tools'], ['Machine', 'machine'], ['Settings', 'settings'], ['Help', 'help'], ['About', 'about']]) {
+for (const [label, name] of [['Tool library', 'tools'], ['Presets', 'presets'], ['Machine', 'machine'], ['Settings', 'settings'], ['Help', 'help'], ['About', 'about']]) {
   await clickButton(label, MAIN_NAV);
   await sleep(1500);
   const alive = await evalIn('1 + 1').then((v) => v === 2).catch(() => false);

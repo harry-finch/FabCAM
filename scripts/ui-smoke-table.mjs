@@ -26,7 +26,7 @@ await evalIn(`
   true
 `);
 await sleep(5000);
-const booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 6`);
+const booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 7`);
 console.log('boot:', booted ? 'OK' : 'FAILED');
 if (!booted) process.exit(1);
 
