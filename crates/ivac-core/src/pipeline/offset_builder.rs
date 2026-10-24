@@ -3108,12 +3108,11 @@ mod tests {
     // Plunge tests moved to pipeline/offset_builder.rs.
 
     /// A 10x10 pocket with a 6mm endmill: tool fits the boundary
-    /// offset (4x4 left after a 3mm offset) but no cascade ring fits
-    /// inside it → the cutter walks the wall and leaves a hollow
-    /// rectangle. We surface this as a `pocket_fill_incomplete` warning
-    /// so the user understands why the gcode is just the contour.
+    /// offset (4x4 left after a 3mm offset). Every point inside that
+    /// path is within 2mm of a wall, less than the 3mm cutter radius:
+    /// no extra ring is necessary to clear its interior.
     #[test]
-    fn pocket_with_just_fitting_tool_warns_about_incomplete_fill() {
+    fn pocket_with_wall_covered_interior_needs_no_extra_ring() {
         let project = Project {
             cutting_version: None,
             segments: closed_square_offset(10.0, 0.0, 0.0),
@@ -3160,8 +3159,8 @@ mod tests {
             .collect();
         assert_eq!(
             incomplete.len(),
-            1,
-            "expected pocket_fill_incomplete warning, got {:?}",
+            0,
+            "unexpected pocket_fill_incomplete warning, got {:?}",
             resp.warnings,
         );
     }
@@ -3321,9 +3320,9 @@ mod tests {
     /// Cascade with a tool too wide for any inward ring emits ONLY the
     /// boundary contour (no silent fallback to zigzag — that was
     /// confusing for users who picked cascade explicitly and saw
-    /// zigzag). The `pocket_fill_incomplete` warning fires so they know.
+    /// zigzag). The boundary sweep already covers the interior; no warning is needed.
     #[test]
-    fn cascade_with_tool_too_wide_emits_only_boundary_no_zigzag_substitute() {
+    fn cascade_boundary_sweep_needs_no_zigzag_substitute() {
         let params = OpParams::mill_default();
         let pocket = crate::project::PocketParams {
             xy_overlap: 0.05, // 95% step — no inward rings will fit
@@ -3331,8 +3330,8 @@ mod tests {
         };
         let project = Project {
             cutting_version: None,
-            // 6×6 with a 3mm tool: boundary inset by 1.5mm leaves a
-            // 3×3 path; cascade inflate by 2.85mm → empty → 0 rings.
+            // 6×6 with a 3mm tool: the 3×3 center path is entirely
+            // covered by the cutter sweep even without another ring.
             segments: closed_square_offset(6.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![endmill(1, 3.0)],
@@ -3370,12 +3369,13 @@ mod tests {
             |_, _, _| {},
         )
         .unwrap();
-        // pocket_fill_incomplete warning must fire so the user knows.
+        // Absence of another ring is not evidence of uncut material.
         assert!(
-            resp.warnings
+            !resp
+                .warnings
                 .iter()
                 .any(|w| w.kind == "pocket_fill_incomplete"),
-            "expected pocket_fill_incomplete warning, got {:?}",
+            "unexpected pocket_fill_incomplete warning, got {:?}",
             resp.warnings,
         );
     }

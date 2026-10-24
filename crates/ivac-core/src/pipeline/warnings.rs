@@ -1362,16 +1362,21 @@ pub(super) fn push_tool_fit_size_warning(
         .with_param("diameter", format!("{:.2}", setup.tool.diameter)));
         return;
     }
-    // Pocket-specific second pass: the boundary contour fits but the
-    // cascade carved no inward rings → the cutter is wide enough to
-    // reach the wall but not to chew out the interior. The user gets
-    // a hollow pocket (just the wall trace), which can look like
-    // "pocketing isn't working". Surface this so they can pick a
-    // smaller tool. PolylineOffset.is_pocket == 0 is the boundary,
-    // is_pocket >= 1 is a cascade ring or zigzag fill.
+    // No inner ring is not itself a coverage failure. A closed wall path
+    // contained in a strip no wider than the cutter diameter covers its
+    // entire enclosed interior: every interior point meets the boundary in
+    // both directions across the strip, so the nearer hit is <= diameter/2.
+    // This is a sufficient proof, not a general swept-area approximation.
+    // Unsupported/wider paths retain the blocking diagnostic.
     if matches!(op.kind, OpKind::Pocket { .. })
         && offsets.iter().any(|o| o.is_pocket == 0)
         && !offsets.iter().any(|o| o.is_pocket >= 1)
+        && !(closed_count == 1
+            && offsets.len() == 1
+            && op.finish_tool_id.map_or(true, |id| id == op.tool_id)
+            && offsets
+                .iter()
+                .all(|o| wall_sweeps_interior(o, setup.tool.diameter)))
     {
         warnings.push(PipelineWarning::for_op(
             op.id,
@@ -1386,6 +1391,75 @@ pub(super) fn push_tool_fit_size_warning(
     }
 }
 
+/// Conservative analytic coverage certificate. No positive tolerance enlarges
+/// the cutter. Arc extrema are included by BBox::from_segments. Discontinuous,
+/// open, nonfinite and empty paths cannot obtain this certificate.
+fn wall_sweeps_interior(offset: &PolylineOffset, diameter: f64) -> bool {
+    if !offset.closed
+        || !offset.tabs.is_empty()
+        || offset.segments.is_empty()
+        || !diameter.is_finite()
+        || diameter <= 0.0
+    {
+        return false;
+    }
+    let segments = &offset.segments;
+    for (a, b) in segments
+        .iter()
+        .zip(segments.iter().cycle().skip(1))
+        .take(segments.len())
+    {
+        if a.end != b.start
+            || !a.start.x.is_finite()
+            || !a.start.y.is_finite()
+            || !a.end.x.is_finite()
+            || !a.end.y.is_finite()
+            || !a.bulge.is_finite()
+        {
+            return false;
+        }
+    }
+    let bbox = crate::geometry::BBox::from_segments(segments);
+    if bbox.is_finite() && (bbox.max_x - bbox.min_x).min(bbox.max_y - bbox.min_y) <= diameter {
+        return true;
+    }
+    // Also certify rotated linear slots in O(n): use the normal of the
+    // longest edge as a candidate strip axis. Curved paths use only the
+    // exact axis-aligned arc bounds above, never endpoint-only arc bounds.
+    if segments
+        .iter()
+        .any(|s| s.bulge != 0.0 || s.kind != crate::geometry::SegmentKind::Line)
+    {
+        return false;
+    }
+    let edge = segments
+        .iter()
+        .max_by(|a, b| {
+            (a.end.x - a.start.x)
+                .hypot(a.end.y - a.start.y)
+                .total_cmp(&(b.end.x - b.start.x).hypot(b.end.y - b.start.y))
+        })
+        .unwrap();
+    let dx = edge.end.x - edge.start.x;
+    let dy = edge.end.y - edge.start.y;
+    let len = dx.hypot(dy);
+    if !len.is_finite() || len == 0.0 {
+        return false;
+    }
+    let mut lo = f64::INFINITY;
+    let mut hi = f64::NEG_INFINITY;
+    for segment in segments {
+        let projection = ((segment.start.x - edge.start.x) * (-dy / len))
+            + ((segment.start.y - edge.start.y) * (dx / len));
+        if !projection.is_finite() {
+            return false;
+        }
+        lo = lo.min(projection);
+        hi = hi.max(projection);
+    }
+    hi - lo <= diameter
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1395,6 +1469,100 @@ mod tests {
     };
     use crate::project::ToolOffset;
     use crate::project::{DrillCycle, OpSource};
+
+    #[test]
+    fn narrow_pocket_pipeline_accepts_6_1_but_refuses_5_9_with_6mm_tool() {
+        for width in [6.1, 5.9] {
+            let mut segments = closed_square(1.0);
+            for s in &mut segments {
+                s.start.x *= 58.0;
+                s.end.x *= 58.0;
+                s.start.y *= width;
+                s.end.y *= width;
+            }
+            let project = project_with_segments(
+                segments,
+                vec![pocket_op(1, 1, OpSource::All)],
+                vec![endmill(1, 6.0)],
+            );
+            let response = crate::pipeline::run_pipeline(
+                crate::fixture_support::request(crate::pipeline::PipelineRequest {
+                    project,
+                    post_processor: None,
+                    cps_post: None,
+                }),
+                |_, _, _| {},
+            )
+            .unwrap();
+            if width > 6.0 {
+                assert!(!response.toolpath.is_empty());
+                assert!(
+                    !response
+                        .warnings
+                        .iter()
+                        .any(|w| w.kind == "pocket_fill_incomplete"),
+                    "{:?}",
+                    response.warnings
+                );
+            } else {
+                assert!(
+                    response.warnings.iter().any(|w| w.kind == "tool_too_large"),
+                    "{:?}",
+                    response.warnings
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn narrow_wall_coverage_certificate_is_conservative() {
+        let mut offset = PolylineOffset {
+            segments: closed_square(1.0),
+            closed: true,
+            level: 0,
+            is_pocket: 0,
+            layer: "0".into(),
+            color: 7,
+            source_object_idx: 0,
+            tabs: vec![],
+            is_finish: true,
+        };
+        // Center path for a 58 x 6.1 pocket with a 6mm cutter.
+        for s in &mut offset.segments {
+            s.start.x *= 52.0;
+            s.end.x *= 52.0;
+            s.start.y *= 0.1;
+            s.end.y *= 0.1;
+        }
+        assert!(wall_sweeps_interior(&offset, 6.0));
+        for s in &mut offset.segments {
+            for p in [&mut s.start, &mut s.end] {
+                let (x, y) = (p.x, p.y);
+                p.x = (x - y) * std::f64::consts::FRAC_1_SQRT_2;
+                p.y = (x + y) * std::f64::consts::FRAC_1_SQRT_2;
+            }
+        }
+        assert!(wall_sweeps_interior(&offset, 6.0));
+        let op = pocket_op(1, 1, OpSource::All);
+        let mut setup = Setup::default();
+        setup.tool.diameter = 6.0;
+        let mut warnings = vec![];
+        push_tool_fit_size_warning(&op, &setup, 2, &[offset.clone()], &mut warnings);
+        assert!(warnings.iter().any(|w| w.kind == "pocket_fill_incomplete"));
+        offset.segments = closed_square(6.01);
+        warnings.clear();
+        push_tool_fit_size_warning(&op, &setup, 1, &[offset.clone()], &mut warnings);
+        assert!(warnings.iter().any(|w| w.kind == "pocket_fill_incomplete"));
+        assert!(!wall_sweeps_interior(&offset, 6.0)); // genuinely uncut central area
+        offset.segments = closed_square(5.9);
+        assert!(wall_sweeps_interior(&offset, 6.0));
+        offset.closed = false;
+        assert!(!wall_sweeps_interior(&offset, 6.0));
+        offset.closed = true;
+        offset.segments.pop();
+        assert!(!wall_sweeps_interior(&offset, 6.0)); // missing wall
+        assert!(!wall_sweeps_interior(&offset, f64::NAN));
+    }
 
     /// A Profile op cutting the outline followed by a Drill op
     /// on the same source emits an `op_order_suspect` warning tagged
