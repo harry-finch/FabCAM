@@ -1,4 +1,10 @@
 {
+  "layers.xform.invalid_size": "Eine endliche Größe größer als null eingeben. Die Zeichnung wurde nicht geändert.",
+  "layers.xform.width": "Breite (X)",
+  "layers.xform.height": "Höhe (Y)",
+  "layers.xform.dimensions_help": "Proportionen gesperrt · Maße entlang X/Y nach Drehung. Skalierung um die Zeichnungsmitte.",
+  "layers.xform.drag_help": "Kontur auswählen und ziehen, um die gesamte importierte Zeichnung zu verschieben. Esc bricht ab. Manuelles Rohteil bleibt fest; automatisches folgt.",
+  "layers.xform.edited_locked": "Ausgewertete Zeichnungsänderungen können hier nicht verschoben oder skaliert werden. Reparaturen / Eckfreistellungen zuerst zurücksetzen.",
   "common.close": "Schließen",
   "common.done": "Fertig",
   "common.cancel": "Abbrechen",
@@ -1986,5 +1992,8 @@
   "preset.review.unavailable": "Der gespeicherte Kontext kann in dieser Ansicht nicht sicher dargestellt werden. Der ursprüngliche Datensatz bleibt erhalten; zum Laden ist weiterhin exakte Kompatibilität erforderlich.",
   "preset.review.manual": "Sie können diese Werte prüfen und manuell in die Operation eingeben. Eine Prüfung ist kein Werkstatttest. Speichern Sie ein neues getestetes Preset erst nach tatsächlichem Test und erneuter ausdrücklicher Bestätigung.",
   "preset.review.claim": "Gespeicherte Werte und Testaussage des Autors; kein Nachweis eines Tests an der aktuellen Werkstattmaschine.",
-  "preset.review.rates": "{role} · T{tool}: {rpm} U/min · Vorschub {feed} mm/min · Eintauchen {plunge} mm/min"
+  "preset.review.rates": "{role} · T{tool}: {rpm} U/min · Vorschub {feed} mm/min · Eintauchen {plunge} mm/min",
+  "shell.description": "Werkzeugwegerzeugung",
+  "settings.appearance.language.en": "EN — English",
+  "settings.appearance.language.de": "DE — Deutsch"
 }

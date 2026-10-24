@@ -1554,6 +1554,7 @@
     flex-direction: column;
     height: 100vh;
     width: 100vw;
+    border-top: 2px solid var(--brand-blue);
   }
   /* .menubar lives in MenuBar.svelte — :global so App's flex rule
      still reaches it across the component scope boundary. */

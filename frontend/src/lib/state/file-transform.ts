@@ -39,43 +39,22 @@ export function applyFileTransform(imp: ImportResponse, t: FileTransform): Impor
   };
 }
 
-/// Recompute each object_meta[i].bbox by walking the transformed
-/// segments tagged with that object's id. Matches the endpoint-based
-/// bbox that the top-level `computeBbox` already produces (no arc-extent
-/// inflation — same limitation, kept symmetric on purpose).
-///
-/// Falls back to the original meta entry when an object has no
-/// segments tagged with its id (degenerate import; preserves the
-/// authored bbox rather than emitting Infinity sentinels).
+/// Exact per-object bounds, including circular-arc extrema.
 function recomputeObjectMetaBbox(
   imp: ImportResponse,
-  transformedSegments: readonly Segment[],
+  segments: readonly Segment[],
 ): ImportResponse['object_meta'] {
-  const meta = imp.object_meta ?? [];
-  if (meta.length === 0) return meta;
-  const tags = imp.objects ?? [];
-  const byId = new Map<number, { min_x: number; min_y: number; max_x: number; max_y: number }>();
-  for (let i = 0; i < transformedSegments.length; i++) {
-    const id = tags[i];
-    if (!id) continue;
-    const seg = transformedSegments[i];
-    let b = byId.get(id);
-    if (!b) {
-      b = { min_x: Infinity, min_y: Infinity, max_x: -Infinity, max_y: -Infinity };
-      byId.set(id, b);
-    }
-    if (seg.start.x < b.min_x) b.min_x = seg.start.x;
-    if (seg.start.y < b.min_y) b.min_y = seg.start.y;
-    if (seg.end.x < b.min_x) b.min_x = seg.end.x;
-    if (seg.end.y < b.min_y) b.min_y = seg.end.y;
-    if (seg.start.x > b.max_x) b.max_x = seg.start.x;
-    if (seg.start.y > b.max_y) b.max_y = seg.start.y;
-    if (seg.end.x > b.max_x) b.max_x = seg.end.x;
-    if (seg.end.y > b.max_y) b.max_y = seg.end.y;
-  }
-  return meta.map((m) => {
-    const b = byId.get(m.id);
-    return b ? { ...m, bbox: b } : m;
+  const byId = new Map<number, BBox>();
+  segments.forEach((seg, i) => {
+    const id = imp.objects?.[i];
+    if (!id) return;
+    const b = segmentBounds(seg);
+    const old = byId.get(id);
+    byId.set(id, old ? unionBounds(old, b) : b);
+  });
+  return (imp.object_meta ?? []).map((m) => {
+    const bbox = byId.get(m.id);
+    return bbox ? { ...m, bbox } : m;
   });
 }
 
@@ -249,21 +228,70 @@ export function combineImports(entries: readonly ImportEntry[]): ImportResponse 
 /// Recompute axis-aligned bbox by scanning the transformed segments.
 /// `fallback` covers the degenerate empty-segments case (which already
 /// existed pre-transform — keep the original bbox).
-function computeBbox(segments: readonly Segment[], fallback: BBox): BBox {
-  if (segments.length === 0) return fallback;
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  for (const s of segments) {
-    if (s.start.x < minX) minX = s.start.x;
-    if (s.start.y < minY) minY = s.start.y;
-    if (s.start.x > maxX) maxX = s.start.x;
-    if (s.start.y > maxY) maxY = s.start.y;
-    if (s.end.x < minX) minX = s.end.x;
-    if (s.end.y < minY) minY = s.end.y;
-    if (s.end.x > maxX) maxX = s.end.x;
-    if (s.end.y > maxY) maxY = s.end.y;
+export function computeBbox(segments: readonly Segment[], fallback: BBox): BBox {
+  if (!segments.length) return fallback;
+  return segments.map(segmentBounds).reduce(unionBounds);
+}
+
+function unionBounds(a: BBox, b: BBox): BBox {
+  return {
+    min_x: Math.min(a.min_x, b.min_x),
+    min_y: Math.min(a.min_y, b.min_y),
+    max_x: Math.max(a.max_x, b.max_x),
+    max_y: Math.max(a.max_y, b.max_y),
+  };
+}
+
+/// Bulge is authoritative (imported center may be absent or a placeholder).
+/// No flattening: test the four cardinal extrema against the signed arc sweep.
+export function segmentBounds(s: Segment): BBox {
+  const b = {
+    min_x: Math.min(s.start.x, s.end.x),
+    min_y: Math.min(s.start.y, s.end.y),
+    max_x: Math.max(s.start.x, s.end.x),
+    max_y: Math.max(s.start.y, s.end.y),
+  };
+  const dx = s.end.x - s.start.x,
+    dy = s.end.y - s.start.y;
+  if (!s.bulge || !Number.isFinite(s.bulge) || (dx === 0 && dy === 0)) return b;
+  const h = (1 / s.bulge - s.bulge) / 4;
+  const cx = (s.start.x + s.end.x) / 2 - dy * h;
+  const cy = (s.start.y + s.end.y) / 2 + dx * h;
+  const radius = Math.hypot(s.start.x - cx, s.start.y - cy);
+  const start = Math.atan2(s.start.y - cy, s.start.x - cx);
+  const sweep = 4 * Math.atan(s.bulge);
+  const tau = 2 * Math.PI;
+  for (const [angle, ux, uy] of [
+    [0, 1, 0],
+    [Math.PI / 2, 0, 1],
+    [Math.PI, -1, 0],
+    [(3 * Math.PI) / 2, 0, -1],
+  ]) {
+    const delta = sweep > 0 ? angle - start : start - angle;
+    const distance = ((delta % tau) + tau) % tau;
+    if (distance <= Math.abs(sweep)) {
+      const x = cx + radius * ux,
+        y = cy + radius * uy;
+      b.min_x = Math.min(b.min_x, x);
+      b.max_x = Math.max(b.max_x, x);
+      b.min_y = Math.min(b.min_y, y);
+      b.max_y = Math.max(b.max_y, y);
+    }
   }
-  return { min_x: minX, min_y: minY, max_x: maxX, max_y: maxY };
+  return b;
+}
+
+/// World-axis dimensions, after rotation; preserve the existing pivot/format.
+export function fileDimensions(entry: ImportEntry) {
+  const transformed = applyFileTransform(entry.source, entry.fileTransform);
+  const b = computeBbox(transformed.segments, transformed.bbox);
+  return { width: b.max_x - b.min_x, height: b.max_y - b.min_y };
+}
+
+export function proportionalScale(entry: ImportEntry, axis: 'width' | 'height', value: number) {
+  const current = fileDimensions(entry)[axis];
+  const scale = (entry.fileTransform.scale * value) / current;
+  return Number.isFinite(value) && value > 0 && current > 0 && Number.isFinite(scale) && scale > 0
+    ? scale
+    : null;
 }

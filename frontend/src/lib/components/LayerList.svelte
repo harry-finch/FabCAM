@@ -1,4 +1,6 @@
 <script lang="ts">
+  import DrawingDimensions from './DrawingDimensions.svelte';
+  import DrawingSectionTitle from './DrawingSectionTitle.svelte';
   import SnapControls from './SnapControls.svelte';
   import { Eye, EyeOff } from '@lucide/svelte';
   import { drawingLayers, layerSwatch } from '../state/drawing-layers';
@@ -175,18 +177,7 @@
         onchange={(e) => setAllVisible((e.currentTarget as HTMLInputElement).checked)}
       />
     {/if}
-    <span class="sidebar-section-identity">
-      <span class="group-name">{t('layers.drawings')}</span>
-      <span
-        class="sidebar-section-count"
-        title={t(
-          project.data.imports.length === 1
-            ? 'layers.documents_count.one'
-            : 'layers.documents_count',
-          { count: project.data.imports.length },
-        )}>{project.data.imports.length}</span
-      >
-    </span>
+    <DrawingSectionTitle {active} count={project.data.imports.length} {onActivate} />
     {#if onAddDrawingClick || onAddTextClick}
       <div class="add-menu" class:open={addMenuOpen}>
         <button
@@ -322,6 +313,7 @@
             </div>
             {#if transformOpen}
               <div class="xform-body">
+                <DrawingDimensions {entry} />
                 <label title={t('layers.xform.tx.title')}>
                   <span>X</span>
                   <span class="xform-field">
@@ -609,13 +601,6 @@
     white-space: nowrap;
   }
   /* `.caret-btn` shape is in app.css. */
-  .group-name {
-    color: var(--text-strong);
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   .group-body {
     margin: 0.2rem 0 0 0.5rem;
     padding-left: 0.3rem;

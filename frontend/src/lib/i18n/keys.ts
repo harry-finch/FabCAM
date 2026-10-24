@@ -565,7 +565,12 @@ export type MsgKey =
   | "layers.toggle_all.title"
   | "layers.view_only"
   | "layers.xform.active.aria"
+  | "layers.xform.dimensions_help"
+  | "layers.xform.drag_help"
+  | "layers.xform.edited_locked"
   | "layers.xform.head.title"
+  | "layers.xform.height"
+  | "layers.xform.invalid_size"
   | "layers.xform.label"
   | "layers.xform.mirror_x"
   | "layers.xform.mirror_x.title"
@@ -579,6 +584,7 @@ export type MsgKey =
   | "layers.xform.scale.title"
   | "layers.xform.tx.title"
   | "layers.xform.ty.title"
+  | "layers.xform.width"
   | "machine.accel.x.aria"
   | "machine.accel.y.aria"
   | "machine.accel.z.aria"
@@ -1575,6 +1581,8 @@ export type MsgKey =
   | "selector.apply"
   | "settings.appearance.language"
   | "settings.appearance.language.auto"
+  | "settings.appearance.language.de"
+  | "settings.appearance.language.en"
   | "settings.appearance.language.help"
   | "settings.appearance.theme"
   | "settings.appearance.theme.auto"
@@ -1636,6 +1644,7 @@ export type MsgKey =
   | "shell.browser_files"
   | "shell.close"
   | "shell.close_action"
+  | "shell.description"
   | "shell.dismiss"
   | "shell.example"
   | "shell.file_menu"
@@ -2895,7 +2904,12 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "layers.toggle_all.title",
   "layers.view_only",
   "layers.xform.active.aria",
+  "layers.xform.dimensions_help",
+  "layers.xform.drag_help",
+  "layers.xform.edited_locked",
   "layers.xform.head.title",
+  "layers.xform.height",
+  "layers.xform.invalid_size",
   "layers.xform.label",
   "layers.xform.mirror_x",
   "layers.xform.mirror_x.title",
@@ -2909,6 +2923,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "layers.xform.scale.title",
   "layers.xform.tx.title",
   "layers.xform.ty.title",
+  "layers.xform.width",
   "machine.accel.x.aria",
   "machine.accel.y.aria",
   "machine.accel.z.aria",
@@ -3905,6 +3920,8 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "selector.apply",
   "settings.appearance.language",
   "settings.appearance.language.auto",
+  "settings.appearance.language.de",
+  "settings.appearance.language.en",
   "settings.appearance.language.help",
   "settings.appearance.theme",
   "settings.appearance.theme.auto",
@@ -3966,6 +3983,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "shell.browser_files",
   "shell.close",
   "shell.close_action",
+  "shell.description",
   "shell.dismiss",
   "shell.example",
   "shell.file_menu",

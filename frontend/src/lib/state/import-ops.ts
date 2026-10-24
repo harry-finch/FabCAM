@@ -458,6 +458,36 @@ export function appendImportedSegments(
   return distinct;
 }
 
+/// Keep manually sized stock in world coordinates during a drawing transform.
+/// Persist the compensation in the existing offsets: old projects load unchanged,
+/// and save/reopen needs no new format or alternate stock representation.
+function fixedStockTransformCommand(p: ProjectState, command: import('./history').Command) {
+  const stock = { ...p.data.stock };
+  const center = () => {
+    const b = p.stockSizingImport?.bbox;
+    return b ? [(b.min_x + b.max_x) / 2, (b.min_y + b.max_y) / 2] : [0, 0];
+  };
+  const before = center();
+  return {
+    ...command,
+    apply(target: unknown) {
+      command.apply(target);
+      if (stock.mode === 'manual') {
+        const after = center();
+        p.data.stock = {
+          ...stock,
+          offsetX: (stock.offsetX ?? 0) + before[0] - after[0],
+          offsetY: (stock.offsetY ?? 0) + before[1] - after[1],
+        };
+      }
+    },
+    revert(target: unknown) {
+      command.revert(target);
+      if (stock.mode === 'manual') p.data.stock = { ...stock };
+    },
+  };
+}
+
 /// Per-import variant of patchFileTransform (Phase 2). Undoable;
 /// the optional coalesceKey is per-import-per-field so two consecutive
 /// nudges of the X spinner on entry #3 collapse to one history step.
@@ -496,11 +526,14 @@ export function patchFileTransformForImport(
     // command so the coalesce key still collapses streaks of nudges
     // into one undo entry.
     p.history.exec(
-      setImportsCommand(
-        before,
-        after,
-        label,
-        coalesceKey ? `xform:${importId}:${coalesceKey}` : undefined,
+      fixedStockTransformCommand(
+        p,
+        setImportsCommand(
+          before,
+          after,
+          label,
+          coalesceKey ? `xform:${importId}:${coalesceKey}` : undefined,
+        ),
       ),
       p.target(),
     );
@@ -508,7 +541,10 @@ export function patchFileTransformForImport(
   }
   p.history.beginTransaction(label);
   try {
-    p.history.exec(setImportsCommand(before, after, label), p.target());
+    p.history.exec(
+      fixedStockTransformCommand(p, setImportsCommand(before, after, label)),
+      p.target(),
+    );
     for (const { opId, patch: opPatch } of opPatches) {
       p.history.exec(updateOperationCommand(opId, opPatch), p.target());
     }
@@ -598,8 +634,5 @@ export function resetFileTransformForImport(p: ProjectState, importId: number) {
   const idx = p.data.imports.findIndex((e) => e.id === importId);
   if (idx < 0) return;
   if (isIdentityFileTransform(p.data.imports[idx].fileTransform)) return;
-  const before = p.data.imports;
-  const after = [...before];
-  after[idx] = { ...after[idx], fileTransform: identityFileTransform() };
-  p.history.exec(setImportsCommand(before, after, 'Reset file transform'), p.target());
+  patchFileTransformForImport(p, importId, identityFileTransform());
 }

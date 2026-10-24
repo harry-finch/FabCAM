@@ -16,7 +16,7 @@ const check = (label, ok) => { console.log(`${label}: ${ok ? 'OK' : 'FAIL'}`); i
 let booted = false;
 for (let i = 0; i < 30 && !booted; i++) {
   await sleep(500);
-  booted = await evalIn(`document.querySelectorAll('${MAIN_NAV} button.main-tab').length === 7`).catch(() => false);
+  booted = await evalIn(`['Project', 'Machine', 'Tool library', 'Presets', 'Settings', 'Help', 'About'].every(name => [...document.querySelectorAll('${MAIN_NAV} button')].some(b => (b.getAttribute('aria-label') || b.textContent).trim().startsWith(name)))`).catch(() => false);
 }
 check('boot (7 areas)', booted);
 if (!booted) process.exit(1);
@@ -39,7 +39,7 @@ const created = await evalIn(`({
 check('project created, workspace visible', created.welcomeGone && created.workspaceVisible);
 
 // Navigate every major area; each must answer a probe and show one panel.
-for (const [label, name] of [['Tool library', 'tools'], ['Presets', 'presets'], ['Machine', 'machine'], ['Settings', 'settings'], ['Help', 'help'], ['About', 'about']]) {
+for (const [label, name] of [['Tool library', 'tools'], ['Presets', 'presets'], ['Machine', 'machine'], ['Settings', 'settings'], ['About', 'about']]) {
   await clickButton(label, MAIN_NAV);
   await sleep(1500);
   const alive = await evalIn('1 + 1').then((v) => v === 2).catch(() => false);
@@ -48,6 +48,14 @@ for (const [label, name] of [['Tool library', 'tools'], ['Presets', 'presets'], 
   const splitHidden = await evalIn(`getComputedStyle(document.querySelector('main.split')).display === 'none'`);
   check(`area ${name}: responsive, one panel, workspace hidden`, visiblePanels === 1 && splitHidden);
 }
+
+// Help is now an accessible shortcut dialog; it keeps the current area visible.
+check('open Help dialog', await clickButton('Help', MAIN_NAV));
+await sleep(300);
+check('Help dialog rendered', await evalIn(`!!document.querySelector('[role="dialog"]')`));
+check('close Help dialog', await evalIn(`(() => { const d = document.querySelector('[role="dialog"]'); const b = d?.querySelector('button[aria-label="Close"]'); if (!b) return false; b.click(); return true; })()`));
+await sleep(300);
+check('Help dialog closed', await evalIn(`!document.querySelector('[role="dialog"]')`));
 
 // Machine sections: General (settings form) then Tools (tooling).
 await clickButton('Machine', MAIN_NAV);

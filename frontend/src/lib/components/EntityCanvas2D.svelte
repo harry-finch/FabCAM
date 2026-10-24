@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { rasterSources, rasterAt } from '../canvas/raster-placement';
+  import { DrawingFrame, drawingFit } from '../canvas/drawing-frame';
+  import { DrawingInteraction } from '../canvas/drawing-interaction';
   import { drawPlanarSurface } from '../canvas/planar-surface';
   import { cornerReliefUi } from '../state/corner-relief-ui.svelte';
   import {
@@ -13,7 +16,7 @@
   import { createFixtureTools } from '../canvas/fixture-feedback.svelte';
 
   import { onMount } from 'svelte';
-  import { project, isContourOp, type OpEntry } from '../state/project.svelte';
+  import { project, isContourOp } from '../state/project.svelte';
   import { opSourceCss } from '../state/op-color';
   import { STOCK_OUTLINE_LAYER } from '../state/stock-outline';
   import { consumeSelectHint } from '../state/ui-hints';
@@ -94,7 +97,7 @@
     requestPreview,
     forceTextPreviewRefresh,
   } from '../state/text_preview.svelte';
-  import type { ReliefSource, TextLayer } from '../state/project-types';
+  import type { TextLayer } from '../state/project-types';
 
   interface Props {
     onShowHelp?: () => void;
@@ -215,6 +218,7 @@
       attributeFilter: ['data-theme'],
     });
     return () => {
+      drawingMovement.cancel();
       fixtureTools.interaction.cancel();
       ro.disconnect();
       mql.removeEventListener('change', onChange);
@@ -604,10 +608,13 @@
     return 7 / Math.max(Math.abs(lastTransform.scale), 1e-6);
   }
 
+  const drawingMovement = new DrawingInteraction(project, () => canvas, scheduleOverlay);
+
   function onPointerMove(e: PointerEvent) {
     const rect = canvas.getBoundingClientRect();
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
+    if (drawingMovement.move(e, cx, cy)) return;
     if (fixtureTools.interaction.move(e)) return;
     // Cursor coordinate HUD. Track the world (data) position on
     // every move regardless of modal mode — users want to read X/Y
@@ -861,6 +868,11 @@
   }
 
   function onPointerUp(e: PointerEvent) {
+    const moved = drawingMovement.end(e);
+    if (moved) {
+      if (moved.tap) commitEntityTapSelection(moved.x, moved.y, e);
+      return;
+    }
     if (cornerReliefUi.editing && e.button === 0) return;
     if (fixtureTools.interaction.end(e)) return;
     // Release touch tracking + end any active gesture. A quick
@@ -968,6 +980,10 @@
   /// zooms out. The pan offsets are adjusted so the data-space point
   /// under the cursor stays under the cursor across the zoom.
   function onWheel(e: WheelEvent) {
+    if (drawingMovement.pending) {
+      e.preventDefault();
+      return;
+    }
     if (!lastBaseTransform) return;
     e.preventDefault();
     const rect = canvas.getBoundingClientRect();
@@ -986,9 +1002,11 @@
   /// empty space, and the keyboard `F` / `Home` shortcuts. Pulls the
   /// canvas back to its auto-fit baseline (no user pan, no user zoom).
   const placementFrame = new PlacementFrame();
+  const drawingFrame = new DrawingFrame();
 
   function fitView() {
     placementFrame.reset();
+    drawingFrame.reset();
     view.reset();
     drawBackground();
   }
@@ -1140,6 +1158,13 @@
   }
 
   function onCtxKeydown(e: KeyboardEvent) {
+    if (drawingMovement.pending && (e.key === 'Escape' || e.ctrlKey || e.metaKey)) {
+      drawingMovement.cancel();
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        return;
+      }
+    }
     if (e.key === 'Escape') {
       // The child dismisses the popover / menu and reports which. A closed
       // popover CONSUMES Escape (return); a closed menu only preventDefaults so
@@ -1203,6 +1228,10 @@
   }
 
   function onPointerDown(e: PointerEvent) {
+    if (drawingMovement.pending) {
+      e.preventDefault();
+      return;
+    }
     const rect = canvas.getBoundingClientRect();
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
@@ -1425,6 +1454,18 @@
         break;
     }
 
+    if (
+      drawingMovement.start(
+        e,
+        pixelHit(cx, cy),
+        cx,
+        cy,
+        Math.abs(lastTransform?.scale ?? 0),
+        addToSelection,
+      )
+    )
+      return;
+
     commitEntityTapSelection(
       cx,
       cy,
@@ -1582,7 +1623,10 @@
   /// Authored-only surfacing uses geometryView's bbox without source contours.
   function viewportFitBBox(): BBox | null {
     const imp = reliefDisplay(project.transformedImport);
-    if (imp && imp.segments.length > 0) return reliefFitBounds(imp.bbox);
+    if (imp && imp.segments.length > 0) {
+      if (project.data.drawing || project.data.cornerRelief) return reliefFitBounds(imp.bbox);
+      return drawingFit(drawingFrame, project, imp.bbox);
+    }
     const fb = placementFallbackBBox();
     if (fb) return fb;
     const gv = project.geometryView;
@@ -1770,6 +1814,8 @@
       });
     }
 
+    drawingMovement.paint(ctx, project2, accent);
+
     drawFixtures(
       ctx,
       project2,
@@ -1827,50 +1873,11 @@
     }
   }
 
-  /// The distinct relief sources referenced by raster-engrave ops, each
-  /// paired with the (first) op referencing it — so the selection
-  /// highlight + drag target know which op an image belongs to.
-  // Cached between repaints (recomputed only when ops / relief sources
-  // change) instead of rebuilt on every overlay paint + pointer hit-test.
-  const rasterPlacements = $derived.by<{ op: OpEntry; src: ReliefSource }[]>(() => {
-    const out: { op: OpEntry; src: ReliefSource }[] = [];
-    const seen = new Set<number>();
-    for (const op of project.data.operations) {
-      if (op.kind !== 'raster_engrave' || !op.enabled) continue;
-      const src = project.data.reliefSources.find((s) => s.id === op.sourceId);
-      if (!src || src.cols <= 0 || src.rows <= 0 || seen.has(src.id)) continue;
-      seen.add(src.id);
-      out.push({ op, src });
-    }
-    return out;
-  });
-
-  /// Hit-test a data-space point against the placed raster images,
-  /// preferring the selected op's image (so overlapping placements stay
-  /// grabbable) then the topmost. Returns the placement or null.
-  function rasterPlacementAtData(x: number, y: number): { op: OpEntry; src: ReliefSource } | null {
-    // Copy before sorting — `rasterPlacements` is a shared cached derived,
-    // and `.sort()` mutates in place.
-    const ordered = [...rasterPlacements].sort(
-      (a, b) =>
-        (a.op.id === project.sel.selectedOpId ? 1 : 0) -
-        (b.op.id === project.sel.selectedOpId ? 1 : 0),
-    );
-    for (let i = ordered.length - 1; i >= 0; i--) {
-      const { src } = ordered[i];
-      const wmm = src.cols * src.cell;
-      const hmm = src.rows * src.cell;
-      if (
-        x >= src.origin.x &&
-        x <= src.origin.x + wmm &&
-        y >= src.origin.y &&
-        y <= src.origin.y + hmm
-      ) {
-        return ordered[i];
-      }
-    }
-    return null;
-  }
+  const rasterPlacements = $derived(
+    rasterSources(project.data.operations, project.data.reliefSources),
+  );
+  const rasterPlacementAtData = (x: number, y: number) =>
+    rasterAt(rasterPlacements, project.sel.selectedOpId, x, y);
 
   /// Text-only projects fit their content, retaining the frame during dragging.
   /// Raster-only placement keeps its existing machine-bed reference.
@@ -1951,6 +1958,7 @@
     if (e.key === 'Shift' || !e.shiftKey) shiftDown = false;
   }}
   onblur={() => {
+    drawingMovement.cancel();
     altDown = false;
     shiftDown = false;
   }}
@@ -1965,7 +1973,10 @@
     onpointerdown={onPointerDown}
     onpointerup={onPointerUp}
     onpointercancel={onPointerUp}
-    onlostpointercapture={(e) => fixtureTools.interaction.end(e)}
+    onlostpointercapture={(e) => {
+      drawingMovement.cancel(e.pointerId);
+      fixtureTools.interaction.end(e);
+    }}
     oncontextmenu={onContextMenu}
     onwheel={onWheel}
     ondblclick={onDblClick}

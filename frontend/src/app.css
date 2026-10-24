@@ -28,6 +28,8 @@
   /* Dark mode (default) — lifted from near-black to a more readable
      ~13% gray and panel borders bumped so dividers are actually visible. */
   --bg-app: #181818;
+  --header-text: #e8e8e8;
+  --header-muted: #7d7d7d;
   --bg-panel: #222222;
   --bg-elevated: #2a2a2a;
   --bg-input: #1a1a1a;
@@ -41,6 +43,7 @@
   --bg-navigation: color-mix(in srgb, var(--bg-elevated) 80%, var(--border));
   --text-section: color-mix(in srgb, var(--text-muted) 65%, var(--text));
   --accent: #4a8df0;
+  --brand-blue: #58b5f5;
   --accent-strong: #88b1f5;
   --success: #84d676;
   --success-bg: #2f8f4a;
@@ -134,6 +137,8 @@
 /* Light tokens applied for explicit light. */
 :root[data-theme='light'] {
   --bg-app: #fafafa;
+  --header-text: #1e1e1e;
+  --header-muted: #636363;
   --bg-panel: #f0f0f0;
   --bg-elevated: #ffffff;
   --bg-input: #ffffff;
@@ -177,6 +182,8 @@
 @media (prefers-color-scheme: light) {
   :root:not([data-theme='dark']):not([data-theme='light']) {
     --bg-app: #fafafa;
+    --header-text: #1e1e1e;
+    --header-muted: #636363;
     --bg-panel: #f0f0f0;
     --bg-elevated: #ffffff;
     --bg-input: #ffffff;

@@ -123,8 +123,9 @@ export interface StockConfig {
   customY: number;
   /// Origin offsets in mm. In auto mode the stock anchor is the
   /// imported bbox (or the work-area corner when no drawing is loaded);
-  /// the offsets translate the stock relative to that anchor. In manual
-  /// mode the anchor is (0, 0) so offsets are absolute.
+  /// the offsets translate the stock relative to that anchor. Manual mode
+  /// uses the geometry bbox center; file-transform commands compensate
+  /// these offsets to keep the manual stock fixed in world coordinates.
   offsetX?: number;
   offsetY?: number;
   /// Z of the stock top plane (mm) in the WCS frame. 0 (default) =

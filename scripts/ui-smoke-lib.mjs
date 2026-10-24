@@ -40,7 +40,7 @@ export async function connect() {
   // element when nav is null) whose trimmed text starts with `text`.
   const clickButton = (text, scope = null) => evalIn(`(() => {
     const root = ${scope ? `document.querySelector(${JSON.stringify(scope)})` : 'document'};
-    const b = root && [...root.querySelectorAll('button')].find((x) => x.textContent.trim().startsWith(${JSON.stringify(text)}));
+    const b = root && [...root.querySelectorAll('button')].find((x) => (x.getAttribute('aria-label') || x.textContent).trim().startsWith(${JSON.stringify(text)}));
     if (!b) return false; b.click(); return true; })()`);
   return { ws, evalIn, clickButton, exceptions };
 }

@@ -3,6 +3,9 @@
 
 import { describe, expect, it } from 'vitest';
 import {
+  segmentBounds,
+  fileDimensions,
+  proportionalScale,
   applyFileTransform,
   applyFileTransformToPoint,
   invertFileTransformPoint,
@@ -222,5 +225,60 @@ describe('applyFileTransform', () => {
     const out = applyFileTransform(base, tx({ translate: { x: 100, y: 0 } }));
     // No segment tagged id=1, so the original bbox survives (not Infinity).
     expect(out.object_meta[0].bbox).toEqual({ min_x: -5, min_y: -5, max_x: 5, max_y: 5 });
+  });
+});
+
+describe('exact drawing dimensions', () => {
+  it('includes semicircle extrema and ignores placeholder centers', () => {
+    expect(segmentBounds(arc(0, 0, 10, 0, 0, 0, 1))).toEqual({
+      min_x: 0,
+      min_y: -5,
+      max_x: 10,
+      max_y: 0,
+    });
+    expect(segmentBounds(arc(0, 0, 10, 0, 0, 0, -1))).toEqual({
+      min_x: 0,
+      min_y: 0,
+      max_x: 10,
+      max_y: 5,
+    });
+  });
+  it('bounds major arcs and mirrored rotated circles without flattening', () => {
+    const major = segmentBounds(arc(0, 0, 10, 0, 0, 0, 2));
+    expect(major.min_x).toBeCloseTo(-1.25);
+    expect(major.max_x).toBeCloseTo(11.25);
+    expect(major.min_y).toBeCloseTo(-10);
+    const source = imp([arc(-5, 0, 5, 0, 0, 0, 1), arc(5, 0, -5, 0, 0, 0, 1)]);
+    const entry = {
+      id: 1,
+      source,
+      fileTransform: { ...identityFileTransform(), rotateDeg: 37, mirrorX: true, scale: 2 },
+    };
+    expect(fileDimensions(entry).width).toBeCloseTo(20);
+    expect(fileDimensions(entry).height).toBeCloseTo(20);
+    const original = JSON.stringify(source);
+    const scale = proportionalScale(entry, 'width', 102.6)!;
+    const resized = { ...entry, fileTransform: { ...entry.fileTransform, scale } };
+    expect(fileDimensions(resized).width).toBeCloseTo(102.6);
+    expect(fileDimensions(resized).height).toBeCloseTo(102.6);
+    expect(JSON.stringify(source)).toBe(original);
+  });
+  it('uses world dimensions after rotation and rejects invalid or degenerate sizes', () => {
+    const entry = {
+      id: 1,
+      source: imp([line(0, 0, 20, 10)]),
+      fileTransform: { ...identityFileTransform(), rotateDeg: 90 },
+    };
+    expect(fileDimensions(entry).width).toBeCloseTo(10);
+    expect(fileDimensions(entry).height).toBeCloseTo(20);
+    expect(proportionalScale(entry, 'height', 40)).toBeCloseTo(2);
+    for (const invalid of [0, -1, NaN, Infinity])
+      expect(proportionalScale(entry, 'width', invalid)).toBeNull();
+    const flat = {
+      ...entry,
+      source: imp([line(0, 0, 10, 0)]),
+      fileTransform: identityFileTransform(),
+    };
+    expect(proportionalScale(flat, 'height', 10)).toBeNull();
   });
 });

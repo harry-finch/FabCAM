@@ -1,4 +1,10 @@
 {
+  "layers.xform.invalid_size": "Enter a finite dimension greater than zero. The drawing was not changed.",
+  "layers.xform.width": "Width (X)",
+  "layers.xform.height": "Height (Y)",
+  "layers.xform.dimensions_help": "Proportions locked · Dimensions along X/Y after rotation. Scale about the drawing center.",
+  "layers.xform.drag_help": "Select a contour, then drag it to move the whole imported drawing. Esc cancels. Manual stock stays fixed; automatic stock follows.",
+  "layers.xform.edited_locked": "Moving and resizing evaluated drawing edits is not supported here. Reset repairs / corner relief first.",
   "about.build": "Build",
   "about.build_hint": "Include the build identifier above when filing issues - it pins the report to the exact binary you tested.",
   "about.col.library": "Library",
@@ -2325,5 +2331,8 @@
   "preset.review.unavailable": "The recorded context cannot be safely displayed in this view. The original record is preserved; exact compatibility is still required before loading.",
   "preset.review.manual": "You may review these values and enter them manually in the operation. Review is not workshop testing. Save a new tested preset only after actual testing and a fresh explicit attestation.",
   "preset.review.claim": "Recorded values and author's test claim; not proof of testing on the current workshop machine.",
-  "preset.review.rates": "{role} · T{tool}: {rpm} rpm · feed {feed} mm/min · plunge {plunge} mm/min"
+  "preset.review.rates": "{role} · T{tool}: {rpm} rpm · feed {feed} mm/min · plunge {plunge} mm/min",
+  "shell.description": "Toolpath generation",
+  "settings.appearance.language.en": "EN — English",
+  "settings.appearance.language.de": "DE — Deutsch"
 }
