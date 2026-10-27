@@ -110,6 +110,18 @@ export function detachMachineProfile(p: ProjectState) {
 
 export function setStock(p: ProjectState, patch: Partial<StockConfig>, coalesceKey?: string) {
   if (Object.keys(patch).length === 0) return;
+  const next = { ...p.data.stock, ...patch };
+  if (
+    next.mode === 'manual' &&
+    (patch.customX !== undefined || patch.customY !== undefined || patch.mode === 'manual')
+  ) {
+    const fp = computeFootprint(p.stockSizingImport, next, p.data.machine.workArea);
+    patch = {
+      ...patch,
+      offsetX: (next.offsetX ?? 0) + p.data.workOffset.x_mm - fp.minX,
+      offsetY: (next.offsetY ?? 0) + p.data.workOffset.y_mm - fp.minY,
+    };
+  }
   p.history.exec(setStockCommand(patch, coalesceKey), p.target());
 }
 

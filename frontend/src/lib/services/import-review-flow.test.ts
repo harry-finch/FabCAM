@@ -56,7 +56,13 @@ beforeEach(() => {
   vi.stubGlobal('window', {});
   importReview.finish(null);
   Object.assign(io.project, {
-    data: { imports: [], dirty: false },
+    data: {
+      imports: [],
+      dirty: false,
+      stock: { mode: 'manual', customX: 300, customY: 200 },
+      workOffset: { x_mm: 12, y_mm: 15, z_mm: 4 },
+      machine: { workArea: { x: 500, y: 500 } },
+    },
     loading: false,
     loadingMessage: null,
     error: null,

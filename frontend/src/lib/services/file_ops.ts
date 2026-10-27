@@ -1,3 +1,4 @@
+import { clearForDrawingImport } from '../state/stock-placement';
 import { programExportStatus } from '../state/program-qualification';
 import { exportSafetyProblem } from '../state/generate-palette-policy';
 import { generationExportIsCurrent } from '../state/generation-run';
@@ -451,7 +452,7 @@ export async function loadFromPath(path: string) {
     if (!result) return;
     await clearPipelineCacheOnReplace();
     await commitDocumentLoad(project, async () => {
-      project.clearProject();
+      clearForDrawingImport(project);
       project.setImported(result, path);
       await project.convertImportedTextEntities();
       const filename = path.split(/[\\/]/).pop() ?? path;
@@ -545,7 +546,7 @@ export async function loadFile(file: File) {
     if (!result) return;
     await clearPipelineCacheOnReplace();
     await commitDocumentLoad(project, async () => {
-      project.clearProject();
+      clearForDrawingImport(project);
       project.setImported(result);
       await project.convertImportedTextEntities();
       project.data.dirty = false;

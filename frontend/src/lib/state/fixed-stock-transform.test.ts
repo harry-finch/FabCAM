@@ -4,8 +4,19 @@ import { combineImports } from './file-transform';
 import { identityFileTransform } from './project-types';
 import { computeFootprint } from '../sim/footprint';
 import type { ProjectState } from './project.svelte';
+vi.mock('./mode_notice.svelte', () => ({ modeNotice: { current: null } }));
 vi.mock('./text_preview.svelte', () => ({ resetPreviewCache: vi.fn() }));
-import { patchFileTransformForImport, resetFileTransformForImport } from './import-ops';
+import {
+  addImported,
+  setImported,
+  patchFileTransformForImport,
+  resetFileTransformForImport,
+} from './import-ops';
+import { setStock, setWorkOffset } from './project-machine-ops';
+import { clearForDrawingImport } from './stock-placement';
+import { removeImport, removeImportedLayer } from './import-ops';
+import { snapshotProject, restoreProject } from './project-file-ops';
+vi.mock('./workspace.svelte', () => ({ workspace: {} }));
 function fixture(mode: 'auto' | 'manual') {
   const points = [
     [10, 20],
@@ -41,12 +52,17 @@ function fixture(mode: 'auto' | 'manual') {
         },
       },
     ],
+    machine: { workArea: { x: 500, y: 500 } },
+    workOffset: { wcs: 'G54', x_mm: 0, y_mm: 0, z_mm: 0 },
+    visibleLayers: new Set<string>(),
     operations: [],
     dirty: false,
     stock: { mode, customX: 150, customY: 150, offsetX: 7, offsetY: 8, margin: 5 },
   };
   const p = {
     data,
+    gen: {},
+    sel: {},
     history: new History(),
     target: () => data,
     get stockSizingImport() {
@@ -198,4 +214,174 @@ it('moves one imported file with its approach marker while preserving other file
   p.history.undo(p.target());
   expect(p.data.operations[0]).toMatchObject({ approachPoint: [10, 20] });
   expect(footprint()).toEqual(stock);
+});
+
+it('resizes manual stock towards positive axes from work zero, atomically undoable', () => {
+  const { p, footprint } = fixture('manual');
+  const original = footprint();
+  setStock(p, { customX: 300, customY: 200 });
+  expect(footprint()).toMatchObject({ minX: 0, minY: 0, maxX: 300, maxY: 200 });
+  expect(p.data.workOffset).toEqual({ wcs: 'G54', x_mm: 0, y_mm: 0, z_mm: 0 });
+  p.history.undo(p.target());
+  expect(footprint()).toEqual(original);
+  p.history.redo(p.target());
+  expect(footprint()).toMatchObject({ minX: 0, minY: 0, maxX: 300, maxY: 200 });
+});
+it('anchors resizing to a nonzero work origin without moving it', () => {
+  const { p, footprint } = fixture('manual');
+  p.data.workOffset.x_mm = 12;
+  p.data.workOffset.y_mm = -8;
+  setStock(p, { customX: 300, customY: 200 });
+  expect(footprint()).toMatchObject({ minX: 12, minY: -8, maxX: 312, maxY: 192 });
+});
+it('preserves manual stock and WCS when replacing and adding distant source geometry', () => {
+  const { p, footprint } = fixture('manual');
+  const original = footprint();
+  const source = structuredClone(p.data.imports[0].source);
+  for (const seg of source.segments) {
+    seg.start.x += 1000;
+    seg.end.x += 1000;
+  }
+  source.bbox.min_x += 1000;
+  source.bbox.max_x += 1000;
+  setImported(p, source);
+  expect(p.data.imports[0].fileTransform).toEqual(identityFileTransform());
+  expect(footprint()).toEqual(original);
+  expect(p.data.workOffset).toEqual({ wcs: 'G54', x_mm: 0, y_mm: 0, z_mm: 0 });
+  const second = structuredClone(source);
+  second.bbox.min_y += 2000;
+  second.bbox.max_y += 2000;
+  for (const seg of second.segments) {
+    seg.start.y += 2000;
+    seg.end.y += 2000;
+  }
+  addImported(p, second);
+  expect(footprint()).toEqual(original);
+  p.history.undo(p.target());
+  expect(p.data.imports).toHaveLength(1);
+  expect(footprint()).toEqual(original);
+  p.history.redo(p.target());
+  expect(p.data.imports).toHaveLength(2);
+  expect(footprint()).toEqual(original);
+});
+it('auto-fit follows imported geometry but never moves work zero', () => {
+  const { p, footprint } = fixture('auto');
+  const source = structuredClone(p.data.imports[0].source);
+  const zero = { ...p.data.workOffset };
+  setImported(p, source);
+  expect(p.data.workOffset).toEqual(zero);
+  expect(footprint().minX).toBe(source.bbox.min_x - p.data.stock.margin + 7);
+});
+
+it('first additive import is undoable without resetting earlier setup history', () => {
+  const { p, footprint } = fixture('manual');
+  const source = p.data.imports[0].source;
+  p.data.imports = [];
+  setStock(p, { customX: 300, customY: 200 });
+  const original = footprint();
+  addImported(p, source);
+  expect(p.history.undoSize).toBe(2);
+  p.history.undo(p.target());
+  expect(p.data.imports).toEqual([]);
+  expect(footprint()).toEqual(original);
+  p.history.redo(p.target());
+  expect(footprint()).toEqual(original);
+});
+it('replacement document boundary preserves blank/zero while clearing old machining', () => {
+  const { p, footprint } = fixture('manual');
+  const source = structuredClone(p.data.imports[0].source);
+  p.data.workOffset = { wcs: 'G55', x_mm: 12, y_mm: -8, z_mm: 3 };
+  const zero = { ...p.data.workOffset },
+    original = footprint();
+  p.clearProject = () => {
+    p.data.imports = [];
+    p.data.operations = [];
+    p.data.workOffset = { wcs: 'G54', x_mm: 0, y_mm: 0, z_mm: 0 };
+  };
+  clearForDrawingImport(p);
+  setImported(p, source);
+  expect(p.data.workOffset).toEqual(zero);
+  expect(footprint()).toEqual(original);
+  expect(p.data.imports[0].source).toEqual(source);
+});
+it.each(['manual', 'auto'] as const)(
+  'removes/adds geometry with undo and real v9 roundtrip in %s mode',
+  (mode) => {
+    const { p, footprint } = fixture(mode);
+    const original = footprint();
+    const source = structuredClone(p.data.imports[0].source);
+    source.layers = [{ name: 'far', color: 7, segment_count: 4 }];
+    source.segments.forEach((s) => {
+      s.start.x += 1000;
+      s.end.x += 1000;
+      s.layer = 'far';
+    });
+    source.bbox.min_x += 1000;
+    source.bbox.max_x += 1000;
+    addImported(p, source);
+    if (mode === 'manual') expect(footprint()).toEqual(original);
+    else expect(footprint().maxX).toBeGreaterThan(original.maxX);
+    const added = footprint();
+    removeImportedLayer(p, 'far');
+    expect(footprint()).toEqual(original);
+    p.history.undo(p.target());
+    expect(footprint()).toEqual(added);
+    removeImport(p, 2);
+    expect(footprint()).toEqual(original);
+    p.history.undo(p.target());
+    expect(footprint()).toEqual(added);
+    Object.assign(p.data, {
+      tools: [],
+      fixtures: [],
+      textLayers: [],
+      reliefSources: [],
+      serializedExtensions: {},
+      machine: { ...p.data.machine, mode: 'mill' },
+    });
+    const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
+    restoreProject(p, saved);
+    expect(footprint()).toEqual(added);
+    expect(p.data.workOffset).toEqual(
+      saved.workOffset ?? { wcs: 'G54', x_mm: 0, y_mm: 0, z_mm: 0 },
+    );
+    expect(p.data.imports).toEqual(saved.imports);
+  },
+);
+it('repeated one-axis resizes and mode changes preserve geometry and Z, and invalidate generation', () => {
+  const { p, footprint } = fixture('auto');
+  Object.assign(p.data, {
+    machine: { unit: 'mm', mode: 'mill', fastMoveZ: 5 },
+    tools: [],
+    fixtures: [],
+    textLayers: [],
+    reliefSources: [],
+    groupOpsByTool: false,
+  });
+  Object.defineProperty(p, 'transformedImport', { get: () => combineImports(p.data.imports) });
+  const geometry = JSON.stringify(p.data.imports);
+  setWorkOffset(p, { x_mm: 15, y_mm: -20, z_mm: 4 });
+  setStock(p, { mode: 'manual' });
+  p.data.operations = [
+    buildOpEntry('profile', {
+      nextId: 1,
+      tools: [],
+      reliefSources: [],
+      selectionIds: [],
+      objectMeta: [],
+    }),
+  ];
+  const key = generationContextKey(p, 'grbl');
+  setStock(p, { customX: 300 });
+  expect(generationContextKey(p, 'grbl')).not.toBe(key);
+  setStock(p, { customY: 200 });
+  expect(footprint()).toMatchObject({ minX: 15, minY: -20, maxX: 315, maxY: 180 });
+  expect(p.data.workOffset.z_mm).toBe(4);
+  p.history.undo(p.target());
+  expect(footprint().maxY).toBe(130);
+  p.history.redo(p.target());
+  expect(footprint().maxY).toBe(180);
+  setStock(p, { mode: 'auto' });
+  setStock(p, { mode: 'manual' });
+  expect(footprint()).toMatchObject({ minX: 15, minY: -20, maxX: 315, maxY: 180 });
+  expect(JSON.stringify(p.data.imports)).toBe(geometry);
 });

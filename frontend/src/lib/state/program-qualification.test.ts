@@ -2,7 +2,12 @@ import { toWireTool } from '../sim/config';
 import { readFileSync } from 'node:fs';
 import { expect, it } from 'vitest';
 import { generationContextKey } from './generation-context';
-import { qualificationKey, qualificationPhase, verificationInput } from './program-qualification';
+import {
+  programExportStatus,
+  qualificationKey,
+  qualificationPhase,
+  verificationInput,
+} from './program-qualification';
 import type { ProjectState } from './project.svelte';
 import type { GenerateResponse } from '../api/types';
 const file = JSON.parse(
@@ -67,12 +72,18 @@ function setup() {
   expect(p.gen.qualification.key).not.toBeNull();
   return p;
 }
-it.each(['stock', 'tool', 'machine', 'fixtures', 'origin'] as const)(
+it.each(['stock', 'stockXY', 'tool', 'machine', 'fixtures', 'origin'] as const)(
   'real generation context invalidates qualification after %s edit',
   (field) => {
     const p = setup();
     const key = qualificationKey(p, 'linuxcnc');
     if (field === 'stock') p.data.stock.thickness++;
+    if (field === 'stockXY') {
+      p.data.stock.mode = 'manual';
+      p.data.stock.customX = 320;
+      p.data.stock.customY = 200;
+      p.data.stock.offsetX = (p.data.stock.offsetX ?? 0) + 15;
+    }
     if (field === 'tool') p.data.tools[0].diameter++;
     if (field === 'machine') p.data.machine.fastMoveZ++;
     if (field === 'origin') p.data.workOffset.x_mm++;
@@ -82,6 +93,7 @@ it.each(['stock', 'tool', 'machine', 'fixtures', 'origin'] as const)(
       ] as never;
     expect(qualificationKey(p, 'linuxcnc')).not.toBe(key);
     expect(qualificationPhase(p, 'linuxcnc')).toBe('stale');
+    expect(programExportStatus(p, 'linuxcnc').stale).toBe(true);
   },
 );
 it('cosmetic settings and cursor do not invalidate; numerical simulation settings do', () => {

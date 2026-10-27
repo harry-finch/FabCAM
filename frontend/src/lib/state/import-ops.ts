@@ -13,9 +13,7 @@ import { resetPreviewCache } from './text_preview.svelte';
 import { setImportsCommand, updateOperationCommand } from './commands';
 import {
   identityFileTransform,
-  inferDefaultWorkOffset,
   isIdentityFileTransform,
-  placementFileTransform,
   type FileTransform,
   type ImportEntry,
 } from './project-types';
@@ -37,16 +35,9 @@ function isAbsolutePath(path: string): boolean {
 /// previous entries. Existing op references stay valid because
 /// imports[0]'s id range is unchanged.
 ///
-/// Undo: not history-tracked in Phase 2A — adding a drawing crosses
-/// a project boundary similar to setImported. Phase 2B is filed to
-/// thread the add through a proper command if users complain.
+/// Appending, including the first drawing in an active project, is undoable.
 export function addImported(p: ProjectState, r: ImportResponse, sourcePath?: string | null) {
-  if (p.data.imports.length === 0) {
-    // First import: behave identically to setImported, since the
-    // open-file flows always call addImported.
-    setImported(p, r, sourcePath);
-    return;
-  }
+  p.documentActive = true;
   const nextId = p.data.imports.reduce((m, e) => (e.id > m ? e.id : m), 0) + 1;
   const before = p.data.imports;
   const after: ImportEntry[] = [
@@ -59,7 +50,10 @@ export function addImported(p: ProjectState, r: ImportResponse, sourcePath?: str
     },
   ];
   const label = `Add ${sourcePath?.split(/[\\/]/).pop() ?? r.filename ?? 'drawing'}`;
-  p.history.exec(setImportsCommand(before, after, label), p.target());
+  p.history.exec(
+    fixedStockTransformCommand(p, setImportsCommand(before, after, label)),
+    p.target(),
+  );
   // Visibility lives outside history (UI-only); reveal the new layers
   // now even though undo won't reverse the toggle.
   const nextVis = new Set(p.data.visibleLayers);
@@ -82,7 +76,10 @@ export function removeImport(p: ProjectState, id: number) {
   if (after.length === before.length) return;
   const removed = before.find((e) => e.id === id);
   const label = `Remove ${removed?.source.filename ?? 'drawing'}`;
-  p.history.exec(setImportsCommand(before, after, label), p.target());
+  p.history.exec(
+    fixedStockTransformCommand(p, setImportsCommand(before, after, label)),
+    p.target(),
+  );
   const stillThere = new Set<string>();
   for (const e of after) for (const l of e.source.layers) stillThere.add(l.name);
   const filtered = new Set<string>();
@@ -96,7 +93,6 @@ export function removeImport(p: ProjectState, id: number) {
 
 export function setImported(p: ProjectState, r: ImportResponse, sourcePath?: string | null) {
   p.documentActive = true;
-  p.data.drawing = undefined;
   // Replace imports[0] in place: inherit the previous entry's id when
   // there was one (so undo entries built against that id stay valid),
   // reset the per-import fileTransform to identity (a new source means
@@ -104,19 +100,22 @@ export function setImported(p: ProjectState, r: ImportResponse, sourcePath?: str
   // from `sourcePath` when the caller provided one.
   const prev = p.data.imports[0];
   const nextPath = sourcePath !== undefined ? sourcePath : (prev?.lastImportPath ?? null);
-  // Auto-place the drawing's bottom-left at the work-area origin
-  // (unless it already sits fully inside the bed) so the emitted g-code
-  // is reachable. Translate-only; flows through the normal FileTransform
-  // path so the pipeline / g-code see the placed coordinates.
-  const placement = placementFileTransform(r.bbox, p.data.machine.workArea);
-  p.data.imports = [
-    {
-      id: prev?.id ?? 1,
-      source: r,
-      fileTransform: placement,
-      lastImportPath: nextPath,
+  // Import source coordinates verbatim. Stock placement and WCS are independent.
+  fixedStockTransformCommand(p, {
+    label: 'Replace drawing',
+    apply() {
+      p.data.drawing = undefined;
+      p.data.imports = [
+        {
+          id: prev?.id ?? 1,
+          source: r,
+          fileTransform: identityFileTransform(),
+          lastImportPath: nextPath,
+        },
+      ];
     },
-  ];
+    revert() {}, // Replacement keeps the existing import history boundary below.
+  }).apply(p.target());
   p.gen.generated = null;
   p.gen.toolpathCumLen = null;
   p.gen.toolpathTotalLen = 0;
@@ -132,23 +131,6 @@ export function setImported(p: ProjectState, r: ImportResponse, sourcePath?: str
   p.sel.selectedObjects = new Set();
   p.sel.hoverSegment = null;
   p.sourceFileStaleNotice = null;
-  // Auto-default work_offset to the geometry bbox's bottom-left
-  // when the drawing was authored off-origin in CAD and the user
-  // hasn't explicitly set an offset. Suppresses the
-  // `stock_origin_outside_geometry_bbox` pipeline warning at its
-  // most common firing site (drawings centered around a non-zero
-  // point in the source CAD), matching the canonical CNC workflow
-  // (operator zeros at the bottom-left corner of the drawing).
-  // No-op when the user has already moved away from default.
-  // Snap the WCS to the PLACED bottom-left, not the raw (pre-placement)
-  // coords — the auto-place translate may have moved the geometry to origin.
-  const placedBbox = {
-    min_x: r.bbox.min_x + placement.translate.x,
-    min_y: r.bbox.min_y + placement.translate.y,
-    max_x: r.bbox.max_x + placement.translate.x,
-    max_y: r.bbox.max_y + placement.translate.y,
-  };
-  p.data.workOffset = inferDefaultWorkOffset(placedBbox, p.data.workOffset);
   // Replacing the imported geometry implies a new project boundary —
   // drop any text-preview segments cached from the previous project
   // so we don't paint stale TextLayer glyphs over the new file.
@@ -302,7 +284,10 @@ export function removeImportedLayer(p: ProjectState, layerName: string) {
   });
   if (!touched) return;
   p.history.beginTransaction(`Delete layer "${layerName}"`);
-  p.history.exec(setImportsCommand(before, after, `Delete layer "${layerName}"`), p.target());
+  p.history.exec(
+    fixedStockTransformCommand(p, setImportsCommand(before, after, `Delete layer "${layerName}"`)),
+    p.target(),
+  );
   // Drop visibility tracking for the gone layer too — visibleLayers
   // lives outside the command target, so this is a plain mutation.
   if (p.data.visibleLayers.has(layerName)) {
@@ -443,7 +428,10 @@ export function appendImportedSegments(
     bbox,
   };
   const after: ImportEntry[] = [{ ...seedEntry, source: afterSource }, ...before.slice(1)];
-  p.history.exec(setImportsCommand(before, after, 'Add geometry'), p.target());
+  p.history.exec(
+    fixedStockTransformCommand(p, setImportsCommand(before, after, 'Add geometry')),
+    p.target(),
+  );
   p.data.visibleLayers = new Set([...p.data.visibleLayers, layerName]);
 
   // Return the de-duplicated set of new object ids (in insertion order).
