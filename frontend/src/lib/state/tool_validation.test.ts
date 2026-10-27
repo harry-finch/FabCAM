@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   diameterInvalid,
+  tipDiameterInvalid,
   speedInvalid,
   feedInvalid,
   plungeInvalid,
@@ -120,4 +121,25 @@ describe('fieldDisabledReason', () => {
   it('returns the empty string when the field has no per-kind reason', () => {
     expect(fieldDisabledReason('coolant', 'endmill')).toBe('');
   });
+});
+
+describe('V-bit tip diameter', () => {
+  it.each([6, 7, -1, NaN, Infinity])('rejects invalid tip %s', (tipDiameter) => {
+    const t = tool({ kind: 'v_bit', diameter: 6, tipDiameter });
+    expect(tipDiameterInvalid(t)).toBe(true);
+    expect(rowInvalid(t)).toBe(true);
+  });
+  it.each([undefined, 0, 0.2, 5.99])('accepts a smaller finite tip %s', (tipDiameter) => {
+    expect(tipDiameterInvalid(tool({ kind: 'v_bit', diameter: 6, tipDiameter }))).toBe(false);
+  });
+  it('does not reinterpret other tool geometries', () => {
+    expect(tipDiameterInvalid(tool({ tipDiameter: 6 }))).toBe(false);
+  });
+});
+
+it.each([0, -1, NaN, Infinity])('rejects an invalid outer V-bit diameter %s', (diameter) => {
+  const t = tool({ kind: 'v_bit', diameter, tipDiameter: 0 });
+  expect(diameterInvalid(t)).toBe(true);
+  expect(tipDiameterInvalid(t)).toBe(true);
+  expect(rowInvalid(t)).toBe(true);
 });

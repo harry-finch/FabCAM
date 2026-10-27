@@ -2,7 +2,7 @@
   import { t } from '../i18n';
   import type { ToolEntry, ToolKind } from '../state/project.svelte';
   import { KIND_DISPLAY_LABELS } from '../state/tool_family';
-  import { fieldApplies, diameterInvalid } from '../state/tool_validation';
+  import { fieldApplies, diameterInvalid, tipDiameterInvalid } from '../state/tool_validation';
   import type { MsgKey } from '../i18n/keys';
   let {
     tool,
@@ -73,22 +73,31 @@
               max={field.key === 'tipAngleDeg' ? 179 : undefined}
               value={tool[field.key] ?? ''}
               placeholder="—"
-              class:invalid={field.key === 'diameter' && diameterInvalid(tool)}
+              class:invalid={(field.key === 'diameter' && diameterInvalid(tool)) ||
+                (field.key === 'tipDiameter' && tipDiameterInvalid(tool))}
+              aria-invalid={field.key === 'tipDiameter' && tipDiameterInvalid(tool)
+                ? true
+                : undefined}
+              aria-describedby={field.key === 'tipDiameter' && tipDiameterInvalid(tool)
+                ? 'tip-diameter-error'
+                : undefined}
               onchange={(e) => {
                 const value = e.currentTarget.value;
                 if (field.key === 'flutes') onUpdateField('flutes', parseInt(value, 10) || 1);
                 else if (field.key === 'diameter')
                   onUpdateField('diameter', parseFloat(value) || 0);
                 else if (field.key === 'tipDiameter')
-                  onUpdateField(
-                    'tipDiameter',
-                    value === '' || Number(value) < 0 ? undefined : Number(value),
-                  );
+                  onUpdateField('tipDiameter', value === '' ? undefined : Number(value));
                 else onUpdateField('tipAngleDeg', value === '' ? undefined : Number(value));
               }}
             /><span>{field.unit}</span></span
           >
         </label>
+        {#if field.key === 'tipDiameter' && tipDiameterInvalid(tool)}
+          <p id="tip-diameter-error" class="field-error" role="alert">
+            {t('ux6b.tip_diameter_error', { diameter: tool.diameter })}
+          </p>
+        {/if}
       {/if}
     {/each}
   {:else}
@@ -119,6 +128,11 @@
 </div>
 
 <style>
+  .field-error {
+    color: var(--danger, #e87979);
+    margin: 0;
+    font-size: 12px;
+  }
   .fields {
     display: flex;
     flex-direction: column;

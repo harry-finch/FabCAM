@@ -17,7 +17,14 @@ import { attrApplies, KIND_DISPLAY_LABELS } from './tool_family';
 /// prior `> 0` check accepted values that downstream clamping silently
 /// ignored, denying the user red-border feedback.
 export function diameterInvalid(t: ToolEntry): boolean {
-  return !(t.diameter >= 0.01);
+  return !Number.isFinite(t.diameter) || !(t.diameter >= 0.01);
+}
+
+/// V-carve requires a genuine cone: a flat tip cannot equal its outer diameter.
+export function tipDiameterInvalid(t: ToolEntry): boolean {
+  if (t.kind !== 'v_bit') return false;
+  const tip = t.tipDiameter ?? 0;
+  return diameterInvalid(t) || !Number.isFinite(tip) || tip < 0 || tip >= t.diameter;
 }
 
 /// Spindle speed (RPM) must be ≥ 1 when the kind spins at all. Drag-knife
@@ -44,6 +51,7 @@ export function plungeInvalid(t: ToolEntry): boolean {
 export function rowInvalid(t: ToolEntry): boolean {
   return (
     diameterInvalid(t) ||
+    tipDiameterInvalid(t) ||
     speedInvalid(t) ||
     feedInvalid(t) ||
     plungeInvalid(t) ||

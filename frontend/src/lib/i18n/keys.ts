@@ -193,13 +193,18 @@ export type MsgKey =
   | "cleanup.method"
   | "cleanup.no_import"
   | "cleanup.overview"
+  | "cleanup.placement_block"
   | "cleanup.preview"
+  | "cleanup.preview_failed"
+  | "cleanup.preview_first"
   | "cleanup.preview_label"
   | "cleanup.reselect"
   | "cleanup.reset"
+  | "cleanup.select_first"
   | "cleanup.simplify"
   | "cleanup.snap"
   | "cleanup.stale"
+  | "cleanup.technical_details"
   | "cleanup.title"
   | "cleanup.tolerance"
   | "common.apply"
@@ -2169,6 +2174,7 @@ export type MsgKey =
   | "ux6b.sort"
   | "ux6b.tip_angle"
   | "ux6b.tip_diameter"
+  | "ux6b.tip_diameter_error"
   | "ux6c.arc_settings"
   | "ux6c.fit_before_post"
   | "ux6c.shopbot_arcs"
@@ -2532,13 +2538,18 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "cleanup.method",
   "cleanup.no_import",
   "cleanup.overview",
+  "cleanup.placement_block",
   "cleanup.preview",
+  "cleanup.preview_failed",
+  "cleanup.preview_first",
   "cleanup.preview_label",
   "cleanup.reselect",
   "cleanup.reset",
+  "cleanup.select_first",
   "cleanup.simplify",
   "cleanup.snap",
   "cleanup.stale",
+  "cleanup.technical_details",
   "cleanup.title",
   "cleanup.tolerance",
   "common.apply",
@@ -4508,6 +4519,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "ux6b.sort",
   "ux6b.tip_angle",
   "ux6b.tip_diameter",
+  "ux6b.tip_diameter_error",
   "ux6c.arc_settings",
   "ux6c.fit_before_post",
   "ux6c.shopbot_arcs",

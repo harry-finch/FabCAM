@@ -3,6 +3,12 @@
   import { onMount, onDestroy } from 'svelte';
   import { buildGenerationProject } from '../state/generation-context';
   import { t } from '../i18n';
+  import type { MsgKey } from '../i18n/keys';
+  import {
+    cleanupError,
+    cleanupBlockReason,
+    cleanupTechnicalDetails,
+  } from '../state/cleanup-feedback';
   import { ScanLine, X } from '@lucide/svelte';
   import { isContourOp } from '../state/op_types';
   import { project } from '../state/project.svelte';
@@ -14,6 +20,8 @@
     resetDrawingOperations,
     provenLegacyBinding,
   } from '../state/drawing';
+  let previewFailed = $state(false);
+  let errorDetails = $state('');
   let open = $state(false),
     busy = $state(false),
     error = $state('');
@@ -63,8 +71,41 @@
       : project.data.operations.some(
             (o) => isContourOp(o) && (o.tabsActive || o.tabPlacements?.length || o.approachPoint),
           )
-        ? 'Remove authored tabs and approach points before repairing geometry.'
+        ? `Repair is blocked by authored tabs or approach points in: ${project.data.operations
+            .filter(
+              (o) => isContourOp(o) && (o.tabsActive || o.tabPlacements?.length || o.approachPoint),
+            )
+            .map((o) => `${o.name} (#${o.id})`)
+            .join(
+              ', ',
+            )}. Their positions cannot yet be remapped safely after topology changes. No placement has been removed.`
         : '',
+  );
+  const previewReason = $derived(
+    cleanupBlockReason(
+      {
+        busy,
+        stale,
+        conflict,
+        selected: selected.length,
+        preview: !!preview,
+        failed: previewFailed,
+      },
+      'preview',
+    ),
+  );
+  const applyReason = $derived(
+    cleanupBlockReason(
+      {
+        busy,
+        stale,
+        conflict,
+        selected: selected.length,
+        preview: !!preview,
+        failed: previewFailed,
+      },
+      'apply',
+    ),
   );
   // View framing only; all proposed coordinates are supplied by Rust.
   const changedPoints = $derived(
@@ -101,6 +142,7 @@
     return result;
   }
   async function analyze() {
+    if (busy) return;
     if (!Number.isFinite(tolerance) || tolerance < 0) {
       error = 'Enter a finite, nonnegative tolerance in mm.';
       return;
@@ -109,8 +151,12 @@
       key = current;
     busy = true;
     error = '';
+    errorDetails = '';
     preview = null;
+    previewFailed = false;
     selected = [];
+    response = null;
+    captured = '';
     try {
       const existing = project.data.drawing;
       if (existing && existing.inputKey !== drawingInputKey(project.data.imports))
@@ -157,17 +203,22 @@
       response = next;
       captured = key;
     } catch (e) {
-      if (token === epoch) error = String(e);
+      if (token === epoch) {
+        error = cleanupError(e);
+        errorDetails = cleanupTechnicalDetails(e);
+      }
     } finally {
       if (token === epoch) busy = false;
     }
   }
   async function showPreview() {
-    if (!response || stale || conflict || !selected.length) return;
+    if (busy || !response || stale || conflict || !selected.length) return;
     const token = ++epoch,
       key = current;
     busy = true;
     error = '';
+    errorDetails = '';
+    previewFailed = false;
     preview = null;
     try {
       const next = await request({
@@ -190,7 +241,11 @@
       });
       if (token === epoch && key === current) preview = next;
     } catch (e) {
-      if (token === epoch) error = String(e);
+      if (token === epoch) {
+        error = cleanupError(e);
+        errorDetails = cleanupTechnicalDetails(e);
+        previewFailed = true;
+      }
     } finally {
       if (token === epoch) busy = false;
     }
@@ -248,8 +303,9 @@
       captured = '';
       selected = [];
       error = '';
+      errorDetails = '';
     } catch (e) {
-      error = String(e);
+      error = cleanupError(e);
     }
   }
   function close() {
@@ -283,7 +339,11 @@
     <p class="muted">{t('cleanup.intro')}</p>
     {#if conflict}<p role="status">{conflict}</p>{/if}
     {#if stale}<p role="status">{t('cleanup.stale')}</p>{/if}
-    {#if error}<p role="alert">{error}</p>{/if}
+    {#if error}<p role="alert">{error}</p>
+      {#if errorDetails && errorDetails !== error}<details>
+          <summary>{t('cleanup.technical_details')}</summary>
+          <pre>{errorDetails}</pre>
+        </details>{/if}{/if}
     <label
       >{t('cleanup.tolerance')} <input type="number" min="0" step="0.01" bind:value={tolerance} />
       {t('machine.unit.mm')}</label
@@ -328,6 +388,7 @@
                   ? [...selected, i]
                   : selected.filter((n) => n !== i);
                 preview = null;
+                previewFailed = false;
               }}
             /><span
               >{t('cleanup.contour', {
@@ -364,22 +425,28 @@
         </p>
       {/if}
       <div class="actions">
-        <button
-          class="btn btn-small"
-          onclick={showPreview}
-          disabled={busy || stale || !!conflict || !selected.length}>{t('cleanup.preview')}</button
-        ><button
-          class="btn btn-small"
-          onclick={apply}
-          disabled={!preview || busy || stale || !!conflict}>{t('cleanup.apply')}</button
+        <button class="btn btn-small" onclick={showPreview} disabled={!!previewReason}
+          >{t('cleanup.preview')}</button
+        ><button class="btn btn-small" onclick={apply} disabled={!!applyReason}
+          >{t('cleanup.apply')}</button
         >
       </div>
     {/if}
+    {#if response && previewReason}<p role="status">
+        {t('cleanup.preview')}: {t(previewReason as MsgKey)}
+      </p>{/if}
+    {#if response && applyReason}<p role="status">
+        {t('cleanup.apply')}: {t(applyReason as MsgKey)}
+      </p>{/if}
     {#if busy}<p role="status">{t('cleanup.busy')}</p>{/if}
   {/if}
 </div>
 
 <style>
+  pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
   .drawing-cleanup {
     padding: 10px;
     border-top: 1px solid var(--border, #383838);

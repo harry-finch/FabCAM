@@ -16,6 +16,8 @@
   import { t } from '../i18n';
   import ShortcutHelp from './ShortcutHelp.svelte';
   let showHelp = $state(false);
+  const buildIdentity = `${typeof __IVAC_PKG_VERSION__ === 'string' ? __IVAC_PKG_VERSION__ : '?'} · ${typeof __IVAC_BUILD_VERSION__ === 'string' ? __IVAC_BUILD_VERSION__ : 'unknown'}`;
+  const shortBuildIdentity = buildIdentity.replace(/v[^ ]+-\d+-g([0-9a-f]+)(-dirty)?$/, '$1$2');
   const themes = [
     { value: 'auto', Icon: Monitor },
     { value: 'light', Icon: Sun },
@@ -59,6 +61,13 @@
     {t('shell.brand')}
     <span class="brand-description">{t('shell.description')}</span>
   </span>
+  <button
+    class="build-identity"
+    title={`${t('about.build')}: ${buildIdentity}`}
+    aria-label={`${t('about.build')}: ${buildIdentity}`}
+    onclick={() => onNavigate('about')}>{shortBuildIdentity}</button
+  >
+
   <button
     type="button"
     class="main-tab context-tab machine-context"
@@ -184,6 +193,15 @@
 {/if}
 
 <style>
+  .build-identity {
+    flex-shrink: 0;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 2px 5px;
+  }
+
   .app-brand {
     display: inline-flex;
     align-items: center;
