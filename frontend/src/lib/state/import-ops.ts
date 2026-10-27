@@ -219,8 +219,10 @@ export async function reimportFromPath(p: ProjectState, path: string): Promise<b
   }
   const next = [...p.data.imports];
   next[idx] = { ...next[idx], source: after };
-  p.data.imports = next;
-  p.data.dirty = true;
+  p.history.exec(
+    fixedStockTransformCommand(p, setImportsCommand(p.data.imports, next, 'Reload drawing source')),
+    p.target(),
+  );
   p.sourceFileStaleNotice = null;
   // Orphan-source detection runs against the merged view (post-reload)
   // so ops keyed by ids from OTHER imports still see their objects.
