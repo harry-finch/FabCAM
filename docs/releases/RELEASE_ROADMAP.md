@@ -12,6 +12,16 @@ original outcomes and scope.
 
 ## Current focus — FabCAM V1.1 macOS Personal Alpha
 
+**ALPHA-1 — bounded stabilization:** implemented on the isolated alpha branch at
+`b0c2f208bc0de1d38f733d378abbb0b85600785d`. [The completion report](ALPHA_1_STOCK_IMPORT_DIAGNOSTICS.md)
+separates software qualification, browser coverage and outstanding native/human
+acceptance. Manual stock anchoring, explicit import placement, cutter feedback,
+cleanup states and frontend build visibility do not implement ALPHA-2 topology
+repair, ALPHA-3 finishing or ALPHA-4 preset reuse. These remain **PLANNED**, with
+separate approval required; no milestone is started automatically. No new packaging
+or integration with TOOL-META is authorized by this completion.
+
+
 **Approved product strategy:** personal evaluation on the maintainer's own Mac,
 local desktop, ShopBot-focused, followed by progressive supervised qualification
 on their actual machine. No immediate public release or general university-fablab

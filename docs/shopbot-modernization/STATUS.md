@@ -1,5 +1,13 @@
 # FabCAM — current status
 
+ALPHA-1 is completed locally on isolated `fix/alpha-stock-diagnostics`, executable
+source `b0c2f208bc0de1d38f733d378abbb0b85600785d`; primary V1.1 is not advanced.
+[Stock/import/diagnostic report](../releases/ALPHA_1_STOCK_IMPORT_DIAGNOSTICS.md)
+records source-bound software gates and browser observations separately from native
+and human acceptance. No new installer, push or hardware test. ALPHA-2/3/4 and
+TOOL-META integration remain separate; **HARD STOP for human review**.
+
+
 Current focus: **FabCAM V1.1 — macOS Personal Alpha**. Latest integrated local
 software/build source: **`1f353ef3b774382f63e67f93a9bb3a4652007de2`**. Drawing drag,
 proportional dimensions, fixed manual stock, pocket diagnostics and header UI are
