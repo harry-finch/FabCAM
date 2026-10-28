@@ -14,12 +14,23 @@ export function validateProjectGeometry(value: ProjectFile): void {
   if (
     value.drawing &&
     (!Array.isArray(value.drawing.originalBindings) ||
-      value.drawing.version !== 1 ||
-      value.drawing.response?.version !== 1 ||
+      ![1, 2].includes(value.drawing.version) ||
+      value.drawing.response?.version !== value.drawing.version ||
       value.drawing.response.drawing?.version !== 1 ||
       value.drawing.inputKey !== drawingInputKey(value.imports))
   )
     throw new Error('Invalid or incompatible edited drawing snapshot');
+  if (value.drawing?.version === 2) {
+    const r = value.drawing.response;
+    if (
+      !('topology' in r) ||
+      typeof r.topology?.complete !== 'boolean' ||
+      !Array.isArray(r.topology.issues) ||
+      !Array.isArray(r.continuity) ||
+      typeof r.local_edit_accepted !== 'boolean'
+    )
+      throw new Error('Invalid scoped drawing snapshot');
+  }
   if (value.drawing) {
     const ids = new Set<number>();
     for (const binding of value.drawing.originalBindings) {

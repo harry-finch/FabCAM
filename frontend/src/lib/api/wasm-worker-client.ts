@@ -1,3 +1,4 @@
+import type { ScopedRequest, ScopedResponse } from './types';
 import { assertCuttingCapability } from './cutting-contract';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
@@ -269,6 +270,9 @@ export class WasmWorkerClient implements WiacClient {
     return this.call('renderTextLayer', [layer]);
   }
 
+  evaluateDrawingV2(request: ScopedRequest): Promise<ScopedResponse> {
+    return this.call('evaluateDrawingV2', [request]);
+  }
   evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
     return this.call('evaluateDrawing', [request]);
   }

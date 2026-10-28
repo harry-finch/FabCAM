@@ -862,8 +862,12 @@ function buildReliefSource(rs: ReliefSource): WireReliefSource {
 /// Construct the wire `project` field for PipelineRequest. Returns null
 /// if the frontend has no operations defined yet — caller should fall
 /// back to the legacy segments+setup path.
-export function buildProject(state: ProjectStateView, allowEmpty = false): WireProject | null {
-  if (state.operations.length === 0) return null;
+export function buildProject(
+  state: ProjectStateView,
+  allowEmpty = false,
+  allowNoOperations = false,
+): WireProject | null {
+  if (state.operations.length === 0 && !allowNoOperations) return null;
   // Prefer the augmented view (imports + selectable stock outline)
   // so an op targeting the stock edge is cut. Falls back to the raw
   // import for callers/tests that don't supply geometryView.

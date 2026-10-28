@@ -1,5 +1,5 @@
 import { CancelledError, type WiacClient } from '../api/client';
-import type { DrawingResponse, ImportResponse } from '../api/types';
+import type { DrawingResponse, ScopedResponse, ImportResponse } from '../api/types';
 import type { components } from '../api/generated';
 import type { ImportEntry } from './project-types';
 import type { OpEntry } from './op_types';
@@ -7,10 +7,10 @@ import type { Command } from './history';
 
 export type GeometryBinding = components['schemas']['Binding'];
 export interface DrawingState {
-  version: 1;
+  version: 1 | 2;
   originalBindings: Pick<OpEntry, 'id' | 'sourceObjects' | 'sourceLayers' | 'geometryBinding'>[];
   inputKey: string;
-  response: DrawingResponse;
+  response: DrawingResponse | ScopedResponse;
 }
 export const drawingInputKey = (imports: readonly ImportEntry[]) =>
   JSON.stringify(imports.map(({ id, source, fileTransform }) => ({ id, source, fileTransform })));

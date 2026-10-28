@@ -2001,5 +2001,9 @@
   "cleanup.select_first": "Mindestens eine vorgeschlagene Reparatur auswählen.",
   "cleanup.preview_first": "Vor dem Anwenden die ausgewählten Reparaturen in der Vorschau prüfen.",
   "cleanup.preview_failed": "Vorschau fehlgeschlagen. Den Fehler oben prüfen; keine Reparatur wurde angewendet.",
-  "cleanup.technical_details": "Technische Details"
+  "cleanup.technical_details": "Technische Details",
+  "cleanup.scoped_note": "Hier sind nur explizite Reparaturen von Lücken zwischen Linien verfügbar. Eine lokale Reparatur erlaubt noch keine Bearbeitung. Bei der Erzeugung gelten weiterhin alle Zeichnungs- und Platzierungsprüfungen.",
+  "cleanup.topology_incomplete": "Die Topologieanalyse ist unvollständig; lokale Reparaturen sind gesperrt.",
+  "cleanup.global_issue": "Zeichnungsweite Diagnose",
+  "cleanup.continuity_gap": "Kontur {contour}: Endpunkte sind verschieden (größte Verbindungslücke {gap} mm). Eine näherungsweise geschlossene Kette ist nicht exakt geschlossen."
 }

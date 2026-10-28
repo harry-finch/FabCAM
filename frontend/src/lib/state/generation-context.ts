@@ -17,7 +17,11 @@ export function generationContextKey(p: ProjectState, post: string): string {
   });
 }
 
-export function buildGenerationProject(p: ProjectState, allowEmpty = false) {
+export function buildGenerationProject(
+  p: ProjectState,
+  allowEmpty = false,
+  allowNoOperations = false,
+) {
   return buildProject(
     {
       material: p.data.material,
@@ -35,6 +39,7 @@ export function buildGenerationProject(p: ProjectState, allowEmpty = false) {
       groupOpsByTool: p.data.groupOpsByTool,
     },
     allowEmpty,
+    allowNoOperations,
   );
 }
 

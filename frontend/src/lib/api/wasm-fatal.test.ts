@@ -2,7 +2,7 @@
 // instance, so after a trap every later call must refuse explicitly.
 import { describe, expect, it, vi } from 'vitest';
 import { isFatalWasmError, WasmFatalError } from './wasm-fatal';
-import type { GenerateRequest } from './types';
+import type { GenerateRequest, ScopedRequest } from './types';
 
 const calls = vi.hoisted(() => ({ generate: 0, version: 0 }));
 vi.mock('ivac-wasm', () => ({
@@ -17,6 +17,9 @@ vi.mock('ivac-wasm', () => ({
     return { version: 'test' };
   },
   healthz: () => ({ ok: true }),
+  evaluateDrawingV2: () => {
+    throw new Error('must not run after a trap');
+  },
 }));
 
 describe('wasm fatal classification', () => {
@@ -38,6 +41,9 @@ describe('WasmWiacClient (main-thread fallback) after a trap', () => {
     );
     await expect(client.generate({} as GenerateRequest)).rejects.toBeInstanceOf(WasmFatalError);
     await expect(client.version()).rejects.toThrow(/reload/);
+    await expect(client.evaluateDrawingV2({} as ScopedRequest)).rejects.toBeInstanceOf(
+      WasmFatalError,
+    );
     expect(calls).toEqual({ generate: 1, version: 1 });
   });
 });

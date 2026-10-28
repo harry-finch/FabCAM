@@ -1,4 +1,4 @@
-import type { DrawingRequest, DrawingGenerationRequest } from './types';
+import type { ScopedRequest, DrawingRequest, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest } from './types';
 import { notificationError } from './error-notification';
 import { isFatalWasmError } from './wasm-fatal';
@@ -124,6 +124,10 @@ ctx.onmessage = async (e: MessageEvent<WorkerRequest>) => {
       case 'renderTextLayer':
         post({ id, type: 'result', value: m.renderTextLayer(args[0] as WireTextLayer) });
         break;
+      case 'evaluateDrawingV2':
+        if (!m.evaluateDrawingV2) throw new Error('WASM does not support scoped drawing v2');
+        post({ id, type: 'result', value: m.evaluateDrawingV2(args[0] as ScopedRequest) });
+        return;
       case 'evaluateDrawing':
         if (!m.evaluateDrawing) throw new Error('WASM does not support GEOM1');
         post({ id, type: 'result', value: m.evaluateDrawing(args[0] as DrawingRequest) });

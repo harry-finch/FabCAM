@@ -2340,5 +2340,9 @@
   "cleanup.select_first": "Select at least one proposed repair.",
   "cleanup.preview_first": "Preview the selected repairs before applying.",
   "cleanup.preview_failed": "Preview failed. Review the error above; no repair has been applied.",
-  "cleanup.technical_details": "Technical details"
+  "cleanup.technical_details": "Technical details",
+  "cleanup.scoped_note": "Only explicit line-gap repairs are available here. Local repair acceptance does not authorize machining. Full drawing and placement checks still apply during generation.",
+  "cleanup.topology_incomplete": "Topology analysis is incomplete; scoped repairs are blocked.",
+  "cleanup.global_issue": "Drawing-wide diagnostic",
+  "cleanup.continuity_gap": "Contour {contour}: endpoints are distinct (maximum junction gap {gap} mm). Fuzzy chain closure is not exact closure."
 }

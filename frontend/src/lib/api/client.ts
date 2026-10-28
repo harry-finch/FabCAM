@@ -1,3 +1,4 @@
+import type { ScopedRequest, ScopedResponse } from './types';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
 // Transport-agnostic client interface. Implementations: HTTP (`http.ts`,
@@ -90,6 +91,7 @@ export interface WiacClient {
    * helix circle fits. Lets the OpPropertiesPanel show
    * `Auto (detected: …)` before gcode generation.
    */
+  evaluateDrawingV2?(request: ScopedRequest): Promise<ScopedResponse>;
   evaluateDrawing?(request: DrawingRequest): Promise<DrawingResponse>;
   generateDrawing?(request: DrawingGenerationRequest): Promise<GenerateResponse>;
   cornerRelief(request: CornerReliefRequest): Promise<CornerReliefResponse>;

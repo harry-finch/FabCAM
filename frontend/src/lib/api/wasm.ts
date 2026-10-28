@@ -1,3 +1,4 @@
+import type { ScopedRequest, ScopedResponse } from './types';
 import { assertCuttingCapability } from './cutting-contract';
 import { isFatalWasmError, WasmFatalError } from './wasm-fatal';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
@@ -27,6 +28,7 @@ import type {
 
 export type WasmModule = {
   presetCommand?: (json: string) => string;
+  evaluateDrawingV2?: (request: ScopedRequest) => ScopedResponse;
   evaluateDrawing?: (request: DrawingRequest) => DrawingResponse;
   generateDrawing?: (request: DrawingGenerationRequest) => GenerateResponse;
   default?: () => Promise<unknown>;
@@ -76,6 +78,7 @@ const GUARDED_EXPORTS = new Set([
   'renderText',
   'renderTextLayer',
   'evaluateDrawing',
+  'evaluateDrawingV2',
   'generateDrawing',
   'cornerRelief',
   'computeHelixRadius',
@@ -224,6 +227,11 @@ export class WasmWiacClient implements WiacClient {
     return m.renderTextLayer(layer);
   }
 
+  async evaluateDrawingV2(request: ScopedRequest): Promise<ScopedResponse> {
+    const m = await loadModule();
+    if (!m.evaluateDrawingV2) throw new Error('WASM does not support scoped drawing v2');
+    return m.evaluateDrawingV2(request);
+  }
   async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
     const m = await loadModule();
     if (!m.evaluateDrawing) throw new Error('WASM does not support GEOM1');

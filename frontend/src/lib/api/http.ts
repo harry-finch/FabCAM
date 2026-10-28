@@ -1,3 +1,4 @@
+import type { ScopedRequest, ScopedResponse } from './types';
 import { assertCuttingCapability } from './cutting-contract';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
@@ -141,6 +142,17 @@ export class HttpWiacClient implements WiacClient {
     return (await res.json()) as RenderTextLayerResponse;
   }
 
+  async evaluateDrawingV2(request: ScopedRequest): Promise<ScopedResponse> {
+    const res = await fetch(`${this.base}/drawing-v2`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const value = (await res.json()) as ScopedResponse;
+    if (value.version !== 2) throw new Error('Unsupported scoped drawing revision');
+    return value;
+  }
   async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
     const res = await fetch(`${this.base}/drawing`, {
       method: 'POST',
@@ -514,6 +526,11 @@ class WasmClientLazy {
         ),
       renderText: (req) => ensure().then((c) => c.renderText(req)),
       renderTextLayer: (layer) => ensure().then((c) => c.renderTextLayer(layer)),
+      evaluateDrawingV2: (req) =>
+        ensure().then((c) => {
+          if (!c.evaluateDrawingV2) throw new Error('Backend does not support scoped drawing v2');
+          return c.evaluateDrawingV2(req);
+        }),
       evaluateDrawing: (req) =>
         ensure().then((c) => {
           if (!c.evaluateDrawing) throw new Error('Backend does not support GEOM1');
@@ -579,6 +596,11 @@ class TauriClientLazy {
         ),
       renderText: (req) => ensure().then((c) => c.renderText(req)),
       renderTextLayer: (layer) => ensure().then((c) => c.renderTextLayer(layer)),
+      evaluateDrawingV2: (req) =>
+        ensure().then((c) => {
+          if (!c.evaluateDrawingV2) throw new Error('Backend does not support scoped drawing v2');
+          return c.evaluateDrawingV2(req);
+        }),
       evaluateDrawing: (req) =>
         ensure().then((c) => {
           if (!c.evaluateDrawing) throw new Error('Backend does not support GEOM1');

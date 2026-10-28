@@ -10,23 +10,24 @@
     cleanupTechnicalDetails,
   } from '../state/cleanup-feedback';
   import { ScanLine, X } from '@lucide/svelte';
-  import { isContourOp } from '../state/op_types';
   import { project } from '../state/project.svelte';
   import { defaultClient } from '../api/http';
-  import type { DrawingResponse, DrawingRequest } from '../api/types';
+  import type { ScopedResponse, ScopedRequest, DrawingRequest } from '../api/types';
   import {
     drawingInputKey,
     drawingCommand,
     resetDrawingOperations,
     provenLegacyBinding,
   } from '../state/drawing';
+  let previewInput = $state<Extract<ScopedRequest, { kind: 'preview' }>['input'] | null>(null);
+  let highlighted = $state<number | null>(null);
   let previewFailed = $state(false);
   let errorDetails = $state('');
   let open = $state(false),
     busy = $state(false),
     error = $state('');
-  let response = $state<DrawingResponse | null>(null),
-    preview = $state<DrawingResponse | null>(null);
+  let response = $state<ScopedResponse | null>(null),
+    preview = $state<ScopedResponse | null>(null);
   let selected = $state<number[]>([]),
     captured = $state('');
   let tolerance = $state(0.1),
@@ -43,6 +44,15 @@
     JSON.stringify([
       drawingInputKey(project.data.imports),
       project.data.operations,
+      project.data.workOffset,
+      project.data.textLayers,
+      project.data.stock,
+      project.data.fixtures,
+      project.data.reliefSources,
+      project.data.groupOpsByTool,
+      project.sourceFileStaleNotice,
+      project.data.tools,
+      project.data.machine,
       project.data.cornerRelief,
       project.documentEpoch,
       project.data.drawing,
@@ -66,20 +76,7 @@
   );
   const stale = $derived(!!captured && captured !== current);
   const conflict = $derived(
-    project.data.cornerRelief
-      ? 'Remove corner relief before repairing drawing geometry.'
-      : project.data.operations.some(
-            (o) => isContourOp(o) && (o.tabsActive || o.tabPlacements?.length || o.approachPoint),
-          )
-        ? `Repair is blocked by authored tabs or approach points in: ${project.data.operations
-            .filter(
-              (o) => isContourOp(o) && (o.tabsActive || o.tabPlacements?.length || o.approachPoint),
-            )
-            .map((o) => `${o.name} (#${o.id})`)
-            .join(
-              ', ',
-            )}. Their positions cannot yet be remapped safely after topology changes. No placement has been removed.`
-        : '',
+    project.data.cornerRelief ? 'Remove corner relief before repairing drawing geometry.' : '',
   );
   const previewReason = $derived(
     cleanupBlockReason(
@@ -119,6 +116,20 @@
       });
     }) ?? [],
   );
+  const diagnosticEdges = $derived(
+    new Set(
+      highlighted == null
+        ? []
+        : (response?.topology.issues[highlighted]?.edges ?? []).map(
+            (id) => `${id.import}/${id.entity}`,
+          ),
+    ),
+  );
+  const edgeIds = $derived(
+    response?.drawing.contours.flatMap((c) =>
+      c.edges.map((e) => `${e.id.import}/${e.id.entity}`),
+    ) ?? [],
+  );
   const bounds = $derived(
     !overview && changedPoints.length
       ? {
@@ -129,17 +140,48 @@
         }
       : (preview?.evaluated.bbox ?? response?.evaluated.bbox),
   );
-  const box = $derived(
-    bounds
-      ? `${bounds.min_x - 1} ${-bounds.max_y - 1} ${Math.max(1, bounds.max_x - bounds.min_x) + 2} ${Math.max(1, bounds.max_y - bounds.min_y) + 2}`
-      : '0 0 10 10',
-  );
-  async function request(req: DrawingRequest) {
-    if (!client.evaluateDrawing)
-      throw new Error('Backend does not support GEOM1. Update it before repairing drawings.');
-    const result = await client.evaluateDrawing(req);
-    if (result.version !== 1) throw new Error('Unsupported drawing contract revision');
+  const frame = $derived.by(() => {
+    if (!bounds) return { x: 0, y: 0, scale: 1 };
+    const width = bounds.max_x - bounds.min_x;
+    const height = bounds.max_y - bounds.min_y;
+    const span = Math.max(width, height, 1e-8);
+    const padding = !overview && changedPoints.length ? span * 0.5 : 1;
+    return {
+      x: bounds.min_x + width / 2,
+      y: bounds.min_y + height / 2,
+      scale: 1000 / (span + 2 * padding),
+    };
+  });
+  // Display transform only. Normalize the SVG coordinate range because WebKit
+  // can drop non-scaling strokes under extreme micro-gap viewBox magnification.
+  const viewX = (x: number) => (x - frame.x) * frame.scale + 500;
+  const viewY = (y: number) => -(y - frame.y) * frame.scale + 500;
+  async function scopedRequest(req: ScopedRequest) {
+    if (!client.evaluateDrawingV2)
+      throw new Error(
+        'Backend does not support scoped drawing v2. Update it before repairing drawings.',
+      );
+    const result = await client.evaluateDrawingV2(req);
+    if (result.version !== 2 || result.drawing.version !== 1)
+      throw new Error('Unsupported scoped drawing revision');
     return result;
+  }
+  const request = (input: DrawingRequest) => scopedRequest({ kind: 'analyze', version: 2, input });
+  function context() {
+    if (!response) throw new Error('Analyze before preview');
+    const machining = buildGenerationProject(project, true, true);
+    if (!machining) throw new Error('Missing project context');
+    return JSON.parse(
+      JSON.stringify({
+        drawing: response.drawing,
+        project: machining,
+        bindings: project.data.operations.map((o) => ({
+          operation: o.id,
+          binding: o.geometryBinding ?? provenLegacyBinding(o, response!),
+        })),
+        document: JSON.parse(current),
+      }),
+    ) as Extract<ScopedRequest, { kind: 'preview' }>['input']['context'];
   }
   async function analyze() {
     if (busy) return;
@@ -153,6 +195,8 @@
     error = '';
     errorDetails = '';
     preview = null;
+    previewInput = null;
+    highlighted = null;
     previewFailed = false;
     selected = [];
     response = null;
@@ -177,8 +221,8 @@
             tolerance_mm: tolerance,
             simplification_mm: analyzeSimplification ? simplification : null,
             legacy_offset: { x: project.data.workOffset.x_mm, y: project.data.workOffset.y_mm },
-            legacy_text: buildGenerationProject(project)?.text_layers ?? [],
-            legacy_auxiliary: (buildGenerationProject(project)?.segments ?? []).slice(
+            legacy_text: buildGenerationProject(project, true, true)?.text_layers ?? [],
+            legacy_auxiliary: (buildGenerationProject(project, true, true)?.segments ?? []).slice(
               project.data.imports.reduce((n, e) => n + e.source.segments.length, 0),
             ),
             imports: project.data.imports.map((e) => ({
@@ -221,10 +265,8 @@
     previewFailed = false;
     preview = null;
     try {
-      const next = await request({
-        kind: 'preview',
-        version: 1,
-        drawing: response.drawing,
+      const input = {
+        context: context(),
         repairs: selected.flatMap((i) => {
           const r = response?.findings[i].repair;
           return r
@@ -235,11 +277,12 @@
               ]
             : [];
         }),
-        bindings: project.data.operations.map(
-          (o) => o.geometryBinding ?? provenLegacyBinding(o, response!),
-        ),
-      });
-      if (token === epoch && key === current) preview = next;
+      };
+      const next = await scopedRequest({ kind: 'preview', version: 2, input });
+      if (token === epoch && key === current) {
+        preview = next;
+        previewInput = input;
+      }
     } catch (e) {
       if (token === epoch) {
         error = cleanupError(e);
@@ -250,41 +293,64 @@
       if (token === epoch) busy = false;
     }
   }
-  function apply() {
-    if (!preview || stale || conflict || busy) return;
-    const ops = project.data.operations.map((op, i) => ({
-      ...op,
-      geometryBinding: preview!.bindings[i],
-      ...(preview!.bindings[i]?.kind === 'contours'
-        ? { sourceObjects: preview!.binding_indices[i]?.map((n) => n + 1) ?? op.sourceObjects }
-        : {}),
-    }));
-    project.history.exec(
-      drawingCommand(
-        project.data.drawing,
-        {
-          version: 1,
-          originalBindings:
-            project.data.drawing?.originalBindings ??
-            project.data.operations.map(({ id, sourceObjects, sourceLayers, geometryBinding }) => ({
-              id,
-              sourceObjects,
-              sourceLayers,
-              geometryBinding,
-            })),
-          inputKey: drawingInputKey(project.data.imports),
-          response: preview,
-        },
-        project.data.operations,
-        ops,
-      ),
-      project.target(),
-    );
-    project.sel.selectedObjects = new Set();
-    response = null;
-    preview = null;
-    captured = '';
-    selected = [];
+  async function apply() {
+    if (!preview || !previewInput || stale || conflict || busy) return;
+    const key = current,
+      token = ++epoch;
+    busy = true;
+    try {
+      const checked = await scopedRequest({
+        kind: 'apply',
+        version: 2,
+        preview: previewInput,
+        current: context(),
+      });
+      if (token !== epoch || key !== current)
+        throw new Error('Drawing preview is stale; analyze again');
+      if (!checked.local_edit_accepted) throw new Error('Backend did not accept this local edit');
+      preview = checked;
+      const ops = project.data.operations.map((op, i) => ({
+        ...op,
+        geometryBinding: preview!.bindings[i],
+        ...(preview!.bindings[i]?.kind === 'contours'
+          ? { sourceObjects: preview!.binding_indices[i]?.map((n) => n + 1) ?? op.sourceObjects }
+          : {}),
+      }));
+      project.history.exec(
+        drawingCommand(
+          project.data.drawing,
+          {
+            version: 2,
+            originalBindings:
+              project.data.drawing?.originalBindings ??
+              project.data.operations.map(
+                ({ id, sourceObjects, sourceLayers, geometryBinding }) => ({
+                  id,
+                  sourceObjects,
+                  sourceLayers,
+                  geometryBinding,
+                }),
+              ),
+            inputKey: drawingInputKey(project.data.imports),
+            response: preview,
+          },
+          project.data.operations,
+          ops,
+        ),
+        project.target(),
+      );
+      project.sel.selectedObjects = new Set();
+      response = null;
+      preview = null;
+      captured = '';
+      selected = [];
+      previewInput = null;
+    } catch (e) {
+      error = cleanupError(e);
+      errorDetails = cleanupTechnicalDetails(e);
+    } finally {
+      if (token === epoch) busy = false;
+    }
   }
   function reset() {
     if (!project.data.drawing) return;
@@ -376,12 +442,39 @@
     {#if response}
       <p class="muted">{t('cleanup.limit', { value: tolerance })}</p>
       {#if !response.findings.length}<p>{t('cleanup.empty')}</p>{/if}
+      <p class="muted">{t('cleanup.scoped_note')}</p>
+      {#if !response.topology.complete}<p role="alert">
+          {t('cleanup.topology_incomplete')}
+        </p>{/if}
+      {#each response.topology.issues as issue, i (i)}
+        <button
+          class="btn btn-small"
+          onclick={() => {
+            highlighted = i;
+            overview = true;
+          }}
+          >{issue.contours.length
+            ? issue.contours.map((id) => `Drawing ${id.import} · contour ${id.entity}`).join(' / ')
+            : t('cleanup.global_issue')}: {issue.message}</button
+        >
+      {/each}
+      {#each response.continuity.filter((c) => !c.exact) as c (`${c.contour.import}/${c.contour.entity}`)}
+        <p class="muted">
+          {t('cleanup.continuity_gap', {
+            contour: c.contour.entity,
+            gap: c.max_gap_mm.toPrecision(6),
+          })}
+        </p>
+      {/each}
       <div class="findings">
         {#each response.findings as finding, i (i)}
           <label
             ><input
               type="checkbox"
-              disabled={!finding.repair || busy || stale}
+              disabled={finding.repair?.kind !== 'gap' ||
+                busy ||
+                stale ||
+                !response.topology.complete}
               checked={selected.includes(i)}
               onchange={(e) => {
                 selected = e.currentTarget.checked
@@ -399,28 +492,29 @@
           >
         {/each}
       </div>
-      {#if preview}
+      {#if preview || highlighted !== null}
         <label><input type="checkbox" bind:checked={overview} />{t('cleanup.overview')}</label>
-        <svg viewBox={box} aria-label={t('cleanup.preview_label')} role="img">
+        <svg viewBox="0 0 1000 1000" aria-label={t('cleanup.preview_label')} role="img">
           {#each response.evaluated.segments as s, i (i)}{#if s.type === 'LINE'}<line
-                x1={s.start.x}
-                y1={-s.start.y}
-                x2={s.end.x}
-                y2={-s.end.y}
-                stroke="currentColor"
-                stroke-dasharray="3 3"
+                x1={viewX(s.start.x)}
+                y1={viewY(s.start.y)}
+                x2={viewX(s.end.x)}
+                y2={viewY(s.end.y)}
+                stroke={diagnosticEdges.has(edgeIds[i]) ? 'var(--danger, #ef6767)' : 'currentColor'}
+                stroke-width={diagnosticEdges.has(edgeIds[i]) ? 0.5 : 0.1}
+                stroke-dasharray={diagnosticEdges.has(edgeIds[i]) ? undefined : '3 3'}
               />{/if}{/each}
-          {#each preview.changes as change (`${change.id.import}/${change.id.entity}`)}{#if change.after}<line
-                x1={change.after.start.x}
-                y1={-change.after.start.y}
-                x2={change.after.end.x}
-                y2={-change.after.end.y}
+          {#each preview?.changes ?? [] as change (`${change.id.import}/${change.id.entity}`)}{#if change.after}<line
+                x1={viewX(change.after.start.x)}
+                y1={viewY(change.after.start.y)}
+                x2={viewX(change.after.end.x)}
+                y2={viewY(change.after.end.y)}
                 stroke="var(--accent, #4a90e2)"
               />{/if}{/each}
         </svg>
         <p class="muted">
           {t('cleanup.legend', {
-            count: preview.bindings.filter((b) => b.kind === 'unresolved').length,
+            count: (preview?.bindings ?? []).filter((b) => b.kind === 'unresolved').length,
           })}
         </p>
       {/if}

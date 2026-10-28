@@ -20,6 +20,7 @@ export type WorkerMethod =
   | 'renderTextLayer'
   | 'computeHelixRadius'
   | 'cornerRelief'
+  | 'evaluateDrawingV2'
   | 'evaluateDrawing'
   | 'generateDrawing'
   | 'rasterizeStl';

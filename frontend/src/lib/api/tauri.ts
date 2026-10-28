@@ -1,3 +1,4 @@
+import type { ScopedRequest, ScopedResponse } from './types';
 import { assertCuttingCapability } from './cutting-contract';
 import type { DrawingRequest, DrawingResponse, DrawingGenerationRequest } from './types';
 import type { CornerReliefRequest, CornerReliefResponse } from './types';
@@ -200,6 +201,9 @@ export class TauriWiacClient implements WiacClient {
     return invoke<RenderTextLayerResponse>('render_text_layer', { layer });
   }
 
+  async evaluateDrawingV2(request: ScopedRequest): Promise<ScopedResponse> {
+    return invoke('evaluate_drawing_v2_cmd', { req: request });
+  }
   async evaluateDrawing(request: DrawingRequest): Promise<DrawingResponse> {
     return invoke('evaluate_drawing_cmd', { req: request });
   }

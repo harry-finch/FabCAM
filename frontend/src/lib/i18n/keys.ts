@@ -183,10 +183,12 @@ export type MsgKey =
   | "cleanup.busy"
   | "cleanup.close"
   | "cleanup.connector"
+  | "cleanup.continuity_gap"
   | "cleanup.contour"
   | "cleanup.deviation"
   | "cleanup.edited"
   | "cleanup.empty"
+  | "cleanup.global_issue"
   | "cleanup.intro"
   | "cleanup.legend"
   | "cleanup.limit"
@@ -200,6 +202,7 @@ export type MsgKey =
   | "cleanup.preview_label"
   | "cleanup.reselect"
   | "cleanup.reset"
+  | "cleanup.scoped_note"
   | "cleanup.select_first"
   | "cleanup.simplify"
   | "cleanup.snap"
@@ -207,6 +210,7 @@ export type MsgKey =
   | "cleanup.technical_details"
   | "cleanup.title"
   | "cleanup.tolerance"
+  | "cleanup.topology_incomplete"
   | "common.apply"
   | "common.cancel"
   | "common.close"
@@ -2528,10 +2532,12 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "cleanup.busy",
   "cleanup.close",
   "cleanup.connector",
+  "cleanup.continuity_gap",
   "cleanup.contour",
   "cleanup.deviation",
   "cleanup.edited",
   "cleanup.empty",
+  "cleanup.global_issue",
   "cleanup.intro",
   "cleanup.legend",
   "cleanup.limit",
@@ -2545,6 +2551,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "cleanup.preview_label",
   "cleanup.reselect",
   "cleanup.reset",
+  "cleanup.scoped_note",
   "cleanup.select_first",
   "cleanup.simplify",
   "cleanup.snap",
@@ -2552,6 +2559,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "cleanup.technical_details",
   "cleanup.title",
   "cleanup.tolerance",
+  "cleanup.topology_incomplete",
   "common.apply",
   "common.cancel",
   "common.close",

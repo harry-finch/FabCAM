@@ -1,3 +1,4 @@
+import { validateDrawingSnapshot } from '../state/drawing-load';
 import { clearForDrawingImport } from '../state/stock-placement';
 import { programExportStatus } from '../state/program-qualification';
 import { exportSafetyProblem } from '../state/generate-palette-policy';
@@ -1159,51 +1160,5 @@ export async function loadMachine() {
 }
 
 async function validateDrawingLoad(file: import('../state/project-types').ProjectFile) {
-  if (!file.drawing) return file;
-  const client = defaultClient();
-  if (!client.evaluateDrawing)
-    throw new Error('Backend cannot validate edited geometry; project was not opened.');
-  const evaluated = await client.evaluateDrawing({
-    kind: 'evaluate',
-    version: 1,
-    tolerance_mm: 0.1,
-    simplification_mm: null,
-    drawing: file.drawing.response.drawing,
-  });
-  if (evaluated.version !== 1) throw new Error('Unsupported edited drawing backend');
-  if (evaluated.drawing.imports.length !== file.imports.length)
-    throw new Error('Edited import count mismatch');
-  const geometryKey = (segments: import('../api/types').Segment[]) =>
-    JSON.stringify(
-      segments.map((s) => [
-        s.type,
-        s.start.x,
-        s.start.y,
-        s.end.x,
-        s.end.y,
-        s.bulge ?? 0,
-        s.center?.x ?? null,
-        s.center?.y ?? null,
-        s.layer ?? '0',
-        s.color ?? 7,
-      ]),
-    );
-  for (const source of evaluated.drawing.imports) {
-    const original = file.imports.find((i) => i.id === source.id);
-    if (!original || geometryKey(original.source.segments) !== geometryKey(source.original))
-      throw new Error('Edited drawing original source mismatch');
-    const t = original.fileTransform;
-    if (
-      source.transform.scale !== t.scale ||
-      source.transform.rotation_deg !== t.rotateDeg ||
-      source.transform.translate.x !== t.translate.x ||
-      source.transform.translate.y !== t.translate.y ||
-      source.transform.mirror_x !== t.mirrorX ||
-      source.transform.mirror_y !== t.mirrorY ||
-      source.pivot.x !== (original.source.bbox.min_x + original.source.bbox.max_x) / 2 ||
-      source.pivot.y !== (original.source.bbox.min_y + original.source.bbox.max_y) / 2
-    )
-      throw new Error('Edited drawing transform/pivot mismatch');
-  }
-  return { ...file, drawing: { ...file.drawing, response: evaluated } };
+  return validateDrawingSnapshot(file, defaultClient());
 }

@@ -66,3 +66,6 @@ export type RemovalSide = components['schemas']['RemovalSide'];
 export type DrawingRequest = components['schemas']['DrawingRequest'];
 export type DrawingResponse = components['schemas']['DrawingResponse'];
 export type DrawingGenerationRequest = components['schemas']['DrawingGenerationRequest'];
+
+export type ScopedRequest = components['schemas']['ScopedRequest'];
+export type ScopedResponse = components['schemas']['ScopedResponse'];
