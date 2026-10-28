@@ -17,9 +17,18 @@ original outcomes and scope.
 separates software qualification, browser coverage and outstanding native/human
 acceptance. Manual stock anchoring, explicit import placement, cutter feedback,
 cleanup states and frontend build visibility do not implement ALPHA-2 topology
-repair, ALPHA-3 finishing or ALPHA-4 preset reuse. These remain **PLANNED**, with
+repair, ALPHA-3 finishing or ALPHA-4 preset reuse. ALPHA-3/4 remain **PLANNED**, with
 separate approval required; no milestone is started automatically. No new packaging
 or integration with TOOL-META is authorized by this completion.
+
+**ALPHA-2 — bounded diagnostics/repair:** implemented on isolated
+`fix/alpha-2-geometry`, base `4d0bf277`, software commit `58ddde72295a01cbe43ce0270c98e1f79f2f1039`. The approved v2 diagnostic and
+snapshot contract preserves drawing/CAM v1 and guarded project v9. The
+[source-bound results](ALPHA_2_GEOMETRY_REPAIR_RESULTS.md) record the conservative
+isolated-envelope proof, private drawing refusals, reader compatibility and
+software/browser evidence. **Bounded human acceptance and focused local commits approved; integration remains separate.**
+No integration, installer, physical qualification or next milestone is authorized
+by successful local editing.
 
 
 **Approved product strategy:** personal evaluation on the maintainer's own Mac,

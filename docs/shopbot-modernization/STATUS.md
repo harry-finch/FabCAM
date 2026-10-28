@@ -1,5 +1,15 @@
 # FabCAM — current status
 
+ALPHA-1 checkpoint accepted by the user; native/physical gates remain separate.
+ALPHA-2 protocol separation is approved and implemented locally on isolated
+`fix/alpha-2-geometry`, software commit `58ddde72295a01cbe43ce0270c98e1f79f2f1039` and the qualified source inventory in the
+[qualification report](../releases/ALPHA_2_GEOMETRY_REPAIR_RESULTS.md).
+Explicit diagnostic/snapshot v2 retains drawing/CAM v1 and guarded project v9.
+Only proven isolated line-gap edits and unchanged single-owner placements are
+accepted; overlapping/nested envelopes and all unproven cases refuse. The private
+drawing is diagnosed, not repaired or CAM-qualified. **Bounded implementation accepted; three focused local commits authorized. HARD STOP after consolidation; no integration or next milestone.**
+
+
 ALPHA-1 is completed locally on isolated `fix/alpha-stock-diagnostics`, executable
 source `b0c2f208bc0de1d38f733d378abbb0b85600785d`; primary V1.1 is not advanced.
 [Stock/import/diagnostic report](../releases/ALPHA_1_STOCK_IMPORT_DIAGNOSTICS.md)

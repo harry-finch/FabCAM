@@ -1,0 +1,213 @@
+{
+  "date": "2026-10-28",
+  "base_sha": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+  "branch": "fix/alpha-2-geometry",
+  "implementation_commits": [
+    "8296fc12b5bf2b080c6c36ae27df597a8cb423eb",
+    "58ddde72295a01cbe43ce0270c98e1f79f2f1039"
+  ],
+  "source_state": "committed; all software bytes match the qualified inventory",
+  "source_fingerprint_sha256": "eeb3a6f0fed2c8cc47fb2a66bc1d6a61d5ee83cc78f8ac6b93f806ed9028c462",
+  "source_files_sha256": {
+    "crates/ivac-core/examples/alpha2_probe.rs": "e4b032a7e33833baa12b470200a2fbeddf5419c354adc1ee1ba90373e0191f60",
+    "crates/ivac-core/src/drawing/api.rs": "9ce0ff72feb1d7c438151ddb6f98c2b21f96bcf98e9bd75bc3f476a60b0defbd",
+    "crates/ivac-core/src/drawing/diagnostics.rs": "4f68f30579fee5746bf6a2630c22681952d1592f233fb0b2ed51d9e91bac0762",
+    "crates/ivac-core/src/drawing/mod.rs": "df636bcdaa5735274d3c01a15cb3b3b4aa1f2097616278b76bd9b80664126a87",
+    "crates/ivac-core/src/drawing/repair.rs": "d5b6e453ac22d9482f3bb2138f34092ba502548bd97b7a777ad0b5164698a410",
+    "crates/ivac-core/src/drawing/scoped.rs": "0e0ec7a67172d0711ff6dcdf72de33629ea7f5cc2ebf253a84ae855675f5c200",
+    "crates/ivac-core/src/drawing/topology.rs": "49261f7c1f59de0753cff498ebeca24ca13a86526c97b4a39dc2c1fe64323f71",
+    "crates/ivac-core/src/lib.rs": "beea7421c7340f37b74e42e9b809841ec645bea2cf58ba5cec0c2e02d1b5c3a8",
+    "crates/ivac-core/tests/alpha2_baseline.rs": "5e609b647b0e14d2ca966908c7e1d4fa24e4fd1801b82644c37ec999dbe45ae7",
+    "crates/ivac-core/tests/alpha2_protocol.rs": "675db083710b693ebd9df6c3beb45756e882846641f29037aab0b436acbd4f52",
+    "crates/ivac-core/tests/alpha2_scoped.rs": "664e2c28a649cc1c8557ed4ad4f08a30030ce29abb71375eeb34c749ee47407f",
+    "crates/ivac-core/tests/alpha2_support/mod.rs": "f7041bed8c7738120eda68e214897f84a89e0948eab5507a18c02d293aa2b8d0",
+    "crates/ivac-server/src/main.rs": "6a2a356641de8aa6968afb02bcbbbf530e22346f304b0f037d785fc81b39ce13",
+    "crates/ivac-tauri/src/commands.rs": "b6c57881a118d94d6ee8ade13746289235e41c323f6ae98ea0721085703a33e0",
+    "crates/ivac-tauri/src/lib.rs": "62b3b1b4d67237abdc23385fece48731a6ae3bce20d45fd5ec5f224d1145046a",
+    "crates/ivac-wasm/src/lib.rs": "2cdecbdacbf070b3a708d11f4fd36b05407aa21f0fc379c327104fbea4c53584",
+    "frontend/src/lib/api/build-project.ts": "f4e1ededfa4911d55a4ba0aca461c9d54bbde17fea74e87466a784cfa188b0dc",
+    "frontend/src/lib/api/client.ts": "a041eacba4ba5dbaa5638e34a6f3a03cc8dde7c4a13d544662d0bc39c173772f",
+    "frontend/src/lib/api/generated.ts": "6be22b4998e8f7dfefa6a89a501c7f5c60effd2c1946fd99ac4a627c444e0689",
+    "frontend/src/lib/api/http.ts": "85eeeb26fab83c37be1786b3502f00a651c6d16253ca4b767bd2b0acd7e95497",
+    "frontend/src/lib/api/tauri.ts": "5e83afd581c9ce4398e64be9e6785fc32d2c3919ea2e81f52ec4088555f7c701",
+    "frontend/src/lib/api/types.ts": "aa4809434b532cedfc820837e3bfb5d5bac0671d86272d233e94456c177b69fc",
+    "frontend/src/lib/api/wasm-fatal.test.ts": "5464b8358710bc3aadc1cb9812e96441e1404e282adc255b280c25785faf9b19",
+    "frontend/src/lib/api/wasm-worker-client.ts": "aef7919c39afcb77953339d1783bd5cb29c1d34df9d712648a2e98f0261557b1",
+    "frontend/src/lib/api/wasm-worker-protocol.ts": "6a454aa22018cf3d468b3d666fa6a1cab319917d1e38bf58a984baed0d6122a3",
+    "frontend/src/lib/api/wasm.ts": "96007bbc9136e4f8c0c628d35728ca3dfe617b2589ed489f508b450ae59017ef",
+    "frontend/src/lib/api/wasm.worker.ts": "404f228441a79223330ac5d9858986870fd36ba2d5a1ed1de3be1b2c697753cc",
+    "frontend/src/lib/components/DrawingCleanupPanel.svelte": "03c09291a20f733b7403505f6487a2b373330d142151966bf7f6566a6e8cd1e9",
+    "frontend/src/lib/i18n/keys.ts": "7e68b7600b5de3284376db6deb6bf7fc07da60ed5eab87630557e9485865df51",
+    "frontend/src/lib/i18n/messages/de.json": "66e265d2be50c241b81a8334220153b6acf9a0f840e5a8fbdb3247c894e00ed9",
+    "frontend/src/lib/i18n/messages/en.json": "f3ef0b14806eed92b06de9cd803dd8a6cea4da3976d40f604671406a487717fb",
+    "frontend/src/lib/services/file_ops.ts": "81485046018759c4165f3f0f6fd772bd6dc6344ddb5861f46a8ec2b510067f2f",
+    "frontend/src/lib/state/alpha2-wasm.test.ts": "3bbc524cf610078e3b2292ea93fc060ee02905103be677dc8fd2966aa11dcf48",
+    "frontend/src/lib/state/drawing-load.ts": "d6c113a7932412836075c0ea888ee537232ab07c7edcd6f10dc13fffe6b2c8f5",
+    "frontend/src/lib/state/drawing.ts": "5641c157d1169357cb740c259dcd9557399c9a296ec15d9f36b1305e33f362ff",
+    "frontend/src/lib/state/generation-context.ts": "4d711d951baf254b09d1fe4cd29f9a67c5a5b7b439958f124704be3c6a47cf79",
+    "frontend/src/lib/state/project-geometry-v1-reader.fixture.ts": "3d0f358ee4850f7d598c30633a513b9c3888f21226397045512c7dc3f4651549",
+    "frontend/src/lib/state/project-geometry-validation.ts": "b1b29cf32e05bde7318cbe319292392ed49be8ef7ae033879fe62eff2bb2a1f7",
+    "schema/openapi.yaml": "1a9f31d2db8049a133ca9cef52573cccb018b18221d36dc7bc718380124a2fc0"
+  },
+  "software_gates": {
+    "passed": 20,
+    "failed": 0,
+    "rust": {
+      "pass": 1609,
+      "fail": 0,
+      "ignored_existing_worker": 1
+    },
+    "frontend": {
+      "files": 177,
+      "pass": 1540,
+      "optional_skip": 1
+    },
+    "frozen_cnc_corpus": {
+      "cases": 23,
+      "exact": 23
+    }
+  },
+  "evidence_sha256": {
+    "dist-test/alpha2/baseline.log": "743bc8d9a00feddc8c819501610def760dcca850e3f50c68bf5c9fef54e236cd",
+    "dist-test/alpha2/raw-order-baseline.log": "76f4f98834d07cf8688334ae75567b528cfad7166da2b1a1aed8b0dfdaf00be3",
+    "dist-test/alpha2/raw-order-corrected.log": "899e0c912e5d45b33c21763ff1873407e070e6d26609b9c05fc99dcf0aec67d9",
+    "dist-test/alpha2/raw-order-clippy.log": "7643668c634a74494d7daebd1a20030f3c8faf441d418e294a4d9018cb34f341",
+    "dist-test/alpha2/focused-final.log": "99e635245bb24dd69b5e0cc0dff8e2aa6d2095ddc2b993c85474dfd2c7bf8a20",
+    "dist-test/alpha2/release-gate-source-proof.log": "94f97b6756343949da5ccd206ec4f495181a341084837b55958f05226828e04e",
+    "dist-test/alpha2/release-gate-complete.log": "af1ab4cd73f88c5b629c5fcf8b93efa42bfe33e21a791f442625cbe0604cdb23",
+    "dist-test/alpha2/release-gate-final.log": "08e8037829400ac2d4703d845fb4faaf965cbdbe72bce709541114f19e6cbb32",
+    "dist-test/alpha2/release-gate-qualified-source.log": "ae9c1495e1e736b79fd8a195e18f341c3fb5747f568ccbf7ed4fb7471afff514",
+    "dist-test/alpha2/native-v2.log": "5b69e00cf0309aa317ba320a71226cd03a354cd6a1d7c73c6bed49064f44cdf3",
+    "dist-test/alpha2/wasm-final.log": "84939e6a078b7a23487d04fb503f627e51c04e5a50af837eb24e9c9c9f2de6cb",
+    "dist-test/alpha2/output-corpus-qualified.log": "1b6f7b1a2b774eacd62afd29456b15dec423489333d9aea45585a40b65256786",
+    "dist-test/alpha2/private-v2-final.log": "8d57434a7d58fc601fb78ef7e3277bd48107d79046edbbf20ef3e033e9be73be"
+  },
+  "baseline_evidence_preserved": true,
+  "private_source_sha256": "36ecdf0b3498b3df40fdf9e6c39bdf82fb300bf10dae96cb865578ca3bbf4a1a",
+  "private_probe": {
+    "gaps": 10,
+    "proper_crossings": 3,
+    "v2_analysis_complete": true,
+    "individual_previews": 20,
+    "accepted": 0
+  },
+  "synthetic_screenshots_sha256": {
+    "docs/releases/evidence/alpha2/microgap-preview.jpg": "e2d4201e14ab2413107a68c4f79277e3f57a94b505f0ee05f887874b3fcdea0a",
+    "docs/releases/evidence/alpha2/narrow-keyboard.jpg": "d11b3a1efd22d0357a7d95c116428f65e6095feb354e806f2f1ac2cd3cfe1929",
+    "docs/releases/evidence/alpha2/reopened-source-proof.jpg": "186f36e99bd82bc80c4128b701cff0a2fcc2e25b4f59c33c9bbcb8a0347a1d98",
+    "docs/releases/evidence/alpha2/structured-crossing.jpg": "bf6486698f491c8f7f540ee28ed63d20e1c2c567bc22ae2d843387f27793a0c4"
+  },
+  "preserved_worktrees": {
+    "primary_v11": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+    "alpha1": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+    "tool_meta": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d"
+  },
+  "limits": [
+    "isolated-envelope line-gap repair only; nested/overlapping envelopes refuse",
+    "exact evaluated source or proven untouched identity-transform raw layout only",
+    "live text unsupported in this proof slice",
+    "unchanged explicit single-contour placements only; zero XY work offset; CAM guard unchanged",
+    "private drawing not repaired or CAM-qualified",
+    "installed native, physical and human UX acceptance remain open",
+    "no commit, merge, push, package or publication"
+  ],
+  "old_reader_verification": {
+    "versions": [
+      "1f353ef3b774382f63e67f93a9bb3a4652007de2",
+      "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+      "4d0bf277c4023acc980f39accf8c8a40b77dbd13"
+    ],
+    "validator_sha256": "3d0f358ee4850f7d598c30633a513b9c3888f21226397045512c7dc3f4651549",
+    "all_same_bytes": true,
+    "frozen_actual_validator_rejects_v2": true
+  },
+  "browser_final": {
+    "url": "http://127.0.0.1:18855/?api=wasm",
+    "input": "synthetic distant crossing plus 0.00005 mm gap",
+    "apply_undo_redo_segments": [
+      7,
+      6,
+      7
+    ],
+    "save_reopen": {
+      "project": 9,
+      "snapshot": 2,
+      "response": 2,
+      "drawing": 1,
+      "segments": 7
+    },
+    "remaining_crossing_diagnosed": true,
+    "installed_native_claimed": false
+  },
+  "proposed_commit_inventory": [
+    {
+      "title": "Rust v2 diagnostics, scoped proof, transport and regressions",
+      "files": [
+        "crates/ivac-core/examples/alpha2_probe.rs",
+        "crates/ivac-core/src/drawing/api.rs",
+        "crates/ivac-core/src/drawing/diagnostics.rs",
+        "crates/ivac-core/src/drawing/mod.rs",
+        "crates/ivac-core/src/drawing/repair.rs",
+        "crates/ivac-core/src/drawing/scoped.rs",
+        "crates/ivac-core/src/drawing/topology.rs",
+        "crates/ivac-core/src/lib.rs",
+        "crates/ivac-core/tests/alpha2_baseline.rs",
+        "crates/ivac-core/tests/alpha2_protocol.rs",
+        "crates/ivac-core/tests/alpha2_scoped.rs",
+        "crates/ivac-core/tests/alpha2_support/mod.rs",
+        "crates/ivac-server/src/main.rs",
+        "crates/ivac-tauri/src/commands.rs",
+        "crates/ivac-tauri/src/lib.rs",
+        "crates/ivac-wasm/src/lib.rs",
+        "schema/openapi.yaml",
+        "frontend/src/lib/api/generated.ts"
+      ]
+    },
+    {
+      "title": "Frontend v2 lifecycle, reader guards and diagnostic UX",
+      "files": [
+        "frontend/src/lib/api/build-project.ts",
+        "frontend/src/lib/api/client.ts",
+        "frontend/src/lib/api/http.ts",
+        "frontend/src/lib/api/tauri.ts",
+        "frontend/src/lib/api/types.ts",
+        "frontend/src/lib/api/wasm-fatal.test.ts",
+        "frontend/src/lib/api/wasm-worker-client.ts",
+        "frontend/src/lib/api/wasm-worker-protocol.ts",
+        "frontend/src/lib/api/wasm.ts",
+        "frontend/src/lib/api/wasm.worker.ts",
+        "frontend/src/lib/components/DrawingCleanupPanel.svelte",
+        "frontend/src/lib/i18n/keys.ts",
+        "frontend/src/lib/i18n/messages/de.json",
+        "frontend/src/lib/i18n/messages/en.json",
+        "frontend/src/lib/services/file_ops.ts",
+        "frontend/src/lib/state/alpha2-wasm.test.ts",
+        "frontend/src/lib/state/drawing-load.ts",
+        "frontend/src/lib/state/drawing.ts",
+        "frontend/src/lib/state/generation-context.ts",
+        "frontend/src/lib/state/project-geometry-v1-reader.fixture.ts",
+        "frontend/src/lib/state/project-geometry-validation.ts"
+      ]
+    },
+    {
+      "title": "ALPHA-2 evidence and checkpoint documentation",
+      "files": [
+        "docs/releases/ALPHA_2_GEOMETRY_REPAIR_RESULTS.md",
+        "docs/releases/ALPHA_2_PROTOCOL_PREFLIGHT.md",
+        "docs/releases/ALPHA_2_QUALIFICATION_RECEIPT.json",
+        "docs/releases/RELEASE_ROADMAP.md",
+        "docs/releases/evidence/alpha2/microgap-preview.jpg",
+        "docs/releases/evidence/alpha2/narrow-keyboard.jpg",
+        "docs/releases/evidence/alpha2/reopened-source-proof.jpg",
+        "docs/releases/evidence/alpha2/structured-crossing.jpg",
+        "docs/shopbot-modernization/STATUS.md"
+      ]
+    }
+  ],
+  "qualified_gate_log": "dist-test/alpha2/release-gate-qualified-source.log",
+  "qualified_cli_sha256": "d1e9351ef448f0fec989c670ec09a99fe5a96b01343d7bf513a5f62d245a46d8",
+  "browser_distribution_index_sha256": "5673c12f4b7134c36b745b324db888d93edfeb10802a3d81212adc38bae2b32a",
+  "final_software_sha": "58ddde72295a01cbe43ce0270c98e1f79f2f1039",
+  "human_acceptance": "approved bounded implementation; no machining or installed-platform acceptance",
+  "post_commit_source_match": true
+}
