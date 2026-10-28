@@ -62,27 +62,7 @@ pub fn validate(d: &Drawing) -> Result<(), String> {
         return Err("Topology analysis budget exceeded (2000 segments); no repair accepted".into());
     }
     for s in &e.segments {
-        if matches!(s.kind, SegmentKind::Arc | SegmentKind::Circle) {
-            let v = cavalier_contours::polyline::PlineVertex::new(s.start.x, s.start.y, s.bulge);
-            if s.start == s.end || s.bulge == 0.0 || v.bulge_is_zero() {
-                return Err("Degenerate or near-flat curve intersection is not qualified".into());
-            }
-            let (center, radius, _, _) = crate::math::bulge_to_arc(s.start, s.end, s.bulge);
-            if !center.x.is_finite()
-                || !center.y.is_finite()
-                || !(radius * radius).is_finite()
-                || s.center
-                    .is_some_and(|c| c.distance(center) > CURVE_INCIDENCE_MM)
-            {
-                return Err("Inconsistent or numerically unbounded curve geometry".into());
-            }
-        }
-        if s.kind != SegmentKind::Line {
-            continue;
-        }
-        if s.start == s.end {
-            return Err("Repair would retain a zero-length line".into());
-        }
+        validate_segment(s)?;
     }
     // Sort on minimum X to prune separated pairs; bounded even on dense overlaps.
     let bounds: Vec<_> = e
@@ -115,40 +95,7 @@ pub fn validate(d: &Drawing) -> Result<(), String> {
                 && (i.abs_diff(j) == 1
                     || (e.membership[..i.min(j)].last() != Some(&e.membership[i])
                         && e.membership.get(i.max(j) + 1) != Some(&e.membership[i])));
-            if a.kind != SegmentKind::Line || b.kind != SegmentKind::Line {
-                validate_curve_pair(a, b, adjacent)?;
-                continue;
-            }
-            let o1 = orient(a.start, a.end, b.start)?;
-            let o2 = orient(a.start, a.end, b.end)?;
-            let o3 = orient(b.start, b.end, a.start)?;
-            let o4 = orient(b.start, b.end, a.end)?;
-            let intersects = (o1 * o2 < 0 && o3 * o4 < 0)
-                || (o1 == 0 && on(a.start, a.end, b.start))
-                || (o2 == 0 && on(a.start, a.end, b.end))
-                || (o3 == 0 && on(b.start, b.end, a.start))
-                || (o4 == 0 && on(b.start, b.end, a.end));
-            if !intersects {
-                continue;
-            }
-            let shared = [a.start, a.end]
-                .iter()
-                .any(|p| *p == b.start || *p == b.end);
-            if same && shared && adjacent {
-                // Two straight segments sharing only their end are allowed;
-                // collinear backtracking/overlap is not.
-                if o1 != 0 || o2 != 0 {
-                    continue;
-                }
-                let positive_x = a.start.x.max(a.end.x).min(b.start.x.max(b.end.x))
-                    - a.start.x.min(a.end.x).max(b.start.x.min(b.end.x));
-                let positive_y = a.start.y.max(a.end.y).min(b.start.y.max(b.end.y))
-                    - a.start.y.min(a.end.y).max(b.start.y.min(b.end.y));
-                if positive_x <= 0. && positive_y <= 0. {
-                    continue;
-                }
-            }
-            return Err("Crossing, overlap or touching contours require explicit review".into());
+            validate_pair(a, b, adjacent)?;
         }
     }
     Ok(())
@@ -277,6 +224,72 @@ pub fn preserve_containment(before: &Drawing, after: &Drawing) -> Result<(), Str
         }
     }
     Ok(())
+}
+
+pub(super) fn validate_segment(s: &crate::Segment) -> Result<(), String> {
+    if matches!(s.kind, SegmentKind::Arc | SegmentKind::Circle) {
+        let v = cavalier_contours::polyline::PlineVertex::new(s.start.x, s.start.y, s.bulge);
+        if s.start == s.end || s.bulge == 0.0 || v.bulge_is_zero() {
+            return Err("Degenerate or near-flat curve intersection is not qualified".into());
+        }
+        let (center, radius, _, _) = crate::math::bulge_to_arc(s.start, s.end, s.bulge);
+        if !center.x.is_finite()
+            || !center.y.is_finite()
+            || !(radius * radius).is_finite()
+            || s.center
+                .is_some_and(|c| c.distance(center) > CURVE_INCIDENCE_MM)
+        {
+            return Err("Inconsistent or numerically unbounded curve geometry".into());
+        }
+    }
+    if s.kind != SegmentKind::Line {
+        return Ok(());
+    }
+    if s.start == s.end {
+        return Err("Repair would retain a zero-length line".into());
+    }
+    Ok(())
+}
+
+pub(super) fn validate_pair(
+    a: &crate::Segment,
+    b: &crate::Segment,
+    adjacent: bool,
+) -> Result<(), String> {
+    if a.kind != SegmentKind::Line || b.kind != SegmentKind::Line {
+        validate_curve_pair(a, b, adjacent)?;
+        return Ok(());
+    }
+    let o1 = orient(a.start, a.end, b.start)?;
+    let o2 = orient(a.start, a.end, b.end)?;
+    let o3 = orient(b.start, b.end, a.start)?;
+    let o4 = orient(b.start, b.end, a.end)?;
+    let intersects = (o1 * o2 < 0 && o3 * o4 < 0)
+        || (o1 == 0 && on(a.start, a.end, b.start))
+        || (o2 == 0 && on(a.start, a.end, b.end))
+        || (o3 == 0 && on(b.start, b.end, a.start))
+        || (o4 == 0 && on(b.start, b.end, a.end));
+    if !intersects {
+        return Ok(());
+    }
+    let shared = [a.start, a.end]
+        .iter()
+        .any(|p| *p == b.start || *p == b.end);
+    if shared && adjacent {
+        // Two straight segments sharing only their end are allowed;
+        // collinear backtracking/overlap is not.
+        if o1 != 0 || o2 != 0 {
+            return Ok(());
+        }
+        let positive_x = a.start.x.max(a.end.x).min(b.start.x.max(b.end.x))
+            - a.start.x.min(a.end.x).max(b.start.x.min(b.end.x));
+        let positive_y = a.start.y.max(a.end.y).min(b.start.y.max(b.end.y))
+            - a.start.y.min(a.end.y).max(b.start.y.min(b.end.y));
+        if positive_x <= 0. && positive_y <= 0. {
+            return Ok(());
+        }
+    }
+    Err("Crossing, overlap or touching contours require explicit review".into())
 }
 
 #[cfg(test)]

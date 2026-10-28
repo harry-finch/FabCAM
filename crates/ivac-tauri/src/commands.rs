@@ -591,6 +591,17 @@ pub async fn evaluate_drawing_cmd(
         .map_err(|e| serialize_error(WiacError::bad_input(e)))
 }
 #[tauri::command]
+pub async fn evaluate_drawing_v2_cmd(
+    req: ivac_core::drawing::scoped::ScopedRequest,
+) -> Result<ivac_core::drawing::scoped::ScopedResponse, String> {
+    tokio::task::spawn_blocking(move || {
+        ivac_core::drawing::scoped::evaluate(req, &ivac_core::cancel::CancelToken::default())
+    })
+    .await
+    .map_err(|e| internal(format!("join error: {e}")))?
+    .map_err(|e| serialize_error(WiacError::bad_input(e)))
+}
+#[tauri::command]
 pub async fn generate_drawing_cmd(
     req: ivac_core::drawing::api::DrawingGenerationRequest,
 ) -> Result<ivac_core::pipeline::PipelineResponse, String> {
@@ -813,4 +824,64 @@ pub fn preset_command(
     request: ivac_core::presets::PresetCommand,
 ) -> Result<serde_json::Value, String> {
     ivac_core::presets::command(request)
+}
+
+#[cfg(test)]
+mod alpha2_native_tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn explicit_v2_command_and_old_reader_revision_boundary() {
+        use ivac_core::drawing::{api::DrawingRequest, scoped::ScopedRequest, Drawing, Source};
+        let drawing = Drawing::from_sources(vec![Source {
+            id: 1,
+            original: vec![ivac_core::Segment::line(
+                ivac_core::Point2::new(0., 0.),
+                ivac_core::Point2::new(10., 0.),
+                "synthetic",
+                7,
+            )],
+            legacy_objects: vec![],
+            pivot: ivac_core::Point2::new(0., 0.),
+            transform: ivac_core::drawing::Transform::default(),
+            next_entity: 1,
+        }])
+        .unwrap();
+        let input = DrawingRequest::Evaluate {
+            version: 1,
+            drawing,
+            tolerance_mm: Some(0.1),
+            simplification_mm: None,
+        };
+        let response = evaluate_drawing_v2_cmd(ScopedRequest::Analyze {
+            version: 2,
+            input: Box::new(input.clone()),
+        })
+        .await
+        .unwrap();
+        let portable = serde_json::to_value(response).unwrap();
+        assert_eq!(portable["version"], 2);
+        assert_eq!(portable["drawing"]["version"], 1);
+        assert_eq!(portable["local_edit_accepted"], false);
+        assert_eq!(
+            evaluate_drawing_cmd(input.clone()).await.unwrap().version,
+            1
+        );
+        let mut old = serde_json::to_value(input).unwrap();
+        old["version"] = serde_json::json!(2);
+        assert!(evaluate_drawing_cmd(serde_json::from_value(old).unwrap())
+            .await
+            .is_err());
+        assert!(evaluate_drawing_v2_cmd(ScopedRequest::Analyze {
+            version: 1,
+            input: Box::new(DrawingRequest::Evaluate {
+                version: 1,
+                drawing: serde_json::from_value(portable["drawing"].clone()).unwrap(),
+                tolerance_mm: Some(0.1),
+                simplification_mm: None,
+            }),
+        })
+        .await
+        .is_err());
+    }
 }

@@ -71,6 +71,7 @@ async fn main() -> Result<()> {
         .route("/helix-radius", post(helix_radius_handler))
         .route("/corner-relief", post(corner_relief_handler))
         .route("/drawing", post(drawing_handler))
+        .route("/drawing-v2", post(drawing_v2_handler))
         .route("/generate-drawing", post(generate_drawing_handler))
         .route("/presets/command", post(preset_command_handler))
         .route("/relief/stl", post(relief_stl_handler));
@@ -804,6 +805,17 @@ async fn drawing_handler(
         .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
         .map_err(AppError::bad_request)
+}
+async fn drawing_v2_handler(
+    Json(req): Json<ivac_core::drawing::scoped::ScopedRequest>,
+) -> Result<Json<ivac_core::drawing::scoped::ScopedResponse>, AppError> {
+    tokio::task::spawn_blocking(move || {
+        ivac_core::drawing::scoped::evaluate(req, &ivac_core::cancel::CancelToken::default())
+    })
+    .await
+    .map_err(|e| AppError::internal(e.to_string()))?
+    .map(Json)
+    .map_err(AppError::bad_request)
 }
 async fn generate_drawing_handler(
     Json(req): Json<ivac_core::drawing::api::DrawingGenerationRequest>,

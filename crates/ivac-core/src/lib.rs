@@ -160,6 +160,8 @@ pub(crate) fn register_schemas(map: &mut schema::SchemaMap) {
     schema::insert::<presets::PresetCollection>(map, "PresetCollection");
     schema::insert::<cutting_parameters::CuttingCheck>(map, "CuttingCheck");
     schema::insert::<ImportOutput>(map, "ImportResponse");
+    schema::insert::<drawing::scoped::ScopedRequest>(map, "ScopedRequest");
+    schema::insert::<drawing::scoped::ScopedResponse>(map, "ScopedResponse");
     schema::insert::<drawing::api::DrawingRequest>(map, "DrawingRequest");
     schema::insert::<drawing::api::DrawingResponse>(map, "DrawingResponse");
     schema::insert::<drawing::api::DrawingGenerationRequest>(map, "DrawingGenerationRequest");

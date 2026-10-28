@@ -224,6 +224,7 @@ fn run_app() -> tauri::Result<()> {
             commands::compute_helix_radius_cmd,
             commands::corner_relief_cmd,
             commands::evaluate_drawing_cmd,
+            commands::evaluate_drawing_v2_cmd,
             commands::generate_drawing_cmd,
             commands::preset_command,
             preset_collections::list_preset_collections,

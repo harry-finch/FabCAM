@@ -384,6 +384,12 @@ export interface components {
             /** @enum {string} */
             kind: "all";
         };
+        Continuity: {
+            contour: components["schemas"]["Identity"];
+            exact: boolean;
+            /** Format: double */
+            max_gap_mm: number;
+        };
         Contour: {
             edges: components["schemas"]["Edge"][];
             id: components["schemas"]["Identity"];
@@ -2389,6 +2395,13 @@ export interface components {
             /** @enum {string} */
             kind: "simplify";
         };
+        RepairContext: {
+            bindings: components["schemas"]["OperationBinding"][];
+            /** @description Complete frontend document context for stale rejection; never accepted as proof of ownership or serialized in the portable response. */
+            document: unknown;
+            drawing: components["schemas"]["Drawing"];
+            project: components["schemas"]["Project"];
+        };
         RoleRates: {
             /** Format: uint32 */
             feed_mm_min?: number | null;
@@ -2405,6 +2418,45 @@ export interface components {
          * @enum {string}
          */
         ScanDirection: "along_x" | "along_y";
+        ScopedPreview: {
+            context: components["schemas"]["RepairContext"];
+            repairs: components["schemas"]["Repair"][];
+        };
+        ScopedRequest: {
+            input: components["schemas"]["DrawingRequest"];
+            /** @enum {string} */
+            kind: "analyze";
+            /** Format: uint32 */
+            version: number;
+        } | {
+            input: components["schemas"]["ScopedPreview"];
+            /** @enum {string} */
+            kind: "preview";
+            /** Format: uint32 */
+            version: number;
+        } | {
+            current: components["schemas"]["RepairContext"];
+            /** @enum {string} */
+            kind: "apply";
+            preview: components["schemas"]["ScopedPreview"];
+            /** Format: uint32 */
+            version: number;
+        };
+        ScopedResponse: {
+            binding_indices: (number[] | null)[];
+            bindings: components["schemas"]["Binding"][];
+            changes: components["schemas"]["DrawingChange"][];
+            continuity: components["schemas"]["Continuity"][];
+            drawing: components["schemas"]["Drawing"];
+            evaluated: components["schemas"]["Evaluated"];
+            findings: components["schemas"]["Finding"][];
+            legacy_contours: (components["schemas"]["Identity"] | null)[];
+            /** @description Explicitly local edit acceptance. No persisted CAM certificate. */
+            local_edit_accepted: boolean;
+            topology: components["schemas"]["TopologyReport"];
+            /** Format: uint32 */
+            version: number;
+        };
         /**
          * @description A flat LINE/ARC primitive. ARC geometry is encoded as the bulge between `start` and `end` (bulge = `tan(included_angle / 4)`).
          *
@@ -3166,6 +3218,16 @@ export interface components {
              * @description Result-local immutable tool binding. Missing means unknown, never a fallback.
              */
             tool_ref?: number | null;
+        };
+        TopologyIssue: {
+            code: string;
+            contours: components["schemas"]["Identity"][];
+            edges: components["schemas"]["Identity"][];
+            message: string;
+        };
+        TopologyReport: {
+            complete: boolean;
+            issues: components["schemas"]["TopologyIssue"][];
         };
         Transform: {
             mirror_x: boolean;

@@ -348,7 +348,7 @@ impl Drawing {
         }
         Ok(())
     }
-    fn apply_repair(&mut self, repair: &Repair) -> Result<(), String> {
+    pub(super) fn apply_repair(&mut self, repair: &Repair) -> Result<(), String> {
         match repair {
             Repair::RemoveZeroLine { contour, edge } => {
                 let ci = self.contour_index(*contour)?;

@@ -550,6 +550,20 @@ components:
         required:
         - kind
         type: object
+    Continuity:
+      properties:
+        contour:
+          $ref: '#/components/schemas/Identity'
+        exact:
+          type: boolean
+        max_gap_mm:
+          format: double
+          type: number
+      required:
+      - contour
+      - exact
+      - max_gap_mm
+      type: object
     Contour:
       additionalProperties: false
       properties:
@@ -4376,6 +4390,25 @@ components:
         - edge
         - kind
         type: object
+    RepairContext:
+      additionalProperties: false
+      properties:
+        bindings:
+          items:
+            $ref: '#/components/schemas/OperationBinding'
+          type: array
+        document:
+          description: Complete frontend document context for stale rejection; never accepted as proof of ownership or serialized in the portable response.
+        drawing:
+          $ref: '#/components/schemas/Drawing'
+        project:
+          $ref: '#/components/schemas/Project'
+      required:
+      - bindings
+      - document
+      - drawing
+      - project
+      type: object
     RoleRates:
       additionalProperties: false
       properties:
@@ -4413,6 +4446,135 @@ components:
       - along_x
       - along_y
       type: string
+    ScopedPreview:
+      additionalProperties: false
+      properties:
+        context:
+          $ref: '#/components/schemas/RepairContext'
+        repairs:
+          items:
+            $ref: '#/components/schemas/Repair'
+          type: array
+      required:
+      - context
+      - repairs
+      type: object
+    ScopedRequest:
+      oneOf:
+      - additionalProperties: false
+        properties:
+          input:
+            $ref: '#/components/schemas/DrawingRequest'
+          kind:
+            enum:
+            - analyze
+            type: string
+          version:
+            format: uint32
+            minimum: 0.0
+            type: integer
+        required:
+        - input
+        - kind
+        - version
+        type: object
+      - additionalProperties: false
+        properties:
+          input:
+            $ref: '#/components/schemas/ScopedPreview'
+          kind:
+            enum:
+            - preview
+            type: string
+          version:
+            format: uint32
+            minimum: 0.0
+            type: integer
+        required:
+        - input
+        - kind
+        - version
+        type: object
+      - additionalProperties: false
+        properties:
+          current:
+            $ref: '#/components/schemas/RepairContext'
+          kind:
+            enum:
+            - apply
+            type: string
+          preview:
+            $ref: '#/components/schemas/ScopedPreview'
+          version:
+            format: uint32
+            minimum: 0.0
+            type: integer
+        required:
+        - current
+        - kind
+        - preview
+        - version
+        type: object
+    ScopedResponse:
+      properties:
+        binding_indices:
+          items:
+            items:
+              format: uint
+              minimum: 0.0
+              type: integer
+            type:
+            - array
+            - 'null'
+          type: array
+        bindings:
+          items:
+            $ref: '#/components/schemas/Binding'
+          type: array
+        changes:
+          items:
+            $ref: '#/components/schemas/DrawingChange'
+          type: array
+        continuity:
+          items:
+            $ref: '#/components/schemas/Continuity'
+          type: array
+        drawing:
+          $ref: '#/components/schemas/Drawing'
+        evaluated:
+          $ref: '#/components/schemas/Evaluated'
+        findings:
+          items:
+            $ref: '#/components/schemas/Finding'
+          type: array
+        legacy_contours:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/Identity'
+            - type: 'null'
+          type: array
+        local_edit_accepted:
+          description: Explicitly local edit acceptance. No persisted CAM certificate.
+          type: boolean
+        topology:
+          $ref: '#/components/schemas/TopologyReport'
+        version:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - binding_indices
+      - bindings
+      - changes
+      - continuity
+      - drawing
+      - evaluated
+      - findings
+      - legacy_contours
+      - local_edit_accepted
+      - topology
+      - version
+      type: object
     Segment:
       description: |-
         A flat LINE/ARC primitive. ARC geometry is encoded as the bulge between `start` and `end` (bulge = `tan(included_angle / 4)`).
@@ -5724,6 +5886,40 @@ components:
       - from
       - kind
       - to
+      type: object
+    TopologyIssue:
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        contours:
+          items:
+            $ref: '#/components/schemas/Identity'
+          type: array
+        edges:
+          items:
+            $ref: '#/components/schemas/Identity'
+          type: array
+        message:
+          type: string
+      required:
+      - code
+      - contours
+      - edges
+      - message
+      type: object
+    TopologyReport:
+      additionalProperties: false
+      properties:
+        complete:
+          type: boolean
+        issues:
+          items:
+            $ref: '#/components/schemas/TopologyIssue'
+          type: array
+      required:
+      - complete
+      - issues
       type: object
     Transform:
       additionalProperties: false

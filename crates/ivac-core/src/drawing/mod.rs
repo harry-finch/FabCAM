@@ -1,7 +1,9 @@
 //! GEOM1 source-preserving geometry contracts. No machine or process rules.
 //! Coordinates are local mm; tolerance values are drawing-space mm.
 pub mod api;
+pub mod diagnostics;
 pub mod repair;
+pub mod scoped;
 mod topology;
 
 use std::collections::{BTreeMap, BTreeSet};

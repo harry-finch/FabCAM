@@ -241,7 +241,10 @@ pub struct DrawingChange {
     pub before: Option<crate::geometry::Segment>,
     pub after: Option<crate::geometry::Segment>,
 }
-fn drawing_changes(before: &Drawing, after: &Drawing) -> Result<Vec<DrawingChange>, String> {
+pub(super) fn drawing_changes(
+    before: &Drawing,
+    after: &Drawing,
+) -> Result<Vec<DrawingChange>, String> {
     fn edges(
         d: &Drawing,
     ) -> Result<std::collections::BTreeMap<super::Identity, crate::geometry::Segment>, String> {

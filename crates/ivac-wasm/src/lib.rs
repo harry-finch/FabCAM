@@ -374,6 +374,17 @@ pub fn evaluate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
         serde_wasm_bindgen::to_value(&result).map_err(into_js_error)
     })
 }
+#[wasm_bindgen(js_name = evaluateDrawingV2)]
+pub fn evaluate_drawing_v2(request: JsValue) -> Result<JsValue, JsValue> {
+    guard(|| {
+        let req = serde_wasm_bindgen::from_value(request).map_err(into_js_error)?;
+        let result =
+            ivac_core::drawing::scoped::evaluate(req, &ivac_core::cancel::CancelToken::default())
+                .map_err(into_js_error)?;
+        serde::Serialize::serialize(&result, &serde_wasm_bindgen::Serializer::json_compatible())
+            .map_err(into_js_error)
+    })
+}
 #[wasm_bindgen(js_name = generateDrawing)]
 pub fn generate_drawing(request: JsValue) -> Result<JsValue, JsValue> {
     guard(|| {
