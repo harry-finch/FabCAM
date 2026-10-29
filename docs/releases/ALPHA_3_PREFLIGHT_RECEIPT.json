@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-28",
+  "status": "audit complete; proposed version policy awaits approval; no production implementation",
+  "source_sha": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+  "branch": "feature/alpha-3-main-finishing",
+  "accepted_alpha2_software_sha": "58ddde72295a01cbe43ce0270c98e1f79f2f1039",
+  "accepted_alpha2_fingerprint_sha256": "eeb3a6f0fed2c8cc47fb2a66bc1d6a61d5ee83cc78f8ac6b93f806ed9028c462",
+  "inherited_alpha2_files_verified": 39,
+  "inherited_alpha2_mismatches": [],
+  "tracked_production_files_changed": [],
+  "new_audit_tests_sha256": {
+    "crates/ivac-core/tests/alpha3_preflight.rs": "087a14c86c02640e83b8286dbc7887dfa05f0321859dea4c3e13e1c9466f2673",
+    "frontend/src/lib/state/alpha3-reader-preflight.test.ts": "feb53d58e802a320efd02899b98157b3bf189841d58a9562a6a33f8c7dce7571"
+  },
+  "reader_files_sha256_by_revision": {
+    "frontend/src/lib/state/project-v9.ts": {
+      "1f353ef3b774382f63e67f93a9bb3a4652007de2": "bde08cd628ed6157f65a968a778cc0e86cb200415f852d63a1a961bd5e2298e4",
+      "34f41692ef1d90eddf1b3ff3b564d2b8600879d7": "bde08cd628ed6157f65a968a778cc0e86cb200415f852d63a1a961bd5e2298e4",
+      "4d0bf277c4023acc980f39accf8c8a40b77dbd13": "bde08cd628ed6157f65a968a778cc0e86cb200415f852d63a1a961bd5e2298e4",
+      "96181814c6f97ac19390dade7a0d3110b2f4d681": "bde08cd628ed6157f65a968a778cc0e86cb200415f852d63a1a961bd5e2298e4"
+    },
+    "frontend/src/lib/state/cutting-parameters.ts": {
+      "1f353ef3b774382f63e67f93a9bb3a4652007de2": "8ffe747b7354921f20b1d949c9f67c658143c6c7ec1181b18e3509dcc6e02080",
+      "34f41692ef1d90eddf1b3ff3b564d2b8600879d7": "8ffe747b7354921f20b1d949c9f67c658143c6c7ec1181b18e3509dcc6e02080",
+      "4d0bf277c4023acc980f39accf8c8a40b77dbd13": "8ffe747b7354921f20b1d949c9f67c658143c6c7ec1181b18e3509dcc6e02080",
+      "96181814c6f97ac19390dade7a0d3110b2f4d681": "8ffe747b7354921f20b1d949c9f67c658143c6c7ec1181b18e3509dcc6e02080"
+    },
+    "crates/ivac-core/src/cutting_parameters.rs": {
+      "1f353ef3b774382f63e67f93a9bb3a4652007de2": "1d6e77541cbbf6bffba5babbb6e17c20159f5289101baf1aecb80d793b1e9082",
+      "34f41692ef1d90eddf1b3ff3b564d2b8600879d7": "1d6e77541cbbf6bffba5babbb6e17c20159f5289101baf1aecb80d793b1e9082",
+      "4d0bf277c4023acc980f39accf8c8a40b77dbd13": "1d6e77541cbbf6bffba5babbb6e17c20159f5289101baf1aecb80d793b1e9082",
+      "96181814c6f97ac19390dade7a0d3110b2f4d681": "1d6e77541cbbf6bffba5babbb6e17c20159f5289101baf1aecb80d793b1e9082"
+    }
+  },
+  "runtime_readers_tested": "current ALPHA-2 descendant only; other listed revisions have identical relevant validator bytes, not separate installed trials",
+  "preserved_worktrees": {
+    "ivacam": {
+      "head": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+      "tracked_clean": true
+    },
+    "FabCAM-alpha-feedback": {
+      "head": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+      "tracked_clean": true
+    },
+    "FabCAM-alpha-2": {
+      "head": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+      "tracked_clean": true
+    },
+    "FabCAM-tool-meta-1": {
+      "head": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d",
+      "tracked_clean": true
+    }
+  },
+  "wasm_build_manifest": {
+    "version": 1,
+    "input": "f567e151f52ccd254938268e4f1a8b04c4657b2ad67e49b7c3986c713853dee8",
+    "assets": {
+      "ivac_wasm_bg.wasm": "1cc893bef4b408ce8f701440a38ec3a5333521d77b3e77a09bba530c5e0e5467",
+      "ivac_wasm.js": "a9cfc9c8bb334b72324ab8e3681ac7e90901b9c2f5d150f054fcf68f4130a18c",
+      "ivac_wasm.d.ts": "664976892b3dd44674f58a7efb00700463b630b75137eaee13ff26d4babc6412",
+      "ivac_wasm_bg.wasm.d.ts": "3055d167b76e3d05e5fc65254f8d219c7381739f9f79fca696ea14344cba60cd",
+      "package.json": "15ace77ef3da914ac8d8b6d4bf47609eba81220c8cafce9064d9a25025c893ef"
+    }
+  },
+  "checks": {
+    "rust_baseline": {
+      "characterization_pass": 10,
+      "desired_behavior_expected_fail": 2,
+      "ignored": 0,
+      "exit_code": 101
+    },
+    "existing_cutting_v9_regressions": {
+      "pass": 13,
+      "fail": 0
+    },
+    "frontend_focused": {
+      "files": 6,
+      "pass": 52,
+      "fail": 0
+    },
+    "strict_clippy_new_test": "PASS",
+    "rustfmt_new_test": "PASS",
+    "prettier_eslint_new_test": "PASS",
+    "wasm_freshness": "PASS",
+    "final_release_gate": "NOT RUN; no new production implementation; baseline suite intentionally RED",
+    "browser_new_ui": "NOT RUN; no new UI",
+    "installed_tauri": "NOT RUN; regular application profile untouched",
+    "physical": "NOT RUN"
+  },
+  "commands": [
+    "cargo test -p ivac-core --all-features --locked --test alpha3_preflight -- --nocapture",
+    "cargo test -p ivac-core --all-features --locked cutting_v9 -- --nocapture",
+    "cargo clippy -p ivac-core --all-features --locked --test alpha3_preflight -- -D warnings",
+    "rustfmt --check --edition 2021 crates/ivac-core/tests/alpha3_preflight.rs",
+    "pnpm exec vitest run src/lib/state/alpha3-reader-preflight.test.ts src/lib/state/project-v9.test.ts src/lib/state/report-cutting.test.ts src/lib/state/generation-context.test.ts src/lib/api/cutting-contract.test.ts src/lib/services/document-lifecycle.test.ts",
+    "pnpm exec prettier --check src/lib/state/alpha3-reader-preflight.test.ts",
+    "pnpm exec eslint src/lib/state/alpha3-reader-preflight.test.ts",
+    "node frontend/scripts/ensure-wasm-fresh.mjs"
+  ],
+  "local_evidence_sha256": {
+    "dist-test/alpha3-preflight/clippy.log": "b0f33b6d7af798de3a0cae9b96d0277067a8d25e47b7d7cc072b8453024dcee1",
+    "dist-test/alpha3-preflight/cutting-v9-regressions.log": "27a114b7d0abeacf06411f8559353d497d009443cfe3166723c74567fff3fea4",
+    "dist-test/alpha3-preflight/frontend-readers.log": "7e62818f419daf3d9caa7b38cf0e9b89f556fd1995a77125cf429a984bae596c",
+    "dist-test/alpha3-preflight/frontend-regressions.log": "fdfb17a2c5e7dcc8bd2a369889f4e7b6cdd0b8c0ba5866813b19151230b68c6a",
+    "dist-test/alpha3-preflight/pocket-cascade-0.4.request.json": "2883f431900e25a4149395031e10a48bf0a3755408fc05fae2e59fc1efda1e36",
+    "dist-test/alpha3-preflight/pocket-cascade-0.4.response.json": "ac1bc07d75ad803c1d6fffbdeea1fb715569a84aed0f355927accc211d05fee2",
+    "dist-test/alpha3-preflight/pocket-cascade-0.request.json": "0e644d76e8cbafb8abbfb2f37f0e0b0d4f2a821b51ebf46995b139ff1cc3aab1",
+    "dist-test/alpha3-preflight/pocket-cascade-0.response.json": "a6a3c65684abcd8ad72496e8f0242801109913e95c715f29d377187eaab61ad4",
+    "dist-test/alpha3-preflight/pocket-cascade-nocontour.request.json": "3c320aff00f31c00ccb7c23f3fbbc722fa829f9728e029f3d11364c58752adf0",
+    "dist-test/alpha3-preflight/pocket-cascade-nocontour.response.json": "ba711708bf769de94bffc1a1cf1de29663f3d7068c6f58af4523cc07f5467d7a",
+    "dist-test/alpha3-preflight/pocket-retained-stock-dual.request.json": "383d84ab7be60e87ecd4a6c7f2c2aba4a1a8e3706af55d373209be96046ce096",
+    "dist-test/alpha3-preflight/pocket-retained-stock-dual.response.json": "8834c24d2564d6a61b41680ca12c3d7d938ca7b8c1bc90af4e5d80682239e828",
+    "dist-test/alpha3-preflight/pocket-retained-stock-single.request.json": "c063fd02eec7b1f7f0ad2d60d6d49d5f98e0e6b30efec98adddeee984838cff0",
+    "dist-test/alpha3-preflight/pocket-retained-stock-single.response.json": "ff723b2675cf2c76d9addd782fb6a7be6699b0fe13e6f01e1320c5d6961c35d2",
+    "dist-test/alpha3-preflight/pocket-shopbot-distinct-tools.request.json": "072d7b1aeaa129019a47ad298ff8611f46f4e09462c5ce6ed151d89fa29b56ad",
+    "dist-test/alpha3-preflight/pocket-shopbot-distinct-tools.response.json": "91de58e60884b23e6305be38eb8dc1114fe3cd4e489ee2a11bd5a89bc860a30a",
+    "dist-test/alpha3-preflight/pocket-spiral-0.4.request.json": "1185d6ac4545bf5df3372524759538b2ac955a459c4e0c60e432f33effcb745a",
+    "dist-test/alpha3-preflight/pocket-spiral-0.4.response.json": "62b2b522b0286ea81de8a8fd991980f0dd439e631d6d3fa4542f2d433170f80a",
+    "dist-test/alpha3-preflight/pocket-spiral-0.request.json": "582c8f58e2eee0d60fe07350ba56547b729d8be21f70b6db7738d6b46380e34c",
+    "dist-test/alpha3-preflight/pocket-spiral-0.response.json": "0138721f427a10f85d20b82182a7dceec7e7fbb68896ddbc6a3add157e31e959",
+    "dist-test/alpha3-preflight/pocket-spiral-nocontour.request.json": "d950c56aa19e0b9d2a482feb1b2941543ddce61f198c2fbb1a32b9bd4556dbd0",
+    "dist-test/alpha3-preflight/pocket-spiral-nocontour.response.json": "05279ff6cf809d59f25d4db6bb5a9fa150fbbd7dc508b00cb6f940834a4bf29e",
+    "dist-test/alpha3-preflight/pocket-trochoidal.request.json": "e9fec4d733913a5377f1a7079efe942599234bb202153a8c346544469e20c75f",
+    "dist-test/alpha3-preflight/pocket-trochoidal.response.json": "b900d0ea20f7d40d53f01fa91f403a19a7e8ee6dbbbc13257eb0d3cff40ca2e0",
+    "dist-test/alpha3-preflight/pocket-zigzag-0.4.request.json": "5008fe9e9940722dd2fe31c041854b90666f012d3a9d97910fa1b32f2e41d95b",
+    "dist-test/alpha3-preflight/pocket-zigzag-0.4.response.json": "b98473c9b3b43c5b812621313fca7eb98e77b9776613c422439a6923d7e87ef9",
+    "dist-test/alpha3-preflight/pocket-zigzag-0.request.json": "3766e71da111ef89bc779430a6fda9732ac386f3203fbb5bdda834759434810e",
+    "dist-test/alpha3-preflight/pocket-zigzag-0.response.json": "714b8dc4333a725cdeb396b85642b647a53b04ea27acf39e23ba399451853af7",
+    "dist-test/alpha3-preflight/pocket-zigzag-nocontour.request.json": "8832253749777eee3e1c9e485a38dbab0a4d9ca5f27a7c36d14209acc887a3b0",
+    "dist-test/alpha3-preflight/pocket-zigzag-nocontour.response.json": "a5b50e1e9ab772f31ef65c3f421858fd181533431923d8f324c5382ada82dbd2",
+    "dist-test/alpha3-preflight/profile-finish-step.request.json": "5cbd83426bb01ba3f8a8939cb31e0bfef84f85b470c060e634f51e6068a05595",
+    "dist-test/alpha3-preflight/profile-finish-step.response.json": "ae1b3f3eb84f3dd7c53654d8af4ef88de3ce9d57b3f5d651840086404749fb11",
+    "dist-test/alpha3-preflight/profile-inside.request.json": "656db06fb1ba68784cc781ed14a67b7569ee0ea04fdd8b226776a363799e33de",
+    "dist-test/alpha3-preflight/profile-inside.response.json": "d17560a6b5597fc4bbeee1b4e18bd1f7e2a952690e21a79f5a271f248010caa4",
+    "dist-test/alpha3-preflight/profile-on.request.json": "f8451b5dd3620d4a2d39042d6f2e0c75981f3404ceab4eb42516ad3606953c1c",
+    "dist-test/alpha3-preflight/profile-on.response.json": "551ed1676bc4147c639c1e69380674ad4028c308f6bff627366df7a128273704",
+    "dist-test/alpha3-preflight/profile-outside.request.json": "23ddd4086a056c8236da5b58563cfe49dc4d1c0396179dbcd1ddf2ac6300ff12",
+    "dist-test/alpha3-preflight/profile-outside.response.json": "c430383dac2bf3a2c00d781f846f3df3f63d2518ea6bb36d4c340d83b9fd3f78",
+    "dist-test/alpha3-preflight/retained-stock-inside.request.json": "641cad6d5a631beae8a219f7c6493207f57717deb5b632011fecf9667e187a32",
+    "dist-test/alpha3-preflight/retained-stock-inside.response.json": "3f54bf54128c2f4aab1dc2a274bc1499721d99610ade3708817167e6ea7108cf",
+    "dist-test/alpha3-preflight/retained-stock-on.request.json": "08f18f7e2f6db641c14851eebc9b7c74a5a34d488bab927cd3b8fe1c00365299",
+    "dist-test/alpha3-preflight/retained-stock-on.response.json": "551ed1676bc4147c639c1e69380674ad4028c308f6bff627366df7a128273704",
+    "dist-test/alpha3-preflight/retained-stock-outside.request.json": "511f487123a7b22462722fea68f7cffcd7840d4f7dca68412359d5964524b7a0",
+    "dist-test/alpha3-preflight/retained-stock-outside.response.json": "ef5591b7b3f775e6fc3ee838686352850903be03d70329e1971620eaf9b1a670",
+    "dist-test/alpha3-preflight/rust-baseline.log": "441833525ba4319fcc2203b28bc321e2aca906a13818b6c8f39012d60f8de30a",
+    "dist-test/alpha3-preflight/wasm-freshness.log": "ee7803fbb1a43e4aa905d3ccf83e6ea4777e7b01277480ceff9affa6c8ed9dbd"
+  },
+  "limits": [
+    "No version change implemented",
+    "No new machining behavior qualified",
+    "No private drawing or coordinates copied",
+    "No implementation commits",
+    "No integration, push, package or publication",
+    "v10 is recommended; required replacement-shape v9 is a tested alternative"
+  ]
+}

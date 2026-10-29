@@ -1,5 +1,43 @@
 # Engineering log
 
+## 2026-10-29 — ALPHA-3 bounded acceptance and local commits
+
+Maintainer accepted the qualified bounded scope and authorized the proposed three
+local commits. Implementation `0867b442b4e23ba8afe2261ac97f46b479a1f633`, software/tests
+`42be450e080d63ef83b632ab3ec9389e4095e126`; 1,295 committed file bytes match the
+qualified fingerprint. No executable changes or rerun required. Acceptance receipt
+retains all geometry/allowance/output and native/physical limitations. Protected
+worktrees preserved; no merge/push/installer/release/hardware. HARD STOP.
+
+## 2026-10-29 — ALPHA-3 implemented; final human review before commits
+
+Completed approved project/cutting v10 and staged collection v2 in the isolated
+ALPHA-3 worktree. Main/Finishing now drive actual Profile/Pocket programs and
+per-stage tool/rate/schedule attribution. Conservative rectangle coverage proofs
+refuse unsupported geometry, entries and holding; Pocket Finishing re-clears the
+reachable region, including floor stock. Minimum positive allowance 0.05 mm follows
+the documented output budget. Existing ShopBot RPM/toolchange guards are unchanged.
+Actual v10 browser save/reopen, old-reader refusal, stage playback, stale export,
+Undo/Redo and v1/v2 collection transfer reviewed. Final gate 20/20; Rust 1,628 PASS,
+frontend 1,542 PASS, 15 native/WASM comparisons, 23 controlled CNC fixtures.
+[Final report](../releases/ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md) records exact
+source fingerprint, expanded dual-tool motion inventory and proposed commit groups.
+No commits or integration; installed-native and physical acceptance remain separate.
+**HARD STOP for scope/UX/motion acceptance and commit authorization.**
+
+## 2026-10-28 — ALPHA-3 contract audit and reader-boundary preflight
+
+Isolated `feature/alpha-3-main-finishing` starts at accepted ALPHA-2 descendant
+`96181814`. Synthetic native/WASM tests reproduce Profile's unused Rough slot,
+implicit Pocket wall rates, distinct-tool retained-stock inconsistency and the
+existing ShopBot RPM refusal. Two desired product baselines deliberately fail.
+Old WASM ignores added optional cutting fields; a required replacement shape
+rejects, but an explicit project/cutting v10 boundary is recommended in Proposed
+ADR-0032, with staged preset v2 and no silent legacy conversion. See the
+[preflight report](../releases/ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md).
+No production/persistence change. HARD STOP for the version-policy decision;
+no implementation commit, merge, push, installer, normal-profile launch or hardware.
+
 ## 2026-10-21 — MAT-1 presentation and source-aware browsing
 
 Implemented approved shared classification/search and inline picker, preserving exact

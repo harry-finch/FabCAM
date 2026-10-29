@@ -1,0 +1,221 @@
+{
+  "main_decoded_motion_exact_ignoring_line_numbers": true,
+  "before": {
+    "segments": 93,
+    "kinds": {
+      "cut": 56,
+      "plunge": 21,
+      "rapid": 16
+    },
+    "cutting_bounds": {
+      "x": [
+        1.0,
+        19.0
+      ],
+      "y": [
+        1.0,
+        19.0
+      ],
+      "z": [
+        -2.0,
+        -1.0
+      ]
+    },
+    "cut_z_endpoints": [
+      -2.0,
+      -1.0
+    ],
+    "rapid_xy_below_z5": 0,
+    "tool_refs": [
+      1,
+      2
+    ]
+  },
+  "after": {
+    "segments": 196,
+    "kinds": {
+      "cut": 120,
+      "plunge": 45,
+      "rapid": 31
+    },
+    "cutting_bounds": {
+      "x": [
+        1.0,
+        19.0
+      ],
+      "y": [
+        1.0,
+        19.0
+      ],
+      "z": [
+        -2.0,
+        -1.0
+      ]
+    },
+    "cut_z_endpoints": [
+      -2.0,
+      -1.0
+    ],
+    "rapid_xy_below_z5": 0,
+    "tool_refs": [
+      1,
+      2
+    ]
+  },
+  "old_by_tool": {
+    "1": {
+      "segments": 78,
+      "kinds": {
+        "cut": 48,
+        "plunge": 18,
+        "rapid": 12
+      },
+      "cutting_bounds": {
+        "x": [
+          1.5,
+          18.5
+        ],
+        "y": [
+          1.5,
+          18.5
+        ],
+        "z": [
+          -2.0,
+          -1.0
+        ]
+      },
+      "cut_z_endpoints": [
+        -2.0,
+        -1.0
+      ],
+      "rapid_xy_below_z5": 0,
+      "tool_refs": [
+        1
+      ]
+    },
+    "2": {
+      "segments": 14,
+      "kinds": {
+        "cut": 8,
+        "plunge": 3,
+        "rapid": 3
+      },
+      "cutting_bounds": {
+        "x": [
+          1.0,
+          19.0
+        ],
+        "y": [
+          1.0,
+          19.0
+        ],
+        "z": [
+          -2.0,
+          -1.0
+        ]
+      },
+      "cut_z_endpoints": [
+        -2.0,
+        -1.0
+      ],
+      "rapid_xy_below_z5": 0,
+      "tool_refs": [
+        2
+      ]
+    }
+  },
+  "new_by_stage": {
+    "main": {
+      "binding": {
+        "authority": "resolved",
+        "end_segment_exclusive": 79,
+        "first_segment": 1,
+        "operation_id": 1,
+        "output_end_line": 146,
+        "output_start_line": 20,
+        "parameters": {
+          "depth_per_pass_mm": 1.0,
+          "feed_mm_min": 811,
+          "plunge_mm_min": 111,
+          "rpm": 11000,
+          "tool_id": 1
+        },
+        "stage": "main"
+      },
+      "segments": 78,
+      "kinds": {
+        "cut": 48,
+        "plunge": 18,
+        "rapid": 12
+      },
+      "cutting_bounds": {
+        "x": [
+          1.5,
+          18.5
+        ],
+        "y": [
+          1.5,
+          18.5
+        ],
+        "z": [
+          -2.0,
+          -1.0
+        ]
+      },
+      "cut_z_endpoints": [
+        -2.0,
+        -1.0
+      ],
+      "rapid_xy_below_z5": 0,
+      "tool_refs": [
+        1
+      ]
+    },
+    "finishing": {
+      "binding": {
+        "authority": "resolved",
+        "end_segment_exclusive": 195,
+        "first_segment": 79,
+        "operation_id": 1,
+        "output_end_line": 345,
+        "output_start_line": 157,
+        "parameters": {
+          "depth_per_pass_mm": 1.0,
+          "feed_mm_min": 413,
+          "plunge_mm_min": 113,
+          "rpm": 13000,
+          "tool_id": 2
+        },
+        "stage": "finishing"
+      },
+      "segments": 116,
+      "kinds": {
+        "cut": 72,
+        "plunge": 27,
+        "rapid": 17
+      },
+      "cutting_bounds": {
+        "x": [
+          1.0,
+          19.0
+        ],
+        "y": [
+          1.0,
+          19.0
+        ],
+        "z": [
+          -2.0,
+          -1.0
+        ]
+      },
+      "cut_z_endpoints": [
+        -2.0,
+        -1.0
+      ],
+      "rapid_xy_below_z5": 0,
+      "tool_refs": [
+        2
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "sourceHead": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+  "dirty": true,
+  "wasmSha256": "6196d4da5cdd3b6a09a31bb723fb9b4fc7fd9e2b293c482329fb2f6ddc21a764",
+  "oldWasmSha256": "1cc893bef4b408ce8f701440a38ec3a5333521d77b3e77a09bba530c5e0e5467",
+  "oldReaderRefusal": true,
+  "cases": [
+    {
+      "name": "linuxcnc-profile-main",
+      "nativeMs": 52.769957999999995,
+      "wasmMs": 41.304958,
+      "moves": 63,
+      "stages": 1,
+      "programSha256": "e0d1c4897a8de0ed02b4bc7925f48b8bcbccd7fc6fa4b4ac5f7c6fe503875acb",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 90080
+    },
+    {
+      "name": "linuxcnc-profile-0.1-0",
+      "nativeMs": 6.445083000000011,
+      "wasmMs": 1.9225419999999929,
+      "moves": 153,
+      "stages": 2,
+      "programSha256": "adf78443c9217644e1572906c9d825fc991c550b93b4a09e84be86dc4cf79366",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 94096
+    },
+    {
+      "name": "linuxcnc-pocket-main",
+      "nativeMs": 12.445209000000006,
+      "wasmMs": 6.1556659999999965,
+      "moves": 119,
+      "stages": 1,
+      "programSha256": "ba28cc42a372a046822a38cb78ee8c3d2001df8602e2ba4afca4d46607d37b9a",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 100656
+    },
+    {
+      "name": "linuxcnc-pocket-0.1-0",
+      "nativeMs": 28.702540999999997,
+      "wasmMs": 5.156167000000011,
+      "moves": 281,
+      "stages": 2,
+      "programSha256": "b538c17ee77cd7323f974d4ce1657ef75c66e56dfff4a1ef261e1478c165b3a4",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 121296
+    },
+    {
+      "name": "linuxcnc-pocket-0-0.1",
+      "nativeMs": 13.844166999999999,
+      "wasmMs": 2.26887499999998,
+      "moves": 280,
+      "stages": 2,
+      "programSha256": "49f31fa3e9322c646fd5adb876c967914024357ee89dfe284b1618d825f6f368",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 123152
+    },
+    {
+      "name": "linuxcnc-pocket-0.1-0.1",
+      "nativeMs": 13.469417000000021,
+      "wasmMs": 1.5254170000000045,
+      "moves": 281,
+      "stages": 2,
+      "programSha256": "55e9f47c76b9622523e5c61eddcdb5b9cefce1b8c2c3f4a726e6862fff0236a8",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 123344
+    },
+    {
+      "name": "grbl-profile-main",
+      "nativeMs": 5.348042000000021,
+      "wasmMs": 2.2200000000000273,
+      "moves": 63,
+      "stages": 1,
+      "programSha256": "0b46d98981a734923f941db91828ace0b95fdd32a5247c5a9390ea83b61a6011",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 123776
+    },
+    {
+      "name": "grbl-profile-0.1-0",
+      "nativeMs": 6.190625000000011,
+      "wasmMs": 1.0255410000000325,
+      "moves": 153,
+      "stages": 2,
+      "programSha256": "98b1e0c8e3a376239ed739d271d879d83ca722d59d8ccd514af79399bc9be109",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 123856
+    },
+    {
+      "name": "grbl-pocket-main",
+      "nativeMs": 11.529584,
+      "wasmMs": 0.8197920000000067,
+      "moves": 119,
+      "stages": 1,
+      "programSha256": "e63ab5fb98fb7e0b5e48f303f807aa40281c88fc18f8fd7b0904c6727aa24aa2",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 123936
+    },
+    {
+      "name": "grbl-pocket-0.1-0",
+      "nativeMs": 25.09808400000003,
+      "wasmMs": 1.510832999999991,
+      "moves": 281,
+      "stages": 2,
+      "programSha256": "1320aca6a5ce2086ddb9455fa3639b79e5ef04984ac6bd57be366d7c38f520c4",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 124048
+    },
+    {
+      "name": "grbl-pocket-0-0.1",
+      "nativeMs": 12.818458999999962,
+      "wasmMs": 1.2382499999999936,
+      "moves": 280,
+      "stages": 2,
+      "programSha256": "20801e49022d9deb5687b268d55c735701a38b2d10a573baa5c46a7f7116bf51",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 124096
+    },
+    {
+      "name": "grbl-pocket-0.1-0.1",
+      "nativeMs": 13.906416999999976,
+      "wasmMs": 1.5953329999999823,
+      "moves": 281,
+      "stages": 2,
+      "programSha256": "5f79934f35e49d3dfb60a3af8ea283852e3d22fa742376d4d61c01618ce6f883",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 124208
+    },
+    {
+      "name": "distinct-tool",
+      "nativeMs": 9.027584000000047,
+      "wasmMs": 2.07566700000001,
+      "moves": 353,
+      "stages": 2,
+      "programSha256": "bd9e8c4c9c5c23bbbdfcb081e5ab3addfbfaa280379b560f9dce64798b997755",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 124752
+    },
+    {
+      "name": "medium-24-profiles-main",
+      "nativeMs": 16.926375000000007,
+      "wasmMs": 4.775792000000024,
+      "moves": 1466,
+      "stages": 1,
+      "programSha256": "d6756f1368d48ba293f947eb5d1ac1f8c5af3e86a6733838cb4da8af6b0aad9e",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 129216
+    },
+    {
+      "name": "island-main",
+      "nativeMs": 30.680916999999965,
+      "wasmMs": 8.263209000000018,
+      "moves": 2096,
+      "stages": 1,
+      "programSha256": "2dfd5ef8827997e64e04ee5f0d0c1f9575b229b1dfb27e90a6395ca684b322ec",
+      "streamEvents": 3,
+      "peakNodeRssKiB": 138176
+    }
+  ]
+}

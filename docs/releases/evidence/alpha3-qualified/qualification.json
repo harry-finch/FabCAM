@@ -1,0 +1,342 @@
+{
+  "date": "2026-10-29",
+  "branch": "feature/alpha-3-main-finishing",
+  "base_sha": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+  "implementation_commits": [],
+  "software_fingerprint_sha256": "1918642857029aad70aff0a2881248e4b67b66daeeb267ad71954f49a54b4b46",
+  "canonical_gates": {
+    "passed": 20,
+    "failed": 0,
+    "rust_test_totals": {
+      "passed": 1628,
+      "failed": 0,
+      "ignored": 1
+    },
+    "frontend_passed": 1542,
+    "frontend_optional_locale_skip": 1,
+    "frontend_files": 178
+  },
+  "raw_log_hashes": [
+    {
+      "name": "alpha3-release-gate4.log",
+      "sha256": "8673c486539a944a77f10c744ae179960ab7da10131843e70b8435372e7e03f2",
+      "bytes": 526838
+    },
+    {
+      "name": "alpha3-runtime-final.log",
+      "sha256": "87d1d374b3966656ffe18d7584ab483512fed97daecc108381f66f6325a95620",
+      "bytes": 125
+    },
+    {
+      "name": "alpha3-differentials-final3.log",
+      "sha256": "1ed65eb76dbab700b538da574c14a6842da12367261d298fce3e84b2e165ef40",
+      "bytes": 520
+    },
+    {
+      "name": "alpha3-native-http.log",
+      "sha256": "c10c9eeae8acad3d6eef66f451065a6d3dbcb48ecc074dc2d86c606d1fd5b4ce",
+      "bytes": 3177
+    },
+    {
+      "name": "alpha3-remaining-final.log",
+      "sha256": "87fd97b04258be9fafcc18371155dcdedc0c0491e80b735fd03cf3314c7f21ff",
+      "bytes": 1360
+    },
+    {
+      "name": "alpha3-output-precision-red.log",
+      "sha256": "179fd877ff80de94dac5229bbb109f6fd3a271ff7b701e4ba0c434a00eead9e7",
+      "bytes": 1095
+    },
+    {
+      "name": "alpha3-stage-diagnostics-red.log",
+      "sha256": "034206bb16206a493d8e15693143b80174559cb20c5d337b0da785c65c840c1a",
+      "bytes": 945
+    }
+  ],
+  "preserved_worktrees": {
+    "ivacam": {
+      "head": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+      "same_as_preflight": true,
+      "tracked_clean": true
+    },
+    "FabCAM-alpha-feedback": {
+      "head": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+      "same_as_preflight": true,
+      "tracked_clean": true
+    },
+    "FabCAM-alpha-2": {
+      "head": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+      "same_as_preflight": true,
+      "tracked_clean": true
+    },
+    "FabCAM-tool-meta-1": {
+      "head": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d",
+      "same_as_preflight": true,
+      "tracked_clean": true
+    }
+  },
+  "frozen_v1_sha": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "real_index_empty": true,
+  "wasm_sha256": "6196d4da5cdd3b6a09a31bb723fb9b4fc7fd9e2b293c482329fb2f6ddc21a764",
+  "browser_assets": [
+    {
+      "path": "apple-touch-icon.png",
+      "sha256": "ec914ff42976fe7d18e5fdc2212dae9a1388ed9850b91e6a199d0c4806c5e018"
+    },
+    {
+      "path": "assets/AboutDialog-BaILN9aX.css",
+      "sha256": "3fae55d3c9ca3cecccdd261c2e15bab596416cd2b23639bbfb4dc1560ddc27fd"
+    },
+    {
+      "path": "assets/AboutDialog-vQDMo_RX.js",
+      "sha256": "780d13519efe3041cf98bdd9af56a9b4a7b96a45029249355e4280a1ec07a6b1"
+    },
+    {
+      "path": "assets/AddTextDialog-BJlzrc0R.css",
+      "sha256": "226bdfbcc8c1ea49bef994bed7dee76704a866b4bd82291a9cddebb490e7e7d1"
+    },
+    {
+      "path": "assets/AddTextDialog-kM5cHMqO.js",
+      "sha256": "c0acd4e4b032e58968e68f94100b371723474d8e191485749801b45ae505a352"
+    },
+    {
+      "path": "assets/GcodePanel-CpuoXhYj.css",
+      "sha256": "8987d500cba71722caaf1599910be9ca274239128518658e69ecf7738c5afafb"
+    },
+    {
+      "path": "assets/GcodePanel-DvEeUHHt.js",
+      "sha256": "d765cfba7ab4a63ce372dd7722a0ed029f731ff343eb8d734137c79581238ca6"
+    },
+    {
+      "path": "assets/MachineWorkspace-D6SMeSGf.css",
+      "sha256": "247737fcd070aa684213f06f0ce5dfc0c867be802deddd4af15dbf17ce1a74f9"
+    },
+    {
+      "path": "assets/MachineWorkspace-vD8PW4Uy.js",
+      "sha256": "04cad46802ac1b35ea480d2af9a73ef5855c319563505a8e5e7236c1d02d7e7b"
+    },
+    {
+      "path": "assets/ReportDialog-CvAztq31.js",
+      "sha256": "596a1f18be972ab979357e3e4536b9c4311fb00ade88bce7b6e9bdf89a1b6eec"
+    },
+    {
+      "path": "assets/ReportDialog-DfTZZiF-.css",
+      "sha256": "f029acf3c266aa304a1803209d1c297deae33bb7b0e20a843821fc6248ad354e"
+    },
+    {
+      "path": "assets/Scene3D-BBqyjIFX.css",
+      "sha256": "c5dda309072a1e40287a67fed936e88af648e39fabbbdf31309512a646796974"
+    },
+    {
+      "path": "assets/Scene3D-Cj58aT-D.js",
+      "sha256": "5ac0a58c16b0a82b9592cf301dcf0580ca2a1862cf987f88e39ffe23b3ff788e"
+    },
+    {
+      "path": "assets/SettingsDialog-B5_9_ipF.css",
+      "sha256": "84dcc8ca174cb0f81827230200cc9d45d3114dde77ed128216600795ff409df0"
+    },
+    {
+      "path": "assets/SettingsDialog-Bqsvbcc-.js",
+      "sha256": "afe75a96d78f330e512f5ff6f1eddb40911058f0c295533f9eaaca95a5d3484d"
+    },
+    {
+      "path": "assets/ToolLibraryDialog-BOsKLpQZ.js",
+      "sha256": "e79d972078a6277e27984ff4bd7827e9c81c3ee1e1367d0295fbea7b592e65be"
+    },
+    {
+      "path": "assets/ToolLibraryDialog-DSr-LXu_.css",
+      "sha256": "e34621456f2c36a16d3b86a19edd0c08f7bc44654028d1607cab65c7f7e2b021"
+    },
+    {
+      "path": "assets/core-C_uWAgQK.js",
+      "sha256": "0c5c956030a5a5a5630208e55cc23830ae4ae50ce6a0f29d63775e638f8d8e25"
+    },
+    {
+      "path": "assets/cutting-contract-qJ-M0lHP.js",
+      "sha256": "18ad9b49cb9135abe1fcd2446efa919583ec42e42e8f39431951e6449ef93976"
+    },
+    {
+      "path": "assets/dialog-draft.svelte-C6FNBmBf.js",
+      "sha256": "eb9ab3005f0f68d9aaccdd229b37348987178907fe529ce48d0ff2472b465059"
+    },
+    {
+      "path": "assets/dist-js-BjV1Yaj9.js",
+      "sha256": "8d8aed7b6ede43618c8dcc38c93a532cd2eeb36a51d1771ef63fcf3933b3d8cf"
+    },
+    {
+      "path": "assets/dist-js-D-Dd5-GQ.js",
+      "sha256": "fc505aa8f11d78de6897f3070c3038e4fbea01df6e7bbddfe73946c53cf2100c"
+    },
+    {
+      "path": "assets/dist-js-D1o1A8ji.js",
+      "sha256": "6411b7bf571984d11a23cbbd55be3edb3d269fe9e9cda24cfa66b63f37bc4ba2"
+    },
+    {
+      "path": "assets/dist-js-NQ67qQMm.js",
+      "sha256": "c822255da6c38789cb1fcd29532150510ae7764e2c62f100d7da1dda0ac8d90e"
+    },
+    {
+      "path": "assets/driver-Bcf_Bg_X.js",
+      "sha256": "0aa79a1851734a9ce9220d6108fcd1714b7a958f54e9201cb0ed2aeda4b3ba20"
+    },
+    {
+      "path": "assets/env-P19VVBwe.js",
+      "sha256": "80fc202a53ee82c009af0e1af7234acca3e1bce63b799159dc341737566bee96"
+    },
+    {
+      "path": "assets/event-BbJMfFeU.js",
+      "sha256": "ab641886d48b4ccf72945ebd27caa72b3eaa18e501d6b2dcf2c4868c5d6c7e78"
+    },
+    {
+      "path": "assets/import-ops-BcV7FTdc.js",
+      "sha256": "8d21e4433311be08676d50b4a242acaf8845490a9afe51ec2f7a416e14df7070"
+    },
+    {
+      "path": "assets/index-DVZyTyzG.css",
+      "sha256": "076c0484bb73c8dbc4882b1d8d4d5abaa6b52abe476d82d274382ff2819457ce"
+    },
+    {
+      "path": "assets/index-DueT6XJF.js",
+      "sha256": "f4625a8aaf97770c5a65113dd7cc395c1b428deacf6886596e30cf0c30c663b5"
+    },
+    {
+      "path": "assets/index-client-DVoIp7bL.js",
+      "sha256": "57a7d6dfbab93bef7213e832006a3577cf6a40125b3861f3e1eda79999f7f373"
+    },
+    {
+      "path": "assets/ivac_wasm-DYiMXiIm.js",
+      "sha256": "23880a2a867c904f8fc7cbf2e27423f0cdd073bad0c256ef572d3038b0dcba1e"
+    },
+    {
+      "path": "assets/ivac_wasm_bg-BnrLAsUx.wasm",
+      "sha256": "6196d4da5cdd3b6a09a31bb723fb9b4fc7fd9e2b293c482329fb2f6ddc21a764"
+    },
+    {
+      "path": "assets/path-D3f-EPQq.js",
+      "sha256": "821a4d8bf56fe05ff754c6c226e680746096c8da31a88fabe6eda5df31f9bc86"
+    },
+    {
+      "path": "assets/preload-helper-ca-nBW7U.js",
+      "sha256": "0c88c6aaef07b19239a2eac9faef82584f9e733114f85dc190e98dcea60b1753"
+    },
+    {
+      "path": "assets/project-types-CKi-ztwV.js",
+      "sha256": "1837f70a45a7fe36dfc594a3ccf4d6497edc3e6ab566e1beb8d4d4d10fe0c789"
+    },
+    {
+      "path": "assets/qualification.worker-D9NU3_Om.js",
+      "sha256": "4b56eb13c3cde110d61b9fd8931343ef942b8276e059cdb996ab490afebbf51b"
+    },
+    {
+      "path": "assets/rolldown-runtime-lhHHWwHU.js",
+      "sha256": "a526d1bb3288ef04d001028843220a24b0867a4edf8c685b69506d6525af36ff"
+    },
+    {
+      "path": "assets/tauri-DQdZQUUi.js",
+      "sha256": "5ef420f98533fc9409d26d9208ca19e38eba695ef554ea024fd8ed6c3f0b869c"
+    },
+    {
+      "path": "assets/text_preview.svelte-B7W53QZl.js",
+      "sha256": "150422d7476806c1c321256a7f7e5b5a90d0d48bd07d92a51c130b309af6e8d7"
+    },
+    {
+      "path": "assets/three-bcSkbUAg.js",
+      "sha256": "c3070bbd4b215a15e2692f08a4b5542c58c21704a088292c0890852e27fb9457"
+    },
+    {
+      "path": "assets/wasm-BJ3Ynrmc.js",
+      "sha256": "cac3e892b6f0d9a741a080082938ec94847328e1ffa07b0bb867aa325f7f9ce2"
+    },
+    {
+      "path": "assets/wasm-fatal-Cq8arUKL.js",
+      "sha256": "1d6721f91e6ba731d70e08a5c7e5c1ed0ef76db8bc9c2a409fbc6675e365aca0"
+    },
+    {
+      "path": "assets/wasm-worker-client-7yAjIFav.js",
+      "sha256": "73239ee29c96185b3f1956fcb3fdbe1bfdcb4cf672c5e7d24a7414070ba59cdb"
+    },
+    {
+      "path": "assets/wasm.worker-CwrE9G2a.js",
+      "sha256": "d393c062a1c058f01fac3cd70df90e8ded1d93664ae4c46188ecb6311e757f66"
+    },
+    {
+      "path": "branding/fabcam-lockup.svg",
+      "sha256": "3de085c0994b3ecb54ce06d178618fb6dba4c8a8b96f85d482cb88fe6fa2ba5f"
+    },
+    {
+      "path": "branding/fabcam-symbol.svg",
+      "sha256": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748"
+    },
+    {
+      "path": "favicon-128.png",
+      "sha256": "5f5c636980e3710ad61f7470b9473fec05c82342f46e22f622e72d2f58cb9398"
+    },
+    {
+      "path": "favicon-16.png",
+      "sha256": "a858d765240d12bcdf721cd262cd877eaca14a76060249517533f88009f74dc0"
+    },
+    {
+      "path": "favicon-256.png",
+      "sha256": "13b230d05d5d900da50905fb0de83397f242bf2e19b3f6de666705cb12cc9a3c"
+    },
+    {
+      "path": "favicon-32.png",
+      "sha256": "c743ac56e8c9b3d1905fa3d2b18c78ebc3956a7a3d550aa6d046ebe513995db9"
+    },
+    {
+      "path": "favicon-64.png",
+      "sha256": "79e3fc07f81be78bc1eddaa8ef746eca9d689b372c758e3b2a36bb4df4179b96"
+    },
+    {
+      "path": "favicon.svg",
+      "sha256": "4b1b64ef32e7c24d7858186abd387d5f57018b2823047abda6d76952bf05d748"
+    },
+    {
+      "path": "fonts/DejaVuSans.ttf",
+      "sha256": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280"
+    },
+    {
+      "path": "fonts/ISO3098-Italic.svg",
+      "sha256": "d669c852b8d6451a67b64c6503cc2372d17ac20e74d334cc68ff6ce9c899acfe"
+    },
+    {
+      "path": "fonts/ISO3098-Regular.svg",
+      "sha256": "4040936ccc75731d7d62f43d961bfa44623907a2f060186ce71f03bb802bf3a1"
+    },
+    {
+      "path": "fonts/README.md",
+      "sha256": "32ba1f92d6c8274334a10254b772c9f8f9f6ade1ee1ca79e170562de928b864b"
+    },
+    {
+      "path": "icons.svg",
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    {
+      "path": "index.html",
+      "sha256": "cf2b2fa1f2a6290b55a89bc9a9199b5252cf0ff1177cdba43c20c4d8f76e25ec"
+    },
+    {
+      "path": "ivacam-logo-512.png",
+      "sha256": "eafec3154c29bf3751f58aba0a4e00dffc9d381879530dcc14aa7ff78c56a61a"
+    },
+    {
+      "path": "samples/all.json",
+      "sha256": "8d97263dec43daae8e5afa2274696583086215d810088cd313e5524b329e56b0"
+    },
+    {
+      "path": "samples/simple-generated-tabs.json",
+      "sha256": "f23edab23144aa2ee3f46006a7c716e8b82ceb27a1c9261428297037cc165179"
+    },
+    {
+      "path": "samples/simple-tabs.json",
+      "sha256": "00e25430c6f0b8aafb940053993f1afd9534b8bf2b0b62cc0ae370597f20aa73"
+    },
+    {
+      "path": "samples/simple.json",
+      "sha256": "64a79c2d8ccb9ec1b2d4838e1dad03bb30bca5d85273af1c890817d89e0b6700"
+    }
+  ],
+  "native_installed_app": "NOT RUN: separate macOS account required",
+  "physical_qualification": "UNQUALIFIED",
+  "human_acceptance": "PENDING"
+}

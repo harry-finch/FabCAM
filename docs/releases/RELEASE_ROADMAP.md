@@ -1,5 +1,12 @@
 # FabCAM release roadmap
 
+**ALPHA-3 human acceptance recorded:** bounded first implementation accepted;
+three focused local commits authorized. Software/tests `42be450e080d63ef83b632ab3ec9389e4095e126`
+match the qualified 1,295-file fingerprint exactly. Documentation/acceptance receipt
+records the commit handoff. Earlier pending-review statements below are historical.
+No integration, push, installer or next milestone. Finishing limits and native/physical
+qualification exclusions remain unchanged. **HARD STOP.**
+
 **Role:** one release plan, with ordered scope and acceptance boundaries.
 [Current STATUS](../shopbot-modernization/STATUS.md) owns the inspected source and
 active work; [consolidation/classification](ROADMAP_CONSOLIDATION.md) owns this
@@ -17,8 +24,8 @@ original outcomes and scope.
 separates software qualification, browser coverage and outstanding native/human
 acceptance. Manual stock anchoring, explicit import placement, cutter feedback,
 cleanup states and frontend build visibility do not implement ALPHA-2 topology
-repair, ALPHA-3 finishing or ALPHA-4 preset reuse. ALPHA-3/4 remain **PLANNED**, with
-separate approval required; no milestone is started automatically. No new packaging
+repair, ALPHA-3 finishing or ALPHA-4 preset reuse. ALPHA-4 remains **PLANNED**, with
+separate approval required; ALPHA-3's later authorization is recorded below. No new packaging
 or integration with TOOL-META is authorized by this completion.
 
 **ALPHA-2 — bounded diagnostics/repair:** implemented on isolated
@@ -30,6 +37,19 @@ software/browser evidence. **Bounded human acceptance and focused local commits 
 No integration, installer, physical qualification or next milestone is authorized
 by successful local editing.
 
+**ALPHA-3 — Main Cutting / optional Finishing:** implemented and software-qualified
+on isolated `feature/alpha-3-main-finishing`, uncommitted over `96181814`.
+[Final source-bound report](ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md): project/cutting v10,
+preset v2, real stage rates/toolpaths, bounded coverage proofs, strict old-file refusal,
+reports/playback and atomic editing. **20/20 canonical gates** and actual browser/WASM
+review pass. Finishing is limited to one exact axis-aligned rectangle, flat endmill,
+direct entry without tabs/leads; Pocket finishing re-clears its reachable area.
+Positive allowances below 0.05 mm refuse. General islands/nonrectangular finishing
+and optimized rest passes remain unsupported; no implicit extension to ALPHA-4.
+[ADR-0032](../shopbot-modernization/adr/ADR-0032-explicit-main-and-optional-finishing.md)
+is Accepted. **Human scope/UX/motion review and commit approval are pending.**
+No implementation commits, integration, installer or hardware qualification.
+Same-tool ShopBot RPM refusal and all existing geometry/export guards remain.
 
 **Approved product strategy:** personal evaluation on the maintainer's own Mac,
 local desktop, ShopBot-focused, followed by progressive supervised qualification

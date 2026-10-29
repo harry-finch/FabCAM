@@ -1,0 +1,38 @@
+{
+  "status": "HUMAN ACCEPTED bounded first implementation; local commits authorized",
+  "implementation_sha": "0867b442b4e23ba8afe2261ac97f46b479a1f633",
+  "software_and_tests_sha": "42be450e080d63ef83b632ab3ec9389e4095e126",
+  "qualified_fingerprint_sha256": "1918642857029aad70aff0a2881248e4b67b66daeeb267ad71954f49a54b4b46",
+  "committed_files_verified": 1295,
+  "mismatches": [],
+  "executable_bytes_changed_since_qualification": false,
+  "qualification_rerun": "Not required: exact byte identity; original 20/20 qualification retained",
+  "documentation_commit": "Containing commit; resolved in post-commit receipt without self-referential SHA",
+  "preserved_worktree_heads": {
+    "ivacam": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+    "FabCAM-alpha-feedback": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+    "FabCAM-alpha-2": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+    "FabCAM-tool-meta-1": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d"
+  },
+  "frozen_v1_sha": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "limits": [
+    "one exact axis-aligned rectangle; flat endmill; direct entry",
+    "no arbitrary contours, selected islands, patterns, tabs, authored approach or leads",
+    "no helix/overcut, whirling or Trochoidal finishing",
+    "Profile Inside/Outside only; equal effective cutter diameters; lateral allowance <= radius; no Profile floor finishing",
+    "Pocket Cascade/Zigzag/Spiral re-clears reachable target; not optimized rest machining",
+    "positive allowances >= 0.05 mm; zero is explicit repeat",
+    "constant positive per-stage pass depth; no legacy schedule conversion",
+    "distinct-tool remaining-material UI unavailable; no full square-corner clearance claim",
+    "ShopBot same-tool RPM restrictions retained; no new post capability",
+    "installed-native and physical CNC remain unqualified"
+  ],
+  "actions_not_taken": [
+    "merge",
+    "push",
+    "installer",
+    "release",
+    "hardware",
+    "ALPHA-4"
+  ]
+}

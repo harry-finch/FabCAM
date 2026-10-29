@@ -1,5 +1,30 @@
 # FabCAM — current status
 
+**ALPHA-3 human acceptance recorded:** bounded first implementation accepted;
+three focused local commits authorized. Software/tests `42be450e080d63ef83b632ab3ec9389e4095e126`
+match the qualified 1,295-file fingerprint exactly. Documentation/acceptance receipt
+records the commit handoff. Earlier pending-review statements below are historical.
+No integration, push, installer or next milestone. Finishing limits and native/physical
+qualification exclusions remain unchanged. **HARD STOP.**
+
+**ALPHA-3 — implemented and software-qualified; human review PENDING.**
+Isolated `feature/alpha-3-main-finishing` retains HEAD
+`96181814c6f97ac19390dade7a0d3110b2f4d681`; implementation is uncommitted.
+Approved project/cutting v10 and staged preset v2 now drive actual Main/Finishing
+Profile/Pocket motions, readers, UI, reports and simulation attribution.
+[Final report](../releases/ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md) and
+[Accepted ADR-0032](adr/ADR-0032-explicit-main-and-optional-finishing.md).
+**20/20 canonical gates**, Rust 1,628 PASS / 1 intentional ignored worker,
+frontend 1,542 PASS / 1 optional skip; 15 exact native/WASM runtime comparisons,
+23 controlled output fixtures and actual browser qualification.
+Finishing is deliberately bounded to one exact axis-aligned rectangle, flat cutter,
+direct entry, no holding/lead complications; positive allowances >=0.05 mm.
+Pocket Finishing re-clears its reachable target; it is not optimized rest machining.
+All unsupported proofs refuse. Main-only geometry and ShopBot guards are retained.
+Installed native UI/physical tests NOT RUN. Other worktrees and private evidence
+preserved. **HARD STOP before implementation commits; no integration, push or installer.**
+The original RED preflight is archived, not rewritten as a passing historical result.
+
 ALPHA-1 checkpoint accepted by the user; native/physical gates remain separate.
 ALPHA-2 protocol separation is approved and implemented locally on isolated
 `fix/alpha-2-geometry`, software commit `58ddde72295a01cbe43ce0270c98e1f79f2f1039` and the qualified source inventory in the
@@ -7,7 +32,9 @@ ALPHA-2 protocol separation is approved and implemented locally on isolated
 Explicit diagnostic/snapshot v2 retains drawing/CAM v1 and guarded project v9.
 Only proven isolated line-gap edits and unchanged single-owner placements are
 accepted; overlapping/nested envelopes and all unproven cases refuse. The private
-drawing is diagnosed, not repaired or CAM-qualified. **Bounded implementation accepted; three focused local commits authorized. HARD STOP after consolidation; no integration or next milestone.**
+drawing is diagnosed, not repaired or CAM-qualified. **Bounded implementation accepted;
+three local commits completed through `96181814`. No integration.** ALPHA-3 was
+subsequently authorized separately, with its current version decision above.
 
 
 ALPHA-1 is completed locally on isolated `fix/alpha-stock-diagnostics`, executable
