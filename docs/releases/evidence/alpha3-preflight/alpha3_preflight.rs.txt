@@ -1,0 +1,286 @@
+//! ALPHA-3 source-bound audit; production behavior has not been changed.
+//! `observed_*` characterizes v9. `desired_*` is deliberately RED on the
+//! accepted ALPHA-2 baseline and must not be ignored or treated as qualification.
+use ivac_core::{
+    gcode::preview::MoveKind,
+    pipeline::{run_pipeline, PipelineRequest, PipelineResponse},
+};
+use serde_json::{json, Value};
+
+fn profile() -> Value {
+    let mut v: Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/cli-v9/profile.request.json"
+    ))
+    .unwrap();
+    v["post_processor"] = json!("linuxcnc");
+    v.as_object_mut().unwrap().remove("cps_post");
+    v["project"]["operations"][0]["params"]["cutting"]["rates"] = json!([
+        {"role":"rough","tool_id":1,"rpm":11000,"feed_mm_min":811,"plunge_mm_min":111},
+        {"role":"finish","tool_id":1,"rpm":13000,"feed_mm_min":413,"plunge_mm_min":113}
+    ]);
+    v
+}
+
+fn pocket(strategy: Value, nocontour: bool, allowance: f64) -> Value {
+    let mut v = profile();
+    let op = &mut v["project"]["operations"][0];
+    let contour = op["kind"]["contour"].clone();
+    op["kind"] = json!({"type":"pocket","strategy":strategy,"contour":contour,
+        "pocket":{"xy_overlap":0.5,"pocket_nocontour":nocontour,
+            "finish_xy_allowance_mm":allowance}});
+    if nocontour {
+        op["params"]["cutting"]["rates"]
+            .as_array_mut()
+            .unwrap()
+            .pop();
+    }
+    v
+}
+
+fn generate(v: &Value) -> Result<PipelineResponse, String> {
+    let req: PipelineRequest = serde_json::from_value(v.clone()).map_err(|e| e.to_string())?;
+    run_pipeline(req, |_, _, _| {}).map_err(|e| e.to_string())
+}
+
+fn record(name: &str, request: &Value, response: &PipelineResponse) {
+    if let Ok(dir) = std::env::var("ALPHA3_EVIDENCE_DIR") {
+        let dir = std::path::Path::new(&dir);
+        std::fs::create_dir_all(dir).unwrap();
+        for (suffix, value) in [
+            ("request", request.clone()),
+            ("response", serde_json::to_value(response).unwrap()),
+        ] {
+            std::fs::write(
+                dir.join(format!("{name}.{suffix}.json")),
+                serde_json::to_vec_pretty(&value).unwrap(),
+            )
+            .unwrap();
+        }
+    }
+}
+
+fn words(program: &str, letter: char) -> Vec<f64> {
+    program
+        .lines()
+        .filter(|l| !l.trim_start().starts_with([';', '(']))
+        .flat_map(|l| l.split_whitespace())
+        .filter_map(|w| w.strip_prefix(letter)?.parse().ok())
+        .collect()
+}
+
+fn cut_x_bounds(r: &PipelineResponse) -> (f64, f64) {
+    r.toolpath
+        .iter()
+        .filter(|s| matches!(s.kind, MoveKind::Cut | MoveKind::Arc) && s.to.z < 0.0)
+        .flat_map(|s| [s.from.x, s.to.x])
+        .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), x| {
+            (min.min(x), max.max(x))
+        })
+}
+
+#[test]
+fn observed_profile_uses_finish_for_all_compensations_and_requires_unused_rough() {
+    for offset in ["inside", "outside", "on"] {
+        let mut v = profile();
+        v["project"]["operations"][0]["kind"]["offset"] = json!(offset);
+        let r = generate(&v).unwrap();
+        record(&format!("profile-{offset}"), &v, &r);
+        let feeds = words(&r.gcode, 'F');
+        assert!(feeds.contains(&413.0) && feeds.contains(&113.0));
+        assert!(!feeds.contains(&811.0) && !feeds.contains(&111.0));
+        assert!(words(&r.gcode, 'S').contains(&13000.0));
+        v["project"]["operations"][0]["params"]["cutting"]["rates"]
+            .as_array_mut()
+            .unwrap()
+            .remove(0);
+        let error = generate(&v).unwrap_err();
+        println!("{offset}: unused Rough removal refuses: {error}");
+    }
+}
+
+#[test]
+fn observed_retained_stock_is_not_removed_and_on_contour_ignores_it() {
+    for (offset, expected) in [
+        ("outside", ((9.0, 36.5), (8.0, 37.5))),
+        ("inside", ((11.0, 34.5), (12.0, 33.5))),
+        ("on", ((10.0, 35.5), (10.0, 35.5))),
+    ] {
+        let mut v = profile();
+        v["project"]["operations"][0]["kind"]["offset"] = json!(offset);
+        let base = generate(&v).unwrap();
+        v["project"]["operations"][0]["params"]["stock_to_leave_mm"] = json!(1.0);
+        let retained = generate(&v).unwrap();
+        record(&format!("retained-stock-{offset}"), &v, &retained);
+        assert_eq!(cut_x_bounds(&base), expected.0);
+        assert_eq!(cut_x_bounds(&retained), expected.1);
+    }
+}
+
+#[test]
+fn observed_finish_step_changes_only_the_last_axial_schedule() {
+    let mut v = profile();
+    let base = generate(&v).unwrap();
+    v["project"]["operations"][0]["params"]["finish_step"] = json!(-0.1);
+    let r = generate(&v).unwrap();
+    record("profile-finish-step", &v, &r);
+    let depths = |r: &PipelineResponse| {
+        let mut z: Vec<_> = r
+            .toolpath
+            .iter()
+            .filter(|s| s.to.z < 0.0)
+            .map(|s| s.to.z)
+            .collect();
+        z.sort_by(f64::total_cmp);
+        z.dedup();
+        z
+    };
+    assert_eq!(depths(&base), [-0.5, -0.25]);
+    assert_eq!(depths(&r), [-0.5, -0.4, -0.25]);
+    assert_eq!(cut_x_bounds(&base), cut_x_bounds(&r));
+    assert!(!words(&r.gcode, 'F').contains(&811.0));
+}
+
+#[test]
+fn observed_pocket_strategy_wall_roles_and_nocontour_contract() {
+    for strategy in ["cascade", "zigzag", "spiral"] {
+        for allowance in [0.0, 0.4] {
+            let v = pocket(json!(strategy), false, allowance);
+            let r = generate(&v).unwrap();
+            let feeds = words(&r.gcode, 'F');
+            assert!(
+                feeds.contains(&811.0) && feeds.contains(&413.0),
+                "{strategy}"
+            );
+            record(&format!("pocket-{strategy}-{allowance}"), &v, &r);
+            println!(
+                "{strategy}, allowance {allowance}: {} decoded moves, F811 + F413",
+                r.toolpath.len()
+            );
+        }
+        let base = pocket(json!(strategy), true, 0.0);
+        let v = pocket(json!(strategy), true, 0.4);
+        let r = generate(&v).unwrap();
+        assert_eq!(generate(&base).unwrap().gcode, r.gcode);
+        assert!(!words(&r.gcode, 'F').contains(&413.0));
+        assert!(r
+            .warnings
+            .iter()
+            .any(|w| w.kind == "nocontour_ignores_finish_allowance"));
+        record(&format!("pocket-{strategy}-nocontour"), &v, &r);
+    }
+}
+
+#[test]
+fn observed_trochoidal_has_its_own_fill_and_implicit_wall_roles() {
+    let v = pocket(
+        json!({"kind":"trochoidal", "engagement_angle_deg":30.0,
+        "loop_radius_factor":0.5}),
+        false,
+        0.4,
+    );
+    let r = generate(&v).unwrap();
+    let feeds = words(&r.gcode, 'F');
+    assert!(feeds.contains(&811.0) && feeds.contains(&413.0));
+    record("pocket-trochoidal", &v, &r);
+    println!(
+        "trochoidal: {} decoded moves; no optional floor-finishing contract",
+        r.toolpath.len()
+    );
+}
+
+#[test]
+fn observed_dual_tool_pocket_finish_radius_does_not_include_retained_stock() {
+    let mut v = pocket(json!("cascade"), false, 0.4);
+    v["project"]["operations"][0]["params"]["stock_to_leave_mm"] = json!(1.0);
+    let single = generate(&v).unwrap();
+    assert_eq!(cut_x_bounds(&single), (12.0, 33.5));
+    record("pocket-retained-stock-single", &v, &single);
+    let mut tool = v["project"]["tools"][0].clone();
+    tool["id"] = json!(2);
+    tool["diameter"] = json!(1.0);
+    v["project"]["tools"].as_array_mut().unwrap().push(tool);
+    v["project"]["operations"][0]["finish_tool_id"] = json!(2);
+    v["project"]["operations"][0]["params"]["cutting"]["rates"][1]["tool_id"] = json!(2);
+    let dual = generate(&v).unwrap();
+    assert_eq!(cut_x_bounds(&dual), (10.5, 35.0));
+    record("pocket-retained-stock-dual", &v, &dual);
+}
+
+#[test]
+fn observed_shopbot_refuses_same_tool_rpm_transition_but_accepts_existing_distinct_sections() {
+    let mut v = pocket(json!("cascade"), false, 0.4);
+    v["post_processor"] = json!("cps");
+    v["cps_post"] = json!({"source":{"kind":"bundled","id":"shopbot"}});
+    let error = generate(&v).unwrap_err();
+    assert!(error.contains("unsupported record spindleSpeed"), "{error}");
+    println!("same-tool spindle transition: {error}");
+    let mut tool = v["project"]["tools"][0].clone();
+    tool["id"] = json!(2);
+    tool["diameter"] = json!(1.0);
+    v["project"]["tools"].as_array_mut().unwrap().push(tool);
+    v["project"]["operations"][0]["finish_tool_id"] = json!(2);
+    v["project"]["operations"][0]["params"]["cutting"]["rates"][1]["tool_id"] = json!(2);
+    let r = generate(&v).unwrap();
+    assert_eq!(r.tool_provenance.bindings.len(), 2);
+    record("pocket-shopbot-distinct-tools", &v, &r);
+}
+
+#[test]
+fn observed_v9_additive_operation_flag_is_ignored_by_native_reader_and_generator() {
+    let base = profile();
+    let mut v = base.clone();
+    v["project"]["operations"][0]["machining_stages"] = json!({"version":1,"finishing":null});
+    let decoded: PipelineRequest = serde_json::from_value(v.clone()).unwrap();
+    assert!(
+        serde_json::to_value(decoded).unwrap()["project"]["operations"][0]
+            .get("machining_stages")
+            .is_none()
+    );
+    assert_eq!(generate(&base).unwrap().gcode, generate(&v).unwrap().gcode);
+}
+
+#[test]
+fn observed_native_rejects_nested_unknown_contract_new_role_and_missing_legacy_rates() {
+    for case in ["nested", "main-role", "no-legacy-rates"] {
+        let mut v = profile();
+        let cutting = &mut v["project"]["operations"][0]["params"]["cutting"];
+        match case {
+            "nested" => cutting["stage_contract"] = json!(1),
+            "main-role" => cutting["rates"][0]["role"] = json!("main"),
+            _ => *cutting = json!({"contract":"main_finishing_v1","main":{},"finishing":null}),
+        }
+        let error = serde_json::from_value::<PipelineRequest>(v).unwrap_err();
+        println!("{case}: {error}");
+    }
+}
+
+#[test]
+fn observed_native_rejects_explicit_cutting_version_ten_before_generation() {
+    let mut v = profile();
+    v["project"]["cutting_version"] = json!(10);
+    let error = generate(&v).unwrap_err();
+    assert!(error.contains("9"), "{error}");
+    println!("cutting_version 10: {error}");
+}
+
+#[test]
+fn desired_profile_main_rates_drive_the_emitted_contour() {
+    let r = generate(&profile()).unwrap();
+    assert!(
+        words(&r.gcode, 'F').contains(&811.0),
+        "ALPHA-3 baseline: contour uses F413 (Finish), not F811 (primary/Rough)"
+    );
+}
+
+#[test]
+fn desired_profile_can_run_without_unused_finish_values() {
+    let mut v = profile();
+    v["project"]["operations"][0]["params"]["cutting"]["rates"]
+        .as_array_mut()
+        .unwrap()
+        .pop();
+    assert!(
+        generate(&v).is_ok(),
+        "ALPHA-3 baseline: no finishing-off representation; missing Finish is refused"
+    );
+}

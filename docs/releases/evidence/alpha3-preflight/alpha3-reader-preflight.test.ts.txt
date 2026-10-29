@@ -1,0 +1,153 @@
+// ALPHA-3 compatibility audit of the unchanged ALPHA-2 readers.
+import { readFileSync } from 'node:fs';
+import { expect, it, vi } from 'vitest';
+vi.mock('./text_preview.svelte', () => ({ resetPreviewCache: vi.fn() }));
+vi.mock('./workspace.svelte', () => ({ workspace: {} }));
+import { validateProjectV9 } from './project-v9';
+import { snapshotProject, restoreProject } from './project-file-ops';
+import { History } from './history';
+import { buildOpEntry } from './op_defaults';
+import { seedCutting } from './cutting-parameters';
+import { defaultProjectMachine, defaultProjectTools } from './project-defaults';
+import { defaultWorkOffset, type ProjectFile } from './project-types';
+import type { ProjectState } from './project.svelte';
+
+function fixture(): ProjectFile {
+  const tools = defaultProjectTools();
+  const op = buildOpEntry('profile', {
+    nextId: 1,
+    tools,
+    reliefSources: [],
+    selectionIds: [],
+    objectMeta: [],
+  });
+  op.cutting = seedCutting(op, tools);
+  return {
+    kind: 'ivac-project',
+    version: 9,
+    imports: [],
+    visibleLayers: [],
+    selectedEntities: [],
+    machine: defaultProjectMachine(),
+    tools,
+    operations: [op],
+  };
+}
+
+it('v9 portable reader accepts an additive operation stage flag without changing old roles', () => {
+  const p = fixture();
+  Object.assign(p.operations![0], { machiningStages: { version: 1, finishing: null } });
+  expect(() => validateProjectV9(p)).not.toThrow();
+  expect(p.operations![0].cutting!.rates.map((r) => r.role)).toEqual(['rough', 'finish']);
+});
+
+it('v9 portable reader rejects nested discriminators, new roles and new required shapes', () => {
+  for (const mode of ['nested', 'main-role', 'new-shape']) {
+    const p = fixture();
+    const c = p.operations![0].cutting!;
+    if (mode === 'nested') Object.assign(c, { stage_contract: 1 });
+    if (mode === 'main-role') Object.assign(c.rates[0], { role: 'main' });
+    if (mode === 'new-shape')
+      Object.assign(p.operations![0], {
+        cutting: { contract: 'main_finishing_v1', main: {}, finishing: null },
+      });
+    expect(() => validateProjectV9(p), mode).toThrow();
+  }
+});
+
+it('the actual restore path refuses outer v10 before mutating the document', () => {
+  const file = fixture();
+  const state = {
+    data: {
+      ...file,
+      fixtures: [],
+      textLayers: [],
+      reliefSources: [],
+      workOffset: defaultWorkOffset(),
+      serializedExtensions: {},
+    },
+    sel: {},
+    history: new History(),
+  } as unknown as ProjectState;
+  const before = JSON.stringify(snapshotProject(state));
+  expect(() => restoreProject(state, { ...file, version: 10 } as unknown as ProjectFile)).toThrow();
+  expect(JSON.stringify(snapshotProject(state))).toBe(before);
+});
+
+function request() {
+  const v = JSON.parse(
+    readFileSync(
+      new URL('../../../../tests/fixtures/cli-v9/profile.request.json', import.meta.url),
+      'utf8',
+    ),
+  );
+  v.post_processor = 'linuxcnc';
+  delete v.cps_post;
+  return v;
+}
+async function realWasm() {
+  const url = new URL('../../../../crates/ivac-wasm/pkg/ivac_wasm.js', import.meta.url);
+  const wasm = await import(/* @vite-ignore */ url.href);
+  await wasm.default({ module_or_path: readFileSync(new URL('./ivac_wasm_bg.wasm', url)) });
+  return wasm;
+}
+
+it('real WASM ignores additive fields even inside the native strict cutting structure', async () => {
+  const wasm = await realWasm();
+  const base = request();
+  const original = wasm.generate(base);
+  for (const mode of ['operation', 'nested']) {
+    const v = structuredClone(base);
+    if (mode === 'operation')
+      v.project.operations[0].machining_stages = { version: 1, finishing: null };
+    else v.project.operations[0].params.cutting.stage_contract = 1;
+    expect(wasm.generate(v).gcode, mode).toBe(original.gcode);
+  }
+});
+
+it('real WASM rejects a new role and a replacement shape lacking legacy rates', async () => {
+  const wasm = await realWasm();
+  const role = request();
+  role.project.operations[0].params.cutting.rates[0].role = 'main';
+  expect(() => wasm.generate(role)).toThrow();
+  const shape = request();
+  shape.project.operations[0].params.cutting = {
+    contract: 'main_finishing_v1',
+    main: {},
+    finishing: null,
+  };
+  expect(() => wasm.generate(shape)).toThrow();
+});
+
+it('real WASM refuses cutting_version 10 on generation and streaming', async () => {
+  const wasm = await realWasm();
+  const v = request();
+  v.project.cutting_version = 10;
+  expect(() => wasm.generate(v)).toThrow(/v9/);
+  const events: unknown[] = [];
+  expect(() =>
+    wasm.generateStreaming(
+      v,
+      (event: unknown) => events.push(event),
+      () => false,
+    ),
+  ).toThrow(/v9/);
+  expect(events).toEqual([]);
+});
+
+it('the real preset reader accepts v1 and rejects proposed collection v2', async () => {
+  const wasm = await realWasm();
+  const collection = {
+    format: 'fabcam-preset-collection',
+    version: 1,
+    id: 'alpha3-synthetic',
+    name: 'ALPHA-3 synthetic reader probe',
+    presets: [],
+  };
+  const validate = (value: unknown) =>
+    wasm.presetCommand(
+      JSON.stringify({ action: 'validate_collection', json: JSON.stringify(value) }),
+    );
+  expect(() => validate(collection)).not.toThrow();
+  expect(() => validate({ ...collection, version: 2 })).toThrow(/version/);
+});
