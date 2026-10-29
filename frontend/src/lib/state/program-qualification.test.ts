@@ -134,8 +134,8 @@ import { explicitProjectFixture } from './explicit-project.fixture';
 it('authored rate and preset provenance edits invalidate generated export qualification', () => {
   const p = setup();
   const before = generationContextKey(p, 'linuxcnc');
-  p.data.operations[0].cutting!.rates[0].feed_mm_min = 1620;
-  p.data.operations[0].cutting!.preset_snapshot = {
+  p.data.operations[0].stages!.main.feed_mm_min = 1620;
+  p.data.operations[0].stagePreset = {
     collection_id: 'qa',
     collection_name: 'Synthetic QA',
     preset_id: 'qa-cut',
@@ -148,8 +148,7 @@ it('authored rate and preset provenance edits invalidate generated export qualif
       signature: '{}',
     },
     parameters: {
-      rates: structuredClone(p.data.operations[0].cutting!.rates),
-      schedule: { kind: 'step', step: -1, finish_step: null },
+      stages: structuredClone(p.data.operations[0].stages!),
     },
   };
   expect(generationContextKey(p, 'linuxcnc')).not.toBe(before);
@@ -157,7 +156,60 @@ it('authored rate and preset provenance edits invalidate generated export qualif
   p.gen.inputContextKey = generationContextKey(p, 'linuxcnc');
   p.gen.qualification!.key = qualificationKey(p, 'linuxcnc')!;
   expect(qualificationPhase(p, 'linuxcnc')).toBe('current');
-  p.data.operations[0].cutting!.preset_snapshot!.preset_name = 'Changed provenance';
+  p.data.operations[0].stagePreset!.preset_name = 'Changed provenance';
   expect(qualificationKey(p, 'linuxcnc')).toBeNull();
   expect(qualificationPhase(p, 'linuxcnc')).toBe('stale');
+});
+
+it('every Main/Finishing field invalidates the generated export context', () => {
+  for (const field of [
+    'main-tool',
+    'main-rpm',
+    'main-feed',
+    'main-plunge',
+    'main-depth',
+    'toggle',
+    'finish-tool',
+    'finish-rpm',
+    'finish-feed',
+    'finish-plunge',
+    'finish-depth',
+    'lateral',
+    'floor',
+    'retained',
+  ] as const) {
+    const p = setup();
+    const op = p.data.operations.find((o) => o.stages)!;
+    expect(op).toBeDefined();
+    const s = op.stages!;
+    s.finishing = { cutting: { ...s.main }, lateral_allowance_mm: 0.2, floor_allowance_mm: 0.1 };
+    op.finishToolId = s.main.tool_id;
+    const before = generationContextKey(p, 'linuxcnc');
+    p.gen.inputContextKey = before;
+    if (field === 'toggle') {
+      s.finishing = null;
+      op.finishToolId = undefined;
+    } else if (field === 'main-tool') {
+      op.toolId++;
+      s.main.tool_id = op.toolId;
+    } else if (field === 'finish-tool') {
+      op.finishToolId!++;
+      s.finishing!.cutting.tool_id = op.finishToolId!;
+    } else if (field === 'lateral') s.finishing!.lateral_allowance_mm += 0.1;
+    else if (field === 'floor') s.finishing!.floor_allowance_mm += 0.1;
+    else if (field === 'retained') op.retainedStockMm = (op.retainedStockMm ?? 0) + 0.1;
+    else {
+      const target = field.startsWith('main-') ? s.main : s.finishing!.cutting;
+      const key = field.endsWith('rpm')
+        ? 'rpm'
+        : field.endsWith('feed')
+          ? 'feed_mm_min'
+          : field.endsWith('plunge')
+            ? 'plunge_mm_min'
+            : 'depth_per_pass_mm';
+      target[key] = (target[key] ?? 0) + 1;
+    }
+    expect(generationContextKey(p, 'linuxcnc'), field).not.toBe(before);
+    expect(programExportStatus(p, 'linuxcnc').stale, field).toBe(true);
+  }
 });

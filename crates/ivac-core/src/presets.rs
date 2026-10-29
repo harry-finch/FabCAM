@@ -30,14 +30,38 @@ pub enum DepthSchedule {
         depths: Vec<f64>,
     },
 }
+impl Default for DepthSchedule {
+    fn default() -> Self {
+        Self::Step {
+            step: None,
+            finish_step: None,
+        }
+    }
+}
+impl DepthSchedule {
+    fn is_empty(&self) -> bool {
+        matches!(
+            self,
+            Self::Step {
+                step: None,
+                finish_step: None
+            }
+        )
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct PresetParameters {
+    /// V2 stage contract. Exclusive with legacy role rates and schedule.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stages: Option<crate::cutting_stages::MainFinishing>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub specialized: Option<SpecializedParameters>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub entry_angle_deg: Option<f64>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub rates: Vec<RoleRates>,
+    #[serde(default, skip_serializing_if = "DepthSchedule::is_empty")]
     pub schedule: DepthSchedule,
     pub pocket_overlap: Option<f64>,
     pub planar_stepover_mm: Option<f64>,
@@ -94,7 +118,7 @@ pub fn parse_collection(json: &str) -> Result<PresetCollection, String> {
     Ok(collection)
 }
 pub fn validate_collection(c: &PresetCollection) -> Result<(), String> {
-    if c.format != "fabcam-preset-collection" || c.version != 1 {
+    if c.format != "fabcam-preset-collection" || !matches!(c.version, 1 | 2) {
         return Err("Unsupported preset collection format/version".into());
     }
     if !safe_id(&c.id) || !text(&c.name, 160) || c.presets.len() > MAX_PRESETS {
@@ -119,11 +143,43 @@ pub fn validate_collection(c: &PresetCollection) -> Result<(), String> {
         }
         let _: serde_json::Value =
             serde_json::from_str(&p.context.signature).map_err(|e| e.to_string())?;
+        if c.version == 1 && p.parameters.stages.is_some() {
+            return Err("Stage parameters require preset collection v2".into());
+        }
+        if c.version == 2 && p.parameters.stages.is_none() {
+            let signature: serde_json::Value =
+                serde_json::from_str(&p.context.signature).map_err(|e| e.to_string())?;
+            let kind = signature["operation"]["type"].as_str();
+            let halfpipe = signature["operation"]["strategy"]["kind"] == "halfpipe";
+            if kind == Some("profile") || (kind == Some("pocket") && !halfpipe) {
+                return Err("V2 Profile/Pocket presets require explicit Main/Finishing".into());
+            }
+        }
         validate_parameters(&p.parameters)?;
     }
     Ok(())
 }
-fn validate_parameters(p: &PresetParameters) -> Result<(), String> {
+pub(crate) fn validate_parameters(p: &PresetParameters) -> Result<(), String> {
+    if let Some(s) = &p.stages {
+        if !p.rates.is_empty()
+            || !p.schedule.is_empty()
+            || p.entry_angle_deg.is_some()
+            || p.specialized.is_some()
+            || p.planar_stepover_mm.is_some()
+        {
+            return Err("Mixed stage/legacy preset parameters".into());
+        }
+        let errors = s.numeric_errors();
+        if !errors.is_empty() {
+            return Err(errors.join("; "));
+        }
+        if p.pocket_overlap
+            .is_some_and(|v| !v.is_finite() || v <= 0.0 || v >= 1.0)
+        {
+            return Err("Invalid pocket overlap".into());
+        }
+        return Ok(());
+    }
     if let Some(s) = &p.specialized {
         s.validate()?;
     }
@@ -179,7 +235,19 @@ fn validate_parameters(p: &PresetParameters) -> Result<(), String> {
 
 pub fn parameters(op: &Op) -> Result<PresetParameters, String> {
     use crate::project::OpKind;
+    if let Some(s) = &op.params.stages {
+        return Ok(PresetParameters {
+            stages: Some(s.clone()),
+            specialized: None,
+            entry_angle_deg: None,
+            rates: vec![],
+            schedule: DepthSchedule::default(),
+            pocket_overlap: op.pocket_params().map(|p| p.xy_overlap),
+            planar_stepover_mm: None,
+        });
+    }
     Ok(PresetParameters {
+        stages: None,
         specialized: SpecializedParameters::capture(op),
         entry_angle_deg: op.params.cutting.as_ref().and_then(|c| c.entry_angle_deg),
         rates: op
@@ -289,6 +357,21 @@ pub fn context(project: &Project, op: &Op) -> Result<PresetContext, String> {
             map.remove(key);
         }
     }
+    if op.params.stages.is_some() {
+        kind.as_object_mut()
+            .ok_or("Invalid operation context")?
+            .insert(
+                "cutting_contract".into(),
+                serde_json::json!("main_finishing_v1"),
+            );
+        for t in &mut tools {
+            t["role"] = serde_json::json!(if t["role"] == "rough" {
+                "main"
+            } else {
+                "finishing"
+            });
+        }
+    }
     let signature=serde_json::to_string(&serde_json::json!({"machine":machine_id,"machine_setup":machine_setup,"mode":project.machine.mode,"material":material,"tools":tools,"operation":kind,"plunge":op.params.plunge})).map_err(|e|e.to_string())?;
     Ok(PresetContext {
         machine_id: machine_id.clone(),
@@ -315,6 +398,15 @@ pub fn load(
         .iter()
         .find(|p| p.id == id)
         .ok_or("Preset not found")?;
+    crate::cutting_parameters::require_current(project)?;
+    if crate::cutting_stages::applies(op)
+        && (collection.version != 2 || p.parameters.stages.is_none())
+    {
+        return Err("Historical Profile/Pocket presets remain inspectable; their Rough/Finish values cannot be applied to v10 Main/Finishing".into());
+    }
+    if !crate::cutting_stages::applies(op) && p.parameters.stages.is_some() {
+        return Err("Stage preset on another operation family".into());
+    }
     let current = context(project, op)?;
     if current.signature != p.context.signature
         || current.machine_id != p.context.machine_id
@@ -334,21 +426,36 @@ pub fn load(
             .ok_or("Preset role is not supported")?
             .1;
     }
-    next.params.cutting = Some(MillingCutting {
-        rates: parameters.rates.clone(),
-        entry_angle_deg: parameters.entry_angle_deg,
-        preset_snapshot: None,
-    });
-    match &parameters.schedule {
-        DepthSchedule::Step { step, finish_step } => {
-            next.params.step = *step;
-            next.params.finish_step = *finish_step;
-            next.params.depth_list.clear();
+    if let Some(s) = &mut parameters.stages {
+        let crate::cutting_stages::MainFinishing::V1 { main, finishing } = s;
+        main.tool_id = op.tool_id;
+        if let Some(f) = finishing {
+            f.cutting.tool_id = op
+                .finish_tool_id
+                .ok_or("Assign the finishing tool explicitly before loading")?;
         }
-        DepthSchedule::Explicit { depths } => {
-            next.params.depth_list.clone_from(depths);
-            next.params.step = None;
-            next.params.finish_step = None;
+        next.params.stages = Some(s.clone());
+        next.params.cutting = None;
+        next.params.step = None;
+        next.params.finish_step = None;
+        next.params.depth_list.clear();
+    } else {
+        next.params.cutting = Some(MillingCutting {
+            rates: parameters.rates.clone(),
+            entry_angle_deg: parameters.entry_angle_deg,
+            preset_snapshot: None,
+        });
+        match &parameters.schedule {
+            DepthSchedule::Step { step, finish_step } => {
+                next.params.step = *step;
+                next.params.finish_step = *finish_step;
+                next.params.depth_list.clear();
+            }
+            DepthSchedule::Explicit { depths } => {
+                next.params.depth_list.clone_from(depths);
+                next.params.step = None;
+                next.params.finish_step = None;
+            }
         }
     }
     if let Some(overlap) = parameters.pocket_overlap {
@@ -374,7 +481,7 @@ pub fn load(
     if !report.errors.is_empty() {
         return Err(report.errors.join("; "));
     }
-    next.params.cutting.as_mut().unwrap().preset_snapshot = Some(LoadedPresetSnapshot {
+    let snapshot = Some(LoadedPresetSnapshot {
         collection_id: collection.id.clone(),
         collection_name: collection.name.clone(),
         preset_id: p.id.clone(),
@@ -382,6 +489,15 @@ pub fn load(
         context: current,
         parameters,
     });
+    if next.params.stages.is_some() {
+        next.params.stage_preset = snapshot;
+    } else {
+        next.params
+            .cutting
+            .as_mut()
+            .ok_or("Missing cutting")?
+            .preset_snapshot = snapshot;
+    }
     Ok(next)
 }
 
@@ -399,7 +515,7 @@ mod tests {
     }
     fn example() -> (Project, PresetCollection) {
         let mut p = Project::default();
-        p.cutting_version = Some(9);
+        p.cutting_version = Some(10);
         p.machine.physical_id = Some("machine-lab".into());
         p.machine.name = "Lab router".into();
         p.material = Some(serde_json::from_str(r#"{"id":"wood-plywood","revision":"1"}"#).unwrap());
@@ -408,6 +524,9 @@ mod tests {
             ..crate::project::ToolEntry::default()
         };
         let mut op = Op::default();
+        op.kind = crate::project::OpKind::Engrave {
+            contour: crate::project::ContourParams::default(),
+        };
         op.params.step = Some(-1.0);
         op.params.cutting = Some(crate::cutting_parameters::seed(
             &op,
@@ -543,7 +662,7 @@ mod tests {
         c.id = "../escape".into();
         assert!(validate_collection(&c).is_err());
         c = collection();
-        c.version = 2;
+        c.version = 3;
         assert!(validate_collection(&c).is_err());
         assert!(parse_collection(&" ".repeat(MAX_COLLECTION_BYTES + 1)).is_err());
         assert!(parse_collection("{\"format\":\"source-pack\"}").is_err());
@@ -582,6 +701,7 @@ pub fn command(request: PresetCommand) -> Result<serde_json::Value, String> {
                 .iter()
                 .find(|o| o.id == op_id)
                 .ok_or("Operation not found")?;
+            crate::cutting_parameters::require_current(&project)?;
             let context = context(&project, op);
             Ok(
                 serde_json::json!({"check":validate_operation(&project,op),"parameters":parameters(op)?,"context":context.as_ref().ok(),"context_error":context.as_ref().err()}),

@@ -116,15 +116,24 @@ fn pass_budget_boundary_is_exact() {
     }
     // The finish pre-pass counts: 998 + pre-finish + final = 1000 passes.
     let mut p = profile(-999., Some(-1.));
+    p.operations[0].kind = OpKind::Engrave {
+        contour: ivac_core::project::ContourParams::default(),
+    };
     p.operations[0].params.finish_step = Some(-0.5);
     let levels = cut_levels(&generate(p).unwrap());
     assert_eq!(levels.len(), 1000);
     assert_eq!(&levels[997..], &[-998., -998.5, -999.]);
     let mut p = profile(-1000., Some(-1.));
+    p.operations[0].kind = OpKind::Engrave {
+        contour: ivac_core::project::ContourParams::default(),
+    };
     p.operations[0].params.finish_step = Some(-0.5);
     assert_pass_limit(generate(p), "1000 + pre-finish");
     // An explicit depth list is a schedule too.
     let mut p = profile(-1., Some(-1.));
+    p.operations[0].kind = OpKind::Engrave {
+        contour: ivac_core::project::ContourParams::default(),
+    };
     p.operations[0].params.depth_list = (1..=BUDGET + 1).map(|i| -(i as f64) * 0.01).collect();
     assert_pass_limit(generate(p), "1001-entry depth list");
 }
@@ -165,7 +174,7 @@ fn explicit_invalid_or_missing_step_refuses_without_tool_inheritance() {
     ] {
         let err = generate(profile(-10., Some(step))).expect_err("invalid step");
         assert!(
-            matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("Depth per pass must be finite and positive")),
+            matches!(&err, PipelineError::AppliedCutting(_, d) if (d.contains("depth_per_pass_mm must be finite and positive") || d.contains("Depth per pass must be finite and positive"))),
             "{step}: {err:?}"
         );
     }
@@ -174,7 +183,7 @@ fn explicit_invalid_or_missing_step_refuses_without_tool_inheritance() {
     p.tools[0].default_step = Some(0.);
     let err = generate(p).unwrap_err();
     assert!(
-        matches!(&err, PipelineError::AppliedCutting(1, d) if d.contains("Set explicit depth per pass")),
+        matches!(&err, PipelineError::AppliedCutting(1, d) if (d.contains("depth_per_pass_mm must be finite and positive") || d.contains("Depth per pass must be finite and positive"))),
         "{err:?}"
     );
     // …but unused when the op supplies its own valid step.
@@ -184,7 +193,8 @@ fn explicit_invalid_or_missing_step_refuses_without_tool_inheritance() {
     // Omitted everywhere refuses; there is no whole-depth fallback.
     let err = generate(profile(-10., None)).unwrap_err();
     assert!(
-        err.to_string().contains("Set explicit depth per pass"),
+        err.to_string()
+            .contains("depth_per_pass_mm must be finite and positive"),
         "{err}"
     );
     // A library default cannot supply missing operation intent.
@@ -192,7 +202,8 @@ fn explicit_invalid_or_missing_step_refuses_without_tool_inheritance() {
     p.tools[0].default_step = Some(-2.5);
     let err = generate(p).unwrap_err();
     assert!(
-        err.to_string().contains("Set explicit depth per pass"),
+        err.to_string()
+            .contains("depth_per_pass_mm must be finite and positive"),
         "{err}"
     );
 }
@@ -204,7 +215,7 @@ fn refused_op_is_never_cached_and_regenerates_after_correction() {
         assert_pass_limit(generate(profile(-5000., Some(-1.))), "refused twice");
         assert!(matches!(
             generate(profile(-5., Some(0.))),
-            Err(PipelineError::AppliedCutting(1, ref d)) if d.contains("Depth per pass")
+            Err(PipelineError::AppliedCutting(_, ref d)) if d.contains("depth_per_pass_mm")
         ));
     }
     assert_eq!(generate(profile(-5., Some(-1.))).unwrap().gcode, valid);
@@ -309,7 +320,7 @@ fn vcarve_depth_levels_share_the_budget() {
     assert_pass_limit(generate(project(-0.0009)), "V-Carve 1112 levels");
     assert!(matches!(
         generate(project(f64::NAN)),
-        Err(PipelineError::AppliedCutting(1, ref d)) if d.contains("Depth per pass")
+        Err(PipelineError::AppliedCutting(_, ref d)) if d.contains("Depth per pass")
     ));
 }
 

@@ -1,3 +1,4 @@
+import { usesStages, seedStages } from './cutting-stages';
 // Single source of truth for the default field set of a newly-added
 // operation, keyed by `OpKind`. Extracted out of `ProjectState.addOperation`
 // (which was a ~200-line copy-pasted if-chain) so the defaults are a PURE,
@@ -190,9 +191,13 @@ function buildUnseededOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
 export function buildOpEntry(kind: OpKind, ctx: OpDefaultsCtx): OpEntry {
   const op = buildUnseededOpEntry(kind, ctx);
   if ((!ctx.modes || ctx.modes.includes('mill')) && cuttingRoles(op).length) {
-    op.cutting = seedCutting(op, [...ctx.tools]);
+    if (usesStages(op)) {
+      op.stages = seedStages(op, ctx.tools);
+      op.step = null;
+    } else op.cutting = seedCutting(op, [...ctx.tools]);
     const tool = ctx.tools.find((t) => t.id === op.toolId);
-    if (op.step === null && tool?.defaultStep !== undefined) op.step = tool.defaultStep;
+    if (!op.stages && op.step === null && tool?.defaultStep !== undefined)
+      op.step = tool.defaultStep;
   }
   return op;
 }

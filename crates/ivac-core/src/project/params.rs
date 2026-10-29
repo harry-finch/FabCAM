@@ -212,6 +212,11 @@ pub struct VCarveParams {
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct OpParamsCommon {
+    /// Required exclusive contract for v10 Profile and ordinary Pocket.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stages: Option<crate::cutting_stages::MainFinishing>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stage_preset: Option<crate::presets::LoadedPresetSnapshot>,
     /// Explicit operation values; no tool-default lookup during v9 generation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cutting: Option<crate::cutting_parameters::MillingCutting>,
@@ -322,6 +327,8 @@ impl OpParamsCommon {
     #[must_use]
     pub fn mill_default() -> Self {
         Self {
+            stages: None,
+            stage_preset: None,
             cutting: None,
             depth: -2.0,
             start_depth: 0.0,

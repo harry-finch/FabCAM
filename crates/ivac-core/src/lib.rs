@@ -16,6 +16,7 @@ pub mod cam;
 pub mod cancel;
 pub mod corner_relief;
 pub mod cutting_parameters;
+pub mod cutting_stages;
 pub mod drawing;
 pub mod errors;
 pub mod gcode;

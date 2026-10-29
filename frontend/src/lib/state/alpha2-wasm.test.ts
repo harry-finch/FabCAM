@@ -4,7 +4,7 @@ import { expect, it, vi } from 'vitest';
 vi.mock('./text_preview.svelte', () => ({ resetPreviewCache: vi.fn() }));
 vi.mock('./workspace.svelte', () => ({ workspace: {} }));
 import { validateProjectGeometry as oldReader } from './project-geometry-v1-reader.fixture';
-import { validateProjectV9 } from './project-v9';
+import { validateProjectV10 } from './project-v10';
 import { explicitProjectFixture } from './explicit-project.fixture';
 import { drawingCommand, drawingInputKey, type DrawingState } from './drawing';
 import { History } from './history';
@@ -133,7 +133,7 @@ it('real WASM v1/v2 boundaries, explicit repair, stale apply and guarded portabl
   // Actual baseline reader source, unchanged: old readers reject nested revision.
   expect(() => oldReader(file)).toThrow(/incompatible/);
   const saved = JSON.parse(JSON.stringify(file));
-  validateProjectV9(saved);
+  validateProjectV10(saved);
   const loaded = await validateDrawingSnapshot(saved, {
     evaluateDrawingV2: async (request) => wasm.evaluateDrawingV2(request),
   } as import('../api/client').WiacClient);
@@ -147,7 +147,7 @@ it('real WASM v1/v2 boundaries, explicit repair, stale apply and guarded portabl
   expect(reopened.local_edit_accepted).toBe(false);
   const malformed = structuredClone(saved);
   malformed.drawing!.response.version = 1;
-  expect(() => validateProjectV9(malformed)).toThrow();
+  expect(() => validateProjectV10(malformed)).toThrow();
   const model = { drawing: undefined as DrawingState | undefined, operations: [], dirty: false };
   const history = new History();
   history.exec(drawingCommand(undefined, state, [], []), model);

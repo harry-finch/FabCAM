@@ -3,6 +3,7 @@ import { expect, it, vi } from 'vitest';
 vi.mock('./text_preview.svelte', () => ({ resetPreviewCache: vi.fn() }));
 vi.mock('./workspace.svelte', () => ({ workspace: {} }));
 import { reportCuttingText, reportToolIds, reportToolNames } from './report-cutting';
+import { usesStages } from './cutting-stages';
 import { cuttingRoles } from './cutting-parameters';
 import { buildOpEntry } from './op_defaults';
 import { defaultProjectTools, defaultProjectMachine } from './project-defaults';
@@ -18,25 +19,43 @@ function op(kind: OpEntry['kind'], patch = {}): OpEntry {
     buildOpEntry(kind, { nextId: 1, tools, reliefSources: [], selectionIds: [], objectMeta: [] }),
     patch,
   );
-  o.cutting = {
-    rates: cuttingRoles(o).map((r, i) => ({
-      ...r,
-      rpm: 13000 + i,
-      feed_mm_min: 410 + i,
-      plunge_mm_min: 110 + i,
-    })),
-  };
+  if (usesStages(o)) {
+    o.stages!.main = { ...o.stages!.main, rpm: 13000, feed_mm_min: 410, plunge_mm_min: 110 };
+    if (o.finishToolId)
+      o.stages!.finishing = {
+        cutting: {
+          ...o.stages!.main,
+          tool_id: o.finishToolId,
+          rpm: 13001,
+          feed_mm_min: 411,
+          plunge_mm_min: 111,
+        },
+        lateral_allowance_mm: 0.2,
+        floor_allowance_mm: 0,
+      };
+  } else {
+    delete o.stages;
+    o.cutting = {
+      rates: cuttingRoles(o).map((r, i) => ({
+        ...r,
+        rpm: 13000 + i,
+        feed_mm_min: 410 + i,
+        plunge_mm_min: 110 + i,
+      })),
+    };
+  }
   return o;
 }
-it('Profile uses Finish, never stored Rough or tool defaults', () => {
+it('Profile reports mandatory Main, no hidden Finish and no tool-default rates', () => {
   const p = op('profile');
-  expect(reportCuttingText(p)).toBe(`finish · #${p.toolId}: 13001 rpm · 411 / 111 mm/min`);
+  expect(reportCuttingText(p)).toContain(`Main · #${p.toolId}: 13000 rpm · 410 / 110 mm/min`);
+  expect(reportCuttingText(p)).toContain('Finishing off');
   expect(reportToolIds(p)).toEqual([p.toolId]);
 });
 it('Pocket attributes rough/finish to actual tools; Halfpipe has only rough', () => {
   const p = op('pocket', { finishToolId: 42 });
   expect(reportToolIds(p)).toEqual([p.toolId, 42]);
-  expect(reportCuttingText(p)).toContain('finish · #42: 13001 rpm · 411 / 111 mm/min');
+  expect(reportCuttingText(p)).toContain('Finishing · #42: 13001 rpm · 411 / 111 mm/min');
   expect(
     reportCuttingText(op('pocket', { pocketStrategy: 'halfpipe', finishToolId: 42 })),
   ).not.toContain('finish');
@@ -54,7 +73,7 @@ it('Drill includes distinct spotting and chamfer tools and rates', () => {
   expect(reportCuttingText(op('chamfer', { chamferFinishPass: true }))).toContain('finish');
 });
 it('missing, wrong-tool and ambiguous rates never fall back to defaults', () => {
-  const p = op('profile');
+  const p = op('chamfer', { chamferFinishPass: true });
   p.cutting!.rates[1].rpm = null;
   expect(reportCuttingText(p)).toContain('— rpm · 411 / 111');
   p.cutting!.rates[1].tool_id = 999;
@@ -67,10 +86,10 @@ it('missing, wrong-tool and ambiguous rates never fall back to defaults', () => 
   expect(reportCuttingText(op('pause'))).toBe('—');
   expect(reportToolIds(op('pause'))).toEqual([]);
 });
-it('edited rates survive real v9 snapshot/restore and feed the exported report unchanged', () => {
+it('edited rates survive real v10 snapshot/restore and feed the exported report unchanged', () => {
   const operations = [op('profile'), op('pocket', { finishToolId: tools[0].id }), op('drill')];
   operations.forEach((o, i) => (o.id = i + 1));
-  operations[0].cutting!.rates[1].feed_mm_min = 321;
+  operations[0].stages!.main.feed_mm_min = 321;
   const p = {
     data: {
       operations,
@@ -90,7 +109,7 @@ it('edited rates survive real v9 snapshot/restore and feed the exported report u
   } as unknown as ProjectState;
   const before = operations.map((o) => reportCuttingText(o));
   const file = JSON.parse(JSON.stringify(snapshotProject(p)));
-  expect(file.version).toBe(9);
+  expect(file.version).toBe(10);
   restoreProject(p, file);
   expect(p.data.operations.map((o) => reportCuttingText(o))).toEqual(before);
   const md = buildReportMarkdown({

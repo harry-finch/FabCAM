@@ -583,10 +583,14 @@ fn run_pipeline_picks_grbl_when_requested() {
 fn run_pipeline_hpgl_emits_pen_up_down_program() {
     let resp = run_pipeline(
         crate::fixture_support::request(PipelineRequest {
-            project: project_with(
-                vec![profile_op(1, 1, ToolOffset::Outside)],
-                vec![endmill(1, 3.0)],
-            ),
+            project: {
+                let mut p = project_with(
+                    vec![profile_op(1, 1, ToolOffset::Outside)],
+                    vec![endmill(1, 3.0)],
+                );
+                p.machine.mode = crate::project::MachineMode::Laser;
+                p
+            },
             post_processor: Some(PostProcessorKind::Hpgl),
             cps_post: None,
         }),
@@ -6259,7 +6263,10 @@ fn prev_tool_id_stays_unchanged_when_dual_tool_skips_finish() {
     // `; toolchange: finish pass with tool 2` comment from
     // dual_tool.rs, which is distinct from the run_per_op's
     // `toolchange: T? (...) for op ...` comment.
-    let real_swap = inter_op_window.contains("toolchange: finish pass with tool");
+    let real_swap = resp
+        .cutting_stages
+        .iter()
+        .any(|b| b.operation_id == 1 && b.stage == "finishing" && b.parameters.tool_id == 2);
     if real_swap {
         // Post-fix: when the cascade DID emit a real T2 swap
         // inside OP 1, prev_tool_id MUST be biased to 2 so that

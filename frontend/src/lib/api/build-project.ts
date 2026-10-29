@@ -723,7 +723,7 @@ function buildOp(opIn: OpEntry, machine: MachineSettings): WireOp {
     enabled: opIn.enabled,
     kind: buildOpKind(opIn),
     tool_id: opIn.toolId,
-    ...(op.finishToolId !== undefined && op.finishToolId !== op.toolId
+    ...(op.finishToolId !== undefined && (op.stages || op.finishToolId !== op.toolId)
       ? { finish_tool_id: op.finishToolId }
       : {}),
     source: buildSource(opIn),
@@ -732,6 +732,9 @@ function buildOp(opIn: OpEntry, machine: MachineSettings): WireOp {
     ...(opIn.side === 'back' ? { side: 'back' as const } : {}),
     params: {
       ...(op.cutting ? { cutting: op.cutting } : {}),
+      ...(op.stages ? { stages: op.stages } : {}),
+      ...(op.stagePreset ? { stage_preset: op.stagePreset } : {}),
+      ...(op.retainedStockMm !== undefined ? { stock_to_leave_mm: op.retainedStockMm } : {}),
       // Program-only ops (Pause, Homing, Probe, CycleMarker,
       // GcodeInclude) construct without `depth` / `startDepth` —
       // they have no meaningful depth schedule. Emit explicit 0
@@ -885,7 +888,7 @@ export function buildProject(
   const workOffset = state.workOffset ? buildWorkOffset(state.workOffset) : null;
   const stock = buildStock(state);
   return {
-    cutting_version: 9,
+    cutting_version: 10,
     segments: imp?.segments ?? [],
     ...(state.material
       ? { material: { id: state.material.id, revision: state.material.revision } }

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import StageCuttingControls from './StageCuttingControls.svelte';
+  import { usesStages } from '../../state/cutting-stages';
   import RecordedPresetContext from '../RecordedPresetContext.svelte';
   import PresetReviewError from '../PresetReviewError.svelte';
   import { t } from '../../i18n';
@@ -154,11 +156,15 @@
         ? JSON.parse(JSON.stringify(stored.data))
         : {
             format: 'fabcam-preset-collection',
-            version: 1,
+            version: 2,
             id: crypto.randomUUID(),
             name: collectionName.trim(),
             presets: [],
           };
+      if (preset.parameters.stages && collection.version !== 2)
+        throw new Error(
+          'Choose a v2 collection or create a new one. Historical collections are preserved.',
+        );
       collection.presets.push(preset);
       await saveCollection(collection, stored?.token ?? null);
       if (alive) {
@@ -192,64 +198,68 @@
 {#if roles.length}
   <fieldset class="cutting">
     <legend>{t('fsreset.ui.cutting.parameters')}</legend>
-    {#if roles.length > 1}<label class="role-row"
-        ><span>{t('fsreset.ux.role')}</span><select
-          aria-label={t('fsreset.ui.cutting.pass')}
-          value={activeRole}
-          onchange={(e) => (selection = { id: op.id, role: e.currentTarget.value as CuttingRole })}
-          >{#each roles as r (r.role)}<option value={r.role}
-              >{op.kind === 'profile' && r.role === 'rough' ? 'Stored main values' : label[r.role]} ·
-              T{r.tool_id}</option
-            >{/each}</select
-        ></label
-      >{/if}
-    {#if cuttingRoleHint(op.kind, activeRole)}<p class="basis role-hint">
-        {cuttingRoleHint(op.kind, activeRole)}
-      </p>{/if}
-    <div class="numeric-fields">
-      {#each fields as field (field.key)}<label class="cutting-field"
-          ><span>{field.label}</span><input
-            aria-label={field.label}
-            type="number"
-            min="1"
-            step="1"
-            value={slot?.[field.key] ?? ''}
-            placeholder={t('fsreset.ui.required')}
-            onchange={(e) => edit(field.key, e.currentTarget.value)}
-          /><span class="unit">{field.unit}</span></label
-        >{/each}
-      {#if ['profile', 'pocket', 'engrave'].includes(op.kind) && !op.depthList?.length}<label
-          class="cutting-field"
-          ><span>{t('fsreset.ui.depth.per.pass')}</span><input
-            aria-label={t('fsreset.ui.depth.per.pass')}
-            type="number"
-            min="0.000001"
-            step="0.1"
-            value={op.step === null ? '' : Math.abs(op.step)}
+    {#if usesStages(op)}<StageCuttingControls {op} />{:else}
+      {#if roles.length > 1}<label class="role-row"
+          ><span>{t('fsreset.ux.role')}</span><select
+            aria-label={t('fsreset.ui.cutting.pass')}
+            value={activeRole}
             onchange={(e) =>
-              project.updateOperation(op.id, {
-                step: e.currentTarget.value === '' ? null : -Number(e.currentTarget.value),
-              })}
-          /><span class="unit">{t('fsreset.ui.mm')}</span></label
+              (selection = { id: op.id, role: e.currentTarget.value as CuttingRole })}
+            >{#each roles as r (r.role)}<option value={r.role}
+                >{op.kind === 'profile' && r.role === 'rough'
+                  ? 'Stored main values'
+                  : label[r.role]} · T{r.tool_id}</option
+              >{/each}</select
+          ></label
         >{/if}
-      {#if usesEntryAngle(op)}<label class="cutting-field"
-          ><span>{t('fsreset.ui.entry.angle2')}</span><input
-            type="number"
-            min="1"
-            max={op.kind === 'drill' ? 45 : 89}
-            step="any"
-            value={op.cutting?.entry_angle_deg ?? ''}
-            onchange={(e) =>
-              project.updateOperation(op.id, {
-                cutting: {
-                  ...op.cutting!,
-                  entry_angle_deg:
-                    e.currentTarget.value === '' ? null : Number(e.currentTarget.value),
-                },
-              })}
-          /><span class="unit">°</span></label
-        >{/if}
-    </div>
+      {#if cuttingRoleHint(op.kind, activeRole)}<p class="basis role-hint">
+          {cuttingRoleHint(op.kind, activeRole)}
+        </p>{/if}
+      <div class="numeric-fields">
+        {#each fields as field (field.key)}<label class="cutting-field"
+            ><span>{field.label}</span><input
+              aria-label={field.label}
+              type="number"
+              min="1"
+              step="1"
+              value={slot?.[field.key] ?? ''}
+              placeholder={t('fsreset.ui.required')}
+              onchange={(e) => edit(field.key, e.currentTarget.value)}
+            /><span class="unit">{field.unit}</span></label
+          >{/each}
+        {#if ['profile', 'pocket', 'engrave'].includes(op.kind) && !op.depthList?.length}<label
+            class="cutting-field"
+            ><span>{t('fsreset.ui.depth.per.pass')}</span><input
+              aria-label={t('fsreset.ui.depth.per.pass')}
+              type="number"
+              min="0.000001"
+              step="0.1"
+              value={op.step === null ? '' : Math.abs(op.step)}
+              onchange={(e) =>
+                project.updateOperation(op.id, {
+                  step: e.currentTarget.value === '' ? null : -Number(e.currentTarget.value),
+                })}
+            /><span class="unit">{t('fsreset.ui.mm')}</span></label
+          >{/if}
+        {#if usesEntryAngle(op)}<label class="cutting-field"
+            ><span>{t('fsreset.ui.entry.angle2')}</span><input
+              type="number"
+              min="1"
+              max={op.kind === 'drill' ? 45 : 89}
+              step="any"
+              value={op.cutting?.entry_angle_deg ?? ''}
+              onchange={(e) =>
+                project.updateOperation(op.id, {
+                  cutting: {
+                    ...op.cutting!,
+                    entry_angle_deg:
+                      e.currentTarget.value === '' ? null : Number(e.currentTarget.value),
+                  },
+                })}
+            /><span class="unit">°</span></label
+          >{/if}
+      </div>
+    {/if}
     <p class="basis origin" title={presetStatus(op, inspection)}>{presetStatus(op, inspection)}</p>
     {#if inspection?.check.errors.length}<ul class="errors" aria-label={t('fsreset.ux.errors')}>
         {#each inspection.check.errors as issue, index (index)}<li>{issue}</li>{/each}
@@ -304,7 +314,7 @@
           {#if reviewedPreset}
             <strong>{reviewedPreset.name}</strong>
             <p class="basis">{t('preset.review.claim')}</p>
-            {#each reviewedPreset.parameters.rates as rate (rate.role)}
+            {#each reviewedPreset.parameters.rates ?? [] as rate (rate.role)}
               <p class="basis">
                 {t('preset.review.rates', {
                   role: label[rate.role],

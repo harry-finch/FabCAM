@@ -7,7 +7,7 @@ import {
   type DrawingState,
 } from './drawing';
 import { History } from './history';
-import { validateProjectV9 as validateProjectFile } from './project-v9';
+import { validateProjectV10 as validateProjectFile } from './project-v10';
 import { explicitProjectFixture } from './explicit-project.fixture';
 
 const op = {
@@ -129,7 +129,7 @@ it('never writes stable or unresolved references into an old readable envelope',
         imports: [],
         operations: [{ ...op, geometryBinding: binding }],
       } as unknown as import('./project-types').ProjectFile),
-    ).toThrow('requires project format v9');
+    ).toThrow('requires project format v10');
   }
 });
 

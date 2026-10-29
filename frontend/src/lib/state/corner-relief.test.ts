@@ -13,7 +13,7 @@ import {
   type CornerReliefModifier,
 } from './corner-relief';
 import { History } from './history';
-import { validateProjectV9 as validateProjectFile } from './project-v9';
+import { validateProjectV10 as validateProjectFile } from './project-v10';
 import { explicitProjectFixture } from './explicit-project.fixture';
 const seg: Segment = {
   type: 'ARC',
@@ -90,7 +90,7 @@ describe('persistent corner relief', () => {
   it('round-trips v9 relief and refuses malformed geometry', () => {
     const file = explicitProjectFixture({
       kind: 'ivac-project',
-      version: 9,
+      version: 10,
       imports,
       cornerRelief: modifier(),
     } as ProjectFile);

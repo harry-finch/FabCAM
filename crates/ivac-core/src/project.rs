@@ -58,7 +58,7 @@ pub struct MaterialIdentity {
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Project {
-    /// Native cutting contract. V9 clients must explicitly send 9.
+    /// Native cutting contract. V10 clients must explicitly send 10.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cutting_version: Option<u32>,
     /// Cutting identity is distinct from stock geometry.

@@ -506,6 +506,22 @@ export interface components {
         };
         /** @enum {string} */
         CuttingRole: "rough" | "finish" | "drill" | "spot" | "chamfer";
+        /** @description One authored stage. Missing values are editable, never executable defaults. */
+        CuttingStage: {
+            /**
+             * Format: double
+             * @description Positive axial depth removed per pass, in mm.
+             */
+            depth_per_pass_mm: number | null;
+            /** Format: uint32 */
+            feed_mm_min: number | null;
+            /** Format: uint32 */
+            plunge_mm_min: number | null;
+            /** Format: uint32 */
+            rpm: number | null;
+            /** Format: uint32 */
+            tool_id: number;
+        };
         DepthSchedule: {
             /** Format: double */
             finish_step?: number | null;
@@ -692,6 +708,14 @@ export interface components {
             message: string;
             repair?: components["schemas"]["Repair"] | null;
         };
+        /** @description Stock reserved by Main and removed by this operation's finishing stage. Retained-for-later stock deliberately does not belong to this structure. */
+        FinishingStage: {
+            cutting: components["schemas"]["CuttingStage"];
+            /** Format: double */
+            floor_allowance_mm: number;
+            /** Format: double */
+            lateral_allowance_mm: number;
+        };
         /** @description A user-declared physical obstacle on the stock the cutter must miss. Lives in drawing XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check. */
         Fixture: {
             /**
@@ -784,6 +808,8 @@ export interface components {
             project: components["schemas"]["Project"];
         };
         GenerateResponse: {
+            /** @description Authored stage bindings to actual emitted movement/output ranges. V10 only. */
+            cutting_stages?: components["schemas"]["StageBinding"][];
             gcode: string;
             gcode_index: components["schemas"]["GcodeIndex"];
             /** @description Output file extension the post declares (`.cps` posts carry their own, e.g. `"nc"`). `None` for the built-in dialects — exporters fall back to their per-dialect defaults. */
@@ -1079,6 +1105,13 @@ export interface components {
             work_area?: components["schemas"]["AxisLimits"];
         };
         MachineMode: ("mill" | "laser" | "drag") | "plasma";
+        /** @description Required semantic discriminator: never an optional flag next to legacy rates. */
+        MainFinishing: {
+            /** @enum {string} */
+            contract: "main_finishing_v1";
+            finishing: components["schemas"]["FinishingStage"] | null;
+            main: components["schemas"]["CuttingStage"];
+        };
         /** @description Exact material identity. Display labels never establish compatibility. */
         MaterialIdentity: {
             id: string;
@@ -1612,6 +1645,9 @@ export interface components {
              * @description Override the tool's `plunge_rate` (Z feed) for this op. Useful for slowing the plunge on hard materials without changing the XY feed. Units: mm/min.
              */
             plunge_rate_override?: number | null;
+            stage_preset?: components["schemas"]["LoadedPresetSnapshot"] | null;
+            /** @description Required exclusive contract for v10 Profile and ordinary Pocket. */
+            stages?: components["schemas"]["MainFinishing"] | null;
             /**
              * Format: double
              * @description Z at which the first pass starts.
@@ -1686,6 +1722,9 @@ export interface components {
              * @description Override the tool's `plunge_rate` (Z feed) for this op. Useful for slowing the plunge on hard materials without changing the XY feed. Units: mm/min.
              */
             plunge_rate_override?: number | null;
+            stage_preset?: components["schemas"]["LoadedPresetSnapshot"] | null;
+            /** @description Required exclusive contract for v10 Profile and ordinary Pocket. */
+            stages?: components["schemas"]["MainFinishing"] | null;
             /**
              * Format: double
              * @description Z at which the first pass starts.
@@ -1776,6 +1815,8 @@ export interface components {
             project: components["schemas"]["Project"];
         };
         PipelineResponse: {
+            /** @description Authored stage bindings to actual emitted movement/output ranges. V10 only. */
+            cutting_stages?: components["schemas"]["StageBinding"][];
             gcode: string;
             gcode_index: components["schemas"]["GcodeIndex"];
             /** @description Output file extension the post declares (`.cps` posts carry their own, e.g. `"nc"`). `None` for the built-in dialects — exporters fall back to their per-dialect defaults. */
@@ -2173,9 +2214,11 @@ export interface components {
             planar_stepover_mm?: number | null;
             /** Format: double */
             pocket_overlap?: number | null;
-            rates: components["schemas"]["RoleRates"][];
-            schedule: components["schemas"]["DepthSchedule"];
+            rates?: components["schemas"]["RoleRates"][];
+            schedule?: components["schemas"]["DepthSchedule"];
             specialized?: components["schemas"]["SpecializedParameters"] | null;
+            /** @description V2 stage contract. Exclusive with legacy role rates and schedule. */
+            stages?: components["schemas"]["MainFinishing"] | null;
         };
         /**
          * @description Axis selector for `OpKind::Probe`. Serializes as the bare lowercase letter (`"x"` / `"y"` / `"z"`) for a wire-friendly payload that drops straight into the G38.2 word.
@@ -2203,7 +2246,7 @@ export interface components {
         Project: {
             /**
              * Format: uint32
-             * @description Native cutting contract. V9 clients must explicitly send 9.
+             * @description Native cutting contract. V10 clients must explicitly send 10.
              */
             cutting_version?: number | null;
             /** @description Fixtures (clamps, dogs, vise jaws, hold-downs) the cutter must avoid throughout the entire program — including rapids. The sim pass tests every toolpath segment against this set and emits `SimWarning::FixtureCollision` on overlap. Default empty: a project with no fixtures behaves exactly as before. */
@@ -2618,6 +2661,22 @@ export interface components {
              * @description Tool id (matches [`crate::project::ToolEntry::id`]) of the spot / centerdrill cutter. The driver emits a toolchange envelope between the spot and the main drill block when the spot tool differs from the main drill's tool.
              */
             spot_tool_id: number;
+        };
+        StageBinding: {
+            authority: components["schemas"]["Authority"];
+            /** Format: uint */
+            end_segment_exclusive: number;
+            /** Format: uint */
+            first_segment: number;
+            /** Format: uint32 */
+            operation_id: number;
+            /** Format: uint32 */
+            output_end_line: number;
+            /** Format: uint32 */
+            output_start_line: number;
+            /** @description Explicit authored stage, not measured controller state. */
+            parameters: components["schemas"]["CuttingStage"];
+            stage: string;
         };
         /** @description Resolved stock box. See [`Project::stock`]. Kept deliberately thin — the auto/manual/margin derivation lives frontend-side (it's a UI convenience for sizing the box to imported geometry); the core only needs the final axis-aligned envelope for the `out_of_stock` scan (and, in future, stock-aware sim / rapid / holder checks). */
         StockConfig: {

@@ -233,12 +233,12 @@ export class WasmWorkerClient implements WiacClient {
   }
 
   async generate(request: GenerateRequest): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     return this.call('generate', [request]);
   }
 
   async generateTwoSided(request: GenerateRequest): Promise<TwoSidedGenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     return this.call('generateTwoSided', [request]);
   }
 
@@ -246,7 +246,7 @@ export class WasmWorkerClient implements WiacClient {
     request: GenerateRequest,
     onProgress: (e: ProgressEvent) => void,
   ): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     onProgress({ phase: 'import', fraction: 0.05, message: 'in-browser core (worker)' });
     const r = await this.generate(request);
     onProgress({ phase: 'done', fraction: 1.0, message: 'complete' });
@@ -258,7 +258,7 @@ export class WasmWorkerClient implements WiacClient {
     onEvent: (event: PipelineEvent) => void,
     cancelToken?: AbortSignal,
   ): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     return this.call('generateStreaming', [request], { onEvent, signal: cancelToken });
   }
 
@@ -277,7 +277,7 @@ export class WasmWorkerClient implements WiacClient {
     return this.call('evaluateDrawing', [request]);
   }
   async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
-    if (request.machining.project?.cutting_version === 9)
+    if (request.machining.project?.cutting_version === 10)
       assertCuttingCapability(await this.version());
     return this.call('generateDrawing', [request]);
   }

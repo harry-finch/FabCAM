@@ -26,6 +26,7 @@
     firstSegmentInRange,
     type GcodeChapter,
   } from '../state/gcode_chapters';
+  import { stageAtSegment } from '../state/report-cutting';
   import type { SimWarning } from '../api/types';
   import { t } from '../i18n';
 
@@ -36,7 +37,11 @@
       project.gen.toolpathTotalLen,
     );
     const id = project.gen.generated?.toolpath[mapped.segIdx]?.op_id;
-    return project.data.operations.find((op) => op.id === id)?.name;
+    const name = project.data.operations.find((op) => op.id === id)?.name;
+    const stage = stageAtSegment(project.gen.generated?.cutting_stages ?? [], mapped.segIdx);
+    return stage
+      ? `${name ?? ''} · ${stage.stage === 'main' ? t('stages.main') : t('stages.finishing')} · #${stage.parameters.tool_id}`
+      : name;
   });
   let speed = $state(1.0);
   let playing = $state(false);

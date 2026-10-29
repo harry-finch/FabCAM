@@ -2,9 +2,11 @@ import { cuttingRoles } from './cutting-parameters';
 import { isProgramOnlyOp, type OpEntry } from './op_types';
 import type { ToolEntry } from './project-types';
 
-/** Actual CAM roles. Profile emits Finish; its stored Rough slot is not used. */
+/** Authored v10 stages or unchanged actual roles of other operation families. */
 export function reportCuttingRoles(op: OpEntry) {
-  return cuttingRoles(op).filter((r) => op.kind !== 'profile' || r.role === 'finish');
+  return cuttingRoles(op).filter(
+    (r) => !!op.stages || op.kind !== 'profile' || r.role === 'finish',
+  );
 }
 export function reportToolIds(op: OpEntry): number[] {
   if (isProgramOnlyOp(op.kind)) return [];
@@ -25,6 +27,21 @@ export function reportCuttingText(
 ): string {
   const number = (v: number | null | undefined) =>
     typeof v === 'number' && Number.isInteger(v) && v > 0 && v <= 0xffffffff ? String(v) : '—';
+  if (op.stages) {
+    const s = op.stages;
+    const row = (name: string, v: typeof s.main) =>
+      `${name} · #${v.tool_id}: ${number(v.rpm)} rpm · ${number(v.feed_mm_min)} / ${number(v.plunge_mm_min)} mm/min · ${v.depth_per_pass_mm ?? '—'} mm/pass`;
+    return [
+      row('Main', s.main),
+      ...(s.finishing
+        ? [
+            row('Finishing', s.finishing.cutting),
+            `Allowances: lateral ${s.finishing.lateral_allowance_mm} mm / floor ${s.finishing.floor_allowance_mm} mm`,
+          ]
+        : ['Finishing off']),
+      `Retained for later: ${op.retainedStockMm ?? 0} mm`,
+    ].join(' · ');
+  }
   return (
     reportCuttingRoles(op)
       .map(({ role, tool_id }) => {
@@ -35,4 +52,25 @@ export function reportCuttingText(
       })
       .join(' · ') || '—'
   );
+}
+
+/** Only call with current generated evidence. No range is inferred from tool ID. */
+export function reportEmittedStages(
+  opId: number,
+  bindings: NonNullable<import('../api/types').GenerateResponse['cutting_stages']>,
+  labels: { main: string; finishing: string; emitted: string; empty: string },
+): string {
+  return bindings
+    .filter((b) => b.operation_id === opId)
+    .map(
+      (b) =>
+        `${b.authority === 'resolved' ? labels.emitted : 'Recorded intent'}: ${b.stage === 'main' ? labels.main : labels.finishing} · #${b.parameters.tool_id} · ${b.first_segment === b.end_segment_exclusive ? labels.empty : `L${b.output_start_line}–${b.output_end_line} · ${b.end_segment_exclusive - b.first_segment} moves`}`,
+    )
+    .join(' · ');
+}
+export function stageAtSegment(
+  bindings: NonNullable<import('../api/types').GenerateResponse['cutting_stages']>,
+  segment: number,
+) {
+  return bindings.find((b) => segment >= b.first_segment && segment < b.end_segment_exclusive);
 }

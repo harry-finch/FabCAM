@@ -3,11 +3,12 @@ use super::*;
 use serde_json::{json, Value};
 
 fn fixture() -> Value {
-    serde_json::from_str(include_str!(concat!(
+    let req: PipelineRequest = serde_json::from_str(include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/perf-v9/square-outline-cps.json"
     )))
-    .unwrap()
+    .unwrap();
+    serde_json::to_value(crate::fixture_support::reviewed_v10(req)).unwrap()
 }
 fn run(value: &Value, cache: Option<&PipelineCache>) -> Result<Value, PipelineError> {
     run_pipeline_impl(
@@ -51,7 +52,7 @@ fn bundled_post_exact_response_invalidation_and_return_to_previous_input() {
         ),
         ("/project/tools/0/diameter", json!(5)),
         ("/project/operations/0/name", json!("changed operation")),
-        ("/project/operations/0/params/fast_move_z", json!(12)),
+        ("/project/operations/0/params/step", json!(-0.1)),
     ] {
         cache.clear();
         run(&a, Some(&cache)).unwrap();
@@ -130,6 +131,10 @@ fn remaining_analysis_reuse_preserves_full_results_and_live_stock_guards() {
         "/../../tests/fixtures/perf-v9/pocket-islands-cps.json"
     )))
     .unwrap();
+    let a = serde_json::to_value(crate::fixture_support::reviewed_v10(
+        serde_json::from_value(a).unwrap(),
+    ))
+    .unwrap();
     let cache = PipelineCache::new(8);
     let expected = run(&a, None).unwrap();
     assert_eq!(expected["remaining_material"][0]["status"], "ready");
@@ -171,6 +176,10 @@ fn interrupted_cps_execution_has_no_result_or_successful_post_cache_entry() {
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/perf-v9/text-Test-medial-cps.json"
     )))
+    .unwrap();
+    let a = serde_json::to_value(crate::fixture_support::reviewed_v10(
+        serde_json::from_value(a).unwrap(),
+    ))
     .unwrap();
     let cache = PipelineCache::new(8);
     let token = CancelToken::new();

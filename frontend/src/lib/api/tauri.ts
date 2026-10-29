@@ -72,12 +72,12 @@ export class TauriWiacClient implements WiacClient {
   }
 
   async generate(request: GenerateRequest): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     return invoke<GenerateResponse>('generate', { request });
   }
 
   async generateTwoSided(request: GenerateRequest): Promise<TwoSidedGenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     return invoke<TwoSidedGenerateResponse>('generate_two_sided', { request });
   }
 
@@ -96,7 +96,7 @@ export class TauriWiacClient implements WiacClient {
     request: GenerateRequest,
     onProgress: (e: ProgressEvent) => void,
   ): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     onProgress({ phase: 'import', fraction: 0.05, message: 'sending to native core' });
     const r = await invoke<GenerateResponse>('generate', { request });
     onProgress({ phase: 'done', fraction: 1.0, message: 'complete' });
@@ -115,7 +115,7 @@ export class TauriWiacClient implements WiacClient {
     onEvent: (event: PipelineEvent) => void,
     cancelToken?: AbortSignal,
   ): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     const { token_id } = await invoke<{ token_id: number }>('generate_streaming_cmd', { request });
 
     let abortHandler: (() => void) | undefined;
@@ -208,7 +208,7 @@ export class TauriWiacClient implements WiacClient {
     return invoke('evaluate_drawing_cmd', { req: request });
   }
   async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
-    if (request.machining.project?.cutting_version === 9)
+    if (request.machining.project?.cutting_version === 10)
       assertCuttingCapability(await this.version());
     return invoke('generate_drawing_cmd', { req: request });
   }

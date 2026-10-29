@@ -131,6 +131,22 @@ export function importChoice(
 }
 
 export function parameterSummary(p: TestedPreset['parameters']): string[] {
+  if (p.stages) {
+    const s = p.stages;
+    const row = (name: string, v: typeof s.main) =>
+      `${name} · #${v.tool_id}: ${v.rpm ?? '—'} rpm · ${v.feed_mm_min ?? '—'} / ${v.plunge_mm_min ?? '—'} mm/min · ${v.depth_per_pass_mm ?? '—'} mm/pass`;
+    return [
+      row('Main', s.main),
+      ...(s.finishing
+        ? [
+            row('Finishing', s.finishing.cutting),
+            `Finishing allowance: lateral ${s.finishing.lateral_allowance_mm} mm · floor ${s.finishing.floor_allowance_mm} mm`,
+          ]
+        : ['Finishing: off']),
+      ...(p.pocket_overlap == null ? [] : [`Pocket overlap: ${p.pocket_overlap * 100}%`]),
+    ];
+  }
+  if (!p.schedule) return ['Missing preset schedule'];
   const depth =
     p.schedule.kind === 'explicit'
       ? `Depths: ${p.schedule.depths.join(', ')} mm`

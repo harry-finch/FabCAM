@@ -288,6 +288,7 @@ fn lot8_same_tool_finish_rpm_change_is_refused_not_silently_ignored_by_shopbot()
     );
     p.tools[0].speed = 18000;
     p.tools[0].speed_finish = Some(12000);
+    p.operations[0].finish_tool_id = Some(1);
     let result = run_pipeline(
         crate::fixture_support::request(PipelineRequest {
             project: p,

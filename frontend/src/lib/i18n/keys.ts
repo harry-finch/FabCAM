@@ -1702,6 +1702,30 @@ export type MsgKey =
   | "shortcuts.view3d.orbit"
   | "shortcuts.view3d.pan"
   | "shortcuts.zoom"
+  | "stages.allowance_help"
+  | "stages.copy"
+  | "stages.depth"
+  | "stages.emitted"
+  | "stages.empty"
+  | "stages.feed"
+  | "stages.finish_depth"
+  | "stages.finish_tool"
+  | "stages.finishing"
+  | "stages.floor"
+  | "stages.lateral"
+  | "stages.main"
+  | "stages.main_tool"
+  | "stages.missing"
+  | "stages.off_help"
+  | "stages.plunge"
+  | "stages.proof_help"
+  | "stages.required"
+  | "stages.retained"
+  | "stages.retained_help"
+  | "stages.retained_title"
+  | "stages.rpm"
+  | "stages.rpm_help"
+  | "stages.toggle"
   | "stock.dimensions"
   | "stock.flip"
   | "stock.flip.axis"
@@ -4051,6 +4075,30 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "shortcuts.view3d.orbit",
   "shortcuts.view3d.pan",
   "shortcuts.zoom",
+  "stages.allowance_help",
+  "stages.copy",
+  "stages.depth",
+  "stages.emitted",
+  "stages.empty",
+  "stages.feed",
+  "stages.finish_depth",
+  "stages.finish_tool",
+  "stages.finishing",
+  "stages.floor",
+  "stages.lateral",
+  "stages.main",
+  "stages.main_tool",
+  "stages.missing",
+  "stages.off_help",
+  "stages.plunge",
+  "stages.proof_help",
+  "stages.required",
+  "stages.retained",
+  "stages.retained_help",
+  "stages.retained_title",
+  "stages.rpm",
+  "stages.rpm_help",
+  "stages.toggle",
   "stock.dimensions",
   "stock.flip",
   "stock.flip.axis",

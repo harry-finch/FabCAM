@@ -23,6 +23,8 @@ mod dual_tool;
 mod halfpipe;
 mod planar_surface;
 mod raster;
+mod stage_coverage;
+mod staged;
 mod surface_mill;
 pub(in crate::pipeline) use planar_surface::{run_planar_surface_op, validate_planar_surface};
 mod thread;
@@ -77,6 +79,11 @@ pub(in crate::pipeline) fn run_standard_op<P: PostProcessor>(
     warnings: &mut Vec<PipelineWarning>,
     cancel: Option<&CancelToken>,
 ) -> Result<(usize, usize, bool), PipelineError> {
+    if op.params.stages.is_some() {
+        return staged::run(
+            op, project, objects, setup, post, last_pos, warnings, cancel,
+        );
+    }
     let (offsets, closed_count) = build_op_offsets(op, project, objects, setup, warnings, cancel)?;
     let offset_count = offsets.len();
     post.raw(&format!("; OP {}", op.id));

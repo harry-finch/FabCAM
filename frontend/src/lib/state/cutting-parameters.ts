@@ -1,3 +1,4 @@
+import { usesStages, validateStageOperation, rebindStages, validateStages } from './cutting-stages';
 import type { components } from '../api/generated';
 import { isProgramOnlyOp, type OpEntry } from './op_types';
 import type { ToolEntry } from './project-types';
@@ -5,6 +6,13 @@ export type MillingCutting = components['schemas']['MillingCutting'];
 export type RoleRates = components['schemas']['RoleRates'];
 export type CuttingRole = RoleRates['role'];
 export function cuttingRoles(op: OpEntry): { role: CuttingRole; tool_id: number }[] {
+  if (op.stages)
+    return [
+      { role: 'rough', tool_id: op.stages.main.tool_id },
+      ...(op.stages.finishing
+        ? [{ role: 'finish' as const, tool_id: op.stages.finishing.cutting.tool_id }]
+        : []),
+    ];
   if (isProgramOnlyOp(op.kind) || op.kind === 'drag_knife' || op.kind === 'raster_engrave')
     return [];
   if (op.kind === 'drill')
@@ -74,6 +82,12 @@ export function seedCutting(op: OpEntry, tools: ToolEntry[]): MillingCutting {
   };
 }
 export function validateCuttingStructure(op: OpEntry): void {
+  if (usesStages(op)) {
+    validateStageOperation(op);
+    if (op.stagePreset) validateLoadedSnapshot(op.stagePreset);
+    return;
+  }
+  if (op.stages || op.stagePreset) throw new Error('Stage cutting values on unsupported operation');
   const c = op.cutting;
   if (!c || !Array.isArray(c.rates) || c.rates.length > 5)
     throw new Error(`${op.name}: missing cutting values`);
@@ -108,6 +122,7 @@ export function validateCuttingStructure(op: OpEntry): void {
 
 /** Existing roles keep their numbers; newly enabled roles are visibly incomplete. */
 export function rebindCutting(op: OpEntry, patch: Partial<OpEntry>): Partial<OpEntry> {
+  if (op.stages) return rebindStages(op, patch);
   if (!op.cutting || patch.cutting !== undefined) return patch;
   const next = { ...op, ...patch } as OpEntry;
   const roles = cuttingRoles(next);
@@ -171,7 +186,38 @@ export function validateLoadedSnapshot(
     'planar_stepover_mm',
     'entry_angle_deg',
     'specialized',
+    'stages',
   ]);
+  if (p.stages) {
+    validateStages(p.stages);
+    if (
+      p.rates?.length ||
+      (p.schedule &&
+        (p.schedule.kind !== 'step' ||
+          p.schedule.step != null ||
+          p.schedule.finish_step != null)) ||
+      p.specialized ||
+      p.entry_angle_deg != null ||
+      p.planar_stepover_mm != null
+    )
+      throw new Error('Mixed stage preset snapshot');
+    if (
+      p.pocket_overlap != null &&
+      (!Number.isFinite(p.pocket_overlap) || p.pocket_overlap <= 0 || p.pocket_overlap >= 1)
+    )
+      throw new Error('Invalid pocket overlap');
+    for (const stage of [
+      p.stages.main,
+      ...(p.stages.finishing ? [p.stages.finishing.cutting] : []),
+    ])
+      if (
+        [stage.rpm, stage.feed_mm_min, stage.plunge_mm_min, stage.depth_per_pass_mm].some(
+          (n) => n == null || n <= 0,
+        )
+      )
+        throw new Error('Incomplete preset stage');
+    return;
+  }
   if (
     p.entry_angle_deg != null &&
     (!Number.isFinite(p.entry_angle_deg) || p.entry_angle_deg < 1 || p.entry_angle_deg > 89)
@@ -226,6 +272,7 @@ export function validateLoadedSnapshot(
     roles.add(r.role);
   }
   const schedule = p.schedule;
+  if (!schedule) throw new Error('Missing preset schedule');
   object(
     schedule,
     schedule?.kind === 'step' ? ['kind', 'step', 'finish_step'] : ['kind', 'depths'],

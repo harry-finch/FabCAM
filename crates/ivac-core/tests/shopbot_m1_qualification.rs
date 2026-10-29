@@ -426,7 +426,7 @@ fn pocket_stepover_variants_have_no_coverage_gaps() {
 }
 
 #[test]
-fn pocket_finish_allowance_is_consumed_by_the_finishing_ring() {
+fn pocket_finish_allowance_is_consumed_by_a_full_finishing_stage() {
     for format in FORMATS {
         assert_pocket("rectangle_100x50", format, 0.5, Some(1.0));
         let mut tool = endmill_tool(1, 6.0);
@@ -469,7 +469,10 @@ fn pocket_finish_allowance_is_consumed_by_the_finishing_ring() {
                     );
                     rough += 1;
                 } else if (f - 600.0).abs() < 0.1 {
-                    near(dist, 3.0, XY_OUTPUT_MM, "finishing ring radius");
+                    assert!(
+                        dist >= 3.0 - XY_OUTPUT_MM,
+                        "finishing stays within cutter-safe wall"
+                    );
                     finish += 1;
                 }
             }

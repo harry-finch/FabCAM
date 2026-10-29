@@ -2,12 +2,13 @@
 """Real production CLI boundary probes in private temporary files; no JS executes."""
 from pathlib import Path
 import json
+import os
 import subprocess
 import tempfile
 
 root = Path(__file__).resolve().parents[1]
-binary = root / 'target/debug/ivac'
-fixture = json.loads((root / 'tests/fixtures/cli-v9/profile.request.json').read_text())
+binary = Path(os.environ.get('CARGO_TARGET_DIR', root / 'target')) / 'debug/ivac'
+fixture = json.loads((root / 'tests/fixtures/alpha3-v10/profile.request.json').read_text())
 with tempfile.TemporaryDirectory(prefix='fabcam-sec1-cli-') as tmp:
     path = Path(tmp) / 'shopbot.cps'
     request = Path(tmp) / 'request.json'

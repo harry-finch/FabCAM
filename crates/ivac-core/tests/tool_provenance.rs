@@ -289,8 +289,8 @@ fn injected_reserved_marker_cannot_certify_native_output() {
         }),
         |_, _, _| {},
     )
-    .unwrap();
-    assert_eq!(r.tool_provenance.authority, Authority::Unavailable);
+    .unwrap_err();
+    assert!(r.to_string().contains("Unresolved stage cutter"));
 }
 
 fn generate(
@@ -333,6 +333,8 @@ fn shopbot_imperial_diameters_resolve_with_their_own_bodies() {
     ] {
         let mut p = pocket();
         p.tools[1].diameter = fraction * 25.4 / 32.;
+        // Keep this rounding/identity test within the explicit area-proof budget.
+        p.segments = closed_rectangle(5., 5., 15., 15.);
         let r = generate(p, PostProcessorKind::Cps);
         assert_eq!(
             r.tool_provenance.authority,

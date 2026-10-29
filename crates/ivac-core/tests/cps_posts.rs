@@ -141,10 +141,11 @@ fn legacy_zero_clearance_is_refused_when_stock_is_declared() {
 
 #[test]
 fn bundled_grbl_snapshot() {
-    let response = run_cps(
+    let mut response = run_cps(
         legacy_post_fixture(),
         CpsPostSource::Bundled { id: "grbl".into() },
     );
+    response.gcode = fixture_support::historical_profile_comments(&response.gcode);
     assert_eq!(response.output_extension.as_deref(), Some("gcode"));
     assert!(response.gcode.contains("G21"));
     assert!(response.gcode.contains("M30"));

@@ -38,6 +38,14 @@ function patchFromWire(current: OpEntry, next: S['Op']): Partial<OpEntry> {
   const params = next.params;
   return {
     cutting: params.cutting ?? undefined,
+    stages: params.stages ?? undefined,
+    stagePreset: params.stage_preset ?? undefined,
+    ...(params.stages
+      ? {
+          toolId: params.stages.main.tool_id,
+          finishToolId: params.stages.finishing?.cutting.tool_id,
+        }
+      : {}),
     step: params.step ?? null,
     finishStep: params.finish_step ?? undefined,
     depthList: params.depth_list ?? [],
@@ -123,8 +131,8 @@ export async function preparePresetLoad(
     key,
     patch,
     before: op.cutting?.rates ?? [],
-    after: next.params.cutting!.rates,
-    parameters: next.params.cutting!.preset_snapshot!.parameters,
+    after: next.params.cutting?.rates ?? [],
+    parameters: (next.params.stage_preset ?? next.params.cutting?.preset_snapshot)!.parameters,
     command: reviewedCuttingCommand(id, key, patch),
   };
 }
@@ -154,7 +162,7 @@ export async function captureTestedPreset(
   };
 }
 export function presetStatus(op: OpEntry, inspection: CuttingInspection | null): string {
-  const baseline = op.cutting?.preset_snapshot;
+  const baseline = op.stagePreset ?? op.cutting?.preset_snapshot;
   if (!baseline) return 'Manual parameters';
   const modified =
     !inspection ||

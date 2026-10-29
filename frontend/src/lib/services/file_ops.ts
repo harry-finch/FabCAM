@@ -7,7 +7,7 @@ import { cornerReliefGenerationError } from '../state/generation-context';
 import { commitDocumentLoad } from '../state/document-load';
 import { notificationError, notificationText } from '../api/error-notification';
 import { generationContextKey } from '../state/generation-context';
-import { validateProjectV9 as validateProjectFile } from '../state/project-v9';
+import { validateProjectV10 as validateProjectFile } from '../state/project-v10';
 /// Open / Save / Sample I/O extracted from FileUpload so the toolbar
 /// (and any other UI surface) can invoke the same flows without
 /// reaching through DOM query selectors. Each function mutates

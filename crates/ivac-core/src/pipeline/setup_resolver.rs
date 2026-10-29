@@ -215,7 +215,7 @@ pub(in crate::pipeline) fn synthesize_op_setup_for_role(
         resolve(crate::project::PassKind::Finish)
             .map_err(|e| PipelineError::AppliedCutting(op.id, e))?
     };
-    if op.params.cutting.is_some() {
+    if op.params.cutting.is_some() || op.params.stages.is_some() {
         for values in [
             (rough_speed_raw, rough_plunge, rough_feed),
             (finish_speed_raw, finish_plunge, finish_feed),
@@ -1435,8 +1435,10 @@ mod tests {
         tool.speed = 24_000;
         let mut project = project_with(vec![op.clone()], vec![tool]);
         project.machine.spindle_rpm_max = Some(12_000);
+        let project = crate::fixture_support::project(project);
+        let op = &project.operations[0];
         let mut warnings = Vec::new();
-        let err = synthesize_op_setup(&op, &project, &mut warnings)
+        let err = synthesize_op_setup(op, &project, &mut warnings)
             .expect_err("invalid authored input must not produce machine output");
         assert!(
             err.to_string().contains("rpm exceeds the machine maximum"),

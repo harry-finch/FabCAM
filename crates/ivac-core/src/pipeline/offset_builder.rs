@@ -1844,10 +1844,8 @@ mod tests {
                 id: 1,
                 name: "Profile".into(),
                 enabled: true,
-                kind: OpKind::Profile {
-                    offset: ToolOffset::Outside,
+                kind: OpKind::Engrave {
                     contour: crate::project::ContourParams::default(),
-                    profile: crate::project::ProfileParams::default(),
                 },
                 tool_id: 1,
                 finish_tool_id: None,
@@ -1947,10 +1945,8 @@ mod tests {
                 id: 1,
                 name: "Profile".into(),
                 enabled: true,
-                kind: OpKind::Profile {
-                    offset: ToolOffset::Outside,
+                kind: OpKind::Engrave {
                     contour: crate::project::ContourParams::default(),
-                    profile: crate::project::ProfileParams::default(),
                 },
                 tool_id: 1,
                 finish_tool_id: None,
@@ -2854,7 +2850,7 @@ mod tests {
                     pocket: crate::project::PocketParams::default(),
                 },
                 tool_id: 1,
-                finish_tool_id: None,
+                finish_tool_id: Some(1),
                 source: OpSource::All,
                 params,
                 group: None,
@@ -2878,80 +2874,28 @@ mod tests {
             |_, _, _| {},
         )
         .unwrap();
-        // We can't read PolylineOffset directly here (it isn't on the
-        // PipelineResponse), but the toolpath order encodes the cut.
-        // Walk the cut moves at op_id=1 and group them by Z-plane to
-        // recover individual passes; then check the winding of each.
-        let cuts: Vec<_> = resp
-            .toolpath
-            .iter()
-            .filter(|s| matches!(s.kind, crate::gcode::preview::MoveKind::Cut) && s.op_id == 1)
-            .collect();
-        assert!(!cuts.is_empty(), "expected cut segments");
-        // Group consecutive cuts that form a closed loop (same Z and the
-        // final point is near the first). The first such loop is the
-        // boundary (level=0) — we look at its signed area.
-        let mut loops: Vec<Vec<&preview::ToolpathSegment>> = Vec::new();
-        let mut cur: Vec<&preview::ToolpathSegment> = Vec::new();
-        for s in &cuts {
-            if cur.is_empty() {
-                cur.push(s);
-                continue;
+        for binding in &resp.cutting_stages {
+            let cuts: Vec<_> = resp.toolpath[binding.first_segment..binding.end_segment_exclusive]
+                .iter()
+                .filter(|s| matches!(s.kind, crate::gcode::preview::MoveKind::Cut))
+                .collect();
+            assert!(!cuts.is_empty());
+            let area: f64 = cuts
+                .iter()
+                .map(|s| s.from.x * s.to.y - s.to.x * s.from.y)
+                .sum();
+            if binding.stage == "main" {
+                assert!(area < 0., "Main must climb");
+            } else {
+                assert!(
+                    area > 0.,
+                    "Finishing must use its authored conventional direction"
+                );
             }
-            let prev = cur.last().unwrap();
-            // New loop when there's a Z jump or a position discontinuity.
-            let z_jump = (s.from.z - prev.to.z).abs() > 1e-3;
-            let xy_jump = (s.from.x - prev.to.x).hypot(s.from.y - prev.to.y) > 0.01;
-            if z_jump || xy_jump {
-                loops.push(std::mem::take(&mut cur));
-            }
-            cur.push(s);
         }
-        if !cur.is_empty() {
-            loops.push(cur);
-        }
-        let area_of_loop = |loop_segs: &[&preview::ToolpathSegment]| -> f64 {
-            let mut s = 0.0;
-            for seg in loop_segs {
-                s += seg.from.x * seg.to.y - seg.to.x * seg.from.y;
-            }
-            s * 0.5
-        };
-        // The boundary pass = the loop with the largest |area| (it's the
-        // outermost ring in the cascade). With Conventional + Pocket
-        // (inner context) we expect CCW = positive signed area.
-        // Group loops by Z so we look at one cut-pass plane only —
-        // multiple Z passes would each repeat the same XY rings.
-        let z_of = |loop_segs: &[&preview::ToolpathSegment]| -> f64 {
-            loop_segs.first().map_or(0.0, |s| s.from.z)
-        };
-        let first_z = z_of(&loops[0]);
-        let same_z: Vec<_> = loops
-            .iter()
-            .filter(|l| (z_of(l) - first_z).abs() < 1e-3)
-            .collect();
-        let mut areas: Vec<f64> = same_z.iter().map(|l| area_of_loop(l)).collect();
-        areas.sort_by(|a, b| b.abs().partial_cmp(&a.abs()).unwrap());
-        let boundary_area = areas[0];
-        assert!(
-            boundary_area > 0.0,
-            "finishing pass should be CCW (conventional) for an inner pocket; got area {boundary_area}"
-        );
-        // For a square boundary the cascade produces ≥ 1 inner ring on
-        // a 50×50 pocket with a 3 mm tool; that ring should be CW =
-        // negative signed area under climb.
-        if areas.len() >= 2 {
-            assert!(
-                areas[1] < 0.0,
-                "cascade ring should be CW (climb) for an inner pocket; got area {}",
-                areas[1]
-            );
-        }
+        assert_eq!(resp.cutting_stages.len(), 2);
     }
 
-    /// Pocket a 4mm box with a 6mm endmill — the cutter doesn't fit.
-    /// Expect a `tool_too_large` warning attached to the op id, and the
-    /// pipeline still completes (no error).
     #[test]
     fn pocket_with_oversized_tool_emits_tool_too_large_warning() {
         let project = Project {
@@ -3530,7 +3474,11 @@ mod tests {
             segments: closed_square_offset(50.0, 0.0, 0.0),
             machine: MachineConfig::default(),
             tools: vec![tool],
-            operations: vec![pocket_op(1, 1, OpSource::All)],
+            operations: vec![{
+                let mut op = pocket_op(1, 1, OpSource::All);
+                op.finish_tool_id = Some(1);
+                op
+            }],
             fixtures: Vec::default(),
             text_layers: Vec::default(),
             work_offset: crate::project::WorkOffset::default(),
@@ -4768,7 +4716,7 @@ mod tests {
     /// emitter substituted the rough feed even when the user
     /// configured distinct finish values.
     #[test]
-    fn profile_op_uses_finish_feed_and_speed() {
+    fn profile_op_uses_authored_main_feed_and_speed() {
         use crate::project::PlungeStrategy;
         let mut tool = endmill(1, 3.0);
         tool.speed = 20_000;
@@ -4821,17 +4769,17 @@ mod tests {
         // IS the finishing pass. The rough feed (F1500) must NOT appear
         // because there is no rough pass on a single-pass Profile.
         assert!(
-            resp.gcode.contains("F400"),
-            "c0pm regression: Profile op should use the finish feedrate F400; gcode:\n{}",
+            resp.gcode.contains("F1500"),
+            "c0pm regression: Profile op should use the Main feedrate F1500; gcode:\n{}",
             resp.gcode,
         );
         assert!(
-            resp.gcode.contains("S8000"),
+            resp.gcode.contains("S20000"),
             "c0pm regression: Profile op should use the finish spindle S8000; gcode:\n{}",
             resp.gcode,
         );
         assert!(
-            !resp.gcode.contains("F1500"),
+            !resp.gcode.contains("F400"),
             "c0pm regression: Profile op must NOT use rough feed F1500 — its single pass is by definition a finishing pass; gcode:\n{}",
             resp.gcode,
         );
@@ -4845,7 +4793,7 @@ mod tests {
     /// warning. The Pocket's outer rough-cascade ring must therefore sit
     /// at the same XY position as if allowance had never been set.
     #[test]
-    fn pocket_nocontour_with_allowance_folds_to_zero_and_warns() {
+    fn pocket_legacy_nocontour_is_not_a_v10_finishing_toggle() {
         use crate::project::PlungeStrategy;
         use crate::project::PocketStrategy;
         let tool_diameter = 3.0;
@@ -4890,53 +4838,19 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        // Baseline: nocontour + allowance=0.
-        let baseline = run_pipeline(
-            crate::fixture_support::request(PipelineRequest {
-                project: mk(0.0, true),
+        for allowance in [0.0, 0.2] {
+            let mut req = crate::fixture_support::request(PipelineRequest {
+                project: mk(0.0, false),
                 post_processor: None,
                 cps_post: None,
-            }),
-            |_, _, _| {},
-        )
-        .unwrap();
-        // Pathological: nocontour + allowance=0.2. Should produce IDENTICAL
-        // toolpath (we folded allowance to 0) AND emit the warning.
-        let ignored = run_pipeline(
-            crate::fixture_support::request(PipelineRequest {
-                project: mk(0.2, true),
-                post_processor: None,
-                cps_post: None,
-            }),
-            |_, _, _| {},
-        )
-        .unwrap();
-        assert!(
-            ignored
-                .warnings
-                .iter()
-                .any(|w| w.kind == "nocontour_ignores_finish_allowance"),
-            "0tsy regression: expected nocontour_ignores_finish_allowance warning when pocket_nocontour=true is combined with a non-zero finish allowance; got warnings: {:?}",
-            ignored.warnings,
-        );
-        // Same number of cut moves — the allowance was ignored, not
-        // applied. (We compare counts rather than exact strings because
-        // the gcode-emitter's plunge / lift ordering may differ on
-        // hashing details, but the rough cascade should walk the same
-        // boundary in both runs.)
-        let cuts_baseline = baseline
-            .toolpath
-            .iter()
-            .filter(|s| matches!(s.kind, crate::gcode::preview::MoveKind::Cut))
-            .count();
-        let cuts_ignored = ignored
-            .toolpath
-            .iter()
-            .filter(|s| matches!(s.kind, crate::gcode::preview::MoveKind::Cut))
-            .count();
-        assert_eq!(
-            cuts_baseline, cuts_ignored,
-            "0tsy regression: nocontour+allowance must produce the same cut count as nocontour+allowance=0 (allowance is folded to 0). baseline={cuts_baseline}, ignored={cuts_ignored}",
-        );
+            });
+            let pocket = req.project.operations[0].pocket_params_mut().unwrap();
+            pocket.pocket_nocontour = true;
+            pocket.finish_xy_allowance_mm = Some(allowance);
+            let before = serde_json::to_string(&req).unwrap();
+            let error = run_pipeline(req.clone(), |_, _, _| {}).unwrap_err();
+            assert!(error.to_string().contains("Legacy nocontour"));
+            assert_eq!(serde_json::to_string(&req).unwrap(), before);
+        }
     }
 }

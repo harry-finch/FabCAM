@@ -747,6 +747,14 @@ impl<W: Write> Drop for InterpretingTee<W> {
 /// after the first space is ignored.
 fn parse_op_marker(raw: &str) -> Option<u32> {
     let s = raw.trim();
+    // Numbered native output retains comments and their physical line indexes.
+    let s = if s.starts_with('N') {
+        s.split_once(char::is_whitespace)
+            .filter(|(n, _)| n.len() > 1 && n[1..].chars().all(|c| c.is_ascii_digit()))
+            .map_or(s, |(_, rest)| rest.trim())
+    } else {
+        s
+    };
     let body = s
         .strip_prefix(';')
         .or_else(|| s.strip_prefix('('))

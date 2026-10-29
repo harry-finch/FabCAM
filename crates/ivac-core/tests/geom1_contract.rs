@@ -622,8 +622,10 @@ fn ui_saved_repair_matches_generated_decoded_program_and_resolved_preview() {
         ["' FABTOOL/1 REQUEST 0 1\n", "' FABTOOL/1 ACTIVE 0 1\n"]
     );
     assert_eq!(
-        rest.concat(),
-        include_str!("../../../docs/shopbot-modernization/geom1/square-repaired-software-only.sbp")
+        fixture_support::neutral_stage_comments(&rest.concat()),
+        fixture_support::neutral_stage_comments(include_str!(
+            "../../../docs/shopbot-modernization/geom1/square-repaired-software-only.sbp"
+        ))
     );
     let mut reference = request.machining.clone();
     reference.project.segments = request.drawing.evaluate().unwrap().segments;

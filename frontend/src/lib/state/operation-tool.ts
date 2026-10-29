@@ -43,7 +43,10 @@ export function selectOperationToolCommand(
       if (
         !op ||
         !toolFitsOperation(op, tool, effectiveModes(s.machine), slot) ||
-        (slot === 'finishToolId' && op.kind !== 'pocket' && op.kind !== 'drill') ||
+        (slot === 'finishToolId' &&
+          op.kind !== 'pocket' &&
+          op.kind !== 'drill' &&
+          !(op.kind === 'profile' && op.stages?.finishing)) ||
         (slot === 'spotToolId' && (op.kind !== 'drill' || !op.spotFirst))
       )
         throw new Error('Tool is incompatible with this operation or machine');
@@ -56,8 +59,13 @@ export function selectOperationToolCommand(
       const patch: Partial<OpEntry> =
         slot === 'spotToolId' && op.kind === 'drill' && op.spotFirst
           ? { spotFirst: { ...op.spotFirst, spotToolId: chosen.id } }
-          : { [slot]: slot === 'finishToolId' && chosen.id === op.toolId ? undefined : chosen.id };
-      // updateOperationCommand rebinds actual v9 roles while preserving authored values.
+          : {
+              [slot]:
+                slot === 'finishToolId' && !op.stages && chosen.id === op.toolId
+                  ? undefined
+                  : chosen.id,
+            };
+      // updateOperationCommand rebinds authored roles and stages while preserving authored values.
       if (addedId !== undefined)
         s.tools = [...s.tools, JSON.parse(JSON.stringify(chosen)) as ToolEntry];
       edit = updateOperationCommand(opId, patch);

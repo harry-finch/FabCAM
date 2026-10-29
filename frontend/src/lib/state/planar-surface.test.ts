@@ -5,7 +5,7 @@ import type { ProjectFile, ToolEntry } from './project-types';
 import { surfaceBounds, surfaceSizingView } from './planar-surface';
 import { History } from './history';
 import { updateOperationCommand } from './commands';
-import { validateProjectV9 as validateProjectFile } from './project-v9';
+import { validateProjectV10 as validateProjectFile } from './project-v10';
 import { explicitProjectFixture } from './explicit-project.fixture';
 import { buildProject } from '../api/build-project';
 
@@ -135,6 +135,6 @@ describe('UX3 planar surfacing', () => {
     expect(
       project?.operations[0].params.cutting?.rates.find((s) => s.role === 'rough')?.feed_mm_min,
     ).toBe(1900);
-    expect(project?.cutting_version).toBe(9);
+    expect(project?.cutting_version).toBe(10);
   });
 });

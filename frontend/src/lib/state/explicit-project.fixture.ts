@@ -1,5 +1,6 @@
+import { usesStages, seedStages } from './cutting-stages';
 // Test construction only. Historical files stay unchanged and are rejected by the product.
-// Reuse their geometry in a separately authored v9 software fixture with creation-time seeds.
+// Reuse their geometry in a separately authored v10 software fixture with creation-time seeds.
 import { seedCutting } from './cutting-parameters';
 import { isProgramOnlyOp } from './op_types';
 import type { ProjectFile, MachineSettings, ToolEntry } from './project-types';
@@ -13,7 +14,7 @@ type ExplicitFixture = ProjectFile & {
 export function explicitProjectFixture(source: unknown): ExplicitFixture {
   const p = structuredClone(source) as ProjectFile;
   p.kind = 'ivac-project';
-  p.version = 9;
+  p.version = 10;
   delete (p as unknown as Record<string, unknown>).fsContext;
   p.imports ??= [];
   p.operations ??= [];
@@ -34,8 +35,17 @@ export function explicitProjectFixture(source: unknown): ExplicitFixture {
     delete (next as unknown as Record<string, unknown>).appliedContextKey;
     delete next.feedRateOverride;
     delete next.plungeRateOverride;
-    if (!isProgramOnlyOp(next.kind) && p.machine?.mode === 'mill')
-      next.cutting = seedCutting(next, p.tools!);
+    if (!isProgramOnlyOp(next.kind) && p.machine?.mode === 'mill') {
+      if (usesStages(next)) {
+        next.stages = seedStages(next, p.tools!);
+        delete next.cutting;
+        next.step = null;
+        delete next.finishToolId;
+        if ('finishStep' in next) delete next.finishStep;
+        if ('finishXyAllowanceMm' in next) delete next.finishXyAllowanceMm;
+        delete next.depthList;
+      } else next.cutting = seedCutting(next, p.tools!);
+    }
     return next;
   });
   return p as ExplicitFixture;

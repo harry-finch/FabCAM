@@ -85,7 +85,7 @@ export class HttpWiacClient implements WiacClient {
   }
 
   async generate(request: GenerateRequest): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     const res = await fetch(`${this.base}/generate`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -96,7 +96,7 @@ export class HttpWiacClient implements WiacClient {
   }
 
   async generateTwoSided(request: GenerateRequest): Promise<TwoSidedGenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     const res = await fetch(`${this.base}/generate/two-sided`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -165,7 +165,7 @@ export class HttpWiacClient implements WiacClient {
     return value;
   }
   async generateDrawing(request: DrawingGenerationRequest): Promise<GenerateResponse> {
-    if (request.machining.project?.cutting_version === 9)
+    if (request.machining.project?.cutting_version === 10)
       assertCuttingCapability(await this.version());
     const res = await fetch(`${this.base}/generate-drawing`, {
       method: 'POST',
@@ -217,7 +217,7 @@ export class HttpWiacClient implements WiacClient {
     request: GenerateRequest,
     onProgress: (e: ProgressEvent) => void,
   ): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     const res = await fetch(`${this.base}/generate/stream`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', accept: 'text/event-stream' },
@@ -287,7 +287,7 @@ export class HttpWiacClient implements WiacClient {
     onEvent: (event: PipelineEvent) => void,
     cancelToken?: AbortSignal,
   ): Promise<GenerateResponse> {
-    if (request.project?.cutting_version === 9) assertCuttingCapability(await this.version());
+    if (request.project?.cutting_version === 10) assertCuttingCapability(await this.version());
     const res = await fetch(`${this.base}/generate/stream`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', accept: 'text/event-stream' },

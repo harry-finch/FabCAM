@@ -76,7 +76,13 @@ export function templateParameterRows(template: OperationTemplate): TemplatePara
   if (s.kind === 'pocket') add('templates.preview.strategy', s.pocketStrategy);
   add('opprops.cut.final_depth', s.depth, 'mm');
   add('opprops.cut.start_depth', s.startDepth, 'mm');
-  add('opprops.cut.step', s.step, 'mm');
+  add('opprops.cut.step', template.stages?.main.depth_per_pass_mm ?? s.step, 'mm');
+  if (template.stages?.finishing) {
+    add('stages.finish_depth', template.stages.finishing.cutting.depth_per_pass_mm, 'mm');
+    add('stages.lateral', template.stages.finishing.lateral_allowance_mm, 'mm');
+    add('stages.floor', template.stages.finishing.floor_allowance_mm, 'mm');
+  }
+  add('stages.retained', s.retainedStockMm, 'mm');
   if (s.depthList && (s.depthList as number[]).length)
     add('opprops.cut.depth_list', (s.depthList as number[]).join(', '), 'mm');
   add('opprops.cut.through_depth', s.throughDepth, 'mm');

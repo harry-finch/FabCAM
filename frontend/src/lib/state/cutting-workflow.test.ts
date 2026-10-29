@@ -43,9 +43,9 @@ it('reviewed copy is one Undo/Redo step and leaves Stock, machine and material u
   const s = fixture(),
     h = new History();
   const before = structuredClone(s);
-  const cutting = structuredClone(s.operations[0].cutting!);
-  cutting.rates[0].feed_mm_min = 1234;
-  h.exec(reviewedCuttingCommand(1, cuttingTargetKey(s, 1), { cutting, step: -2 }), s);
+  const stages = structuredClone(s.operations[0].stages!);
+  stages.main.feed_mm_min = 1234;
+  h.exec(reviewedCuttingCommand(1, cuttingTargetKey(s, 1), { stages }), s);
   expect(h.undoSize).toBe(1);
   expect(s.stock).toEqual(before.stock);
   expect(s.material).toEqual(before.material);
@@ -54,7 +54,7 @@ it('reviewed copy is one Undo/Redo step and leaves Stock, machine and material u
   h.undo(s);
   expect(s.operations).toEqual(before.operations);
   h.redo(s);
-  expect(s.operations[0].cutting?.rates[0].feed_mm_min).toBe(1234);
+  expect(s.operations[0].stages?.main.feed_mm_min).toBe(1234);
 });
 it('rejects a stale preview before any mutation', () => {
   const s = fixture();

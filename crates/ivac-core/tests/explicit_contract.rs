@@ -1,13 +1,16 @@
-//! Current wire contract: no source context or saved recommendation can bypass v9.
+#[path = "support/explicit.rs"]
+mod fixture_support;
+// Current wire contract: no source context or saved recommendation can bypass v10.
 use ivac_core::pipeline::PipelineRequest;
 use ivac_core::project::MaterialIdentity;
 use serde_json::{json, Value};
 
 fn request() -> Value {
-    serde_json::from_str(include_str!(
+    let old = serde_json::from_str(include_str!(
         "../../../tests/fixtures/cli-v9/profile.request.json"
     ))
-    .unwrap()
+    .unwrap();
+    serde_json::to_value(fixture_support::reviewed_v10(old)).unwrap()
 }
 
 #[test]
@@ -15,7 +18,7 @@ fn explicit_request_round_trips_without_legacy_state() {
     let req: PipelineRequest = serde_json::from_value(request()).unwrap();
     ivac_core::cutting_parameters::validate_project(&req.project).unwrap();
     let encoded = serde_json::to_value(&req).unwrap();
-    assert_eq!(encoded["project"]["cutting_version"], 9);
+    assert_eq!(encoded["project"]["cutting_version"], 10);
     assert!(encoded["project"].get("fs_context").is_none());
     assert!(encoded["project"]["operations"][0]["params"]
         .get("applied_cutting")

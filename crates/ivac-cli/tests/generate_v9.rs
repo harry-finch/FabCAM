@@ -1,4 +1,6 @@
-//! Public-process tests: explicit reviewed values, no physical machine qualification.
+#[path = "../../ivac-core/tests/support/explicit.rs"]
+mod fixture_support;
+// Public-process tests: explicit reviewed values, no physical machine qualification.
 use ivac_core::pipeline::{run_pipeline, PipelineRequest};
 use serde_json::{json, Value};
 use std::{
@@ -35,10 +37,11 @@ impl Drop for Scratch {
     }
 }
 fn request() -> Value {
-    serde_json::from_str(include_str!(
+    let old = serde_json::from_str(include_str!(
         "../../../tests/fixtures/cli-v9/profile.request.json"
     ))
-    .unwrap()
+    .unwrap();
+    serde_json::to_value(fixture_support::reviewed_v10(old)).unwrap()
 }
 fn success(out: &Output) -> Value {
     assert!(
@@ -64,6 +67,13 @@ fn canonical_posts_match_authoritative_pipeline_and_shopbot_golden() {
         if post != "cps" {
             req.as_object_mut().unwrap().remove("cps_post");
         }
+        if post == "hpgl" {
+            req["project"]["machine"]["mode"] = json!("laser");
+            req["project"]["operations"][0]["params"]
+                .as_object_mut()
+                .unwrap()
+                .remove("stages");
+        }
         let expected = run_pipeline(
             serde_json::from_value::<PipelineRequest>(req.clone()).unwrap(),
             |_, _, _| {},
@@ -83,22 +93,25 @@ fn canonical_posts_match_authoritative_pipeline_and_shopbot_golden() {
                 assert_eq!(gcode.matches(marker).count(), 1);
             }
             assert_eq!(
-                gcode
-                    .replace("' FABTOOL/1 REQUEST 0 1\n", "")
-                    .replace("' FABTOOL/1 ACTIVE 0 1\n", ""),
-                include_str!("../../../tests/fixtures/test1/profile.sbp")
+                fixture_support::neutral_stage_comments(
+                    &gcode
+                        .replace("' FABTOOL/1 REQUEST 0 1\n", "")
+                        .replace("' FABTOOL/1 ACTIVE 0 1\n", "")
+                ),
+                fixture_support::neutral_stage_comments(include_str!(
+                    "../../../tests/fixtures/test1/profile.sbp"
+                ))
             );
         }
     }
 }
 #[test]
-fn effective_finish_values_are_not_library_or_rough_defaults() {
+fn effective_main_values_are_not_library_or_old_role_defaults() {
     let dir = Scratch::new();
     let mut req = request();
     req["post_processor"] = json!("linuxcnc");
     req.as_object_mut().unwrap().remove("cps_post");
-    req["project"]["operations"][0]["params"]["cutting"]["rates"][1] =
-        json!({"role":"finish","tool_id":1,"rpm":13000,"feed_mm_min":410,"plunge_mm_min":110});
+    req["project"]["operations"][0]["params"]["stages"]["main"] = json!({"tool_id":1,"rpm":13000,"feed_mm_min":410,"plunge_mm_min":110,"depth_per_pass_mm":0.25});
     let actual = success(&dir.run(&req, &[]));
     let g = actual["gcode"].as_str().unwrap();
     assert!(
@@ -134,7 +147,7 @@ fn geometry_template_matches_canonical_import_and_rejects_ambiguous_selection() 
         "/project/operations/0/source",
         "/project/operations/0/tool_id",
         "/project/operations/0/params/depth",
-        "/project/operations/0/params/step",
+        "/project/operations/0/params/stages/main/depth_per_pass_mm",
         "/project/operations/0/params/fast_move_z",
     ] {
         let mut bad = req.clone();
@@ -173,23 +186,26 @@ fn invalid_rates_roles_limits_and_conflicting_inputs_emit_nothing() {
     ] {
         for field in ["rpm", "feed_mm_min", "plunge_mm_min"] {
             let mut bad = base.clone();
-            bad["project"]["operations"][0]["params"]["cutting"]["rates"][1][field] = value.clone();
+            bad["project"]["operations"][0]["params"]["stages"]["main"][field] = value.clone();
             refused(&dir.run(&bad, &[]));
         }
     }
     for (pointer, value) in [
         ("/project/cutting_version", json!(8)),
         ("/project/cutting_version", Value::Null),
-        ("/project/operations/0/params/cutting", Value::Null),
-        ("/project/operations/0/params/step", Value::Null),
+        ("/project/operations/0/params/stages", Value::Null),
+        (
+            "/project/operations/0/params/stages/main/depth_per_pass_mm",
+            Value::Null,
+        ),
         ("/project/tools/0/diameter", json!(0)),
         (
-            "/project/operations/0/params/cutting/rates/1/tool_id",
+            "/project/operations/0/params/stages/main/tool_id",
             json!(999),
         ),
         (
-            "/project/operations/0/params/cutting/rates/1/role",
-            json!("rough"),
+            "/project/operations/0/params/stages/contract",
+            json!("legacy"),
         ),
     ] {
         let mut bad = base.clone();

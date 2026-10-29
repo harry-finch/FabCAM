@@ -144,6 +144,9 @@ fn non_finite_parameters_are_refused_before_planning() {
         // Used to offset silently by a near-zero radius, without a warning.
         ("tool diameter", |p| p.tools[0].diameter = f64::NAN),
         ("depth list entry", |p| {
+            p.operations[0].kind = ivac_core::project::OpKind::Engrave {
+                contour: ivac_core::project::ContourParams::default(),
+            };
             p.operations[0].params.depth_list = vec![-1., f64::NEG_INFINITY];
         }),
     ];

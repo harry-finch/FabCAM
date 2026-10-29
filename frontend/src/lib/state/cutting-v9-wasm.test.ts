@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, it } from 'vitest';
+import { authorV10 } from './alpha3.fixture';
 it('real WASM JSON preserves incomplete roles and validates collections', async () => {
   const url = new URL('../../../../crates/ivac-wasm/pkg/ivac_wasm.js', import.meta.url);
   const wasm = await import(/* @vite-ignore */ url.href);
@@ -11,29 +12,20 @@ it('real WASM JSON preserves incomplete roles and validates collections', async 
     ),
   );
   const p = request.project;
-  p.cutting_version = 9;
+  authorV10({ project: p } as Parameters<typeof authorV10>[0]);
   const op = p.operations[0];
   delete op.params.applied_cutting;
   delete op.params.feed_rate_override;
   delete op.params.plunge_rate_override;
-  op.params.step = -1;
-  op.params.cutting = {
-    rates: ['rough', 'finish'].map((role) => ({
-      role,
-      tool_id: op.tool_id,
-      rpm: null,
-      feed_mm_min: 800,
-      plunge_mm_min: 100,
-    })),
-  };
+  op.params.stages.main.rpm = null;
   const inspect = JSON.parse(
     wasm.presetCommand(JSON.stringify({ action: 'inspect', project: p, op_id: op.id })),
   );
-  expect(inspect.parameters.rates[0].rpm).toBeNull();
+  expect(inspect.parameters.stages.main.rpm).toBeNull();
   expect(inspect.check.errors.join(' ')).toContain('positive');
   const collection = {
     format: 'fabcam-preset-collection',
-    version: 1,
+    version: 2,
     id: 'lab',
     name: 'Lab',
     presets: [],
@@ -53,7 +45,7 @@ it('real WASM JSON preserves incomplete roles and validates collections', async 
       }),
     ),
   ).toThrow();
-  op.params.cutting.rates[0].rpm = 1.25;
+  op.params.stages.main.rpm = 1.25;
   expect(() =>
     wasm.presetCommand(JSON.stringify({ action: 'inspect', project: p, op_id: op.id })),
   ).toThrow();
@@ -69,23 +61,14 @@ it('real WASM reviews and copies a tested preset while preserving the assigned c
       'utf8',
     ),
   ).project;
-  p.cutting_version = 9;
+  authorV10({ project: p } as Parameters<typeof authorV10>[0]);
   p.machine.physical_id = 'lab-router';
   p.material = { id: 'plywood', revision: '1' };
   p.tools.forEach((t: { physical_id: string; id: number }) => {
     t.physical_id = `bit-${t.id}`;
   });
   const op = p.operations[0];
-  op.params.step = -1;
-  op.params.cutting = {
-    rates: ['rough', 'finish'].map((role) => ({
-      role,
-      tool_id: op.tool_id,
-      rpm: 12000,
-      feed_mm_min: 800,
-      plunge_mm_min: 100,
-    })),
-  };
+
   const command = (request: unknown) => JSON.parse(wasm.presetCommand(JSON.stringify(request)));
   const inspected = command({ action: 'inspect', project: p, op_id: op.id });
   expect(inspected.check.errors).toEqual([]);
@@ -100,12 +83,12 @@ it('real WASM reviews and copies a tested preset while preserving the assigned c
   };
   const collection = {
     format: 'fabcam-preset-collection',
-    version: 1,
+    version: 2,
     id: 'lab',
     name: 'Lab',
     presets: [preset],
   };
-  op.params.cutting.rates[0].feed_mm_min = 900;
+  op.params.stages.main.feed_mm_min = 900;
   const before = JSON.stringify(p);
   const loaded = command({
     action: 'load',
@@ -114,16 +97,16 @@ it('real WASM reviews and copies a tested preset while preserving the assigned c
     collection,
     preset_id: 'tested',
   });
-  expect(loaded.params.cutting.rates[0].feed_mm_min).toBe(800);
+  expect(loaded.params.stages.main.feed_mm_min).toBe(800);
   expect(JSON.stringify(p)).toBe(before);
-  expect(JSON.stringify(loaded.params.cutting.preset_snapshot)).not.toContain('private workshop');
+  expect(JSON.stringify(loaded.params.stage_preset)).not.toContain('private workshop');
   p.machine.physical_id = 'different-router';
   expect(() =>
     command({ action: 'load', project: p, op_id: op.id, collection, preset_id: 'tested' }),
   ).toThrow();
 });
 
-it('real WASM generation adapters require v9 and preserve explicit profile output', async () => {
+it('real WASM generation adapters require v10 and preserve explicit profile output', async () => {
   const url = new URL('../../../../crates/ivac-wasm/pkg/ivac_wasm.js', import.meta.url);
   const wasm = await import(/* @vite-ignore */ url.href);
   await wasm.default({ module_or_path: readFileSync(new URL('./ivac_wasm_bg.wasm', url)) });
@@ -140,18 +123,10 @@ it('real WASM generation adapters require v9 and preserve explicit profile outpu
     () => wasm.generateTwoSided(req),
     () => wasm.generateStreaming(req, () => {}),
   ];
-  for (const call of calls) expect(call).toThrow('v9');
-  req.project.cutting_version = 9;
+  for (const call of calls) expect(call).toThrow('v10');
+  authorV10(req);
   const op = req.project.operations[0];
-  op.params.cutting = {
-    rates: ['rough', 'finish'].map((role) => ({
-      role,
-      tool_id: op.tool_id,
-      rpm: 12000,
-      feed_mm_min: 800,
-      plunge_mm_min: 100,
-    })),
-  };
+
   const first = wasm.generate(req);
   expect(first.gcode).toContain('S12000');
   expect(first.gcode).toContain('F800');
@@ -160,9 +135,9 @@ it('real WASM generation adapters require v9 and preserve explicit profile outpu
   expect(wasm.generate(req).gcode).toEqual(first.gcode);
   expect(wasm.generateTwoSided(req).front.gcode).toEqual(first.gcode);
   expect(wasm.generateStreaming(req, () => {}).gcode).toEqual(first.gcode);
-  op.params.cutting.rates[1].rpm = null;
+  op.params.stages.main.rpm = null;
   for (const call of calls) expect(call).toThrow();
-  op.params.cutting.rates[1].rpm = 50000;
+  op.params.stages.main.rpm = 50000;
   req.project.tools[0].max_rpm = 20000;
   for (const call of calls) expect(call).toThrow();
 });

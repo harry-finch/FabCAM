@@ -200,6 +200,9 @@ pub struct PipelineResponse {
     /// Runtime provenance, not persisted source or physical machine state.
     #[serde(default)]
     pub tool_provenance: provenance::ToolProvenance,
+    /// Authored stage bindings to actual emitted movement/output ranges. V10 only.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub cutting_stages: Vec<stage_provenance::StageBinding>,
     pub gcode: String,
     pub toolpath: Vec<preview::ToolpathSegment>,
     pub gcode_index: preview::GcodeIndex,
@@ -780,7 +783,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         .count()
         .max(1);
     let mut warnings: Vec<PipelineWarning> = Vec::new();
-    if project.cutting_version == Some(9) {
+    if project.cutting_version == Some(10) {
         for op in project.operations.iter().filter(|o| o.enabled) {
             warnings.extend(
                 crate::cutting_parameters::validate_operation(&project, op)
@@ -1041,6 +1044,24 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         .operations
         .iter()
         .filter_map(|op| {
+            if let Some(s) = &op.params.stages {
+                let stages: Vec<_> = std::iter::once(s.main())
+                    .chain(s.finishing().map(|f| &f.cutting))
+                    .collect();
+                return Some(crate::sim::timing::OpRates {
+                    op_id: op.id,
+                    plunge_rate_mm_min: stages
+                        .iter()
+                        .filter_map(|s| s.plunge_mm_min)
+                        .max()
+                        .unwrap_or(0),
+                    feed_rate_mm_min: stages
+                        .iter()
+                        .filter_map(|s| s.feed_mm_min)
+                        .max()
+                        .unwrap_or(0),
+                });
+            }
             if let Some(cutting) = &op.params.cutting {
                 return Some(crate::sim::timing::OpRates {
                     op_id: op.id,
@@ -1097,6 +1118,14 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     #[cfg(not(feature = "cps"))]
     let tool_provenance =
         provenance::native(&project, post_kind, &gcode, &mut toolpath, &native_intents);
+    let cutting_stages = stage_provenance::bind(
+        &project,
+        &gcode,
+        &toolpath,
+        &tool_provenance,
+        execution_path,
+    )
+    .map_err(|e| PipelineError::AppliedCutting(0, e))?;
     let mut time_estimate = match &cps_feeds_dwell {
         // IR-derived feeds + dwell: timing never depends on the CPS
         // output text being parseable.
@@ -1125,6 +1154,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     time_estimate.dwell_s -= time_estimate.spindle_warmup_s;
     progress("done", 1.0, "complete");
     Ok(PipelineResponse {
+        cutting_stages,
         tool_provenance,
         stats: PipelineStats {
             object_count: objects.len(),
@@ -1458,7 +1488,7 @@ fn prepare_stream(
         .count()
         .max(1);
     let mut warnings: Vec<PipelineWarning> = Vec::new();
-    if project.cutting_version == Some(9) {
+    if project.cutting_version == Some(10) {
         for op in project.operations.iter().filter(|o| o.enabled) {
             warnings.extend(
                 crate::cutting_parameters::validate_operation(&project, op)
@@ -1992,6 +2022,9 @@ fn count_tool_changes(project: &Project) -> u32 {
 /// would fall through to single-emit with no envelope. Keep in sync
 /// when new op kinds gain dual-tool support.
 fn op_can_emit_internal_swap(op: &Op) -> bool {
+    if let Some(s) = &op.params.stages {
+        return s.finishing().is_some();
+    }
     if matches!(op.kind, OpKind::Pocket { .. }) {
         return true;
     }
@@ -2674,7 +2707,7 @@ where
         // per-op effects live in compute_op_cache_key / apply_cached_op /
         // store_op_cache; this loop keeps only the control flow (hit ⇒
         // bookkeep + continue; miss ⇒ emit + store + fall through).
-        let cache_key = if op.params.cutting.is_some() {
+        let cache_key = if op.params.cutting.is_some() || op.params.stages.is_some() {
             None
         } else {
             compute_op_cache_key(
@@ -3098,8 +3131,7 @@ fn next_prev_tool_id(op: &Op, internal_swap_emitted: bool) -> u32 {
 /// Resolve the authored per-pass Z step. A missing, non-finite or nonnegative
 /// value is invalid; generation never reads a live tool-library default.
 pub(crate) fn effective_step(op: &Op, _tool: &ToolEntry) -> Result<f64, PipelineWarning> {
-    op.params
-        .step
+    op.params.stages.as_ref().and_then(|s| s.main().depth_per_pass_mm.map(|v| -v)).or(op.params.step)
         .filter(|v| v.is_finite() && *v <= -1e-9)
         .ok_or_else(|| {
             PipelineWarning::for_op(
@@ -3916,6 +3948,7 @@ mod lot8_tests;
 mod audit_13_14;
 
 pub mod provenance;
+pub mod stage_provenance;
 
 #[cfg(test)]
 mod cutting_v9_tests;

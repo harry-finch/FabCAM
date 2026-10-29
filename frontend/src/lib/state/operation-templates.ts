@@ -1,3 +1,9 @@
+import {
+  usesStages,
+  validateStages,
+  type MainFinishing,
+  type CuttingStage,
+} from './cutting-stages';
 import type { OpEntry, ToolKind } from './op_types';
 import type { ToolEntry } from './project-types';
 import { cuttingRoles } from './cutting-parameters';
@@ -8,10 +14,21 @@ export interface TemplateTool {
   kind: ToolKind;
   diameter: number;
   name: string;
-  rough: Rates;
-  finish: Rates;
+  rough?: Rates;
+  finish?: Rates;
 }
+type TemplateStages = {
+  contract: 'main_finishing_v1';
+  main: Omit<CuttingStage, 'tool_id'>;
+  finishing: {
+    cutting: Omit<CuttingStage, 'tool_id'>;
+    lateral_allowance_mm: number;
+    floor_allowance_mm: number;
+  } | null;
+};
 export interface OperationTemplate {
+  /** Old v1 readers strictly reject this unknown required stage structure. */
+  stages?: TemplateStages;
   version: 1;
   id: string;
   name: string;
@@ -22,6 +39,7 @@ export interface OperationTemplate {
 const COMMON = [
   'depth',
   'startDepth',
+  'retainedStockMm',
   'step',
   'sourceCombine',
   'plunge',
@@ -91,7 +109,13 @@ export function captureTemplate(
 ): OperationTemplate {
   if (!templateKind(op.kind)) throw new Error('templates.unsupported');
   if (op.side === 'back') throw new Error('templates.front_only');
-  if ('finishToolId' in op && op.finishToolId && op.finishToolId !== op.toolId && op.step === null)
+  if (
+    !op.stages &&
+    'finishToolId' in op &&
+    op.finishToolId &&
+    op.finishToolId !== op.toolId &&
+    op.step === null
+  )
     throw new Error('templates.explicit_step');
   if (
     op.pattern ||
@@ -128,12 +152,28 @@ export function captureTemplate(
       kind: tool.kind,
       diameter: tool.diameter,
       name: tool.name,
-      rough: rates(op, tool, 'rough'),
-      finish: rates(op, tool, 'finish'),
+      ...(!op.stages ? { rough: rates(op, tool, 'rough'), finish: rates(op, tool, 'finish') } : {}),
     };
   };
   settings.step = op.step;
+  const withoutId = (stage: CuttingStage) => ({
+    rpm: stage.rpm,
+    feed_mm_min: stage.feed_mm_min,
+    plunge_mm_min: stage.plunge_mm_min,
+    depth_per_pass_mm: stage.depth_per_pass_mm,
+  });
   const result: OperationTemplate = {
+    ...(op.stages
+      ? {
+          stages: {
+            contract: 'main_finishing_v1' as const,
+            main: withoutId(op.stages.main),
+            finishing: op.stages.finishing
+              ? { ...op.stages.finishing, cutting: withoutId(op.stages.finishing.cutting) }
+              : null,
+          },
+        }
+      : {}),
     version: 1,
     id,
     name: name.trim(),
@@ -163,7 +203,7 @@ export function validTemplate(value: unknown): value is OperationTemplate {
     return false;
   if (
     Object.keys(t).some(
-      (k) => !['version', 'id', 'name', 'settings', 'tool', 'finishTool'].includes(k),
+      (k) => !['version', 'id', 'name', 'settings', 'tool', 'finishTool', 'stages'].includes(k),
     )
   )
     return false;
@@ -222,7 +262,11 @@ export function validTemplate(value: unknown): value is OperationTemplate {
       if (key === 'tabMode' && !['off', 'auto'].includes(String(obj.kind))) return false;
       if (key === 'halfpipeProfile' && !['circular_arc', 'v_bottom'].includes(String(obj.kind)))
         return false;
-    } else if (typeof value !== 'number' || !Number.isFinite(value)) return false;
+    } else if (
+      !(t.stages && key === 'step' && value === null) &&
+      (typeof value !== 'number' || !Number.isFinite(value))
+    )
+      return false;
   }
   const finiteTree = (v: unknown): boolean =>
     typeof v === 'number'
@@ -238,8 +282,7 @@ export function validTemplate(value: unknown): value is OperationTemplate {
     t.settings.depth >= 0 ||
     typeof t.settings.startDepth !== 'number' ||
     t.settings.startDepth < t.settings.depth ||
-    typeof t.settings.step !== 'number' ||
-    t.settings.step >= 0
+    (!t.stages && (typeof t.settings.step !== 'number' || t.settings.step >= 0))
   )
     return false;
   if (
@@ -254,22 +297,67 @@ export function validTemplate(value: unknown): value is OperationTemplate {
     tool.diameter > 0 &&
     typeof tool.name === 'string' &&
     Object.keys(tool).every((k) => ['kind', 'diameter', 'name', 'rough', 'finish'].includes(k)) &&
-    ['rough', 'finish'].every((pass) => {
-      const r = tool[pass as 'rough' | 'finish'];
-      return (
-        r &&
-        Object.keys(r).length === 3 &&
-        ['rpm', 'feed_mm_min', 'plunge_mm_min'].every((key) => {
-          const v = r[key as keyof Rates];
-          return Number.isInteger(v) && v > 0 && v <= 0xffffffff;
-        })
-      );
-    });
+    (t.stages
+      ? tool.rough === undefined && tool.finish === undefined
+      : ['rough', 'finish'].every((pass) => {
+          const r = tool[pass as 'rough' | 'finish'];
+          return (
+            r &&
+            Object.keys(r).length === 3 &&
+            ['rpm', 'feed_mm_min', 'plunge_mm_min'].every((key) => {
+              const v = r[key as keyof Rates];
+              return Number.isInteger(v) && v > 0 && v <= 0xffffffff;
+            })
+          );
+        }));
   if (
     !safeTool(t.tool) ||
-    (t.finishTool && (!safeTool(t.finishTool) || t.settings.kind !== 'pocket'))
+    (t.finishTool &&
+      (!safeTool(t.finishTool) ||
+        (t.settings.kind !== 'pocket' && !(t.stages && t.settings.kind === 'profile'))))
   )
     return false;
+  if (t.stages) {
+    if (
+      typeof t.stages !== 'object' ||
+      !t.stages.main ||
+      typeof t.stages.main !== 'object' ||
+      (t.stages.finishing && !t.stages.finishing.cutting)
+    )
+      return false;
+    if (
+      !['profile', 'pocket'].includes(t.settings.kind) ||
+      (!!t.finishTool && !t.stages.finishing) ||
+      t.settings.pocketStrategy === 'halfpipe' ||
+      t.settings.step !== null ||
+      t.settings.finishStep != null ||
+      t.settings.finishXyAllowanceMm != null ||
+      (Array.isArray(t.settings.depthList) && t.settings.depthList.length)
+    )
+      return false;
+    if (
+      'tool_id' in t.stages.main ||
+      (t.stages.finishing && 'tool_id' in t.stages.finishing.cutting)
+    )
+      return false;
+    try {
+      validateStages({
+        ...t.stages,
+        main: { ...t.stages.main, tool_id: 1 },
+        finishing: t.stages.finishing
+          ? { ...t.stages.finishing, cutting: { ...t.stages.finishing.cutting, tool_id: 2 } }
+          : null,
+      });
+    } catch {
+      return false;
+    }
+    const complete = (v: Omit<CuttingStage, 'tool_id'>) =>
+      [v.rpm, v.feed_mm_min, v.plunge_mm_min, v.depth_per_pass_mm].every(
+        (n) => typeof n === 'number' && n > 0,
+      );
+    if (!complete(t.stages.main) || (t.stages.finishing && !complete(t.stages.finishing.cutting)))
+      return false;
+  }
   if (t.settings.kind === 'planar_surface') {
     const p = t.settings.surface as Record<string, unknown>;
     if (
@@ -344,11 +432,34 @@ export function instantiateTemplate(
     ...(settings.kind === 'planar_surface' ? {} : { sourceObjects: ids }),
     side: 'front',
   } as OpEntry;
+  if (usesStages(op)) {
+    if (!template.stages)
+      throw new Error(
+        'Historical Profile/Pocket template requires manual recreation for Main/Finishing',
+      );
+    const s = template.stages;
+    const stages: MainFinishing = {
+      ...copy(s),
+      main: { ...copy(s.main), tool_id: tool.id },
+      finishing: s.finishing
+        ? {
+            ...copy(s.finishing),
+            cutting: { ...copy(s.finishing.cutting), tool_id: finish?.id ?? tool.id },
+          }
+        : null,
+    };
+    op.stages = stages;
+    op.step = null;
+    op.finishToolId = stages.finishing?.cutting.tool_id;
+    return op;
+  }
   op.cutting = {
     rates: cuttingRoles(op).map((r) => ({
       ...r,
       ...copy(
-        r.role === 'finish' ? (template.finishTool ?? template.tool).finish : template.tool.rough,
+        (r.role === 'finish'
+          ? (template.finishTool ?? template.tool).finish
+          : template.tool.rough)!,
       ),
     })),
   };

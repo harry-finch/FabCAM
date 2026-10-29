@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { OperationTemplate, TemplateTool } from '../state/operation-templates';
+  import type { OperationTemplate } from '../state/operation-templates';
   import { templateParameterRows } from '../state/operation-template-ui';
   import { t } from '../i18n';
   let { template }: { template: OperationTemplate } = $props();
@@ -11,19 +11,23 @@
   );
 </script>
 
-{#snippet rates(tool: TemplateTool, pass: 'rough' | 'finish')}
+{#snippet rates(values: {
+  rpm: number | null;
+  feed_mm_min: number | null;
+  plunge_mm_min: number | null;
+})}
   <dl>
     <div>
       <dt>{t('surface.rpm')}</dt>
-      <dd>{tool[pass].rpm} {units.rpm}</dd>
+      <dd>{values.rpm} {units.rpm}</dd>
     </div>
     <div>
       <dt>{t('surface.feed_mm_min')}</dt>
-      <dd>{tool[pass].feed_mm_min} {units.feed}</dd>
+      <dd>{values.feed_mm_min} {units.feed}</dd>
     </div>
     <div>
       <dt>{t('surface.plunge_mm_min')}</dt>
-      <dd>{tool[pass].plunge_mm_min} {units.feed}</dd>
+      <dd>{values.plunge_mm_min} {units.feed}</dd>
     </div>
   </dl>
 {/snippet}
@@ -35,10 +39,19 @@
         <dd>{row.value}</dd>
       </div>{/each}
   </dl>
-  {#if differentFinish}<h4>{t('templates.preview.rough')}</h4>{/if}
-  {@render rates(template.tool, 'rough')}
-  {#if differentFinish}<h4>{t('templates.preview.finish')}</h4>
-    {@render rates(finish, 'finish')}{/if}
+  {#if template.stages}
+    <h4>{t('stages.main')}</h4>
+    {@render rates(template.stages.main)}
+    {#if template.stages.finishing}
+      <h4>{t('stages.finishing')}</h4>
+      {@render rates(template.stages.finishing.cutting)}
+    {/if}
+  {:else}
+    {#if differentFinish}<h4>{t('templates.preview.rough')}</h4>{/if}
+    {#if template.tool.rough}{@render rates(template.tool.rough)}{/if}
+    {#if differentFinish && finish.finish}<h4>{t('templates.preview.finish')}</h4>
+      {@render rates(finish.finish)}{/if}
+  {/if}
 </details>
 
 <style>

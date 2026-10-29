@@ -73,7 +73,7 @@ pub fn run(args: impl Iterator<Item = String>) -> Result<()> {
             "/project/operations/0/tool_id",
             "/project/operations/0/source",
             "/project/operations/0/params/depth",
-            "/project/operations/0/params/step",
+            "/project/operations/0/params/stages/main/depth_per_pass_mm",
             "/project/operations/0/params/fast_move_z",
         ] {
             if raw

@@ -213,7 +213,7 @@ pub fn version() -> VersionResponse {
     let mut capabilities = vec![
         "import-dxf",
         "generate-gcode",
-        "cutting-parameters-v9",
+        "cutting-parameters-v10",
         "post-linuxcnc",
         "post-grbl",
         "post-hpgl",
@@ -627,11 +627,44 @@ pub async fn generate_drawing_cmd(
 mod audit_15_16 {
     use super::*;
     #[tokio::test]
+    async fn alpha3_v10_native_commands_match_full_stage_and_two_sided_output() {
+        let mut value: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/alpha3-v10/profile.request.json"
+        ))
+        .unwrap();
+        value["post_processor"] = serde_json::json!("linuxcnc");
+        value["cps_post"] = serde_json::Value::Null;
+        let op = &mut value["project"]["operations"][0];
+        op["finish_tool_id"] = serde_json::json!(1);
+        op["params"]["stages"]["finishing"] = serde_json::json!({
+            "cutting":op["params"]["stages"]["main"],
+            "lateral_allowance_mm":0.1,"floor_allowance_mm":0.0});
+        let request: PipelineRequest = serde_json::from_value(value.clone()).unwrap();
+        let expected = ivac_core::pipeline::run_pipeline(request.clone(), |_, _, _| {}).unwrap();
+        let actual = generate(request.clone()).await.unwrap();
+        assert_eq!(
+            serde_json::to_value(actual).unwrap(),
+            serde_json::to_value(expected).unwrap()
+        );
+        let expected =
+            ivac_core::pipeline::run_pipeline_two_sided(request.clone(), |_, _, _| {}).unwrap();
+        let actual = generate_two_sided(request).await.unwrap();
+        assert_eq!(
+            serde_json::to_value(actual).unwrap(),
+            serde_json::to_value(expected).unwrap()
+        );
+        value["project"]["cutting_version"] = serde_json::json!(9);
+        assert!(generate(serde_json::from_value(value).unwrap())
+            .await
+            .is_err());
+    }
+    #[tokio::test]
     async fn qual1a2_json_value_command_decoding_preserves_numeric_bits() {
         // The SDK uses a JSON Value argument. This exercises that conversion
         // and the command, but does not claim installed WebView/IPC acceptance.
         let input = include_str!("../../../tests/fixtures/perf-v9/square-medial-linuxcnc.json");
         let mut value: serde_json::Value = serde_json::from_str(input).unwrap();
+        value["project"]["cutting_version"] = 10.into();
         value["project"]["operations"][0]["params"]["cutting"]["entry_angle_deg"] =
             serde_json::json!("__LEXEME__");
         let json = value
@@ -660,13 +693,7 @@ mod audit_15_16 {
             "../../../tests/fixtures/test1/profile.request.json"
         ))
         .unwrap();
-        request.project.cutting_version = Some(9);
-        for op in &mut request.project.operations {
-            op.params.cutting = Some(ivac_core::cutting_parameters::seed(
-                op,
-                &request.project.tools,
-            ));
-        }
+        request = crate::alpha3_fixture::request(request);
         request.project.fixtures.push(ivac_core::project::Fixture {
             id: 1,
             name: "clamp".into(),
@@ -711,7 +738,7 @@ mod audit_15_16 {
             bindings: vec![],
             machining: PipelineRequest {
                 project: ivac_core::project::Project {
-                    cutting_version: Some(9),
+                    cutting_version: Some(10),
                     ..Default::default()
                 },
                 post_processor: None,
@@ -732,7 +759,7 @@ mod audit_15_16_tool {
     #[tokio::test]
     async fn drawing_missing_tool_keeps_assign_tool_action() {
         let mut project = ivac_core::project::Project::default();
-        project.cutting_version = Some(9);
+        project.cutting_version = Some(10);
         project.tools.push(ivac_core::project::ToolEntry {
             id: 7,
             ..Default::default()
@@ -741,6 +768,16 @@ mod audit_15_16_tool {
             id: 3,
             tool_id: 99,
             ..Default::default()
+        });
+        project.operations[0].params.stages = Some(ivac_core::cutting_stages::MainFinishing::V1 {
+            main: ivac_core::cutting_stages::CuttingStage {
+                tool_id: 99,
+                rpm: Some(10000),
+                feed_mm_min: Some(100),
+                plunge_mm_min: Some(50),
+                depth_per_pass_mm: Some(1.),
+            },
+            finishing: None,
         });
         let error = generate_drawing_cmd(ivac_core::drawing::api::DrawingGenerationRequest {
             version: ivac_core::drawing::CONTRACT,

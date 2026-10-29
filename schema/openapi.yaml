@@ -835,6 +835,45 @@ components:
       - spot
       - chamfer
       type: string
+    CuttingStage:
+      additionalProperties: false
+      description: One authored stage. Missing values are editable, never executable defaults.
+      properties:
+        depth_per_pass_mm:
+          description: Positive axial depth removed per pass, in mm.
+          format: double
+          type:
+          - number
+          - 'null'
+        feed_mm_min:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
+        plunge_mm_min:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
+        rpm:
+          format: uint32
+          minimum: 0.0
+          type:
+          - integer
+          - 'null'
+        tool_id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - depth_per_pass_mm
+      - feed_mm_min
+      - plunge_mm_min
+      - rpm
+      - tool_id
+      type: object
     DepthSchedule:
       oneOf:
       - additionalProperties: false
@@ -1318,6 +1357,23 @@ components:
       - contour
       - message
       type: object
+    FinishingStage:
+      additionalProperties: false
+      description: Stock reserved by Main and removed by this operation's finishing stage. Retained-for-later stock deliberately does not belong to this structure.
+      properties:
+        cutting:
+          $ref: '#/components/schemas/CuttingStage'
+        floor_allowance_mm:
+          format: double
+          type: number
+        lateral_allowance_mm:
+          format: double
+          type: number
+      required:
+      - cutting
+      - floor_allowance_mm
+      - lateral_allowance_mm
+      type: object
     Fixture:
       description: A user-declared physical obstacle on the stock the cutter must miss. Lives in drawing XY (same frame as the imported geometry) and occupies a Z range; the sim collision test gates on that range first then falls back to a per-shape XY swept-region check.
       properties:
@@ -1501,6 +1557,11 @@ components:
       type: object
     GenerateResponse:
       properties:
+        cutting_stages:
+          description: Authored stage bindings to actual emitted movement/output ranges. V10 only.
+          items:
+            $ref: '#/components/schemas/StageBinding'
+          type: array
         gcode:
           type: string
         gcode_index:
@@ -2095,6 +2156,26 @@ components:
         enum:
         - plasma
         type: string
+    MainFinishing:
+      description: 'Required semantic discriminator: never an optional flag next to legacy rates.'
+      oneOf:
+      - additionalProperties: false
+        properties:
+          contract:
+            enum:
+            - main_finishing_v1
+            type: string
+          finishing:
+            anyOf:
+            - $ref: '#/components/schemas/FinishingStage'
+            - type: 'null'
+          main:
+            $ref: '#/components/schemas/CuttingStage'
+        required:
+        - contract
+        - finishing
+        - main
+        type: object
     MaterialIdentity:
       additionalProperties: false
       description: Exact material identity. Display labels never establish compatibility.
@@ -2824,6 +2905,15 @@ components:
           type:
           - integer
           - 'null'
+        stage_preset:
+          anyOf:
+          - $ref: '#/components/schemas/LoadedPresetSnapshot'
+          - type: 'null'
+        stages:
+          anyOf:
+          - $ref: '#/components/schemas/MainFinishing'
+          - type: 'null'
+          description: Required exclusive contract for v10 Profile and ordinary Pocket.
         start_depth:
           default: 0.0
           description: |-
@@ -2912,6 +3002,15 @@ components:
           type:
           - integer
           - 'null'
+        stage_preset:
+          anyOf:
+          - $ref: '#/components/schemas/LoadedPresetSnapshot'
+          - type: 'null'
+        stages:
+          anyOf:
+          - $ref: '#/components/schemas/MainFinishing'
+          - type: 'null'
+          description: Required exclusive contract for v10 Profile and ordinary Pocket.
         start_depth:
           default: 0.0
           description: |-
@@ -3097,6 +3196,11 @@ components:
       type: object
     PipelineResponse:
       properties:
+        cutting_stages:
+          description: Authored stage bindings to actual emitted movement/output ranges. V10 only.
+          items:
+            $ref: '#/components/schemas/StageBinding'
+          type: array
         gcode:
           type: string
         gcode_index:
@@ -3890,9 +3994,11 @@ components:
           anyOf:
           - $ref: '#/components/schemas/SpecializedParameters'
           - type: 'null'
-      required:
-      - rates
-      - schedule
+        stages:
+          anyOf:
+          - $ref: '#/components/schemas/MainFinishing'
+          - type: 'null'
+          description: V2 stage contract. Exclusive with legacy role rates and schedule.
       type: object
     ProbeAxis:
       description: Axis selector for `OpKind::Probe`. Serializes as the bare lowercase letter (`"x"` / `"y"` / `"z"`) for a wire-friendly payload that drops straight into the G38.2 word.
@@ -3921,7 +4027,7 @@ components:
       additionalProperties: false
       properties:
         cutting_version:
-          description: Native cutting contract. V9 clients must explicitly send 9.
+          description: Native cutting contract. V10 clients must explicitly send 10.
           format: uint32
           minimum: 0.0
           type:
@@ -4938,6 +5044,46 @@ components:
       required:
       - spot_depth_mm
       - spot_tool_id
+      type: object
+    StageBinding:
+      properties:
+        authority:
+          $ref: '#/components/schemas/Authority'
+        end_segment_exclusive:
+          format: uint
+          minimum: 0.0
+          type: integer
+        first_segment:
+          format: uint
+          minimum: 0.0
+          type: integer
+        operation_id:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        output_end_line:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        output_start_line:
+          format: uint32
+          minimum: 0.0
+          type: integer
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/CuttingStage'
+          description: Explicit authored stage, not measured controller state.
+        stage:
+          type: string
+      required:
+      - authority
+      - end_segment_exclusive
+      - first_segment
+      - operation_id
+      - output_end_line
+      - output_start_line
+      - parameters
+      - stage
       type: object
     StockConfig:
       description: Resolved stock box. See [`Project::stock`]. Kept deliberately thin — the auto/manual/margin derivation lives frontend-side (it's a UI convenience for sizing the box to imported geometry); the core only needs the final axis-aligned envelope for the `out_of_stock` scan (and, in future, stock-aware sim / rapid / holder checks).

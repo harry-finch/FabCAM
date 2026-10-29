@@ -5,7 +5,7 @@ import {
   defaultProjectStock,
 } from './project-defaults';
 import { computeUnsavedWork } from './unsaved';
-import { validateProjectV9 as validateProjectFile } from './project-v9';
+import { validateProjectV10 as validateProjectFile } from './project-v10';
 // Project-file / workspace lifecycle extracted from the ProjectState
 // god root. Save/load of .ivac-project files, the
 // project-boundary reset, and the per-project workspace view state all
@@ -147,7 +147,7 @@ export function snapshotProject(p: ProjectState): ProjectFile {
     ...(p.data.drawing ? { drawing: p.data.drawing } : {}),
     ...(p.data.cornerRelief ? { cornerRelief: p.data.cornerRelief } : {}),
     kind: 'ivac-project',
-    version: 9,
+    version: 10,
     ...(p.data.material ? { material: p.data.material } : {}),
 
     imports: p.data.imports,

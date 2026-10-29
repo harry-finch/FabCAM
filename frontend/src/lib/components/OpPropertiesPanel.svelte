@@ -390,7 +390,7 @@
       </p>
     {/if}
 
-    {#if op.kind === 'pocket' || op.kind === 'drill'}
+    {#if op.kind === 'drill' || (op.kind === 'pocket' && !op.stages)}
       <label
         class="row"
         title={op.kind === 'pocket'
@@ -509,7 +509,7 @@
             <p class="step-error">{t('opprops.cut.step.required')}</p>
           {/if}
         {/if}
-        {#if (isContourOp(op) || op.kind === 'chamfer') && fields.finishStep}
+        {#if !op.stages && (isContourOp(op) || op.kind === 'chamfer') && fields.finishStep}
           <label class="row" title={t('opprops.cut.finish_step.title')}>
             <span>{t('opprops.cut.finish_step')}</span>
             <div class="num-cell">
@@ -528,7 +528,7 @@
             </div>
           </label>
         {/if}
-        {#if op.kind === 'pocket'}
+        {#if op.kind === 'pocket' && !op.stages}
           <label class="row" title={t('opprops.cut.xy_finish_stock.title')}>
             <span>{t('opprops.cut.xy_finish_stock')}</span>
             <div class="num-cell">
@@ -634,7 +634,7 @@
             </div>
           </label>
         {/if}
-        {#if fields.list}
+        {#if fields.list && !op.stages}
           <label class="row" title={t('opprops.cut.depth_list.title')}>
             <span>{t('opprops.cut.depth_list')}</span>
             <div class="num-cell">
@@ -675,24 +675,29 @@
               >
             </select>
           </label>
-          <label class="row" title={t(CUT_DIRECTION_HELP[op.finishCutDirection ?? 'conventional'])}>
-            <span>{t('opprops.cut.finish_direction')}</span>
-            <select
-              value={op.finishCutDirection ?? 'conventional'}
-              onchange={(e) =>
-                patch(
-                  'finishCutDirection',
-                  (e.currentTarget as HTMLSelectElement).value as CutDirection,
-                )}
+          {#if !op.stages || op.stages.finishing}
+            <label
+              class="row"
+              title={t(CUT_DIRECTION_HELP[op.finishCutDirection ?? 'conventional'])}
             >
-              <option value="conventional" title={t(CUT_DIRECTION_HELP.conventional)}
-                >{t('opprops.direction.conventional')}</option
+              <span>{t('opprops.cut.finish_direction')}</span>
+              <select
+                value={op.finishCutDirection ?? 'conventional'}
+                onchange={(e) =>
+                  patch(
+                    'finishCutDirection',
+                    (e.currentTarget as HTMLSelectElement).value as CutDirection,
+                  )}
               >
-              <option value="climb" title={t(CUT_DIRECTION_HELP.climb)}
-                >{t('opprops.direction.climb')}</option
-              >
-            </select>
-          </label>
+                <option value="conventional" title={t(CUT_DIRECTION_HELP.conventional)}
+                  >{t('opprops.direction.conventional')}</option
+                >
+                <option value="climb" title={t(CUT_DIRECTION_HELP.climb)}
+                  >{t('opprops.direction.climb')}</option
+                >
+              </select>
+            </label>
+          {/if}
           <label class="row" title={t(PLUNGE_HELP[op.plunge?.kind ?? 'direct'])}>
             <span>{t('opprops.cut.plunge')}</span>
             <select

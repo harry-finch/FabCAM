@@ -313,3 +313,7 @@ mod audit_15_16 {
         assert!(!super::is_webkit_command("/usr/bin/FakeWebKitWebProcess\0"));
     }
 }
+
+#[cfg(test)]
+#[path = "../../ivac-core/tests/support/explicit.rs"]
+mod alpha3_fixture;

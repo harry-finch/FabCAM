@@ -55,7 +55,8 @@ describe('UX4 reusable operation templates', () => {
     'captures %s and explicitly rebinds without copying source identity',
     (kind) => {
       const op = source(kind);
-      op.step = -0.5;
+      if (op.stages) op.stages.main.depth_per_pass_mm = 0.5;
+      else op.step = -0.5;
       const template = captureTemplate(op, [sourceTool], 'Shop model', 'template-1');
       const serialized = JSON.stringify(template);
       for (const key of [
@@ -75,8 +76,12 @@ describe('UX4 reusable operation templates', () => {
         ...binding(),
         stockZone: { minX: 30, minY: 40, maxX: 70, maxY: 80 },
       });
-      expect(next).toMatchObject({ id: 42, toolId: 7, step: -0.5 });
-      expect(next.cutting?.rates[0]).toMatchObject({
+      expect(next).toMatchObject({
+        id: 42,
+        toolId: 7,
+        step: kind === 'planar_surface' ? -0.5 : null,
+      });
+      expect(next.stages?.main ?? next.cutting?.rates[0]).toMatchObject({
         tool_id: 7,
         rpm: 18000,
         feed_mm_min: 1200,
@@ -90,16 +95,16 @@ describe('UX4 reusable operation templates', () => {
   );
   it('preserves actual manual overrides without exporting private recommendation evidence', () => {
     const op = source();
-    for (const rate of op.cutting!.rates) {
+    for (const rate of [op.stages!.main]) {
       rate.feed_mm_min = 2222;
       rate.plunge_mm_min = 333;
     }
     const template = captureTemplate(op, [sourceTool], 'Manual', 't');
-    expect(template.tool.rough).toMatchObject({ feed_mm_min: 2222, plunge_mm_min: 333 });
+    expect(template.stages!.main).toMatchObject({ feed_mm_min: 2222, plunge_mm_min: 333 });
     const next = instantiateTemplate(template, binding());
-    expect(next.cutting?.rates.every((slot) => slot.rpm === 18000)).toBe(true);
-    template.tool.rough.rpm = 1;
-    expect(next.cutting?.rates[0].rpm).toBe(18000);
+    expect(next.stages!.main.rpm).toBe(18000);
+    template.stages!.main.rpm = 1;
+    expect(next.stages!.main.rpm).toBe(18000);
     expect('appliedCutting' in op).toBe(false);
   });
   it('requires all destination choices, current IDs, milling mode and compatible physical tool', () => {
@@ -120,7 +125,12 @@ describe('UX4 reusable operation templates', () => {
     const op = source();
     if (op.kind !== 'pocket') throw new Error();
     op.finishToolId = 2;
-    const slot = op.cutting!.rates.find((r) => r.role === 'finish')!;
+    op.stages!.finishing = {
+      cutting: { ...op.stages!.main },
+      lateral_allowance_mm: 0.2,
+      floor_allowance_mm: 0,
+    };
+    const slot = op.stages!.finishing.cutting;
     slot.tool_id = 2;
     slot.feed_mm_min = 900;
     const finish = { ...sourceTool, id: 2, diameter: 3, feedRateFinish: 900 };
@@ -134,12 +144,10 @@ describe('UX4 reusable operation templates', () => {
       tools: [targetTool, { ...finish, id: 8 }],
     });
     expect(next).toMatchObject({ toolId: 7, finishToolId: 8 });
-    expect(
-      next.cutting?.rates.find((s) => s.tool_id === 8 && s.role === 'finish')?.feed_mm_min,
-    ).toBe(900);
-    op.step = null;
+    expect(next.stages?.finishing?.cutting.feed_mm_min).toBe(900);
+    op.stages!.finishing!.cutting.depth_per_pass_mm = null;
     expect(() => captureTemplate(op, [sourceTool, finish], 'Dual', 't')).toThrow(
-      'templates.explicit_step',
+      'templates.invalid',
     );
   });
   it('refuses geometry-local markers, unsupported kinds and invalid settings', () => {
@@ -223,7 +231,7 @@ describe('UX4 reusable operation templates', () => {
       >[0]['machine'],
     });
     expect(wire?.operations[0].source).toEqual({ kind: 'objects', ids: [5] });
-    expect(wire?.operations[0].params.cutting?.rates[0].feed_mm_min).toBe(1200);
+    expect(wire?.operations[0].params.stages?.main.feed_mm_min).toBe(1200);
     expect(JSON.stringify(wire)).not.toContain('template-1');
   });
   it('serializes overlapping persistence writes and exposes storage failures', async () => {

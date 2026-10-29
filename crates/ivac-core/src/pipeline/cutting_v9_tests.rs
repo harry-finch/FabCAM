@@ -7,14 +7,8 @@ use crate::project::{
     DrillCycle, OpKind, OpSource, PocketStrategy, SpotConfig, ToolKind, ToolOffset,
 };
 
-fn explicit(mut project: Project) -> Project {
-    project.cutting_version = Some(9);
-    for op in &mut project.operations {
-        if !op.is_program_only() {
-            op.params.cutting = Some(cutting::seed(op, &project.tools));
-        }
-    }
-    project
+fn explicit(project: Project) -> Project {
+    crate::fixture_support::project(project)
 }
 fn request(project: Project) -> PipelineRequest {
     PipelineRequest {
@@ -23,7 +17,25 @@ fn request(project: Project) -> PipelineRequest {
         cps_post: None,
     }
 }
+fn main_mut(op: &mut Op) -> &mut crate::cutting_stages::CuttingStage {
+    let crate::cutting_stages::MainFinishing::V1 { main, .. } =
+        op.params.stages.as_mut().expect("staged");
+    main
+}
 fn set_role(op: &mut Op, role: CuttingRole, rpm: u32, feed: u32, plunge: u32) {
+    if let Some(crate::cutting_stages::MainFinishing::V1 { main, finishing }) =
+        &mut op.params.stages
+    {
+        let stage = if role == CuttingRole::Finish {
+            &mut finishing.as_mut().expect("explicit finishing").cutting
+        } else {
+            main
+        };
+        stage.rpm = Some(rpm);
+        stage.feed_mm_min = Some(feed);
+        stage.plunge_mm_min = Some(plunge);
+        return;
+    }
     let r = op
         .params
         .cutting
@@ -192,7 +204,7 @@ fn v9_missing_secondary_values_and_known_limits_refuse_without_clamping() {
     for case in 0..6 {
         let mut bad = p.clone();
         match case {
-            0 => bad.operations[0].params.cutting.as_mut().unwrap().rates[1].rpm = None,
+            0 => main_mut(&mut bad.operations[0]).rpm = None,
             1 => bad.machine.spindle_rpm_max = Some(1000),
             2 => bad.machine.max_feed_mm_min = Some(10),
             3 => bad.tools[0].max_rpm = Some(1000),
@@ -481,7 +493,7 @@ fn v9_two_sided_preserves_both_programs_and_refuses_invalid_back() {
         .unwrap_err()
         .to_string()
         .contains("explicit operation-owned"));
-    p.operations[1].params.cutting.as_mut().unwrap().rates[1].rpm = None;
+    main_mut(&mut p.operations[1]).rpm = None;
     assert!(run_pipeline_two_sided(request(p), |_, _, _| {}).is_err());
 }
 #[test]
@@ -507,7 +519,7 @@ fn v9_streaming_preserves_bytes_and_preflight_rejects_missing_values() {
     let sink = Sink(std::sync::Arc::default());
     stream_gcode_to_writer(request(p.clone()), Box::new(sink.clone())).unwrap();
     assert_eq!(*sink.0.lock().unwrap(), expected.as_bytes());
-    p.operations[0].params.cutting.as_mut().unwrap().rates[1].feed_mm_min = None;
+    main_mut(&mut p.operations[0]).feed_mm_min = None;
     let sink = Sink(std::sync::Arc::default());
     assert!(stream_gcode_to_writer(request(p), Box::new(sink.clone())).is_err());
     assert!(sink.0.lock().unwrap().is_empty());
@@ -515,10 +527,11 @@ fn v9_streaming_preserves_bytes_and_preflight_rejects_missing_values() {
 
 #[test]
 fn v9_explicit_schedule_and_rates_ignore_live_tool_defaults() {
-    let mut p = explicit(project_with(
-        vec![profile_op(1, 1, ToolOffset::Outside)],
-        vec![endmill(1, 3.0)],
-    ));
+    let mut op = profile_op(1, 1, ToolOffset::On);
+    op.kind = OpKind::Engrave {
+        contour: crate::project::ContourParams::default(),
+    };
+    let mut p = explicit(project_with(vec![op], vec![endmill(1, 3.0)]));
     p.operations[0].params.step = None;
     p.operations[0].params.depth_list = vec![-0.5, -1.0];
     let before = run_pipeline(request(p.clone()), |_, _, _| {}).unwrap();

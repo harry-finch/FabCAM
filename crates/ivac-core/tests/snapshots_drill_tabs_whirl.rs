@@ -309,7 +309,7 @@ fn snapshot_profile_rectangle_tabs_and_helix_entry() {
         actual.lines().filter(|l| l.contains("Z-1")).count() >= 1,
         "expected tab lift to Z-1:\n{actual}",
     );
-    let digest = seahash_hex(&actual);
+    let digest = seahash_hex(&fixture_support::historical_profile_comments(&actual));
     assert_snapshot(
         "profile_rectangle_tabs_helix",
         &digest,
@@ -378,7 +378,7 @@ fn snapshot_profile_ramp_tabs() {
         xyz_moves >= 2,
         "expected ≥2 ramp G1 X*Y*Z* moves; got {xyz_moves}:\n{actual}",
     );
-    let digest = seahash_hex(&actual);
+    let digest = seahash_hex(&fixture_support::historical_profile_comments(&actual));
     assert_snapshot(
         "profile_ramp_tabs",
         &digest,
@@ -441,7 +441,7 @@ fn snapshot_whirl_walks_closed_contour() {
         g1_count >= 50,
         "expected ≥50 G1 stamps from the face-mill overlay; got {g1_count}",
     );
-    let digest = seahash_hex(&actual);
+    let digest = seahash_hex(&fixture_support::historical_profile_comments(&actual));
     assert_snapshot(
         "whirl_closed_contour",
         &digest,

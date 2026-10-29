@@ -216,7 +216,7 @@ async fn version() -> Json<VersionResponse> {
             let mut caps = vec![
                 "import-dxf",
                 "generate-gcode",
-                "cutting-parameters-v9",
+                "cutting-parameters-v10",
                 "stream-gcode",
                 "post-linuxcnc",
                 "post-grbl",
@@ -1249,7 +1249,7 @@ mod tests {
             let bytes = to_bytes(resp.into_body(), usize::MAX).await.unwrap();
             let error: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
             assert!(
-                error["message"].as_str().unwrap().contains("v9"),
+                error["message"].as_str().unwrap().contains("v10"),
                 "{path}: {error}"
             );
             assert!(error.get("gcode").is_none());
@@ -1259,7 +1259,7 @@ mod tests {
     fn a_request(post: PostProcessorKind) -> PipelineRequest {
         PipelineRequest {
             project: ivac_core::project::Project {
-                cutting_version: Some(9),
+                cutting_version: Some(10),
                 ..Default::default()
             },
             post_processor: Some(post),
@@ -1275,10 +1275,7 @@ mod tests {
         .unwrap();
         req.post_processor = Some(PostProcessorKind::Linuxcnc);
         req.cps_post = None;
-        req.project.cutting_version = Some(9);
-        for op in &mut req.project.operations {
-            op.params.cutting = Some(ivac_core::cutting_parameters::seed(op, &req.project.tools));
-        }
+        req = crate::alpha3_fixture::request(req);
         req.project.fixtures.push(ivac_core::project::Fixture {
             id: 1,
             name: "clamp".into(),
@@ -1384,3 +1381,7 @@ mod tests {
         assert!(parsed.recovery_hint.is_some());
     }
 }
+
+#[cfg(test)]
+#[path = "../../ivac-core/tests/support/explicit.rs"]
+mod alpha3_fixture;

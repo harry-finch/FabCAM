@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, it } from 'vitest';
+import { authorV10 } from '../state/alpha3.fixture';
 
 it('current transports do not register legacy recommendation or source-pack entry points', () => {
   const source = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
@@ -35,6 +36,7 @@ it('fresh real WASM has no obsolete exports and refuses old payload fields', asy
       'utf8',
     ),
   );
+  authorV10(req);
   req.post_processor = 'linuxcnc';
   delete req.cps_post;
   expect(wasm.version().capabilities).not.toContain('feeds-speeds');

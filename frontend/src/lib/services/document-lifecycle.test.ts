@@ -363,7 +363,7 @@ it('saves and reopens a standalone surfacing zone in explicit format 9', () => {
   p.data.operations[0].cutting = seedCutting(p.data.operations[0], p.data.tools);
   const saved = p.snapshot();
   expect(saved.kind).toBe('ivac-project');
-  expect(saved.version).toBe(9);
+  expect(saved.version).toBe(10);
   const reopened = JSON.parse(JSON.stringify(saved));
   clearProject(p);
   restoreProject(p, reopened);
@@ -433,7 +433,7 @@ it.each(geomFiles)(
       ),
     );
     const before = JSON.stringify(io.project.data);
-    expect(() => restoreProject(io.project, historicalFile)).toThrow('v9');
+    expect(() => restoreProject(io.project, historicalFile)).toThrow('v10');
     expect(JSON.stringify(io.project.data)).toBe(before);
     const file = explicitProjectFixture(historicalFile);
     file.workshopNote = { revision: 3, label: 'inert metadata retained' };
@@ -463,7 +463,7 @@ it.each(geomFiles)(
     expect(reopened.machine).toMatchObject(file.machine);
     expect(reopened).toEqual(saved);
     if (file.drawing) {
-      expect(reopened.version).toBe(9);
+      expect(reopened.version).toBe(10);
       const { drawingCommand } = await import('../state/drawing');
       p.history.exec(drawingCommand(p.data.drawing, undefined, p.data.operations, []), p.data);
       p.history.undo(p.data);

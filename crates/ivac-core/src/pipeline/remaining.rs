@@ -82,7 +82,8 @@ pub(super) fn analyze(
                 Some("cascade_pocket_only")
             } else if !tool.is_some_and(|t| {
                 t.kind == ToolKind::Endmill && t.diameter.is_finite() && t.diameter > 0.
-            }) || op.finish_tool_id.is_some()
+            }) || (op.finish_tool_id.is_some()
+                && !(op.params.stages.is_some() && op.finish_tool_id == Some(op.tool_id)))
             {
                 Some("single_flat_cutter_only")
             } else if contour

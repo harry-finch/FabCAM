@@ -6,7 +6,12 @@
   import { generatedMinimumZ, workshopWarnings } from '../state/workshop-report';
   import { generationContextKey, coerceGenerationPost } from '../state/generation-context';
   import { workspace } from '../state/workspace.svelte';
-  import { reportCuttingText, reportToolIds, reportToolNames } from '../state/report-cutting';
+  import {
+    reportEmittedStages,
+    reportCuttingText,
+    reportToolIds,
+    reportToolNames,
+  } from '../state/report-cutting';
   import { computeFootprint } from '../sim/footprint';
   import { project, type OpEntry } from '../state/project.svelte';
   import { isProgramOnlyOp } from '../state/op_types';
@@ -78,7 +83,19 @@
     ],
   ]);
   const opRates = (op: OpEntry) =>
-    reportCuttingText(op, { rough: t('uxc.rough'), finish: t('fs35.finishing') });
+    [
+      reportCuttingText(op, { rough: t('uxc.rough'), finish: t('fs35.finishing') }),
+      gen
+        ? reportEmittedStages(op.id, gen.cutting_stages ?? [], {
+            main: t('stages.main'),
+            finishing: t('stages.finishing'),
+            emitted: t('stages.emitted'),
+            empty: t('stages.empty'),
+          })
+        : '',
+    ]
+      .filter(Boolean)
+      .join(' · ');
   function minimum(op: OpEntry) {
     const z = gen ? generatedMinimumZ(gen.toolpath, op.id) : null;
     return z == null ? '—' : `${z.toFixed(3)} mm`;

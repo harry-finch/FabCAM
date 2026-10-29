@@ -124,7 +124,7 @@
           ? { ...target!.data, name: name.trim() }
           : {
               format: 'fabcam-preset-collection',
-              version: 1,
+              version: 2,
               id: crypto.randomUUID(),
               name: name.trim(),
               presets: [],

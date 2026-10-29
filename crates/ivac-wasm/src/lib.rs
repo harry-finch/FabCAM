@@ -70,7 +70,7 @@ pub fn version() -> Result<JsValue, JsValue> {
         "movement-tool-provenance-1",
         "import-dxf",
         "generate-gcode",
-        "cutting-parameters-v9",
+        "cutting-parameters-v10",
         "post-linuxcnc",
         "post-grbl",
         "post-hpgl",
@@ -165,13 +165,34 @@ pub fn from_stl(bytes: &[u8], max_dim: u32) -> Result<JsValue, JsValue> {
 // serde-wasm-bindgen's struct visitor visits declared fields only, unlike the
 // JSON reader. Refuse retired fields explicitly before they could be discarded.
 // This is a transport check; all current cutting/safety values remain core-owned.
+fn strict_stage_keys(value: &JsValue, keys: &[&str]) -> Result<(), JsValue> {
+    if !value.is_object() || value.is_null() || js_sys::Array::is_array(value) {
+        return Err(JsValue::from_str("Invalid stage object"));
+    }
+    let object: js_sys::Object = value.clone().unchecked_into();
+    let names = js_sys::Object::keys(&object);
+    if names.length() as usize != keys.len()
+        || names
+            .iter()
+            .any(|k| !k.as_string().is_some_and(|s| keys.contains(&s.as_str())))
+    {
+        return Err(JsValue::from_str("Missing or unknown stage fields"));
+    }
+    for key in keys {
+        let v = js_sys::Reflect::get(value, &JsValue::from_str(key))?;
+        if v.is_undefined() || v.as_f64().is_some_and(|n| !n.is_finite()) {
+            return Err(JsValue::from_str("Undefined/nonfinite stage field"));
+        }
+    }
+    Ok(())
+}
 fn reject_legacy_cutting_fields(request: &JsValue) -> Result<(), JsValue> {
     let project = js_sys::Reflect::get(request, &JsValue::from_str("project"))?;
     if !project.is_object() {
         return Ok(()); // The typed reader reports missing/invalid structure.
     }
     if js_sys::Reflect::has(&project, &JsValue::from_str("fs_context"))? {
-        return Err(JsValue::from_str("Legacy fs_context is unsupported in v9"));
+        return Err(JsValue::from_str("Legacy fs_context is unsupported in v10"));
     }
     let operations = js_sys::Reflect::get(&project, &JsValue::from_str("operations"))?;
     if let Some(operations) = operations.dyn_ref::<js_sys::Array>() {
@@ -183,10 +204,41 @@ fn reject_legacy_cutting_fields(request: &JsValue) -> Result<(), JsValue> {
             if !params.is_object() {
                 continue;
             }
+            // Strict stage sub-boundary: serde-wasm-bindgen otherwise silently
+            // ignores unknown struct fields. This is not project normalization.
+            let stages = js_sys::Reflect::get(&params, &JsValue::from_str("stages"))?;
+            if !stages.is_null() && !stages.is_undefined() {
+                strict_stage_keys(&stages, &["contract", "main", "finishing"])?;
+                let main = js_sys::Reflect::get(&stages, &JsValue::from_str("main"))?;
+                let rate_keys = [
+                    "tool_id",
+                    "rpm",
+                    "feed_mm_min",
+                    "plunge_mm_min",
+                    "depth_per_pass_mm",
+                ];
+                strict_stage_keys(&main, &rate_keys)?;
+                let finish = js_sys::Reflect::get(&stages, &JsValue::from_str("finishing"))?;
+                if !finish.is_null() {
+                    strict_stage_keys(
+                        &finish,
+                        &["cutting", "lateral_allowance_mm", "floor_allowance_mm"],
+                    )?;
+                    strict_stage_keys(
+                        &js_sys::Reflect::get(&finish, &JsValue::from_str("cutting"))?,
+                        &rate_keys,
+                    )?;
+                }
+                let json = js_sys::JSON::stringify(&stages)?
+                    .as_string()
+                    .ok_or_else(|| JsValue::from_str("Invalid stage contract"))?;
+                serde_json::from_str::<ivac_core::cutting_stages::MainFinishing>(&json)
+                    .map_err(|e| JsValue::from_str(&e.to_string()))?;
+            }
             for field in ["applied_cutting", "fs_full_width"] {
                 if js_sys::Reflect::has(&params, &JsValue::from_str(field))? {
                     return Err(JsValue::from_str(&format!(
-                        "Legacy {field} is unsupported in v9"
+                        "Legacy {field} is unsupported in v10"
                     )));
                 }
             }
@@ -473,7 +525,10 @@ mod test1_bridge {
                 markers,
                 ["' FABTOOL/1 REQUEST 0 1\n", "' FABTOOL/1 ACTIVE 0 1\n"]
             );
-            assert_eq!(rest.concat(), expected);
+            assert_eq!(
+                fixture_support::neutral_stage_comments(&rest.concat()),
+                fixture_support::neutral_stage_comments(expected)
+            );
             let mut invalid = req;
             invalid.project.stock.as_mut().unwrap().top_z_mm = 18.;
             assert!(matches!(

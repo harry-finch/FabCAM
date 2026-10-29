@@ -94,6 +94,11 @@ describe('UX4.1 presentation without changing template semantics', () => {
     ).toBeNull();
     const pocket = make('pocket');
     pocket.finishTool = structuredClone(pocket.tool);
+    pocket.stages!.finishing = {
+      cutting: { ...pocket.stages!.main },
+      lateral_allowance_mm: 0.2,
+      floor_allowance_mm: 0,
+    };
     expect(templateBindingProblem(pocket, target())).toBe('templates.choose_tool');
     expect(templateBindingProblem(pocket, { ...target(), finishToolId: 7 })).toBe(
       'templates.distinct_finish',
@@ -109,7 +114,7 @@ describe('UX4.1 presentation without changing template semantics', () => {
       [],
     );
     expect(templateToolDifferences(entry, { ...target(), toolId: 0 })).toEqual([]);
-    expect(instantiateTemplate(entry, target()).cutting?.rates[0]).toMatchObject({
+    expect(instantiateTemplate(entry, target()).stages?.main).toMatchObject({
       tool_id: 7,
       rpm: 10000,
       feed_mm_min: 1000,

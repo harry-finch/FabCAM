@@ -796,7 +796,7 @@ export function placementFileTransform(
 
 export interface ProjectFile {
   kind: 'ivac-project';
-  version: 9;
+  version: 10;
   drawing?: import('./drawing').DrawingState;
   cornerRelief?: import('./corner-relief').CornerReliefModifier;
   material?: MaterialIdentity;

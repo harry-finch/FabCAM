@@ -3,11 +3,11 @@ import type { ProjectFile } from './project-types';
 import { validateCuttingStructure } from './cutting-parameters';
 import { validateProjectGeometry } from './project-geometry-validation';
 /** Validate before changing any current document state. Null rates remain editable. */
-export function validateProjectV9(input: unknown): asserts input is ProjectFile {
+export function validateProjectV10(input: unknown): asserts input is ProjectFile {
   const value = input as ProjectFile;
-  if (!value || value.kind !== 'ivac-project' || value.version !== 9)
+  if (!value || value.kind !== 'ivac-project' || value.version !== 10)
     throw new Error(
-      'This FabCAM requires project format v9. Versions 1–8 are unsupported; the original file was kept.',
+      'This FabCAM requires project format v10. Open historical projects in the previous FabCAM version or recreate them manually; the original file was kept.',
     );
   if (
     !Array.isArray(value.imports) ||
@@ -15,8 +15,8 @@ export function validateProjectV9(input: unknown): asserts input is ProjectFile 
     !Array.isArray(value.tools) ||
     !value.machine
   )
-    throw new Error('Incomplete v9 project');
-  if ('fsContext' in value) throw new Error('Legacy source context is not supported in v9');
+    throw new Error('Incomplete v10 project');
+  if ('fsContext' in value) throw new Error('Legacy source context is not supported in v10');
   validateProjectGeometry(value);
   const ids = new Set<number>();
   for (const t of value.tools) {
@@ -36,13 +36,16 @@ export function validateProjectV9(input: unknown): asserts input is ProjectFile 
       op.feedRateOverride !== undefined ||
       op.plungeRateOverride !== undefined
     )
-      throw new Error('Legacy cutting overrides are unsupported in v9');
+      throw new Error('Legacy cutting overrides are unsupported in v10');
     if (isProgramOnlyOp(op.kind)) continue;
     if (!ids.has(op.toolId)) throw new Error(`${op.name}: assigned tool is missing`);
     if (value.machine.mode === 'mill') {
       validateCuttingStructure(op);
-      for (const r of op.cutting!.rates)
+      for (const r of op.stages
+        ? [op.stages.main, ...(op.stages.finishing ? [op.stages.finishing.cutting] : [])]
+        : op.cutting!.rates)
         if (!ids.has(r.tool_id)) throw new Error('Secondary tool is missing');
-    } else if (op.cutting) throw new Error('Milling values on non-milling operation');
+    } else if (op.cutting || op.stages || op.stagePreset)
+      throw new Error('Milling values on non-milling operation');
   }
 }

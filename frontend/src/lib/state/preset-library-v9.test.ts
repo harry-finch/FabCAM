@@ -48,7 +48,7 @@ it('editing context, rates or date requires an exact new attestation; names and 
   edited.notes = 'Preserved original source claim';
   expect(editTestedPreset(original, edited, '').name).toBe('New label');
   for (const mutate of [
-    (p: TestedPreset) => (p.parameters.rates[0].rpm = 14000),
+    (p: TestedPreset) => (p.parameters.rates![0].rpm = 14000),
     (p: TestedPreset) => (p.context.machine_id = 'other'),
     (p: TestedPreset) => (p.test_date = '2026-10-22'),
   ]) {
@@ -57,7 +57,7 @@ it('editing context, rates or date requires an exact new attestation; names and 
     expect(() => editTestedPreset(original, draft, '')).toThrow('Confirm');
     const attested = attestationKey(draft);
     expect(editTestedPreset(original, draft, attested)).toEqual(draft);
-    draft.parameters.rates[0].feed_mm_min = 999;
+    draft.parameters.rates![0].feed_mm_min = 999;
     expect(() => editTestedPreset(original, draft, attested)).toThrow('Confirm');
   }
   expect(() => editTestedPreset(null, original, '')).toThrow('Confirm');

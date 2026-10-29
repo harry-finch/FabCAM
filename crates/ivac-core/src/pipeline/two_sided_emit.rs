@@ -150,7 +150,7 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
     }
     let stock = stock.clone();
     let dowels = stock.flip.as_ref().and_then(|f| f.dowels.clone());
-    if req.project.cutting_version == Some(9) && dowels.is_some() {
+    if req.project.cutting_version == Some(10) && dowels.is_some() {
         return Err(PipelineError::Fixture("Automatic dowel drilling has no explicit operation-owned cutting values and is not qualified for v9. Prepare registration with explicit Drill operations and disable automatic holes.".into()));
     }
     let dowel_centres = dowels

@@ -5,13 +5,14 @@ All destinations live in a private temporary directory. No machine execution.
 """
 import copy
 import json
+import os
 from pathlib import Path
 import subprocess
 import tempfile
 
 repo = Path(__file__).resolve().parents[1]
-binary = repo / "target/debug/ivac"
-request = json.loads((repo / "tests/fixtures/cli-v9/profile.request.json").read_text())
+binary = Path(os.environ.get("CARGO_TARGET_DIR", repo / "target")) / "debug/ivac"
+request = json.loads((repo / "tests/fixtures/alpha3-v10/profile.request.json").read_text())
 request["post_processor"] = "linuxcnc"
 request["cps_post"] = None
 
@@ -35,7 +36,7 @@ with tempfile.TemporaryDirectory(prefix="fabcam-numsafe3-export-") as directory:
     bad = copy.deepcopy(request)
     operation = copy.deepcopy(bad["project"]["operations"][0])
     operation["id"] = 2
-    operation["params"]["step"] = -1e-8
+    operation["params"]["stages"]["main"]["depth_per_pass_mm"] = 1e-8
     bad["project"]["operations"].append(operation)
     failed = run(save("bad.json", bad), "--output", target)
     assert failed.returncode and b"1000" in failed.stderr, failed.stderr
@@ -65,9 +66,9 @@ with tempfile.TemporaryDirectory(prefix="fabcam-numsafe3-export-") as directory:
     assert (root / "fresh.front.ngc").stat().st_size
     assert (root / "fresh.back.ngc").stat().st_size
 
-    pair["project"]["operations"][1]["params"]["step"] = -1e-8
+    pair["project"]["operations"][1]["params"]["stages"]["main"]["depth_per_pass_mm"] = 1e-8
     failed_pair = run(save("bad-pair.json", pair), "--two-sided", "--output", root / "failed.ngc")
-    assert failed_pair.returncode and b"1000" in failed_pair.stderr
+    assert failed_pair.returncode and b"1000" in failed_pair.stderr, failed_pair.stderr
     assert not (root / "failed.front.ngc").exists()
     assert not (root / "failed.back.ngc").exists()
     assert not list(root.glob(".fabcam-export-*"))

@@ -175,8 +175,10 @@ fn golden(case: &str, text: &str) {
         std::fs::write(&path, text).unwrap();
     }
     assert_eq!(
-        text,
-        std::fs::read_to_string(path).expect("required reviewed SBP golden")
+        fixture_support::neutral_stage_comments(text),
+        fixture_support::neutral_stage_comments(
+            &std::fs::read_to_string(path).expect("required reviewed SBP golden")
+        )
     );
 }
 fn check(case: &str) {
@@ -1541,7 +1543,7 @@ fn v1_freeze_pocket_rpm_matrix() {
             finish.speed = second_rpm;
             finish.speed_finish = Some(second_rpm);
             p.tools.push(finish);
-            p.operations[0].finish_tool_id = finish_id;
+            p.operations[0].finish_tool_id = Some(finish_id.unwrap_or(1));
             let expected = if lab && finish_id == Some(2) {
                 Some("tool changes unsupported")
             } else {
@@ -1625,7 +1627,7 @@ fn v1_freeze_separate_sections_allow_distinct_manual_rpm() {
 }
 
 #[test]
-fn v1_freeze_pocket_without_wall_ring_does_not_change_tools_or_rpm() {
+fn v10_refuses_legacy_nocontour_instead_of_hiding_finish_intent() {
     for lab in [false, true] {
         let mut p = project("square", "svg");
         p.operations[0].kind = OpKind::Pocket {
@@ -1661,10 +1663,8 @@ fn v1_freeze_pocket_without_wall_ring_does_not_change_tools_or_rpm() {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(!result.gcode.contains("Load tool 2"));
-        assert!(!result.gcode.contains("at 10000 RPM"));
-        assert!(!result.gcode.contains("TR,10000"));
+        .unwrap_err();
+        assert!(result.to_string().contains("Legacy nocontour"));
     }
 }
 

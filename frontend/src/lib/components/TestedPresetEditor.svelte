@@ -85,6 +85,44 @@
     <button type="button" onclick={useOperation} disabled={busy || project.sel.selectedOpId == null}
       >{t('fsreset.ui.use.selected.operation.s.configuration.and.values')}</button
     >
+    {#if draft.parameters.stages}
+      {#each [{ label: t('stages.main'), value: draft.parameters.stages.main }, ...(draft.parameters.stages.finishing ? [{ label: t('stages.finishing'), value: draft.parameters.stages.finishing.cutting }] : [])] as stage (stage.label)}
+        <strong>{stage.label} · T{stage.value.tool_id}</strong>
+        {#each ['rpm', 'feed_mm_min', 'plunge_mm_min', 'depth_per_pass_mm'] as key (key)}
+          <label
+            >{stage.label}
+            {key}<input
+              type="number"
+              min="0.000001"
+              step="any"
+              value={stage.value[key as keyof typeof stage.value] ?? ''}
+              onchange={(e) =>
+                Object.assign(stage.value, {
+                  [key]: e.currentTarget.value === '' ? null : Number(e.currentTarget.value),
+                })}
+            /></label
+          >
+        {/each}
+      {/each}
+      {#if draft.parameters.stages.finishing}
+        <label
+          >{t('stages.lateral')} (mm)<input
+            type="number"
+            min="0"
+            step="any"
+            bind:value={draft.parameters.stages.finishing.lateral_allowance_mm}
+          /></label
+        >
+        <label
+          >{t('stages.floor')} (mm)<input
+            type="number"
+            min="0"
+            step="any"
+            bind:value={draft.parameters.stages.finishing.floor_allowance_mm}
+          /></label
+        >
+      {/if}
+    {/if}
     <div class="rates">
       <table>
         <thead
@@ -94,7 +132,7 @@
             ><th>{t('fsreset.ui.plunge.mm.min')}</th></tr
           ></thead
         ><tbody>
-          {#each draft.parameters.rates as rate (rate.role)}<tr
+          {#each draft.parameters.rates ?? [] as rate (rate.role)}<tr
               ><th>{rate.role} / T{rate.tool_id}</th>
               <td
                 ><input
@@ -130,7 +168,7 @@
         </tbody>
       </table>
     </div>
-    {#if draft.parameters.schedule.kind === 'step'}
+    {#if draft.parameters.schedule?.kind === 'step'}
       <label
         >Depth step (negative mm; blank when unused)<input
           type="number"
@@ -138,7 +176,7 @@
           max="-0.000000001"
           value={draft.parameters.schedule.step ?? ''}
           onchange={(e) => {
-            if (draft.parameters.schedule.kind === 'step')
+            if (draft.parameters.schedule?.kind === 'step')
               draft.parameters.schedule.step =
                 e.currentTarget.value === '' ? null : Number(e.currentTarget.value);
           }}
@@ -151,18 +189,18 @@
           max="-0.000000001"
           value={draft.parameters.schedule.finish_step ?? ''}
           onchange={(e) => {
-            if (draft.parameters.schedule.kind === 'step')
+            if (draft.parameters.schedule?.kind === 'step')
               draft.parameters.schedule.finish_step =
                 e.currentTarget.value === '' ? null : Number(e.currentTarget.value);
           }}
         /></label
       >
-    {:else}
+    {:else if draft.parameters.schedule?.kind === 'explicit'}
       <label
         >{t('fsreset.ui.depth.schedule.descending.mm.comma.separated')}<input
           value={draft.parameters.schedule.depths.join(', ')}
           onchange={(e) => {
-            if (draft.parameters.schedule.kind === 'explicit')
+            if (draft.parameters.schedule?.kind === 'explicit')
               draft.parameters.schedule.depths = e.currentTarget.value
                 .split(',')
                 .map((v) => Number(v.trim()));

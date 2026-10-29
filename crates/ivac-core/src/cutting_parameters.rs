@@ -46,6 +46,13 @@ pub struct CuttingCheck {
 #[must_use]
 pub fn roles(op: &Op) -> Vec<(CuttingRole, u32)> {
     use CuttingRole::{Chamfer, Drill, Finish, Rough, Spot};
+    if let Some(stages) = &op.params.stages {
+        let mut result = vec![(Rough, stages.main().tool_id)];
+        if let Some(f) = stages.finishing() {
+            result.push((Finish, f.cutting.tool_id));
+        }
+        return result;
+    }
     if op.is_program_only()
         || matches!(
             op.kind,
@@ -225,6 +232,19 @@ pub fn validate_limits(
 /// General constraints apply regardless of any workshop attestation.
 #[must_use]
 pub fn validate_operation(project: &Project, op: &Op) -> CuttingCheck {
+    if crate::cutting_stages::applies(op) && project.machine.mode == MachineMode::Mill {
+        return crate::cutting_stages::validate_operation(project, op);
+    }
+    if op.params.stages.is_some() {
+        return CuttingCheck {
+            errors: vec!["Stage contract is unsupported for this operation/process".into()],
+            warnings: vec![],
+        };
+    }
+    validate_role_operation(project, op)
+}
+
+pub(crate) fn validate_role_operation(project: &Project, op: &Op) -> CuttingCheck {
     let mut out = CuttingCheck::default();
     if op.is_program_only() {
         return out;
@@ -632,16 +652,23 @@ fn validate_specialized_values(op: &Op, tool: &ToolEntry, role: CuttingRole) -> 
 
 /// Required by every public generation adapter before any output file is staged.
 pub fn require_current(project: &Project) -> Result<(), String> {
-    if project.cutting_version != Some(9) {
+    if project.cutting_version != Some(10) {
         return Err(
-            "Generation requires explicit cutting contract v9; legacy projects are unsupported"
+            "Generation requires cutting contract v10; open historical projects in the previous FabCAM version or recreate them explicitly"
                 .into(),
         );
+    }
+    for op in &project.operations {
+        if project.machine.mode == MachineMode::Mill && crate::cutting_stages::applies(op) {
+            crate::cutting_stages::validate_structure(op)?;
+        } else if op.params.stages.is_some() || op.params.stage_preset.is_some() {
+            return Err("Stage contract is unsupported for this operation/process".into());
+        }
     }
     Ok(())
 }
 
-/// Every generation path requires the explicit native v9 contract.
+/// Every generation path requires the explicit native v10 contract.
 pub fn validate_project(project: &Project) -> Result<(), crate::pipeline::PipelineError> {
     require_current(project).map_err(|e| crate::pipeline::PipelineError::AppliedCutting(0, e))?;
     let mut tool_ids = std::collections::BTreeSet::new();
@@ -679,6 +706,9 @@ pub fn validate_project(project: &Project) -> Result<(), crate::pipeline::Pipeli
 
 /// Resolve only explicit v9 milling rates. Generation never reads creation defaults.
 pub fn saved_rates(op: &Op, tool: &ToolEntry, pass: PassKind) -> Result<(u32, u32, u32), String> {
+    if let Some(stages) = &op.params.stages {
+        return stages.main().rates(tool.id);
+    }
     let role = match pass {
         PassKind::Drill => CuttingRole::Drill,
         PassKind::Rough => CuttingRole::Rough,
@@ -717,10 +747,13 @@ mod tests {
     fn project() -> Project {
         let tools = vec![ToolEntry::default()];
         let mut op = Op::default();
+        op.kind = crate::project::OpKind::Engrave {
+            contour: crate::project::ContourParams::default(),
+        };
         op.params.step = Some(-1.0);
         op.params.cutting = Some(seed(&op, &tools));
         Project {
-            cutting_version: Some(9),
+            cutting_version: Some(10),
             tools,
             operations: vec![op],
             ..Project::default()
@@ -825,6 +858,9 @@ mod tests {
         p.operations[0].kind =
             serde_json::from_str(r#"{"type":"pocket","strategy":"cascade"}"#).unwrap();
         p.operations[0].pocket_params_mut().unwrap().xy_overlap = 0.5;
+        p.operations[0].params.cutting = None;
+        p.cutting_version = None;
+        p = crate::fixture_support::project(p);
         assert!(validate_project(&p).is_ok());
         for overlap in [0.0, 1.0, 1.5, f64::NAN] {
             p.operations[0].pocket_params_mut().unwrap().xy_overlap = overlap;

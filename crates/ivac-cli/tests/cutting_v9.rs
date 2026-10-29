@@ -1,8 +1,7 @@
-//! Real CLI process checks; temporary software-only outputs, no machine activity.
-use ivac_core::{
-    cutting_parameters,
-    pipeline::{run_pipeline, PipelineRequest, PostProcessorKind},
-};
+#[path = "../../ivac-core/tests/support/explicit.rs"]
+mod fixture_support;
+// Real CLI process checks; temporary software-only outputs, no machine activity.
+use ivac_core::pipeline::{run_pipeline, PipelineRequest, PostProcessorKind};
 use std::{fs, path::PathBuf, process::Command};
 struct Scratch(PathBuf);
 impl Scratch {
@@ -26,7 +25,7 @@ impl Drop for Scratch {
     }
 }
 #[test]
-fn serialized_v9_cli_preserves_output_and_rejects_before_publication() {
+fn serialized_v10_cli_preserves_output_and_rejects_before_publication() {
     let dir = Scratch::new();
     let input = dir.0.join("request.json");
     let out = dir.0.join("program.ngc");
@@ -49,20 +48,16 @@ fn serialized_v9_cli_preserves_output_and_rejects_before_publication() {
     fs::write(&input, serde_json::to_vec(&req).unwrap()).unwrap();
     let r = invoke();
     assert!(!r.status.success());
-    assert!(String::from_utf8_lossy(&r.stderr).contains("v9"));
+    assert!(String::from_utf8_lossy(&r.stderr).contains("v10"));
     assert_eq!(fs::read_to_string(&out).unwrap(), "original user output");
-    req.project.cutting_version = Some(9);
-    for op in &mut req.project.operations {
-        op.params.cutting = Some(cutting_parameters::seed(op, &req.project.tools));
-    }
+    req = fixture_support::request(req);
     let mut missing = req.clone();
-    missing.project.operations[0]
+    let ivac_core::cutting_stages::MainFinishing::V1 { main, .. } = missing.project.operations[0]
         .params
-        .cutting
+        .stages
         .as_mut()
-        .unwrap()
-        .rates[1]
-        .rpm = None;
+        .unwrap();
+    main.rpm = None;
     fs::write(&input, serde_json::to_vec(&missing).unwrap()).unwrap();
     assert!(!invoke().status.success());
     assert_eq!(fs::read_to_string(&out).unwrap(), "original user output");

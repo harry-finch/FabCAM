@@ -48,12 +48,10 @@ it('checks assignment without rewriting authored values', () => {
   expect(assignmentProblem(op, tool, ['mill'])).toBeUndefined();
   expect(JSON.stringify(op)).toBe(before);
 });
-it('accepts assignment with incomplete v9 values without mutating them', () => {
+it('accepts assignment with incomplete Main values without mutating them', () => {
   const op = profile();
-  op.cutting!.rates.forEach((r) => {
-    r.rpm = null;
-    r.feed_mm_min = null;
-  });
+  op.stages!.main.rpm = null;
+  op.stages!.main.feed_mm_min = null;
   const before = JSON.stringify(op);
   expect(assignmentProblem(op, { ...tool, id: 99 }, ['mill'])).toBeUndefined();
   expect(JSON.stringify(op)).toBe(before);
