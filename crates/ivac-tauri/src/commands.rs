@@ -627,6 +627,32 @@ pub async fn generate_drawing_cmd(
 mod audit_15_16 {
     use super::*;
     #[tokio::test]
+    async fn alpha31_native_commands_match_polygon_stages_and_fail_closed() {
+        for fixture in [
+            include_str!("../../../tests/fixtures/alpha31/convex-pocket.request.json"),
+            include_str!("../../../tests/fixtures/alpha31/concave-pocket.request.json"),
+        ] {
+            let mut request: PipelineRequest = serde_json::from_str(fixture).unwrap();
+            let expected =
+                ivac_core::pipeline::run_pipeline(request.clone(), |_, _, _| {}).unwrap();
+            let actual = generate(request.clone()).await.unwrap();
+            assert_eq!(
+                serde_json::to_value(actual).unwrap(),
+                serde_json::to_value(expected).unwrap()
+            );
+            let expected =
+                ivac_core::pipeline::run_pipeline_two_sided(request.clone(), |_, _, _| {}).unwrap();
+            let actual = generate_two_sided(request.clone()).await.unwrap();
+            assert_eq!(
+                serde_json::to_value(actual).unwrap(),
+                serde_json::to_value(expected).unwrap()
+            );
+            request.project.operations[0].params.stock_to_leave_mm = 30.;
+            assert!(generate(request.clone()).await.is_err());
+            assert!(generate_two_sided(request).await.is_err());
+        }
+    }
+    #[tokio::test]
     async fn alpha3_v10_native_commands_match_full_stage_and_two_sided_output() {
         let mut value: serde_json::Value = serde_json::from_str(include_str!(
             "../../../tests/fixtures/alpha3-v10/profile.request.json"

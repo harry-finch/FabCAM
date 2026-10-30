@@ -2019,7 +2019,7 @@
   "stages.floor": "Bodenaufmaß",
   "stages.finish_depth": "Schlichtzustellung pro Durchgang",
   "stages.allowance_help": "Der Hauptschnitt lässt dieses Aufmaß stehen; Schlichten entfernt den werkzeugzugänglichen Rest. Null Aufmaß bedeutet einen Wiederholungsdurchgang. Positive Aufmaße müssen für die qualifizierte Ausgabegenauigkeit mindestens 0,05 mm betragen.",
-  "stages.proof_help": "Schlichten erfordert ein einzelnes achsparalleles Rechteck, einen Flachfräser und direktes Eintauchen, ohne Haltestege oder Anfahrwege. Nicht nachgewiesene Abdeckung verhindert die Erzeugung.",
+  "stages.proof_help": "Schlichten unterstützt eine exakt geschlossene Kontur aus Geraden, einen Flachfräser und direktes Eintauchen. Inseln, Quellkurven, Haltestege und Anfahrwege werden nicht unterstützt. Jede Strategie muss Wand- und Bodenabdeckung nachweisen; unvollständige Pfade oder ein überschrittenes Prüfbudget verhindern die Erzeugung.",
   "stages.rpm_help": "ShopBot: Dasselbe Werkzeug muss für Hauptschnitt und Schlichten dieselbe Drehzahl verwenden. Keine automatische Drehzahlanpassung.",
   "stages.retained_title": "Aufmaß für eine spätere Operation",
   "stages.retained": "Beibehaltenes seitliches Aufmaß",

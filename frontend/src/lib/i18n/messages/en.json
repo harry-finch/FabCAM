@@ -2358,7 +2358,7 @@
   "stages.floor": "Floor allowance",
   "stages.finish_depth": "Finishing depth per pass",
   "stages.allowance_help": "Main leaves these allowances; Finishing removes the cutter-accessible remainder. Zero allowances mean a repeat pass. Positive allowances must be at least 0.05 mm for the qualified output precision.",
-  "stages.proof_help": "Finishing requires an isolated axis-aligned rectangle, a flat endmill and direct entry, without tabs or leads. Unsupported coverage refuses generation.",
+  "stages.proof_help": "Finishing supports one exactly closed straight-edge contour, a flat endmill and direct entry. Islands, source curves, tabs and leads are not supported. Each strategy must pass wall and floor coverage checks; incomplete or over-budget paths block generation.",
   "stages.rpm_help": "ShopBot: the same cutter must use the same RPM in Main and Finishing. No automatic RPM substitution.",
   "stages.retained_title": "Stock retained for a later operation",
   "stages.retained": "Lateral retained stock",

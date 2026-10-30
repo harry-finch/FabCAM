@@ -140,3 +140,44 @@ async fn corrected_http_generation_matches_buffered_pipeline_and_refuses_invalid
         }
     }
 }
+
+#[tokio::test]
+async fn alpha31_http_polygon_finishing_and_coverage_refusal_match_core() {
+    for fixture in [
+        include_str!("../../../tests/fixtures/alpha31/convex-pocket.request.json"),
+        include_str!("../../../tests/fixtures/alpha31/concave-pocket.request.json"),
+    ] {
+        let mut value: serde_json::Value = serde_json::from_str(fixture).unwrap();
+        for refuse in [false, true] {
+            if refuse {
+                value["project"]["operations"][0]["params"]["stock_to_leave_mm"] =
+                    serde_json::json!(30.);
+            }
+            let expected =
+                run_pipeline(serde_json::from_value(value.clone()).unwrap(), |_, _, _| {});
+            let request = Request::builder()
+                .method("POST")
+                .uri("/generate")
+                .header("content-type", "application/json")
+                .body(Body::from(value.to_string()))
+                .unwrap();
+            let response = Router::new()
+                .route("/generate", post(generate))
+                .with_state(Arc::new(AppState::default()))
+                .oneshot(request)
+                .await
+                .unwrap();
+            if refuse {
+                assert!(expected.is_err());
+                assert!(response.status().is_client_error());
+            } else {
+                assert_eq!(response.status(), StatusCode::OK);
+                let bytes = axum::body::to_bytes(response.into_body(), 16 * 1024 * 1024)
+                    .await
+                    .unwrap();
+                let actual: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+                assert_eq!(actual, serde_json::to_value(expected.unwrap()).unwrap());
+            }
+        }
+    }
+}
