@@ -11,7 +11,7 @@ is superseded within ADR-0030's scope, not unfinished work to restart.
 [Documentation index](../../README.md) · [Fork architecture](../ARCHITECTURE.md) ·
 [Current gates](../../releases/V1_READINESS.md).
 
-Decisions ADR-0001–0032 are indexed below. The recorded state is quoted from each ADR,
+Decisions ADR-0001–0033 are indexed below. The recorded state is quoted from each ADR,
 including historical pending-review wording. An accepted architecture, implemented
 code, software evidence and human checkpoint acceptance are separate states.
 Use current readiness/explicit acceptance records to resolve later dispositions;
@@ -60,6 +60,7 @@ qualification. M0–M4 are retained; later work uses named tracks, not global M5
 | [ADR-0030](ADR-0030-fabcam-fabspeed-separation.md) | FabCAM explicit parameters and independent FabSpeed calculation | Accepted; FS-RESET implemented; final qualification/human acceptance remain separate |
 | [ADR-0031](ADR-0031-optional-one-way-fabspeed-catalogue.md) | Optional One-Way FabSpeed Catalogue for FabCAM | Proposed; product ownership/direction approved, INT-0 transport/storage and implementation contract OPEN |
 | [ADR-0032](ADR-0032-explicit-main-and-optional-finishing.md) | Explicit Main Cutting and optional Finishing | Accepted; project/cutting v10 and preset v2 implemented, bounded ALPHA-3 software qualification complete; human acceptance/commits pending |
+| [ADR-0033](ADR-0033-explicit-pocket-finishing-scope.md) | Versioned Pocket Walls/Floor finishing scope | Accepted; bounded ALPHA-3.2 software qualification and human acceptance recorded; native/physical excluded |
 
 For current V1.1 architecture, ADR-0030 supersedes the historical recommendation,
 source-pack and inactive-recipe ownership of ADR-0002/3/4/5/6/11/27/28/29 within its

@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-30",
+  "alpha31_commits": [
+    "59d8e233fa54facb9873b7203068ed45ad291011",
+    "56743de13a1f66005d7e24519fc298e66bf9c224",
+    "81e8d47d3ca6860303d534393bad37056ea0cfb2"
+  ],
+  "alpha32_base": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+  "alpha32_branch": "feature/alpha-3-2-pocket-finishing",
+  "software_fingerprint_sha256": "1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c",
+  "alpha31_worktree_clean": true,
+  "reader_sources": [
+    {
+      "path": "crates/ivac-core/src/cutting_stages.rs",
+      "sha256": "8df057b674ad7ef6fad4214ebc8cc245fd05345fbde97b143573e74b13ce19d3",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "crates/ivac-core/src/presets.rs",
+      "sha256": "cca8e87f82c5407bf99062b7d4b7ca99c405dbdf50143e38e71576fffd2d17a0",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "crates/ivac-core/src/cutting_parameters.rs",
+      "sha256": "a6bc4c7a538445c1811fe74061f61756f6cf0316844ad5048c34d7af1bbc8063",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "crates/ivac-wasm/src/lib.rs",
+      "sha256": "ddf15581e0cb5761aaab9878f633e96055ce3f3f17fd2b833a39cb8982caa75c",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "frontend/src/lib/state/cutting-stages.ts",
+      "sha256": "2d8e88994e4e85a4b3d613a40419e52a6c1a51e43474da4b91acf72fa7babd4a",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "frontend/src/lib/state/project-v10.ts",
+      "sha256": "7bf8a279892f5ec4d62e5a3590040782eb319a7e0ada4982a2a77d800f643921",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "frontend/src/lib/state/project-file-ops.ts",
+      "sha256": "d965a9c4ff9982f67ff047c1f9328b118478bf099f75adb33d13ff2275cc7e0e",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "frontend/src/lib/state/operation-templates.ts",
+      "sha256": "a47deb9f7fd60a15da05cb3529fe46c2ff9d0b4a623c7f0533f82e44d99a1b1c",
+      "identical_to_accepted_alpha3": true
+    },
+    {
+      "path": "frontend/src/lib/state/cutting-parameters.ts",
+      "sha256": "35f028ac5e20e97a44bb5d2f30d80da5033b990396f7e4b8333ffb179448a9d8",
+      "identical_to_accepted_alpha3": true
+    }
+  ],
+  "protected_worktrees": [
+    {
+      "worktree": "ivacam",
+      "head": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+      "tracked_changes": 0,
+      "untracked_status_entries": 1004
+    },
+    {
+      "worktree": "FabCAM-alpha-feedback",
+      "head": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+      "tracked_changes": 0,
+      "untracked_status_entries": 3
+    },
+    {
+      "worktree": "FabCAM-alpha-2",
+      "head": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0
+    },
+    {
+      "worktree": "FabCAM-alpha-3",
+      "head": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0
+    },
+    {
+      "worktree": "FabCAM-tool-meta-1",
+      "head": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0
+    },
+    {
+      "worktree": "FabCAM-v1-freeze",
+      "head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0
+    }
+  ],
+  "main_ref": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "verification_limit": "HEAD and tracked status checked; no full historical hash claim for ignored/untracked evidence.",
+  "no_production_change": true
+}

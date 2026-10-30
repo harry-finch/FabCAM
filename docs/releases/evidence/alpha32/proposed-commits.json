@@ -1,0 +1,307 @@
+{
+  "authorized": false,
+  "actual_commits": [],
+  "base_sha": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+  "software_fingerprint_sha256": "62265b79d933d4681d70592e273e33cca9bbbafcb162909a6a3994e9b0650c42",
+  "groups": [
+    {
+      "order": 1,
+      "name": "Rust scope/proof/transports, schema and synthetic qualification",
+      "depends_on": [],
+      "files": [
+        {
+          "path": "crates/ivac-cli/tests/cutting_v9.rs",
+          "sha256": "6784d76a02a8bc2a9316dd4667f65e4fe0db5a9f8134f58b1882395f5f028f74"
+        },
+        {
+          "path": "crates/ivac-core/src/cam/offsets/pocket_fill.rs",
+          "sha256": "99f05e0cd1971d9af8905b5cd2a3c1723ee1544dd668aa60c8cd96da907c59bd"
+        },
+        {
+          "path": "crates/ivac-core/src/cutting_stages.rs",
+          "sha256": "2c242e1352ac2e0d4c32429314e9e62434c13a7dcc49da15549daa6d3ebf7d29"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline.rs",
+          "sha256": "34620a796ffc7045911bd62a4293aea17579e9e0932c6daa1db0217ea2f2ad14"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/cutting_v9_tests.rs",
+          "sha256": "b224df95176a795ab6dc130c3db8c8fd2b7589231ec458a30b5834345c54ddba"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/offset_builder.rs",
+          "sha256": "cecd3ce1d472fa240432ff29bc86531515ac5871b4396868d85ccd36ae51cae7"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/op_drivers/stage_polygon.rs",
+          "sha256": "39f21d7ff19df022c262bf0d0de1a56b17f6d084bc2df1cbd3526ae5aaacca33"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/op_drivers/stage_polygon/pocket.rs",
+          "sha256": "cdd8eb3a0f8ff6b39b17583ce78bb85645ec0167b8400df9b7ab20dbe3262bfa"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/op_drivers/staged.rs",
+          "sha256": "0510ef2e231112c438ca596a1646063a6d8f9cae44fac74db71282d98e3e4693"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/stage_provenance.rs",
+          "sha256": "3c72190c89d39e12fdb64b7f493f594959df60cdadc3072ce522ec1554652f2c"
+        },
+        {
+          "path": "crates/ivac-core/src/presets.rs",
+          "sha256": "6ec34410e721bb541b6bf0f518d250b4d94d031c75a5406027bf7c531eeee369"
+        },
+        {
+          "path": "crates/ivac-core/tests/alpha32_finishing.rs",
+          "sha256": "1122f69519344890b0ea9f3759fc858eabcdcb4d78ac9f5f0f74dd338f9ff958"
+        },
+        {
+          "path": "crates/ivac-server/src/main.rs",
+          "sha256": "7a2d6d5caa45586ec8aaf447cd6d8a42069bd4e4ec3c2047529200614eceb5a2"
+        },
+        {
+          "path": "crates/ivac-server/src/qual1a2_tests.rs",
+          "sha256": "87d6c9a3eaaeeb78c366e27d0663e4a5e7b23acf51bac504355c21772eea7d2f"
+        },
+        {
+          "path": "crates/ivac-tauri/src/commands.rs",
+          "sha256": "70a00049234fa906eab7909cf6f38f85d6694c0062b45552c9863beb3d43a232"
+        },
+        {
+          "path": "crates/ivac-wasm/src/lib.rs",
+          "sha256": "6dec0fd0ecfec225a2f44c26336bb1cbe1a31c12f803475ec52171e15d5b58c6"
+        },
+        {
+          "path": "frontend/src/lib/api/generated.ts",
+          "sha256": "b632295bbbd849d6ea3274c0c87c303a8ae0daf9313c9e73cbc3c38fdbc4fbeb"
+        },
+        {
+          "path": "schema/openapi.yaml",
+          "sha256": "754d87f3ddcc5d55cb12f56138dc3f90753d61217a85f9192a7db021175fc7a0"
+        },
+        {
+          "path": "scripts/alpha32-runtime-check.mjs",
+          "sha256": "1ba679663f82415d067b994cd6a30f429ea4a7886c6cc16df627750ba6a25af5"
+        },
+        {
+          "path": "tests/fixtures/alpha32/browser-pocket.ivac-project.json",
+          "sha256": "0ca14770e6c1d7aa807dc866d42b06e56d9f6ca0c1caf35bfa9b64169345c58c"
+        },
+        {
+          "path": "tests/fixtures/alpha32/scoped-pocket.request.json",
+          "sha256": "7358c03aea6033541a5217a70ef4e980a30f95b07b0cd68366bc979942b55c5d"
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "name": "Frontend scope UX, adapters, persistence and regression tests",
+      "depends_on": [
+        1
+      ],
+      "files": [
+        {
+          "path": "frontend/src/lib/api/cutting-contract.ts",
+          "sha256": "e27285ac000157c7b67904f640a22c90b948ad06bdd6d469a17ebf1345630f09"
+        },
+        {
+          "path": "frontend/src/lib/api/http.ts",
+          "sha256": "1d25bdadc87568ecb067ae5d2878c47e88328557b131b96d4cbc715a61fe6243"
+        },
+        {
+          "path": "frontend/src/lib/api/tauri.ts",
+          "sha256": "891b95b45a3a39598a8437bbb2ff930e2fade6b8c0e5b7d135d66bc6c17b5070"
+        },
+        {
+          "path": "frontend/src/lib/api/wasm-worker-client.ts",
+          "sha256": "b4c79875ccf8190e9849c69904a89d74aa977b3dc925e8c533731be0dc96db82"
+        },
+        {
+          "path": "frontend/src/lib/api/wasm.ts",
+          "sha256": "e543c112d3cd5fb0bba9577ad31ec11889b763cf368e88747c1263179bdc8103"
+        },
+        {
+          "path": "frontend/src/lib/components/TestedPresetEditor.svelte",
+          "sha256": "ef7f2072cb0128d6e507402ada86afb7a436118203e5c77e3bfd70824d072535"
+        },
+        {
+          "path": "frontend/src/lib/components/op_properties/StageCuttingControls.svelte",
+          "sha256": "fdaaf78e6b412c385b3b125a42848cf707a064ea942990a94ff4ab83106800cd"
+        },
+        {
+          "path": "frontend/src/lib/i18n/keys.ts",
+          "sha256": "d48b220577f33b47d117150657fbfad20e88079cf88d3001c42d2ecd4ba735cf"
+        },
+        {
+          "path": "frontend/src/lib/i18n/messages/de.json",
+          "sha256": "0362c85241531bbe39e2c0b19ab10be49da8257faaed4ce61bdd2312338e68cd"
+        },
+        {
+          "path": "frontend/src/lib/i18n/messages/en.json",
+          "sha256": "ae553f18c5bea05bcf07870ef0847f431b0eacac6c90758f220468b0c777f081"
+        },
+        {
+          "path": "frontend/src/lib/state/cutting-stages.ts",
+          "sha256": "9c322641da1e95b6cee141ee8b0191229994ccd01723620ba35f6a14776fc497"
+        },
+        {
+          "path": "frontend/src/lib/state/operation-template-ui.test.ts",
+          "sha256": "5b84d1f66608ccf78350774a1ca6a918e3cbe2d6914ac18708518e1ce714190b"
+        },
+        {
+          "path": "frontend/src/lib/state/operation-templates.test.ts",
+          "sha256": "3fa2aa5668e2606a60029569114bbb14f203c7b092fb95562e120d9e0090a999"
+        },
+        {
+          "path": "frontend/src/lib/state/operation-templates.ts",
+          "sha256": "e8db67a61e321c4eeff894463a8b619e13a0c6696e1b3395ac2cfed72aaa1635"
+        },
+        {
+          "path": "frontend/src/lib/state/operation-tool.test.ts",
+          "sha256": "b286a6f3c7ccee3d8f27aed22c3e76c5f09222e299f7a71279f9d6e5e55cede4"
+        },
+        {
+          "path": "frontend/src/lib/state/pocket-finishing.test.ts",
+          "sha256": "0bd8004e41af8fb1930106daf0797a44bedffc1dba7481606ca629248b9f230a"
+        },
+        {
+          "path": "frontend/src/lib/state/preset-library-v9.ts",
+          "sha256": "fe45cae3193defb4f925c2b9cc85ea9bc28c6a55b01d2777a0a8418e4487ac1e"
+        },
+        {
+          "path": "frontend/src/lib/state/program-qualification.test.ts",
+          "sha256": "32adf372fe8676719cc5e14efb3eefb9f17654f7249dc7200c3c241d6db2851e"
+        },
+        {
+          "path": "frontend/src/lib/state/project-v10.test.ts",
+          "sha256": "3f4674b57a935946c047d2864ae55514e4d9f9e1ce6093f08f10967256594fdf"
+        },
+        {
+          "path": "frontend/src/lib/state/report-cutting.test.ts",
+          "sha256": "4cab794e87a0c4c768fdd967d57a17b2757fa386b2690f9f71c8d7b374cbcd4a"
+        },
+        {
+          "path": "frontend/src/lib/state/report-cutting.ts",
+          "sha256": "6b96912602ed1615166215064ef38323729eb24c61c6011063c347a4e4cd69cd"
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "name": "Sanitized reports/evidence and milestone status",
+      "depends_on": [
+        1,
+        2
+      ],
+      "files": [
+        {
+          "path": "docs/releases/ALPHA_3_2_POCKET_FINISHING.md",
+          "sha256": "1261c5b35ac9cc471c4f5207ba9f00babba1d570b3e785e7bddf80def5a6ed16"
+        },
+        {
+          "path": "docs/releases/RELEASE_ROADMAP.md",
+          "sha256": "0572aa54b9282b39e1ae5c7b0d90350d3f44f1f5beea5d8711a3a575defdbb36"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32-preflight/baseline.json",
+          "sha256": "9eb028a696fb164017dac19b751f35e6a73df29de3a1fb61bd8b82126394eab9"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32-preflight/reader-probe.mjs",
+          "sha256": "55860b69f081d64dbbf9bb9d0b7a546a8a367c9699c5a3134f1a98f76c3f2d70"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32-preflight/readers.json",
+          "sha256": "f48d749bd5e2f31e76b4c59d222a43eb9a27f7967698127a6442525a8d374311"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/browser-assets.json",
+          "sha256": "da2a95da943ddd567b32bdd349178b77597b90b965fedf1e801c55c40b4d8bae"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/browser-report.png",
+          "sha256": "011335b70b0ceaee32d62f11727d1ff0610e41dca6460afb1076581b184820fa"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/browser-review.json",
+          "sha256": "09e093f60b3f2583279ef65b7832530ba1c73b77807c7fda78a9e53061c385fc"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/browser-saved-floor.ivac-project.json",
+          "sha256": "7121ba56cdf68470511b9db16cc18b2d6b459ccb86d4b6762816b50eddbb1b2a"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/desktop-refusal.png",
+          "sha256": "8b2be74b5d75825f052d9bf82d5e1f77a4cc66dc6deca1ce3363d73d1f281b7d"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/desktop-scope-preview.png",
+          "sha256": "5c1a1077766d3068e6f82010e3d9f2759d0534425102ee807a79709849d464d0"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/final-axial-budget-refusal.png",
+          "sha256": "eb9ce24a4f871f233f51f57f457d13d9d1d61cfa38ddaf4465f7b683b381ed1d"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/final-floor-preview.png",
+          "sha256": "8bd2d024b896b0d3b992649eb80b43b413df8abc281c219b8281f42ed6b725ef"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/final-report-stages.png",
+          "sha256": "3801f0ac789265336768147a4e54776cfd91a1aa596651a72b898235d372d9b1"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/motion-inventory.json",
+          "sha256": "a66eabb59075b5d7c3b071af6e15ccb73ff0ed90a888a9e492539e648ef5f364"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/narrow-de-preview.png",
+          "sha256": "400fda2382999cb5b994bba43c24ceb854e835f136c4b97c9fa450064eaf8d8d"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/performance.json",
+          "sha256": "3252f5843519ceb31b2001ebd8f32a60623637eb0ce15c0a8868c7f6bd366d85"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/qualification.json",
+          "sha256": "3a7b82521acecf4233cb378a030e9055afeaea94c75a23e77d723cf17f50fc40"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/retained-corpus.json",
+          "sha256": "3d0a131be58c26dca9201888d99a767e5ae2e04ae1b6695f5ddf929a69e84a9f"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/runtime-comparison.json",
+          "sha256": "b8deef74535a90106db22ffe24318636dea3e27759aae5d3a47aefc5618d6052"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/software-files.json",
+          "sha256": "af7e93cc220b3b2405c5e2b65f4a3f0a646dd0ce470df891a8196d7650a84c1d"
+        },
+        {
+          "path": "docs/releases/evidence/alpha32/worktrees.json",
+          "sha256": "2724fb445941e0b531a02730e796f9b87614d92060f5fa9365b71fe18804fa09"
+        },
+        {
+          "path": "docs/shopbot-modernization/ROADMAP.md",
+          "sha256": "637bcb7739066b3a9cf12f816e5561b56eedee9ac82a28cb2ab6f4400391dbe2"
+        },
+        {
+          "path": "docs/shopbot-modernization/STATUS.md",
+          "sha256": "8fe56288dfe419da9280d103c2548136a5c0fe0e1452b5209de6f60408c3785d"
+        },
+        {
+          "path": "docs/shopbot-modernization/adr/ADR-0033-explicit-pocket-finishing-scope.md",
+          "sha256": "d4879bebf5cc4a167031b0afda202092a943247726f000306c1d03d03661b1ca"
+        },
+        {
+          "path": "docs/shopbot-modernization/adr/README.md",
+          "sha256": "d462b3d762647d7b5155b7ce956cf523697761c110b110b0226d61de310eba7a"
+        }
+      ]
+    }
+  ],
+  "note": "Documentation hashes may be refreshed after human review; no staging or commit performed. All software bytes are pinned by software-files.json."
+}

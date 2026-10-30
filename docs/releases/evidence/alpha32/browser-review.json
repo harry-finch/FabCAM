@@ -1,0 +1,89 @@
+{
+  "software_fingerprint_sha256": "62265b79d933d4681d70592e273e33cca9bbbafcb162909a6a3994e9b0650c42",
+  "origin": "http://127.0.0.1:18838/?api=wasm",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 960
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "locales": [
+    "en",
+    "de"
+  ],
+  "synthetic_only": true,
+  "save_sha256": "7121ba56cdf68470511b9db16cc18b2d6b459ccb86d4b6762816b50eddbb1b2a",
+  "saved_contract": {
+    "contract": "pocket_finishing_v2",
+    "main": {
+      "tool_id": 1,
+      "rpm": 18000,
+      "feed_mm_min": 811,
+      "plunge_mm_min": 111,
+      "depth_per_pass_mm": 0.25
+    },
+    "finishing": {
+      "cutting": {
+        "tool_id": 1,
+        "rpm": 18000,
+        "feed_mm_min": 413,
+        "plunge_mm_min": 113,
+        "depth_per_pass_mm": 0.2
+      },
+      "lateral_allowance_mm": 0,
+      "floor_allowance_mm": 0.1,
+      "scope": "floor_only"
+    }
+  },
+  "steps": [
+    "Real production worker generation for all three scopes and full-program simulation",
+    "Scope preview Cancel leaves export current; Apply disables stale export",
+    "Undo restores exact contract/reserves and prior eligible context; Redo restores stale edit",
+    "Walls-only 6704 moves, Both 17588 moves, Floor-only 10951 moves on browser concave fixture",
+    "Actual v10 Save download and file-picker reopen, source/rates/scope retained, generated eligibility not loaded",
+    "Spiral concave explicit proof-budget refusal and no qualified output",
+    "Narrow German surface preview, Tab focus on Apply, 390px body without horizontal overflow",
+    "Machining report scope, authored Main/Finishing rates, tools and decoded stage intervals",
+    "Final rebuilt WASM Floor generation 10951 moves and simulation complete",
+    "Actual numeric spinner edit invalidates export; 0.000001 step refuses 1000-level budget before generation; Undo twice restores 0.25 and regeneration succeeds"
+  ],
+  "frontend_ui_changes_after_first_visual_review": false,
+  "final_core_change_after_first_review": "Early axial limit only, explicitly rechecked in final browser build",
+  "screenshots": [
+    {
+      "path": "browser-report.png",
+      "sha256": "011335b70b0ceaee32d62f11727d1ff0610e41dca6460afb1076581b184820fa"
+    },
+    {
+      "path": "desktop-refusal.png",
+      "sha256": "8b2be74b5d75825f052d9bf82d5e1f77a4cc66dc6deca1ce3363d73d1f281b7d"
+    },
+    {
+      "path": "desktop-scope-preview.png",
+      "sha256": "5c1a1077766d3068e6f82010e3d9f2759d0534425102ee807a79709849d464d0"
+    },
+    {
+      "path": "final-axial-budget-refusal.png",
+      "sha256": "eb9ce24a4f871f233f51f57f457d13d9d1d61cfa38ddaf4465f7b683b381ed1d"
+    },
+    {
+      "path": "final-floor-preview.png",
+      "sha256": "8bd2d024b896b0d3b992649eb80b43b413df8abc281c219b8281f42ed6b725ef"
+    },
+    {
+      "path": "final-report-stages.png",
+      "sha256": "3801f0ac789265336768147a4e54776cfd91a1aa596651a72b898235d372d9b1"
+    },
+    {
+      "path": "narrow-de-preview.png",
+      "sha256": "400fda2382999cb5b994bba43c24ceb854e835f136c4b97c9fa450064eaf8d8d"
+    }
+  ],
+  "human_ux_review": "PENDING",
+  "installed_native": "NOT RUN",
+  "physical": "NOT RUN"
+}

@@ -1,0 +1,43 @@
+{
+  "native_executable_sha256": "c4bb5e3fffe1cf3e754c892fed90d4208b251ae69ab78d65b94b66e7443a4c46",
+  "method": "One macOS /usr/bin/time -l sample per fresh all-features debug CLI process; concurrent qualification may affect timing. Not a benchmark, universal memory guarantee or installed-native acceptance.",
+  "cases": [
+    {
+      "case": "rectangle-cascade-walls_only",
+      "exit_code": 0,
+      "max_rss_bytes": 17350656,
+      "wall_seconds": 0.02
+    },
+    {
+      "case": "concave-cascade-walls_only",
+      "exit_code": 0,
+      "max_rss_bytes": 23609344,
+      "wall_seconds": 0.38
+    },
+    {
+      "case": "concave-cascade-walls_and_floor",
+      "exit_code": 0,
+      "max_rss_bytes": 33996800,
+      "wall_seconds": 0.72
+    },
+    {
+      "case": "circle-walls_and_floor",
+      "exit_code": 0,
+      "max_rss_bytes": 21725184,
+      "wall_seconds": 1.03
+    },
+    {
+      "case": "annulus-floor_only",
+      "exit_code": 0,
+      "max_rss_bytes": 18235392,
+      "wall_seconds": 3.1
+    },
+    {
+      "case": "concave-spiral-walls_only",
+      "exit_code": 1,
+      "max_rss_bytes": 22495232,
+      "wall_seconds": 0.21
+    }
+  ],
+  "software_fingerprint_sha256": "62265b79d933d4681d70592e273e33cca9bbbafcb162909a6a3994e9b0650c42"
+}

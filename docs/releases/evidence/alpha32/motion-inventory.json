@@ -1,0 +1,5915 @@
+{
+  "scope": "Synthetic decoded motion inventory; legacy comparator changes only nested discriminator/removes new scope, never migrates user data.",
+  "cases": [
+    {
+      "case": "rectangle-cascade-walls_only",
+      "request_sha256": "8a8c6cfa94cc9463435b8276b4e81a005def3b02fc0008d7360b16eb5f8a36bd",
+      "program_sha256": "9955b9b2e35c65147f848bbc0a5c9e83dd4147cd36285c47f10c61e09ff9c527",
+      "decoded_sha256": "0aca00abb949a14842e56804da34106bc4ab9396f2d8d187aa75292fa9aa613e",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 208,
+            "first_segment": 1,
+            "end_segment_exclusive": 118
+          },
+          "move_kinds": {
+            "cut": 72,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 211,
+            "output_end_line": 239,
+            "first_segment": 118,
+            "end_segment_exclusive": 136
+          },
+          "move_kinds": {
+            "cut": 12,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": true,
+      "historical_moves": 281,
+      "new_moves": 137,
+      "historical_program_sha256": "aa0f54fafbdf9f445aafa6c04af06f06c6aff72c0335d8f4aea3134b9996554d",
+      "program_changed": true
+    },
+    {
+      "case": "rectangle-cascade-floor_only",
+      "request_sha256": "c4de6f629bafabc8060675cbeb8c0dec3ea8dd1fcd2f494bc112eed8cadbaa60",
+      "program_sha256": "b6ef577543d53974a6a615fe86b74a4b0a4a2d15aa93b93b10cce6610d6b08ba",
+      "decoded_sha256": "4fa329bb832db96a0eb82506b80d53918c9b8f2a7efd8fef8d2c5135ac5a71c4",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 208,
+            "first_segment": 1,
+            "end_segment_exclusive": 118
+          },
+          "move_kinds": {
+            "cut": 72,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 211,
+            "output_end_line": 336,
+            "first_segment": 118,
+            "end_segment_exclusive": 189
+          },
+          "move_kinds": {
+            "cut": 36,
+            "plunge": 18,
+            "rapid": 17
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": true,
+      "historical_moves": 280,
+      "new_moves": 190,
+      "historical_program_sha256": "c4454f06af72d15c4043aaf9a37be340c8e7c4fcba906d50ccc5f2a601d0ea63",
+      "program_changed": true
+    },
+    {
+      "case": "rectangle-cascade-walls_and_floor",
+      "request_sha256": "2d4f30d309e2ec71e48dd93a90df811f47df840c02b1b4cea2e619cc502f38e9",
+      "program_sha256": "fc4f7f00cdfc1ae4ea86abeae3b5eccb9c8634a3e83f6b5deea0f43d38cc4408",
+      "decoded_sha256": "f6eb513f6b42634c5fe14b3f16dc238f68a20622e8361c94872259107ef07b66",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 208,
+            "first_segment": 1,
+            "end_segment_exclusive": 118
+          },
+          "move_kinds": {
+            "cut": 72,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 211,
+            "output_end_line": 463,
+            "first_segment": 118,
+            "end_segment_exclusive": 280
+          },
+          "move_kinds": {
+            "cut": 108,
+            "plunge": 36,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": true,
+      "historical_moves": 281,
+      "new_moves": 281,
+      "historical_program_sha256": "fc4f7f00cdfc1ae4ea86abeae3b5eccb9c8634a3e83f6b5deea0f43d38cc4408",
+      "program_changed": false
+    },
+    {
+      "case": "rectangle-zigzag-walls_only",
+      "request_sha256": "3e67d208ec61852dd8be8754a9fd7ad4e182cac97e0382198861f0cd14f47d4d",
+      "program_sha256": "98f8c14188486d814cd03fcbf8d1cd2c5b08c8639d670d2fc25bddf8297390cc",
+      "decoded_sha256": "c54642a5c4043714b2fdc5e6ddfaedaef0f6240e1a3b24de639f51324cfd50a5",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 122,
+            "first_segment": 1,
+            "end_segment_exclusive": 88
+          },
+          "move_kinds": {
+            "cut": 78,
+            "plunge": 6,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 125,
+            "output_end_line": 153,
+            "first_segment": 88,
+            "end_segment_exclusive": 106
+          },
+          "move_kinds": {
+            "cut": 12,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rectangle-zigzag-floor_only",
+      "request_sha256": "2dc3021c9dc33ab7dc4c80dfb6bace049ed6696a5ebefb539d6f61ae70d7158f",
+      "program_sha256": "fe2e6096d98c736f7414c57b738030709551297e18d5e79e1c3f6058787f5e19",
+      "decoded_sha256": "8298937cc7bc8e5a03421edab015d88f21dbab1d1bab2ce9eeca1fefcbb528d2",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 122,
+            "first_segment": 1,
+            "end_segment_exclusive": 88
+          },
+          "move_kinds": {
+            "cut": 78,
+            "plunge": 6,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 125,
+            "output_end_line": 183,
+            "first_segment": 88,
+            "end_segment_exclusive": 134
+          },
+          "move_kinds": {
+            "cut": 39,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rectangle-zigzag-walls_and_floor",
+      "request_sha256": "b9c87ec40f8e6e1a4a3edc5389d60f598958da9560411cb250a6cf7c65c72ac6",
+      "program_sha256": "551f4f86abc25cf2ec312d93329476c4b4d6d59aed9253682f366d8c54ca1f1f",
+      "decoded_sha256": "bd59495081dc325734fcb419f7003651e459467f7c8a534662791ed2275249d4",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 122,
+            "first_segment": 1,
+            "end_segment_exclusive": 88
+          },
+          "move_kinds": {
+            "cut": 78,
+            "plunge": 6,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 125,
+            "output_end_line": 274,
+            "first_segment": 88,
+            "end_segment_exclusive": 217
+          },
+          "move_kinds": {
+            "cut": 117,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rectangle-spiral-walls_only",
+      "request_sha256": "9ad0baeb987832369228497922563e8552ce3bed90cec90016a6313b81c4a322",
+      "program_sha256": "8ee0919797341b39d8e86086a7176e52797dcdb6c1a432d5509ce5837e4aa102",
+      "decoded_sha256": "acb829b13e1357ae59d8641d3ab37fa7a357dc4243c96ceb4bf300e234c97555",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 131,
+            "first_segment": 1,
+            "end_segment_exclusive": 97
+          },
+          "move_kinds": {
+            "cut": 86,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 134,
+            "output_end_line": 162,
+            "first_segment": 97,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "cut": 12,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rectangle-spiral-floor_only",
+      "request_sha256": "e5d594c6226a56be61411fef59e6f62ba8407eaea8e47b168a3a6b9a050b19fc",
+      "program_sha256": "2403cf0b880c1178df9be954da6e2d33702d38203155dfa28b49226b3ecd28b1",
+      "decoded_sha256": "69f73ff09c0c6ce8d0604f1d3dc4c362f9e10c05a85549ef3e0cabf82c3a3c90",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 131,
+            "first_segment": 1,
+            "end_segment_exclusive": 97
+          },
+          "move_kinds": {
+            "cut": 86,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 134,
+            "output_end_line": 196,
+            "first_segment": 97,
+            "end_segment_exclusive": 147
+          },
+          "move_kinds": {
+            "cut": 43,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rectangle-spiral-walls_and_floor",
+      "request_sha256": "8a131dd9cb87dc4eeb989739eb0a711385ef80e3764defab87f9dd9423beb6a2",
+      "program_sha256": "17673ae7bd14734af7745662390464d2cf11a6425e8ce673ee76bce8cb5abc2d",
+      "decoded_sha256": "1426ebfc2c3d3fce93de5baf3fe195a2b186b24ee4e1525f51c1143c31ab957a",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 131,
+            "first_segment": 1,
+            "end_segment_exclusive": 97
+          },
+          "move_kinds": {
+            "cut": 86,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 134,
+            "output_end_line": 295,
+            "first_segment": 97,
+            "end_segment_exclusive": 238
+          },
+          "move_kinds": {
+            "cut": 129,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-cascade-walls_only",
+      "request_sha256": "ee9c38d1ef31f77fbe7ffc48f39ec8ac07e58946a82567fd7eb5f35b0c45a5b4",
+      "program_sha256": "7a9a24d2952dc5fbf92dd36882a59e393e7f3957db89b2c16618fbed787c0a8e",
+      "decoded_sha256": "2cdad4affd24b4aa5a9fdaf8b77c3df3706ea0dd3bfbc1a6e8ecb1cf9b675dc1",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 208,
+            "first_segment": 1,
+            "end_segment_exclusive": 118
+          },
+          "move_kinds": {
+            "cut": 72,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 211,
+            "output_end_line": 239,
+            "first_segment": 118,
+            "end_segment_exclusive": 136
+          },
+          "move_kinds": {
+            "cut": 12,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-cascade-floor_only",
+      "request_sha256": "988a5b0787aa3ee5729776997a89fd098bb636aab7f841cca5d5c7a167a6e8f2",
+      "program_sha256": "3c0c960f4cb24f71de1fd0e46d370070695552671abe3d4ba661061d2f3b5cb6",
+      "decoded_sha256": "f50f9e9e7647020e1d3f8c273cba47a805f73baf6226abc599edb7c22a58c61f",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 208,
+            "first_segment": 1,
+            "end_segment_exclusive": 118
+          },
+          "move_kinds": {
+            "cut": 72,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 211,
+            "output_end_line": 336,
+            "first_segment": 118,
+            "end_segment_exclusive": 189
+          },
+          "move_kinds": {
+            "cut": 36,
+            "plunge": 18,
+            "rapid": 17
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-cascade-walls_and_floor",
+      "request_sha256": "aadbf9e48c94e37cb8eddeef127c1c6798505beefc6e4a7ab158fad892022f68",
+      "program_sha256": "baade65c424a7aa72af4442299f76235915f91fc96ea623b0efcdb99a26af1f3",
+      "decoded_sha256": "2ce8276089575d9a1af52ef64ec0139c1aa45bb07d1e54672405b55ca00574a0",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 208,
+            "first_segment": 1,
+            "end_segment_exclusive": 118
+          },
+          "move_kinds": {
+            "cut": 72,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 211,
+            "output_end_line": 463,
+            "first_segment": 118,
+            "end_segment_exclusive": 280
+          },
+          "move_kinds": {
+            "cut": 108,
+            "plunge": 36,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-zigzag-walls_only",
+      "request_sha256": "13861c02c75960f08b3d955244b3e266be381baf05b2dbfe14fc6fdc90884f57",
+      "program_sha256": "58e66d9c90870b904206831f4d2be7a3a0c60391f91cb8d958ad4fdcf0f24b1c",
+      "decoded_sha256": "0fface504776d03e6ad51d272e6444bc7f64b76d548a00756ac12f8d16ad2ccd",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 159,
+            "first_segment": 1,
+            "end_segment_exclusive": 125
+          },
+          "move_kinds": {
+            "cut": 114,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 162,
+            "output_end_line": 190,
+            "first_segment": 125,
+            "end_segment_exclusive": 143
+          },
+          "move_kinds": {
+            "cut": 12,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-zigzag-floor_only",
+      "request_sha256": "a9d99f4f082536c91c7b59122cf7ef3ad764f0fe2d5682ff246ff2be58459945",
+      "program_sha256": "281750c0ea1ec5deff7a4fbbed2351e2d4ded3eec4aed0243916cb7e5797c397",
+      "decoded_sha256": "80ee240e1dd97712a8d2cf4942baa801770a22bc77606766afcbe5591b7ccff4",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 163,
+            "first_segment": 1,
+            "end_segment_exclusive": 129
+          },
+          "move_kinds": {
+            "cut": 118,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 166,
+            "output_end_line": 244,
+            "first_segment": 129,
+            "end_segment_exclusive": 195
+          },
+          "move_kinds": {
+            "cut": 59,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-zigzag-walls_and_floor",
+      "request_sha256": "13b0686d1704c773cd2ad41c642c27b834a8187c5819c7baf823453666cb5369",
+      "program_sha256": "f7f5136160b369139922f25558fab81e6fd726eab1f2377c97867b3d9f80f2b2",
+      "decoded_sha256": "2402fec8497e35e9f5960bb39afe97a118ce6e36277a77427d81f5678da223a5",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 159,
+            "first_segment": 1,
+            "end_segment_exclusive": 125
+          },
+          "move_kinds": {
+            "cut": 114,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 162,
+            "output_end_line": 371,
+            "first_segment": 125,
+            "end_segment_exclusive": 314
+          },
+          "move_kinds": {
+            "cut": 177,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-spiral-walls_only",
+      "request_sha256": "b1ee79717c189b385f967811a5c444b4a720721613ac7ffc0ee008ffeae97944",
+      "program_sha256": "4396d4378137a1608b60fa0ac0792bae7abf00508fcb9ef3890e2f494a9b418b",
+      "decoded_sha256": "e3cfa89a6d3656df25b031515348fe3f1370a0c77962c5808a9460361af8335d",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 131,
+            "first_segment": 1,
+            "end_segment_exclusive": 97
+          },
+          "move_kinds": {
+            "cut": 86,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 134,
+            "output_end_line": 162,
+            "first_segment": 97,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "cut": 12,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-spiral-floor_only",
+      "request_sha256": "a6a145190f1f1856bcca3558ee5a4a7bfe022fa0d9ba1f8de02d6bd565925218",
+      "program_sha256": "7725ca6096385734d4c78c3ab00fe2e0e2b62f480bf7c639ade94d411692fb8a",
+      "decoded_sha256": "f193ea03fb70ab7e962db69eca9e2dd67237b5b96aa235e4ae4ce215142c1267",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 131,
+            "first_segment": 1,
+            "end_segment_exclusive": 97
+          },
+          "move_kinds": {
+            "cut": 86,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 134,
+            "output_end_line": 196,
+            "first_segment": 97,
+            "end_segment_exclusive": 147
+          },
+          "move_kinds": {
+            "cut": 43,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rotated-spiral-walls_and_floor",
+      "request_sha256": "14523406b128a3af87468b5a92ea5a36c69282c18534a79003e3853530033c49",
+      "program_sha256": "4ad2e2d007f1c24b589696f8e52678de1a6266552d565e6923135efd6fd04f7b",
+      "decoded_sha256": "a07a77f1ed7a08c9cd10e671d30d33dda96f28284131a52063b86f9414668343",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 131,
+            "first_segment": 1,
+            "end_segment_exclusive": 97
+          },
+          "move_kinds": {
+            "cut": 86,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 134,
+            "output_end_line": 295,
+            "first_segment": 97,
+            "end_segment_exclusive": 238
+          },
+          "move_kinds": {
+            "cut": 129,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-cascade-walls_only",
+      "request_sha256": "34829cd3f9e39ede961af6c6f1e41da989e2884c19c6b4a632d9f8c4910282b1",
+      "program_sha256": "17a2669a65b882b0dd7a6b1d969eeda3e942a94fe1bd58d5f429abf260aaadcd",
+      "decoded_sha256": "e4671d80853ed21e015ea8ef3cc28d27ebf2ff7fa7f380d22367d0d853c929f8",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 209,
+            "first_segment": 1,
+            "end_segment_exclusive": 111
+          },
+          "move_kinds": {
+            "cut": 60,
+            "plunge": 30,
+            "rapid": 20
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 212,
+            "output_end_line": 237,
+            "first_segment": 111,
+            "end_segment_exclusive": 126
+          },
+          "move_kinds": {
+            "cut": 9,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-cascade-floor_only",
+      "request_sha256": "37f5524a5536ffdc88c7ff7914cfca26ec1874054d6457911d27b40bac7b3bac",
+      "program_sha256": "715cb7bf5fa5e54823b873fe70ed6bbf8991b3be4c59acbb8ba87f85860a9f32",
+      "decoded_sha256": "d7c681562c69ae479d75f084b186a7448edbec09190b1a4030c24776e0337707",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 209,
+            "first_segment": 1,
+            "end_segment_exclusive": 111
+          },
+          "move_kinds": {
+            "cut": 60,
+            "plunge": 30,
+            "rapid": 20
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 212,
+            "output_end_line": 341,
+            "first_segment": 111,
+            "end_segment_exclusive": 180
+          },
+          "move_kinds": {
+            "cut": 30,
+            "plunge": 20,
+            "rapid": 19
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-cascade-walls_and_floor",
+      "request_sha256": "ef873acab0c52f0410ca6fb6b2c030e5aa4e1701b44aa420669aa071af11f8e9",
+      "program_sha256": "8e3bbd23e905e83b7ebc73751ebaa1903293607615b8f2f8637c94ddc9f9d578",
+      "decoded_sha256": "33e1cec261550108d81b9b963cab9084a50e15976c6c79365e9bb4e6f7d75d24",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 209,
+            "first_segment": 1,
+            "end_segment_exclusive": 111
+          },
+          "move_kinds": {
+            "cut": 60,
+            "plunge": 30,
+            "rapid": 20
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 212,
+            "output_end_line": 462,
+            "first_segment": 111,
+            "end_segment_exclusive": 261
+          },
+          "move_kinds": {
+            "cut": 90,
+            "plunge": 40,
+            "rapid": 20
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-zigzag-walls_only",
+      "request_sha256": "7a7f9b70b59512512a98f514a672d2d897e2f3317c2616dccd729952b93f2bc1",
+      "program_sha256": "f20b3786a18c5448192012b7e20d4f2107ae98faedac93874c1975e3c8ebe555",
+      "decoded_sha256": "7a8e6f504fa34dc92e121493bb6ca487f310d54498e14eea023c0eb28c2f0e3c",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 165,
+            "first_segment": 1,
+            "end_segment_exclusive": 131
+          },
+          "move_kinds": {
+            "cut": 120,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 168,
+            "output_end_line": 193,
+            "first_segment": 131,
+            "end_segment_exclusive": 146
+          },
+          "move_kinds": {
+            "cut": 9,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-zigzag-floor_only",
+      "request_sha256": "a12e2abc21882ef2bd1783b6904aa90bf8d445e1f0d991e6048e467c949e74d6",
+      "program_sha256": "e96b9aab91d646c90dd510d38a1d9e9cef8f5dc375c42dfec88dfcccfc6c5720",
+      "decoded_sha256": "868a16ee8d5de70811562eba6490ed58c7b41200cf89506c55ccb90017346f6d",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 165,
+            "first_segment": 1,
+            "end_segment_exclusive": 131
+          },
+          "move_kinds": {
+            "cut": 120,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 168,
+            "output_end_line": 247,
+            "first_segment": 131,
+            "end_segment_exclusive": 198
+          },
+          "move_kinds": {
+            "cut": 60,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-zigzag-walls_and_floor",
+      "request_sha256": "9afcf0b7ec3545b6011ac5485e80675866614598ed335b33f27ff22ab2a7340f",
+      "program_sha256": "567775ed52541f694eed8b65ff876f8c127336d9fd05319313f265144951822e",
+      "decoded_sha256": "b40a589caa71cf20feb595ccaea6887766680e6965f0d282800fb4f530d13cf9",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 165,
+            "first_segment": 1,
+            "end_segment_exclusive": 131
+          },
+          "move_kinds": {
+            "cut": 120,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 168,
+            "output_end_line": 380,
+            "first_segment": 131,
+            "end_segment_exclusive": 323
+          },
+          "move_kinds": {
+            "cut": 180,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-spiral-walls_only",
+      "request_sha256": "776360ae988662a58d5b91e6658581043dcbf6f623e2adf1e6830e08422276b2",
+      "program_sha256": "9742f1307d45a1a50ea02c0a5e8b651f0fafbe0912255b89c1c609c00181ea4b",
+      "decoded_sha256": "02e8cbf35c32f58d370a0a3adfdd4f2f91e1d625642a5ee6e04616402584a459",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 121,
+            "first_segment": 1,
+            "end_segment_exclusive": 87
+          },
+          "move_kinds": {
+            "cut": 76,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 124,
+            "output_end_line": 149,
+            "first_segment": 87,
+            "end_segment_exclusive": 102
+          },
+          "move_kinds": {
+            "cut": 9,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-spiral-floor_only",
+      "request_sha256": "46ad71f9e2cef2b44b334d45789dd0171e17d475c12b4585abe131ea4712fa16",
+      "program_sha256": "ef78754729e9b0bea34a67adace18c1393aa457a694aa2e5d55815960841952f",
+      "decoded_sha256": "e8ecf7ab8734f9fe163828c67871bf8e92136ed258c54bced4273553d7ffd720",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 121,
+            "first_segment": 1,
+            "end_segment_exclusive": 87
+          },
+          "move_kinds": {
+            "cut": 76,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 124,
+            "output_end_line": 181,
+            "first_segment": 87,
+            "end_segment_exclusive": 132
+          },
+          "move_kinds": {
+            "cut": 38,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "triangle-spiral-walls_and_floor",
+      "request_sha256": "6205886ec5647afd9ce5fd508fd9dbc61b3f7269be9df0725d99ebb4d452065d",
+      "program_sha256": "4df99fef41e9d07f089f21555058ac59e82bc70fd1b6c9f008337a3779776efa",
+      "decoded_sha256": "6853e286aff50fa25bedcb4cac73f88bf51c6b43c08718048d87964719ccd2a3",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 121,
+            "first_segment": 1,
+            "end_segment_exclusive": 87
+          },
+          "move_kinds": {
+            "cut": 76,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 124,
+            "output_end_line": 270,
+            "first_segment": 87,
+            "end_segment_exclusive": 213
+          },
+          "move_kinds": {
+            "cut": 114,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-cascade-walls_only",
+      "request_sha256": "86e0c823500690bce309306b9b876fb47adcd54075db68633fe4ac4e4e5a20f6",
+      "program_sha256": "06768c004a402b9bef88212deb7a9c655a5a17485b8669b1f1438156806e192e",
+      "decoded_sha256": "08e75f377913594d7fbf8b9d939b02e4f617401ee37360acd7e43994aff92e50",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 319,
+            "output_end_line": 350,
+            "first_segment": 194,
+            "end_segment_exclusive": 215
+          },
+          "move_kinds": {
+            "cut": 15,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-cascade-floor_only",
+      "request_sha256": "1ec089864347c8e452e516fc5ce9672b7b0e9df64ed79370d64774051bdf2506",
+      "program_sha256": "1a582201ce861fdc1c9f6246622e3dfda55784427b15b452eef36f64898ddb81",
+      "decoded_sha256": "d10addd2f1a389921cdd6d97f1fb41a963e6d4d011b8453681cd2e010b6b4ebe",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 319,
+            "output_end_line": 512,
+            "first_segment": 194,
+            "end_segment_exclusive": 309
+          },
+          "move_kinds": {
+            "cut": 64,
+            "plunge": 26,
+            "rapid": 25
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-cascade-walls_and_floor",
+      "request_sha256": "d537b518477ccc1a2359fa44890a8a392c40946490278dd6d702528477630520",
+      "program_sha256": "7147402dd7dccf53a3286b9e8f9f2731807aa2917ccd598b238e70ba5647164b",
+      "decoded_sha256": "8211fd4486826151239fcd2411fcb21a9df364252308db8a354aaec91054bfaf",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 319,
+            "output_end_line": 719,
+            "first_segment": 194,
+            "end_segment_exclusive": 464
+          },
+          "move_kinds": {
+            "cut": 192,
+            "plunge": 52,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-zigzag-walls_only",
+      "request_sha256": "9cdf71f3a4857f1e9d75f4f71e3bc3bb77eb3a01f59937788b2ef1faf9c2d49b",
+      "program_sha256": "f1ba3ae69826cbd3aa2d5670c0b7431dd22b9e18d9bb3aab2ff4c6af700e609f",
+      "decoded_sha256": "549e2afac6ead73667c9ed2bdda3adabc65f00bb32ffdd89b925c3dd15f0f712",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 173,
+            "first_segment": 1,
+            "end_segment_exclusive": 139
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 176,
+            "output_end_line": 207,
+            "first_segment": 139,
+            "end_segment_exclusive": 160
+          },
+          "move_kinds": {
+            "cut": 15,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-zigzag-floor_only",
+      "request_sha256": "a28651303437ba14d2bad9c30e0bb00411cbb170399c5e2a8f03592d0f25c306",
+      "program_sha256": "4b6ce6b9fefa457448a94b9c7813993bf15d4b528341b57dea1a53be695a647e",
+      "decoded_sha256": "c249ae265ced4455d908acc883b10da2a5978b5bc141ec71edc60db2faa39264",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 173,
+            "first_segment": 1,
+            "end_segment_exclusive": 139
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 176,
+            "output_end_line": 259,
+            "first_segment": 139,
+            "end_segment_exclusive": 210
+          },
+          "move_kinds": {
+            "cut": 64,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-zigzag-walls_and_floor",
+      "request_sha256": "31660a1d2dd3d49b48376af1cadb4f550589d258cdda449818ecb654f396063d",
+      "program_sha256": "703a3b91f2b368fc92e0b52fbf1774f3f054b3c924ecaa4694ecc525b7901a71",
+      "decoded_sha256": "0c23d6751464a7d8fc0c4c8f57d5215269f67ef56630d184213e3a84cd40a2c7",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 173,
+            "first_segment": 1,
+            "end_segment_exclusive": 139
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 176,
+            "output_end_line": 400,
+            "first_segment": 139,
+            "end_segment_exclusive": 343
+          },
+          "move_kinds": {
+            "cut": 192,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-spiral-walls_only",
+      "request_sha256": "29d899151de50553227063910d2409c4080582c447f40d3fa93266e170910eb8",
+      "program_sha256": "b432e4ddeeba91b107cd5708bfcbf7e95415d086767c5327ff9501af01ef84c1",
+      "decoded_sha256": "b9db30882fdacacdbe9f8e840ea4cc5d65e48ecc2aa342d9de8bc176850315eb",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 195,
+            "first_segment": 1,
+            "end_segment_exclusive": 161
+          },
+          "move_kinds": {
+            "cut": 150,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 198,
+            "output_end_line": 229,
+            "first_segment": 161,
+            "end_segment_exclusive": 182
+          },
+          "move_kinds": {
+            "cut": 15,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-spiral-floor_only",
+      "request_sha256": "f19657e1046f6973f3c1454c35539dd0fd7714d6b804850ca95de95e0f889284",
+      "program_sha256": "71209ab3ca6b974f126c66307a4ef43bbc78c24a4d8b2a6fc2564e499edbbdeb",
+      "decoded_sha256": "bbc5c33cf1a8cf46292562f41a0c6fa538384ebe4f6b675582c2295b996b60f6",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 195,
+            "first_segment": 1,
+            "end_segment_exclusive": 161
+          },
+          "move_kinds": {
+            "cut": 150,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 198,
+            "output_end_line": 292,
+            "first_segment": 161,
+            "end_segment_exclusive": 243
+          },
+          "move_kinds": {
+            "cut": 75,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "convex-spiral-walls_and_floor",
+      "request_sha256": "a6e39b0c83343f7cc9eae6d070c2064b540286ebf53e73023ab99b71075dc716",
+      "program_sha256": "8f83f4c0065a4c75de5615dc63dce1ccf00bea31d3792e8f9ef7e6a5a7d4ccb6",
+      "decoded_sha256": "5b869b438ed6d5e4d5cfd970a61b4796f9f376922f9514e5795729b5faa4ad9c",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 195,
+            "first_segment": 1,
+            "end_segment_exclusive": 161
+          },
+          "move_kinds": {
+            "cut": 150,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 198,
+            "output_end_line": 455,
+            "first_segment": 161,
+            "end_segment_exclusive": 398
+          },
+          "move_kinds": {
+            "cut": 225,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "concave-cascade-walls_only",
+      "request_sha256": "b8a8023e58c17fc2c662832298173e0c7c662f01a48e5135285a788d7bf66996",
+      "program_sha256": "f034722b2325a2c95ab40d8febb92949e6f11b0753e1ae98b2acb62d42174044",
+      "decoded_sha256": "2eb6568f5739e1f553a98111bc6e8f874aa698c4913310d5e202e224c29fcced",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 6333,
+            "first_segment": 1,
+            "end_segment_exclusive": 6261
+          },
+          "move_kinds": {
+            "arc": 12,
+            "cut": 6208,
+            "plunge": 24,
+            "rapid": 16
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 6336,
+            "output_end_line": 6373,
+            "first_segment": 6261,
+            "end_segment_exclusive": 6303
+          },
+          "move_kinds": {
+            "arc": 18,
+            "cut": 18,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": true,
+      "historical_moves": 16330,
+      "new_moves": 6304,
+      "historical_program_sha256": "8de7433f6e4477eafcf3ce4442c92460b6506f269712fc58f351d8458926c200",
+      "program_changed": true
+    },
+    {
+      "case": "concave-cascade-floor_only",
+      "request_sha256": "cfe04e0280cabfb3b4427cbecea6c8326d916341d2161bf8b8ec8a1b3b45322c",
+      "program_sha256": "02c361137788035a32826f8df1141a5943443ce268aad2acbe140e218cd90f82",
+      "decoded_sha256": "ce558b069bc12c23d8f1f0e380d63ff69232ff68b3d4929b51be694269fc10d0",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 6793,
+            "first_segment": 1,
+            "end_segment_exclusive": 6721
+          },
+          "move_kinds": {
+            "arc": 12,
+            "cut": 6668,
+            "plunge": 24,
+            "rapid": 16
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 6796,
+            "output_end_line": 10210,
+            "first_segment": 6721,
+            "end_segment_exclusive": 10092
+          },
+          "move_kinds": {
+            "arc": 6,
+            "cut": 3334,
+            "plunge": 16,
+            "rapid": 15
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": true,
+      "historical_moves": 16789,
+      "new_moves": 10093,
+      "historical_program_sha256": "2052615f6d42617c6f5acc4b15a01c6ed38f8b208cfd292a665e00d1c1cbc8a8",
+      "program_changed": true
+    },
+    {
+      "case": "concave-cascade-walls_and_floor",
+      "request_sha256": "64a8ca96577d4165adaf3b61d5f82fa9d1a662304f397c0fa9eddfee1ccbbda1",
+      "program_sha256": "279f22ff0d78a67849eab7acec59f96cb9fa3354c7519517862a29af8a937b67",
+      "decoded_sha256": "2030a7727ec42f5f86053a9567e5112a11f8c38c06c96b81bcc22d05c5dee214",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 6333,
+            "first_segment": 1,
+            "end_segment_exclusive": 6261
+          },
+          "move_kinds": {
+            "arc": 12,
+            "cut": 6208,
+            "plunge": 24,
+            "rapid": 16
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 6336,
+            "output_end_line": 16469,
+            "first_segment": 6261,
+            "end_segment_exclusive": 16329
+          },
+          "move_kinds": {
+            "arc": 18,
+            "cut": 10002,
+            "plunge": 32,
+            "rapid": 16
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": true,
+      "historical_moves": 16330,
+      "new_moves": 16330,
+      "historical_program_sha256": "279f22ff0d78a67849eab7acec59f96cb9fa3354c7519517862a29af8a937b67",
+      "program_changed": false
+    },
+    {
+      "case": "concave-zigzag-walls_only",
+      "request_sha256": "80ac3ce6e28b5af9a811424926040aa9305f9c334d2f5f5ec2df2b621115b329",
+      "program_sha256": "4f7907e34b54b0be4790fc6c0e3e829d4aed4c84d62103a4af51a9d722d32fd0",
+      "decoded_sha256": "59b15ef8b337425b0d2faf561b6539057335627ea4065373301153d33fb6f3c1",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 196,
+            "first_segment": 1,
+            "end_segment_exclusive": 164
+          },
+          "move_kinds": {
+            "arc": 12,
+            "cut": 136,
+            "plunge": 9,
+            "rapid": 6
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 199,
+            "output_end_line": 236,
+            "first_segment": 164,
+            "end_segment_exclusive": 206
+          },
+          "move_kinds": {
+            "arc": 18,
+            "cut": 18,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "concave-zigzag-floor_only",
+      "request_sha256": "44616606e8d4d7a6532af86e0a57adf0e04d303e8a81a543ff80f7a3bc6f50d4",
+      "program_sha256": "e202d35ed590d31ef1499e25f5e045b6bdac731d299888856f65d169cf5b7346",
+      "decoded_sha256": "3fcabae024ad7bb59529ac8fa4df7d5de3486a3f2a5709e0903742b370d81b7e",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 184,
+            "first_segment": 1,
+            "end_segment_exclusive": 160
+          },
+          "move_kinds": {
+            "arc": 12,
+            "cut": 138,
+            "plunge": 6,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 187,
+            "output_end_line": 276,
+            "first_segment": 160,
+            "end_segment_exclusive": 242
+          },
+          "move_kinds": {
+            "arc": 6,
+            "cut": 69,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "concave-zigzag-walls_and_floor",
+      "request_sha256": "e942bb776fc63a48e2a41ef0fa0078451a707830299bb80564733918fac34e98",
+      "program_sha256": "0e4ac9e1207c2adb6b070141fb41679bb2e76ad26d5154a0bd505052d3c86f81",
+      "decoded_sha256": "c8450eb795de4c5977c523a3d2a4856a6f05893f319cc2fc5b006a456f63835f",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 196,
+            "first_segment": 1,
+            "end_segment_exclusive": 164
+          },
+          "move_kinds": {
+            "arc": 12,
+            "cut": 136,
+            "plunge": 9,
+            "rapid": 6
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 199,
+            "output_end_line": 441,
+            "first_segment": 164,
+            "end_segment_exclusive": 401
+          },
+          "move_kinds": {
+            "arc": 18,
+            "cut": 207,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "irregular_concave-cascade-walls_only",
+      "request_sha256": "78a06c3d3f2d521eb3a2c83a754486d4ce5929cf3aaf14db1cf6eff2a684dff9",
+      "program_sha256": "351cfc83e17ce7aace920e793d1d773abf1a4f450f462e8e43b68fc980d2cfee",
+      "decoded_sha256": "3b627a609a59816438f223464feaa7ce45a7b094e5e5321a60019ceb08db11d9",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 9444,
+            "first_segment": 1,
+            "end_segment_exclusive": 9366
+          },
+          "move_kinds": {
+            "arc": 14,
+            "cut": 9306,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 9447,
+            "output_end_line": 9484,
+            "first_segment": 9366,
+            "end_segment_exclusive": 9411
+          },
+          "move_kinds": {
+            "arc": 21,
+            "cut": 18,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "irregular_concave-cascade-floor_only",
+      "request_sha256": "eac924ce4755b41fbdb69970abde4f8d0b22a9c196204b39351acabb59982392",
+      "program_sha256": "7ec21c8547ad2a0c95af9a0e74d20de3690d2f6a64ec9a82ca71678dbb1026cf",
+      "decoded_sha256": "ac479635566cbf2a5d5f3bcb147a6bf3887cd2a0ae8dea0b1670f569223b7963",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 9608,
+            "first_segment": 1,
+            "end_segment_exclusive": 9530
+          },
+          "move_kinds": {
+            "arc": 14,
+            "cut": 9470,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 9611,
+            "output_end_line": 14436,
+            "first_segment": 9530,
+            "end_segment_exclusive": 14307
+          },
+          "move_kinds": {
+            "arc": 7,
+            "cut": 4735,
+            "plunge": 18,
+            "rapid": 17
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "irregular_concave-cascade-walls_and_floor",
+      "request_sha256": "0fe0c4769d532b6f3eef4b8beb6a77777844dc3be29a614b2a1a27515343c0eb",
+      "program_sha256": "543120a9d85ce55a251c42f959bf16e480b5140803757ebd99792d63b063fe5f",
+      "decoded_sha256": "c74b107d72ca635268afacb9c58307fee03c7fd73f46c03bfb20afb898f1c3e0",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 9444,
+            "first_segment": 1,
+            "end_segment_exclusive": 9366
+          },
+          "move_kinds": {
+            "arc": 14,
+            "cut": 9306,
+            "plunge": 27,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 9447,
+            "output_end_line": 23799,
+            "first_segment": 9366,
+            "end_segment_exclusive": 23646
+          },
+          "move_kinds": {
+            "arc": 21,
+            "cut": 14205,
+            "plunge": 36,
+            "rapid": 18
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "irregular_concave-zigzag-walls_only",
+      "request_sha256": "6803aa9bf842f0a2b6d4cd2446a780bd2a5ec7bb97afc48af99fc58e16331eb0",
+      "program_sha256": "662b64a2de2dc07ef6abe28cbb2fc0cbebe12feec798dda8d8b28185f3a92b00",
+      "decoded_sha256": "545b7dc37ba134a2f6ad2651748c743a2c590e4dca0577b85a583a95cf665c9b",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 245,
+            "first_segment": 1,
+            "end_segment_exclusive": 191
+          },
+          "move_kinds": {
+            "arc": 14,
+            "cut": 146,
+            "plunge": 18,
+            "rapid": 12
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 248,
+            "output_end_line": 285,
+            "first_segment": 191,
+            "end_segment_exclusive": 236
+          },
+          "move_kinds": {
+            "arc": 21,
+            "cut": 18,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "irregular_concave-zigzag-floor_only",
+      "request_sha256": "d0117e0dd0c69c884086fe68c82787781d8ccfc1c05ecb8306e24aea7b033a0a",
+      "program_sha256": "34b7b8d1d2738a42da60a8cbba0989ca4ddfb111e1d0bc04f75bb2208149c18e",
+      "decoded_sha256": "bee4cf787d8ede83d12de505b441ffb1433cf6dbc27c5f2074ebd1bc3bb28224",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 245,
+            "first_segment": 1,
+            "end_segment_exclusive": 191
+          },
+          "move_kinds": {
+            "arc": 14,
+            "cut": 146,
+            "plunge": 18,
+            "rapid": 12
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 248,
+            "output_end_line": 381,
+            "first_segment": 191,
+            "end_segment_exclusive": 294
+          },
+          "move_kinds": {
+            "arc": 7,
+            "cut": 73,
+            "plunge": 12,
+            "rapid": 11
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "irregular_concave-zigzag-walls_and_floor",
+      "request_sha256": "74ff27c6560f39ceb7cc21e99d446b8d8970a2752b70fb0b38cb478af2ee7ed8",
+      "program_sha256": "451707bb932c8c0cea4a8ca4a2f1f0d5d0cc6ab081fc1b6d2e6776be5d575851",
+      "decoded_sha256": "8e8786461168cabefd245b7256d589953103791b133cdd4438c8afb79ef45a92",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 245,
+            "first_segment": 1,
+            "end_segment_exclusive": 191
+          },
+          "move_kinds": {
+            "arc": 14,
+            "cut": 146,
+            "plunge": 18,
+            "rapid": 12
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 248,
+            "output_end_line": 566,
+            "first_segment": 191,
+            "end_segment_exclusive": 467
+          },
+          "move_kinds": {
+            "arc": 21,
+            "cut": 219,
+            "plunge": 24,
+            "rapid": 12
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "grbl-walls_only",
+      "request_sha256": "b8c33c0c460dab839bacd92f725b2ae476c9fb1b1e69ae487ec680de67ecfad1",
+      "program_sha256": "9a52ceeebcf5ef0b1ab06bfc66f7b565f8be8284d9631289e530739f09abbbe2",
+      "decoded_sha256": "08e75f377913594d7fbf8b9d939b02e4f617401ee37360acd7e43994aff92e50",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 319,
+            "output_end_line": 350,
+            "first_segment": 194,
+            "end_segment_exclusive": 215
+          },
+          "move_kinds": {
+            "cut": 15,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "grbl-floor_only",
+      "request_sha256": "8a1e0b68e564104b641997b2ae72fe8f4be67327d7c3022694e0aa85cac0992d",
+      "program_sha256": "d0074fe1fb0723b993544c661c4ca333de1a30827bacdd5c9e3a628913417a29",
+      "decoded_sha256": "d10addd2f1a389921cdd6d97f1fb41a963e6d4d011b8453681cd2e010b6b4ebe",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 319,
+            "output_end_line": 512,
+            "first_segment": 194,
+            "end_segment_exclusive": 309
+          },
+          "move_kinds": {
+            "cut": 64,
+            "plunge": 26,
+            "rapid": 25
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "grbl-walls_and_floor",
+      "request_sha256": "78596b31b3040cb86f8dc5940951ef01299d880dde48ff15f67c1bbeae08553a",
+      "program_sha256": "b1b0d4d20898987d0bb4604af89a85ce34580cdd10984d758c2d1bcb60e148ed",
+      "decoded_sha256": "8211fd4486826151239fcd2411fcb21a9df364252308db8a354aaec91054bfaf",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 319,
+            "output_end_line": 719,
+            "first_segment": 194,
+            "end_segment_exclusive": 464
+          },
+          "move_kinds": {
+            "cut": 192,
+            "plunge": 52,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "cps-walls_only",
+      "request_sha256": "a532959e70d524389ce88ae18ebb7b93ac3d67b898b5e92ffc90d68a9ec48ae9",
+      "program_sha256": "bbb379caa9bb542f6817f9bed9f9a1cfe217269af9b999b17ad4923b30983164",
+      "decoded_sha256": "e7e7cedac758da44cac0a249953c058f74e5542125d192999718cbd09e8aa404",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 18,
+            "output_end_line": 288,
+            "first_segment": 0,
+            "end_segment_exclusive": 192
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 25
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 291,
+            "output_end_line": 319,
+            "first_segment": 192,
+            "end_segment_exclusive": 213
+          },
+          "move_kinds": {
+            "cut": 15,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "cps-floor_only",
+      "request_sha256": "7947270ca283bc9d0fab69361e19ffa7cffaed03364e49415daddbf208186117",
+      "program_sha256": "58b33653da53ba38eed15c872aeb2b7d79a125e31e47433ace8e6679cef4d6f6",
+      "decoded_sha256": "b7da414a3b95bfd3f623fdab74e350d0772d1027cf1f21ce69db3344d0da802a",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 18,
+            "output_end_line": 288,
+            "first_segment": 0,
+            "end_segment_exclusive": 192
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 25
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 291,
+            "output_end_line": 457,
+            "first_segment": 192,
+            "end_segment_exclusive": 307
+          },
+          "move_kinds": {
+            "cut": 64,
+            "plunge": 26,
+            "rapid": 25
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "cps-walls_and_floor",
+      "request_sha256": "3cf67cb736047d47158152e2ed4bd590c748718bcbc464608c3dad965fdd1d93",
+      "program_sha256": "a7a48425e0dbc8cdfce973ef3c87781c14e225dd3e94b53d34543df30c710a1b",
+      "decoded_sha256": "1a8a82cc2958f933ea770851fb0fbf61cdf6cde77aaa656b3005c93941bc065a",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 18,
+            "output_end_line": 288,
+            "first_segment": 0,
+            "end_segment_exclusive": 192
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 25
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 291,
+            "output_end_line": 664,
+            "first_segment": 192,
+            "end_segment_exclusive": 462
+          },
+          "move_kinds": {
+            "cut": 192,
+            "plunge": 52,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "null-finishing",
+      "request_sha256": "3ceb5ababf8e74f2769312e570c5a8a6e52a040f7e7c9de458e74f2e1a0b5db0",
+      "program_sha256": "fffad2fda0ff211c44a62592c51341fa04ec2112cf54e2927feb242c4a1ccbf4",
+      "decoded_sha256": "726eeac52f2a09c5e959be0cbb49f9deab22c1d8bb4190374d8bc7fabd135998",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": null
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "distinct-tool",
+      "request_sha256": "4f9109b0b73767372ffc19fbb42a7d3bfe546be9969668baca443b48566ae489",
+      "program_sha256": "13d85eeec113c2fb48d0c74adfc4a1154f1322e816ac69075bb09a1bf9e239be",
+      "decoded_sha256": "11ca908269597433156786d507296dbf49024a7f54099df9fa71327cfccc09d0",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 2,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 316,
+            "first_segment": 1,
+            "end_segment_exclusive": 194
+          },
+          "move_kinds": {
+            "cut": 128,
+            "plunge": 39,
+            "rapid": 26
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 2,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 328,
+            "output_end_line": 883,
+            "first_segment": 194,
+            "end_segment_exclusive": 569
+          },
+          "move_kinds": {
+            "cut": 267,
+            "plunge": 72,
+            "rapid": 36
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": true,
+      "historical_moves": 570,
+      "new_moves": 570,
+      "historical_program_sha256": "13d85eeec113c2fb48d0c74adfc4a1154f1322e816ac69075bb09a1bf9e239be",
+      "program_changed": false
+    },
+    {
+      "case": "circle-walls_only",
+      "request_sha256": "686ce1c63d74787f8b2cc900c9ff5fba11ecc01d78251c3078fb0bdb22e57e1c",
+      "program_sha256": "ef66b2e1b1938991456eb9a4a6d5bfb1630141e2cc55cb86644d8d4e7410e442",
+      "decoded_sha256": "48a593cf24a4981eb623395cdd13fab45a3010d44a882abba754ccefb44963b4",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 59,
+            "first_segment": 1,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "arc": 104,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 62,
+            "output_end_line": 90,
+            "first_segment": 115,
+            "end_segment_exclusive": 193
+          },
+          "move_kinds": {
+            "arc": 72,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": false,
+      "historical_refusal": "Error: operation #1: finishing proof refused: Finishing source curves are not qualified; use a straight-edge polygon or disable Finishing"
+    },
+    {
+      "case": "circle-floor_only",
+      "request_sha256": "32d5ac82d7fec6a9f04906b7df5c3bd2ec6c46862b94d04d1cc7223ce3ea877b",
+      "program_sha256": "850d0ee9e47a628eda66d5a425488c1795a238190d76b477c0f8c81465877010",
+      "decoded_sha256": "697c9ccb2dbad7fb9edd7c9ade634ffcb98cbbcbe6a66dfb9ad9c635a0204c84",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 59,
+            "first_segment": 1,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "arc": 104,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 62,
+            "output_end_line": 88,
+            "first_segment": 115,
+            "end_segment_exclusive": 174
+          },
+          "move_kinds": {
+            "arc": 52,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": false,
+      "historical_refusal": "Error: operation #1: finishing proof refused: Finishing source curves are not qualified; use a straight-edge polygon or disable Finishing"
+    },
+    {
+      "case": "circle-walls_and_floor",
+      "request_sha256": "4a37010c75b75ac93b61cba9ccb92ca4964a5f13e5b874b6b7bddcb24b78e740",
+      "program_sha256": "cb59ec7f4b7b1b1ad72059100f88ba0430ed0da4e057a8b7cab356d9efc4a9b2",
+      "decoded_sha256": "ec442843281dd1b54be0a6b76c5c8278fe9fc53bc8ec0509d06888306e46e445",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 59,
+            "first_segment": 1,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "arc": 104,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 62,
+            "output_end_line": 115,
+            "first_segment": 115,
+            "end_segment_exclusive": 283
+          },
+          "move_kinds": {
+            "arc": 156,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": false,
+      "historical_refusal": "Error: operation #1: finishing proof refused: Finishing source curves are not qualified; use a straight-edge polygon or disable Finishing"
+    },
+    {
+      "case": "rounded-walls_only",
+      "request_sha256": "e4b0ed75b377f0b53af156d5f0c577b76aa209321399b9812171b80371a95b48",
+      "program_sha256": "18dfd54ab31f14b1c1987bce4a2b0ce56ea61ed420a35551769dc05545b32a98",
+      "decoded_sha256": "4d20126925768fffb117f71d903a3fb654ea09885e00e357bc28c1f57b56a599",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 111,
+            "first_segment": 1,
+            "end_segment_exclusive": 101
+          },
+          "move_kinds": {
+            "arc": 48,
+            "cut": 32,
+            "plunge": 12,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 114,
+            "output_end_line": 154,
+            "first_segment": 101,
+            "end_segment_exclusive": 191
+          },
+          "move_kinds": {
+            "arc": 72,
+            "cut": 12,
+            "plunge": 4,
+            "rapid": 2
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rounded-floor_only",
+      "request_sha256": "cf0f8c3efd5049d32f9682b79e9adffa2c2898ea99acd1c72bf223ac96e9b4dc",
+      "program_sha256": "a06f7eafcd8019803bc0450270dadbd115640d3514570ca49214fc6c3965bcdf",
+      "decoded_sha256": "98e942ff2089ca55c669f2738d3f35872611074dc2fd2403bed8d93918491d33",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 111,
+            "first_segment": 1,
+            "end_segment_exclusive": 101
+          },
+          "move_kinds": {
+            "arc": 48,
+            "cut": 32,
+            "plunge": 12,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 114,
+            "output_end_line": 173,
+            "first_segment": 101,
+            "end_segment_exclusive": 156
+          },
+          "move_kinds": {
+            "arc": 24,
+            "cut": 16,
+            "plunge": 8,
+            "rapid": 7
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "rounded-walls_and_floor",
+      "request_sha256": "ec27169fac39994cf9f06a6602a275a446294910e5420c965f498f6ea8369617",
+      "program_sha256": "927777219b76d452ad61e589800eafcbedb0b2012105f11ce859cc2c06909c39",
+      "decoded_sha256": "791f1408ba4b3fa2fc01e30c611bb6ce5724c6e8afdeb0d5322279784021ab81",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 111,
+            "first_segment": 1,
+            "end_segment_exclusive": 101
+          },
+          "move_kinds": {
+            "arc": 48,
+            "cut": 32,
+            "plunge": 12,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 114,
+            "output_end_line": 238,
+            "first_segment": 101,
+            "end_segment_exclusive": 245
+          },
+          "move_kinds": {
+            "arc": 72,
+            "cut": 48,
+            "plunge": 16,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "island-walls_only",
+      "request_sha256": "a9297e2484975eaa9abb449a8357de2f9d71a65ede3f2aba7bce4dfddf0808f8",
+      "program_sha256": "288cf5ee007ce5e7a9eb284483c1284dcf755f15eb048de233e1cb07c288429f",
+      "decoded_sha256": "2b71b7c975631f9e4c816764839c891b071146ecd5f8bc46d6f12ad61e0b0ed3",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 1335,
+            "first_segment": 1,
+            "end_segment_exclusive": 1285
+          },
+          "move_kinds": {
+            "cut": 1264,
+            "plunge": 12,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 1338,
+            "output_end_line": 1766,
+            "first_segment": 1285,
+            "end_segment_exclusive": 1693
+          },
+          "move_kinds": {
+            "cut": 396,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": false,
+      "historical_refusal": "Error: operation #1: finishing proof refused: Finishing proof requires one selected unpatterned contour (no islands) with direct entry"
+    },
+    {
+      "case": "island-floor_only",
+      "request_sha256": "690e372ba1e7cf0d9d70aab7a0b974fb32137a2a62f360efc3dbc4ce079ef175",
+      "program_sha256": "18f0eeef6fce4a93c03ccd839e4d30e16607d32ed66b78b4b99847929d5be2cd",
+      "decoded_sha256": "5c957b99b8a24f60b8edba641a519c5b7336d05fc8d5a81dda0a73fba25f5ff0",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 967,
+            "first_segment": 1,
+            "end_segment_exclusive": 917
+          },
+          "move_kinds": {
+            "cut": 896,
+            "plunge": 12,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 970,
+            "output_end_line": 1457,
+            "first_segment": 917,
+            "end_segment_exclusive": 1380
+          },
+          "move_kinds": {
+            "cut": 448,
+            "plunge": 8,
+            "rapid": 7
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": false,
+      "historical_refusal": "Error: operation #1: finishing proof refused: Finishing proof requires one selected unpatterned contour (no islands) with direct entry"
+    },
+    {
+      "case": "island-walls_and_floor",
+      "request_sha256": "5cf444b1cbbfe397ae32000d8eb5121d89b6b53e890d491539e1f399cbe3b070",
+      "program_sha256": "067971f6d42d5a5cb49fe5fbacf401d7c87f95a9fe0d79b9960495c4d8979c13",
+      "decoded_sha256": "e93c84895b60d6d577b04c561811b0f5c32fff5354c37fadf1658ca7b40ac0ee",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 1335,
+            "first_segment": 1,
+            "end_segment_exclusive": 1285
+          },
+          "move_kinds": {
+            "cut": 1264,
+            "plunge": 12,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 1338,
+            "output_end_line": 2746,
+            "first_segment": 1285,
+            "end_segment_exclusive": 2653
+          },
+          "move_kinds": {
+            "cut": 1344,
+            "plunge": 16,
+            "rapid": 8
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ],
+      "historical_counterpart_accepted": false,
+      "historical_refusal": "Error: operation #1: finishing proof refused: Finishing proof requires one selected unpatterned contour (no islands) with direct entry"
+    },
+    {
+      "case": "annulus-walls_only",
+      "request_sha256": "92833a65a3315b472112f5c6bd517a89ccea47ce5817e1a3bda66f780d07cbb4",
+      "program_sha256": "fb61b6af34ca5abf032a43a8fcae21b6501231c5ad51282c0aadaddfef912836",
+      "decoded_sha256": "ef0488529a1a4fdef32dde773645ecba2913cd4ef93d8bf95f017c38e2b98d2c",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0,
+          "scope": "walls_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 59,
+            "first_segment": 1,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "arc": 104,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 62,
+            "output_end_line": 115,
+            "first_segment": 115,
+            "end_segment_exclusive": 283
+          },
+          "move_kinds": {
+            "arc": 156,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "annulus-floor_only",
+      "request_sha256": "05b01bc26cefcc5d5a19e97ff84cc4f52f6970b5c2071e21b92b0e5eb59a736d",
+      "program_sha256": "212f14a6a09bd0843b9b1c96fdb4ec4212fc960c7ac4d7b6136c6665ab17adcd",
+      "decoded_sha256": "74cd224ff5d45ada5587ea4b9ddf3818be962e6e043a85d002a8029f77b66cb1",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 59,
+            "first_segment": 1,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "arc": 104,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 62,
+            "output_end_line": 88,
+            "first_segment": 115,
+            "end_segment_exclusive": 174
+          },
+          "move_kinds": {
+            "arc": 52,
+            "plunge": 4,
+            "rapid": 3
+          },
+          "cutting_levels": [
+            -0.5
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    },
+    {
+      "case": "annulus-walls_and_floor",
+      "request_sha256": "0718d3ccba1c25f8969589e8be8535cca35a5a1d5d3e4bae73af51e15d68d5c7",
+      "program_sha256": "7718fb600afc5ba3e86d890580f32e6bd40c2bc156550f342aae4f674f657029",
+      "decoded_sha256": "a50c1743eed0a379e37a8272155372e1daa477c2ed8939d66256b2874b557576",
+      "contract": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 1200,
+          "plunge_mm_min": 200,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0.1,
+          "floor_allowance_mm": 0.1,
+          "scope": "walls_and_floor"
+        }
+      },
+      "stages": [
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "main",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "depth_per_pass_mm": 0.25
+            },
+            "output_start_line": 19,
+            "output_end_line": 59,
+            "first_segment": 1,
+            "end_segment_exclusive": 115
+          },
+          "move_kinds": {
+            "arc": 104,
+            "plunge": 6,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.4,
+            -0.25
+          ],
+          "lateral_rapids_below_start": 0
+        },
+        {
+          "binding": {
+            "authority": "resolved",
+            "operation_id": 1,
+            "stage": "finishing",
+            "parameters": {
+              "tool_id": 1,
+              "rpm": 18000,
+              "feed_mm_min": 413,
+              "plunge_mm_min": 113,
+              "depth_per_pass_mm": 0.2
+            },
+            "output_start_line": 62,
+            "output_end_line": 115,
+            "first_segment": 115,
+            "end_segment_exclusive": 283
+          },
+          "move_kinds": {
+            "arc": 156,
+            "plunge": 8,
+            "rapid": 4
+          },
+          "cutting_levels": [
+            -0.5,
+            -0.4,
+            -0.2
+          ],
+          "lateral_rapids_below_start": 0
+        }
+      ]
+    }
+  ],
+  "software_fingerprint_sha256": "62265b79d933d4681d70592e273e33cca9bbbafcb162909a6a3994e9b0650c42"
+}

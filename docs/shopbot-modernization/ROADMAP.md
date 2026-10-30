@@ -1,12 +1,28 @@
 # FabCAM roadmap navigation
 
+**ALPHA-3.2 accepted and locally consolidated.** Software `610d35d6031cb94e4b93473ce1cff661b2b85421`
+exactly matches all 1,308 qualified files. Earlier pending-review statements are
+historical. Bounded software acceptance only; native/workshop/physical exclusions
+remain. No integration or next milestone. **HARD STOP.**
+
+**ALPHA-3.2 — bounded implementation qualified; human acceptance pending (2026-10-30).**
+ADR-0033 is approved; historical executable preservation was waived. The isolated
+worktree adds explicit Walls / Floor / Both scope, checked axial coverage, reachable
+floor proof, curves/simple islands and revision-safe UI. Project/cutting v10 stays;
+new `pocket_finishing_v2` and capability are strict. Conservative geometry, cutter,
+entry and resource refusals remain. [Report and limitations](../releases/ALPHA_3_2_POCKET_FINISHING.md).
+All changes are uncommitted on baseline `81e8d47d3ca6860303d534393bad37056ea0cfb2`.
+20/20 mandatory gates PASS; 1,659 Rust / 1,549 frontend tests, 79 real transport
+cases and three actual flipped pairs. **HARD STOP for human acceptance.**
+No commit, push, merge, installer, release, ALPHA-4 or physical operation.
+
 **ALPHA-3.1 accepted and locally consolidated — 2026-10-30.** Human acceptance
 covers the bounded polygon implementation and documented limitations.
 Core `59d8e233fa54facb9873b7203068ed45ad291011`; software/tests `56743de13a1f66005d7e24519fc298e66bf9c224`;
 all 1,302 qualified software files match the final fingerprint exactly.
 [Acceptance receipt](../releases/evidence/alpha31/consolidation.json).
-Earlier pending-review/uncommitted statements are historical. ALPHA-3.2 isolated
-preflight is authorized; HARD STOP before any incompatible persistence change.
+Earlier pending-review/uncommitted statements are historical. ALPHA-3.2 proceeds
+under accepted ADR-0033; its current human gate is documented above.
 No merge, push, installer, release or physical operation.
 
 The single active plan is [RELEASE_ROADMAP](../releases/RELEASE_ROADMAP.md).

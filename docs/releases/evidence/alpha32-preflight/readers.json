@@ -1,0 +1,103 @@
+{
+  "source_sha": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+  "software_fingerprint_sha256": "1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c",
+  "native_sha256": "ff4cde0746ec5f57ebe77c68b2bdfad302077f2fc7917e13ce41a9ed8f34c324",
+  "wasm_sha256": "5fc690b54b18774598a982df9529126d3d264d58be0d89cd94b0aae13a46bb31",
+  "method": "Unmodified current frontend reader functions (TS transpilation only), qualified native CLI and real WASM; hypothetical unsupported inputs. No new contract implemented.",
+  "rows": [
+    {
+      "case": "unchanged-v10-v1",
+      "native": true,
+      "wasm": true,
+      "portable": true,
+      "program_sha256": "7147402dd7dccf53a3286b9e8f9f2731807aa2917ccd598b238e70ba5647164b"
+    },
+    {
+      "case": "scope-on-v1",
+      "native": "    unknown field `scope`, expected one of `cutting`, `lateral_allowance_mm`, `floor_allowance_mm` at line 1 column 1430",
+      "portable": "Malformed Main/Finishing contract",
+      "portable_input_unchanged": true,
+      "template_rejected": true,
+      "snapshot": "Malformed Main/Finishing contract",
+      "collection": "unknown field `scope`, expected one of `cutting`, `lateral_allowance_mm`, `floor_allowance_mm` at line 1 column 658",
+      "wasm": {
+        "generate": "Missing or unknown stage fields",
+        "generateStreaming": "Missing or unknown stage fields",
+        "generateTwoSided": "Missing or unknown stage fields"
+      }
+    },
+    {
+      "case": "new-discriminator-only",
+      "native": "    unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 1148",
+      "portable": "Unsupported cutting stage contract",
+      "portable_input_unchanged": true,
+      "template_rejected": true,
+      "snapshot": "Unsupported cutting stage contract",
+      "collection": "unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 377",
+      "wasm": {
+        "generate": "unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 33",
+        "generateStreaming": "unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 33",
+        "generateTwoSided": "unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 33"
+      }
+    },
+    {
+      "case": "new-discriminator",
+      "native": "    unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 1148",
+      "portable": "Unsupported cutting stage contract",
+      "portable_input_unchanged": true,
+      "template_rejected": true,
+      "snapshot": "Unsupported cutting stage contract",
+      "collection": "unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 377",
+      "wasm": {
+        "generate": "Missing or unknown stage fields",
+        "generateStreaming": "Missing or unknown stage fields",
+        "generateTwoSided": "Missing or unknown stage fields"
+      }
+    },
+    {
+      "case": "new-discriminator-disabled",
+      "native": "    unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 1149",
+      "portable": "Unsupported cutting stage contract",
+      "portable_input_unchanged": true,
+      "template_rejected": true,
+      "snapshot": "Unsupported cutting stage contract",
+      "collection": "unknown variant `pocket_finishing_v2`, expected `main_finishing_v1` at line 1 column 377",
+      "wasm": {
+        "generate": "Missing or unknown stage fields",
+        "generateStreaming": "Missing or unknown stage fields",
+        "generateTwoSided": "Missing or unknown stage fields"
+      }
+    },
+    {
+      "case": "unsafe-sidecar-portable-operation",
+      "accepted_ignored_semantics": true,
+      "note": "Unknown operation field does not revise the guarded stage contract; never use this as finishing intent."
+    },
+    {
+      "case": "unsafe-sidecar-native-params",
+      "native_refused": "    unknown field `finishing_scope`, expected one of `stages`, `stage_preset`, `cutting`, `depth`, `start_depth`, `step`, `fast_move_z`, `objectorder`, `plunge`, `feed_rate_override`, `plunge_rate_override`, `finish_step`, `through_depth`, `stock_to_leave_mm`, `depth_list` at line 1 column 1426",
+      "wasm_refusal": null,
+      "wasm_accepted_unchanged": true
+    },
+    {
+      "case": "outer-version-11",
+      "portable_refused": true,
+      "native_refused": true,
+      "wasm_refused": true
+    },
+    {
+      "case": "historical-L-positive-F-zero",
+      "request_sha256": "e0f671428c6d303b749660ab68cf28f54a5d238e96b9ac608c15bc70b212899a",
+      "program_sha256": "6dc9dc4f812c373d5d7d7087722aad333865af4c846eeb26e6a66d5e6a313222",
+      "matches_alpha31_qualified_program": true,
+      "finishing_interior_moves": 112,
+      "note": "Recorded rectangle has interior finishing cutting moves despite F=0. This characterizes full-area legacy behavior, not wall-height qualification."
+    }
+  ],
+  "limits": [
+    "No installed-native UI or hardware",
+    "No new-reader or new-path qualification",
+    "Portable validation input immutability tested; restore entry-point ordering inspected in source, not a new browser lifecycle test",
+    "HTTP/Tauri handlers inspected for shared typed decoding; not separately invoked in this audit"
+  ]
+}

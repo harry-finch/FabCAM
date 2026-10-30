@@ -1,0 +1,320 @@
+{
+  "baseline_sha": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+  "fixtures": 23,
+  "programs": 24,
+  "rows": [
+    {
+      "fixture": "chamfer-grbl.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "4ace46e33e8f33234f269882f1488fd4e95b9afeb45503927a2bc466c910f651"
+    },
+    {
+      "fixture": "chamfer.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "00a26128f5b2ed5d2eede0dd2a60e5ec1efd1cbda6353c4d926be14007ce4f56"
+    },
+    {
+      "fixture": "dovetail.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "f8dbd33a0dbc212484e94263706bd7045cb558f2a9d25fc29ec2460eb6b7b701"
+    },
+    {
+      "fixture": "drill-shared-false.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "1f5901ad83c163152b0fd8c662535ec9c03d09d7f895a2a649f229cbd490ddac"
+    },
+    {
+      "fixture": "drill-shared-true.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "a12cb555bff13c5ccc472cbc8cb8b088d0058acf887e6332930dcc9b304c7ce6"
+    },
+    {
+      "fixture": "dual-pocket.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "21f4ca0f0eafe476f44da8e8d3c69f6fe995b3b054d5cf5dfe4d6a7435654eb4"
+    },
+    {
+      "fixture": "engrave-grbl.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "49a6263845cd167282481ad2c756815a9dcc92399f67db914f4e43011419db14"
+    },
+    {
+      "fixture": "engrave.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "8eedda46a7a4b9240ce31e6fa216d0c4264b7caeaab61392ee6fe06fed63b447"
+    },
+    {
+      "fixture": "halfpipe.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "7d60be2a0b30699e42755ad96b3245aca9eed3267ce7aee24812f4f8dd3a792e"
+    },
+    {
+      "fixture": "planar.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "069816f6d5f332a8acec140ab476a2afc98a8fb04bb5428f5fc63401ea7f31df"
+    },
+    {
+      "fixture": "pocket-grbl.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "ed2b4496bf64c8ef0f0588ec61413ac0d86e0989fa328966ff9316391b7c5870"
+    },
+    {
+      "fixture": "pocket.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "26b2984bf2dcab1b5ace276c5a36cdaa7afec8273daf01c8dc72d7d72aaf92bd"
+    },
+    {
+      "fixture": "profile-grbl.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "e242c2c335f540a5dda330a1384b74868caa16756fd174980bd09859f3e097ae"
+    },
+    {
+      "fixture": "profile-inside-grbl.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "c949c831bc170db36f432600f9ff6d049b21f5da7d8e78d7f2049ca48103fac8"
+    },
+    {
+      "fixture": "profile-inside.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "04900344a7990bde105e68356624e6d46e17158b0810a8a93609f65b6b1788cf"
+    },
+    {
+      "fixture": "profile.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "c83346b83c7cfc7ad5dd4568a7fef22919280cb29a50d2bdf4da27b279b8a24c"
+    },
+    {
+      "fixture": "relief.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "db43b8bf5e66c2126e2b5a3e2933837b6cf503d6eeb7e732b16f54f782537eea"
+    },
+    {
+      "fixture": "shopbot-profile.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "b168766782fb9023c17ad0db433a8df9114e7f2d77d1cfed6853d27cb7e66d84"
+    },
+    {
+      "fixture": "shopbot-vcarve.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "26fde1a684eabbf4a19ba23a8e407f4e9e834e416e38ba6eeb1c6d77bc3ebc0b"
+    },
+    {
+      "fixture": "thread.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "07088be6f15866c032b9633d6f8b0a9497937aa157510c4409754e36847dd838"
+    },
+    {
+      "fixture": "tslot.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "f8dbd33a0dbc212484e94263706bd7045cb558f2a9d25fc29ec2460eb6b7b701"
+    },
+    {
+      "fixture": "two-sided.json",
+      "side": "front",
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "5d88935440077dbf3b8ee36fd9a4db5c1a1a904f32f314344c9e571c262fc456"
+    },
+    {
+      "fixture": "two-sided.json",
+      "side": "back",
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "9528a7ebe2cd2ab405d0b02019c836fd29c0a35bea4a0546069a2806e5a5bd47"
+    },
+    {
+      "fixture": "waterline.json",
+      "side": null,
+      "exact_fields": [
+        "gcode",
+        "toolpath",
+        "tool_provenance",
+        "gcode_index",
+        "stats",
+        "cutting_stages"
+      ],
+      "program_sha256": "22656031b5c4507fce40fbd4dbd0044b8011ef3f69989d81145db50d4cf3184a"
+    }
+  ],
+  "software_fingerprint_sha256": "62265b79d933d4681d70592e273e33cca9bbbafcb162909a6a3994e9b0650c42"
+}

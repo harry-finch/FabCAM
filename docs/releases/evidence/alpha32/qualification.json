@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-30",
+  "base_sha": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+  "branch": "feature/alpha-3-2-pocket-finishing",
+  "implementation_commits": [],
+  "software_fingerprint_sha256": "62265b79d933d4681d70592e273e33cca9bbbafcb162909a6a3994e9b0650c42",
+  "software_files": 1308,
+  "canonical_gates": {
+    "passed": 20,
+    "failed": 0,
+    "names": [
+      "cargo fmt --check",
+      "cargo clippy -Dwarnings (with pedantic)",
+      "cargo test --workspace",
+      "xtask schema-check",
+      "xtask version-check",
+      "readme parity",
+      "pnpm install",
+      "codegen drift",
+      "i18n keys drift",
+      "pnpm run lint",
+      "pnpm run check",
+      "pnpm run test",
+      "pnpm run build",
+      "wasm-pack build (web)",
+      "wasm cps size guard",
+      "cargo-deny check",
+      "ui smoke (headless)",
+      "CLI trust and transactional export",
+      "SEC1 release boundary regressions",
+      "candidate identity regressions"
+    ],
+    "rust": {
+      "passed": 1659,
+      "failed": 0,
+      "ignored": 1
+    },
+    "frontend": {
+      "passed": 1549,
+      "optional_locale_skip": 1,
+      "files": 179
+    }
+  },
+  "runtime": {
+    "cases": 79,
+    "accepted": 68,
+    "expected_refusals": 11,
+    "real_two_sided_pairs": 3
+  },
+  "retained_corpus": {
+    "fixtures": 23,
+    "exact_programs": 24
+  },
+  "baseline_red": {
+    "source_sha": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+    "expected_failures": 2,
+    "production_mutated": false
+  },
+  "intermediate_environment_refusal": "Two full intermediate attempts failed the headless host setup: alias absent from PATH, then macOS Chrome aborted through the symlink. A dedicated smoke run and final3 full gate pass with PATH detection plus the installed real executable in CHROME. No skipped gate or source weakening.",
+  "raw_log_hashes": [
+    {
+      "name": "alpha32-baseline.log",
+      "sha256": "0bc81a65d01cb31cb3d7c7281db6e24e7ad9cf5592eee38174b66c06bd0b600a",
+      "bytes": 1676
+    },
+    {
+      "name": "alpha32-release-gate.log",
+      "sha256": "5d7ee9d53d17459f5ca751f2b9fcd33266c6cc9e32c2f153ad7d378611c959f7",
+      "bytes": 530629
+    },
+    {
+      "name": "alpha32-axial-budget.log",
+      "sha256": "e3d188ef2d0375809fb3b4f0291c74225e49dd514f70777f23c3f1bb0bc3e6ce",
+      "bytes": 528
+    },
+    {
+      "name": "alpha32-release-gate-final.log",
+      "sha256": "e751d7059207a64d3a0bba747b0e89f46e4a7811555800fd6a85768a232fc465",
+      "bytes": 530012
+    },
+    {
+      "name": "alpha32-release-gate-final2.log",
+      "sha256": "cbe0e0cf0c7029d4cd189c9814406aee15ebf8a297065ec9ca2fcb67c91c7cda",
+      "bytes": 528506
+    },
+    {
+      "name": "alpha32-release-gate-final3.log",
+      "sha256": "4d09091b39a7dabde88fff8502abd40d2ee0305ab6acbdd0ada2aba837661c90",
+      "bytes": 529097
+    },
+    {
+      "name": "alpha32-ui-final.log",
+      "sha256": "ac0db8afbcd3d563bc41c30c5c769668279325da8e114a8a6ab6ba53941933fd",
+      "bytes": 1273
+    },
+    {
+      "name": "alpha32-runtime-final.log",
+      "sha256": "5edf9ef036c1842d45bbd06ad40bf9efa90e7cb012f4c6483050b22487d8e6df",
+      "bytes": 82
+    },
+    {
+      "name": "alpha32-retained-corpus.log",
+      "sha256": "43d0dc1c9a008cc5186e270d75c6452b7e6cd3fb44b84e7acff8d2ddbf544dcd",
+      "bytes": 522
+    }
+  ],
+  "human_acceptance": "PENDING",
+  "installed_native": "NOT RUN: separate macOS account required",
+  "physical": "NOT RUN",
+  "recommendation": "GO for human review of the bounded implementation, not universal finishing or machine qualification",
+  "no_commit_push_merge_installer_or_release": true
+}

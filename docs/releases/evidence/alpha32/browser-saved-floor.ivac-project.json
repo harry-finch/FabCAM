@@ -1,0 +1,248 @@
+{
+  "kind": "ivac-project",
+  "version": 10,
+  "imports": [
+    {
+      "id": 1,
+      "source": {
+        "filename": "concave.svg",
+        "format": "svg",
+        "segments": [
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 50
+            },
+            "end": {
+              "x": 44,
+              "y": 50
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 44,
+              "y": 50
+            },
+            "end": {
+              "x": 44,
+              "y": 37
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 44,
+              "y": 37
+            },
+            "end": {
+              "x": 25,
+              "y": 37
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 25,
+              "y": 37
+            },
+            "end": {
+              "x": 25,
+              "y": 16
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 25,
+              "y": 16
+            },
+            "end": {
+              "x": 10,
+              "y": 16
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          },
+          {
+            "type": "LINE",
+            "start": {
+              "x": 10,
+              "y": 16
+            },
+            "end": {
+              "x": 10,
+              "y": 50
+            },
+            "bulge": 0,
+            "layer": "svg",
+            "color": 7
+          }
+        ],
+        "layers": [
+          {
+            "name": "svg",
+            "color": 7,
+            "segment_count": 6
+          }
+        ],
+        "bbox": {
+          "min_x": 10,
+          "min_y": 16,
+          "max_x": 44,
+          "max_y": 50
+        },
+        "unit_scale": 1,
+        "warnings": [],
+        "objects": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "object_meta": [
+          {
+            "id": 1,
+            "closed": true,
+            "layer": "svg",
+            "color": 7,
+            "bbox": {
+              "min_x": 10,
+              "min_y": 16,
+              "max_x": 44,
+              "max_y": 50
+            }
+          }
+        ],
+        "unit_status": "physical",
+        "unit_source": "width='60mm', height='60mm'"
+      },
+      "fileTransform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "rotateDeg": 0,
+        "scale": 1,
+        "mirrorX": false,
+        "mirrorY": false
+      }
+    }
+  ],
+  "visibleLayers": [],
+  "selectedEntities": [],
+  "stock": {
+    "visible": true,
+    "mode": "manual",
+    "margin": 5,
+    "thickness": 5,
+    "customX": 70,
+    "customY": 70,
+    "offsetX": 0,
+    "offsetY": 0,
+    "offsetZ": 0
+  },
+  "tools": [
+    {
+      "id": 1,
+      "name": "QA 2 mm endmill",
+      "kind": "endmill",
+      "diameter": 2,
+      "flutes": 2,
+      "speed": 18000,
+      "plungeRate": 100,
+      "feedRate": 800,
+      "coolant": "off",
+      "physicalId": "alpha31-software-fixture-tool",
+      "fluteLengthMm": 12
+    }
+  ],
+  "machine": {
+    "unit": "mm",
+    "mode": "mill",
+    "comments": true,
+    "arcs": true,
+    "toolchangeStrategy": "manual_m0_pause",
+    "fastMoveZ": 5,
+    "accel": {
+      "x": 250,
+      "y": 250,
+      "z": 250
+    },
+    "toolchangeS": 5,
+    "rapidSpeed": 5000,
+    "workArea": {
+      "x": 200,
+      "y": 300,
+      "z": 50
+    },
+    "physicalId": "alpha31-software-fixture-machine",
+    "gcodeDialect": "linuxcnc"
+  },
+  "operations": [
+    {
+      "id": 1,
+      "name": "ALPHA-3.2 scoped pocket",
+      "enabled": true,
+      "toolId": 1,
+      "sourceCombine": "auto",
+      "sourceLayers": [
+        "svg"
+      ],
+      "kind": "pocket",
+      "depth": -0.5,
+      "startDepth": 0,
+      "step": null,
+      "offset": "outside",
+      "pocketStrategy": "cascade",
+      "tabWidthMode": "material_v1",
+      "cutDirection": "conventional",
+      "finishCutDirection": "conventional",
+      "plunge": {
+        "kind": "direct"
+      },
+      "xyOverlap": 0.5,
+      "stages": {
+        "contract": "pocket_finishing_v2",
+        "main": {
+          "tool_id": 1,
+          "rpm": 18000,
+          "feed_mm_min": 811,
+          "plunge_mm_min": 111,
+          "depth_per_pass_mm": 0.25
+        },
+        "finishing": {
+          "cutting": {
+            "tool_id": 1,
+            "rpm": 18000,
+            "feed_mm_min": 413,
+            "plunge_mm_min": 113,
+            "depth_per_pass_mm": 0.2
+          },
+          "lateral_allowance_mm": 0,
+          "floor_allowance_mm": 0.1,
+          "scope": "floor_only"
+        }
+      },
+      "finishToolId": 1
+    }
+  ],
+  "fixtures": [],
+  "textLayers": []
+}

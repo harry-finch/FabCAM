@@ -1,0 +1,1651 @@
+{
+  "baseSha": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+  "uncommitted": true,
+  "nativeExecutableSha256": "c4bb5e3fffe1cf3e754c892fed90d4208b251ae69ab78d65b94b66e7443a4c46",
+  "wasmSha256": "6e5e1b019c69f11a456ea83925cb85ece98ce8dae4cd3481ad747092bbdd35c0",
+  "cases": [
+    {
+      "name": "rectangle-cascade-walls_only",
+      "requestSha256": "8a8c6cfa94cc9463435b8276b4e81a005def3b02fc0008d7360b16eb5f8a36bd",
+      "accepted": true,
+      "nativeMs": 472.93420799999996,
+      "oldReadersRefused": true,
+      "programSha256": "9955b9b2e35c65147f848bbc0a5c9e83dd4147cd36285c47f10c61e09ff9c527",
+      "moves": 137,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 117
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 18
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-cascade-floor_only",
+      "requestSha256": "c4de6f629bafabc8060675cbeb8c0dec3ea8dd1fcd2f494bc112eed8cadbaa60",
+      "accepted": true,
+      "nativeMs": 16.46637499999997,
+      "oldReadersRefused": true,
+      "programSha256": "b6ef577543d53974a6a615fe86b74a4b0a4a2d15aa93b93b10cce6610d6b08ba",
+      "moves": 190,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 117
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 71
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-cascade-walls_and_floor",
+      "requestSha256": "2d4f30d309e2ec71e48dd93a90df811f47df840c02b1b4cea2e619cc502f38e9",
+      "accepted": true,
+      "nativeMs": 17.38854200000003,
+      "oldReadersRefused": true,
+      "programSha256": "fc4f7f00cdfc1ae4ea86abeae3b5eccb9c8634a3e83f6b5deea0f43d38cc4408",
+      "moves": 281,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 117
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 162
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-zigzag-walls_only",
+      "requestSha256": "3e67d208ec61852dd8be8754a9fd7ad4e182cac97e0382198861f0cd14f47d4d",
+      "accepted": true,
+      "nativeMs": 10.89754199999993,
+      "oldReadersRefused": true,
+      "programSha256": "98f8c14188486d814cd03fcbf8d1cd2c5b08c8639d670d2fc25bddf8297390cc",
+      "moves": 107,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 87
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 18
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-zigzag-floor_only",
+      "requestSha256": "2dc3021c9dc33ab7dc4c80dfb6bace049ed6696a5ebefb539d6f61ae70d7158f",
+      "accepted": true,
+      "nativeMs": 9.32016699999997,
+      "oldReadersRefused": true,
+      "programSha256": "fe2e6096d98c736f7414c57b738030709551297e18d5e79e1c3f6058787f5e19",
+      "moves": 135,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 87
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 46
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-zigzag-walls_and_floor",
+      "requestSha256": "b9c87ec40f8e6e1a4a3edc5389d60f598958da9560411cb250a6cf7c65c72ac6",
+      "accepted": true,
+      "nativeMs": 10.860124999999925,
+      "oldReadersRefused": true,
+      "programSha256": "551f4f86abc25cf2ec312d93329476c4b4d6d59aed9253682f366d8c54ca1f1f",
+      "moves": 218,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 87
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 129
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-spiral-walls_only",
+      "requestSha256": "9ad0baeb987832369228497922563e8552ce3bed90cec90016a6313b81c4a322",
+      "accepted": true,
+      "nativeMs": 10.564834000000019,
+      "oldReadersRefused": true,
+      "programSha256": "8ee0919797341b39d8e86086a7176e52797dcdb6c1a432d5509ce5837e4aa102",
+      "moves": 116,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 96
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 18
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-spiral-floor_only",
+      "requestSha256": "e5d594c6226a56be61411fef59e6f62ba8407eaea8e47b168a3a6b9a050b19fc",
+      "accepted": true,
+      "nativeMs": 13.12012500000003,
+      "oldReadersRefused": true,
+      "programSha256": "2403cf0b880c1178df9be954da6e2d33702d38203155dfa28b49226b3ecd28b1",
+      "moves": 148,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 96
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 50
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rectangle-spiral-walls_and_floor",
+      "requestSha256": "8a131dd9cb87dc4eeb989739eb0a711385ef80e3764defab87f9dd9423beb6a2",
+      "accepted": true,
+      "nativeMs": 12.010499999999979,
+      "oldReadersRefused": true,
+      "programSha256": "17673ae7bd14734af7745662390464d2cf11a6425e8ce673ee76bce8cb5abc2d",
+      "moves": 239,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 96
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 141
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-cascade-walls_only",
+      "requestSha256": "ee9c38d1ef31f77fbe7ffc48f39ec8ac07e58946a82567fd7eb5f35b0c45a5b4",
+      "accepted": true,
+      "nativeMs": 27.938666000000012,
+      "oldReadersRefused": true,
+      "programSha256": "7a9a24d2952dc5fbf92dd36882a59e393e7f3957db89b2c16618fbed787c0a8e",
+      "moves": 137,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 117
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 18
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-cascade-floor_only",
+      "requestSha256": "988a5b0787aa3ee5729776997a89fd098bb636aab7f841cca5d5c7a167a6e8f2",
+      "accepted": true,
+      "nativeMs": 40.56754100000012,
+      "oldReadersRefused": true,
+      "programSha256": "3c0c960f4cb24f71de1fd0e46d370070695552671abe3d4ba661061d2f3b5cb6",
+      "moves": 190,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 117
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 71
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-cascade-walls_and_floor",
+      "requestSha256": "aadbf9e48c94e37cb8eddeef127c1c6798505beefc6e4a7ab158fad892022f68",
+      "accepted": true,
+      "nativeMs": 34.34979199999998,
+      "oldReadersRefused": true,
+      "programSha256": "baade65c424a7aa72af4442299f76235915f91fc96ea623b0efcdb99a26af1f3",
+      "moves": 281,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 117
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 162
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-zigzag-walls_only",
+      "requestSha256": "13861c02c75960f08b3d955244b3e266be381baf05b2dbfe14fc6fdc90884f57",
+      "accepted": true,
+      "nativeMs": 11.31879200000003,
+      "oldReadersRefused": true,
+      "programSha256": "58e66d9c90870b904206831f4d2be7a3a0c60391f91cb8d958ad4fdcf0f24b1c",
+      "moves": 144,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 124
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 18
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-zigzag-floor_only",
+      "requestSha256": "a9d99f4f082536c91c7b59122cf7ef3ad764f0fe2d5682ff246ff2be58459945",
+      "accepted": true,
+      "nativeMs": 12.288041000000021,
+      "oldReadersRefused": true,
+      "programSha256": "281750c0ea1ec5deff7a4fbbed2351e2d4ded3eec4aed0243916cb7e5797c397",
+      "moves": 196,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 128
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 66
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-zigzag-walls_and_floor",
+      "requestSha256": "13b0686d1704c773cd2ad41c642c27b834a8187c5819c7baf823453666cb5369",
+      "accepted": true,
+      "nativeMs": 14.130292000000054,
+      "oldReadersRefused": true,
+      "programSha256": "f7f5136160b369139922f25558fab81e6fd726eab1f2377c97867b3d9f80f2b2",
+      "moves": 315,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 124
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 189
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-spiral-walls_only",
+      "requestSha256": "b1ee79717c189b385f967811a5c444b4a720721613ac7ffc0ee008ffeae97944",
+      "accepted": true,
+      "nativeMs": 15.356874999999945,
+      "oldReadersRefused": true,
+      "programSha256": "4396d4378137a1608b60fa0ac0792bae7abf00508fcb9ef3890e2f494a9b418b",
+      "moves": 116,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 96
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 18
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-spiral-floor_only",
+      "requestSha256": "a6a145190f1f1856bcca3558ee5a4a7bfe022fa0d9ba1f8de02d6bd565925218",
+      "accepted": true,
+      "nativeMs": 30.402417000000014,
+      "oldReadersRefused": true,
+      "programSha256": "7725ca6096385734d4c78c3ab00fe2e0e2b62f480bf7c639ade94d411692fb8a",
+      "moves": 148,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 96
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 50
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rotated-spiral-walls_and_floor",
+      "requestSha256": "14523406b128a3af87468b5a92ea5a36c69282c18534a79003e3853530033c49",
+      "accepted": true,
+      "nativeMs": 26.397915999999896,
+      "oldReadersRefused": true,
+      "programSha256": "4ad2e2d007f1c24b589696f8e52678de1a6266552d565e6923135efd6fd04f7b",
+      "moves": 239,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 96
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 141
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-cascade-walls_only",
+      "requestSha256": "34829cd3f9e39ede961af6c6f1e41da989e2884c19c6b4a632d9f8c4910282b1",
+      "accepted": true,
+      "nativeMs": 22.861417000000074,
+      "oldReadersRefused": true,
+      "programSha256": "17a2669a65b882b0dd7a6b1d969eeda3e942a94fe1bd58d5f429abf260aaadcd",
+      "moves": 127,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 110
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 15
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-cascade-floor_only",
+      "requestSha256": "37f5524a5536ffdc88c7ff7914cfca26ec1874054d6457911d27b40bac7b3bac",
+      "accepted": true,
+      "nativeMs": 23.31879200000003,
+      "oldReadersRefused": true,
+      "programSha256": "715cb7bf5fa5e54823b873fe70ed6bbf8991b3be4c59acbb8ba87f85860a9f32",
+      "moves": 181,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 110
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 69
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-cascade-walls_and_floor",
+      "requestSha256": "ef873acab0c52f0410ca6fb6b2c030e5aa4e1701b44aa420669aa071af11f8e9",
+      "accepted": true,
+      "nativeMs": 23.85570800000005,
+      "oldReadersRefused": true,
+      "programSha256": "8e3bbd23e905e83b7ebc73751ebaa1903293607615b8f2f8637c94ddc9f9d578",
+      "moves": 262,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 110
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 150
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-zigzag-walls_only",
+      "requestSha256": "7a7f9b70b59512512a98f514a672d2d897e2f3317c2616dccd729952b93f2bc1",
+      "accepted": true,
+      "nativeMs": 11.746875000000045,
+      "oldReadersRefused": true,
+      "programSha256": "f20b3786a18c5448192012b7e20d4f2107ae98faedac93874c1975e3c8ebe555",
+      "moves": 147,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 130
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 15
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-zigzag-floor_only",
+      "requestSha256": "a12e2abc21882ef2bd1783b6904aa90bf8d445e1f0d991e6048e467c949e74d6",
+      "accepted": true,
+      "nativeMs": 12.79995800000006,
+      "oldReadersRefused": true,
+      "programSha256": "e96b9aab91d646c90dd510d38a1d9e9cef8f5dc375c42dfec88dfcccfc6c5720",
+      "moves": 199,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 130
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 67
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-zigzag-walls_and_floor",
+      "requestSha256": "9afcf0b7ec3545b6011ac5485e80675866614598ed335b33f27ff22ab2a7340f",
+      "accepted": true,
+      "nativeMs": 14.731041999999889,
+      "oldReadersRefused": true,
+      "programSha256": "567775ed52541f694eed8b65ff876f8c127336d9fd05319313f265144951822e",
+      "moves": 324,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 130
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 192
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-spiral-walls_only",
+      "requestSha256": "776360ae988662a58d5b91e6658581043dcbf6f623e2adf1e6830e08422276b2",
+      "accepted": true,
+      "nativeMs": 14.038708000000042,
+      "oldReadersRefused": true,
+      "programSha256": "9742f1307d45a1a50ea02c0a5e8b651f0fafbe0912255b89c1c609c00181ea4b",
+      "moves": 103,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 86
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 15
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-spiral-floor_only",
+      "requestSha256": "46ad71f9e2cef2b44b334d45789dd0171e17d475c12b4585abe131ea4712fa16",
+      "accepted": true,
+      "nativeMs": 13.985666000000037,
+      "oldReadersRefused": true,
+      "programSha256": "ef78754729e9b0bea34a67adace18c1393aa457a694aa2e5d55815960841952f",
+      "moves": 133,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 86
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 45
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "triangle-spiral-walls_and_floor",
+      "requestSha256": "6205886ec5647afd9ce5fd508fd9dbc61b3f7269be9df0725d99ebb4d452065d",
+      "accepted": true,
+      "nativeMs": 16.61675000000014,
+      "oldReadersRefused": true,
+      "programSha256": "4df99fef41e9d07f089f21555058ac59e82bc70fd1b6c9f008337a3779776efa",
+      "moves": 214,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 86
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 126
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-cascade-walls_only",
+      "requestSha256": "86e0c823500690bce309306b9b876fb47adcd54075db68633fe4ac4e4e5a20f6",
+      "accepted": true,
+      "nativeMs": 41.87970799999994,
+      "oldReadersRefused": true,
+      "programSha256": "06768c004a402b9bef88212deb7a9c655a5a17485b8669b1f1438156806e192e",
+      "moves": 216,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 21
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-cascade-floor_only",
+      "requestSha256": "1ec089864347c8e452e516fc5ce9672b7b0e9df64ed79370d64774051bdf2506",
+      "accepted": true,
+      "nativeMs": 39.6840000000002,
+      "oldReadersRefused": true,
+      "programSha256": "1a582201ce861fdc1c9f6246622e3dfda55784427b15b452eef36f64898ddb81",
+      "moves": 310,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 115
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-cascade-walls_and_floor",
+      "requestSha256": "d537b518477ccc1a2359fa44890a8a392c40946490278dd6d702528477630520",
+      "accepted": true,
+      "nativeMs": 41.69325000000026,
+      "oldReadersRefused": true,
+      "programSha256": "7147402dd7dccf53a3286b9e8f9f2731807aa2917ccd598b238e70ba5647164b",
+      "moves": 465,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 270
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-zigzag-walls_only",
+      "requestSha256": "9cdf71f3a4857f1e9d75f4f71e3bc3bb77eb3a01f59937788b2ef1faf9c2d49b",
+      "accepted": true,
+      "nativeMs": 13.603207999999995,
+      "oldReadersRefused": true,
+      "programSha256": "f1ba3ae69826cbd3aa2d5670c0b7431dd22b9e18d9bb3aab2ff4c6af700e609f",
+      "moves": 161,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 138
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 21
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-zigzag-floor_only",
+      "requestSha256": "a28651303437ba14d2bad9c30e0bb00411cbb170399c5e2a8f03592d0f25c306",
+      "accepted": true,
+      "nativeMs": 13.80233300000009,
+      "oldReadersRefused": true,
+      "programSha256": "4b6ce6b9fefa457448a94b9c7813993bf15d4b528341b57dea1a53be695a647e",
+      "moves": 211,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 138
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 71
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-zigzag-walls_and_floor",
+      "requestSha256": "31660a1d2dd3d49b48376af1cadb4f550589d258cdda449818ecb654f396063d",
+      "accepted": true,
+      "nativeMs": 16.653290999999626,
+      "oldReadersRefused": true,
+      "programSha256": "703a3b91f2b368fc92e0b52fbf1774f3f054b3c924ecaa4694ecc525b7901a71",
+      "moves": 344,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 138
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 204
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-spiral-walls_only",
+      "requestSha256": "29d899151de50553227063910d2409c4080582c447f40d3fa93266e170910eb8",
+      "accepted": true,
+      "nativeMs": 18.701916999999867,
+      "oldReadersRefused": true,
+      "programSha256": "b432e4ddeeba91b107cd5708bfcbf7e95415d086767c5327ff9501af01ef84c1",
+      "moves": 183,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 160
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 21
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-spiral-floor_only",
+      "requestSha256": "f19657e1046f6973f3c1454c35539dd0fd7714d6b804850ca95de95e0f889284",
+      "accepted": true,
+      "nativeMs": 18.69445799999994,
+      "oldReadersRefused": true,
+      "programSha256": "71209ab3ca6b974f126c66307a4ef43bbc78c24a4d8b2a6fc2564e499edbbdeb",
+      "moves": 244,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 160
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 82
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "convex-spiral-walls_and_floor",
+      "requestSha256": "a6e39b0c83343f7cc9eae6d070c2064b540286ebf53e73023ab99b71075dc716",
+      "accepted": true,
+      "nativeMs": 22.367833000000246,
+      "oldReadersRefused": true,
+      "programSha256": "8f83f4c0065a4c75de5615dc63dce1ccf00bea31d3792e8f9ef7e6a5a7d4ccb6",
+      "moves": 399,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 160
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 237
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "concave-cascade-walls_only",
+      "requestSha256": "b8a8023e58c17fc2c662832298173e0c7c662f01a48e5135285a788d7bf66996",
+      "accepted": true,
+      "nativeMs": 319.1368749999997,
+      "oldReadersRefused": true,
+      "programSha256": "f034722b2325a2c95ab40d8febb92949e6f11b0753e1ae98b2acb62d42174044",
+      "moves": 6304,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 6260
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 42
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "concave-cascade-floor_only",
+      "requestSha256": "cfe04e0280cabfb3b4427cbecea6c8326d916341d2161bf8b8ec8a1b3b45322c",
+      "accepted": true,
+      "nativeMs": 366.2995000000001,
+      "oldReadersRefused": true,
+      "programSha256": "02c361137788035a32826f8df1141a5943443ce268aad2acbe140e218cd90f82",
+      "moves": 10093,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 6720
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 3371
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "concave-cascade-walls_and_floor",
+      "requestSha256": "64a8ca96577d4165adaf3b61d5f82fa9d1a662304f397c0fa9eddfee1ccbbda1",
+      "accepted": true,
+      "nativeMs": 496.45537500000046,
+      "oldReadersRefused": true,
+      "programSha256": "279f22ff0d78a67849eab7acec59f96cb9fa3354c7519517862a29af8a937b67",
+      "moves": 16330,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 6260
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 10068
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "concave-zigzag-walls_only",
+      "requestSha256": "80ac3ce6e28b5af9a811424926040aa9305f9c334d2f5f5ec2df2b621115b329",
+      "accepted": true,
+      "nativeMs": 20.092209000000366,
+      "oldReadersRefused": true,
+      "programSha256": "4f7907e34b54b0be4790fc6c0e3e829d4aed4c84d62103a4af51a9d722d32fd0",
+      "moves": 207,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 163
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 42
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "concave-zigzag-floor_only",
+      "requestSha256": "44616606e8d4d7a6532af86e0a57adf0e04d303e8a81a543ff80f7a3bc6f50d4",
+      "accepted": true,
+      "nativeMs": 19.516625000000204,
+      "oldReadersRefused": true,
+      "programSha256": "e202d35ed590d31ef1499e25f5e045b6bdac731d299888856f65d169cf5b7346",
+      "moves": 243,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 159
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 82
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "concave-zigzag-walls_and_floor",
+      "requestSha256": "e942bb776fc63a48e2a41ef0fa0078451a707830299bb80564733918fac34e98",
+      "accepted": true,
+      "nativeMs": 23.67883299999994,
+      "oldReadersRefused": true,
+      "programSha256": "0e4ac9e1207c2adb6b070141fb41679bb2e76ad26d5154a0bd505052d3c86f81",
+      "moves": 402,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 163
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 237
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "concave-spiral-walls_only",
+      "requestSha256": "5fd1e9659b3573350bd9b8a838f747f5808377f84aa6eb913b3b535d591a4e6c",
+      "accepted": false,
+      "nativeMs": 216.9772499999999,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 2,
+      "refusal": "Error: operation #1: finishing proof refused: Pocket decoded planar proof budget exceeded"
+    },
+    {
+      "name": "concave-spiral-floor_only",
+      "requestSha256": "1432fb1324ce5464ae163b5c0ca743e75be4c50f7632d7811c7b8e406c6e9312",
+      "accepted": false,
+      "nativeMs": 207.61995800000022,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 2,
+      "refusal": "Error: operation #1: finishing proof refused: Pocket decoded planar proof budget exceeded"
+    },
+    {
+      "name": "concave-spiral-walls_and_floor",
+      "requestSha256": "d96746fc167b2e93f2f6cc079b00be0ed6ea045eab31e37d774cc571707fdb03",
+      "accepted": false,
+      "nativeMs": 291.3016660000003,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 2,
+      "refusal": "Error: operation #1: finishing proof refused: Pocket decoded planar proof budget exceeded"
+    },
+    {
+      "name": "irregular_concave-cascade-walls_only",
+      "requestSha256": "78a06c3d3f2d521eb3a2c83a754486d4ce5929cf3aaf14db1cf6eff2a684dff9",
+      "accepted": true,
+      "nativeMs": 1035.451333,
+      "oldReadersRefused": true,
+      "programSha256": "351cfc83e17ce7aace920e793d1d773abf1a4f450f462e8e43b68fc980d2cfee",
+      "moves": 9412,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 9365
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 45
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "irregular_concave-cascade-floor_only",
+      "requestSha256": "eac924ce4755b41fbdb69970abde4f8d0b22a9c196204b39351acabb59982392",
+      "accepted": true,
+      "nativeMs": 1469.9782090000008,
+      "oldReadersRefused": true,
+      "programSha256": "7ec21c8547ad2a0c95af9a0e74d20de3690d2f6a64ec9a82ca71678dbb1026cf",
+      "moves": 14308,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 9529
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 4777
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "irregular_concave-cascade-walls_and_floor",
+      "requestSha256": "0fe0c4769d532b6f3eef4b8beb6a77777844dc3be29a614b2a1a27515343c0eb",
+      "accepted": true,
+      "nativeMs": 1155.0572080000002,
+      "oldReadersRefused": true,
+      "programSha256": "543120a9d85ce55a251c42f959bf16e480b5140803757ebd99792d63b063fe5f",
+      "moves": 23647,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 9365
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 14280
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "irregular_concave-zigzag-walls_only",
+      "requestSha256": "6803aa9bf842f0a2b6d4cd2446a780bd2a5ec7bb97afc48af99fc58e16331eb0",
+      "accepted": true,
+      "nativeMs": 21.048541000000114,
+      "oldReadersRefused": true,
+      "programSha256": "662b64a2de2dc07ef6abe28cbb2fc0cbebe12feec798dda8d8b28185f3a92b00",
+      "moves": 237,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 190
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 45
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "irregular_concave-zigzag-floor_only",
+      "requestSha256": "d0117e0dd0c69c884086fe68c82787781d8ccfc1c05ecb8306e24aea7b033a0a",
+      "accepted": true,
+      "nativeMs": 21.866791000000376,
+      "oldReadersRefused": true,
+      "programSha256": "34b7b8d1d2738a42da60a8cbba0989ca4ddfb111e1d0bc04f75bb2208149c18e",
+      "moves": 295,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 190
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 103
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "irregular_concave-zigzag-walls_and_floor",
+      "requestSha256": "74ff27c6560f39ceb7cc21e99d446b8d8970a2752b70fb0b38cb478af2ee7ed8",
+      "accepted": true,
+      "nativeMs": 25.966042000000016,
+      "oldReadersRefused": true,
+      "programSha256": "451707bb932c8c0cea4a8ca4a2f1f0d5d0cc6ab081fc1b6d2e6776be5d575851",
+      "moves": 468,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 190
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 276
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "irregular_concave-spiral-walls_only",
+      "requestSha256": "d986a8f14ce444e14150b7b4923828f91377dc29016212df1c75c84c31fc9a48",
+      "accepted": false,
+      "nativeMs": 716.168334,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 2,
+      "refusal": "Error: operation #1: finishing proof refused: Pocket decoded planar proof budget exceeded"
+    },
+    {
+      "name": "irregular_concave-spiral-floor_only",
+      "requestSha256": "72969aa0a389b144b2751eb1fd8a4a069da4d1efd4c7b8a74425c864e8752db6",
+      "accepted": false,
+      "nativeMs": 475.5577919999996,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 2,
+      "refusal": "Error: operation #1: finishing proof refused: Pocket decoded planar proof budget exceeded"
+    },
+    {
+      "name": "irregular_concave-spiral-walls_and_floor",
+      "requestSha256": "158149d5d4accf2a23cb3dbb7c1ced04d426df40d5342789af93a8a42ffeab74",
+      "accepted": false,
+      "nativeMs": 807.844165999999,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 2,
+      "refusal": "Error: operation #1: finishing proof refused: Pocket decoded planar proof budget exceeded"
+    },
+    {
+      "name": "grbl-walls_only",
+      "requestSha256": "b8c33c0c460dab839bacd92f725b2ae476c9fb1b1e69ae487ec680de67ecfad1",
+      "accepted": true,
+      "nativeMs": 41.15024999999878,
+      "oldReadersRefused": true,
+      "programSha256": "9a52ceeebcf5ef0b1ab06bfc66f7b565f8be8284d9631289e530739f09abbbe2",
+      "moves": 216,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 21
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "grbl-floor_only",
+      "requestSha256": "8a1e0b68e564104b641997b2ae72fe8f4be67327d7c3022694e0aa85cac0992d",
+      "accepted": true,
+      "nativeMs": 38.92258299999958,
+      "oldReadersRefused": true,
+      "programSha256": "d0074fe1fb0723b993544c661c4ca333de1a30827bacdd5c9e3a628913417a29",
+      "moves": 310,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 115
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "grbl-walls_and_floor",
+      "requestSha256": "78596b31b3040cb86f8dc5940951ef01299d880dde48ff15f67c1bbeae08553a",
+      "accepted": true,
+      "nativeMs": 41.04670900000201,
+      "oldReadersRefused": true,
+      "programSha256": "b1b0d4d20898987d0bb4604af89a85ce34580cdd10984d758c2d1bcb60e148ed",
+      "moves": 465,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 270
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "cps-walls_only",
+      "requestSha256": "a532959e70d524389ce88ae18ebb7b93ac3d67b898b5e92ffc90d68a9ec48ae9",
+      "accepted": true,
+      "nativeMs": 374.9202089999999,
+      "oldReadersRefused": true,
+      "programSha256": "bbb379caa9bb542f6817f9bed9f9a1cfe217269af9b999b17ad4923b30983164",
+      "moves": 213,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 192
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 21
+        }
+      ],
+      "wasmCps": "Not available in canonical browser WASM; native software only"
+    },
+    {
+      "name": "cps-floor_only",
+      "requestSha256": "7947270ca283bc9d0fab69361e19ffa7cffaed03364e49415daddbf208186117",
+      "accepted": true,
+      "nativeMs": 431.0645000000004,
+      "oldReadersRefused": true,
+      "programSha256": "58b33653da53ba38eed15c872aeb2b7d79a125e31e47433ace8e6679cef4d6f6",
+      "moves": 307,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 192
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 115
+        }
+      ],
+      "wasmCps": "Not available in canonical browser WASM; native software only"
+    },
+    {
+      "name": "cps-walls_and_floor",
+      "requestSha256": "3cf67cb736047d47158152e2ed4bd590c748718bcbc464608c3dad965fdd1d93",
+      "accepted": true,
+      "nativeMs": 509.5644169999978,
+      "oldReadersRefused": true,
+      "programSha256": "a7a48425e0dbc8cdfce973ef3c87781c14e225dd3e94b53d34543df30c710a1b",
+      "moves": 462,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 192
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 270
+        }
+      ],
+      "wasmCps": "Not available in canonical browser WASM; native software only"
+    },
+    {
+      "name": "missing-scope",
+      "requestSha256": "1f22f79d4116c0feaff23b77c2dea246a8a30c06d4ce244b98e60ca877101c8e",
+      "accepted": false,
+      "nativeMs": 4.5459999999984575,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 0,
+      "refusal": "    missing field `scope` at line 148 column 9"
+    },
+    {
+      "name": "unknown-scope",
+      "requestSha256": "d2044e0217eb698efa586d7fc2adbde71b0387adef4114cd1da915726140f4c3",
+      "accepted": false,
+      "nativeMs": 4.524792000000161,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 0,
+      "refusal": "    unknown variant `automatic`, expected one of `walls_only`, `floor_only`, `walls_and_floor` at line 149 column 9"
+    },
+    {
+      "name": "contradiction",
+      "requestSha256": "cb8b8a7e080e3f1cee45d78a1dd5bc9751efcb34941735728acf860749fe105a",
+      "accepted": false,
+      "nativeMs": 4.165124999999534,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 0,
+      "refusal": "Error: Finishing scope contradicts the authored lateral/floor allowance; explicitly set the irrelevant allowance to zero"
+    },
+    {
+      "name": "disabled-unknown",
+      "requestSha256": "cfc0673031eafe4770468c7a31094996bf9ef247602717a8ea80ef4e34fb69c9",
+      "accepted": false,
+      "nativeMs": 4.304667000000336,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 0,
+      "refusal": "    unknown variant `automatic`, expected one of `walls_only`, `floor_only`, `walls_and_floor` at line 149 column 9"
+    },
+    {
+      "name": "malformed-main",
+      "requestSha256": "f4e8f72379493d72486313aea2156a8769bc1679cce0bda20313c28eabff7485",
+      "accepted": false,
+      "nativeMs": 4.340958000000683,
+      "oldReadersRefused": true,
+      "progressEventsBeforeRefusal": 0,
+      "refusal": "    unknown field `extra`, expected one of `tool_id`, `rpm`, `feed_mm_min`, `plunge_mm_min`, `depth_per_pass_mm` at line 150 column 9"
+    },
+    {
+      "name": "null-finishing",
+      "requestSha256": "3ceb5ababf8e74f2769312e570c5a8a6e52a040f7e7c9de458e74f2e1a0b5db0",
+      "accepted": true,
+      "nativeMs": 29.427625000000262,
+      "oldReadersRefused": true,
+      "programSha256": "fffad2fda0ff211c44a62592c51341fa04ec2112cf54e2927feb242c4a1ccbf4",
+      "moves": 195,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "distinct-tool",
+      "requestSha256": "4f9109b0b73767372ffc19fbb42a7d3bfe546be9969668baca443b48566ae489",
+      "accepted": true,
+      "nativeMs": 23.041832999999315,
+      "oldReadersRefused": true,
+      "programSha256": "13d85eeec113c2fb48d0c74adfc4a1154f1322e816ac69075bb09a1bf9e239be",
+      "moves": 570,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 193
+        },
+        {
+          "stage": "finishing",
+          "tool": 2,
+          "moves": 375
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "circle-walls_only",
+      "requestSha256": "686ce1c63d74787f8b2cc900c9ff5fba11ecc01d78251c3078fb0bdb22e57e1c",
+      "accepted": true,
+      "nativeMs": 984.0455829999992,
+      "oldReadersRefused": true,
+      "programSha256": "ef66b2e1b1938991456eb9a4a6d5bfb1630141e2cc55cb86644d8d4e7410e442",
+      "moves": 194,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 114
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 78
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "circle-floor_only",
+      "requestSha256": "32d5ac82d7fec6a9f04906b7df5c3bd2ec6c46862b94d04d1cc7223ce3ea877b",
+      "accepted": true,
+      "nativeMs": 813.4365419999995,
+      "oldReadersRefused": true,
+      "programSha256": "850d0ee9e47a628eda66d5a425488c1795a238190d76b477c0f8c81465877010",
+      "moves": 175,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 114
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 59
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "circle-walls_and_floor",
+      "requestSha256": "4a37010c75b75ac93b61cba9ccb92ca4964a5f13e5b874b6b7bddcb24b78e740",
+      "accepted": true,
+      "nativeMs": 1025.1652500000018,
+      "oldReadersRefused": true,
+      "programSha256": "cb59ec7f4b7b1b1ad72059100f88ba0430ed0da4e057a8b7cab356d9efc4a9b2",
+      "moves": 284,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 114
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 168
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rounded-walls_only",
+      "requestSha256": "e4b0ed75b377f0b53af156d5f0c577b76aa209321399b9812171b80371a95b48",
+      "accepted": true,
+      "nativeMs": 326.635624999999,
+      "oldReadersRefused": true,
+      "programSha256": "18dfd54ab31f14b1c1987bce4a2b0ce56ea61ed420a35551769dc05545b32a98",
+      "moves": 192,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 100
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 90
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rounded-floor_only",
+      "requestSha256": "cf0f8c3efd5049d32f9682b79e9adffa2c2898ea99acd1c72bf223ac96e9b4dc",
+      "accepted": true,
+      "nativeMs": 262.87816699999894,
+      "oldReadersRefused": true,
+      "programSha256": "a06f7eafcd8019803bc0450270dadbd115640d3514570ca49214fc6c3965bcdf",
+      "moves": 157,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 100
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 55
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "rounded-walls_and_floor",
+      "requestSha256": "ec27169fac39994cf9f06a6602a275a446294910e5420c965f498f6ea8369617",
+      "accepted": true,
+      "nativeMs": 305.44520900000134,
+      "oldReadersRefused": true,
+      "programSha256": "927777219b76d452ad61e589800eafcbedb0b2012105f11ce859cc2c06909c39",
+      "moves": 246,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 100
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 144
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "island-walls_only",
+      "requestSha256": "a9297e2484975eaa9abb449a8357de2f9d71a65ede3f2aba7bce4dfddf0808f8",
+      "accepted": true,
+      "nativeMs": 127.41679099999965,
+      "oldReadersRefused": true,
+      "programSha256": "288cf5ee007ce5e7a9eb284483c1284dcf755f15eb048de233e1cb07c288429f",
+      "moves": 1694,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 1284
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 408
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "island-floor_only",
+      "requestSha256": "690e372ba1e7cf0d9d70aab7a0b974fb32137a2a62f360efc3dbc4ce079ef175",
+      "accepted": true,
+      "nativeMs": 119.54212499999994,
+      "oldReadersRefused": true,
+      "programSha256": "18f0eeef6fce4a93c03ccd839e4d30e16607d32ed66b78b4b99847929d5be2cd",
+      "moves": 1381,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 916
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 463
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "island-walls_and_floor",
+      "requestSha256": "5cf444b1cbbfe397ae32000d8eb5121d89b6b53e890d491539e1f399cbe3b070",
+      "accepted": true,
+      "nativeMs": 153.8825829999987,
+      "oldReadersRefused": true,
+      "programSha256": "067971f6d42d5a5cb49fe5fbacf401d7c87f95a9fe0d79b9960495c4d8979c13",
+      "moves": 2654,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 1284
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 1368
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "annulus-walls_only",
+      "requestSha256": "92833a65a3315b472112f5c6bd517a89ccea47ce5817e1a3bda66f780d07cbb4",
+      "accepted": true,
+      "nativeMs": 3592.7873750000035,
+      "oldReadersRefused": true,
+      "programSha256": "fb61b6af34ca5abf032a43a8fcae21b6501231c5ad51282c0aadaddfef912836",
+      "moves": 284,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 114
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 168
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "annulus-floor_only",
+      "requestSha256": "05b01bc26cefcc5d5a19e97ff84cc4f52f6970b5c2071e21b92b0e5eb59a736d",
+      "accepted": true,
+      "nativeMs": 2960.8854580000043,
+      "oldReadersRefused": true,
+      "programSha256": "212f14a6a09bd0843b9b1c96fdb4ec4212fc960c7ac4d7b6136c6665ab17adcd",
+      "moves": 175,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 114
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 59
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    },
+    {
+      "name": "annulus-walls_and_floor",
+      "requestSha256": "0718d3ccba1c25f8969589e8be8535cca35a5a1d5d3e4bae73af51e15d68d5c7",
+      "accepted": true,
+      "nativeMs": 3674.528833000004,
+      "oldReadersRefused": true,
+      "programSha256": "7718fb600afc5ba3e86d890580f32e6bd40c2bc156550f342aae4f674f657029",
+      "moves": 284,
+      "stages": [
+        {
+          "stage": "main",
+          "tool": 1,
+          "moves": 114
+        },
+        {
+          "stage": "finishing",
+          "tool": 1,
+          "moves": 168
+        }
+      ],
+      "nativeWasmStreamTwoSidedExact": true
+    }
+  ],
+  "twoSidedPairs": [
+    {
+      "scope": "walls_only",
+      "requestSha256": "eb6816b8062fe2604dce028bbe386063ccd7dec07a8d439b46d6ed1a825b1bb1",
+      "nativeWasmExact": true,
+      "programs": {
+        "front": {
+          "sha256": "d9bff81a874024a613b8bdd33910129e89743bb76a918bed191e5b32b562fff9",
+          "moves": 216
+        },
+        "back": {
+          "sha256": "59759c3935b8df3f702da32f9c58a62d6d1ed385cd987edde6ffa558e6874024",
+          "moves": 216
+        }
+      }
+    },
+    {
+      "scope": "floor_only",
+      "requestSha256": "1c61e9134c693c5e3c8a52cd3b369aa72be41941d43fa596fd9aa05fd1b19684",
+      "nativeWasmExact": true,
+      "programs": {
+        "front": {
+          "sha256": "c565c7d3867e40ecfa719103bcd492e750a9447e7f3c7dc23740987dca77c0cb",
+          "moves": 310
+        },
+        "back": {
+          "sha256": "4f279a148e3bb3e465df0c0cf5c802b7e40964c7da59e58dc941f3ae96cb15d2",
+          "moves": 310
+        }
+      }
+    },
+    {
+      "scope": "walls_and_floor",
+      "requestSha256": "99185f40431e65bed6c67aa9ce8635afe128e0f84a8b80e18af762b4652861d0",
+      "nativeWasmExact": true,
+      "programs": {
+        "front": {
+          "sha256": "82ebe1df34020df24970e21fcaea62e3323b09e98b605b30f936534ab4eda76a",
+          "moves": 465
+        },
+        "back": {
+          "sha256": "1109a9cffd8a5e416ea99d9783c036474d974921a2142bef41ab6e89945629e7",
+          "moves": 465
+        }
+      }
+    }
+  ],
+  "software_fingerprint_sha256": "62265b79d933d4681d70592e273e33cca9bbbafcb162909a6a3994e9b0650c42",
+  "comparison_policy": {
+    "program": "exact bytes",
+    "native_wasm_coordinates": "absolute <=1e-12 mm for from/to/center xyz only; all other compared fields exact",
+    "old_readers": "Exact archived ALPHA-3.1 CLI and real WASM reject all 79 new-contract requests; strict frontend old-reader preflight retained separately."
+  }
+}
