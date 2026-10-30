@@ -24,6 +24,7 @@ mod halfpipe;
 mod planar_surface;
 mod raster;
 mod stage_coverage;
+pub(super) mod stage_polygon;
 mod staged;
 mod surface_mill;
 pub(in crate::pipeline) use planar_surface::{run_planar_surface_op, validate_planar_surface};

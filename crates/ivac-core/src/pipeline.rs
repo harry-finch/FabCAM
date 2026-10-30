@@ -401,6 +401,8 @@ pub enum PipelineError {
     CpsUnavailable,
     #[error(".cps post failed: {message}")]
     CpsPostFailed { message: String },
+    #[error("operation #{0}: finishing proof refused: {1}")]
+    FinishingProof(u32, String),
     #[error("pipeline cancelled")]
     Cancelled,
 }
@@ -433,6 +435,7 @@ impl PipelineError {
             PipelineError::VCarve(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review V-bit geometry, closed contours, depth and entry limits. No qualified output was generated.")),
             PipelineError::Waterline(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Repair open or ambiguous mesh slices, or change the slice levels. No output generated.")),
             PipelineError::PlanarSurface(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review surfacing zone, flat cutter, depth and work area.")),
+            PipelineError::FinishingProof(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Review this contour, cutter, allowance and fill strategy, or disable Finishing. No qualified program was generated.")),
             PipelineError::AppliedCutting(id, message) => Some(Structured::misconfigured(message.clone()).with_param("op_id", *id).with_hint("Apply or edit complete cutting rates for the current tool roles.")),
             PipelineError::Fixture(message) => Some(Structured::misconfigured(message.clone())),
             PipelineError::WorkOrigin(message) => Some(Structured::misconfigured(message.clone())),
@@ -1126,6 +1129,13 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         execution_path,
     )
     .map_err(|e| PipelineError::AppliedCutting(0, e))?;
+    op_drivers::stage_polygon::verify_output(
+        &project,
+        &objects,
+        &toolpath,
+        &cutting_stages,
+        cancel,
+    )?;
     let mut time_estimate = match &cps_feeds_dwell {
         // IR-derived feeds + dwell: timing never depends on the CPS
         // output text being parseable.
@@ -1255,7 +1265,9 @@ pub enum StreamGcodeError {
 }
 
 /// Stream a project's g-code straight to `writer`, never materializing the
-/// whole program in memory: peak memory is O(largest single op) instead of
+/// whole program in memory for established Main-only/rectangle operations. New
+/// polygon finishing first buffers/decodes/validates the whole result, then writes
+/// those exact bytes; its memory cost matches `run_pipeline`. Otherwise peak memory is O(largest single op) instead of
 /// O(total program) (`ivac-3j1p`). This is the headless "just write the
 /// .gcode" path — it deliberately skips the preview toolpath, the time
 /// estimate, and the toolpath-derived warnings (`out_of_work_area` /
@@ -1276,9 +1288,34 @@ pub enum StreamGcodeError {
 /// [`run_pipeline`] raises; [`StreamGcodeError::Write`] when the sink errors.
 pub fn stream_gcode_to_writer(
     request: PipelineRequest,
-    writer: Box<dyn std::io::Write + Send>,
+    mut writer: Box<dyn std::io::Write + Send>,
 ) -> Result<StreamGcodeOutcome, StreamGcodeError> {
+    // New polygon finishing must pass the final decoded-motion gate BEFORE
+    // any bytes reach the writer. Existing Main-only/rectangle streaming stays
+    // write-through. Only the new capability uses bounded buffered generation.
+    let original = request
+        .project
+        .operations
+        .iter()
+        .any(|op| {
+            op.enabled
+                && op
+                    .params
+                    .stages
+                    .as_ref()
+                    .is_some_and(|s| s.finishing().is_some())
+        })
+        .then(|| request.clone());
     let (prep, mut warnings) = prepare_stream(request)?;
+    if op_drivers::stage_polygon::needs_decoded_gate(&prep.project, &prep.objects) {
+        let response = run_pipeline(original.expect("finishing request preserved"), |_, _, _| {})?;
+        writer.write_all(response.gcode.as_bytes())?;
+        writer.flush()?;
+        return Ok(StreamGcodeOutcome {
+            stats: response.stats,
+            warnings: response.warnings,
+        });
+    }
     let stats_collector = std::cell::RefCell::new((0usize, 0usize, 0usize));
     run_stream_emit(
         &prep,
@@ -1308,11 +1345,36 @@ pub fn stream_gcode_to_writer(
 #[cfg(test)]
 pub(crate) fn stream_gcode_to_writer_capped(
     request: PipelineRequest,
-    writer: Box<dyn std::io::Write + Send>,
+    mut writer: Box<dyn std::io::Write + Send>,
     tee_cap: usize,
     cache: &PipelineCache,
 ) -> Result<StreamGcodeOutcome, StreamGcodeError> {
+    // New polygon finishing must pass the final decoded-motion gate BEFORE
+    // any bytes reach the writer. Existing Main-only/rectangle streaming stays
+    // write-through. Only the new capability uses bounded buffered generation.
+    let original = request
+        .project
+        .operations
+        .iter()
+        .any(|op| {
+            op.enabled
+                && op
+                    .params
+                    .stages
+                    .as_ref()
+                    .is_some_and(|s| s.finishing().is_some())
+        })
+        .then(|| request.clone());
     let (prep, mut warnings) = prepare_stream(request)?;
+    if op_drivers::stage_polygon::needs_decoded_gate(&prep.project, &prep.objects) {
+        let response = run_pipeline(original.expect("finishing request preserved"), |_, _, _| {})?;
+        writer.write_all(response.gcode.as_bytes())?;
+        writer.flush()?;
+        return Ok(StreamGcodeOutcome {
+            stats: response.stats,
+            warnings: response.warnings,
+        });
+    }
     let stats_collector = std::cell::RefCell::new((0usize, 0usize, 0usize));
     run_stream_emit(
         &prep,
@@ -1340,7 +1402,8 @@ pub(crate) fn stream_gcode_to_writer_capped(
 ///
 /// Peak memory is O(toolpath) rather than O(largest op) — but still below the
 /// buffered [`run_pipeline`]'s O(toolpath + joined String), because the program
-/// text is streamed straight to `writer` and never held whole (`ivac-3j1p`).
+/// text is streamed straight to `writer` and never held whole (`ivac-3j1p`),
+/// except new polygon finishing, which uses the buffered decoded safety gate.
 /// The time estimate is a follow-up (`ivac-3j1p.3.2.2` B2); a caller that needs
 /// it today must use [`run_pipeline`].
 #[derive(Debug, Clone)]
@@ -1375,9 +1438,36 @@ pub struct StreamPreviewOutcome {
 /// happen for the emit scope constructed here.
 pub fn stream_gcode_with_preview(
     request: PipelineRequest,
-    writer: Box<dyn std::io::Write + Send>,
+    mut writer: Box<dyn std::io::Write + Send>,
 ) -> Result<StreamPreviewOutcome, StreamGcodeError> {
+    // New polygon finishing must pass the final decoded-motion gate BEFORE
+    // any bytes reach the writer. Existing Main-only/rectangle streaming stays
+    // write-through. Only the new capability uses bounded buffered generation.
+    let original = request
+        .project
+        .operations
+        .iter()
+        .any(|op| {
+            op.enabled
+                && op
+                    .params
+                    .stages
+                    .as_ref()
+                    .is_some_and(|s| s.finishing().is_some())
+        })
+        .then(|| request.clone());
     let (prep, mut warnings) = prepare_stream(request)?;
+    if op_drivers::stage_polygon::needs_decoded_gate(&prep.project, &prep.objects) {
+        let response = run_pipeline(original.expect("finishing request preserved"), |_, _, _| {})?;
+        writer.write_all(response.gcode.as_bytes())?;
+        writer.flush()?;
+        return Ok(StreamPreviewOutcome {
+            stats: response.stats,
+            warnings: response.warnings,
+            toolpath: response.toolpath,
+            gcode_index: response.gcode_index,
+        });
+    }
     let stats_collector = std::cell::RefCell::new((0usize, 0usize, 0usize));
 
     // Tee the emitted lines into an incremental interpreter: the toolpath +

@@ -63,7 +63,7 @@ pub(super) fn run<P: PostProcessor>(
                 if crate::pipeline::cancelled(cancel) {
                     PipelineError::Cancelled
                 } else {
-                    PipelineError::AppliedCutting(op.id, e)
+                    PipelineError::FinishingProof(op.id, e)
                 }
             };
             let selected = crate::pipeline::ordered_selection(op, objects);
@@ -72,7 +72,7 @@ pub(super) fn run<P: PostProcessor>(
                 || !matches!(op.params.plunge, PlungeStrategy::Direct)
             {
                 return Err(fail(
-                    "Finishing proof requires a single unpatterned rectangle with direct entry"
+                    "Finishing proof requires one selected unpatterned contour (no islands) with direct entry"
                         .into(),
                 ));
             }
@@ -100,40 +100,75 @@ pub(super) fn run<P: PostProcessor>(
                     "Finishing proof requires a flat endmill and ordinary depth passes".into(),
                 ));
             }
-            let bounds = super::stage_coverage::rectangle(&objects[selected[0]]).map_err(fail)?;
             let pocket = matches!(op.kind, OpKind::Pocket { .. });
             let radius = tool.effective_diameter() * 0.5;
             let inset = radius + view.params.stock_to_leave_mm;
-            if matches!(
-                op.kind,
-                OpKind::Profile {
-                    offset: ToolOffset::Outside,
-                    ..
-                }
-            ) {
-                super::stage_coverage::prove_outside(bounds, inset, &offsets).map_err(fail)?;
-            } else if pocket
-                || matches!(
+            if let Ok(bounds) = super::stage_coverage::rectangle(&objects[selected[0]]) {
+                if matches!(
                     op.kind,
                     OpKind::Profile {
-                        offset: ToolOffset::Inside,
+                        offset: ToolOffset::Outside,
                         ..
                     }
-                )
-            {
-                let inside = [
-                    bounds[0] + inset,
-                    bounds[1] + inset,
-                    bounds[2] - inset,
-                    bounds[3] - inset,
-                ];
-                super::stage_coverage::prove(inside, radius, &offsets, pocket, cancel)
-                    .map_err(fail)?;
-            } else {
-                return Err(fail(
+                ) {
+                    super::stage_coverage::prove_outside(bounds, inset, &offsets).map_err(fail)?;
+                } else if pocket
+                    || matches!(
+                        op.kind,
+                        OpKind::Profile {
+                            offset: ToolOffset::Inside,
+                            ..
+                        }
+                    )
+                {
+                    let inside = [
+                        bounds[0] + inset,
+                        bounds[1] + inset,
+                        bounds[2] - inset,
+                        bounds[3] - inset,
+                    ];
+                    super::stage_coverage::prove(inside, radius, &offsets, pocket, cancel)
+                        .map_err(fail)?;
+                } else {
+                    return Err(fail(
                     "On-contour finishing is not qualified; choose an explicit compensated side"
                         .into(),
                 ));
+                }
+            } else {
+                let outside = matches!(
+                    op.kind,
+                    OpKind::Profile {
+                        offset: ToolOffset::Outside,
+                        ..
+                    }
+                );
+                if !outside
+                    && !pocket
+                    && !matches!(
+                        op.kind,
+                        OpKind::Profile {
+                            offset: ToolOffset::Inside,
+                            ..
+                        }
+                    )
+                {
+                    return Err(fail("On-contour finishing is not qualified; choose an explicit compensated side".into()));
+                }
+                let polygon =
+                    super::stage_polygon::Polygon::new(&objects[selected[0]]).map_err(fail)?;
+                let paths = super::stage_polygon::planned(&offsets).map_err(fail)?;
+                polygon
+                    .prove(
+                        radius,
+                        inset,
+                        outside,
+                        pocket,
+                        &paths,
+                        super::stage_polygon::PLAN_ERROR,
+                        cancel,
+                    )
+                    .map_err(fail)?;
             }
             if !pocket {
                 let f = stages.finishing().expect("checked");
