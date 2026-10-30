@@ -78,6 +78,44 @@ pub(super) fn build_op_offsets(
     warnings: &mut Vec<PipelineWarning>,
     cancel: Option<&CancelToken>,
 ) -> Result<(Vec<PolylineOffset>, usize), PipelineError> {
+    build_op_offsets_mode(op, project, objects, setup, warnings, cancel, false)
+}
+#[allow(clippy::too_many_arguments, clippy::too_many_lines)]
+pub(super) fn build_op_offsets_mode(
+    op: &Op,
+    project: &Project,
+    objects: &[VcObject],
+    setup: &Setup,
+    warnings: &mut Vec<PipelineWarning>,
+    cancel: Option<&CancelToken>,
+    qualified_pocket: bool,
+) -> Result<(Vec<PolylineOffset>, usize), PipelineError> {
+    // Only scoped finishing opts into error-bounded curve sampling and the
+    // raster domain correction. The ordinary kernel remains the path generator.
+    let mut interpolate = 6usize;
+    if qualified_pocket {
+        for (idx, obj) in objects.iter().enumerate() {
+            if !op_includes_object(op, obj, idx) {
+                continue;
+            }
+            for s in &obj.segments {
+                if s.bulge == 0. {
+                    continue;
+                }
+                let (_, _, _, r) = crate::math::bulge_to_arc(s.start, s.end, s.bulge);
+                let r = r + setup.tool.diameter + op.params.stock_to_leave_mm;
+                let n =
+                    (4. * s.bulge.atan().abs() / (2. * (1. - (0.0005 / r).min(1.)).acos())).ceil();
+                if !n.is_finite() || n > 4096. {
+                    return Err(PipelineError::FinishingProof(
+                        op.id,
+                        "Pocket curve sampling exceeds bounded precision budget".into(),
+                    ));
+                }
+                interpolate = interpolate.max((n as usize).div_ceil(8));
+            }
+        }
+    }
     let _trochoidal_scope = crate::cam::trochoidal::DiagnosticScope::begin();
     if cancelled(cancel) {
         return Err(PipelineError::Cancelled);
@@ -357,7 +395,10 @@ pub(super) fn build_op_offsets(
             let regions = combine_source_regions(objects, &selected, combine);
             let region_tabs =
                 combined_region_tabs(effective_op, &regions, &selected, objects, &tabs_by_object)?;
-            let pocket_emit = pocket_emit_for(strategy, effective_op);
+            let pocket_emit = match (qualified_pocket, pocket_emit_for(strategy, effective_op)) {
+                (true, PocketEmit::Zigzag { angle_deg }) => PocketEmit::ScopedZigzag { angle_deg },
+                (_, e) => e,
+            };
             for (region_no, region) in regions.iter().enumerate() {
                 if cancelled(cancel) {
                     return Err(PipelineError::Cancelled);
@@ -384,7 +425,7 @@ pub(super) fn build_op_offsets(
                     &synthetic,
                     radius,
                     pocket_for_kind.is_some_and(|p| p.pocket_nocontour),
-                    6,
+                    interpolate,
                     pocket_emit,
                     &inflated_holes,
                     xy_step,
@@ -441,7 +482,13 @@ pub(super) fn build_op_offsets(
                 if selected_depths[idx] % 2 == 1 {
                     continue;
                 }
-                let pocket_emit = pocket_emit_for(strategy, effective_op);
+                let pocket_emit = match (qualified_pocket, pocket_emit_for(strategy, effective_op))
+                {
+                    (true, PocketEmit::Zigzag { angle_deg }) => {
+                        PocketEmit::ScopedZigzag { angle_deg }
+                    }
+                    (_, e) => e,
+                };
                 // Islands = nested closed objects that are *also* in this
                 // op's selection. Honored unconditionally so the user gets
                 // an annulus pocket from "outer + inner" without having to
@@ -457,7 +504,7 @@ pub(super) fn build_op_offsets(
                     })
                     .filter_map(|i| objects.get(*i))
                     .filter(|inner| inner.closed)
-                    .map(|inner| segments_to_points(&inner.segments, 6))
+                    .map(|inner| segments_to_points(&inner.segments, interpolate))
                     .collect();
                 // Legacy auto-island fallback: when `pocket_islands` is on
                 // and the explicit selection didn't pick any inners, fall
@@ -500,7 +547,7 @@ pub(super) fn build_op_offsets(
                         .iter()
                         .filter_map(|i| objects.get(*i))
                         .filter(|inner| inner.closed)
-                        .map(|inner| segments_to_points(&inner.segments, 6))
+                        .map(|inner| segments_to_points(&inner.segments, interpolate))
                         .collect();
                 }
                 if obj.closed {
@@ -516,7 +563,7 @@ pub(super) fn build_op_offsets(
                         obj,
                         radius,
                         pocket_for_kind.is_some_and(|p| p.pocket_nocontour),
-                        6,
+                        interpolate,
                         pocket_emit,
                         &inflated_islands,
                         xy_step,

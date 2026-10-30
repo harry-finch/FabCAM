@@ -1111,6 +1111,11 @@ export interface components {
             contract: "main_finishing_v1";
             finishing: components["schemas"]["FinishingStage"] | null;
             main: components["schemas"]["CuttingStage"];
+        } | {
+            /** @enum {string} */
+            contract: "pocket_finishing_v2";
+            finishing: components["schemas"]["PocketFinishingStage"] | null;
+            main: components["schemas"]["CuttingStage"];
         };
         /** @description Exact material identity. Display labels never establish compatibility. */
         MaterialIdentity: {
@@ -1916,6 +1921,19 @@ export interface components {
             /** @description Skip the boundary contour pass (used by HATCH-equivalent layers). */
             nocontour: boolean;
             zigzag: boolean;
+        };
+        /**
+         * @description Explicit Pocket surfaces. Never inferred from zero allowances.
+         * @enum {string}
+         */
+        PocketFinishingScope: "walls_only" | "floor_only" | "walls_and_floor";
+        PocketFinishingStage: {
+            cutting: components["schemas"]["CuttingStage"];
+            /** Format: double */
+            floor_allowance_mm: number;
+            /** Format: double */
+            lateral_allowance_mm: number;
+            scope: components["schemas"]["PocketFinishingScope"];
         };
         /** @description Parameters specific to [`super::op::OpKind::Pocket`]. */
         PocketParams: {

@@ -56,7 +56,10 @@ fn serialized_v10_cli_preserves_output_and_rejects_before_publication() {
         .params
         .stages
         .as_mut()
-        .unwrap();
+        .unwrap()
+    else {
+        panic!("expected v1 fixture")
+    };
     main.rpm = None;
     fs::write(&input, serde_json::to_vec(&missing).unwrap()).unwrap();
     assert!(!invoke().status.success());

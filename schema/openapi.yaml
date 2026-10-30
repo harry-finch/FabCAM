@@ -2176,6 +2176,23 @@ components:
         - finishing
         - main
         type: object
+      - additionalProperties: false
+        properties:
+          contract:
+            enum:
+            - pocket_finishing_v2
+            type: string
+          finishing:
+            anyOf:
+            - $ref: '#/components/schemas/PocketFinishingStage'
+            - type: 'null'
+          main:
+            $ref: '#/components/schemas/CuttingStage'
+        required:
+        - contract
+        - finishing
+        - main
+        type: object
     MaterialIdentity:
       additionalProperties: false
       description: Exact material identity. Display labels never establish compatibility.
@@ -3397,6 +3414,32 @@ components:
       - islands
       - nocontour
       - zigzag
+      type: object
+    PocketFinishingScope:
+      description: Explicit Pocket surfaces. Never inferred from zero allowances.
+      enum:
+      - walls_only
+      - floor_only
+      - walls_and_floor
+      type: string
+    PocketFinishingStage:
+      additionalProperties: false
+      properties:
+        cutting:
+          $ref: '#/components/schemas/CuttingStage'
+        floor_allowance_mm:
+          format: double
+          type: number
+        lateral_allowance_mm:
+          format: double
+          type: number
+        scope:
+          $ref: '#/components/schemas/PocketFinishingScope'
+      required:
+      - cutting
+      - floor_allowance_mm
+      - lateral_allowance_mm
+      - scope
       type: object
     PocketParams:
       description: Parameters specific to [`super::op::OpKind::Pocket`].

@@ -71,6 +71,7 @@ pub fn version() -> Result<JsValue, JsValue> {
         "import-dxf",
         "generate-gcode",
         "cutting-parameters-v10",
+        "pocket-finishing-v2",
         "post-linuxcnc",
         "post-grbl",
         "post-hpgl",
@@ -220,10 +221,19 @@ fn reject_legacy_cutting_fields(request: &JsValue) -> Result<(), JsValue> {
                 strict_stage_keys(&main, &rate_keys)?;
                 let finish = js_sys::Reflect::get(&stages, &JsValue::from_str("finishing"))?;
                 if !finish.is_null() {
-                    strict_stage_keys(
-                        &finish,
-                        &["cutting", "lateral_allowance_mm", "floor_allowance_mm"],
-                    )?;
+                    let contract = js_sys::Reflect::get(&stages, &JsValue::from_str("contract"))?;
+                    let keys: &[&str] =
+                        if contract.as_string().as_deref() == Some("pocket_finishing_v2") {
+                            &[
+                                "cutting",
+                                "lateral_allowance_mm",
+                                "floor_allowance_mm",
+                                "scope",
+                            ]
+                        } else {
+                            &["cutting", "lateral_allowance_mm", "floor_allowance_mm"]
+                        };
+                    strict_stage_keys(&finish, keys)?;
                     strict_stage_keys(
                         &js_sys::Reflect::get(&finish, &JsValue::from_str("cutting"))?,
                         &rate_keys,

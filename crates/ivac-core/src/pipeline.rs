@@ -1049,7 +1049,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
         .filter_map(|op| {
             if let Some(s) = &op.params.stages {
                 let stages: Vec<_> = std::iter::once(s.main())
-                    .chain(s.finishing().map(|f| &f.cutting))
+                    .chain(s.finishing().map(|f| f.cutting))
                     .collect();
                 return Some(crate::sim::timing::OpRates {
                     op_id: op.id,

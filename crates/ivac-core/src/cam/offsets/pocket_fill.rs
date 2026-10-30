@@ -532,6 +532,11 @@ pub enum PocketEmit {
     Zigzag {
         angle_deg: f64,
     },
+    /// V2 explicit scoped Pocket: raster the entire already-compensated center
+    /// domain. A second erosion leaves uncovered wedges at oblique walls.
+    ScopedZigzag {
+        angle_deg: f64,
+    },
     Spiral,
     Trochoidal {
         engagement_angle_deg: f64,
@@ -659,7 +664,7 @@ pub fn pocket_for_object(
         let pts = segments_to_points(&offset.segments, interpolate);
 
         match emit {
-            PocketEmit::Zigzag { angle_deg } => {
+            PocketEmit::Zigzag { angle_deg } | PocketEmit::ScopedZigzag { angle_deg } => {
                 // Zigzag stride is the same step semantics — distance
                 // between raster lines. Default ~50% overlap.
                 // angle_deg rotates the raster direction. We
@@ -679,7 +684,12 @@ pub fn pocket_for_object(
                 // in ALL directions (including holes); without it, fill up
                 // to the existing safe boundary. Scan-axis trimming is not
                 // geometric cutter compensation.
-                let zigzag_tool_d = if nocontour { 0.0 } else { tool_radius * 2.0 };
+                let zigzag_tool_d = if nocontour || matches!(emit, PocketEmit::ScopedZigzag { .. })
+                {
+                    0.0
+                } else {
+                    tool_radius * 2.0
+                };
                 // Previously this wrapper clamped step to 0.1 mm
                 // before handing to pocket_zigzag, defeating fine-finish
                 // strides (e.g. 0.05 mm mirror finish). pocket_zigzag now

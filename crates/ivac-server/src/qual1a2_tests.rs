@@ -181,3 +181,52 @@ async fn alpha31_http_polygon_finishing_and_coverage_refusal_match_core() {
         }
     }
 }
+
+#[tokio::test]
+async fn alpha32_http_scopes_preserve_exact_stage_output_and_refuse_contradictions() {
+    let mut value: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/alpha32/scoped-pocket.request.json"
+    ))
+    .unwrap();
+    for scope in [
+        "walls_only",
+        "floor_only",
+        "walls_and_floor",
+        "contradictory",
+    ] {
+        let f = &mut value["project"]["operations"][0]["params"]["stages"]["finishing"];
+        f["scope"] = serde_json::json!(if scope == "contradictory" {
+            "walls_only"
+        } else {
+            scope
+        });
+        f["floor_allowance_mm"] = serde_json::json!(if scope == "walls_only" { 0. } else { 0.1 });
+        f["lateral_allowance_mm"] = serde_json::json!(if scope == "floor_only" { 0. } else { 0.1 });
+        let request = Request::builder()
+            .method("POST")
+            .uri("/generate")
+            .header("content-type", "application/json")
+            .body(Body::from(value.to_string()))
+            .unwrap();
+        let response = Router::new()
+            .route("/generate", post(generate))
+            .with_state(Arc::new(AppState::default()))
+            .oneshot(request)
+            .await
+            .unwrap();
+        if scope == "contradictory" {
+            assert!(response.status().is_client_error());
+            continue;
+        }
+        assert_eq!(response.status(), StatusCode::OK);
+        let bytes = axum::body::to_bytes(response.into_body(), 16 * 1024 * 1024)
+            .await
+            .unwrap();
+        let expected =
+            run_pipeline(serde_json::from_value(value.clone()).unwrap(), |_, _, _| {}).unwrap();
+        assert_eq!(
+            serde_json::from_slice::<serde_json::Value>(&bytes).unwrap(),
+            serde_json::to_value(expected).unwrap()
+        );
+    }
+}

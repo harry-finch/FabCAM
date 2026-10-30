@@ -19,7 +19,10 @@ fn request(project: Project) -> PipelineRequest {
 }
 fn main_mut(op: &mut Op) -> &mut crate::cutting_stages::CuttingStage {
     let crate::cutting_stages::MainFinishing::V1 { main, .. } =
-        op.params.stages.as_mut().expect("staged");
+        op.params.stages.as_mut().expect("staged")
+    else {
+        panic!("expected v1 fixture")
+    };
     main
 }
 fn set_role(op: &mut Op, role: CuttingRole, rpm: u32, feed: u32, plunge: u32) {

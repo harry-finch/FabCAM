@@ -214,6 +214,7 @@ pub fn version() -> VersionResponse {
         "import-dxf",
         "generate-gcode",
         "cutting-parameters-v10",
+        "pocket-finishing-v2",
         "post-linuxcnc",
         "post-grbl",
         "post-hpgl",
@@ -626,6 +627,38 @@ pub async fn generate_drawing_cmd(
 #[cfg(test)]
 mod audit_15_16 {
     use super::*;
+    #[tokio::test]
+    async fn alpha32_native_scopes_and_refusals_match_authoritative_output() {
+        let mut value: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/alpha32/scoped-pocket.request.json"
+        ))
+        .unwrap();
+        for scope in ["walls_only", "floor_only", "walls_and_floor"] {
+            let f = &mut value["project"]["operations"][0]["params"]["stages"]["finishing"];
+            f["scope"] = serde_json::json!(scope);
+            f["floor_allowance_mm"] =
+                serde_json::json!(if scope == "walls_only" { 0. } else { 0.1 });
+            f["lateral_allowance_mm"] =
+                serde_json::json!(if scope == "floor_only" { 0. } else { 0.1 });
+            let request: PipelineRequest = serde_json::from_value(value.clone()).unwrap();
+            let expected =
+                ivac_core::pipeline::run_pipeline(request.clone(), |_, _, _| {}).unwrap();
+            let actual = generate(request.clone()).await.unwrap();
+            assert_eq!(
+                serde_json::to_value(actual).unwrap(),
+                serde_json::to_value(&expected).unwrap()
+            );
+            assert_eq!(
+                generate_two_sided(request).await.unwrap().front.gcode,
+                expected.gcode
+            );
+        }
+        value["project"]["operations"][0]["params"]["stages"]["finishing"]["scope"] =
+            serde_json::json!("walls_only");
+        assert!(generate(serde_json::from_value(value).unwrap())
+            .await
+            .is_err());
+    }
     #[tokio::test]
     async fn alpha31_native_commands_match_polygon_stages_and_fail_closed() {
         for fixture in [

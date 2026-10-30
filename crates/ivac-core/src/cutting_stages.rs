@@ -33,6 +33,40 @@ pub struct FinishingStage {
     pub floor_allowance_mm: f64,
 }
 
+/// Explicit Pocket surfaces. Never inferred from zero allowances.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum PocketFinishingScope {
+    WallsOnly,
+    FloorOnly,
+    WallsAndFloor,
+}
+impl PocketFinishingScope {
+    #[must_use]
+    pub fn walls(self) -> bool {
+        self != Self::FloorOnly
+    }
+    #[must_use]
+    pub fn floor(self) -> bool {
+        self != Self::WallsOnly
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PocketFinishingStage {
+    pub scope: PocketFinishingScope,
+    pub cutting: CuttingStage,
+    pub lateral_allowance_mm: f64,
+    pub floor_allowance_mm: f64,
+}
+/// Borrowed execution view, not a persisted contract or an implicit scope.
+#[derive(Debug, Clone, Copy)]
+pub struct FinishingRef<'a> {
+    pub cutting: &'a CuttingStage,
+    pub lateral_allowance_mm: f64,
+    pub floor_allowance_mm: f64,
+}
+
 /// Required semantic discriminator: never an optional flag next to legacy rates.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(tag = "contract", deny_unknown_fields)]
@@ -43,6 +77,13 @@ pub enum MainFinishing {
         #[serde(deserialize_with = "required_option")]
         #[schemars(required, schema_with = "nullable_finishing_schema")]
         finishing: Option<FinishingStage>,
+    },
+    #[serde(rename = "pocket_finishing_v2")]
+    PocketV2 {
+        main: CuttingStage,
+        #[serde(deserialize_with = "required_option")]
+        #[schemars(required, schema_with = "nullable_pocket_finishing_schema")]
+        finishing: Option<PocketFinishingStage>,
     },
 }
 
@@ -57,10 +98,11 @@ impl MainFinishing {
     /// material removal must still be proven by the authoritative CAM pipeline.
     #[must_use]
     pub fn numeric_errors(&self) -> Vec<String> {
-        let Self::V1 { main, finishing } = self;
-        let mut errors = Vec::new();
-        for (label, stage) in std::iter::once(("main", main))
-            .chain(finishing.iter().map(|f| ("finishing", &f.cutting)))
+        let main = self.main();
+        let finishing = self.finishing();
+        let mut errors = self.scope_errors();
+        for (label, stage) in
+            std::iter::once(("main", main)).chain(finishing.map(|f| ("finishing", f.cutting)))
         {
             if stage.tool_id == 0 {
                 errors.push(format!("{label}: tool_id must be positive"));
@@ -112,15 +154,66 @@ pub fn applies(op: &crate::project::Op) -> bool {
 impl MainFinishing {
     #[must_use]
     pub fn main(&self) -> &CuttingStage {
-        let Self::V1 { main, .. } = self;
-        main
+        match self {
+            Self::V1 { main, .. } | Self::PocketV2 { main, .. } => main,
+        }
+    }
+    pub fn main_mut(&mut self) -> &mut CuttingStage {
+        match self {
+            Self::V1 { main, .. } | Self::PocketV2 { main, .. } => main,
+        }
+    }
+    pub fn finishing_cutting_mut(&mut self) -> Option<&mut CuttingStage> {
+        match self {
+            Self::V1 { finishing, .. } => finishing.as_mut().map(|f| &mut f.cutting),
+            Self::PocketV2 { finishing, .. } => finishing.as_mut().map(|f| &mut f.cutting),
+        }
     }
     #[must_use]
-    pub fn finishing(&self) -> Option<&FinishingStage> {
-        let Self::V1 { finishing, .. } = self;
-        finishing.as_ref()
+    pub fn finishing(&self) -> Option<FinishingRef<'_>> {
+        match self {
+            Self::V1 { finishing, .. } => finishing.as_ref().map(|f| FinishingRef {
+                cutting: &f.cutting,
+                lateral_allowance_mm: f.lateral_allowance_mm,
+                floor_allowance_mm: f.floor_allowance_mm,
+            }),
+            Self::PocketV2 { finishing, .. } => finishing.as_ref().map(|f| FinishingRef {
+                cutting: &f.cutting,
+                lateral_allowance_mm: f.lateral_allowance_mm,
+                floor_allowance_mm: f.floor_allowance_mm,
+            }),
+        }
+    }
+    #[must_use]
+    pub fn pocket_scope(&self) -> Option<PocketFinishingScope> {
+        match self {
+            Self::PocketV2 { finishing, .. } => finishing.as_ref().map(|f| f.scope),
+            Self::V1 { .. } => None,
+        }
+    }
+    #[must_use]
+    pub fn contract(&self) -> &'static str {
+        match self {
+            Self::V1 { .. } => "main_finishing_v1",
+            Self::PocketV2 { .. } => "pocket_finishing_v2",
+        }
+    }
+    fn scope_errors(&self) -> Vec<String> {
+        let mut errors = Vec::new();
+        if let Self::PocketV2 {
+            finishing: Some(f), ..
+        } = self
+        {
+            if (!f.scope.walls() && f.lateral_allowance_mm != 0.)
+                || (!f.scope.floor() && f.floor_allowance_mm != 0.)
+            {
+                errors.push("Finishing scope contradicts the authored lateral/floor allowance; explicitly set the irrelevant allowance to zero".into());
+            }
+        }
+        errors
     }
 }
+
 impl CuttingStage {
     pub fn rates(&self, tool_id: u32) -> Result<(u32, u32, u32), String> {
         if self.tool_id != tool_id {
@@ -172,6 +265,14 @@ pub(crate) fn validate_structure(op: &crate::project::Op) -> Result<(), String> 
         .stages
         .as_ref()
         .ok_or("Profile/Pocket requires the v10 Main/Finishing contract")?;
+    if matches!(stages, MainFinishing::PocketV2 { .. })
+        && !matches!(op.kind, crate::project::OpKind::Pocket { .. })
+    {
+        return Err("pocket_finishing_v2 requires an ordinary Pocket operation".into());
+    }
+    if let Some(error) = stages.scope_errors().first() {
+        return Err(error.clone());
+    }
     if op.params.cutting.is_some()
         || op.params.step.is_some()
         || op.params.finish_step.is_some()
@@ -189,7 +290,7 @@ pub(crate) fn validate_structure(op: &crate::project::Op) -> Result<(), String> 
     if !op.params.stock_to_leave_mm.is_finite() || op.params.stock_to_leave_mm < 0.0 {
         return Err("Invalid retained-for-later stock".into());
     }
-    for stage in std::iter::once(stages.main()).chain(stages.finishing().map(|f| &f.cutting)) {
+    for stage in std::iter::once(stages.main()).chain(stages.finishing().map(|f| f.cutting)) {
         if stage.tool_id == 0 {
             return Err("Stage tool_id must be positive".into());
         }
@@ -271,7 +372,7 @@ pub(crate) fn validate_operation(
         }
     }
     for (label, stage) in std::iter::once(("Main", stages.main()))
-        .chain(stages.finishing().map(|f| ("Finishing", &f.cutting)))
+        .chain(stages.finishing().map(|f| ("Finishing", f.cutting)))
     {
         let view = execution_op(op, stage);
         let check = validate_role_operation(project, &view);
@@ -335,7 +436,7 @@ pub(crate) fn validate_operation(
             out.errors
                 .push("Floor allowance leaves no positive main cutting depth".into());
         }
-        for stage in [stages.main(), &f.cutting] {
+        for stage in [stages.main(), f.cutting] {
             if let Some(tool) = project.tools.iter().find(|t| t.id == stage.tool_id) {
                 if tool.whirl {
                     out.errors
@@ -361,6 +462,12 @@ fn nullable_finishing_schema(
     generator: &mut schemars::gen::SchemaGenerator,
 ) -> schemars::schema::Schema {
     generator.subschema_for::<Option<FinishingStage>>()
+}
+
+fn nullable_pocket_finishing_schema(
+    generator: &mut schemars::gen::SchemaGenerator,
+) -> schemars::schema::Schema {
+    generator.subschema_for::<Option<PocketFinishingStage>>()
 }
 
 #[cfg(test)]

@@ -25,8 +25,9 @@ pub(super) fn run<P: PostProcessor>(
     // Plan both stages before emitting either. Failed finishing never publishes a
     // seemingly complete main-only program.
     let mut plans = Vec::new();
+    let mut main_floor = None;
     for (name, stage, finishing) in std::iter::once(("main", stages.main(), false))
-        .chain(stages.finishing().map(|f| ("finishing", &f.cutting, true)))
+        .chain(stages.finishing().map(|f| ("finishing", f.cutting, true)))
     {
         if crate::pipeline::cancelled(cancel) {
             return Err(PipelineError::Cancelled);
@@ -41,6 +42,13 @@ pub(super) fn run<P: PostProcessor>(
             c.cut_direction = direction;
             c.finish_cut_direction = direction;
         }
+        if finishing && stages.pocket_scope().is_some_and(|s| !s.walls()) {
+            let reserve = stages
+                .finishing()
+                .expect("scoped finishing")
+                .floor_allowance_mm;
+            view.params.start_depth = op.params.depth - op.params.through_depth.max(0.) + reserve;
+        }
         if !finishing {
             if let Some(f) = stages.finishing() {
                 view.params.stock_to_leave_mm =
@@ -48,13 +56,33 @@ pub(super) fn run<P: PostProcessor>(
                 view.params.depth = op.params.depth + f.floor_allowance_mm;
             }
         }
+        // Bound the axial schedule before building offsets or retaining emitted
+        // motions. The decoded proof independently checks every resulting level.
+        if stages.pocket_scope().is_some() {
+            let end = view.params.depth - view.params.through_depth.max(0.);
+            let step = stage.depth_per_pass_mm.unwrap_or(0.);
+            let levels = ((view.params.start_depth - end) / step).ceil().max(1.);
+            if step <= 0. || !levels.is_finite() || levels > 1000. {
+                return Err(PipelineError::FinishingProof(
+                    op.id,
+                    "Pocket axial proof budget exceeded (1000 levels)".into(),
+                ));
+            }
+        }
         let mut setup =
             crate::pipeline::setup_resolver::synthesize_op_setup(&view, project, warnings)?;
         crate::pipeline::setup_resolver::resolve_auto_helix_radius(
             &view, objects, &mut setup, warnings,
         );
-        let (mut offsets, closed) =
-            super::build_op_offsets(&view, project, objects, &setup, warnings, cancel)?;
+        let (mut offsets, closed) = crate::pipeline::offset_builder::build_op_offsets_mode(
+            &view,
+            project,
+            objects,
+            &setup,
+            warnings,
+            cancel,
+            stages.pocket_scope().is_some(),
+        )?;
         if stages.finishing().is_some() {
             use crate::project::{
                 LeadKind, OpKind, PlungeStrategy, TabPlacementMode, ToolKind, ToolOffset,
@@ -67,7 +95,7 @@ pub(super) fn run<P: PostProcessor>(
                 }
             };
             let selected = crate::pipeline::ordered_selection(op, objects);
-            if selected.len() != 1
+            if (stages.pocket_scope().is_none() && selected.len() != 1)
                 || op.pattern().is_some()
                 || !matches!(op.params.plunge, PlungeStrategy::Direct)
             {
@@ -103,7 +131,64 @@ pub(super) fn run<P: PostProcessor>(
             let pocket = matches!(op.kind, OpKind::Pocket { .. });
             let radius = tool.effective_diameter() * 0.5;
             let inset = radius + view.params.stock_to_leave_mm;
-            if let Ok(bounds) = super::stage_coverage::rectangle(&objects[selected[0]]) {
+            if let Some(scope) = stages.pocket_scope() {
+                if tool.flute_length_mm.is_none() {
+                    return Err(fail("Pocket finishing requires a known usable flute length to prove axial reach".into()));
+                }
+                if op.pocket_params().is_some_and(|p| p.frame_shape.is_some())
+                    || matches!(op.source, crate::project::OpSource::Objects { combine, .. } | crate::project::OpSource::Layers { combine, .. } if combine != crate::project::SourceCombine::Auto)
+                {
+                    return Err(fail("Scoped Pocket finishing requires explicit containment geometry, without a generated frame or Boolean combination".into()));
+                }
+                let main_tool = project
+                    .tools
+                    .iter()
+                    .find(|t| t.id == stages.main().tool_id)
+                    .ok_or(PipelineError::UnknownTool(op.id, stages.main().tool_id))?;
+                let finish = stages.finishing().expect("scope");
+                // Exact authored effective diameters; do not infer cutter equivalence.
+                #[allow(clippy::float_cmp)]
+                if scope != crate::cutting_stages::PocketFinishingScope::WallsAndFloor
+                    && (main_tool.effective_diameter() != tool.effective_diameter()
+                        || finish.lateral_allowance_mm > radius)
+                {
+                    return Err(fail("Single-surface Pocket finishing requires equal effective cutter diameters and a lateral reserve no larger than the cutter radius; combined finishing can qualify different cutters".into()));
+                }
+                if finishing && !scope.floor() {
+                    offsets.retain(|o| o.level == 0);
+                }
+                let region =
+                    super::stage_polygon::PocketRegion::new(objects, &selected).map_err(fail)?;
+                let paths = super::stage_polygon::planned(&offsets).map_err(fail)?;
+                region
+                    .prove(
+                        radius,
+                        inset,
+                        !finishing || scope.floor(),
+                        &paths,
+                        super::stage_polygon::PLAN_ERROR,
+                        cancel,
+                    )
+                    .map_err(fail)?;
+                if !finishing {
+                    main_floor = Some((paths, radius));
+                } else if !scope.floor() {
+                    let (prior, prior_radius) = main_floor
+                        .as_ref()
+                        .ok_or_else(|| fail("Missing Main removal proof".into()))?;
+                    region
+                        .prove_combined_floor(
+                            inset,
+                            prior,
+                            *prior_radius,
+                            &paths,
+                            radius,
+                            super::stage_polygon::PLAN_ERROR,
+                            cancel,
+                        )
+                        .map_err(fail)?;
+                }
+            } else if let Ok(bounds) = super::stage_coverage::rectangle(&objects[selected[0]]) {
                 if matches!(
                     op.kind,
                     OpKind::Profile {

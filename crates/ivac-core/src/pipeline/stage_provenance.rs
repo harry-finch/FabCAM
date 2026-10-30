@@ -88,7 +88,7 @@ pub(super) fn bind(
             }
             let parameters = match name.as_str() {
                 "main" => stages.main(),
-                "finishing" => &stages.finishing().ok_or("Unexpected finishing")?.cutting,
+                "finishing" => stages.finishing().ok_or("Unexpected finishing")?.cutting,
                 _ => return Err("Unknown stage".into()),
             };
             // Non-resolved CPS exposes recorded IR, with optional/absent line sync.

@@ -217,6 +217,7 @@ async fn version() -> Json<VersionResponse> {
                 "import-dxf",
                 "generate-gcode",
                 "cutting-parameters-v10",
+                "pocket-finishing-v2",
                 "stream-gcode",
                 "post-linuxcnc",
                 "post-grbl",

@@ -5,9 +5,11 @@
 //! collapsed or trimmed references refuse. Source primitives are never changed.
 //! A finite chord enclosure accounts for arc sagitta; continuous capsule interval
 //! coverage and convex tile containment prove coverage between samples as well.
+mod pocket;
 use crate::cam::{offsets::PolylineOffset, VcObject};
 use crate::geometry::{Point2, Segment, SegmentKind};
 use crate::pipeline::CancelToken;
+pub(super) use pocket::PocketRegion;
 
 const FLAT: f64 = 0.0001;
 const EPS: f64 = 1e-8;
@@ -522,6 +524,15 @@ pub(in crate::pipeline) fn verify_output(
                 crate::pipeline::PipelineError::FinishingProof(op.id, e)
             }
         };
+        if op
+            .params
+            .stages
+            .as_ref()
+            .is_some_and(|s| s.pocket_scope().is_some())
+        {
+            pocket::verify_decoded(project, op, objects, path, stages, cancel).map_err(fail)?;
+            continue;
+        }
         let selected = crate::pipeline::ordered_selection(op, objects);
         if selected.len() != 1 {
             return Err(fail("Finishing requires one selected contour; islands and multiple regions are unsupported".into()));
@@ -539,7 +550,11 @@ pub(in crate::pipeline) fn verify_output(
                 ..
             }
         );
-        let finish = op.params.stages.as_ref().and_then(|s| s.finishing());
+        let finish = op
+            .params
+            .stages
+            .as_ref()
+            .and_then(crate::cutting_stages::MainFinishing::finishing);
         let finish = finish.expect("filtered finishing");
         for binding in stages.iter().filter(|s| s.operation_id == op.id) {
             let main = binding.stage == "main";
@@ -668,7 +683,12 @@ pub(in crate::pipeline) fn needs_decoded_gate(
         })
         .any(|op| {
             let selected = crate::pipeline::ordered_selection(op, objects);
-            selected.len() != 1 || super::stage_coverage::rectangle(&objects[selected[0]]).is_err()
+            op.params
+                .stages
+                .as_ref()
+                .is_some_and(|s| s.pocket_scope().is_some())
+                || selected.len() != 1
+                || super::stage_coverage::rectangle(&objects[selected[0]]).is_err()
         })
 }
 

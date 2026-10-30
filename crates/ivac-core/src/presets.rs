@@ -357,13 +357,21 @@ pub fn context(project: &Project, op: &Op) -> Result<PresetContext, String> {
             map.remove(key);
         }
     }
-    if op.params.stages.is_some() {
+    if let Some(stages) = &op.params.stages {
         kind.as_object_mut()
             .ok_or("Invalid operation context")?
             .insert(
                 "cutting_contract".into(),
-                serde_json::json!("main_finishing_v1"),
+                serde_json::json!(stages.contract()),
             );
+        if stages.contract() == "pocket_finishing_v2" {
+            kind.as_object_mut()
+                .ok_or("Invalid operation context")?
+                .insert(
+                    "finishing_scope".into(),
+                    serde_json::to_value(stages.pocket_scope()).map_err(|e| e.to_string())?,
+                );
+        }
         for t in &mut tools {
             t["role"] = serde_json::json!(if t["role"] == "rough" {
                 "main"
@@ -427,10 +435,9 @@ pub fn load(
             .1;
     }
     if let Some(s) = &mut parameters.stages {
-        let crate::cutting_stages::MainFinishing::V1 { main, finishing } = s;
-        main.tool_id = op.tool_id;
-        if let Some(f) = finishing {
-            f.cutting.tool_id = op
+        s.main_mut().tool_id = op.tool_id;
+        if let Some(f) = s.finishing_cutting_mut() {
+            f.tool_id = op
                 .finish_tool_id
                 .ok_or("Assign the finishing tool explicitly before loading")?;
         }
