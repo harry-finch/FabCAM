@@ -389,7 +389,6 @@ export type MsgKey =
   | "fsreset.ui.refresh"
   | "fsreset.ui.rename"
   | "fsreset.ui.replace.operation.parameters"
-  | "fsreset.ui.replace.parameters"
   | "fsreset.ui.required"
   | "fsreset.ui.reviewed.replacement"
   | "fsreset.ui.rpm"
@@ -1582,6 +1581,50 @@ export type MsgKey =
   | "report.untitled_project"
   | "report.warnings.summary"
   | "report.warnings.title"
+  | "reuse.action"
+  | "reuse.applied"
+  | "reuse.choose_stage"
+  | "reuse.confirm"
+  | "reuse.context"
+  | "reuse.context.diameter_mm"
+  | "reuse.context.machine_id"
+  | "reuse.context.machine_label"
+  | "reuse.context.material_id"
+  | "reuse.context.material_label"
+  | "reuse.context.material_revision"
+  | "reuse.context.operation"
+  | "reuse.context.stage"
+  | "reuse.context.strategy"
+  | "reuse.context.surface_scope"
+  | "reuse.context.tool_id"
+  | "reuse.context.tool_kind"
+  | "reuse.context.tool_physical_id"
+  | "reuse.current"
+  | "reuse.destination"
+  | "reuse.disclosure"
+  | "reuse.error.fields"
+  | "reuse.error.metadata"
+  | "reuse.error.numeric"
+  | "reuse.error.source"
+  | "reuse.error.source_changed"
+  | "reuse.error.stage"
+  | "reuse.error.stale"
+  | "reuse.error.target"
+  | "reuse.excluded"
+  | "reuse.fields"
+  | "reuse.identities"
+  | "reuse.notice"
+  | "reuse.parameter"
+  | "reuse.proposed"
+  | "reuse.review"
+  | "reuse.source"
+  | "reuse.source_stage"
+  | "reuse.state.copied"
+  | "reuse.state.modified"
+  | "reuse.state.superseded"
+  | "reuse.strict_action"
+  | "reuse.target"
+  | "reuse.unknown"
   | "scene3d.ctx.dismiss"
   | "scene3d.ctx.hint"
   | "scene3d.ctx.new_op"
@@ -2776,7 +2819,6 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "fsreset.ui.refresh",
   "fsreset.ui.rename",
   "fsreset.ui.replace.operation.parameters",
-  "fsreset.ui.replace.parameters",
   "fsreset.ui.required",
   "fsreset.ui.reviewed.replacement",
   "fsreset.ui.rpm",
@@ -3969,6 +4011,50 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "report.untitled_project",
   "report.warnings.summary",
   "report.warnings.title",
+  "reuse.action",
+  "reuse.applied",
+  "reuse.choose_stage",
+  "reuse.confirm",
+  "reuse.context",
+  "reuse.context.diameter_mm",
+  "reuse.context.machine_id",
+  "reuse.context.machine_label",
+  "reuse.context.material_id",
+  "reuse.context.material_label",
+  "reuse.context.material_revision",
+  "reuse.context.operation",
+  "reuse.context.stage",
+  "reuse.context.strategy",
+  "reuse.context.surface_scope",
+  "reuse.context.tool_id",
+  "reuse.context.tool_kind",
+  "reuse.context.tool_physical_id",
+  "reuse.current",
+  "reuse.destination",
+  "reuse.disclosure",
+  "reuse.error.fields",
+  "reuse.error.metadata",
+  "reuse.error.numeric",
+  "reuse.error.source",
+  "reuse.error.source_changed",
+  "reuse.error.stage",
+  "reuse.error.stale",
+  "reuse.error.target",
+  "reuse.excluded",
+  "reuse.fields",
+  "reuse.identities",
+  "reuse.notice",
+  "reuse.parameter",
+  "reuse.proposed",
+  "reuse.review",
+  "reuse.source",
+  "reuse.source_stage",
+  "reuse.state.copied",
+  "reuse.state.modified",
+  "reuse.state.superseded",
+  "reuse.strict_action",
+  "reuse.target",
+  "reuse.unknown",
   "scene3d.ctx.dismiss",
   "scene3d.ctx.hint",
   "scene3d.ctx.new_op",

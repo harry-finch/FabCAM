@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { reuseRecords, reuseState } from '../state/preset-reuse-metadata';
   import { qualifiedDiagnostics, qualificationPhase } from '../state/program-qualification';
   /// Authored setup plus current generated evidence; no machine qualification.
   import Modal from './Modal.svelte';
@@ -85,6 +86,18 @@
   const opRates = (op: OpEntry) =>
     [
       reportCuttingText(op, { rough: t('uxc.rough'), finish: t('fs35.finishing') }),
+      ...reuseRecords(project.data.serializedExtensions)
+        .filter(
+          (r) => r.operation_id === op.id && reuseState(op, r, project.data) !== 'unassociated',
+        )
+        .map((r) =>
+          t('reuse.disclosure', {
+            stage: t(r.stage === 'main' ? 'stages.main' : 'stages.finishing'),
+            source: `${r.source.collection_name} — ${r.source.preset_name} (${r.source.collection_id}/${r.source.preset_id}@${r.source.content_sha256})`,
+            values: JSON.stringify(r.values),
+            state: t(`reuse.state.${reuseState(op, r, project.data)}` as Parameters<typeof t>[0]),
+          }),
+        ),
       gen
         ? reportEmittedStages(op.id, gen.cutting_stages ?? [], {
             main: t('stages.main'),

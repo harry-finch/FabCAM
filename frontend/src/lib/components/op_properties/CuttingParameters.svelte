@@ -1,4 +1,6 @@
 <script lang="ts">
+  import PresetReuseReview from './PresetReuseReview.svelte';
+  import PresetReuseStatus from './PresetReuseStatus.svelte';
   import StageCuttingControls from './StageCuttingControls.svelte';
   import { usesStages } from '../../state/cutting-stages';
   import RecordedPresetContext from '../RecordedPresetContext.svelte';
@@ -271,6 +273,7 @@
             {/if}{group.message}
           </p>{/each}
       </details>{/if}
+    <PresetReuseStatus {op} />
     <div class="actions">
       <button class="btn-secondary" onclick={() => open('load')} disabled={busy}
         >{t('fsreset.ui.load.preset')}</button
@@ -328,6 +331,24 @@
             {#each parameterSummary(reviewedPreset.parameters) as line (line)}<p class="basis">
                 {line}
               </p>{/each}
+            {@const storedSource = collections.find((c) =>
+              c.data.presets.some((p) => p === reviewedPreset),
+            )}
+            {#if storedSource}
+              {#key JSON.stringify([storedSource.data.id, reviewedPreset.id, storedSource.token])}
+                <PresetReuseReview
+                  {op}
+                  collection={storedSource.data}
+                  token={storedSource.token}
+                  presetId={reviewedPreset.id}
+                  onApplied={() => {
+                    panel = null;
+                    prepared = null;
+                    message = t('reuse.applied');
+                  }}
+                />
+              {/key}
+            {/if}
             <RecordedPresetContext preset={reviewedPreset} />
           {/if}
           {#if prepared}<table>
@@ -368,8 +389,7 @@
             {#each parameterSummary(prepared.parameters) as line (line)}<p class="basis">
                 {line}
               </p>{/each}
-            <button class="btn-primary" onclick={apply}>{t('fsreset.ui.replace.parameters')}</button
-            >
+            <button class="btn-primary" onclick={apply}>{t('reuse.strict_action')}</button>
           {/if}
         {:else}
           <label class="row"
