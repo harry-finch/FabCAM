@@ -1,0 +1,54 @@
+{
+  "method": "Read-only HEAD and tracked-status recheck. No protected worktree writes; existing untracked evidence retained. Not a complete before/after content hash of all ignored/untracked files.",
+  "main": "ef807cf8250ddc4bdf795c75bb9bf9f011db9bca",
+  "worktrees": [
+    {
+      "worktree": "ivacam",
+      "head": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+      "expected_head": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+      "tracked_changes": 0,
+      "untracked_status_entries": 1004,
+      "status_sha256": "3c55696d54d3d43ca1e9eeb45f7ec22c37ce8e9c649970ae72caea5b644a606f"
+    },
+    {
+      "worktree": "FabCAM-alpha-feedback",
+      "head": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+      "expected_head": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+      "tracked_changes": 0,
+      "untracked_status_entries": 3,
+      "status_sha256": "8eadf21ec14708e0f2d893468dfea047fa1e8cff882626111daa7140604cc615"
+    },
+    {
+      "worktree": "FabCAM-alpha-2",
+      "head": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+      "expected_head": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0,
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "worktree": "FabCAM-alpha-3",
+      "head": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+      "expected_head": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0,
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "worktree": "FabCAM-tool-meta-1",
+      "head": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d",
+      "expected_head": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0,
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "worktree": "FabCAM-v1-freeze",
+      "head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "expected_head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "tracked_changes": 0,
+      "untracked_status_entries": 0,
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

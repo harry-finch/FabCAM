@@ -1,0 +1,1705 @@
+{
+  "baseSha": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+  "uncommitted": true,
+  "baselineExecutableSha256": "03932206efd9dc21ca6177a3232de8a37844b2546e50e6e3158d66bd300b475e",
+  "nativeExecutableSha256": "ff4cde0746ec5f57ebe77c68b2bdfad302077f2fc7917e13ce41a9ed8f34c324",
+  "wasmSha256": "5fc690b54b18774598a982df9529126d3d264d58be0d89cd94b0aae13a46bb31",
+  "cases": [
+    {
+      "name": "rectangle-inside-main",
+      "requestSha256": "7fe17c804e5a8041bd88b143b1966e9ef9771dbeb611425ce6e12ec72dbc25c0",
+      "nativeMs": 785.3231659999999,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "adaa6fc6ea634bc29954e8ae36e80e8c2c20b050c7cc8247ccaeaefb551a4d27",
+      "moves": 15,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 23.136375000000044,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 91536
+    },
+    {
+      "name": "rectangle-inside-finish",
+      "requestSha256": "df0d845e39448992214702a0b9f9663bcf41cc27254464fedc0970a3bec26b5b",
+      "nativeMs": 6.310082999999963,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "9e55756f3dc9595e212e417fbcc3db927a66e97b8d233ca16254d800bbe1ab49",
+      "moves": 33,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.40037499999994,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 91792
+    },
+    {
+      "name": "rectangle-outside-main",
+      "requestSha256": "bc22b4a98ded71884f57a61f33aa02556a8fc9bd8b546d2046f747f695f409dd",
+      "nativeMs": 6.2850839999999835,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "cefa238d872621f5ab861c7555f7b9d04b901762ba257d8cadadf360144438d3",
+      "moves": 63,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.0109579999999596,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 107856
+    },
+    {
+      "name": "rectangle-outside-finish",
+      "requestSha256": "6bc13eddca0968c479dac3d3d0df77ef80e81a7f10ddf789b84ed4d0bdb3bfd1",
+      "nativeMs": 6.861250000000041,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "f1c68c92443175474cfbe18dd6578394417f01c9ec1a67c832864e80c0c060c5",
+      "moves": 153,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.5430410000000165,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 120416
+    },
+    {
+      "name": "rectangle-cascade-main",
+      "requestSha256": "df403e140f73ac17aa30eea2e1286fcde5a7e561b2e7b6d247aff7e0524439df",
+      "nativeMs": 14.351083000000017,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "d293e4912e63f5b8a42ecf01f9a909712b420795ab4e64a55ad84abe96e6a475",
+      "moves": 119,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.8740187689836603
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 6.577207999999928,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 122912
+    },
+    {
+      "name": "rectangle-cascade-finish",
+      "requestSha256": "46e60b03dec38dd2bbb1a99bb13a4354941fed1b809a00415036a43e87b7a4df",
+      "nativeMs": 15.38066700000013,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "fc4f7f00cdfc1ae4ea86abeae3b5eccb9c8634a3e83f6b5deea0f43d38cc4408",
+      "moves": 281,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.8740187689836603
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 3.5149579999999787,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 124096
+    },
+    {
+      "name": "rectangle-zigzag-main",
+      "requestSha256": "90d80b52d2eb68db4090d6a0291a3af6d52734893b948c5528f28aea4a5e314e",
+      "nativeMs": 6.521874999999909,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "1035713f8449fac19d3eb11e4dc1e4f956e1e3ebf50daea0e1a0283ce0acbbf4",
+      "moves": 82,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.367917000000034,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 124096
+    },
+    {
+      "name": "rectangle-zigzag-finish",
+      "requestSha256": "afd48b1d8c57fcf8db6b8b624839b585fe65c2fca385e514e098378fe52fe120",
+      "nativeMs": 7.8854160000000775,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "8a938064199ef42d3710e3aebbd71da14fed68c22b966c7299e1a8cd3710f3da",
+      "moves": 199,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.3582080000001042,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 124096
+    },
+    {
+      "name": "rectangle-spiral-main",
+      "requestSha256": "a838a6cd2345d1cb2d5d08b1219832ec12f22dcc8e7f31149604f1e86b7ebb0f",
+      "nativeMs": 6.251582999999982,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "266eaee306a98a037eeeeb3844c4d9a965c72c4bcd5c6561ce7a1875dc46af40",
+      "moves": 98,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.0849589999997988,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 124128
+    },
+    {
+      "name": "rectangle-spiral-finish",
+      "requestSha256": "b2738f90180064f4400bef76a7f83e8605da66918f09fef19553789517aa0cad",
+      "nativeMs": 8.447499999999991,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "17673ae7bd14734af7745662390464d2cf11a6425e8ce673ee76bce8cb5abc2d",
+      "moves": 239,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.5118750000001455,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 124592
+    },
+    {
+      "name": "rotated-inside-main",
+      "requestSha256": "879583104cf612e9ec7ae4f7d349ece6718f02c8baff0a373868de19af4ca03b",
+      "nativeMs": 6.067957999999862,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "121bd5c47d533ccea3476fc9087748ff9d7a4ce669728f89b60f6e375e26564a",
+      "moves": 15,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.5132919999998649,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 124624
+    },
+    {
+      "name": "rotated-inside-finish",
+      "requestSha256": "36d408a5061159f9b6f76c065c7487d2851ec9c750e395486794eff0e3b5c137",
+      "nativeMs": 6.339750000000095,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "7e252db3368ef9ecf3d674e3c42a42191e9d69be5f3bb9c9e61d8a4ce38a6c6b",
+      "moves": 33,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 2.7777920000000904,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 124912
+    },
+    {
+      "name": "rotated-outside-main",
+      "requestSha256": "890fae519523327a9ee11ea8fb8cf8e64534354cf1f23065399b18ada4fb5e1c",
+      "nativeMs": 5.912582999999813,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "8e2a73731970709197e9a615c675b78d0fcd970b7d34cf64e266769897a2e051",
+      "moves": 69,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.6346670000000358,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 125616
+    },
+    {
+      "name": "rotated-outside-finish",
+      "requestSha256": "f006c4a196ff14a1ef7a04e32571946d76aec1ecc9d42316bf4768485e243dba",
+      "nativeMs": 65.02808300000015,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "adf32a0aa4c4430694b9b743b2a72722c8849996260d493a78939589ac904b52",
+      "moves": 166,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 8.045708000000104,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 127440
+    },
+    {
+      "name": "rotated-cascade-main",
+      "requestSha256": "a7e821f67d18bc7933dfc339b9a53c949a33ad533216174f5d0ca91e78698066",
+      "nativeMs": 18.55733299999997,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "44db0692b93051a677663249fd88fd118c8abcd923270e877290e7b6290eddf5",
+      "moves": 119,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.8731218212051317
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 2.755916999999954,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 129568
+    },
+    {
+      "name": "rotated-cascade-finish",
+      "requestSha256": "bc4fd553f2921995ec82bc7af1f488bd4ccccef662063e3afd8b760af663ed82",
+      "nativeMs": 33.17070899999999,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "baade65c424a7aa72af4442299f76235915f91fc96ea623b0efcdb99a26af1f3",
+      "moves": 281,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.8731218212051317
+        }
+      ],
+      "wasmMs": 7.569375000000036,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133232
+    },
+    {
+      "name": "rotated-zigzag-main",
+      "requestSha256": "ed9a144702183ff03ef92aa73734488762fb850b4b7e327088f55a9a9929e4bc",
+      "nativeMs": 7.326374999999871,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "a85519003f237a3b0dafe5b142a050241d4b60ffdfffa6dc9304a76585e6846e",
+      "moves": 118,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.8047920000001341,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133568
+    },
+    {
+      "name": "rotated-zigzag-finish",
+      "requestSha256": "880d12d8e7253721124b60eaf2bce9bd31418c11ae3bb10afac4438cd4f88b26",
+      "nativeMs": 6.206333000000086,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing floor coverage is incomplete near (25.5980, 13.0771) mm (nearest path 1.002900 mm); choose another fill strategy/cutter",
+      "wasmRefusal": true
+    },
+    {
+      "name": "rotated-spiral-main",
+      "requestSha256": "d5b8dbe43cf5380d9df08f3bda3388b51e688dd877f3b439bbbb30f70895ba2a",
+      "nativeMs": 6.673874999999953,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "8ee9f698933e90aba76aead4c0b8f8edd7ea7cb0d875e4a7f61eb3cd404e0442",
+      "moves": 98,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.9184579999998732,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133664
+    },
+    {
+      "name": "rotated-spiral-finish",
+      "requestSha256": "f78189a24ad76022c6406071eddce520250109849af5509ae5958b8c1a378e6f",
+      "nativeMs": 20.967959000000064,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "4ad2e2d007f1c24b589696f8e52678de1a6266552d565e6923135efd6fd04f7b",
+      "moves": 239,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 3.6911250000000564,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133696
+    },
+    {
+      "name": "triangle-inside-main",
+      "requestSha256": "0a7f256b9013ff08ba43a624ac5ba40bec6e184831c4874fbfcef11e0ecd695e",
+      "nativeMs": 5.569541999999956,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "b36ac02982b945799594ad7588bce9ebd0a849a14df6b0f6734d8ee5c9c6114f",
+      "moves": 13,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.43295800000009876,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133696
+    },
+    {
+      "name": "triangle-inside-finish",
+      "requestSha256": "63497b28e2d1fda837108352b40e100ad0fd6217d0c2105755ee17976d5a99dc",
+      "nativeMs": 6.227124999999887,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "7b38ddb54dc71025fc4a0b96cea6999b1a7cd047736188e1c757b1c080e1d944",
+      "moves": 28,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 0.5912079999998241,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133776
+    },
+    {
+      "name": "triangle-outside-main",
+      "requestSha256": "031aecc5b8e21e61f3542c12a90ec7c0e5695351732bd91122fe3917a6527876",
+      "nativeMs": 6.735333999999966,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "463764d514f6cd894ed14664c472c78d110aa067b98742a4c6d1fd72186357e4",
+      "moves": 65,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.6077080000000024,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133776
+    },
+    {
+      "name": "triangle-outside-finish",
+      "requestSha256": "c65e263afdd80d8fe7a2efe25b23b9c2699a1a1ae8bcc0a36c8b9c54bb7fbbf8",
+      "nativeMs": 66.604916,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "3a446c4670e446a7f953a94ce820296ca80ec09baee2bc7cda3a485a782f6f2a",
+      "moves": 158,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 7.189582999999857,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133888
+    },
+    {
+      "name": "triangle-cascade-main",
+      "requestSha256": "91db3f34faff4a4bf7bc60757122199c9ce5bec28860b4b1623c341084e2f677",
+      "nativeMs": 16.137915999999905,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "efba3ca8baa3b84c012ea02ff5bc4bd63438996722c63352d751679a7d5e3844",
+      "moves": 112,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 2.0729168778052554
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 2.527125000000069,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 133904
+    },
+    {
+      "name": "triangle-cascade-finish",
+      "requestSha256": "4e64b9ce289192c8ba9e14565c9f54c7379e86ecc8290c11a395f4e867a71883",
+      "nativeMs": 22.55666700000006,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "8e3bbd23e905e83b7ebc73751ebaa1903293607615b8f2f8637c94ddc9f9d578",
+      "moves": 262,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 2.0729168778052554
+        }
+      ],
+      "wasmMs": 3.887542000000394,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134000
+    },
+    {
+      "name": "triangle-zigzag-main",
+      "requestSha256": "784ee33c0092ffa3fb3f591ba2d700a3357b776b3194632827b405c21bf0d3df",
+      "nativeMs": 7.51791699999967,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "cfa571123e482e31dd291403658d0484c73b6138e3b0dbcb313f31f8fbf9e919",
+      "moves": 120,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.8105410000002848,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134016
+    },
+    {
+      "name": "triangle-zigzag-finish",
+      "requestSha256": "1fbea2ced8749b335dff0e921f07ad091c0d007a58d48fc37bd66dc461e611ce",
+      "nativeMs": 6.010541999999987,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing floor coverage is incomplete near (22.7159, 38.8154) mm (nearest path 1.002900 mm); choose another fill strategy/cutter",
+      "wasmRefusal": true
+    },
+    {
+      "name": "triangle-spiral-main",
+      "requestSha256": "3da43080d3ea01ebdcb71625e4f5ec23bc958839cd0183344ee0158536071b8d",
+      "nativeMs": 6.622334000000137,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "2b58faa5474ba788055e7fadf4cf6f404b25181acbfd7548b3e6341ef74767ce",
+      "moves": 88,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.7293330000002243,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134352
+    },
+    {
+      "name": "triangle-spiral-finish",
+      "requestSha256": "c59197d871cce5c538028b3edc3593bea8518e114a5008d596f34d80a83313f2",
+      "nativeMs": 13.36449999999968,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "4df99fef41e9d07f089f21555058ac59e82bc70fd1b6c9f008337a3779776efa",
+      "moves": 214,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 2.3368749999999636,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134464
+    },
+    {
+      "name": "convex-inside-main",
+      "requestSha256": "a325e92c21ff921c2e85d4bbc0c68dbe17c85d08fad65752305cafd127a5dba9",
+      "nativeMs": 8.220708000000286,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "416774e7e06b92d3e2095353285536387e538bbdf33e8d860b25fc552379b40b",
+      "moves": 17,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.5216660000000957,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134464
+    },
+    {
+      "name": "convex-inside-finish",
+      "requestSha256": "1a64a90d55b9a79c7d2a0495b0760aabadc7dddfebda731c0a0a279d53627d7d",
+      "nativeMs": 15.19641700000011,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "89a0c820c8b1e180dcfc4b0c1395a69b635b628f7c5285cad80d197428786efa",
+      "moves": 38,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 0.7372089999998934,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134464
+    },
+    {
+      "name": "convex-outside-main",
+      "requestSha256": "15a8424d306b50bab52d2b2a0dcd19dc292a085b9b71932927f66c1853b48be9",
+      "nativeMs": 7.238250000000335,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "bcc4f940e80a26027211653d130d33e12defd666c6e3e2611445e35005891b37",
+      "moves": 69,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.644249999999829,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134464
+    },
+    {
+      "name": "convex-outside-finish",
+      "requestSha256": "c4e5ab7437f689c71957c41eadd7a037c3bc8e9a66311473bd831f9ecbc19220",
+      "nativeMs": 69.21675000000005,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "b40271fcb83b68b2bf399591db062745b7b1db5511c5fc42fc1e7f18d73af1d7",
+      "moves": 168,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 7.010041999999885,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134464
+    },
+    {
+      "name": "convex-cascade-main",
+      "requestSha256": "1f04761307c28194870873864a281115ed25998e894047fed39e7e0405fd4c7f",
+      "nativeMs": 32.017667000000074,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "fffad2fda0ff211c44a62592c51341fa04ec2112cf54e2927feb242c4a1ccbf4",
+      "moves": 195,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.6536647107859608
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 4.971959000000425,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134464
+    },
+    {
+      "name": "convex-cascade-finish",
+      "requestSha256": "77a56a102e5fdd5aafc349edde0b276a1ee7ea09456e2aaf3ac30d5269237523",
+      "nativeMs": 42.8962919999999,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "7147402dd7dccf53a3286b9e8f9f2731807aa2917ccd598b238e70ba5647164b",
+      "moves": 465,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.6536647107859608
+        }
+      ],
+      "wasmMs": 7.681625000000167,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134704
+    },
+    {
+      "name": "convex-zigzag-main",
+      "requestSha256": "49340f4e0db65a919c1ccb335742cda90a95cc2c9c06963e08324d3feef29853",
+      "nativeMs": 7.739666999999827,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "6ad65d28fa15e67fdbaea6bba4c57f4c6abf696f47269dd4790086dacb2dedef",
+      "moves": 132,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.9736250000000837,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134704
+    },
+    {
+      "name": "convex-zigzag-finish",
+      "requestSha256": "fb802427ed487560206bcfa4d5611af44c7376da0497fd97900c6c1a61a38fe8",
+      "nativeMs": 7.491708000000017,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing floor coverage is incomplete near (13.6554, 12.3903) mm (nearest path 1.002899 mm); choose another fill strategy/cutter",
+      "wasmRefusal": true
+    },
+    {
+      "name": "convex-spiral-main",
+      "requestSha256": "c42abe27891f58d31530546bf3f8acbbd0cd6ab18a5075694fd19b90978c1bc9",
+      "nativeMs": 8.033917000000201,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "b46e91335a8550becbb4b51fa786747144e18d74c51c419274123dd41362e803",
+      "moves": 162,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.0298330000000533,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134720
+    },
+    {
+      "name": "convex-spiral-finish",
+      "requestSha256": "2ba312681452556600530f4a9324a493e152b13bfc37f1396f6ebc5fcd7fcb33",
+      "nativeMs": 46.90074999999979,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "8f83f4c0065a4c75de5615dc63dce1ccf00bea31d3792e8f9ef7e6a5a7d4ccb6",
+      "moves": 399,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 5.711624999999913,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 134832
+    },
+    {
+      "name": "concave-inside-main",
+      "requestSha256": "763f5be3beee3ff93869e677c0683c7dfa85b42c0b4b68916164629b6f119772",
+      "nativeMs": 6.5004579999999805,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "d2b3d30280cfd356413431ad0dce7b789f46b23f918d56f81ed55f1e189131f3",
+      "moves": 31,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.4944590000000062,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 135328
+    },
+    {
+      "name": "concave-inside-finish",
+      "requestSha256": "f7b98ebabc242d1a31ce51d5fdb46f50789226537f16132448773c634c1f4bb4",
+      "nativeMs": 13.80383299999994,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "506c54d818386d09f031ed57997c1dc626271237433df014eeec51839724ecb9",
+      "moves": 73,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 2.046415999999681,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 135552
+    },
+    {
+      "name": "concave-outside-main",
+      "requestSha256": "f018fb52de116d6cf67f3adabeba4c63e1be7defadf24fab4e52c6723bff92f9",
+      "nativeMs": 6.697750000000269,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "904ca953b9ab62cfb35add2ac8f4e656c6ff3389c91e04a1f8f2bd297d5c0a6d",
+      "moves": 79,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.6462499999997817,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 135552
+    },
+    {
+      "name": "concave-outside-finish",
+      "requestSha256": "d01bf52800d94cbea27c0f49b27441119097eb5524e30ce4e59081c2d3bffe88",
+      "nativeMs": 104.29966700000023,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "9e00a6c23f7ffea8a0c2f1fa5af59d1f66794abba96595e7be61b6e803101b6f",
+      "moves": 193,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 9.888666999999714,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 135568
+    },
+    {
+      "name": "concave-cascade-main",
+      "requestSha256": "d99cf593f74d3cec40b80f9c268c049793df1e7169f6d41050f147e9268fd486",
+      "nativeMs": 169.7233329999999,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "c2d7893886528a55c2b7495d159d2f3a19ba1ad672b1052c353d3ecfec520dce",
+      "moves": 6722,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "analytic_arc_path",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 40.89687499999991,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 158624
+    },
+    {
+      "name": "concave-cascade-finish",
+      "requestSha256": "5fdf5e459ab306f53cf7ed0a767bcbc91a315f174d732561f4dc0af26121c6a2",
+      "nativeMs": 662.9458329999998,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "279f22ff0d78a67849eab7acec59f96cb9fa3354c7519517862a29af8a937b67",
+      "moves": 16330,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "analytic_arc_path",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 94.65112500000032,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 267312
+    },
+    {
+      "name": "concave-zigzag-main",
+      "requestSha256": "5abae6d925a907a7beccd35c6fcc379f0a2b1776fdb618fcef4a7abf7be9bdad",
+      "nativeMs": 7.151499999999942,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "0e73b8d999091b3bf022e1eace73524d24dddbbb25b7f5fe1f9c8106f128fcef",
+      "moves": 157,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.9912089999997988,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 270640
+    },
+    {
+      "name": "concave-zigzag-finish",
+      "requestSha256": "ae48d6eb2f16902203fb2b9182c0d828ed648db658689d58b355653f31f73f35",
+      "nativeMs": 22.551832999999533,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "6792df09410df9d3d490b70cf8f01b16c8c76031777b5521b43b5a7708331ee5",
+      "moves": 388,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 3.5137079999994967,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 278032
+    },
+    {
+      "name": "concave-spiral-main",
+      "requestSha256": "8435d2ba2769c6fdda39e4d79fc987de73cd27cca30becb196c131c47da48209",
+      "nativeMs": 147.30724999999984,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "b19a53eea68499310917bee978572062872e659883c50ef90ecf5a6e17334732",
+      "moves": 6704,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 23.263875000000553,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 294816
+    },
+    {
+      "name": "concave-spiral-finish",
+      "requestSha256": "4b3ad266acc233bef82f077d0a053bb49edb17212e2c3d0fa28b42dedb297029",
+      "nativeMs": 298.51650000000063,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing decoded proof budget exceeded (5000 distinct planar movements per stage)",
+      "wasmRefusal": true
+    },
+    {
+      "name": "irregular_concave-inside-main",
+      "requestSha256": "3974b05737b6cbfb316e9ee4e126a8f145c87c992b0c8fed60ddecc5360c2997",
+      "nativeMs": 6.046624999999949,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "b5e140626cb1e5e333d35f80fdb30ecf9ce5552dcfa50943e8b5ebe81f373031",
+      "moves": 33,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.48479200000019773,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 294832
+    },
+    {
+      "name": "irregular_concave-inside-finish",
+      "requestSha256": "5d2b8c32a007d415647c778c57f8e4b7bdea2e355e84430e7233a664f9ea8429",
+      "nativeMs": 12.026958000000377,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "5db26424a47c1236ebc3dbb70b90e5ad40783b2de93a71cd78bf97b723653145",
+      "moves": 78,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 1.3817079999998896,
+      "maxCoordinateDeltaMm": 3.552713678800501e-15,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 294832
+    },
+    {
+      "name": "irregular_concave-outside-main",
+      "requestSha256": "bba290154b24102d30c02bddf6be0f0b5990eb388312a881e54f764d3a082873",
+      "nativeMs": 6.499582999999802,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "e1f92356b019e05b0ee695eb0fda68d353117c4fbdb59faa19bad1252e4098df",
+      "moves": 85,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.6424999999999272,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 294864
+    },
+    {
+      "name": "irregular_concave-outside-finish",
+      "requestSha256": "12e097feec894c6d79961ebe8d1a2c866787028b9cd2c944176cb9025916f664",
+      "nativeMs": 98.20437500000025,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "e028ba71b91a4e19d181139bbc464f8e88b3e782b7db8f86a77160180827dd97",
+      "moves": 208,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 9.579666999999972,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 294864
+    },
+    {
+      "name": "irregular_concave-cascade-main",
+      "requestSha256": "ae4bdf284b475971f36f1395d7078163241e2f721652f5cdc6e108d404ea68f5",
+      "nativeMs": 421.3259169999992,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "0b2d8ac4fab28e5fc19cc1560cddac103f4cd0af0e4901569de42d1c210d102c",
+      "moves": 9531,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "analytic_arc_path",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 95.37024999999994,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 308032
+    },
+    {
+      "name": "irregular_concave-cascade-finish",
+      "requestSha256": "90208cbbb558706536881a5fa943c9986ee7e1bdee101d34969e88bf774ec048",
+      "nativeMs": 1167.88425,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "543120a9d85ce55a251c42f959bf16e480b5140803757ebd99792d63b063fe5f",
+      "moves": 23647,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "analytic_arc_path",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 162.4828749999997,
+      "maxCoordinateDeltaMm": 3.552713678800501e-15,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "irregular_concave-zigzag-main",
+      "requestSha256": "7dc64e8313f81ee9f6041b90b13b8a07e763e9140bef37929ce593d3aa9fb1c0",
+      "nativeMs": 11.59979199999907,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "d0674d3497353cfa88619fb62958b375e262d88e5cdba7d173a4198bde2157a1",
+      "moves": 176,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.3585000000002765,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "irregular_concave-zigzag-finish",
+      "requestSha256": "fe2e9e86907e4ed3126d2f185e421d3bc03d0dfadc90d84b88a6583dc616314b",
+      "nativeMs": 9.793707999999242,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing floor coverage is incomplete near (17.1455, 12.7040) mm (nearest path 1.002900 mm); choose another fill strategy/cutter",
+      "wasmRefusal": true
+    },
+    {
+      "name": "irregular_concave-spiral-main",
+      "requestSha256": "db131ce34bd2376a88e27d2627a62173da9bca108c88387212f7d67f3b885502",
+      "nativeMs": 431.9681249999994,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "bdb89d1764387702c3cb710dfcea8ebf8c876f48f0bb8560d3e262528868a21a",
+      "moves": 9510,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 31.44616599999972,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "irregular_concave-spiral-finish",
+      "requestSha256": "1aedd2555d8b1f0bd1f9620a7ae8293ff4bf4f70afe06d472b2c83d0ea17154a",
+      "nativeMs": 810.9087080000008,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing decoded proof budget exceeded (5000 distinct planar movements per stage)",
+      "wasmRefusal": true
+    },
+    {
+      "name": "rectangle-cascade-0-0",
+      "requestSha256": "73c27aa11e9a5498ea772269ac61875ec7c6df70d85ef812e9e4c124900270c3",
+      "nativeMs": 20.291957999999795,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "1ca0ab1f0ca529d110eb49bcd622e6017f7e7382f4fa2ade3ba2ff7bd7885623",
+      "moves": 280,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.8740187689836603
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 2.7803750000002765,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-cascade-0.05-0",
+      "requestSha256": "e0f671428c6d303b749660ab68cf28f54a5d238e96b9ac608c15bc70b212899a",
+      "nativeMs": 27.338333000001512,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "6dc9dc4f812c373d5d7d7087722aad333865af4c846eeb26e6a66d5e6a313222",
+      "moves": 281,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.8740187689836603
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 3.6040000000011787,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-cascade-0-0.05",
+      "requestSha256": "f1e17d9c4a40fdff157da3d50fc141ffd28a99c36a1d5241f5bed6b5fa9b1980",
+      "nativeMs": 14.435750000000553,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "5790d0b65c94ee98669d842d5f80bf4485585ca1de2bca1341e4fb2607021ee7",
+      "moves": 280,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "ready",
+          "reason": "resolved_path_at_depth",
+          "area_mm2": 0.8740187689836603
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 2.005290999999488,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-zigzag-0-0",
+      "requestSha256": "20e326960fe7e4e48af5d5ee8841bfcf09d12484617f17d42100145ae2397093",
+      "nativeMs": 7.276208000001134,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "b072bc043abf0107c99ad7feb52892771da33d89d301255d8fdd907a6e0a53b2",
+      "moves": 198,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.8974580000012793,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-zigzag-0.05-0",
+      "requestSha256": "372bf3b6723094cd93c9ab98808165c99d31f1756d2fbee53c18c123cd47d1ab",
+      "nativeMs": 7.833958999999595,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "de5f344af4f75ee26d2258fb467f65fda3682f7700652323d63d5a4053afd827",
+      "moves": 199,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.106499999999869,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-zigzag-0-0.05",
+      "requestSha256": "532823c2c2d330755981411d925225862cedd7b68fc62faf448fb69d0e0386b4",
+      "nativeMs": 7.351709000000483,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "4a4835169da56132dad07e7d149fa9b66a5e0a40eb7aa0135200c6c1ebb6dafe",
+      "moves": 198,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.9318749999983993,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-spiral-0-0",
+      "requestSha256": "00ac1e56e6c6a6c70e03c903a0cdaa4970fc73a9275be32484a728144a6bec4d",
+      "nativeMs": 7.899457999999868,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "58805f7e5e8aa8770da902afc1ca3ab6444496baf772e953c8ebe5380d54e614",
+      "moves": 238,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.1085829999992711,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-spiral-0.05-0",
+      "requestSha256": "cfb697ad96075493370235287522669059f97e7e2e909432083d8f688b870f91",
+      "nativeMs": 8.287207999999737,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "dc48722c86848c312afcd3f23c466e1262da906c2901a8639a1cc8a60cf1fcec",
+      "moves": 239,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.0542910000003758,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "rectangle-spiral-0-0.05",
+      "requestSha256": "596a5dd44cb1c96d8b419dd5d849c624b7ab5467f65e2dfc5f81da6625c48103",
+      "nativeMs": 7.775832999999693,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "12425b7fb059ec3366a98b07eee9df3eaa286be7a262baea9e31afa1534bc7f4",
+      "moves": 238,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 1.0892919999987498,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "grbl-concave-inside",
+      "requestSha256": "1dcb0e9388003d6ae843af2bddaf261ed07bccab996d0cc990290f3afdf66131",
+      "nativeMs": 11.321541999999681,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "bc79c7610db291f4e2695e04fd643061c21297955fa4995c6ccdaab7f7d7b6e2",
+      "moves": 73,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 3.237749999998414,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "grbl-concave-outside",
+      "requestSha256": "0a15774f27f1aa3c2910962c37c8a93b06db2a302fe0dfd9abf8622d5d26a9b3",
+      "nativeMs": 97.36074999999983,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "b4bedbcfdc680b9f532753e9858de0652d4ababc730d509712f1027549db67b3",
+      "moves": 193,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 9.631666999999652,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "grbl-concave-cascade",
+      "requestSha256": "97a5b8b04452d4a581585c29a2f360ab1cf60aaf8f65a30939c9749734dfdc3d",
+      "nativeMs": 486.80004199999894,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "d5eebc581258a4b316bb0237641a95c5affd146267598fc09fa31cf5742d21fc",
+      "moves": 16330,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "analytic_arc_path",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 74.78483400000005,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "cps-concave-inside",
+      "requestSha256": "114e9fbcd0bcb33fd9c3ef131d54758c86f335892c1029910f4d21ebf087a04c",
+      "nativeMs": 242.3841250000005,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "9bb0c90fca795f2c0a1cfca9f9b0ed472223a8f26ccb275a0dc120f3ad7a0f40",
+      "moves": 70,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmCps": "UNSUPPORTED by canonical browser WASM; native/core qualified separately",
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "cps-concave-outside",
+      "requestSha256": "6674bb599a75320312816f1b1b0ee028d2f026f2e2bf69b59a1a5823d7e602a8",
+      "nativeMs": 372.6022499999999,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "dc6aff7a049f5e303092bd4f9b248fdc9bfd1f358e7c6346f6fc3792bf1f3bc5",
+      "moves": 190,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmCps": "UNSUPPORTED by canonical browser WASM; native/core qualified separately",
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "cps-concave-cascade",
+      "requestSha256": "22f9604a931cd4200a9ec8d163e0f06b9ea076999b113da9b0811aed0236cf47",
+      "nativeMs": 11444.215,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "4df2b42f397b872398a8431a4f02c8562fe4478035466979384099dfa916017c",
+      "moves": 16327,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "analysis_budget",
+          "area_mm2": 0
+        }
+      ],
+      "wasmCps": "UNSUPPORTED by canonical browser WASM; native/core qualified separately",
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "distinct-tool",
+      "requestSha256": "1f6ab31ca37483c6bd0020590442f4a96bf3078301ac62738cb49bef3598c78e",
+      "nativeMs": 22.10791700000118,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "13d85eeec113c2fb48d0c74adfc4a1154f1322e816ac69075bb09a1bf9e239be",
+      "moves": 570,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "single_flat_cutter_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 4.5864999999976135,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "medium-32-outside",
+      "requestSha256": "ca4c23d3ddf4628056747c476b14f21e85b674f79d88735239713616eabb8c80",
+      "nativeMs": 96.77520799999911,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "eee0f2ee67296faf352765cb3e897bcd0182f7d5545559ebffabb45d2f9c31eb",
+      "moves": 813,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 12.450041000000056,
+      "maxCoordinateDeltaMm": 1.4210854715202004e-14,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "medium-32-cascade",
+      "requestSha256": "5bc923235e804d1ee45cc60741fa12095f6d4c0c5ec618bb2ee1b6993889cbcc",
+      "nativeMs": 96.18445800000336,
+      "accepted": true,
+      "baselineAccepted": false,
+      "programSha256": "81709dc754732a11137a9ff67e8448afbe3bdbdfc810d99eff7212e1e7ab79e8",
+      "moves": 3211,
+      "stages": 2,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "analytic_arc_path",
+          "area_mm2": 0
+        }
+      ],
+      "wasmMs": 22.2992090000007,
+      "maxCoordinateDeltaMm": 7.105427357601002e-15,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "multi-eight-main-only",
+      "requestSha256": "b89d6aa283e230beb981c6a0b9383fcd5c4068c3803c0f9f84ef2d52f7f1ee8c",
+      "nativeMs": 7.284833000001527,
+      "accepted": true,
+      "baselineAccepted": true,
+      "programSha256": "885cfa264c9b5a03785c11dc2ea553b9127274d392869376632c00e4104831bb",
+      "moves": 106,
+      "stages": 1,
+      "remaining": [
+        {
+          "status": "unsupported",
+          "reason": "cascade_pocket_only",
+          "area_mm2": 0
+        }
+      ],
+      "baselineByteExact": true,
+      "wasmMs": 0.8653749999975844,
+      "maxCoordinateDeltaMm": 0,
+      "runtimeProgramExact": true,
+      "peakNodeRssKiB": 327312
+    },
+    {
+      "name": "island-refusal",
+      "requestSha256": "4701578b1b920d8bda7e0443f7ca9e88407234e043024de12b325c1cd85dea71",
+      "nativeMs": 286.96104099999866,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing proof requires one selected unpatterned contour (no islands) with direct entry",
+      "wasmRefusal": true
+    },
+    {
+      "name": "refusal-narrow-neck",
+      "requestSha256": "b07cfb2b9e18feb4d8f86de9b1c35bd47d2601a5ff3e66db0af76649744ca9b2",
+      "nativeMs": 16.74883399999817,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing offset crosses/touches or splits: Crossing, overlap or touching curves require explicit review",
+      "wasmRefusal": true
+    },
+    {
+      "name": "refusal-tiny-edge",
+      "requestSha256": "349c15e6da24765cf44a39951c84a9c5bf8a6a5c8eb6310e680d6bef861e03f6",
+      "nativeMs": 5.316624999999476,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing polygon has nonfinite, out-of-range or near-degenerate edges (<0.001 mm)",
+      "wasmRefusal": true
+    },
+    {
+      "name": "refusal-crossing",
+      "requestSha256": "6e38bd956f4310b8acf34a488709bd257709f450c97a295febeeb638c1237850",
+      "nativeMs": 5.270166999998764,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing source topology: Crossing, overlap or touching contours require explicit review",
+      "wasmRefusal": true
+    },
+    {
+      "name": "refusal-near-collinear",
+      "requestSha256": "6107cce5234b2f3574e40d9b9afb2d4da781ed0f3d1f39d1a8a7bc95b18875c3",
+      "nativeMs": 5.051125000001775,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing reference has an ambiguous/near-collinear corner; simplify explicitly or disable Finishing",
+      "wasmRefusal": true
+    },
+    {
+      "name": "refusal-micro-gap",
+      "requestSha256": "a8180058a050d429e38b492b37c302e22f7e0cb51408cd092ba4a161fc8922d7",
+      "nativeMs": 4.562042000001384,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing requires exact endpoint continuity; preview an explicit drawing repair",
+      "wasmRefusal": true
+    },
+    {
+      "name": "refusal-source-arc",
+      "requestSha256": "fe8b875581efdb8f3d2067bf949cfebae25c593dcf11c4b6eecb0cf25c41176d",
+      "nativeMs": 4.875124999998661,
+      "accepted": false,
+      "baselineAccepted": false,
+      "refusal": "Error: operation #1: finishing proof refused: Finishing source curves are not qualified; use a straight-edge polygon or disable Finishing",
+      "wasmRefusal": true
+    }
+  ],
+  "software_fingerprint_sha256": "1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c",
+  "comparison_policy": {
+    "machine_program": "exact bytes",
+    "native_baseline_decoded": "exact",
+    "native_wasm_coordinates": "absolute difference <=1e-12 mm only for from/to/center xyz; other fields exact",
+    "max_observed_coordinate_delta_mm": 1.4210854715202004e-14
+  }
+}

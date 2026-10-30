@@ -1,5 +1,30 @@
 # FabCAM — current status
 
+**ALPHA-3.1 accepted and locally consolidated — 2026-10-30.** Human acceptance
+covers the bounded polygon implementation and documented limitations.
+Core `59d8e233fa54facb9873b7203068ed45ad291011`; software/tests `56743de13a1f66005d7e24519fc298e66bf9c224`;
+all 1,302 qualified software files match the final fingerprint exactly.
+[Acceptance receipt](../releases/evidence/alpha31/consolidation.json).
+Earlier pending-review/uncommitted statements are historical. ALPHA-3.2 isolated
+preflight is authorized; HARD STOP before any incompatible persistence change.
+No merge, push, installer, release or physical operation.
+
+**ALPHA-3.1 — bounded polygon finishing implemented and software-qualified;
+human acceptance PENDING.** Isolated `feature/alpha-3-1-generalized-finishing`,
+uncommitted over accepted ALPHA-3 HEAD `1a70e503b8661aeb59b8d3bff56e5fde4139836c`.
+[Source-bound report](../releases/ALPHA_3_1_GENERALIZED_FINISHING.md): useful convex
+and concave Profile Inside/Outside and single-boundary Pocket finishing, with
+continuous planned/decoded coverage proofs. V10/preset v2, Main-only output,
+rectangle output and ShopBot guards are preserved. **20/20 canonical gates**,
+1,645 Rust PASS / 1 intentional ignored worker, 1,542 frontend PASS / 1 optional
+skip; 86 runtime cases and 23 retained output fixtures. Final 1,302-file fingerprint:
+`1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c`.
+Source curves/islands/holding extensions remain unsupported; some Zigzag coverage
+and Spiral/complexity cases refuse. New polygon streaming buffers before publishing
+validated bytes. Installed native/physical tests NOT RUN. **CONDITIONAL GO for
+human review; HARD STOP before commits/integration.** Other worktrees preserved;
+no ALPHA-4, TOOL-META integration, installer or publication.
+
 **ALPHA-3 human acceptance recorded:** bounded first implementation accepted;
 three focused local commits authorized. Software/tests `42be450e080d63ef83b632ab3ec9389e4095e126`
 match the qualified 1,295-file fingerprint exactly. Documentation/acceptance receipt

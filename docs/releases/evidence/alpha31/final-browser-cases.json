@@ -1,0 +1,56 @@
+[
+  {
+    "fixture": "rotated-profile",
+    "state": [
+      "Generated in  0.0 s",
+      "Full-program simulation complete",
+      "2 obj · 2 offsets · 158 moves"
+    ],
+    "exportEnabled": true
+  },
+  {
+    "fixture": "convex-profile",
+    "state": [
+      "Generated in  0.0 s",
+      "Full-program simulation complete",
+      "2 obj · 2 offsets · 168 moves"
+    ],
+    "exportEnabled": true
+  },
+  {
+    "fixture": "concave-profile",
+    "state": [
+      "Generated in  0.0 s",
+      "Full-program simulation complete",
+      "2 obj · 2 offsets · 193 moves"
+    ],
+    "exportEnabled": true
+  },
+  {
+    "fixture": "convex-pocket",
+    "state": [
+      "Generated in  0.0 s",
+      "Full-program simulation complete",
+      "2 obj · 26 offsets · 465 moves"
+    ],
+    "exportEnabled": true
+  },
+  {
+    "fixture": "convex-pocket-dual",
+    "state": [
+      "Generated in  0.0 s",
+      "Full-program simulation complete",
+      "2 obj · 31 offsets · 570 moves"
+    ],
+    "exportEnabled": true
+  },
+  {
+    "fixture": "island-pocket",
+    "state": [
+      "Generation failed after  0.1 s",
+      "Finishing proof requires one selected unpatterned contour (no islands) with direct entry",
+      "No qualified program was generated."
+    ],
+    "exportButtonCount": 0
+  }
+]

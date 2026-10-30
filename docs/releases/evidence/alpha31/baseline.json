@@ -1,0 +1,426 @@
+{
+  "source_sha": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+  "software_fingerprint": "1918642857029aad70aff0a2881248e4b67b66daeeb267ad71954f49a54b4b46",
+  "cases": [
+    {
+      "case": "rectangle-inside-main",
+      "request_sha256": "5ceb465ba052ddbf6da72188d18b2e8a28389e1a442aa81f9d4ef41780739cee",
+      "exit_code": 0,
+      "elapsed_ms": 747.113,
+      "program_sha256": "adaa6fc6ea634bc29954e8ae36e80e8c2c20b050c7cc8247ccaeaefb551a4d27"
+    },
+    {
+      "case": "rectangle-inside-finish",
+      "request_sha256": "564b933c01094ccdffcd31d2b8c81191ee243d5efd00c8bfa12a216ed28ae42d",
+      "exit_code": 0,
+      "elapsed_ms": 8.882,
+      "program_sha256": "9e55756f3dc9595e212e417fbcc3db927a66e97b8d233ca16254d800bbe1ab49"
+    },
+    {
+      "case": "rectangle-outside-main",
+      "request_sha256": "52e6a3c3c942048ecb76e559c5a359795c7ee6c77b91b6de0f83dfc45e50f1cb",
+      "exit_code": 0,
+      "elapsed_ms": 7.348,
+      "program_sha256": "cefa238d872621f5ab861c7555f7b9d04b901762ba257d8cadadf360144438d3"
+    },
+    {
+      "case": "rectangle-outside-finish",
+      "request_sha256": "76dda75cd6c0597d83b91f8ecda4b25645df8fa0296c2a2e0eebe89a9c7c95f7",
+      "exit_code": 0,
+      "elapsed_ms": 7.443,
+      "program_sha256": "f1c68c92443175474cfbe18dd6578394417f01c9ec1a67c832864e80c0c060c5"
+    },
+    {
+      "case": "rectangle-cascade-main",
+      "request_sha256": "12dfe17eb327d431024b79376b51445cc8d12c1544203dd7c98ee94d0c22d160",
+      "exit_code": 0,
+      "elapsed_ms": 14.524,
+      "program_sha256": "d293e4912e63f5b8a42ecf01f9a909712b420795ab4e64a55ad84abe96e6a475"
+    },
+    {
+      "case": "rectangle-cascade-finish",
+      "request_sha256": "e096aa62b4aba4705c9ccc6bb5112f56e09fb991e8ccd8aa67b0edabcac5d353",
+      "exit_code": 0,
+      "elapsed_ms": 15.302,
+      "program_sha256": "fc4f7f00cdfc1ae4ea86abeae3b5eccb9c8634a3e83f6b5deea0f43d38cc4408"
+    },
+    {
+      "case": "rectangle-zigzag-main",
+      "request_sha256": "ecf9ec85bfa07d709ffa9bc78c42480af9ce84d6884249b41ccb91aab143f0ca",
+      "exit_code": 0,
+      "elapsed_ms": 5.769,
+      "program_sha256": "1035713f8449fac19d3eb11e4dc1e4f956e1e3ebf50daea0e1a0283ce0acbbf4"
+    },
+    {
+      "case": "rectangle-zigzag-finish",
+      "request_sha256": "134a454c6184e5d6ccec2d61e4cced3af4d0bd5eb10b6bd3b620b02a3a333f44",
+      "exit_code": 0,
+      "elapsed_ms": 6.921,
+      "program_sha256": "8a938064199ef42d3710e3aebbd71da14fed68c22b966c7299e1a8cd3710f3da"
+    },
+    {
+      "case": "rectangle-spiral-main",
+      "request_sha256": "194bf14dc46c903d77b0542e01753f91c41a30f35ed0a0610c02dbc8515f2af1",
+      "exit_code": 0,
+      "elapsed_ms": 5.638,
+      "program_sha256": "266eaee306a98a037eeeeb3844c4d9a965c72c4bcd5c6561ce7a1875dc46af40"
+    },
+    {
+      "case": "rectangle-spiral-finish",
+      "request_sha256": "b2a4d7f28c35268aad2952afdd98e580420f7ff7484eb839d640817c7e587a5b",
+      "exit_code": 0,
+      "elapsed_ms": 7.013,
+      "program_sha256": "17673ae7bd14734af7745662390464d2cf11a6425e8ce673ee76bce8cb5abc2d"
+    },
+    {
+      "case": "rotated-inside-main",
+      "request_sha256": "9315fb7a583a8ae4a6f7eab5a38da49b0a4a7ce768bf8b66a0708a32e7f89034",
+      "exit_code": 0,
+      "elapsed_ms": 4.501,
+      "program_sha256": "121bd5c47d533ccea3476fc9087748ff9d7a4ce669728f89b60f6e375e26564a"
+    },
+    {
+      "case": "rotated-inside-finish",
+      "request_sha256": "b23276e290ca4e744db4b2cddded116034ce3167873d4b44929540008ecb6d72",
+      "exit_code": 1,
+      "elapsed_ms": 4.114,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof requires exact axis-aligned straight rectangle edges"
+    },
+    {
+      "case": "rotated-outside-main",
+      "request_sha256": "b9cb06eb101245f8eb07ba67eae41674047aae34094e85edc945c2a79c0dc6aa",
+      "exit_code": 0,
+      "elapsed_ms": 4.691,
+      "program_sha256": "8e2a73731970709197e9a615c675b78d0fcd970b7d34cf64e266769897a2e051"
+    },
+    {
+      "case": "rotated-outside-finish",
+      "request_sha256": "84bde61a1dc354859c07c697cc6a9c86e16626a81d5401e523076f4621b64e15",
+      "exit_code": 1,
+      "elapsed_ms": 4.088,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof requires exact axis-aligned straight rectangle edges"
+    },
+    {
+      "case": "rotated-cascade-main",
+      "request_sha256": "a92fdf75088519016c4c554b1d306c5d704b1666a35f4edec792416edcea8867",
+      "exit_code": 0,
+      "elapsed_ms": 15.943,
+      "program_sha256": "44db0692b93051a677663249fd88fd118c8abcd923270e877290e7b6290eddf5"
+    },
+    {
+      "case": "rotated-cascade-finish",
+      "request_sha256": "c5acd224739c57b5f2fcf5740f11762fec61efcac39109a607db223853d2364b",
+      "exit_code": 1,
+      "elapsed_ms": 4.386,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof requires exact axis-aligned straight rectangle edges"
+    },
+    {
+      "case": "rotated-zigzag-main",
+      "request_sha256": "2b9c3de226147166f6d2de6de9cdb710b94b7d430bb3c964495e1b79c3b2010f",
+      "exit_code": 0,
+      "elapsed_ms": 5.303,
+      "program_sha256": "a85519003f237a3b0dafe5b142a050241d4b60ffdfffa6dc9304a76585e6846e"
+    },
+    {
+      "case": "rotated-zigzag-finish",
+      "request_sha256": "f8bc6b6bec95fbf7a1c01b9498116a81ef0bb18385400fcfff1c5c6f1a6d034b",
+      "exit_code": 1,
+      "elapsed_ms": 4.154,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof requires exact axis-aligned straight rectangle edges"
+    },
+    {
+      "case": "rotated-spiral-main",
+      "request_sha256": "095813e654076f6c826beb3518e9e210a6d9ca56917783eaa9b89224ef0fa352",
+      "exit_code": 0,
+      "elapsed_ms": 5.208,
+      "program_sha256": "8ee9f698933e90aba76aead4c0b8f8edd7ea7cb0d875e4a7f61eb3cd404e0442"
+    },
+    {
+      "case": "rotated-spiral-finish",
+      "request_sha256": "4d065e43b4840077eddd8080e71aa22c5526e8874b0bdf531c16ec1648113415",
+      "exit_code": 1,
+      "elapsed_ms": 4.285,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof requires exact axis-aligned straight rectangle edges"
+    },
+    {
+      "case": "triangle-inside-main",
+      "request_sha256": "0ec2710f3f95ce9c4387403d05c9d4ae40fbf93752786c4bc1636aef0f18c663",
+      "exit_code": 0,
+      "elapsed_ms": 4.141,
+      "program_sha256": "b36ac02982b945799594ad7588bce9ebd0a849a14df6b0f6734d8ee5c9c6114f"
+    },
+    {
+      "case": "triangle-inside-finish",
+      "request_sha256": "5c06fed3b7bb4dda7dc35def7a857199a4cdf5494a6b51bf5aca7ae5e0f87624",
+      "exit_code": 1,
+      "elapsed_ms": 3.831,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "triangle-outside-main",
+      "request_sha256": "bc55be69a2b44fdedbe576a7a97e66be88ddfc4605e843ced9e1ec96a6575e40",
+      "exit_code": 0,
+      "elapsed_ms": 4.514,
+      "program_sha256": "463764d514f6cd894ed14664c472c78d110aa067b98742a4c6d1fd72186357e4"
+    },
+    {
+      "case": "triangle-outside-finish",
+      "request_sha256": "a16bba01509764bab11941a7bdf48ee607e5e9d654e6bb9a17cfade1c123d70e",
+      "exit_code": 1,
+      "elapsed_ms": 3.968,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "triangle-cascade-main",
+      "request_sha256": "64c031b2c01577fb5b667ac59187330b6a0f93c1bb7ccb406a1402887d048f8b",
+      "exit_code": 0,
+      "elapsed_ms": 12.565,
+      "program_sha256": "efba3ca8baa3b84c012ea02ff5bc4bd63438996722c63352d751679a7d5e3844"
+    },
+    {
+      "case": "triangle-cascade-finish",
+      "request_sha256": "56a7a6c561f9ba3118d68206918c4f10c0b6f8b4bfd9154ced27190c4f2d595f",
+      "exit_code": 1,
+      "elapsed_ms": 4.799,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "triangle-zigzag-main",
+      "request_sha256": "45ed5cbd41061e67e1faca315ec3eb63fe22e7e2be6bab36551411a062bd4fec",
+      "exit_code": 0,
+      "elapsed_ms": 5.998,
+      "program_sha256": "cfa571123e482e31dd291403658d0484c73b6138e3b0dbcb313f31f8fbf9e919"
+    },
+    {
+      "case": "triangle-zigzag-finish",
+      "request_sha256": "f23b60758b48bcbf19be9d91fdf7ba8456601a59449fd2ee8bf47b71aad7f484",
+      "exit_code": 1,
+      "elapsed_ms": 4.337,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "triangle-spiral-main",
+      "request_sha256": "93174e02793778fdd552591834723174148b610654887f2eadc9bd5316e40d12",
+      "exit_code": 0,
+      "elapsed_ms": 5.205,
+      "program_sha256": "2b58faa5474ba788055e7fadf4cf6f404b25181acbfd7548b3e6341ef74767ce"
+    },
+    {
+      "case": "triangle-spiral-finish",
+      "request_sha256": "5053b242a595da314a0b6fafef3afee76b8b268b21b56b98f27c9935e06e4326",
+      "exit_code": 1,
+      "elapsed_ms": 4.182,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "convex-inside-main",
+      "request_sha256": "6adaade52fbf31ee42cd167baf1a0de21d705b58b50e7c6655ea1cf37fedb15d",
+      "exit_code": 0,
+      "elapsed_ms": 4.311,
+      "program_sha256": "416774e7e06b92d3e2095353285536387e538bbdf33e8d860b25fc552379b40b"
+    },
+    {
+      "case": "convex-inside-finish",
+      "request_sha256": "4fa821715aebd3fb1db55c074e1316a5b9802ad1461110eae149c96e5ea592f1",
+      "exit_code": 1,
+      "elapsed_ms": 3.99,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "convex-outside-main",
+      "request_sha256": "9db07074d774cf3511703a6a31ca9ec4eb080cde2409a678fb5c3ca6416913fd",
+      "exit_code": 0,
+      "elapsed_ms": 4.971,
+      "program_sha256": "bcc4f940e80a26027211653d130d33e12defd666c6e3e2611445e35005891b37"
+    },
+    {
+      "case": "convex-outside-finish",
+      "request_sha256": "52a5c8d1c2a73c886acf3fcf73f50c53717a985039d0d3063c7972e1dae67cff",
+      "exit_code": 1,
+      "elapsed_ms": 3.856,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "convex-cascade-main",
+      "request_sha256": "cbbf399a5bbeed74c22d8d32130676a367f98361b247a41ef0618083a9b3f568",
+      "exit_code": 0,
+      "elapsed_ms": 27.196,
+      "program_sha256": "fffad2fda0ff211c44a62592c51341fa04ec2112cf54e2927feb242c4a1ccbf4"
+    },
+    {
+      "case": "convex-cascade-finish",
+      "request_sha256": "7ad5bf621da741fe7738d06d8a28e5e64c6a5b8b712f6710419bb270078e938b",
+      "exit_code": 1,
+      "elapsed_ms": 4.541,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "convex-zigzag-main",
+      "request_sha256": "f272c37cc724786a4ddc5de5a7863b5a1e6a764a530ce51505098ee3a5be1861",
+      "exit_code": 0,
+      "elapsed_ms": 5.687,
+      "program_sha256": "6ad65d28fa15e67fdbaea6bba4c57f4c6abf696f47269dd4790086dacb2dedef"
+    },
+    {
+      "case": "convex-zigzag-finish",
+      "request_sha256": "cd28d9638920bf7a0a24acebf639e97275e6e7a9e62c226793810e286f9d6d08",
+      "exit_code": 1,
+      "elapsed_ms": 4.219,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "convex-spiral-main",
+      "request_sha256": "9a89cc8d21483b3c69d364dbe234206bdb8a16235c8c0a0e2a7d8911e22ef839",
+      "exit_code": 0,
+      "elapsed_ms": 6.231,
+      "program_sha256": "b46e91335a8550becbb4b51fa786747144e18d74c51c419274123dd41362e803"
+    },
+    {
+      "case": "convex-spiral-finish",
+      "request_sha256": "2f753fbe6bd41566c26a288a16b9eb356272bdfde23b83fcf063a5d5ae119e7e",
+      "exit_code": 1,
+      "elapsed_ms": 4.472,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "concave-inside-main",
+      "request_sha256": "1b6ae8b27aa4f458d0d90394a9f095753df2048168592484c19c9957513b9dee",
+      "exit_code": 0,
+      "elapsed_ms": 5.968,
+      "program_sha256": "d2b3d30280cfd356413431ad0dce7b789f46b23f918d56f81ed55f1e189131f3"
+    },
+    {
+      "case": "concave-inside-finish",
+      "request_sha256": "7f1c3defdf06e2ff4abaf0926f0fc65b57f6f4874c42e79a723d87275b491661",
+      "exit_code": 1,
+      "elapsed_ms": 5.584,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "concave-outside-main",
+      "request_sha256": "4c9b774454bafb9a6a6e1f7740118b34d0641a5ac2e7ef4e67fcf6f6201acbcb",
+      "exit_code": 0,
+      "elapsed_ms": 5.712,
+      "program_sha256": "904ca953b9ab62cfb35add2ac8f4e656c6ff3389c91e04a1f8f2bd297d5c0a6d"
+    },
+    {
+      "case": "concave-outside-finish",
+      "request_sha256": "670c452dfc8badd665cade9af4ad6245d34f79ba1a4325a5da599e8e87b8132f",
+      "exit_code": 1,
+      "elapsed_ms": 4.469,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "concave-cascade-main",
+      "request_sha256": "3ea6f192c6e25fd6b3ced5d9971e3a00b402e6db9ede24d4c3130411bfa1d7b9",
+      "exit_code": 0,
+      "elapsed_ms": 149.603,
+      "program_sha256": "c2d7893886528a55c2b7495d159d2f3a19ba1ad672b1052c353d3ecfec520dce"
+    },
+    {
+      "case": "concave-cascade-finish",
+      "request_sha256": "37a02a36fedfda7a6f2f155f7c05102f9484c5f5c48924dd4d4b87ebc74fbff3",
+      "exit_code": 1,
+      "elapsed_ms": 69.761,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "concave-zigzag-main",
+      "request_sha256": "579b62a05471a55fd1bbcd2688aa3879a55bd4078b02524587f842944169db6e",
+      "exit_code": 0,
+      "elapsed_ms": 6.993,
+      "program_sha256": "0e73b8d999091b3bf022e1eace73524d24dddbbb25b7f5fe1f9c8106f128fcef"
+    },
+    {
+      "case": "concave-zigzag-finish",
+      "request_sha256": "a821eadbbd660e0da6be6d6524ae648a3c6987d07919988ee414793390859cc6",
+      "exit_code": 1,
+      "elapsed_ms": 5.195,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "concave-spiral-main",
+      "request_sha256": "b2caceb491da57cdadc4c6f481fe8e9bcef388c0357de4335c9a0837d40a7b3e",
+      "exit_code": 0,
+      "elapsed_ms": 140.791,
+      "program_sha256": "b19a53eea68499310917bee978572062872e659883c50ef90ecf5a6e17334732"
+    },
+    {
+      "case": "concave-spiral-finish",
+      "request_sha256": "39f3586a0a10edb7f3329429d7110c9a0159753e40a469281fff5f5fdce33540",
+      "exit_code": 1,
+      "elapsed_ms": 69.964,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "irregular_concave-inside-main",
+      "request_sha256": "0aef175b3b4e26884a06aff119e4a100f8d5702f84457fc8988e8b39ef66c37c",
+      "exit_code": 0,
+      "elapsed_ms": 5.178,
+      "program_sha256": "b5e140626cb1e5e333d35f80fdb30ecf9ce5552dcfa50943e8b5ebe81f373031"
+    },
+    {
+      "case": "irregular_concave-inside-finish",
+      "request_sha256": "ef23c05006d2f5f58e6ace60e4fb85a575e079920238bcd8a88c6cb4e1460fb2",
+      "exit_code": 1,
+      "elapsed_ms": 4.507,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "irregular_concave-outside-main",
+      "request_sha256": "e1f7beb2f93adb31a3ece6d29192e1ea3ef7abcb9ed8390c946306446a3cb2b0",
+      "exit_code": 0,
+      "elapsed_ms": 5.082,
+      "program_sha256": "e1f92356b019e05b0ee695eb0fda68d353117c4fbdb59faa19bad1252e4098df"
+    },
+    {
+      "case": "irregular_concave-outside-finish",
+      "request_sha256": "fa480c5ddbbad383b457aae39c615d867406268ab7cae211665085f0b0ca5648",
+      "exit_code": 1,
+      "elapsed_ms": 4.153,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "irregular_concave-cascade-main",
+      "request_sha256": "d8e3a4e074f7e91d31b9205f0cc789e64a25b4b958de75cb894196f50512233e",
+      "exit_code": 0,
+      "elapsed_ms": 398.938,
+      "program_sha256": "0b2d8ac4fab28e5fc19cc1560cddac103f4cd0af0e4901569de42d1c210d102c"
+    },
+    {
+      "case": "irregular_concave-cascade-finish",
+      "request_sha256": "bca88626ff33f333ec361a4871ae1683a371ba9e99a28b970b42782650aaeb97",
+      "exit_code": 1,
+      "elapsed_ms": 293.79,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "irregular_concave-zigzag-main",
+      "request_sha256": "68f5b657623d7779928263e9cc1e39573d3dbedfd8f710b6af71edada11148c5",
+      "exit_code": 0,
+      "elapsed_ms": 7.781,
+      "program_sha256": "d0674d3497353cfa88619fb62958b375e262d88e5cdba7d173a4198bde2157a1"
+    },
+    {
+      "case": "irregular_concave-zigzag-finish",
+      "request_sha256": "4dc0fa8557bf4c689e0f15797e04cdc2ab97062a39a535b868c2d8ed2d9a7829",
+      "exit_code": 1,
+      "elapsed_ms": 5.826,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    },
+    {
+      "case": "irregular_concave-spiral-main",
+      "request_sha256": "37e8a2020b10f802612f2db11fb156aa766cec33585c5ab078e864e2af40a305",
+      "exit_code": 0,
+      "elapsed_ms": 405.688,
+      "program_sha256": "bdb89d1764387702c3cb710dfcea8ebf8c876f48f0bb8560d3e262528868a21a"
+    },
+    {
+      "case": "irregular_concave-spiral-finish",
+      "request_sha256": "e835f77428eef4ba1c5ba13223554d38fe6653b99cae8b3b2f7772b556c668d3",
+      "exit_code": 1,
+      "elapsed_ms": 289.467,
+      "refusal": "Error: operation #1: invalid applied cutting parameters: Finishing proof currently requires one isolated four-edge rectangle"
+    }
+  ]
+}

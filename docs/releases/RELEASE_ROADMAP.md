@@ -1,5 +1,14 @@
 # FabCAM release roadmap
 
+**ALPHA-3.1 accepted and locally consolidated — 2026-10-30.** Human acceptance
+covers the bounded polygon implementation and documented limitations.
+Core `59d8e233fa54facb9873b7203068ed45ad291011`; software/tests `56743de13a1f66005d7e24519fc298e66bf9c224`;
+all 1,302 qualified software files match the final fingerprint exactly.
+[Acceptance receipt](evidence/alpha31/consolidation.json).
+Earlier pending-review/uncommitted statements are historical. ALPHA-3.2 isolated
+preflight is authorized; HARD STOP before any incompatible persistence change.
+No merge, push, installer, release or physical operation.
+
 **ALPHA-3 human acceptance recorded:** bounded first implementation accepted;
 three focused local commits authorized. Software/tests `42be450e080d63ef83b632ab3ec9389e4095e126`
 match the qualified 1,295-file fingerprint exactly. Documentation/acceptance receipt
@@ -18,6 +27,18 @@ below supersedes the earlier immediate public-RC plan; dated reports keep their
 original outcomes and scope.
 
 ## Current focus — FabCAM V1.1 macOS Personal Alpha
+
+**ALPHA-3.1 — generalized polygon finishing:** implementation and software gates
+are complete on isolated `feature/alpha-3-1-generalized-finishing`, uncommitted
+over accepted ALPHA-3 `1a70e503`. [Qualification and accepted/refused matrix](ALPHA_3_1_GENERALIZED_FINISHING.md)
+demonstrate meaningful convex/concave Profile and Pocket support, unchanged
+Main-only/rectangle output, bounded decoded coverage and retained V10 semantics.
+20/20 canonical gates pass. Human UX/motion acceptance and local commit approval
+remain **PENDING**. Curves, islands, unproven offsets, holding extensions and
+optimized rest machining are excluded; strategy/resource refusals are deliberate.
+The new polygon streaming path buffers the program for proof before writing.
+No integration or native/physical acceptance is inferred. **HARD STOP**; ALPHA-4
+and the separate native Personal Alpha gate are not started by this result.
 
 **ALPHA-1 — bounded stabilization:** implemented on the isolated alpha branch at
 `b0c2f208bc0de1d38f733d378abbb0b85600785d`. [The completion report](ALPHA_1_STOCK_IMPORT_DIAGNOSTICS.md)

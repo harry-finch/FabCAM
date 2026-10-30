@@ -1,0 +1,209 @@
+{
+  "software_fingerprint_sha256": "1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c",
+  "origins": [
+    "http://127.0.0.1:18835/?api=wasm",
+    "http://127.0.0.1:18836/?api=wasm"
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 760,
+      "height": 900
+    }
+  ],
+  "locales": [
+    "en",
+    "de"
+  ],
+  "native_installed": "NOT RUN: separate macOS account required",
+  "physical": "NOT RUN",
+  "assets": {
+    "web-reviewed": {
+      "asset_manifest_sha256": "76baaf57a471b4f8aad901a996ba5e4eaf4a08858ce702e087e6618f99d8affe",
+      "wasm": [
+        {
+          "path": "assets/ivac_wasm_bg-CCaBpyGv.wasm",
+          "sha256": "0609e3981551d2ee8b7407834cc69ee54983414383fd7d6c4f35e4cd657df7e4"
+        }
+      ],
+      "index_sha256": "9439166254ee685af2d9303bf9aa4058a3e26f900793dd378495dc5f69d38858"
+    },
+    "web-final": {
+      "asset_manifest_sha256": "94a4aea8140d2f6fd0323bb9e086f7b15a5230d2acd05ebbdd7aa39a5bf3a15f",
+      "wasm": [
+        {
+          "path": "assets/ivac_wasm_bg-oMKJik3U.wasm",
+          "sha256": "5fc690b54b18774598a982df9529126d3d264d58be0d89cd94b0aae13a46bb31"
+        }
+      ],
+      "index_sha256": "4ce9b87c3212d830304a6fd012fa15bb8405be00fa554798af49219a555fd62e"
+    }
+  },
+  "saved_project_sha256": "e9de8c9142f532f382a9d4bff6091d7a5ad7b73c3fd583eedc20756203e226d7",
+  "saved_project_version": 10,
+  "final_concave_save_reopen": {
+    "moves": 17588,
+    "program_lines": 17732,
+    "main_moves": 6660,
+    "finishing_moves": 10926,
+    "verification": "Full-program simulation complete; export enabled"
+  },
+  "first_review_steps": [
+    "SVG import and Profile creation",
+    "rotated/convex/concave Profile Finishing",
+    "Main-only Profile",
+    "Pocket Main-only, wall-only, floor-only, combined allowances",
+    "Cascade and Spiral accepted; Zigzag incomplete floor refused; concave Spiral proof budget refused",
+    "distinct Pocket cutter #2 in playback",
+    "island explicit refusal",
+    "allowance edit stale export, Undo exact context restore, Redo stale refusal",
+    "drawing X+1 edit stale export",
+    "actual Save V10 download and reopen",
+    "report stage/rate/tool attribution",
+    "desktop/narrow EN/DE help and keyboard focus"
+  ],
+  "final_repeat": "Same UI/messages; final rebuilt core repeats representative accepted cases and refusals after added analytic-arc enclosure debit.",
+  "screenshots": [
+    {
+      "path": "browser-budget-refusal.png",
+      "sha256": "f7a9dfa1d863b48248e64f4e585ff38c1dd2fd1e044304efe34da5cbc3ffc63f"
+    },
+    {
+      "path": "browser-concave-3d.png",
+      "sha256": "c126bd38056fab5cd4741f67b79a452a3cc93625db7fd93d5e7f5b1753f90fa7"
+    },
+    {
+      "path": "browser-concave-finishing.png",
+      "sha256": "0a9f3418e037edb27077203ded5cedebc55e677847bd91b8a40cddc35251c1a1"
+    },
+    {
+      "path": "browser-distinct-cutter.png",
+      "sha256": "cdf1025ce27d9fb63429ee659931a704e914843421b50e22b0d7c1973c758be0"
+    },
+    {
+      "path": "browser-floor-refusal.png",
+      "sha256": "c408c573349c9bb5a1d1c2006e517b3353054e1816e690b57ada4397a7d8a026"
+    },
+    {
+      "path": "browser-geometry-stale.png",
+      "sha256": "95f4e887b559f0000ddc69c2cacfac7b1477bc19337005cecd65bd5082bac734"
+    },
+    {
+      "path": "browser-island-refusal.png",
+      "sha256": "441d49fa9e8b0a02aab796e608b76c858901ff162321bcef477dae10e1591460"
+    },
+    {
+      "path": "browser-narrow-de.png",
+      "sha256": "6c85ba24738b2874a65012a00e66a0a9b7c625f6db26e53df9414306c4ea24d3"
+    },
+    {
+      "path": "browser-profile-finish.png",
+      "sha256": "38c0c7856b992711472699676cd42ec20ac0238d7b8e5f385bc15939db7af858"
+    },
+    {
+      "path": "browser-profile-main.png",
+      "sha256": "bd1dc0db9a4fefdbb787425a922b9bcf3b869c9e8411fe4ad73296bba77f91d5"
+    },
+    {
+      "path": "browser-report-stages.png",
+      "sha256": "d8ae1a1aa03857e1f388f6c0fdef7a240cf5ad089c8b6c75dba865cab86fda4a"
+    },
+    {
+      "path": "browser-stale.png",
+      "sha256": "5fe3bf812fc779f89bd97a6bf19ae18ec537f21f9b9013814383196119c20bed"
+    },
+    {
+      "path": "final-browser-concave.png",
+      "sha256": "40de3232232bf30967925ea8e72aa5347c7d5da3b9f221310b7a7e74f870689a"
+    },
+    {
+      "path": "final-browser-island.png",
+      "sha256": "57bfb5f9c44b6fe6b8367556d699570718bb0941a931a18e5a99f5366ce9e7f2"
+    }
+  ],
+  "synthetic_fixture_hashes": [
+    {
+      "name": "concave-pocket.ivac-project.json",
+      "sha256": "cab6cbdf203d04da7252c1a1c9e36f50394c529f809bac14dca97fdf12327ccf"
+    },
+    {
+      "name": "concave-profile.ivac-project.json",
+      "sha256": "fa4ebb34e2b3ce60454b1711cdac85082facdd289f8138b244af8894a442ff8e"
+    },
+    {
+      "name": "concave.svg",
+      "sha256": "c92f1a43b57d4c7dda8b840c3f9dbe1ca427d0540f2e7541325fe03d3f1b2d27"
+    },
+    {
+      "name": "convex-pocket-dual.ivac-project.json",
+      "sha256": "203c3ae956df0da4289d2f408ecd89c418d0e9e343968bf93d7dc162a1823903"
+    },
+    {
+      "name": "convex-pocket.ivac-project.json",
+      "sha256": "b7b4f43201cfb77e7078551ca9ff769d4f0e0fe94e691b34b974e2219b92f029"
+    },
+    {
+      "name": "convex-profile.ivac-project.json",
+      "sha256": "404795832fb68a478ed714ce38f35bd02e0015b49592627700795cb4975d1394"
+    },
+    {
+      "name": "convex.svg",
+      "sha256": "a5a257f1b27b7a7727e2d8fc8879c5a2bb71c85fafb340963e429555183f31d3"
+    },
+    {
+      "name": "irregular_concave-pocket.ivac-project.json",
+      "sha256": "bd418db82366c60b20f176e343a247712a76b4551692cec706be7c6fe6731bf8"
+    },
+    {
+      "name": "irregular_concave-profile.ivac-project.json",
+      "sha256": "6e7bab5411698a99a45624c212c0e21e6ea38c1a515dc24701dc3cf68cfafb73"
+    },
+    {
+      "name": "irregular_concave.svg",
+      "sha256": "26e9b3828b98f7900480e8b36829283bb312701a1d60a7708f312d6ef69b64bc"
+    },
+    {
+      "name": "island-pocket.ivac-project.json",
+      "sha256": "fd090e92948c654a3f1f1617fb64ce16f82a53e61e22a600b71b50ef26735cab"
+    },
+    {
+      "name": "rectangle-pocket.ivac-project.json",
+      "sha256": "1902c7ac7c67b906474e4a5ab6f91f0c29fdec3862ffb0c604ebd91173479fec"
+    },
+    {
+      "name": "rectangle-profile.ivac-project.json",
+      "sha256": "5adc0fbf007bc1d8bb6f822b8026ee43872cd550fe00977c3d71a8bd874013cd"
+    },
+    {
+      "name": "rectangle.svg",
+      "sha256": "9968e2512e36232bd3087f16efc4ad9f5c3efdb9b09617bad06b836762307013"
+    },
+    {
+      "name": "rotated-pocket.ivac-project.json",
+      "sha256": "2ef683f24e12aa540809c10692d5488d01e3a9a7633313bd3cbd14245dbe3b31"
+    },
+    {
+      "name": "rotated-profile.ivac-project.json",
+      "sha256": "8dd681de122f15ec5750a342a0eb2e50596113f3c7167f009f29e30c5d0f6cf7"
+    },
+    {
+      "name": "rotated.svg",
+      "sha256": "25a8a090c325a8cefcceceda1d349260230eb7de75ffb5e63972c15ebc61b332"
+    },
+    {
+      "name": "triangle-pocket.ivac-project.json",
+      "sha256": "7a242a96f9879bfb7c050fc3079e70ce7a4f74834d79620c8834af5695c340cc"
+    },
+    {
+      "name": "triangle-profile.ivac-project.json",
+      "sha256": "be2f297272e3ebe8fefbcd23203a5b36b6f8c39e4f363361c006799be44c605f"
+    },
+    {
+      "name": "triangle.svg",
+      "sha256": "9b9ee87228fa4ebfb140f98c17da0778bc8cc71d0585a38eae418dd160865c1a"
+    }
+  ]
+}

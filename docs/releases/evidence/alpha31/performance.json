@@ -1,0 +1,59 @@
+{
+  "method": "macOS /usr/bin/time -l, fresh native CLI process, debug all-features build, single observation; not a production benchmark or memory guarantee",
+  "cases": [
+    {
+      "case": "rectangle-cascade-finish",
+      "exit_code": 0,
+      "max_rss_bytes": 17711104,
+      "wall_seconds": 0.01
+    },
+    {
+      "case": "convex-outside-finish",
+      "exit_code": 0,
+      "max_rss_bytes": 17137664,
+      "wall_seconds": 0.05
+    },
+    {
+      "case": "convex-cascade-finish",
+      "exit_code": 0,
+      "max_rss_bytes": 18235392,
+      "wall_seconds": 0.03
+    },
+    {
+      "case": "concave-cascade-finish",
+      "exit_code": 0,
+      "max_rss_bytes": 31309824,
+      "wall_seconds": 0.42
+    },
+    {
+      "case": "medium-32-outside",
+      "exit_code": 0,
+      "max_rss_bytes": 18186240,
+      "wall_seconds": 0.08
+    },
+    {
+      "case": "medium-32-cascade",
+      "exit_code": 0,
+      "max_rss_bytes": 20643840,
+      "wall_seconds": 0.08
+    },
+    {
+      "case": "multi-eight-main-only",
+      "exit_code": 0,
+      "max_rss_bytes": 16842752,
+      "wall_seconds": 0.0
+    },
+    {
+      "case": "island-refusal",
+      "exit_code": 1,
+      "max_rss_bytes": 18169856,
+      "wall_seconds": 0.26
+    },
+    {
+      "case": "refusal-narrow-neck",
+      "exit_code": 1,
+      "max_rss_bytes": 17055744,
+      "wall_seconds": 0.01
+    }
+  ]
+}

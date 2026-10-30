@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-30",
+  "branch": "feature/alpha-3-1-generalized-finishing",
+  "base_sha": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+  "implementation_commits": [],
+  "software_fingerprint_sha256": "1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c",
+  "software_files": 1302,
+  "canonical_gates": {
+    "passed": 20,
+    "failed": 0,
+    "rust": {
+      "passed": 1645,
+      "failed": 0,
+      "ignored": 1
+    },
+    "frontend": {
+      "passed": 1542,
+      "optional_locale_skip": 1,
+      "files": 178
+    },
+    "names": [
+      "cargo fmt --check",
+      "cargo clippy -Dwarnings (with pedantic)",
+      "cargo test --workspace",
+      "xtask schema-check",
+      "xtask version-check",
+      "readme parity",
+      "pnpm install",
+      "codegen drift",
+      "i18n keys drift",
+      "pnpm run lint",
+      "pnpm run check",
+      "pnpm run test",
+      "pnpm run build",
+      "wasm-pack build (web)",
+      "wasm cps size guard",
+      "cargo-deny check",
+      "ui smoke (headless)",
+      "CLI trust and transactional export",
+      "SEC1 release boundary regressions",
+      "candidate identity regressions"
+    ]
+  },
+  "runtime": {
+    "cases": 86,
+    "accepted": 73,
+    "newly_accepted": 28,
+    "refused": 13,
+    "baseline_exact": 45,
+    "native_wasm_program_exact": 70
+  },
+  "retained_corpus": {
+    "fixtures": 23,
+    "exact_programs": 24
+  },
+  "baseline_red": {
+    "expected_failed_tests": 2,
+    "source_sha": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+    "mutated_production": false
+  },
+  "raw_log_hashes": [
+    {
+      "name": "alpha31-baseline-red.log",
+      "sha256": "f67cd7b6a07babc0ecddcbf41a53ae2d8e54fb4a913112f969b10ef136043c76",
+      "bytes": 1654
+    },
+    {
+      "name": "alpha31-final4-wasm.log",
+      "sha256": "ee7803fbb1a43e4aa905d3ccf83e6ea4777e7b01277480ceff9affa6c8ed9dbd",
+      "bytes": 62
+    },
+    {
+      "name": "alpha31-final4-gate.log",
+      "sha256": "d65f4d570011881d7ba5f3474db8df7907a8e7656076ff7f93643379ce7e9c18",
+      "bytes": 527943
+    },
+    {
+      "name": "alpha31-enclosure.log",
+      "sha256": "acdb60283fed296cbc11e6eba891d62e6b92d71fdab9790b468394c87a41dbda",
+      "bytes": 21754
+    },
+    {
+      "name": "alpha31-final-native.log",
+      "sha256": "ba7a578a439d5d92310f966d0fcd82691ed42e2d63dab58bd56882056eb01854",
+      "bytes": 298
+    },
+    {
+      "name": "alpha31-final-runtime.log",
+      "sha256": "82a1cf4539beec4f7b9706a9780ca853ebb6db20cf063d4d6e7b00380b9aa89a",
+      "bytes": 109
+    },
+    {
+      "name": "alpha31-retained-corpus.log",
+      "sha256": "752c544723b670a41ed1e60a42ae7ec263ccb802920932ba8e24293159d8a7b8",
+      "bytes": 408
+    }
+  ],
+  "human_review": "PENDING",
+  "recommendation": "CONDITIONAL GO: bounded polygons, stated strategy/resource/stream-memory limits",
+  "installed_native": "NOT RUN",
+  "physical": "NOT RUN",
+  "no_commit_push_merge_installer_or_release": true
+}

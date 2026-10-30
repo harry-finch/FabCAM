@@ -1,0 +1,218 @@
+{
+  "status": "PROPOSED ONLY \u2014 no staging or commits authorized yet",
+  "base_sha": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+  "software_fingerprint_sha256": "1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c",
+  "changed_file_count": 44,
+  "self_hash_note": "This inventory lists itself without a hash to avoid self-reference. All other proposed file hashes are exact.",
+  "groups": [
+    {
+      "number": 1,
+      "title": "feat(cam): prove generalized polygon Main/Finishing paths",
+      "depends_on": [],
+      "files": [
+        {
+          "path": "crates/ivac-core/src/pipeline.rs",
+          "sha256": "d41176a75a3007faf34b778892b56c09fc475d48790137b946c64b8c5495a9eb"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/op_drivers.rs",
+          "sha256": "1a3c43c0c7cdd28045ca9689435c836efb4969521537f092f1a36f67a40f8dd1"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/op_drivers/stage_polygon.rs",
+          "sha256": "275b19d8b3db54be844c609e91299a7a0501a27a6ab022fbf00b8fbf1f604d86"
+        },
+        {
+          "path": "crates/ivac-core/src/pipeline/op_drivers/staged.rs",
+          "sha256": "dfe4e165d9df6edfc030bf9690b194830a26a803983b5aaf2e63c7d4cdd21c06"
+        },
+        {
+          "path": "crates/ivac-core/tests/alpha31_finishing.rs",
+          "sha256": "39f748d0b12c30cae6f36b14aa1e4c01ad04894f92e2327bafc2f5544aab499e"
+        },
+        {
+          "path": "tests/fixtures/alpha31/concave-pocket.request.json",
+          "sha256": "37a02a36fedfda7a6f2f155f7c05102f9484c5f5c48924dd4d4b87ebc74fbff3"
+        },
+        {
+          "path": "tests/fixtures/alpha31/convex-pocket.request.json",
+          "sha256": "7ad5bf621da741fe7738d06d8a28e5e64c6a5b8b712f6710419bb270078e938b"
+        },
+        {
+          "path": "tests/fixtures/alpha31/polygons.json",
+          "sha256": "14231e995daf2182ce16405b3bb560e1d713c5b6fea56edb2344140e8819803b"
+        },
+        {
+          "path": "tests/fixtures/alpha31/triangle-profile.request.json",
+          "sha256": "a16bba01509764bab11941a7bdf48ee607e5e9d654e6bb9a17cfade1c123d70e"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "test(cam): qualify polygon finishing across runtime boundaries",
+      "depends_on": [
+        1
+      ],
+      "files": [
+        {
+          "path": "crates/ivac-server/src/qual1a2_tests.rs",
+          "sha256": "74f93e8b9eeb97e31c45bdae42f808972828485d7ce31a1f340751fa74d6a734"
+        },
+        {
+          "path": "crates/ivac-tauri/src/commands.rs",
+          "sha256": "f45c7f6290b999a9be2a85aa087e01ab3b2ccf9317a5cc2eae0d8560f8e3152e"
+        },
+        {
+          "path": "frontend/src/lib/i18n/messages/de.json",
+          "sha256": "19574079b17325ca512dacd5536c0327af8af6504709e7346552b06d5f418fdf"
+        },
+        {
+          "path": "frontend/src/lib/i18n/messages/en.json",
+          "sha256": "314fbc12c21649f4ea09a0d1cafd2b8f93b689e65764245a5ec6111c45f82c45"
+        },
+        {
+          "path": "scripts/alpha31-runtime-check.mjs",
+          "sha256": "562aee69876b80af00b4035d8504f3c8f7ee510f5d18e0b3f6977d7ca2ec80b2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "docs(alpha31): record bounded finishing qualification and review gates",
+      "depends_on": [
+        1,
+        2
+      ],
+      "files": [
+        {
+          "path": "docs/releases/ALPHA_3_1_GENERALIZED_FINISHING.md",
+          "sha256": "d4b71b4f7112845c72a71a518eff44e0f603035bbc147210c491ea1305596c3c"
+        },
+        {
+          "path": "docs/releases/RELEASE_ROADMAP.md",
+          "sha256": "97557a44550a8210f038a43a15e9ad22ca73b813f5ad3b819950db138d255eec"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/baseline.json",
+          "sha256": "bf297ae3e2eb20e54196b98ce3b3aa79b307cf8288c84814847b69d35969b40d"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-budget-refusal.png",
+          "sha256": "f7a9dfa1d863b48248e64f4e585ff38c1dd2fd1e044304efe34da5cbc3ffc63f"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-concave-3d.png",
+          "sha256": "c126bd38056fab5cd4741f67b79a452a3cc93625db7fd93d5e7f5b1753f90fa7"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-concave-finishing.png",
+          "sha256": "0a9f3418e037edb27077203ded5cedebc55e677847bd91b8a40cddc35251c1a1"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-distinct-cutter.png",
+          "sha256": "cdf1025ce27d9fb63429ee659931a704e914843421b50e22b0d7c1973c758be0"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-floor-refusal.png",
+          "sha256": "c408c573349c9bb5a1d1c2006e517b3353054e1816e690b57ada4397a7d8a026"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-geometry-stale.png",
+          "sha256": "95f4e887b559f0000ddc69c2cacfac7b1477bc19337005cecd65bd5082bac734"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-island-refusal.png",
+          "sha256": "441d49fa9e8b0a02aab796e608b76c858901ff162321bcef477dae10e1591460"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-narrow-de.png",
+          "sha256": "6c85ba24738b2874a65012a00e66a0a9b7c625f6db26e53df9414306c4ea24d3"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-profile-finish.png",
+          "sha256": "38c0c7856b992711472699676cd42ec20ac0238d7b8e5f385bc15939db7af858"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-profile-main.png",
+          "sha256": "bd1dc0db9a4fefdbb787425a922b9bcf3b869c9e8411fe4ad73296bba77f91d5"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-report-stages.png",
+          "sha256": "d8ae1a1aa03857e1f388f6c0fdef7a240cf5ad089c8b6c75dba865cab86fda4a"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-review.json",
+          "sha256": "03f3f535369f3f705b4c31dc361fcacd5fea7e1b36ef5b61cfdc4ca4ad7a8e5c"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-saved-pocket.ivac-project.json",
+          "sha256": "e9de8c9142f532f382a9d4bff6091d7a5ad7b73c3fd583eedc20756203e226d7"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/browser-stale.png",
+          "sha256": "5fe3bf812fc779f89bd97a6bf19ae18ec537f21f9b9013814383196119c20bed"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/final-browser-cases.json",
+          "sha256": "317d7462095c99b716520adde3630383b598d5185c1c2418429cd05b25cfb792"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/final-browser-concave.png",
+          "sha256": "40de3232232bf30967925ea8e72aa5347c7d5da3b9f221310b7a7e74f870689a"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/final-browser-island.png",
+          "sha256": "57bfb5f9c44b6fe6b8367556d699570718bb0941a931a18e5a99f5366ce9e7f2"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/motion-inventory.json",
+          "sha256": "9817857b80d0629ab5e9847f3ade9a0f788bc819670cc5ab9854af6cfe0a80bd"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/performance.json",
+          "sha256": "2ceed4323d485ec5aefd95c3d73d237fda05a5dad9ee7d4095bf52e6dfdbad7c"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/proposed-commits.json",
+          "sha256": null
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/qualification.json",
+          "sha256": "7badd7a52d9c6c64101b8b481a0a2c0bc2b1d3cbab08e9a5bd1cccf0063ab927"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/retained-corpus.json",
+          "sha256": "8c0910ee57b8edab745516081265cb4bf040b92e401a5faef7436460d617ab45"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/runtime-comparison.json",
+          "sha256": "80756f2a558b4d300356fd500508739d6658627cf1482606d62019a2ee256489"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/software-files.json",
+          "sha256": "069eaa8135b10991c1f1e9617d14877dcb8f1b0221588094650add72e968b792"
+        },
+        {
+          "path": "docs/releases/evidence/alpha31/worktrees.json",
+          "sha256": "3f3e2f03d2a121bc0745d9ee0c0dc8fda4b3f6523b50748e24e152996b84c4b1"
+        },
+        {
+          "path": "docs/shopbot-modernization/ROADMAP.md",
+          "sha256": "d30f1fccfdcc411519c409c102678675c7aeb1287a901ce186cc83749ff480db"
+        },
+        {
+          "path": "docs/shopbot-modernization/STATUS.md",
+          "sha256": "35f561340a9dd0ffe7f0e886001b898a6dc0167621578093c7adca930dbf428b"
+        }
+      ]
+    }
+  ],
+  "excluded": [
+    "Private drawings and derived private coordinates",
+    "Raw logs, build outputs, WASM packages and compiler caches",
+    "Unrelated worktrees or user evidence"
+  ],
+  "schema_or_postprocessor_changes": false,
+  "next_action": "Human review and explicit commit approval; no merge/push/installer/publication"
+}

@@ -1,8 +1,23 @@
 # FabCAM roadmap navigation
 
+**ALPHA-3.1 accepted and locally consolidated — 2026-10-30.** Human acceptance
+covers the bounded polygon implementation and documented limitations.
+Core `59d8e233fa54facb9873b7203068ed45ad291011`; software/tests `56743de13a1f66005d7e24519fc298e66bf9c224`;
+all 1,302 qualified software files match the final fingerprint exactly.
+[Acceptance receipt](../releases/evidence/alpha31/consolidation.json).
+Earlier pending-review/uncommitted statements are historical. ALPHA-3.2 isolated
+preflight is authorized; HARD STOP before any incompatible persistence change.
+No merge, push, installer, release or physical operation.
+
 The single active plan is [RELEASE_ROADMAP](../releases/RELEASE_ROADMAP.md).
 Use [STATUS](STATUS.md) for current source/ownership and [V1 readiness](../releases/V1_READINESS.md)
 for frozen V1 gates; dated reports retain source-bound facts and acceptance limits.
+
+Latest isolated software checkpoint:
+[ALPHA-3.1 bounded polygon finishing](../releases/ALPHA_3_1_GENERALIZED_FINISHING.md).
+20/20 gates pass; convex/concave Profile and simple Pocket finishing are qualified
+within explicit proof/strategy limits. Human review and commits are pending;
+no integration, native installation, physical acceptance or next-milestone authority.
 
 | Track | Authoritative entry | Boundary |
 |---|---|---|

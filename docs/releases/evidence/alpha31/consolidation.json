@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-30",
+  "human_acceptance": "ACCEPTED: qualified bounded ALPHA-3.1; limitations retained",
+  "base_sha": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+  "core_commit": "59d8e233fa54facb9873b7203068ed45ad291011",
+  "software_commit": "56743de13a1f66005d7e24519fc298e66bf9c224",
+  "documentation_commit": "The commit containing this receipt; exact SHA recorded in handoff and ALPHA-3.2 preflight.",
+  "software_fingerprint_sha256": "1673ddb0e22994cb716b04711c4943c4635d707dc1956c6fa9901c15a6c1224c",
+  "verified_committed_files": 1302,
+  "verification": "Every committed blob (resolving tracked symlinks) matches the qualified software-file SHA256; exact proposed files verified before staging.",
+  "executable_bytes_changed_since_qualification": false,
+  "rerun_required": false,
+  "qualified_gate_receipt_sha256": "7badd7a52d9c6c64101b8b481a0a2c0bc2b1d3cbab08e9a5bd1cccf0063ab927",
+  "approved_inventory_sha256": "7649120c703dbb541fa2f3fea2b9404e711dc7568ed86ee56643053b6baf1666",
+  "original_receipts": "Preserved byte-for-byte; pending-review states are historical and superseded by this acceptance.",
+  "acceptance_limits": [
+    "Documented polygon geometry and strategy/resource limits",
+    "No source curve/island/holding extensions",
+    "New polygon streaming buffers for decoded proof",
+    "Installed-native and physical qualification NOT RUN"
+  ],
+  "next": "ALPHA-3.2 isolated compatibility preflight; explicit approval required before new incompatible versions.",
+  "no_merge_push_installer_release_hardware": true
+}
