@@ -1,0 +1,20 @@
+{
+  "software_fingerprint": "6d544fa193e5eb07f42b632d6cf985517d2891e77cfdc3c7f2f46a99a09c245a",
+  "software_files": 1315,
+  "exit_code": 0,
+  "mandatory_groups_passed": 20,
+  "rust_passed": 1659,
+  "rust_ignored": 1,
+  "frontend_passed": 1559,
+  "frontend_skipped": 1,
+  "targeted_passed": 28,
+  "targeted_existing_skip": 1,
+  "runtime_outcomes": 7,
+  "source_differences_after_gate": [],
+  "qualification_method": "Canonical scripts/pre-release.sh; private temporary generated-file index; real index unstaged",
+  "binary_sha256": {
+    "target/debug/ivac": "afba3cbcb07e5ac6f69a4820b4b51263309bf2f445ecae3a4070945dedc25945",
+    "target/debug/ivac-server": "0802030b8cd0db36e032636a507d1dbddd34f9cc8486148cb0b5f7ec3e7d84cb",
+    "crates/ivac-wasm/pkg/ivac_wasm_bg.wasm": "d4e20b80ad24630a573b8e05cae91d7474c59fe4a07e4363603e759c1571d534"
+  }
+}

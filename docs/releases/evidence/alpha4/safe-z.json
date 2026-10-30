@@ -1,0 +1,32 @@
+[
+  {
+    "case": "copy-depth_per_pass_mm.request.json",
+    "safe_z_mm": 5,
+    "lateral_rapids": 9,
+    "all_at_or_above_safe_z": true
+  },
+  {
+    "case": "copy-feed_mm_min.request.json",
+    "safe_z_mm": 5,
+    "lateral_rapids": 9,
+    "all_at_or_above_safe_z": true
+  },
+  {
+    "case": "copy-plunge_mm_min.request.json",
+    "safe_z_mm": 5,
+    "lateral_rapids": 9,
+    "all_at_or_above_safe_z": true
+  },
+  {
+    "case": "copy-rpm.request.json",
+    "safe_z_mm": 5,
+    "lateral_rapids": 9,
+    "all_at_or_above_safe_z": true
+  },
+  {
+    "case": "without-reuse.request.json",
+    "safe_z_mm": 5,
+    "lateral_rapids": 9,
+    "all_at_or_above_safe_z": true
+  }
+]

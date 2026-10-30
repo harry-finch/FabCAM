@@ -1,0 +1,64 @@
+{
+  "base": "38fc911fab5ac7058329e1edbad7e4489134ac91",
+  "fingerprint": "6d544fa193e5eb07f42b632d6cf985517d2891e77cfdc3c7f2f46a99a09c245a",
+  "groups": [
+    {
+      "group": 1,
+      "subject": "feat(presets): add reviewed selective starting-value reuse",
+      "dependencies": [
+        "accepted ALPHA-3.2 base"
+      ],
+      "paths": [
+        "frontend/src/lib/state/commands.ts",
+        "frontend/src/lib/state/preset-reuse-metadata.ts",
+        "frontend/src/lib/state/preset-reuse.ts",
+        "frontend/src/lib/state/preset-reuse.test.ts",
+        "frontend/src/lib/state/preset-reuse-persistence.test.ts"
+      ]
+    },
+    {
+      "group": 2,
+      "subject": "feat(ui): expose reviewed preset reuse and advisory provenance",
+      "dependencies": [
+        "group 1 domain service, metadata and history"
+      ],
+      "paths": [
+        "frontend/src/lib/components/ReportDialog.svelte",
+        "frontend/src/lib/components/op_properties/CuttingParameters.svelte",
+        "frontend/src/lib/components/op_properties/PresetReuseReview.svelte",
+        "frontend/src/lib/components/op_properties/PresetReuseStatus.svelte",
+        "frontend/src/lib/i18n/keys.ts",
+        "frontend/src/lib/i18n/messages/en.json",
+        "frontend/src/lib/i18n/messages/de.json",
+        "frontend/scripts/alpha4-runtime-check.ts"
+      ]
+    },
+    {
+      "group": 3,
+      "subject": "docs(alpha4): record acceptance and qualified source consolidation",
+      "dependencies": [
+        "group 2 completes the qualified software inventory"
+      ],
+      "paths": [
+        "docs/README.md",
+        "docs/shopbot-modernization/STATUS.md",
+        "docs/shopbot-modernization/ROADMAP.md",
+        "docs/releases/RELEASE_ROADMAP.md",
+        "docs/releases/ALPHA_4_REVIEWED_PRESET_REUSE.md",
+        "docs/releases/evidence/alpha4/baseline-summary.json",
+        "docs/releases/evidence/alpha4/preservation-summary.json",
+        "docs/releases/evidence/alpha4/qualification.json",
+        "docs/releases/evidence/alpha4/software-files.json",
+        "docs/releases/evidence/alpha4/safe-z.json",
+        "docs/releases/evidence/alpha4/runtime-summary.json",
+        "docs/releases/evidence/alpha4/browser-final.png",
+        "docs/releases/evidence/alpha4/browser-project-report.md",
+        "docs/releases/evidence/alpha4/commit-plan.json",
+        "docs/releases/evidence/alpha4/consolidation.json",
+        "docs/releases/evidence/alpha4/committed-evidence-sha256.json"
+      ]
+    }
+  ],
+  "grouping_adjustment": "Runtime qualification script moved from proposed group 3 to group 2 so the documentation-only third commit cannot change software bytes. Group 1 is a domain foundation; group 2 is the complete software checkpoint.",
+  "exclusions": "Private presets, trial notes, portable project files (including the synthetic browser snapshot), raw logs and stack traces, caches, compiled assets, unrelated worktrees. Existing local evidence is retained, never deleted."
+}

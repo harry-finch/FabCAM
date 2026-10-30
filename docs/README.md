@@ -1,5 +1,8 @@
 # FabCAM documentation
 
+Latest isolated checkpoint: [ALPHA-4 reviewed preset reuse](releases/ALPHA_4_REVIEWED_PRESET_REUSE.md),
+software qualification and human review tracked separately.
+
 Current focus: **FabCAM V1.1 — macOS Personal Alpha**, on the maintainer's own
 Mac, with supervised ShopBot cases accepted progressively. General fablab/public
 distribution, Windows/Linux installers and public signing/notarization are deferred;

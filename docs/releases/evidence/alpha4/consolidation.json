@@ -1,0 +1,98 @@
+{
+  "acceptance": "User accepts ALPHA-4 as bounded software-qualified implementation and authorizes exactly three local commits.",
+  "base": "38fc911fab5ac7058329e1edbad7e4489134ac91",
+  "implementation_commit": "68744a56dc572d92aab5dc955c71c4ae5c5a2160",
+  "software_commit": "7fddc775f82bac1decf2c3ef9982ff07a87a48a9",
+  "documentation_commit": "The documentation-only commit containing this receipt; full SHA recorded in the final handoff.",
+  "software_files_verified_from_git": 1315,
+  "inventory_symlink_paths": [
+    "assets/branding/fabcam/exports/linux/fabcam-1024.png",
+    "assets/branding/fabcam/exports/linux/fabcam-128.png",
+    "assets/branding/fabcam/exports/linux/fabcam-16.png",
+    "assets/branding/fabcam/exports/linux/fabcam-20.png",
+    "assets/branding/fabcam/exports/linux/fabcam-24.png",
+    "assets/branding/fabcam/exports/linux/fabcam-256.png",
+    "assets/branding/fabcam/exports/linux/fabcam-32.png",
+    "assets/branding/fabcam/exports/linux/fabcam-48.png",
+    "assets/branding/fabcam/exports/linux/fabcam-512.png",
+    "assets/branding/fabcam/exports/linux/fabcam-64.png",
+    "crates/ivac-wasm/LICENSE"
+  ],
+  "verification_method": "Hash committed blobs; resolve committed symlinks to their committed target blobs as the qualified inventory follows symlinks. Verify link text against the worktree too.",
+  "qualified_software_fingerprint": "6d544fa193e5eb07f42b632d6cf985517d2891e77cfdc3c7f2f46a99a09c245a",
+  "committed_software_fingerprint": "6d544fa193e5eb07f42b632d6cf985517d2891e77cfdc3c7f2f46a99a09c245a",
+  "software_worktree_and_git_differences": [],
+  "reviewed_groups": [
+    {
+      "group": 1,
+      "subject": "feat(presets): add reviewed selective starting-value reuse",
+      "dependencies": [
+        "accepted ALPHA-3.2 base"
+      ],
+      "paths": [
+        "frontend/src/lib/state/commands.ts",
+        "frontend/src/lib/state/preset-reuse-metadata.ts",
+        "frontend/src/lib/state/preset-reuse.ts",
+        "frontend/src/lib/state/preset-reuse.test.ts",
+        "frontend/src/lib/state/preset-reuse-persistence.test.ts"
+      ]
+    },
+    {
+      "group": 2,
+      "subject": "feat(ui): expose reviewed preset reuse and advisory provenance",
+      "dependencies": [
+        "group 1 domain service, metadata and history"
+      ],
+      "paths": [
+        "frontend/src/lib/components/ReportDialog.svelte",
+        "frontend/src/lib/components/op_properties/CuttingParameters.svelte",
+        "frontend/src/lib/components/op_properties/PresetReuseReview.svelte",
+        "frontend/src/lib/components/op_properties/PresetReuseStatus.svelte",
+        "frontend/src/lib/i18n/keys.ts",
+        "frontend/src/lib/i18n/messages/en.json",
+        "frontend/src/lib/i18n/messages/de.json",
+        "frontend/scripts/alpha4-runtime-check.ts"
+      ]
+    },
+    {
+      "group": 3,
+      "subject": "docs(alpha4): record acceptance and qualified source consolidation",
+      "dependencies": [
+        "group 2 completes the qualified software inventory"
+      ],
+      "paths": [
+        "docs/README.md",
+        "docs/shopbot-modernization/STATUS.md",
+        "docs/shopbot-modernization/ROADMAP.md",
+        "docs/releases/RELEASE_ROADMAP.md",
+        "docs/releases/ALPHA_4_REVIEWED_PRESET_REUSE.md",
+        "docs/releases/evidence/alpha4/baseline-summary.json",
+        "docs/releases/evidence/alpha4/preservation-summary.json",
+        "docs/releases/evidence/alpha4/qualification.json",
+        "docs/releases/evidence/alpha4/software-files.json",
+        "docs/releases/evidence/alpha4/safe-z.json",
+        "docs/releases/evidence/alpha4/runtime-summary.json",
+        "docs/releases/evidence/alpha4/browser-final.png",
+        "docs/releases/evidence/alpha4/browser-project-report.md",
+        "docs/releases/evidence/alpha4/commit-plan.json",
+        "docs/releases/evidence/alpha4/consolidation.json",
+        "docs/releases/evidence/alpha4/committed-evidence-sha256.json"
+      ]
+    }
+  ],
+  "source_changes_after_qualification": false,
+  "new_release_gate_run": false,
+  "reason": "Qualified executable-source bytes match exactly; no additional gate is required.",
+  "prior_qualification": {
+    "mandatory_groups": 20,
+    "rust_passed": 1659,
+    "frontend_passed": 1559,
+    "runtime_outcomes": 7
+  },
+  "other_worktrees_preserved": 15,
+  "strict_matching": "unchanged",
+  "stepover_reuse": "unsupported",
+  "source_context_attestation_transfer": false,
+  "excluded_and_preserved_locally": "Raw logs, raw error traces, full local evidence manifests, synthetic portable project snapshot, unselected screenshots and original absolute-path receipts. No private preset, trial notes, user project, cache or compiled asset is staged.",
+  "scope": "No merge, push, publication, installer, TOOL-META/FabSpeed integration or physical machining. HARD STOP."
+}

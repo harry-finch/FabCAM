@@ -1,5 +1,23 @@
 # FabCAM release roadmap
 
+**ALPHA-4 accepted as bounded software-qualified implementation; locally consolidated.**
+The 1315-file qualified inventory is unchanged. Selective cross-context values,
+advisory provenance, atomic history, V10 persistence and strict matching are accepted.
+Stepover remains unsupported; source physical attestation never transfers.
+[Report and commit receipt](ALPHA_4_REVIEWED_PRESET_REUSE.md). Earlier pending statements below are historical.
+No merge, push, installer, TOOL-META/FabSpeed integration or physical acceptance.
+**HARD STOP after the three authorized local commits.**
+
+**ALPHA-4 — reviewed preset reuse software-qualified; human acceptance pending (2026-10-30).**
+Isolated `feature/alpha-4-preset-reuse`, accepted ALPHA-3.2 base `38fc911`.
+Separate selective numerical copy into V10 Main / already-enabled Finishing;
+strict tested-preset matching stays unchanged. Advisory origin carries no target
+physical attestation. 20/20 mandatory gates PASS; 1659 Rust / 1559 frontend tests.
+[Source-bound report](ALPHA_4_REVIEWED_PRESET_REUSE.md).
+Earlier ALPHA-4 “planned/not authorized” statements below describe preceding
+checkpoints. No commit, integration, installer, release or physical acceptance.
+**HARD STOP after this checkpoint for human review.**
+
 **ALPHA-3.2 accepted and locally consolidated.** Software `610d35d6031cb94e4b93473ce1cff661b2b85421`
 exactly matches all 1,308 qualified files. Earlier pending-review statements are
 historical. Bounded software acceptance only; native/workshop/physical exclusions

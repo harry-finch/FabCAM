@@ -1,0 +1,66 @@
+{
+  "base": "38fc911",
+  "synthetic_only": true,
+  "cases": [
+    {
+      "name": "without-reuse",
+      "native_wasm_http_equal": true,
+      "minZ": -0.5,
+      "gcode_sha256": "1e0d15181c09e89ed77ed094addca05415cc487376f87d70b82eaa65ee7b9847",
+      "moves": 7294
+    },
+    {
+      "name": "copy-rpm",
+      "native_wasm_http_equal": true,
+      "minZ": -0.5,
+      "gcode_sha256": "c66613686805c9183532592f5c17b17cdb8008725588ecd01ba5a08fd620a641",
+      "moves": 7294
+    },
+    {
+      "name": "copy-feed_mm_min",
+      "native_wasm_http_equal": true,
+      "minZ": -0.5,
+      "gcode_sha256": "f1f27af4a4561d5e87d7ed68cb0ccc7bf6b2960f32b178caf56bcf021a59d703",
+      "moves": 7294
+    },
+    {
+      "name": "copy-plunge_mm_min",
+      "native_wasm_http_equal": true,
+      "minZ": -0.5,
+      "gcode_sha256": "26b669849fe68c4dd2df9633029a1732f37bdafd562e025de5ff77d0b73d35c7",
+      "moves": 7294
+    },
+    {
+      "name": "copy-depth_per_pass_mm",
+      "native_wasm_http_equal": true,
+      "minZ": -0.5,
+      "gcode_sha256": "6eb4946e215cf2210101dd20147c09836473d653974530bb41763ee220adac9a",
+      "moves": 3660
+    },
+    {
+      "name": "target-machine-limit",
+      "expected_refusal": true,
+      "consumers": [
+        "native CLI",
+        "HTTP",
+        "WASM"
+      ],
+      "error_kind": "misconfigured",
+      "reason": "Feed 600 mm/min exceeds target machine maximum 500 mm/min."
+    },
+    {
+      "name": "shopbot-intra-section-rpm",
+      "expected_refusal": true,
+      "consumers": [
+        "native CLI",
+        "HTTP"
+      ],
+      "error_kind": "misconfigured",
+      "reason": "Unsupported intra-section spindle speed change; equal RPM remains required for one ShopBot tool."
+    }
+  ],
+  "strict_matching_pass": true,
+  "strict_cross_context_refused": true,
+  "wasm_sha256": "d4e20b80ad24630a573b8e05cae91d7474c59fe4a07e4363603e759c1571d534",
+  "sanitization": "Structured results retained; raw errors, stack traces, logs and request/project payloads excluded. Original evidence retained locally."
+}

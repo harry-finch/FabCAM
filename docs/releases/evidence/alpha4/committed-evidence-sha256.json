@@ -1,0 +1,12 @@
+{
+  "baseline-summary.json": "04d897b01ea501941b091fef803479231be8fbee21bda7bb72020c919d2cdfd1",
+  "preservation-summary.json": "586862c73a76133c53ff338516b995223545df14f404fcb825063e0fb1104afb",
+  "qualification.json": "6dc7914587db43f8eeb1f9ba04be6a19855f50813b8a016f32d37423d53f9413",
+  "software-files.json": "d32604b80c53f39d2e47883b206383bd5b3e3221f04b7874e91112a421220c5e",
+  "safe-z.json": "3e4c641d38d73858d4dd96a4211a78cb2a695fe2cede9edc9a7ce7f40bd72a98",
+  "runtime-summary.json": "40cfbc87a1fd0faf0e511c51edfdd1729c74a2b91372d61f235373f5e5fe372f",
+  "browser-final.png": "0ec4249a6a90aab949f404d7a1341e54a066ca56e14e5505b04cd5a5ebdd28f1",
+  "browser-project-report.md": "9aa565f9218190d76dc089ac3c1332c698adf41d47f092aefa436104e3599706",
+  "commit-plan.json": "ac790b8de00363450d8e972e505e866a9c3a26ab167ccd1cb76d81b03e2f3450",
+  "consolidation.json": "277f31f416d63b648f0748103c7846531f8b06befb6e689d35e2755066254aa2"
+}
