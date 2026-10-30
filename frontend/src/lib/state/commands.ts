@@ -1,3 +1,4 @@
+import { withoutOperationReuse } from './preset-reuse-metadata';
 import { rebindCutting } from './cutting-parameters';
 import { selectedBinding } from './drawing';
 /// Command builders for every undoable project mutation. Each builder
@@ -47,6 +48,7 @@ function clone<T>(v: T): T {
 /// commands.ts doesn't pull in the Svelte-runtime class itself; only
 /// the fields it touches.
 export interface CommandTarget {
+  serializedExtensions?: Record<string, unknown>;
   drawing?: import('./drawing').DrawingState;
   material?: import('./project-types').MaterialIdentity;
   imports: ImportEntry[];
@@ -120,6 +122,7 @@ export function duplicateOperationCommand(
 export function deleteOperationCommand(opId: number): Command {
   let savedIdx = -1;
   let savedOp: OpEntry | undefined;
+  let savedExtensions: Record<string, unknown> | undefined;
   return {
     label: 'Delete operation',
     apply: (s) => {
@@ -127,6 +130,10 @@ export function deleteOperationCommand(opId: number): Command {
       savedIdx = t.operations.findIndex((o) => o.id === opId);
       if (savedIdx >= 0) {
         savedOp = clone(t.operations[savedIdx]);
+        if (t.serializedExtensions) {
+          savedExtensions = clone(t.serializedExtensions);
+          t.serializedExtensions = withoutOperationReuse(t.serializedExtensions, opId);
+        }
         t.operations = t.operations.filter((o) => o.id !== opId);
         t.dirty = true;
       }
@@ -136,6 +143,7 @@ export function deleteOperationCommand(opId: number): Command {
       if (savedIdx >= 0 && savedOp) {
         const next = [...t.operations];
         next.splice(savedIdx, 0, clone(savedOp));
+        if (savedExtensions) t.serializedExtensions = clone(savedExtensions);
         t.operations = next;
         t.dirty = true;
       }
