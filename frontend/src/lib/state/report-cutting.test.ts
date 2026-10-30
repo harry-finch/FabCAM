@@ -23,6 +23,7 @@ function op(kind: OpEntry['kind'], patch = {}): OpEntry {
     o.stages!.main = { ...o.stages!.main, rpm: 13000, feed_mm_min: 410, plunge_mm_min: 110 };
     if (o.finishToolId)
       o.stages!.finishing = {
+        ...(o.stages!.contract === 'pocket_finishing_v2' ? { scope: 'walls_only' as const } : {}),
         cutting: {
           ...o.stages!.main,
           tool_id: o.finishToolId,

@@ -71,6 +71,7 @@ it('keeps authored Main values and the separate finishing tool', () => {
   op.finishToolId = 11;
   op.stages!.main.feed_mm_min = 321;
   op.stages!.finishing = {
+    scope: 'walls_only',
     cutting: { ...op.stages!.main, tool_id: 11 },
     lateral_allowance_mm: 0.2,
     floor_allowance_mm: 0,
@@ -103,6 +104,7 @@ it('switches finishing back to the main cutter without disabling finishing or re
     op = s.operations[0];
   op.finishToolId = 8;
   op.stages!.finishing = {
+    scope: 'walls_only',
     cutting: { ...op.stages!.main, tool_id: 8, feed_mm_min: 321 },
     lateral_allowance_mm: 0.2,
     floor_allowance_mm: 0,

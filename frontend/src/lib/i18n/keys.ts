@@ -1703,6 +1703,7 @@ export type MsgKey =
   | "shortcuts.view3d.pan"
   | "shortcuts.zoom"
   | "stages.allowance_help"
+  | "stages.both_help"
   | "stages.copy"
   | "stages.depth"
   | "stages.emitted"
@@ -1712,20 +1713,33 @@ export type MsgKey =
   | "stages.finish_tool"
   | "stages.finishing"
   | "stages.floor"
+  | "stages.floor_help"
+  | "stages.floor_only"
   | "stages.lateral"
+  | "stages.legacy_scope"
   | "stages.main"
   | "stages.main_tool"
   | "stages.missing"
   | "stages.off_help"
   | "stages.plunge"
+  | "stages.pocket_proof_help"
   | "stages.proof_help"
+  | "stages.repeat"
   | "stages.required"
   | "stages.retained"
   | "stages.retained_help"
   | "stages.retained_title"
   | "stages.rpm"
   | "stages.rpm_help"
+  | "stages.scope"
+  | "stages.scope_apply"
+  | "stages.scope_cancel"
+  | "stages.scope_preview"
+  | "stages.scope_reset"
   | "stages.toggle"
+  | "stages.walls_and_floor"
+  | "stages.walls_help"
+  | "stages.walls_only"
   | "stock.dimensions"
   | "stock.flip"
   | "stock.flip.axis"
@@ -4076,6 +4090,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "shortcuts.view3d.pan",
   "shortcuts.zoom",
   "stages.allowance_help",
+  "stages.both_help",
   "stages.copy",
   "stages.depth",
   "stages.emitted",
@@ -4085,20 +4100,33 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "stages.finish_tool",
   "stages.finishing",
   "stages.floor",
+  "stages.floor_help",
+  "stages.floor_only",
   "stages.lateral",
+  "stages.legacy_scope",
   "stages.main",
   "stages.main_tool",
   "stages.missing",
   "stages.off_help",
   "stages.plunge",
+  "stages.pocket_proof_help",
   "stages.proof_help",
+  "stages.repeat",
   "stages.required",
   "stages.retained",
   "stages.retained_help",
   "stages.retained_title",
   "stages.rpm",
   "stages.rpm_help",
+  "stages.scope",
+  "stages.scope_apply",
+  "stages.scope_cancel",
+  "stages.scope_preview",
+  "stages.scope_reset",
   "stages.toggle",
+  "stages.walls_and_floor",
+  "stages.walls_help",
+  "stages.walls_only",
   "stock.dimensions",
   "stock.flip",
   "stock.flip.axis",

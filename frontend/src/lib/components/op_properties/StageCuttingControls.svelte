@@ -1,8 +1,25 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import { project, type OpEntry } from '../../state/project.svelte';
-  import type { CuttingStage, MainFinishing } from '../../state/cutting-stages';
+  import {
+    withPocketScope,
+    type CuttingStage,
+    type MainFinishing,
+    type PocketScope,
+  } from '../../state/cutting-stages';
   let { op }: { op: OpEntry } = $props();
+  let pendingScope = $state<PocketScope | null>(null);
+  const scope = $derived(
+    op.stages?.contract === 'pocket_finishing_v2' ? op.stages.finishing?.scope : null,
+  );
+  const proposed = $derived(
+    pendingScope && op.stages?.finishing ? withPocketScope(op.stages, pendingScope) : null,
+  );
+  const scopeLabels = {
+    walls_only: 'stages.walls_only',
+    floor_only: 'stages.floor_only',
+    walls_and_floor: 'stages.walls_and_floor',
+  } as const;
   const fields = [
     { key: 'rpm' as const, label: 'stages.rpm', unit: 'rpm', step: 1 },
     { key: 'feed_mm_min' as const, label: 'stages.feed', unit: 'mm/min', step: 1 },
@@ -44,7 +61,7 @@
   function toggle(on: boolean) {
     if (!op.stages) return;
     const next = structuredClone($state.snapshot(op.stages));
-    next.finishing = on
+    const finishing = on
       ? {
           cutting: {
             tool_id: next.main.tool_id,
@@ -57,6 +74,10 @@
           floor_allowance_mm: 0,
         }
       : null;
+    if (next.contract === 'pocket_finishing_v2')
+      next.finishing = finishing ? { ...finishing, scope: 'walls_only' } : null;
+    else next.finishing = finishing;
+    pendingScope = null;
     update(next);
   }
   function allowance(field: 'lateral_allowance_mm' | 'floor_allowance_mm', value: string) {
@@ -70,6 +91,57 @@
 {#if !op.stages}<p class="error">{t('stages.missing')}</p>{:else}
   {#each rows as stage (stage.name)}
     {#if stage.name === 'finishing'}
+      {#if op.kind === 'pocket'}
+        <label class="row"
+          ><span>{t('stages.scope')}</span><select
+            aria-label={t('stages.scope')}
+            value={pendingScope ?? scope ?? 'legacy'}
+            onchange={(e) => {
+              pendingScope = e.currentTarget.value as PocketScope;
+            }}
+          >
+            {#if !scope}<option value="legacy" disabled>{t('stages.legacy_scope')}</option>{/if}
+            {#each Object.entries(scopeLabels) as [value, label] (value)}<option {value}
+                >{t(label)}</option
+              >{/each}
+          </select></label
+        >
+        {#if proposed?.finishing && op.stages.finishing}
+          <div class="scope-preview" role="status">
+            <strong>{t('stages.scope_preview')}</strong>
+            <p>
+              {t('stages.lateral')}: {op.stages.finishing.lateral_allowance_mm} → {proposed
+                .finishing.lateral_allowance_mm} mm<br />{t('stages.floor')}: {op.stages.finishing
+                .floor_allowance_mm} → {proposed.finishing.floor_allowance_mm} mm
+            </p>
+            <p>{t('stages.scope_reset')}</p>
+            <button
+              class="btn-secondary"
+              onclick={() => {
+                update(proposed);
+                pendingScope = null;
+              }}>{t('stages.scope_apply')}</button
+            >
+            <button
+              class="btn-secondary"
+              onclick={() => {
+                pendingScope = null;
+              }}>{t('stages.scope_cancel')}</button
+            >
+          </div>
+        {/if}
+        <p class="hint">
+          {scope
+            ? t(
+                scope === 'walls_only'
+                  ? 'stages.walls_help'
+                  : scope === 'floor_only'
+                    ? 'stages.floor_help'
+                    : 'stages.both_help',
+              )
+            : t('stages.legacy_scope')}
+        </p>
+      {/if}
       <div class="stage-heading">
         <strong>{t('stages.finishing')}</strong><button
           class="btn-secondary"
@@ -117,20 +189,21 @@
     {/if}
   {/each}
   {#if op.stages.finishing}
-    <label class="row"
-      ><span>{t('stages.lateral')}</span>
-      <div class="num-cell">
-        <input
-          aria-label={t('stages.lateral')}
-          type="number"
-          min="0"
-          step="0.05"
-          value={op.stages.finishing.lateral_allowance_mm}
-          onchange={(e) => allowance('lateral_allowance_mm', e.currentTarget.value)}
-        /><span class="unit">{fields[3].unit}</span>
-      </div></label
-    >
-    {#if op.kind === 'pocket'}<label class="row"
+    {#if scope !== 'floor_only'}<label class="row"
+        ><span>{t('stages.lateral')}</span>
+        <div class="num-cell">
+          <input
+            aria-label={t('stages.lateral')}
+            type="number"
+            min="0"
+            step="0.05"
+            value={op.stages.finishing.lateral_allowance_mm}
+            onchange={(e) => allowance('lateral_allowance_mm', e.currentTarget.value)}
+          /><span class="unit">{fields[3].unit}</span>
+        </div></label
+      >
+    {/if}
+    {#if op.kind === 'pocket' && scope !== 'walls_only'}<label class="row"
         ><span>{t('stages.floor')}</span>
         <div class="num-cell">
           <input
@@ -144,7 +217,12 @@
         </div></label
       >{/if}
     <p class="hint">{t('stages.allowance_help')}</p>
-    <p class="hint">{t('stages.proof_help')}</p>
+    <p class="hint">{t(scope ? 'stages.pocket_proof_help' : 'stages.proof_help')}</p>
+    {#if op.stages.finishing.lateral_allowance_mm === 0 && op.stages.finishing.floor_allowance_mm === 0}<p
+        class="hint"
+      >
+        <strong>{t('stages.repeat')}</strong>
+      </p>{/if}
     {#if op.stages.finishing.cutting.tool_id === op.stages.main.tool_id}<p
         class="hint"
         class:error={op.stages.finishing.cutting.rpm !== op.stages.main.rpm}
@@ -174,6 +252,16 @@
 {/if}
 
 <style>
+  .scope-preview {
+    border: 1px solid var(--border, #555);
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .scope-preview button {
+    margin: 4px 8px 0 0;
+  }
   .stage-heading {
     display: flex;
     align-items: center;

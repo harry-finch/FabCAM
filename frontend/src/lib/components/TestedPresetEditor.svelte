@@ -105,22 +105,27 @@
         {/each}
       {/each}
       {#if draft.parameters.stages.finishing}
-        <label
-          >{t('stages.lateral')} (mm)<input
-            type="number"
-            min="0"
-            step="any"
-            bind:value={draft.parameters.stages.finishing.lateral_allowance_mm}
-          /></label
-        >
-        <label
-          >{t('stages.floor')} (mm)<input
-            type="number"
-            min="0"
-            step="any"
-            bind:value={draft.parameters.stages.finishing.floor_allowance_mm}
-          /></label
-        >
+        {#if draft.parameters.stages.contract === 'pocket_finishing_v2'}<p>
+            {t('stages.scope')}: {t(`stages.${draft.parameters.stages.finishing.scope}`)}
+          </p>{/if}
+        {#if draft.parameters.stages.contract !== 'pocket_finishing_v2' || draft.parameters.stages.finishing.scope !== 'floor_only'}<label
+            >{t('stages.lateral')} (mm)<input
+              type="number"
+              min="0"
+              step="any"
+              bind:value={draft.parameters.stages.finishing.lateral_allowance_mm}
+            /></label
+          >
+        {/if}
+        {#if draft.parameters.stages.contract !== 'pocket_finishing_v2' || draft.parameters.stages.finishing.scope !== 'walls_only'}<label
+            >{t('stages.floor')} (mm)<input
+              type="number"
+              min="0"
+              step="any"
+              bind:value={draft.parameters.stages.finishing.floor_allowance_mm}
+            /></label
+          >
+        {/if}
       {/if}
     {/if}
     <div class="rates">

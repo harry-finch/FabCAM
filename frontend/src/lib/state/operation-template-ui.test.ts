@@ -95,6 +95,7 @@ describe('UX4.1 presentation without changing template semantics', () => {
     const pocket = make('pocket');
     pocket.finishTool = structuredClone(pocket.tool);
     pocket.stages!.finishing = {
+      scope: 'walls_only',
       cutting: { ...pocket.stages!.main },
       lateral_allowance_mm: 0.2,
       floor_allowance_mm: 0,

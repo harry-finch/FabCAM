@@ -18,13 +18,14 @@ export interface TemplateTool {
   finish?: Rates;
 }
 type TemplateStages = {
-  contract: 'main_finishing_v1';
+  contract: MainFinishing['contract'];
   main: Omit<CuttingStage, 'tool_id'>;
-  finishing: {
-    cutting: Omit<CuttingStage, 'tool_id'>;
-    lateral_allowance_mm: number;
-    floor_allowance_mm: number;
-  } | null;
+  finishing:
+    | (Omit<NonNullable<MainFinishing['finishing']>, 'cutting'> & {
+        scope?: import('./cutting-stages').PocketScope;
+        cutting: Omit<CuttingStage, 'tool_id'>;
+      })
+    | null;
 };
 export interface OperationTemplate {
   /** Old v1 readers strictly reject this unknown required stage structure. */
@@ -166,7 +167,7 @@ export function captureTemplate(
     ...(op.stages
       ? {
           stages: {
-            contract: 'main_finishing_v1' as const,
+            contract: op.stages.contract,
             main: withoutId(op.stages.main),
             finishing: op.stages.finishing
               ? { ...op.stages.finishing, cutting: withoutId(op.stages.finishing.cutting) }
@@ -327,6 +328,7 @@ export function validTemplate(value: unknown): value is OperationTemplate {
       return false;
     if (
       !['profile', 'pocket'].includes(t.settings.kind) ||
+      (t.stages.contract === 'pocket_finishing_v2' && t.settings.kind !== 'pocket') ||
       (!!t.finishTool && !t.stages.finishing) ||
       t.settings.pocketStrategy === 'halfpipe' ||
       t.settings.step !== null ||
@@ -438,7 +440,7 @@ export function instantiateTemplate(
         'Historical Profile/Pocket template requires manual recreation for Main/Finishing',
       );
     const s = template.stages;
-    const stages: MainFinishing = {
+    const stages = {
       ...copy(s),
       main: { ...copy(s.main), tool_id: tool.id },
       finishing: s.finishing
@@ -448,6 +450,9 @@ export function instantiateTemplate(
           }
         : null,
     };
+    validateStages(stages);
+    if (stages.contract === 'pocket_finishing_v2' && op.kind !== 'pocket')
+      throw new Error('Pocket scope requires Pocket');
     op.stages = stages;
     op.step = null;
     op.finishToolId = stages.finishing?.cutting.tool_id;

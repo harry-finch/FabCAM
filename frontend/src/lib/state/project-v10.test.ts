@@ -115,6 +115,7 @@ it('one explicit toggle and tool assignment undo and redo atomically', () => {
   const before = JSON.stringify(op);
   const stages = {
     ...op.stages!,
+    contract: 'main_finishing_v1' as const,
     finishing: {
       cutting: { ...op.stages!.main },
       lateral_allowance_mm: 0.2,

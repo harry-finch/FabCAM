@@ -213,3 +213,24 @@ it('every Main/Finishing field invalidates the generated export context', () => 
     expect(programExportStatus(p, 'linuxcnc').stale, field).toBe(true);
   }
 });
+
+it('Pocket scope alone invalidates generated output and export qualification', () => {
+  const p = setup();
+  const op = p.data.operations.find((o) => o.stages)!;
+  op.stages = {
+    contract: 'pocket_finishing_v2',
+    main: op.stages!.main,
+    finishing: {
+      scope: 'walls_and_floor',
+      cutting: { ...op.stages!.main },
+      lateral_allowance_mm: 0,
+      floor_allowance_mm: 0,
+    },
+  };
+  op.finishToolId = op.toolId;
+  p.gen.inputContextKey = generationContextKey(p, 'linuxcnc');
+  const before = p.gen.inputContextKey;
+  op.stages.finishing!.scope = 'walls_only';
+  expect(generationContextKey(p, 'linuxcnc')).not.toBe(before);
+  expect(programExportStatus(p, 'linuxcnc').stale).toBe(true);
+});

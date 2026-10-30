@@ -126,6 +126,7 @@ describe('UX4 reusable operation templates', () => {
     if (op.kind !== 'pocket') throw new Error();
     op.finishToolId = 2;
     op.stages!.finishing = {
+      scope: 'walls_only',
       cutting: { ...op.stages!.main },
       lateral_allowance_mm: 0.2,
       floor_allowance_mm: 0,

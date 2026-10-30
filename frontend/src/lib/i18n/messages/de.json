@@ -2029,5 +2029,19 @@
   "stages.rpm": "Spindeldrehzahl",
   "stages.depth": "Zustellung pro Durchgang",
   "stages.emitted": "Programmstufe",
-  "stages.empty": "Keine Schnittbewegungen"
+  "stages.empty": "Keine Schnittbewegungen",
+  "stages.scope": "Schlichtflächen",
+  "stages.walls_only": "Nur Wände",
+  "stages.floor_only": "Nur Boden",
+  "stages.walls_and_floor": "Wände und Boden",
+  "stages.legacy_scope": "Vollflächiges Schlichten (bisheriger Vertrag)",
+  "stages.scope_preview": "Änderung der Schlichtflächen prüfen",
+  "stages.scope_reset": "Das nicht benötigte Aufmaß wird null. Werkzeuge und Schnittwerte bleiben erhalten. Neu berechnen: Der bisherige Preset-Kontext gilt nicht mehr.",
+  "stages.scope_apply": "Flächen übernehmen",
+  "stages.scope_cancel": "Abbrechen",
+  "stages.walls_help": "Der Hauptschnitt erreicht die Endtiefe mit seitlichem Aufmaß. Schlichten fährt Außen- und Inselwände auf den festgelegten Tiefenstufen ab.",
+  "stages.floor_help": "Der Hauptschnitt erreicht die Wände und lässt Bodenaufmaß stehen. Schlichten räumt den erreichbaren Boden ab der Hauptschnitt-Bodentiefe.",
+  "stages.both_help": "Der Hauptschnitt lässt beide Aufmaße stehen. Schlichten räumt den erreichbaren Bereich bis zu den endgültigen Wänden und zum Boden.",
+  "stages.pocket_proof_help": "Begrenzter Nachweis: ein geschlossener Bereich, einfache Inseln, Flachfräser mit bekannter Schneidenlänge und direktes Eintauchen. Geraden-/Bogenübergänge, Zugang, jede Tiefenstufe und Bodenabdeckung werden geprüft. Unvollständige oder nicht unterstützte Pfade blockieren die Erzeugung. Einzelne Schlichtflächen erfordern gleiche effektive Fräserdurchmesser. Haltestege, Anfahrwege, Rahmen und Boolesche Kombinationen bleiben ausgeschlossen.",
+  "stages.repeat": "Null Aufmaß · Wiederholungsdurchgang, kein Nachweis der Oberflächengüte"
 }

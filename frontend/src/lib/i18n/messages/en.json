@@ -2368,5 +2368,19 @@
   "stages.rpm": "Spindle speed",
   "stages.depth": "Depth per pass",
   "stages.emitted": "Program stage",
-  "stages.empty": "No cutting movements"
+  "stages.empty": "No cutting movements",
+  "stages.scope": "Finishing surfaces",
+  "stages.walls_only": "Walls only",
+  "stages.floor_only": "Floor only",
+  "stages.walls_and_floor": "Walls and floor",
+  "stages.legacy_scope": "Full-area finishing (existing contract)",
+  "stages.scope_preview": "Review finishing scope change",
+  "stages.scope_reset": "The irrelevant allowance becomes zero. Tools and rates stay as authored. This change requires a new generation and invalidates previous preset context.",
+  "stages.scope_apply": "Apply scope",
+  "stages.scope_cancel": "Cancel",
+  "stages.walls_help": "Main clears to final depth with lateral reserve. Finishing follows the outer and island walls at the authored axial levels.",
+  "stages.floor_help": "Main reaches the walls and leaves the floor reserve. Finishing clears the reachable floor, starting at the Main floor depth.",
+  "stages.both_help": "Main leaves both reserves. Finishing clears the reachable region to the final walls and floor.",
+  "stages.pocket_proof_help": "Bounded proof: one closed region, simple islands, flat endmills with known flute length and direct entry. Line/arc joins, cutter access, every axial level and floor coverage are checked. Unsupported or incomplete paths block generation. Single-surface finishing requires equal effective cutter diameters. Tabs, leads, frames and Boolean combinations remain unsupported.",
+  "stages.repeat": "Zero reserve · repeat pass, not proof of finish quality"
 }

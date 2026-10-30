@@ -36,6 +36,9 @@ export function reportCuttingText(
       ...(s.finishing
         ? [
             row('Finishing', s.finishing.cutting),
+            ...(s.contract === 'pocket_finishing_v2'
+              ? [`Finishing surfaces: ${s.finishing.scope.replaceAll('_', ' ')}`]
+              : []),
             `Allowances: lateral ${s.finishing.lateral_allowance_mm} mm / floor ${s.finishing.floor_allowance_mm} mm`,
           ]
         : ['Finishing off']),
