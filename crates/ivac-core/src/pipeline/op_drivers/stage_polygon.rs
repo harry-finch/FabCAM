@@ -5,6 +5,8 @@
 //! collapsed or trimmed references refuse. Source primitives are never changed.
 //! A finite chord enclosure accounts for arc sagitta; continuous capsule interval
 //! coverage and convex tile containment prove coverage between samples as well.
+#[cfg(test)]
+mod perf1;
 mod pocket;
 use crate::cam::{offsets::PolylineOffset, VcObject};
 use crate::geometry::{Point2, Segment, SegmentKind};
@@ -29,6 +31,8 @@ impl Budget<'_> {
             .work
             .checked_add(n)
             .ok_or("Finishing proof work overflow")?;
+        #[cfg(test)]
+        perf1::record_work(n, self.work);
         if self.work > MAX_WORK {
             return Err(
                 "Finishing polygon proof budget exceeded; reduce contour/path complexity".into(),
@@ -68,7 +72,7 @@ fn distance(p: Point2, c: Chord) -> f64 {
     };
     p.distance(add(c[0], mul(d, t)))
 }
-fn segment_distance(a: Chord, b: Chord) -> f64 {
+fn segment_intersects(a: Chord, b: Chord) -> bool {
     let u = sub(a[1], a[0]);
     let v = sub(b[1], b[0]);
     let w = sub(b[0], a[0]);
@@ -77,8 +81,14 @@ fn segment_distance(a: Chord, b: Chord) -> f64 {
         let t = cross(w, v) / den;
         let s = cross(w, u) / den;
         if (0. ..=1.).contains(&t) && (0. ..=1.).contains(&s) {
-            return 0.;
+            return true;
         }
+    }
+    false
+}
+fn segment_distance(a: Chord, b: Chord) -> f64 {
+    if segment_intersects(a, b) {
+        return 0.;
     }
     distance(a[0], b)
         .min(distance(a[1], b))

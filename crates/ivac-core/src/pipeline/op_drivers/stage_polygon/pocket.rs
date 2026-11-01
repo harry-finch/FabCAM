@@ -8,10 +8,35 @@ use super::{
     OUTPUT_ERROR, PLAN_ERROR,
 };
 
+fn bounds(c: Chord) -> [f64; 4] {
+    [
+        c[0].x.min(c[1].x),
+        c[0].y.min(c[1].y),
+        c[0].x.max(c[1].x),
+        c[0].y.max(c[1].y),
+    ]
+}
+
+/// Conservative broad phase: if expanded AABBs are separated on an axis, the
+/// Euclidean distance cannot pass the original narrow-phase threshold. FLAT is
+/// extra broad-phase padding (far above f64 roundoff in the admitted 1e6-mm
+/// domain), never a change to the original acceptance threshold. Uncertain cases
+/// still run the original predicate. Budget::use_work charges ALL original edges.
+/// The separate original intersection check in safe() also preserves any
+/// near-parallel floating-point intersection result before endpoint-distance pruning.
+fn boxes_near(a: [f64; 4], b: [f64; 4], reach: f64) -> bool {
+    let padding = reach.max(0.) + FLAT;
+    !(a[0] - padding > b[2]
+        || b[0] - padding > a[2]
+        || a[1] - padding > b[3]
+        || b[1] - padding > a[3])
+}
+
 struct Boundary {
     polygon: Polygon,
     source: Vec<Segment>,
     curved: bool,
+    edge_bounds: Vec<[f64; 4]>,
 }
 impl Boundary {
     fn new(obj: &VcObject) -> Result<Self, String> {
@@ -44,9 +69,25 @@ impl Boundary {
         };
         Ok(Self {
             curved: source.iter().any(|s| s.bulge != 0.),
+            edge_bounds: polygon.edges.iter().map(|&e| bounds(e)).collect(),
             polygon,
             source,
         })
+    }
+    // Bounds only reject predicates that cannot lower the minimum. The original
+    // distance and winding predicates, order and logical edge charges are retained.
+    fn clearance(&self, p: Point2) -> f64 {
+        let mut nearest = f64::INFINITY;
+        for (edge, b) in self.polygon.edges.iter().zip(&self.edge_bounds) {
+            if boxes_near([p.x, p.y, p.x, p.y], *b, nearest) {
+                nearest = nearest.min(distance(p, *edge));
+            }
+        }
+        if self.polygon.inside(p) {
+            nearest
+        } else {
+            -nearest
+        }
     }
     fn reference(&self, inset: f64, island: bool) -> Result<Vec<Chord>, String> {
         if !self.curved {
@@ -155,9 +196,9 @@ impl PocketRegion {
             .enumerate()
             .map(|(i, b)| {
                 if i == self.outer {
-                    b.polygon.clearance(p)
+                    b.clearance(p)
                 } else {
-                    -b.polygon.clearance(p)
+                    -b.clearance(p)
                 }
             })
             .fold(f64::INFINITY, f64::min)
@@ -186,8 +227,13 @@ impl PocketRegion {
                 || self
                     .boundaries
                     .iter()
-                    .flat_map(|b| &b.polygon.edges)
-                    .any(|e| segment_distance(*path, *e) < inset - error + 2. * FLAT)
+                    .flat_map(|b| b.polygon.edges.iter().zip(&b.edge_bounds))
+                    .any(|(e, b)| {
+                        let limit = inset - error + 2. * FLAT;
+                        (boxes_near(bounds(*path), *b, limit)
+                            || super::segment_intersects(*path, *e))
+                            && segment_distance(*path, *e) < limit
+                    })
             {
                 return Err(
                     "Pocket trajectory gouges a wall, island or retained-stock envelope".into(),
@@ -591,6 +637,95 @@ mod tests {
                     .is_err(),
                     "{scope}/{mutation}"
                 );
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod perf1_pruning_tests {
+    use super::*;
+    #[test]
+    fn aabb_pruning_never_discards_a_narrow_phase_match() {
+        let mut seed = 11_u64;
+        let mut number = || {
+            seed = seed.wrapping_mul(6_364_136_223_846_793_005).wrapping_add(1);
+            (f64::from(u32::try_from(seed >> 32).unwrap()) / f64::from(u32::MAX) - 0.5) * 2_000_000.
+        };
+        for _ in 0..20_000 {
+            let a = [
+                Point2::new(number(), number()),
+                Point2::new(number(), number()),
+            ];
+            let b = [
+                Point2::new(number(), number()),
+                Point2::new(number(), number()),
+            ];
+            for reach in [0., 1e-8, FLAT, 0.1, 100., 1_000_000.] {
+                let original = segment_distance(a, b) < reach;
+                assert!(
+                    !original
+                        || boxes_near(bounds(a), bounds(b), reach)
+                        || super::super::segment_intersects(a, b)
+                );
+            }
+        }
+        for coordinate in [-1_000_000., 0., 1_000_000.] {
+            let a = [Point2::new(coordinate, 0.), Point2::new(coordinate, 1.)];
+            for gap in [0., 1e-9, FLAT, 1., 10.] {
+                let b = [
+                    Point2::new(coordinate + gap, 0.),
+                    Point2::new(coordinate + gap, 1.),
+                ];
+                assert!(boxes_near(bounds(a), bounds(b), gap));
+            }
+        }
+    }
+    #[test]
+    fn indexed_signed_clearance_is_bit_identical_at_boundaries_and_far_points() {
+        for shift in [-999_900., 0., 999_900.] {
+            let vertices = vec![
+                Point2::new(shift, 0.),
+                Point2::new(shift + 20., 0.),
+                Point2::new(shift + 20., 20.),
+                Point2::new(shift, 20.),
+            ];
+            let edges = (0..4)
+                .map(|i| [vertices[i], vertices[(i + 1) % 4]])
+                .collect::<Vec<_>>();
+            let boundary = Boundary {
+                edge_bounds: edges.iter().map(|&e| bounds(e)).collect(),
+                polygon: Polygon { vertices, edges },
+                source: Vec::new(),
+                curved: false,
+            };
+            for x in [-100., -FLAT, 0., FLAT, 10., 20., 20. + FLAT, 100.] {
+                for y in [-100., -FLAT, 0., FLAT, 10., 20., 20. + FLAT, 100.] {
+                    let p = Point2::new(shift + x, y);
+                    assert_eq!(
+                        boundary.clearance(p).to_bits(),
+                        boundary.polygon.clearance(p).to_bits()
+                    );
+                }
+            }
+        }
+    }
+    #[test]
+    fn separated_near_parallel_chords_preserve_original_distance_decision() {
+        for shift in [-500_000., 0., 500_000.] {
+            for delta in [1e-12, 1e-10, 1e-8, 1e-6] {
+                let a = [Point2::new(shift, 0.), Point2::new(shift + 1000., 1000.)];
+                let b = [
+                    Point2::new(shift + 1001., 1001. + delta),
+                    Point2::new(shift + 2001., 2001. + delta),
+                ];
+                for limit in [0., 0.1, 1., 2.] {
+                    let original = segment_distance(a, b) < limit;
+                    let candidate = (boxes_near(bounds(a), bounds(b), limit)
+                        || super::super::segment_intersects(a, b))
+                        && segment_distance(a, b) < limit;
+                    assert_eq!(candidate, original);
+                }
             }
         }
     }
