@@ -1,0 +1,878 @@
+{
+  "baseline_binary_sha256": "c6873245b80a536afaa52002e365a026e669caacdee81448aa7b80e29d92a93a",
+  "candidate_binary_sha256": "55847b8cebbd0476721a8d906b6eed39eeaedfeec2335652585d22c8bac4156d",
+  "rows": [
+    {
+      "name": "alpha32-rectangle-cascade-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "9c2806cc03104c56cd45a220b500a999b33ec9f823172fb4dba3d05324990585",
+      "program_sha256": "9955b9b2e35c65147f848bbc0a5c9e83dd4147cd36285c47f10c61e09ff9c527",
+      "response_sha256": "32f946099e70d34e322ea82973e65f48ac6f685bd417d7d88739bf5e426a0e4b"
+    },
+    {
+      "name": "alpha32-rectangle-cascade-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "248351aacaacc68cfece97d462f4b07c91d69e13469f2524bee85939239adefd",
+      "program_sha256": "b6ef577543d53974a6a615fe86b74a4b0a4a2d15aa93b93b10cce6610d6b08ba",
+      "response_sha256": "e4ecf89e08eccd8ba794180abe5912530e370d337be176fe1bf6c70ae441c2c8"
+    },
+    {
+      "name": "alpha32-rectangle-cascade-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "f0d6aafcf08e17068def87dc59294fa6aa29cc7d1c90689ceecb31c5687d1fce",
+      "program_sha256": "fc4f7f00cdfc1ae4ea86abeae3b5eccb9c8634a3e83f6b5deea0f43d38cc4408",
+      "response_sha256": "1c1887b53158865ebb2c37423530f3a259918bc2bc9cb0076da13f9e8266bd53"
+    },
+    {
+      "name": "alpha32-rectangle-zigzag-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "930a75a5111d6baf5b5e699240358737c6b02e45e8fabd76daf970d2f29aca62",
+      "program_sha256": "98f8c14188486d814cd03fcbf8d1cd2c5b08c8639d670d2fc25bddf8297390cc",
+      "response_sha256": "6077367ed845ba14383411bdbb6e20820f9b70f15befefe32d46a2ba84edead9"
+    },
+    {
+      "name": "alpha32-rectangle-zigzag-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "9fc09de203101bd81f7e775d6e003f546eda885c14a661e4644239473de89b51",
+      "program_sha256": "fe2e6096d98c736f7414c57b738030709551297e18d5e79e1c3f6058787f5e19",
+      "response_sha256": "280d12dc961042e95658485e272da66cd66eafd3f5d86c969a9eed1fea3bbe71"
+    },
+    {
+      "name": "alpha32-rectangle-zigzag-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "89bf33a32c4d2f96d4aef21a1157b65125e9d4aeec10cc4f001eb6b6c00dcb42",
+      "program_sha256": "551f4f86abc25cf2ec312d93329476c4b4d6d59aed9253682f366d8c54ca1f1f",
+      "response_sha256": "7cabb736a9e5da5b30819b8551ffbb0409f565e24d6af64979cc1210a13ba73c"
+    },
+    {
+      "name": "alpha32-rectangle-spiral-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "fe2079613d94d2dd6de81a431a2fe9cab371df99fed5ab0b874b47dd696d8162",
+      "program_sha256": "8ee0919797341b39d8e86086a7176e52797dcdb6c1a432d5509ce5837e4aa102",
+      "response_sha256": "84a7c64259be6d676f483bd518c80a1a02cbcc751ed7116bee0892ddde8c7424"
+    },
+    {
+      "name": "alpha32-rectangle-spiral-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "48e11be5047d45b1d1010387a219d7f90dcbada4b610461e705d8fae0f0be01a",
+      "program_sha256": "2403cf0b880c1178df9be954da6e2d33702d38203155dfa28b49226b3ecd28b1",
+      "response_sha256": "de985318cd2cc02d75cce1fd1a81d744679518c71b61270f8c6ac5f135d30f45"
+    },
+    {
+      "name": "alpha32-rectangle-spiral-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "79bd98cae164f58ebfbdb1d871c8856c51eb8c21424c11fbe8d5114357e7f4c0",
+      "program_sha256": "17673ae7bd14734af7745662390464d2cf11a6425e8ce673ee76bce8cb5abc2d",
+      "response_sha256": "ef83cd94c3fe2837d4bdeed808ea3031b80f52572a6ea22d9a03ab035768d865"
+    },
+    {
+      "name": "alpha32-rotated-cascade-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "0f99602fad9392f8975b60c9a015fe6c0d002c1acf87c7cce509088a54ecb13a",
+      "program_sha256": "7a9a24d2952dc5fbf92dd36882a59e393e7f3957db89b2c16618fbed787c0a8e",
+      "response_sha256": "be9c3ddd1d3457084df00a5399703a83934a2349f0064a47078ee9238bb049b0"
+    },
+    {
+      "name": "alpha32-rotated-cascade-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "20b98ced709164476afbdcf8c263b636485a2b7010929db953af1d9271c2bc67",
+      "program_sha256": "3c0c960f4cb24f71de1fd0e46d370070695552671abe3d4ba661061d2f3b5cb6",
+      "response_sha256": "8b4d2f3f27bf1ea312ebbb707fb06a26cccdaf6a8686bed5b570ffc3d9a75d4b"
+    },
+    {
+      "name": "alpha32-rotated-cascade-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "8cc758b42c95bd7b61383293ff50d5752ff6c3fa40554776125664d77c8ca71e",
+      "program_sha256": "baade65c424a7aa72af4442299f76235915f91fc96ea623b0efcdb99a26af1f3",
+      "response_sha256": "1b9baaf3c1ac3881df020f51c3f60f75646a2bbad1c8a5ba56a86b472899dfe6"
+    },
+    {
+      "name": "alpha32-rotated-zigzag-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "d1bdb62ff60b51bbfb7e4dd63d3b1d384f31e47c1e125d34c7ce04f08ca0c620",
+      "program_sha256": "58e66d9c90870b904206831f4d2be7a3a0c60391f91cb8d958ad4fdcf0f24b1c",
+      "response_sha256": "0dd0283142447f48da3acdea55f5173ff73c641360fb7a498e590f9d002d9dae"
+    },
+    {
+      "name": "alpha32-rotated-zigzag-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "bea6e83d7fbb42d35566b81e6d6b1aeaec2c619f24126cf048aa7b72a5729964",
+      "program_sha256": "281750c0ea1ec5deff7a4fbbed2351e2d4ded3eec4aed0243916cb7e5797c397",
+      "response_sha256": "32f827a47a66548c40b813af6abbf6fc63c0eef8b2358d271b3106c4d395ca90"
+    },
+    {
+      "name": "alpha32-rotated-zigzag-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "50bfdf5e4c8f6df7fdadc4fd76d3251445991742a64d056e237c9a9484883af1",
+      "program_sha256": "f7f5136160b369139922f25558fab81e6fd726eab1f2377c97867b3d9f80f2b2",
+      "response_sha256": "2694029cbccb1c4e657ec6c61d8e562cae5451594c987c3f973980cc8f0ea8fa"
+    },
+    {
+      "name": "alpha32-rotated-spiral-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "e9c840d7020a0311f4d377787a412e6fb285a0f7e7426ca1f73a5e9823b053df",
+      "program_sha256": "4396d4378137a1608b60fa0ac0792bae7abf00508fcb9ef3890e2f494a9b418b",
+      "response_sha256": "b0e7b0f572c41eb9178dd5d43ed935f956e0078895e5f4609b276849e0994578"
+    },
+    {
+      "name": "alpha32-rotated-spiral-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "e8b63a957d73ff270eecbab0a10d67e98ed7b328a4cf10d52a1eb6596d397370",
+      "program_sha256": "7725ca6096385734d4c78c3ab00fe2e0e2b62f480bf7c639ade94d411692fb8a",
+      "response_sha256": "9d52345ad47c68a08ea2872de9204181c3982235f1f0354bc6bda115656f3e01"
+    },
+    {
+      "name": "alpha32-rotated-spiral-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "55e53293eaf943650a36846b331da1b5052f1f7a2d6731725a79326cc5bf4058",
+      "program_sha256": "4ad2e2d007f1c24b589696f8e52678de1a6266552d565e6923135efd6fd04f7b",
+      "response_sha256": "b7bff4612710810b126c8b73bf47609349d9d858f16dc4b64784d433a7d3ed3e"
+    },
+    {
+      "name": "alpha32-triangle-cascade-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "dc7de64f41f36d359de3f9b89deb2ca0bcbbab8aab1a98c1b62d68f1cd92cbb0",
+      "program_sha256": "17a2669a65b882b0dd7a6b1d969eeda3e942a94fe1bd58d5f429abf260aaadcd",
+      "response_sha256": "1fbd8a7c9d6d6d43a3d76730525ba7ad1397774e85d480addf825a28342fc90a"
+    },
+    {
+      "name": "alpha32-triangle-cascade-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "44a26c3d7585540d22321b514f94c4827fdcd4a1ff0d5905e1b9b5376f2138e3",
+      "program_sha256": "715cb7bf5fa5e54823b873fe70ed6bbf8991b3be4c59acbb8ba87f85860a9f32",
+      "response_sha256": "9b1c2eba445609d747dd50fba00146a3f68b65ccf264e1d29e7303db05fb6537"
+    },
+    {
+      "name": "alpha32-triangle-cascade-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "4574208e8b44b7d526b82167ca56c31c8fcbf3e089f45035c31e63005cd61881",
+      "program_sha256": "8e3bbd23e905e83b7ebc73751ebaa1903293607615b8f2f8637c94ddc9f9d578",
+      "response_sha256": "e0b185d0431365a58b5d3845ffb27f07cb5526639d9c008be8aacc191d79987c"
+    },
+    {
+      "name": "alpha32-triangle-zigzag-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c9fcdf2436436af3e93255f9e762f0980489af4497c467753602546f7226f162",
+      "program_sha256": "f20b3786a18c5448192012b7e20d4f2107ae98faedac93874c1975e3c8ebe555",
+      "response_sha256": "190e9d0eec8f15fcb778b1a7424a69ec7c421e89f81a07ababe89549a88a1cec"
+    },
+    {
+      "name": "alpha32-triangle-zigzag-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "704dead172972f36d8a70134651c87ee1f3510357d98a22fa01383fe57802452",
+      "program_sha256": "e96b9aab91d646c90dd510d38a1d9e9cef8f5dc375c42dfec88dfcccfc6c5720",
+      "response_sha256": "65f39a1b4a512bbf496c5ce2aefd7909034dacc75491f580b655e572dc997b2e"
+    },
+    {
+      "name": "alpha32-triangle-zigzag-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "9c05a296e2124dcfaa0467f599d4169a664be67b61649941e352803273447f70",
+      "program_sha256": "567775ed52541f694eed8b65ff876f8c127336d9fd05319313f265144951822e",
+      "response_sha256": "97aa2a22d31a432b029bc3d7270000b2ab3ddac9db044b889206007c7d6398d3"
+    },
+    {
+      "name": "alpha32-triangle-spiral-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "bf70961d67e103776c33dbbad48153730ae74d82dd48955030ef2db094fd4939",
+      "program_sha256": "9742f1307d45a1a50ea02c0a5e8b651f0fafbe0912255b89c1c609c00181ea4b",
+      "response_sha256": "769a6c59775ad5ba530e068632fb5c200f91060528ea29fcb07185cfc5d92e7a"
+    },
+    {
+      "name": "alpha32-triangle-spiral-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "dd6a8ca49939861ce2cb2fcb74ed975754b95931bcf0f0c47984c85f60a06299",
+      "program_sha256": "ef78754729e9b0bea34a67adace18c1393aa457a694aa2e5d55815960841952f",
+      "response_sha256": "216dea14b4cae0b1c0658ccaa171df9590b862e02ead11bbb8dade6a2e590a42"
+    },
+    {
+      "name": "alpha32-triangle-spiral-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "af37f511b6ddf647d58ee1e9d3b96e917052b3cc43e600459afbfc75ab3a0b1c",
+      "program_sha256": "4df99fef41e9d07f089f21555058ac59e82bc70fd1b6c9f008337a3779776efa",
+      "response_sha256": "0511c5924d797232047bf8d7f1c281eb6d34721510fc29e82f99fd5b9d60c14f"
+    },
+    {
+      "name": "alpha32-convex-cascade-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "16b0e682d8dc99ca000175ae97b688161fede465918cd4f9f1f4d0a8c1e45e60",
+      "program_sha256": "06768c004a402b9bef88212deb7a9c655a5a17485b8669b1f1438156806e192e",
+      "response_sha256": "28b8594d87eb68053fc02cad6290731847d800fcc48949cfd8376d087ef08839"
+    },
+    {
+      "name": "alpha32-convex-cascade-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c4ca5b2a715b1d80a7df05a11f42b2680e7c3acf0c52de4bf6205162f57a4653",
+      "program_sha256": "1a582201ce861fdc1c9f6246622e3dfda55784427b15b452eef36f64898ddb81",
+      "response_sha256": "6618f1def6fd2d406c1ed8415b9884874a78105c6a3abe2ee1cf8c9ef38e3716"
+    },
+    {
+      "name": "alpha32-convex-cascade-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "de2f6dc2a1446c9445a442ac9c66870b20f0a4651d8c5519812fa1efdef3dc80",
+      "program_sha256": "7147402dd7dccf53a3286b9e8f9f2731807aa2917ccd598b238e70ba5647164b",
+      "response_sha256": "accf845856635cf98ae4c507ab4f464d20737747712cae82519e8ac443264fa6"
+    },
+    {
+      "name": "alpha32-convex-zigzag-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "45b5c00f00726c3dbcf04c3c70b4e81705d93c41a1995ac428310905d89fe542",
+      "program_sha256": "f1ba3ae69826cbd3aa2d5670c0b7431dd22b9e18d9bb3aab2ff4c6af700e609f",
+      "response_sha256": "c6cc104675ca2406c486d6822736808477767b69840af57e72e722582cb347af"
+    },
+    {
+      "name": "alpha32-convex-zigzag-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "a00b62d49023655b3a6ba11fe21513773902ae49410e704b1260494bdd0d581e",
+      "program_sha256": "4b6ce6b9fefa457448a94b9c7813993bf15d4b528341b57dea1a53be695a647e",
+      "response_sha256": "427f73d09877e050bbe05f3afa5c9f15a9bf86f555c0f07b38c78ca9f59509a1"
+    },
+    {
+      "name": "alpha32-convex-zigzag-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "02eaebaded12bb42a3010b1a4dd220493931ad6cf5988998a3f74787bf3e36f4",
+      "program_sha256": "703a3b91f2b368fc92e0b52fbf1774f3f054b3c924ecaa4694ecc525b7901a71",
+      "response_sha256": "626ccfafe6df13f6a707e270e8d344372e6ed819b709c22951552e21b5a4fef6"
+    },
+    {
+      "name": "alpha32-convex-spiral-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "144b6f47a0d5d8706239e8b928b36f8af1c870f0d6cc27761d9e383e674a3b35",
+      "program_sha256": "b432e4ddeeba91b107cd5708bfcbf7e95415d086767c5327ff9501af01ef84c1",
+      "response_sha256": "448596d4987c8570f783a875e4e49e8424221162b96b1a67b8aafa94328a00f3"
+    },
+    {
+      "name": "alpha32-convex-spiral-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c3259c5d2c7dffb5ef0b4dcf048d0bac0cbdc3be49849d2a67593d5b461e54cc",
+      "program_sha256": "71209ab3ca6b974f126c66307a4ef43bbc78c24a4d8b2a6fc2564e499edbbdeb",
+      "response_sha256": "6399f6b0b295517da5b866acec094c2cbf7961054e6ac80e48b2ad099a196ede"
+    },
+    {
+      "name": "alpha32-convex-spiral-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "9f2f83923aef5bdb7d18568bd548550da1edf4092a75ecc2556ddcad6fb72755",
+      "program_sha256": "8f83f4c0065a4c75de5615dc63dce1ccf00bea31d3792e8f9ef7e6a5a7d4ccb6",
+      "response_sha256": "a572996021b83e48433e030054fbf58791d25329efaf651da4bc49cd629fd3c2"
+    },
+    {
+      "name": "alpha32-concave-cascade-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "4cde8de9c4c8c63fb0e6301068abeb4b1a886d081476993bb0d81dd95fb87695",
+      "program_sha256": "f034722b2325a2c95ab40d8febb92949e6f11b0753e1ae98b2acb62d42174044",
+      "response_sha256": "792181f710acb3ff72d21ab07eb9ee609eda0bc97ade37cc7c5948f7fbf9521e"
+    },
+    {
+      "name": "alpha32-concave-cascade-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "2353ada68ed2c43d325d5d68e502ddf584c836b1f4bab8d5398128cd4b64773d",
+      "program_sha256": "02c361137788035a32826f8df1141a5943443ce268aad2acbe140e218cd90f82",
+      "response_sha256": "1ffca0d971a08d7039ea489dbfbdb007b77db24288ce932d5916029cee848123"
+    },
+    {
+      "name": "alpha32-concave-cascade-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "1e33bdc5d6e937b3e5b7f86b5ac4ea621564af4e6f67357f2ed28df444165047",
+      "program_sha256": "279f22ff0d78a67849eab7acec59f96cb9fa3354c7519517862a29af8a937b67",
+      "response_sha256": "86fb4c00c13259ef3e30a11ffb0c63086abfc3ac5788e52a8e81db1fc2e2280b"
+    },
+    {
+      "name": "alpha32-concave-zigzag-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "33b6ed05c67f1de0a8c244e856b795372840c9af236831a7a1f52b098199aff3",
+      "program_sha256": "4f7907e34b54b0be4790fc6c0e3e829d4aed4c84d62103a4af51a9d722d32fd0",
+      "response_sha256": "5021652af01b86a11072ec217e5559a232bf02c64bef3c372af57d32197c2f07"
+    },
+    {
+      "name": "alpha32-concave-zigzag-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "40ca22d6be4acbac91854ba2e66c4f26c6fd6a850d500457de231bd7ed779dc3",
+      "program_sha256": "e202d35ed590d31ef1499e25f5e045b6bdac731d299888856f65d169cf5b7346",
+      "response_sha256": "25be72f4876798e2a48bc39c50c5c0be2c9c5ba7d44d1dad3d25ac7d5ce3a2aa"
+    },
+    {
+      "name": "alpha32-concave-zigzag-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "e5a398beeb611703e2547acda5047c2f8944a4c01eb9f254fafd0caca616295d",
+      "program_sha256": "0e4ac9e1207c2adb6b070141fb41679bb2e76ad26d5154a0bd505052d3c86f81",
+      "response_sha256": "db216b28176c4348dbe07c45e0b8c7d19ea20ff0c1e492b3f4431a104ab637fc"
+    },
+    {
+      "name": "alpha32-concave-spiral-walls_only",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "719ad307a67bde2b88ae5021c99aeef1f6eac58c2fd6cb573f99654d0594c0c5",
+      "program_sha256": null,
+      "response_sha256": "4454c3536ccdd6a45ae11f9e7d77aefdf37eacd236b7e4bc9ca9f1e977eac9a0"
+    },
+    {
+      "name": "alpha32-concave-spiral-floor_only",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "67507b468f3a3bb36c036c720f4109ca917b4a369f9f7970b9e5ea6c0164c4a4",
+      "program_sha256": null,
+      "response_sha256": "4454c3536ccdd6a45ae11f9e7d77aefdf37eacd236b7e4bc9ca9f1e977eac9a0"
+    },
+    {
+      "name": "alpha32-concave-spiral-walls_and_floor",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "5ee0184323d52de280e3d9f98fc74ee038fd19c3c80518ccbed209dd9a9faa0e",
+      "program_sha256": null,
+      "response_sha256": "4454c3536ccdd6a45ae11f9e7d77aefdf37eacd236b7e4bc9ca9f1e977eac9a0"
+    },
+    {
+      "name": "alpha32-irregular_concave-cascade-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "92dbfe29a496af1d48e2b023a12573d05dec9e379bc3b2c840e634054d6b7257",
+      "program_sha256": "351cfc83e17ce7aace920e793d1d773abf1a4f450f462e8e43b68fc980d2cfee",
+      "response_sha256": "e197c7e64cae6d67adccb96aa9b828981691b5331745ce16bc5b19d083a70177"
+    },
+    {
+      "name": "alpha32-irregular_concave-cascade-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "34579cb2c193e9ed8660507a9d04a287725e6f40d77f05cce348c516cc9c8180",
+      "program_sha256": "7ec21c8547ad2a0c95af9a0e74d20de3690d2f6a64ec9a82ca71678dbb1026cf",
+      "response_sha256": "2a31b62684375cdaf92694a41e03497f5c694fb9f0caf65e0eaa48afadf06479"
+    },
+    {
+      "name": "alpha32-irregular_concave-cascade-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "4d10f44fd6b6d215077ec0ae9128a765bc0b61cf921135459ce083dde0f7e512",
+      "program_sha256": "543120a9d85ce55a251c42f959bf16e480b5140803757ebd99792d63b063fe5f",
+      "response_sha256": "6241a97edffa71569b7f400c8893f202f5270c130e03f5c87d5de7e0880d59b0"
+    },
+    {
+      "name": "alpha32-irregular_concave-zigzag-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "cba052f75f1f5ce305e95eceba9d01cc8f73d6614cc625fd14ab46d5f0d52566",
+      "program_sha256": "662b64a2de2dc07ef6abe28cbb2fc0cbebe12feec798dda8d8b28185f3a92b00",
+      "response_sha256": "0af2e633075089d626a9e7f8b8a0316e145a19b0a8c683c2696f9e5b643c63df"
+    },
+    {
+      "name": "alpha32-irregular_concave-zigzag-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "3cb27d79c391ea0f86bda7ea700debc692d6b03257eacddb9a87c435afcd8cd2",
+      "program_sha256": "34b7b8d1d2738a42da60a8cbba0989ca4ddfb111e1d0bc04f75bb2208149c18e",
+      "response_sha256": "54a675e2f60f8c701a957d33dd1d46f99d4710386ebd51dbc0d1b75dd621cb8e"
+    },
+    {
+      "name": "alpha32-irregular_concave-zigzag-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "cdf62c9b47dd88f62da61d7c16a39fa61b79daab7824019d046a4b26ef17d90d",
+      "program_sha256": "451707bb932c8c0cea4a8ca4a2f1f0d5d0cc6ab081fc1b6d2e6776be5d575851",
+      "response_sha256": "dba6609325b7c3ae852ee984f28ada6d40258135e626fd24efaed51092e48459"
+    },
+    {
+      "name": "alpha32-irregular_concave-spiral-walls_only",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "af96c98b06c64cc1ff5fcca1fe50456c8e2068ea4f8fdebef5a060a94c561974",
+      "program_sha256": null,
+      "response_sha256": "4454c3536ccdd6a45ae11f9e7d77aefdf37eacd236b7e4bc9ca9f1e977eac9a0"
+    },
+    {
+      "name": "alpha32-irregular_concave-spiral-floor_only",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "f706ae93617e0ff9b388389cd78d85a3df70ffa1bbb17d2dbff6d8988dc36fc9",
+      "program_sha256": null,
+      "response_sha256": "4454c3536ccdd6a45ae11f9e7d77aefdf37eacd236b7e4bc9ca9f1e977eac9a0"
+    },
+    {
+      "name": "alpha32-irregular_concave-spiral-walls_and_floor",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "ef4c1e4406d55bec0e8669ff9f780b359d7706806d1eff0eb37585ea86138e8b",
+      "program_sha256": null,
+      "response_sha256": "4454c3536ccdd6a45ae11f9e7d77aefdf37eacd236b7e4bc9ca9f1e977eac9a0"
+    },
+    {
+      "name": "alpha32-grbl-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "8c31f524c570f277ba671a60788d7f6489d573a87bbf3a5e931f72275d2cdf2a",
+      "program_sha256": "9a52ceeebcf5ef0b1ab06bfc66f7b565f8be8284d9631289e530739f09abbbe2",
+      "response_sha256": "abff9543e4bed1dce65993c49f7b1cccf4606269e7611112f3f8750bd68f0e97"
+    },
+    {
+      "name": "alpha32-grbl-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "a8f908d44137edd3c1eaee1a3f8529ef4166b3469ecb673d3873c5c1a2e07935",
+      "program_sha256": "d0074fe1fb0723b993544c661c4ca333de1a30827bacdd5c9e3a628913417a29",
+      "response_sha256": "522c202b61220245dad6bda965d2a1a068c8e2e7327f4c1f73c6edf485e6822f"
+    },
+    {
+      "name": "alpha32-grbl-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "2617cfac46b27e62a71d0477801f100502ca4280e15b4faef5df717e07cb71fe",
+      "program_sha256": "b1b0d4d20898987d0bb4604af89a85ce34580cdd10984d758c2d1bcb60e148ed",
+      "response_sha256": "850566b6d00200f63376ac1db9b0d449403874d9f7a86730253ae081f804266d"
+    },
+    {
+      "name": "alpha32-cps-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "65cb7eede4e448ac3c40a7eaf5b7099c557b719a6e42a10a9358fbf3e3b7f03c",
+      "program_sha256": "bbb379caa9bb542f6817f9bed9f9a1cfe217269af9b999b17ad4923b30983164",
+      "response_sha256": "c93624f2b4d8f477536071946ff49c6d77cb340fcda7bc6cd233de76450e7765"
+    },
+    {
+      "name": "alpha32-cps-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c405e9a7c6155be92b5362790ea1a981065ce5d61cddf3103f403ea83f342aa1",
+      "program_sha256": "58b33653da53ba38eed15c872aeb2b7d79a125e31e47433ace8e6679cef4d6f6",
+      "response_sha256": "5b1f77829ccd16afdac51acbb5ae9b3c4bdac6012756ffa1ab44f84e083e67ed"
+    },
+    {
+      "name": "alpha32-cps-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "e5bb9689b0f1a77703785550f350e72b559434f94b074efd5e984e7d0c664392",
+      "program_sha256": "a7a48425e0dbc8cdfce973ef3c87781c14e225dd3e94b53d34543df30c710a1b",
+      "response_sha256": "3a887988b1a155b975a6dbe594012d372f0099cd4a3b90a2ad1811b6f9033168"
+    },
+    {
+      "name": "alpha32-missing-scope",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "9e6eec22200b12ccb1f7b2441daffff89c73e4adc2c6986eabc9b3d300330ee2",
+      "program_sha256": null,
+      "response_sha256": "eae6f54dc627aa0fbbd5c9d8fb56514bbb6f452fa1c2f0994879f82b71c77add"
+    },
+    {
+      "name": "alpha32-unknown-scope",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "8c569d76ff977e1fd9746c9f4de9d5bafdcbd30065c4831a82157e9f84627e6d",
+      "program_sha256": null,
+      "response_sha256": "3b96fb6f6c7f3f7db87f09e3c576c9c8378b8040a250ea39b1af34cf94dfbbc3"
+    },
+    {
+      "name": "alpha32-contradiction",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "0cb40cc0b50b951c2aae5e7dc1eb8384608d0f7b7eeb3aacadaf75ce1c9ae313",
+      "program_sha256": null,
+      "response_sha256": "73d8691fbc84cc5bba4a2f6b93f2956e533607eaf1731e63b12503aff619bfb9"
+    },
+    {
+      "name": "alpha32-disabled-unknown",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "957edb071ac0fe32fa8cfeaa2c293ef6a8c139626939e977153cc6f3c6666ad3",
+      "program_sha256": null,
+      "response_sha256": "40c56665ec056fa917a58dac9e2de6c9fc4d3bef55d088cdcb4dcb554350189c"
+    },
+    {
+      "name": "alpha32-malformed-main",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "3020a4f6ff498e342ebe9db98a2b94699ff1df22fdd127f457b5cb23671d4de1",
+      "program_sha256": null,
+      "response_sha256": "503d6d945c5d6b890b3a6d734516c4d4843403efd833305a30d35336fabbdb03"
+    },
+    {
+      "name": "alpha32-null-finishing",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "a9b0f5a278d440e4400391bac24e06000da80b087fd9c8721a2e4c9a3fdabc88",
+      "program_sha256": "fffad2fda0ff211c44a62592c51341fa04ec2112cf54e2927feb242c4a1ccbf4",
+      "response_sha256": "853aaad27747ea96c93a7eb6857d2dcc98030ae1818c8210f8f2b671c367da28"
+    },
+    {
+      "name": "alpha32-distinct-tool",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "5fdd396312f89362358f70c073ee545cbd6165f7f28d95ae8c431ef72f5ab2c7",
+      "program_sha256": "13d85eeec113c2fb48d0c74adfc4a1154f1322e816ac69075bb09a1bf9e239be",
+      "response_sha256": "61e9e15b51b2efa4d7b4fae5a41266e4106af240ffe2bcfc6b0df1bf6ea590a4"
+    },
+    {
+      "name": "alpha32-circle-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c08114ee886b01e9e82c10594806aaee7542a5859ca383177eb5497a9a577038",
+      "program_sha256": "ef66b2e1b1938991456eb9a4a6d5bfb1630141e2cc55cb86644d8d4e7410e442",
+      "response_sha256": "af4fab4417b0a54dc8891fe0d3201e00b77899f55e0862a954b3c70f0d85e82c"
+    },
+    {
+      "name": "alpha32-circle-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "f7fc23c70ca8fac286f9f822fdb38babda0371ca4d79847c86142925a1d1be41",
+      "program_sha256": "850d0ee9e47a628eda66d5a425488c1795a238190d76b477c0f8c81465877010",
+      "response_sha256": "7f7be3c9f65a3cd6fd0a74f0d2a23ee15447057de6083a606316c60495a970ac"
+    },
+    {
+      "name": "alpha32-circle-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "50effa0e504100ba54df48a2b67e50d07acd818f26fa7ac33008814a444a7532",
+      "program_sha256": "cb59ec7f4b7b1b1ad72059100f88ba0430ed0da4e057a8b7cab356d9efc4a9b2",
+      "response_sha256": "eb481a3989edf17b564d2debd07e9175a937196103d6f540f6eb4592535224f7"
+    },
+    {
+      "name": "alpha32-rounded-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "78d7e76692270631731567b79c807d2d36727582fba741c06310b52a34f29bb6",
+      "program_sha256": "18dfd54ab31f14b1c1987bce4a2b0ce56ea61ed420a35551769dc05545b32a98",
+      "response_sha256": "72a3606d3651b68095124d1355070eb99123f7e2c1ad790d9410a54239f3066d"
+    },
+    {
+      "name": "alpha32-rounded-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "60cc58f045e52a6d8335dd6e941d88e7d020af6bb2adf982dc294537df793b81",
+      "program_sha256": "a06f7eafcd8019803bc0450270dadbd115640d3514570ca49214fc6c3965bcdf",
+      "response_sha256": "25a5fb3d0cfef172b6a2876abf71df98bb0cc73b60512c10a03341e26c851f6a"
+    },
+    {
+      "name": "alpha32-rounded-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "cbfdd1eb7618f9a0cdd9b396921b6e82345ced36de74ef18d63f6ce67a0b75c2",
+      "program_sha256": "927777219b76d452ad61e589800eafcbedb0b2012105f11ce859cc2c06909c39",
+      "response_sha256": "cb30f7c4dea05801e8f11ccfb3ef8a0dbdb83b90dab559a04c735b1f4c05af39"
+    },
+    {
+      "name": "alpha32-island-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "74ec68a916e0d5a511e288e7aeb2ddb74a2779cba65068bccc6b133809475cf4",
+      "program_sha256": "288cf5ee007ce5e7a9eb284483c1284dcf755f15eb048de233e1cb07c288429f",
+      "response_sha256": "bee856564794a75af3f8dad717dc7051d2956d9a1a7014b439d996a6bf063b46"
+    },
+    {
+      "name": "alpha32-island-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "024ff900e3c1e770a256d35bdd6017a11e6122d3616e16a557142dea31233ca9",
+      "program_sha256": "18f0eeef6fce4a93c03ccd839e4d30e16607d32ed66b78b4b99847929d5be2cd",
+      "response_sha256": "74e74e02f5eac7ea68ded5112d716d41adec717cb2b2ee43abf8beda0c86af9c"
+    },
+    {
+      "name": "alpha32-island-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "434e7e3244aa1bd772da4cfe2db6823036a813309ddda7519f2e172883664911",
+      "program_sha256": "067971f6d42d5a5cb49fe5fbacf401d7c87f95a9fe0d79b9960495c4d8979c13",
+      "response_sha256": "f1314e6be6ca620b4024896bfaf6247e44346184f2c2de82dd8888d95d44e68d"
+    },
+    {
+      "name": "alpha32-annulus-walls_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "6d756d969791034bb04dadce9af726882fdcbf04c5fea964a4a4cf548d2dd620",
+      "program_sha256": "fb61b6af34ca5abf032a43a8fcae21b6501231c5ad51282c0aadaddfef912836",
+      "response_sha256": "0eb4cdb0134756da8d55505ac9a76ffa1dae95812561ce504b8ce629a7eb5236"
+    },
+    {
+      "name": "alpha32-annulus-floor_only",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "614b85b1dc5c0758ba3b6ddc49d8a7b5621fb0e806d8d546fa298e048c9cba9a",
+      "program_sha256": "212f14a6a09bd0843b9b1c96fdb4ec4212fc960c7ac4d7b6136c6665ab17adcd",
+      "response_sha256": "6e7ca026443231a22f3943a2931c837732fed80152c3425aaef527930ace7b05"
+    },
+    {
+      "name": "alpha32-annulus-walls_and_floor",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "bef73567d67f8f2026b027f0d51128ded00fd656e90a6d67d0451e87e44aedef",
+      "program_sha256": "7718fb600afc5ba3e86d890580f32e6bd40c2bc156550f342aae4f674f657029",
+      "response_sha256": "3faa0b229124db6eed7d4473714fcb93cb12e847ede3340402fb6dd14ba79416"
+    },
+    {
+      "name": "retained-chamfer-grbl",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "1ddc7b7bb270a0e6ec63a3c6e7b588e0cb7f9431711851a450dc8976ef61f7d2",
+      "program_sha256": "4ace46e33e8f33234f269882f1488fd4e95b9afeb45503927a2bc466c910f651",
+      "response_sha256": "2db6211278b7dd2f34a00105692a5debbbd7daaa0396da3b0c9e05e7fc7b8a72"
+    },
+    {
+      "name": "retained-chamfer",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "5c34aecf2f437947ec02675d4bef4acc08a03dffe4d3307c00e1e690699acf16",
+      "program_sha256": "00a26128f5b2ed5d2eede0dd2a60e5ec1efd1cbda6353c4d926be14007ce4f56",
+      "response_sha256": "9abb90679866b1b035b085f6c644d1049f4a6fb2abe370bb8c3ade8ccc88faf1"
+    },
+    {
+      "name": "retained-dovetail",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "49c9d6ddc0391092c20bb31dd88eb058ae79eb55bff9f42d1218ac1a9030de38",
+      "program_sha256": "f8dbd33a0dbc212484e94263706bd7045cb558f2a9d25fc29ec2460eb6b7b701",
+      "response_sha256": "d0bd776a35c212e69bc390c41b95c99211450747844daac89c62559ddc73844a"
+    },
+    {
+      "name": "retained-drill-shared-false",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "90ab328bc6dde9a125002eb44df667f22a957bb11f77cc2990d21c6f597f59b4",
+      "program_sha256": "1f5901ad83c163152b0fd8c662535ec9c03d09d7f895a2a649f229cbd490ddac",
+      "response_sha256": "273ea4ba49bb25e60a6abf51af7a7d499d5cc62cc7994f6062263929a141cea8"
+    },
+    {
+      "name": "retained-drill-shared-true",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "0b5e57829dd8922838a57d3949cfbcad90ff4695df594771ede341a58a31aef0",
+      "program_sha256": "a12cb555bff13c5ccc472cbc8cb8b088d0058acf887e6332930dcc9b304c7ce6",
+      "response_sha256": "0833280acbb0b506661544b8b42d9af2e7393ceb9c0cf48accaa48f36184bde3"
+    },
+    {
+      "name": "retained-dual-pocket",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "d8e02861cb29814c889413bafbf1d4d4a61de1c3c2cb5536a0cc0f20c6a4d847",
+      "program_sha256": "21f4ca0f0eafe476f44da8e8d3c69f6fe995b3b054d5cf5dfe4d6a7435654eb4",
+      "response_sha256": "bb14d0ce70239e175bb1c73333fad332cfeeef6ebb72342847af4445541a86e7"
+    },
+    {
+      "name": "retained-engrave-grbl",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c6535a3c81c9d1dddb8015d82e521c620bd71795ca54da02e86724608685c468",
+      "program_sha256": "49a6263845cd167282481ad2c756815a9dcc92399f67db914f4e43011419db14",
+      "response_sha256": "449f1b2681cfe10dd88554a34eaa4301080846286224fd8955eb5ba89304a050"
+    },
+    {
+      "name": "retained-engrave",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "5351b6146f6812fbe34a1ebf3617dd0b01e313659e48ec5224b25a201ab8e2df",
+      "program_sha256": "8eedda46a7a4b9240ce31e6fa216d0c4264b7caeaab61392ee6fe06fed63b447",
+      "response_sha256": "0011dc64a71d1a60f5553cf54684237ec688b12beae09ff4d89a40aa6eee32ce"
+    },
+    {
+      "name": "retained-halfpipe",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "ee9ab1a3b9d431042050642370cb221aa79f38c48efbb67df628fc8244be4156",
+      "program_sha256": "7d60be2a0b30699e42755ad96b3245aca9eed3267ce7aee24812f4f8dd3a792e",
+      "response_sha256": "7707415421d02af3fc31287a8578851117b77e237085ddaf39d49ad2c7ce26e1"
+    },
+    {
+      "name": "retained-planar",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "da5907ac7d82d4a2e95c92b61d6fa1bcaab2e91170a3f4fe4a987e5f0693253f",
+      "program_sha256": "069816f6d5f332a8acec140ab476a2afc98a8fb04bb5428f5fc63401ea7f31df",
+      "response_sha256": "6d86ca034a05eb4eddb98fc5a725641179d81fec106df1b863d034e40c8494be"
+    },
+    {
+      "name": "retained-pocket-grbl",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "1df827c61293f8960057332265121cadaee085d4f73d64928abd5fcd7c6b043d",
+      "program_sha256": "ed2b4496bf64c8ef0f0588ec61413ac0d86e0989fa328966ff9316391b7c5870",
+      "response_sha256": "5bf6c2f415bcb01acd492fcfccfdee76b27b8551159b854b28416e47ff4f8d44"
+    },
+    {
+      "name": "retained-pocket",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c85df456bad597c6ee3704a4155d7ef12dfe073b4197e719ed55eca20cd57695",
+      "program_sha256": "26b2984bf2dcab1b5ace276c5a36cdaa7afec8273daf01c8dc72d7d72aaf92bd",
+      "response_sha256": "5a03f88eaf9d9d4eec842e921cd70ebf6b1671ec5070f150a104095242b18722"
+    },
+    {
+      "name": "retained-profile-grbl",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "4f77bf90583299a1c4d9d9975f8febd7e25041b43a4c8a0e55a08051c87022e7",
+      "program_sha256": "e242c2c335f540a5dda330a1384b74868caa16756fd174980bd09859f3e097ae",
+      "response_sha256": "f904b1673e112c9ee6e1c764a05a6cd53d77d627bc405f03c7040c5be1eeb7c3"
+    },
+    {
+      "name": "retained-profile-inside-grbl",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "c9efec1b526e673652a0abe6fda6f1b7f8a08f0a56bd95fac12d0d41e07819a9",
+      "program_sha256": "c949c831bc170db36f432600f9ff6d049b21f5da7d8e78d7f2049ca48103fac8",
+      "response_sha256": "f604587447d6927a66631f5e9b081fcd96aec3278db45c89651b12c32b96919d"
+    },
+    {
+      "name": "retained-profile-inside",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "8388f832fcd69bd2abcc52765b006a72f1a7b9c8784fc093c57f51eb080435f0",
+      "program_sha256": "04900344a7990bde105e68356624e6d46e17158b0810a8a93609f65b6b1788cf",
+      "response_sha256": "a51b8266c04825f8ba8db662e3dbfc76f45b6374bb43fbd6cd66b5d38c7f2d72"
+    },
+    {
+      "name": "retained-profile",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "8c496c441eb4e55f3d69297e1d422bf94def4ce4095bb42c97983d74476164f1",
+      "program_sha256": "c83346b83c7cfc7ad5dd4568a7fef22919280cb29a50d2bdf4da27b279b8a24c",
+      "response_sha256": "ed7e1f36c9b700199b3c02a875dca6e39244326829ee5889c3998a4940a1fae9"
+    },
+    {
+      "name": "retained-relief",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "ef8fd0847d86f147d98027e7031262049fe5d3a0a98f0d87922ab23fb760df38",
+      "program_sha256": "db43b8bf5e66c2126e2b5a3e2933837b6cf503d6eeb7e732b16f54f782537eea",
+      "response_sha256": "edd079299dea913dc847edf88c1a16eae25566f1c139d22b3ce89c90eafc7c98"
+    },
+    {
+      "name": "retained-shopbot-profile",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "0c7da0d406ddaca885c168f13db998d7a91f784a32ba2b8a3d9f6602c366e2d4",
+      "program_sha256": "b168766782fb9023c17ad0db433a8df9114e7f2d77d1cfed6853d27cb7e66d84",
+      "response_sha256": "ae63b6c6152f799a100061cf45ed49deff2829d85897793dfccd3ae297915396"
+    },
+    {
+      "name": "retained-shopbot-vcarve",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "4f1d79560baa63b787871802b81405aebb4d24c9894a85c0cb6aa52e7b00d948",
+      "program_sha256": "26fde1a684eabbf4a19ba23a8e407f4e9e834e416e38ba6eeb1c6d77bc3ebc0b",
+      "response_sha256": "f303f3e973fb83808bb85a6beb4095f41ddb81df1c1853ffe60ed8076a3e4c49"
+    },
+    {
+      "name": "retained-thread",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "53676309706ae5f73aa6912b85917a20fe1cc0132c52402873ec80a1fe34bbbd",
+      "program_sha256": "07088be6f15866c032b9633d6f8b0a9497937aa157510c4409754e36847dd838",
+      "response_sha256": "59dbbb9bc67d4e7664913e2e52dae0ec319bd9340089e6c311380f4809d89492"
+    },
+    {
+      "name": "retained-tslot",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "6f24c78f841165c9437fcda3d76ea1f0337192caf67152c3859c5358ff88a3dc",
+      "program_sha256": "f8dbd33a0dbc212484e94263706bd7045cb558f2a9d25fc29ec2460eb6b7b701",
+      "response_sha256": "200ae18490b93bed7219ead071fdb5cce5ed6bd9488551687f527a19b59d38ba"
+    },
+    {
+      "name": "retained-two-sided",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "d009de76a329c8e0c486fcdc7abb862f782c95e110169bc0fdecbd88d3f11f03",
+      "program_sha256": "fc55776f4b6d441ea9000451bc90a636a4b2f611dc780c1079a6103f99fb1f0e",
+      "response_sha256": "291e7e1b7bdff6ab066bdea183a11582f7a61183b072569891de5f5ce9374f99"
+    },
+    {
+      "name": "retained-waterline",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "d1e010855ce510c0456fc715162ab5afdfa4d3e7227c49255376e678ecb8b3bc",
+      "program_sha256": "22656031b5c4507fce40fbd4dbd0044b8011ef3f69989d81145db50d4cf3184a",
+      "response_sha256": "55c70c10fddfa7beecd9cfc1a19cd7d0de5e7f76aa4953d2d67ad1103437be6c"
+    },
+    {
+      "name": "alpha4-copy-depth_per_pass_mm",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "4e128cacc1f5479cf513e2da4bb1ba70c99a35ec6e1abb3954cedf4eecef5d89",
+      "program_sha256": "6eb4946e215cf2210101dd20147c09836473d653974530bb41763ee220adac9a",
+      "response_sha256": "97f092c0bd768c738e67693c3006c44a859a10c5a9c7d06f6eed2c4a2d165ed9"
+    },
+    {
+      "name": "alpha4-copy-feed_mm_min",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "cfeeb03137706f81e7e06a155588e402a1a871f73af501871c3ea3f15ba5257e",
+      "program_sha256": "f1f27af4a4561d5e87d7ed68cb0ccc7bf6b2960f32b178caf56bcf021a59d703",
+      "response_sha256": "3dd7e003e1dc8a33502d0ef86bec9c93722336abd7a12d356345e9dc3b7569bb"
+    },
+    {
+      "name": "alpha4-copy-plunge_mm_min",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "e9a40623c89586ad9ff320557df22efe1eaeb184fd3569ff5ea56b7645d4c3f2",
+      "program_sha256": "26b669849fe68c4dd2df9633029a1732f37bdafd562e025de5ff77d0b73d35c7",
+      "response_sha256": "496b438c128703de358ee5b946d2d248e840d201719a3b6e7a88a9602e5817d4"
+    },
+    {
+      "name": "alpha4-copy-rpm",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "b5d94ea27c692ec916e5e3ca2ee4dddf9eb933599670c672b102ea7095343d65",
+      "program_sha256": "c66613686805c9183532592f5c17b17cdb8008725588ecd01ba5a08fd620a641",
+      "response_sha256": "491d8f106a55e785df667e147fea22b95579e1fdb3c46fb234610449636d53b2"
+    },
+    {
+      "name": "alpha4-shopbot-intra-section-rpm",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "6fb908ff74cbfead982d45fa2835a562e6dd47e7704605fc8e4fad0e040cf7ca",
+      "program_sha256": null,
+      "response_sha256": "1aea076ffb40e0ecaad6adc09c42a7e29fa4c0e80e463d45da7e5392ff66bf35"
+    },
+    {
+      "name": "alpha4-target-machine-limit",
+      "accepted": false,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "3ac399eaee350e3300425a138045786a746561f1b04d580f69fedbe8f6813feb",
+      "program_sha256": null,
+      "response_sha256": "fe4954df63009d7d8b04fe8567f8c175106347f43765deb67c084d3a567fb7b5"
+    },
+    {
+      "name": "alpha4-without-reuse",
+      "accepted": true,
+      "exact_complete_response_or_refusal": true,
+      "request_sha256": "fede37370bfc8faafb54848965a2abb9ad5e7233f4243b195c992e0b8b44ca35",
+      "program_sha256": "1e0d15181c09e89ed77ed094addca05415cc487376f87d70b82eaa65ee7b9847",
+      "response_sha256": "0dd634596cbbb240289da1eaad7de3693f7833bec4e00ef9b00e9536e625877e"
+    }
+  ]
+}

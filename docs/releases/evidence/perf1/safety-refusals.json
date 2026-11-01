@@ -1,0 +1,90 @@
+[
+  {
+    "name": "cam02-central-island-linuxcnc",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "c9f9d62d7dfeefbc7eed01d6efa218858df69150e85f07dea36e86cce1838f27",
+    "stderr_sha256": "c98666fabfaf107f24b7e73eccc9fecf264e495ef4c0168177d78c2e5a632d38"
+  },
+  {
+    "name": "cam02-offcenter-island-linuxcnc",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "e8605118b7664945bc2deeea46d8f106a24345fd0af8304dd728fdcfa8d756c1",
+    "stderr_sha256": "c98666fabfaf107f24b7e73eccc9fecf264e495ef4c0168177d78c2e5a632d38"
+  },
+  {
+    "name": "cam02-outside-profile-cps",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "00fc9daf65197ae79e6488ca47b2dc31f5e2edb5b1d2a26f0626b272230d1784",
+    "stderr_sha256": "c98666fabfaf107f24b7e73eccc9fecf264e495ef4c0168177d78c2e5a632d38"
+  },
+  {
+    "name": "cam02-outside-profile-linuxcnc",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "b763f66e6c90631825e3f3289a804d50baa2679dbdb9d9306c44d939ba556414",
+    "stderr_sha256": "c98666fabfaf107f24b7e73eccc9fecf264e495ef4c0168177d78c2e5a632d38"
+  },
+  {
+    "name": "cam04-cw-shopbot",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "5f4b20ee6aa19b41ca5c545d48b88e5f9c2ebac840601fd60b57a2dd7657a619",
+    "stderr_sha256": "07ea51fa3fdba9e99ffc3967990782466394b8a1bcb444e77a254de62bf9e63e"
+  },
+  {
+    "name": "cam04-inside-ccw-True",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "e32c41c55844342d6fcb080068adc957927054544b082afa8dae3f30011b5ece",
+    "stderr_sha256": "07ea51fa3fdba9e99ffc3967990782466394b8a1bcb444e77a254de62bf9e63e"
+  },
+  {
+    "name": "cam04-inside-cw-True",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "0128327fd66cd9043be5846be9be48c4477740452c0791782530de9d50d3dd20",
+    "stderr_sha256": "07ea51fa3fdba9e99ffc3967990782466394b8a1bcb444e77a254de62bf9e63e"
+  },
+  {
+    "name": "cam06-approach",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "a67377ef74362c39acaae77e8c68d29457e439c3251651504213f992f0de470c",
+    "stderr_sha256": "583511321517f3477acc367ef8ed3bd320b3e17dfca0fa148c0d92657cafe1c3"
+  },
+  {
+    "name": "cam06-empty_manual",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "ce88d25a80c87b933b2c665a68873c9e4886e1a17ca673d58037b78820e356d3",
+    "stderr_sha256": "20b05bde9cf723666cd14661cabc5ba5656b303671437b468956b5259e520621"
+  },
+  {
+    "name": "cam06-text",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "b6ca4cff53599f19b711ef1316ab190f1c5fb82b81522177e2b8289ee548ff1d",
+    "stderr_sha256": "af370bc294599fcaa4004bfb846d74e5e5fa12442f8f67f29fc0a8c4ea148db9"
+  },
+  {
+    "name": "thread-deep-start",
+    "refused": true,
+    "no_program": true,
+    "exact_refusal": true,
+    "request_sha256": "ca0b558e43281b7f4fef8f398a5f2d92058e06720007dd640914fae44ea0164d",
+    "stderr_sha256": "8b0d2b354c9ad6b799f2f730be4ab721d97dd74e50cca9d8815422e9067dac44"
+  }
+]

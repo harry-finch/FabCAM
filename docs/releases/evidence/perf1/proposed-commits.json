@@ -1,0 +1,64 @@
+{
+  "commits_created": false,
+  "staging_performed": false,
+  "groups": [
+    {
+      "title": "perf(core): prune finishing distance checks conservatively",
+      "depends_on": [],
+      "paths": [
+        "crates/ivac-core/src/pipeline/op_drivers/stage_polygon.rs",
+        "crates/ivac-core/src/pipeline/op_drivers/stage_polygon/perf1.rs",
+        "crates/ivac-core/src/pipeline/op_drivers/stage_polygon/pocket.rs"
+      ]
+    },
+    {
+      "title": "perf(frontend): share synchronous generation freshness checks",
+      "depends_on": [],
+      "paths": [
+        "frontend/bench/perf1-browser.ts",
+        "frontend/bench/perf1-project.ts",
+        "frontend/bench/perf1-run.ts",
+        "frontend/bench/perf1.html",
+        "frontend/bench/perf1.vite.config.ts",
+        "frontend/src/lib/state/perf1-benchmark.test.ts",
+        "frontend/src/lib/state/program-qualification.ts"
+      ]
+    },
+    {
+      "title": "test(perf): qualify measured gains and exact CNC preservation",
+      "depends_on": [
+        1,
+        2
+      ],
+      "paths": [
+        "docs/releases/PERF_1_MEASURED_OPTIMIZATION.md",
+        "docs/releases/evidence/perf1/corpus-debug.json",
+        "docs/releases/evidence/perf1/corpus-release.json",
+        "docs/releases/evidence/perf1/measurements.json",
+        "docs/releases/evidence/perf1/preservation.json",
+        "docs/releases/evidence/perf1/proposed-commits.json",
+        "docs/releases/evidence/perf1/qualification.json",
+        "docs/releases/evidence/perf1/safety-refusals.json",
+        "docs/releases/evidence/perf1/software-files.json",
+        "docs/shopbot-modernization/ROADMAP.md",
+        "docs/shopbot-modernization/STATUS.md",
+        "scripts/perf1/README.md",
+        "scripts/perf1/bench-native.py",
+        "scripts/perf1/bench-wasm.py",
+        "scripts/perf1/compare-corpus.py",
+        "scripts/perf1/paired-frontend.py",
+        "scripts/perf1/source-inventory.py",
+        "scripts/perf1/summarize.py",
+        "scripts/perf1/wasm-one.mjs",
+        "tests/fixtures/perf1/budget-refusal.json",
+        "tests/fixtures/perf1/concave.json",
+        "tests/fixtures/perf1/convex.json",
+        "tests/fixtures/perf1/curved.json",
+        "tests/fixtures/perf1/distinct-cutter.json",
+        "tests/fixtures/perf1/island.json",
+        "tests/fixtures/perf1/near-budget.json",
+        "tests/fixtures/perf1/rectangle.json"
+      ]
+    }
+  ]
+}

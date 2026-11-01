@@ -1,0 +1,46 @@
+{
+  "accepted_starting_commit": "62b8a6bcf8a19bc98e57af0a254adf0ae78508eb",
+  "qualified_non_markdown_file_count": 1293,
+  "software_fingerprint_sha256": "b42027a117a0529a974f8c5746d0794803687f7a6a474cd1c305a6fbf4643d27",
+  "core_commit": "f35b3f5d6670e76f44387c48364b9aadf01b237e",
+  "frontend_commit": "13030e7df210fc9a2585201df875a73ae2f88388",
+  "software_and_documentation_commit": "Containing third commit; exact SHA recorded in final human receipt and ignored local consolidation receipt.",
+  "commit_dependencies": {
+    "core": "Includes referenced test-only Rust benchmark module",
+    "frontend": "Self-contained diagnostics implementation and benchmark helpers; follows core in this local sequence",
+    "qualification": "Depends on both implementation commits; supplies synthetic requests, reproducibility drivers and sanitized evidence"
+  },
+  "accepted": true,
+  "source_byte_identical_to_qualified_inventory": true,
+  "full_canonical_gate_rerun": false,
+  "reason": "All qualified software bytes remain identical; original 20/20 source-bound gate is preserved.",
+  "cnc_comparisons": {
+    "release": 109,
+    "accepted_debug": 109,
+    "safety_refusals": 11,
+    "receipts_unchanged": true
+  },
+  "preserved_evidence_sha256": {
+    "docs/releases/evidence/perf1/corpus-debug.json": "3dbd600b9a380722f2f8a97eb9b53c8517ee5e58ecaecc7dcd57214b10155946",
+    "docs/releases/evidence/perf1/corpus-release.json": "c4c889cd3cca74ff203f561af9bce21daf7043813e5239a542309b990e9c624f",
+    "docs/releases/evidence/perf1/measurements.json": "fbbc197f9460b6e210f9cb48aac8b47b4b933bfc5f44a80727251da9562d92b6",
+    "docs/releases/evidence/perf1/preservation.json": "bde84adcc88ab5d8ca22938d2f16d0496b43b2a1e495d21bc25ae21d3ddbdd46",
+    "docs/releases/evidence/perf1/proposed-commits.json": "820d3bea45cf8c372cd5d028e1c89cbdfea55f96d72db83a978231f426afdbbb",
+    "docs/releases/evidence/perf1/qualification.json": "11b8f60aba1123aa247d49ca345500cc9052bba49468464b08d0456bbd9c0c66",
+    "docs/releases/evidence/perf1/safety-refusals.json": "21783915f8337b8c961a9620c9841397d78bc8bd23dfd93d156986af34a13ea8",
+    "docs/releases/evidence/perf1/software-files.json": "22b48045b5fc342f211eb5c70e7a50db076b538269ad7bdec1432d12fb654a0c"
+  },
+  "timing_regressions_and_limitations_preserved": true,
+  "other_worktrees_checked": 6,
+  "canonical_V1_1_HEAD": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+  "exclusions": [
+    "No merge",
+    "No push",
+    "No installer",
+    "No publication",
+    "No FabSpeed integration",
+    "No physical machining",
+    "No deferred optimization implementation"
+  ],
+  "checkpoint": "HARD STOP after three authorized local commits"
+}

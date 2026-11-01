@@ -1,0 +1,90 @@
+{
+  "canonical_gate": {
+    "command": "scripts/pre-release.sh",
+    "executions": 1,
+    "exit_code": 0,
+    "groups": [
+      "cargo fmt --check",
+      "cargo clippy -Dwarnings (with pedantic)",
+      "cargo test --workspace",
+      "xtask schema-check",
+      "xtask version-check",
+      "readme parity",
+      "pnpm install",
+      "codegen drift",
+      "i18n keys drift",
+      "pnpm run lint",
+      "pnpm run check",
+      "pnpm run test",
+      "pnpm run build",
+      "wasm-pack build (web)",
+      "wasm cps size guard",
+      "cargo-deny check",
+      "ui smoke (headless)",
+      "CLI trust and transactional export",
+      "SEC1 release boundary regressions",
+      "candidate identity regressions"
+    ],
+    "passed_groups": 20,
+    "total_groups": 20,
+    "rust_tests": 1689,
+    "rust_ignored": 3,
+    "frontend_tests": 1572,
+    "frontend_skipped": 2,
+    "manual_benchmarks_executed_separately": true,
+    "raw_log_sha256": "0c7a5a8566010c12445fde6d29e220dc13f61905490a1d3ef0a59b18957c61ae"
+  },
+  "software_fingerprint_sha256": "b42027a117a0529a974f8c5746d0794803687f7a6a474cd1c305a6fbf4643d27",
+  "software_files": 1293,
+  "runtime_and_test_bytes_unchanged_after_gate_start": true,
+  "inventory_tool_followup": "Only source-inventory.py enumeration was corrected to include tracked additions and support subsequent staging/commits. Python driver syntax and regenerated inventory verification rerun; no runtime/test/gate implementation changed. Initial full inventory fingerprint was 4901bb43359e8325ede70392b2153d37ff8f85841df73917183281477b1d4571.",
+  "targeted": {
+    "rust_pocket_properties_and_decoded_mutation": {
+      "passed": 4
+    },
+    "frontend_suites": {
+      "passed": 45,
+      "manual_benchmark_skipped": 1
+    },
+    "python_driver_syntax": true,
+    "markdown_links": {
+      "files": [
+        "docs/releases/PERF_1_MEASURED_OPTIMIZATION.md",
+        "docs/shopbot-modernization/ROADMAP.md",
+        "docs/shopbot-modernization/STATUS.md",
+        "scripts/perf1/README.md"
+      ],
+      "checked_targets": 24,
+      "broken": []
+    }
+  },
+  "review": {
+    "model": "Astra Medium",
+    "mode": "targeted read-only",
+    "production_blockers": 0,
+    "suggestion": "Combined broad-phase/intersection fallback and near-parallel property assertions; implemented",
+    "subsequent_production_semantic_changes": false
+  },
+  "limitations": [
+    "No installed-native file-workflow acceptance",
+    "No authenticated remote HTTP qualification",
+    "No physical CNC/controller qualification",
+    "No universal speedup or heap-leak proof",
+    "No chaining optimization or persistent identity cache"
+  ],
+  "corpus": {
+    "release": {
+      "cases": 109,
+      "accepted": 96,
+      "refused": 13,
+      "complete_response_or_refusal_exact": true
+    },
+    "accepted_debug": {
+      "cases": 109,
+      "complete_response_or_refusal_exact": true,
+      "historical_full_response_exact": true
+    },
+    "targeted_safety_refusals": 11,
+    "initial_cross_profile_exploratory_failure": "Unchanged release baseline differs in last-bit region coordinates from historic debug for circle-walls_only. Matched-profile release/debug qualification both pass; no golden or predicate changed."
+  }
+}

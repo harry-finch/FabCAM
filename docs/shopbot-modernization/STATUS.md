@@ -11,9 +11,14 @@ the safety/security feature commits have **not** been merged there. The frozen V
 worktree remains on its separate historical line. Inspect Git before selecting a
 build; a branch name or old installer is not evidence of feature freshness.
 
-This reconciliation is isolated on `docs/doc-consolidation-1` from that accepted
-security descendant. It changes documentation/guidance only; the maintainer accepted this
-checkpoint and authorized three local documentation commits. [Verification and consolidation](../releases/DOC_CONSOLIDATION_1.md).
+The accepted documentation baseline is committed at
+`62b8a6bcf8a19bc98e57af0a254adf0ae78508eb`; see
+[documentation consolidation](../releases/DOC_CONSOLIDATION_1.md). PERF-1 is now an
+accepted for local consolidation on `feature/perf-1-measured-optimization`: conservative
+finishing-distance pruning and synchronous freshness deduplication, with original
+budgets and CNC behavior preserved. The maintainer accepted bounded software
+qualification and authorized the three local commits; see
+[measurements, exact source and qualification](../releases/PERF_1_MEASURED_OPTIMIZATION.md).
 
 | Current contract | Implemented boundary |
 | --- | --- |
@@ -56,7 +61,8 @@ extend that qualification; executable/generated blob preservation is checked sep
 - No current-source installer/publication or canonical merge is authorized by
   software/documentation acceptance. Frozen V1 gates remain in [V1_READINESS](../releases/V1_READINESS.md).
 
-This documentation checkpoint is accepted for local consolidation only. PERF-1
-remains planned and unstarted in the technical roadmap; implementation needs separate
-authorization. HARD STOP after consolidation. Future milestones update these sections
-**in place**.
+PERF-1 passes 20/20 canonical software gates and exact CNC replay; the maintainer
+accepted this bounded software milestone and authorized three local commits.
+The source-bound report owns the fingerprint and consolidation receipt. Canonical
+integration and release remain unauthorized. HARD STOP after local consolidation.
+Future milestones update these sections **in place**.

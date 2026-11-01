@@ -1,0 +1,52 @@
+{
+  "other_worktrees": [
+    {
+      "worktree": "ivacam",
+      "head": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_sha256": "4308140e2259fdd50285156ea1b6edda881e4d0814ca3dd9691375bf8adcdadb",
+      "head_unchanged": true,
+      "status_unchanged": true
+    },
+    {
+      "worktree": "FabCAM-doc-consolidation-1",
+      "head": "62b8a6bcf8a19bc98e57af0a254adf0ae78508eb",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "head_unchanged": true,
+      "status_unchanged": true
+    },
+    {
+      "worktree": "FabCAM-safety-audit-1",
+      "head": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_sha256": "855f0f5c632343761895e46536022fba829c6616102e95786db2d58228ccd7d9",
+      "head_unchanged": true,
+      "status_unchanged": true
+    },
+    {
+      "worktree": "FabCAM-safety-fix-1",
+      "head": "c33f69f6d6181f7bac2b1cebcdfe5b830f2d5b1c",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "head_unchanged": true,
+      "status_unchanged": true
+    },
+    {
+      "worktree": "FabCAM-sec-harden-1",
+      "head": "6bfecf3339524cc86e8c2bd83f168c63cbdd2860",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "head_unchanged": true,
+      "status_unchanged": true
+    },
+    {
+      "worktree": "FabCAM-v1-freeze",
+      "head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "head_unchanged": true,
+      "status_unchanged": true
+    }
+  ],
+  "own_HEAD": "62b8a6bcf8a19bc98e57af0a254adf0ae78508eb",
+  "index_empty": true,
+  "other_evidence_not_edited": true,
+  "baseline_native_binary_sha256": "c6873245b80a536afaa52002e365a026e669caacdee81448aa7b80e29d92a93a",
+  "native_final_equals_measured": true,
+  "wasm_final_equals_measured": true
+}
