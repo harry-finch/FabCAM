@@ -1,5 +1,13 @@
 # FabCAM release roadmap
 
+**INT-ALPHA-1 — accepted bounded software candidate; locally consolidated (2026-11-01).**
+Accepted ALPHA-4 `78be459` already inherits ALPHA-1–3.2. TOOL-META descriptive
+specifications are ported onto V10 without machining changes or catalogue sync.
+109 exact CNC cases, 8 exact WASM cases and 4 exact native/HTTP cases pass.
+20/20 mandatory gates PASS; 1662 Rust/Tauri and 1565 frontend tests.
+[Source-bound integration report](INT_ALPHA_1_INTEGRATION.md). Three authorized local commits; no primary integration.
+**HARD STOP after local consolidation. Native/platform/physical acceptance remains separate.**
+
 **ALPHA-4 accepted as bounded software-qualified implementation; locally consolidated.**
 The 1315-file qualified inventory is unchanged. Selective cross-context values,
 advisory provenance, atomic history, V10 persistence and strict matching are accepted.

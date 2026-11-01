@@ -1,0 +1,18 @@
+[
+  {
+    "case": "alpha32-rectangle-cascade-walls_only-metadata",
+    "full_response_native_http_exact": true
+  },
+  {
+    "case": "alpha32-rectangle-cascade-floor_only-metadata",
+    "full_response_native_http_exact": true
+  },
+  {
+    "case": "alpha32-rectangle-cascade-walls_and_floor-metadata",
+    "full_response_native_http_exact": true
+  },
+  {
+    "case": "alpha4-copy-feed_mm_min-metadata",
+    "full_response_native_http_exact": true
+  }
+]

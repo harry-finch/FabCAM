@@ -1,0 +1,55 @@
+{
+  "baseline_wasm_sha256": "d4e20b80ad24630a573b8e05cae91d7474c59fe4a07e4363603e759c1571d534",
+  "candidate_wasm_sha256": "ce23bbf0e4465fdabae5801c3d5d87fea7253ed00e46be432a24065b631a5f30",
+  "coordinate_tolerance": 0,
+  "cases": [
+    {
+      "name": "profile-main",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "e0d1c4897a8de0ed02b4bc7925f48b8bcbccd7fc6fa4b4ac5f7c6fe503875acb"
+    },
+    {
+      "name": "alpha32-rectangle-cascade-walls_only",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "9955b9b2e35c65147f848bbc0a5c9e83dd4147cd36285c47f10c61e09ff9c527"
+    },
+    {
+      "name": "alpha32-rectangle-cascade-floor_only",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "b6ef577543d53974a6a615fe86b74a4b0a4a2d15aa93b93b10cce6610d6b08ba"
+    },
+    {
+      "name": "alpha32-rectangle-cascade-walls_and_floor",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "fc4f7f00cdfc1ae4ea86abeae3b5eccb9c8634a3e83f6b5deea0f43d38cc4408"
+    },
+    {
+      "name": "alpha32-circle-floor_only",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "850d0ee9e47a628eda66d5a425488c1795a238190d76b477c0f8c81465877010"
+    },
+    {
+      "name": "alpha32-island-walls_and_floor",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "067971f6d42d5a5cb49fe5fbacf401d7c87f95a9fe0d79b9960495c4d8979c13"
+    },
+    {
+      "name": "alpha32-null-finishing",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "fffad2fda0ff211c44a62592c51341fa04ec2112cf54e2927feb242c4a1ccbf4"
+    },
+    {
+      "name": "alpha32-distinct-tool",
+      "exact_full_wasm_baseline_candidate": true,
+      "metadata_only_in_tool_snapshots": true,
+      "program_sha256": "13d85eeec113c2fb48d0c74adfc4a1154f1322e816ac69075bb09a1bf9e239be"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "base": "78be45928f8c63ccb284787f90d9d5c065765717",
+  "branch": "integration/alpha-v10-tool-meta",
+  "commits_created": 0,
+  "canonical_runs": 1,
+  "exit_code": 0,
+  "mandatory_groups": [
+    "cargo fmt --check",
+    "cargo clippy -Dwarnings (with pedantic)",
+    "cargo test --workspace",
+    "xtask schema-check",
+    "xtask version-check",
+    "readme parity",
+    "pnpm install",
+    "codegen drift",
+    "i18n keys drift",
+    "pnpm run lint",
+    "pnpm run check",
+    "pnpm run test",
+    "pnpm run build",
+    "wasm-pack build (web)",
+    "wasm cps size guard",
+    "cargo-deny check",
+    "ui smoke (headless)",
+    "CLI trust and transactional export",
+    "SEC1 release boundary regressions",
+    "candidate identity regressions"
+  ],
+  "rust_passed": 1662,
+  "rust_failed": 0,
+  "rust_ignored": 1,
+  "frontend_passed": 1565,
+  "frontend_existing_skip": 1,
+  "focused_frontend_passed": 81,
+  "focused_frontend_existing_skip": 1,
+  "cnc_cases": 109,
+  "cnc_accepted": 96,
+  "cnc_expected_refusals": 13,
+  "wasm_exact_cases": 8,
+  "native_http_exact_cases": 4,
+  "software_files": 1318,
+  "software_fingerprint": "974de18341dd476e16699b0dcf9bf76bd5fdc6eaf5b4b70ba11aa5a01be5377d",
+  "source_differences_after_gate": [],
+  "actual_index_staged": [],
+  "private_index_method": "Generated API/i18n only in a temporary GIT_INDEX_FILE; canonical drift guards active. Real index unstaged.",
+  "binary_sha256": {
+    "target/debug/ivac": "6ec0f30d32e9ca7e1d96b58d592c7981c4a9465748761feeac437370cd64ffd8",
+    "target/debug/ivac-server": "37afdca1ef8c3c371c1ecec152c01994f6001cb2f8ff25f6b1b2501e4a9ea90b",
+    "crates/ivac-wasm/pkg/ivac_wasm_bg.wasm": "ce23bbf0e4465fdabae5801c3d5d87fea7253ed00e46be432a24065b631a5f30"
+  },
+  "installed_native_acceptance": "NOT RUN",
+  "physical_qualification": "NOT RUN",
+  "logs": {
+    "pre-release": {
+      "local_path": "<local-logs>/int-alpha1-pre-release.log",
+      "sha256": "d157965727d0057a2801f1248038ffcabf43dfff20f6880db696efb51f40980d"
+    },
+    "targeted-final": {
+      "local_path": "<local-logs>/int-alpha1-targeted-final.log",
+      "sha256": "8650b68dd106fda5b3df9f8f6e3e63109bb9cd1c5f32450324629aa31b327eba"
+    },
+    "tool-test-final": {
+      "local_path": "<local-logs>/int-alpha1-tool-test-final.log",
+      "sha256": "19be18fd7f72a4a6274a3fbee629d979835968ac94d12119537d56a8c1ced3e0"
+    },
+    "frontend-all": {
+      "local_path": "<local-logs>/int-alpha1-frontend-all.log",
+      "sha256": "4619b4f23332624b87d29170306f61354ba80476b48fcddf7a65c478a6d57b94"
+    },
+    "cnc": {
+      "local_path": "<local-logs>/int-alpha1-cnc.log",
+      "sha256": "e03aa4be2936da49655ffe3ffa2f55c67a0b97abd97a48f15ad61864bdbd5cbc"
+    },
+    "wasm-differential": {
+      "local_path": "<local-logs>/int-alpha1-wasm-differential.log",
+      "sha256": "4d867222fb9c4405856323d00d47c3cdfa98d10b250d29a0b4db938e4ab3d58f"
+    },
+    "lint-final": {
+      "local_path": "<local-logs>/int-alpha1-lint-final.log",
+      "sha256": "186f530f410425c2238ea685e550081e30fd3c7a56ba021c2d05772c0ae9c7cb"
+    },
+    "check-final": {
+      "local_path": "<local-logs>/int-alpha1-check-final.log",
+      "sha256": "937dcbd753425e9d41afa9b0539f9cca0198ce194e6697b8aa05e24e5b964f57"
+    },
+    "production-build": {
+      "local_path": "<local-logs>/int-alpha1-production-build.log",
+      "sha256": "df135777048204d3004c69b58aea1f20667e29eef484fe67af060e2b391d6920"
+    },
+    "cnc_final_artifact": {
+      "local_path": "<local-logs>/int-alpha1-cnc-final.log",
+      "sha256": "e03aa4be2936da49655ffe3ffa2f55c67a0b97abd97a48f15ad61864bdbd5cbc"
+    }
+  },
+  "recommendation": "GO within bounded integration software scope; human review and commits pending.",
+  "cnc_final_artifact_exact": true,
+  "cnc_before_canonical_binary_sha256": "34b4604b7cae741119e6406c8479c4b1a9008d8bd58d6be022f7a832eab39573",
+  "cnc_replay_output_directory": "dist-test/int-alpha1/cnc-final-artifact",
+  "cnc_replay_harness_note": "Only the temporary output-directory literal was redirected for the replay. Repository script and assertions unchanged. Existing two-sided overwrite refusal was preserved."
+}

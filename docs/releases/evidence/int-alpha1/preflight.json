@@ -1,0 +1,118 @@
+{
+  "alpha4_head": "78be45928f8c63ccb284787f90d9d5c065765717",
+  "qualified_fingerprint": "6d544fa193e5eb07f42b632d6cf985517d2891e77cfdc3c7f2f46a99a09c245a",
+  "worktrees": [
+    {
+      "path": "<worktrees>/ivacam",
+      "head": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+      "branch": "refs/heads/FabCAM-v1.1",
+      "status_sha256": "850850740b524866e3d2b5045132faedb2ba947796bf3720e1569a17ecab2b86",
+      "status_entries": 1004
+    },
+    {
+      "path": "<worktrees>/FabCAM-alpha-2",
+      "head": "96181814c6f97ac19390dade7a0d3110b2f4d681",
+      "branch": "refs/heads/fix/alpha-2-geometry",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-alpha-3",
+      "head": "1a70e503b8661aeb59b8d3bff56e5fde4139836c",
+      "branch": "refs/heads/feature/alpha-3-main-finishing",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-alpha-3-1",
+      "head": "81e8d47d3ca6860303d534393bad37056ea0cfb2",
+      "branch": "refs/heads/feature/alpha-3-1-generalized-finishing",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-alpha-3-2",
+      "head": "38fc911fab5ac7058329e1edbad7e4489134ac91",
+      "branch": "refs/heads/feature/alpha-3-2-pocket-finishing",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-alpha-4",
+      "head": "78be45928f8c63ccb284787f90d9d5c065765717",
+      "branch": "refs/heads/feature/alpha-4-preset-reuse",
+      "status_sha256": "3fd332ac1f659d8c50f61d8a70b956f6b90b62f3220bd6fbee6cf8266ca3f8b0",
+      "status_entries": 15
+    },
+    {
+      "path": "<worktrees>/FabCAM-alpha-feedback",
+      "head": "4d0bf277c4023acc980f39accf8c8a40b77dbd13",
+      "branch": "refs/heads/fix/alpha-stock-diagnostics",
+      "status_sha256": "67d38da2c6f3705ec5f163006b0a8fc5c153aaef5e8dd771e9c531d00e218675",
+      "status_entries": 3
+    },
+    {
+      "path": "<worktrees>/FabCAM-qual-1a",
+      "head": "7f55b2e8fdc7850234a90e456efa2f02de21c322",
+      "branch": "refs/heads/codex/qual-1a-deterministic-vcarve",
+      "status_sha256": "4b97a64afbfe16e673d415ec07381678cd34bd3c48b3a72f47f605c325e10fa7",
+      "status_entries": 8
+    },
+    {
+      "path": "<worktrees>/FabCAM-qual-1a2",
+      "head": "aa846fc6ac01af586e660e43f13488bef3c8064d",
+      "branch": "refs/heads/codex/qual-1a2-numeric-input",
+      "status_sha256": "4b97a64afbfe16e673d415ec07381678cd34bd3c48b3a72f47f605c325e10fa7",
+      "status_entries": 8
+    },
+    {
+      "path": "<worktrees>/FabCAM-qual-1a3",
+      "head": "aa846fc6ac01af586e660e43f13488bef3c8064d",
+      "branch": "refs/heads/codex/qual-1a3-motion-presets",
+      "status_sha256": "7199c69169e034c5497595344285c742125624e9f1db5ba62b25036385d574e3",
+      "status_entries": 12
+    },
+    {
+      "path": "<worktrees>/FabCAM-qual-1a4",
+      "head": "f2b0427b2361ae33064eb9caa5a874716880ee4d",
+      "branch": "refs/heads/codex/qual-1a4-production",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-qual-1b",
+      "head": "aeae8202b385e46fdee9ff5827f5ca05702d14c3",
+      "branch": "refs/heads/codex/qual-1b-cancellation",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-qual-1c",
+      "head": "9520d98b7966745253c0a0401c800ef4831bc79b",
+      "branch": "refs/heads/codex/qual-1c-personal-alpha",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-sec-1",
+      "head": "98e249f248ed7c22cd24165de57258943f960c1f",
+      "branch": "refs/heads/codex/sec-1-consolidation",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-tool-meta-1",
+      "head": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d",
+      "branch": "refs/heads/feature/tool-substrate-coating",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "path": "<worktrees>/FabCAM-v1-freeze",
+      "head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "branch": "refs/heads/codex/v1-freeze-readiness",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    }
+  ]
+}

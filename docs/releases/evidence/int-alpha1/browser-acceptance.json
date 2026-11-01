@@ -1,0 +1,77 @@
+{
+  "new_project_v10": true,
+  "synthetic_import": "shopbot-m1/concave_L_shape.svg",
+  "original_bbox_mm": [
+    10,
+    10,
+    110,
+    110
+  ],
+  "explicit_scale": 0.3,
+  "after_explicit_scale_bbox_mm": [
+    45,
+    45,
+    75,
+    75
+  ],
+  "manual_stock_mm": [
+    150,
+    150,
+    5
+  ],
+  "work_origin_mm": [
+    0,
+    0,
+    0
+  ],
+  "tool_metadata": {
+    "substrate": "carbide",
+    "coating": "uncoated",
+    "diameter_mm": 3,
+    "flute_length_mm": 12
+  },
+  "save_reopen": {
+    "project_file_sha256": "40721659b89759b7940d67cb681cb40e752ac1de1089d0a6b35059dc4b0210b5",
+    "operations": 2,
+    "metadata_preserved": true,
+    "stage_tool_ids_preserved": true,
+    "scope": "walls_and_floor"
+  },
+  "generated": {
+    "profile_main_moves": 79,
+    "walls_only_total_moves": 315,
+    "walls_only_pocket_main_moves": 220,
+    "walls_only_finishing_moves": 16,
+    "floor_only_total_moves": 698,
+    "floor_only_pocket_main_moves": 310,
+    "floor_only_finishing_moves": 309,
+    "both_total_moves": 639,
+    "both_pocket_main_moves": 250,
+    "both_finishing_moves": 310
+  },
+  "reviewed_reuse": {
+    "source": "Synthetic ALPHA-4 / profile-source",
+    "target": "Pocket Main",
+    "selected_field": "feed_mm_min",
+    "before": 800,
+    "copied": 600,
+    "manual_edit": 601,
+    "undo_restores_800_and_removes_origin": true,
+    "redo_restores_600_and_origin": true,
+    "modified_disclosure": true,
+    "target_test_attestation": false,
+    "stale_export_disabled": true,
+    "regenerated_export_enabled": true,
+    "finishing_feed_unchanged": 800
+  },
+  "layouts": {
+    "standard": "1280x720 default",
+    "narrow_desktop": "1120x800",
+    "compact_transition_observed_at": "1000x800",
+    "keyboard_tab_substrate_to_coating": true,
+    "new_metadata_en_de_labels": true,
+    "viewport_reset": true
+  },
+  "unsupported_refusal": "Finishing path proof budget exceeded (5000 segments); stale export disabled; no guard changed.",
+  "native_gui": "NOT RUN; installed application and normal profile not launched."
+}

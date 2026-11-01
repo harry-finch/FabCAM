@@ -1,0 +1,11 @@
+{
+  "checked": 97,
+  "broken": [],
+  "scope": [
+    "docs/releases/INT_ALPHA_1_INTEGRATION.md",
+    "docs/releases/RELEASE_ROADMAP.md",
+    "docs/shopbot-modernization/STATUS.md",
+    "docs/shopbot-modernization/ROADMAP.md"
+  ],
+  "method": "Resolve all relative Markdown path targets; external URLs and anchor-only references excluded."
+}

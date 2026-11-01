@@ -1,0 +1,151 @@
+{
+  "source": "efe98dc2e7e46f4d12783dd8dbc9c0b09d2f773d",
+  "common_base": "34f41692ef1d90eddf1b3ff3b564d2b8600879d7",
+  "applied": [
+    {
+      "file": "crates/ivac-core/src/pipeline/offset_builder.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/pipeline/test_helpers.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/pipeline_cache.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/presets.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/project/tool.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/sim/fixture_check.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/sim/heightmap.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/sim/holder.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/sim/holder_check.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/src/sim/rapid_check.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/tests/common/mod.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-core/tests/tool_metadata.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "crates/ivac-wasm/src/sim.rs",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/api/build-project.test.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/api/build-project.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/components/ToolCopyComparison.svelte",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/components/ToolDetailBasics.svelte",
+      "applied_clean": false,
+      "diagnostic": "error: patch failed: frontend/src/lib/components/ToolDetailBasics.svelte:119\nerror: frontend/src/lib/components/ToolDetailBasics.svelte: patch does not apply"
+    },
+    {
+      "file": "frontend/src/lib/components/ToolImpactList.svelte",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/services/file_ops.ts",
+      "applied_clean": false,
+      "diagnostic": "error: patch failed: frontend/src/lib/services/file_ops.ts:1\nerror: frontend/src/lib/services/file_ops.ts: patch does not apply"
+    },
+    {
+      "file": "frontend/src/lib/services/toolset-draft-io.test.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/state/generation-context.test.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/state/project-data.svelte.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/state/project-types.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/state/tool-library-review.test.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/state/tool-library-review.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "frontend/src/lib/state/tool-metadata.ts",
+      "applied_clean": true,
+      "diagnostic": ""
+    }
+  ],
+  "excluded": [
+    "V9 project files/validators/tests (ported to V10 explicitly)",
+    "French locale framework",
+    "FabSpeed/ADR-0031 catalogue planning",
+    "historical docs/raw logs",
+    "old generated schema/API (regenerate current source)"
+  ],
+  "semantic_ports": [
+    "project-v9 validator mapped to existing project-v10.ts; no V9 reader restored",
+    "ToolDetailBasics metadata fields inserted without replacing current geometry validation",
+    "file_ops metadata validation inserted before existing draft import",
+    "EN/DE only; project-data French union patch reverted",
+    "V10 native test inputs and real WASM strict metadata compatibility assertion",
+    "tool-library impact review includes Finishing-only tool references"
+  ]
+}

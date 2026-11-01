@@ -1,0 +1,19 @@
+{
+  "browser-acceptance.json": "92153298960397686bf3a4f7cb28f4726d07941f5eff1663238073cf454ab7ed",
+  "browser-budget-refusal.png": "83b50b9a3f0e1c970b6ca6f72bffab47bbc317604505ec1608cca6412b1b8bd7",
+  "browser-final.png": "46c8beb888babbcf5c27f1a85a7e7e5e72443a51bf7bf9fde405eb1f032b6d1e",
+  "browser-narrow-de.png": "806f79cdb54db9591e1a76d5dc55829e49302a118a4c5c936c61b327b9471c27",
+  "browser-narrow-metadata.png": "72c6f9ae0ad0a3a5a14d6bd6b328a96fee8836c8ee518a42733d29ba95204e03",
+  "browser-stale.png": "0b79568721f07b4cbb09e6a40fb8913663566b539468eb8fd73896a107e31fb3",
+  "cnc-before-canonical.json": "3ea2cac6800eb90113b54accf18300ea67aefc0c8075032cc12beb32c24605a3",
+  "cnc-comparison.json": "2c93f3f970e2cf2bbb8c865c054ceddf5dfaaef1656d60b0090ebe3b8e0c0cff",
+  "consolidation.json": "ae89e78a0ce08199d3ed3bdaa62301697faf72be4aaae655478bd24f38db5bbf",
+  "document-links.json": "ed571955aa746ace5322767624587f884719abdbb6b964d89fd13fd4b4ac9137",
+  "http-comparison.json": "789b7f5107e6066c92a510b2939ab19eefe4e3192214840a5c904f434f71d10b",
+  "port-inventory.json": "e8d42e7b80af1d64c66075efb4efd62d0243604726ca213cfb0b09f334745bf8",
+  "preflight.json": "ff65dd3f62bf06b88e20b6a0b467645f54415a0ca1ad943ef9b8dcc3c607c9bc",
+  "preservation.json": "f945357644230241f0787084585020a18c630e0a686f77041f81415cc20802bf",
+  "qualification.json": "a1ea8665ed31660faf9d68c624cb7d063a6720cf5a200f919c6d898410a7df13",
+  "software-files.json": "8a9e5da6c5660988a74fe614ecb27e0ed94d66818cf5e1a8debdd26333893390",
+  "wasm-comparison.json": "80522be400b525ae45e943d7920f693c5fa978eb86dc85340af3798cbe8b5fb7"
+}
