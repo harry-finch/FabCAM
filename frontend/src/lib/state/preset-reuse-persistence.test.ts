@@ -24,6 +24,11 @@ it('actual V10 portable save/restore retains exact advisory values, unknown exte
   ) as ProjectFile;
   file.machine!.physicalId = 'target-machine';
   file.tools!.forEach((t) => (t.physicalId = `target-tool-${t.id}`));
+  file.tools!.forEach((t) => {
+    t.substrate = 'HSS custom';
+    t.coating = 'uncoated';
+  });
+  const originalTools = structuredClone(file.tools);
   const data = {
     ...file,
     workOffset: defaultWorkOffset(),
@@ -85,6 +90,12 @@ it('actual V10 portable save/restore retains exact advisory values, unknown exte
     ]),
     async () => [{ json: JSON.stringify(c), token: 'v1' }],
   );
+  expect(p.data.tools).toEqual(originalTools);
+  p.history.undo(p.target());
+  expect(reuseRecords(p.data.serializedExtensions)).toHaveLength(0);
+  expect(p.data.tools).toEqual(originalTools);
+  p.history.redo(p.target());
+  expect(reuseRecords(p.data.serializedExtensions)).toHaveLength(1);
   const changed = generationContextKey(p, 'grbl');
   expect(changed).not.toBe(key);
   const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
@@ -92,6 +103,7 @@ it('actual V10 portable save/restore retains exact advisory values, unknown exte
   expect(JSON.stringify(saved)).not.toContain('private trial');
   restoreProject(p, saved);
   expect(snapshotProject(p)).toEqual(saved);
+  expect(p.data.tools).toEqual(originalTools);
   expect(p.data.operations[0].stages!.main.depth_per_pass_mm).toBe(1.122706142614561);
   const records = reuseRecords(p.data.serializedExtensions);
   expect(records).toHaveLength(1);
@@ -100,6 +112,8 @@ it('actual V10 portable save/restore retains exact advisory values, unknown exte
   // Advisory data has no generation authority and is intentionally absent from all wire transports.
   const wire = buildGenerationProject(p);
   expect(wire).not.toHaveProperty('fabcamPresetValueReuse');
+  p.data.operations[0].stages!.main.depth_per_pass_mm = 1.5;
+  expect(reuseState(p.data.operations[0], records[0], p.data)).toBe('modified');
   const restoredKey = generationContextKey(p, 'grbl');
   p.data.serializedExtensions.vendor = { exact: 42 };
   expect(generationContextKey(p, 'grbl')).toBe(restoredKey);

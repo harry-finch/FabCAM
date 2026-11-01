@@ -37,6 +37,8 @@ describe('UX6-B staged toolset I/O', () => {
         {
           ...defaultToolForMode('mill', 70),
           name: 'New V-bit',
+          substrate: 'HSS-Co custom',
+          coating: 'uncoated',
           kind: 'v_bit',
           tipAngleDeg: 60,
           tipDiameter: 0.2,
@@ -46,6 +48,8 @@ describe('UX6-B staged toolset I/O', () => {
     const replacement = await importToolset('replace', current);
     expect(replacement?.map((t) => t.id)).toEqual([1, 2]);
     expect(replacement?.[1].tipAngleDeg).toBe(60);
+    expect(replacement?.[1].substrate).toBe('HSS-Co custom');
+    expect(replacement?.[1].coating).toBe('uncoated');
     const added = await importToolset('add', current);
     expect(added?.map((t) => t.id)).toEqual([8, 9]);
     expect(added?.[0]).toEqual(original[0]);
@@ -53,7 +57,7 @@ describe('UX6-B staged toolset I/O', () => {
     expect(io.invoke).not.toHaveBeenCalled();
   });
   it('cancel/invalid import leave the draft unchanged; export writes the draft format', async () => {
-    const current = [defaultToolForMode('mill', 5)];
+    const current = [{ ...defaultToolForMode('mill', 5), substrate: 'carbide', coating: 'TiAlN' }];
     const original = structuredClone(current);
     io.cancel = true;
     expect(await importToolset('replace', current)).toBeNull();
@@ -71,4 +75,19 @@ describe('UX6-B staged toolset I/O', () => {
     expect(current).toEqual(original);
     expect(io.invoke).not.toHaveBeenCalled();
   });
+});
+
+it('rejects malformed metadata before returning an import draft', async () => {
+  io.cancel = false;
+  const current = [defaultToolForMode('mill', 1)];
+  const original = structuredClone(current);
+  for (const field of ['substrate', 'coating']) {
+    io.text = JSON.stringify({
+      kind: 'toolset',
+      version: 1,
+      payload: [{ ...current[0], [field]: 42 }],
+    });
+    expect(await importToolset('replace', current)).toBeNull();
+    expect(current).toEqual(original);
+  }
 });

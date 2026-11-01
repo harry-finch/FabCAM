@@ -190,3 +190,25 @@ it('MAT-1 browsing is read-only; explicit material choice changes freshness and 
   command.apply(p.data);
   expect(generationContextKey(p, 'cps')).toBe(changed);
 });
+
+it('substrate/coating edits invalidate generation through existing Undo/Redo without changing operations', async () => {
+  const { History } = await import('./history');
+  const { replaceToolsCommand } = await import('./commands');
+  const { defaultToolForMode } = await import('./tool_mode_defaults');
+  const p = fixture();
+  p.data.tools = [defaultToolForMode('mill', 1)];
+  const history = new History();
+  const operations = JSON.stringify(p.data.operations);
+  const original = generationContextKey(p, 'cps');
+  history.exec(
+    replaceToolsCommand([{ ...p.data.tools[0], substrate: 'carbide', coating: 'uncoated' }]),
+    p.data,
+  );
+  const edited = generationContextKey(p, 'cps');
+  expect(edited).not.toBe(original);
+  history.undo(p.data);
+  expect(generationContextKey(p, 'cps')).toBe(original);
+  history.redo(p.data);
+  expect(generationContextKey(p, 'cps')).toBe(edited);
+  expect(JSON.stringify(p.data.operations)).toBe(operations);
+});

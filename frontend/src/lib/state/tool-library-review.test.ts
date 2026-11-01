@@ -71,3 +71,29 @@ describe('UX6-B library review contracts', () => {
     ).toHaveLength(1);
   });
 });
+
+it('reviews specification edits and preserves independent copies and cutting values', () => {
+  const original = defaultToolForMode('mill', 1);
+  const changed = { ...original, substrate: 'carbide', coating: 'uncoated' };
+  const impact = toolLibraryImpacts([changed], [original], [])[0];
+  expect(impact.substrateBefore).toBeUndefined();
+  expect(impact.substrateAfter).toBe('carbide');
+  expect(impact.coatingAfter).toBe('uncoated');
+  const synced = syncStockedFromInventory([changed], [original])![0];
+  expect(synced).toEqual(changed);
+  expect(synced).not.toBe(changed);
+  expect(stockTool(changed, [])).toEqual(changed);
+  expect(original.coating).toBeUndefined();
+  expect(synced.feedRate).toBe(original.feedRate);
+});
+
+it('INT-ALPHA-1 metadata review includes a cutter used only by Finishing', () => {
+  const original = defaultToolForMode('mill', 2);
+  const changed = { ...original, coating: 'uncoated' };
+  const impact = toolLibraryImpacts(
+    [changed],
+    [original],
+    [{ name: 'Pocket finishing only', toolId: 1, finishToolId: 2 }],
+  )[0];
+  expect(impact.operations).toEqual(['Pocket finishing only']);
+});

@@ -100,6 +100,18 @@ it('real WASM reviews and copies a tested preset while preserving the assigned c
   expect(loaded.params.stages.main.feed_mm_min).toBe(800);
   expect(JSON.stringify(p)).toBe(before);
   expect(JSON.stringify(loaded.params.stage_preset)).not.toContain('private workshop');
+  const historic = JSON.stringify(collection);
+  p.tools[0].substrate = 'HSS custom';
+  p.tools[0].coating = 'uncoated';
+  const metadata = command({ action: 'inspect', project: p, op_id: op.id });
+  expect(metadata.context.signature).toContain('HSS custom');
+  expect(metadata.context.signature).toContain('uncoated');
+  expect(() =>
+    command({ action: 'load', project: p, op_id: op.id, collection, preset_id: 'tested' }),
+  ).toThrow();
+  expect(JSON.stringify(collection)).toBe(historic);
+  delete p.tools[0].substrate;
+  delete p.tools[0].coating;
   p.machine.physical_id = 'different-router';
   expect(() =>
     command({ action: 'load', project: p, op_id: op.id, collection, preset_id: 'tested' }),

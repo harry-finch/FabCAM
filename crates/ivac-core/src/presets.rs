@@ -554,6 +554,28 @@ mod tests {
         (p, c)
     }
     #[test]
+    fn metadata_changes_invalidate_test_context_without_rewriting_history_or_rates() {
+        let (mut p, c) = example();
+        let historical = serde_json::to_value(&c).unwrap();
+        let rates = serde_json::to_value(&p.operations).unwrap();
+        assert!(!c.presets[0].context.signature.contains("substrate"));
+        assert!(!c.presets[0].context.signature.contains("coating"));
+        assert!(load(&p, &p.operations[0], &c, "tested-profile").is_ok());
+        p.tools[0].substrate = Some("carbide".into());
+        assert!(load(&p, &p.operations[0], &c, "tested-profile").is_err());
+        p.tools[0].substrate = None;
+        p.tools[0].coating = Some("uncoated".into());
+        assert!(load(&p, &p.operations[0], &c, "tested-profile").is_err());
+        let uncoated = context(&p, &p.operations[0]).unwrap();
+        p.tools[0].coating = Some("TiAlN".into());
+        assert_ne!(context(&p, &p.operations[0]).unwrap(), uncoated);
+        assert_eq!(serde_json::to_value(&p.operations).unwrap(), rates);
+        assert_eq!(serde_json::to_value(&c).unwrap(), historical);
+        p.tools[0].coating = None;
+        assert!(load(&p, &p.operations[0], &c, "tested-profile").is_ok());
+    }
+
+    #[test]
     fn specialized_cycles_copy_without_changing_role_assignments() {
         use crate::project::{DrillCycle, OpKind, SpotConfig};
         let (mut p, mut c) = example();

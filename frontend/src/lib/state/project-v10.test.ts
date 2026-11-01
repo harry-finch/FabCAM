@@ -167,3 +167,27 @@ it('geometry guards and retired metadata guards are retained', () => {
   file.operations![0].geometryBinding = { kind: 'unresolved', previous: [], reason: 'missing' };
   expect(() => validateProjectV10(file)).toThrow();
 });
+
+it('INT-ALPHA-1 optional metadata round-trips without changing identity, stages or legacy absence', () => {
+  for (const [substrate, coating] of [
+    [undefined, undefined],
+    ['HSS-Co custom', 'uncoated'],
+    ['', 'DLC custom'],
+  ] as const) {
+    const file = fixture();
+    Object.assign(file.tools![0], { substrate, coating });
+    const original = structuredClone(file);
+    const p = state(file);
+    const saved = JSON.parse(JSON.stringify(snapshotProject(p)));
+    restoreProject(p, saved);
+    expect(p.data.tools).toEqual(original.tools);
+    expect(p.data.operations).toEqual(original.operations);
+    for (const field of ['substrate', 'coating']) {
+      const bad = structuredClone(saved);
+      bad.tools[0][field] = 42;
+      const before = JSON.stringify(snapshotProject(p));
+      expect(() => restoreProject(p, bad)).toThrow(/expected text/);
+      expect(JSON.stringify(snapshotProject(p))).toBe(before);
+    }
+  }
+});

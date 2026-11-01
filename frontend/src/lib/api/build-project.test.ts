@@ -1023,3 +1023,22 @@ it('v9 specialized missing values cannot be filled while building a generation r
     }),
   ).toThrow('explicit drill cycle');
 });
+
+it('transports cutter metadata without changing any other tool or operation value', () => {
+  const state = {
+    transformedImport: fakeImport(),
+    machine: baseMachine(),
+    tools: [baseTool()],
+    operations: [profileOp()],
+  };
+  const before = buildProject(state)!;
+  const after = buildProject({
+    ...state,
+    tools: [baseTool({ substrate: 'HSS custom', coating: 'uncoated' })],
+  })!;
+  expect(after.tools[0].substrate).toBe('HSS custom');
+  expect(after.tools[0].coating).toBe('uncoated');
+  delete after.tools[0].substrate;
+  delete after.tools[0].coating;
+  expect(JSON.stringify(after)).toBe(JSON.stringify(before));
+});
