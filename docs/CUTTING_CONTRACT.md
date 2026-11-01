@@ -1,137 +1,153 @@
-# V1.1 cutting, preset and safety contract — ALPHA-3 v10
+# Current V10 cutting, preset and safety contract
 
-Authoritative implementation: `ivac-core::project`, `cutting_parameters`, `presets`,
-`cutting_stages`, `pipeline::op_drivers::staged`, `pipeline::stage_provenance`,
-`pipeline::setup_resolver`; generated wire schema: `schema/openapi.yaml` and
-`frontend/src/lib/api/generated.ts`. [ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
-is Accepted. No recommendation crate, source-pack runtime, Trial lifecycle or FabSpeed
-client is part of the current application.
+Source identity and qualification provenance live in [STATUS](shopbot-modernization/STATUS.md).
+Production owners are `ivac-core::project`, `cutting_parameters`, `cutting_stages`,
+`presets`, `pipeline::op_drivers::staged`, `stage_polygon`, `stage_provenance` and
+`setup_resolver`. Rust types generate [OpenAPI](../schema/openapi.yaml) and
+[TypeScript](../frontend/src/lib/api/generated.ts). Accepted
+[ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md),
+[ADR-0032](shopbot-modernization/adr/ADR-0032-explicit-main-and-optional-finishing.md)
+and [ADR-0033](shopbot-modernization/adr/ADR-0033-explicit-pocket-finishing-scope.md)
+own the versioned decisions. No recommendation engine or live FabSpeed client is active.
 
 ## Persistence and generation
 
-On the isolated ALPHA-3 branch, a frontend ProjectFile has **version 10** and a
-PipelineRequest has **`project.cutting_version: 10`**. Adapters require the explicit
-`cutting-parameters-v10` capability. See [ADR-0032](shopbot-modernization/adr/ADR-0032-explicit-main-and-optional-finishing.md)
-and the [source-bound qualification](releases/ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md).
-Primary V1.1/V1 are separate preserved branches; this document does not claim integration.
+Frontend ProjectFile **version 10** is distinct from a native `PipelineRequest` with
+**`project.cutting_version: 10`**. Adapters negotiate `cutting-parameters-v10`;
+scoped Pocket additionally requires `pocket-finishing-v2`. Portable versions 1–9 and
+future versions refuse before project/history mutation. Historical V9 requests,
+files and fixtures remain evidence, not current examples or automatic migrations.
 
-Profile and ordinary Pocket require `params.stages` with `contract: main_finishing_v1`,
-mandatory `main` and required nullable `finishing`. Each stage owns actual tool ID,
-positive integer RPM/feed/plunge and a positive constant depth per pass. Nullable
-editable values are preserved; generation refuses incomplete values. The operation's
-redundant tool assignments must equal the stage assignments. Legacy rate/depth fields
-cannot coexist with these stages. Finishing is OFF by default, not inferred from a
-wall-path tag. Other families retain `params.cutting.rates` with their existing exact
-role/tool set and execution meaning inside the v10 envelope.
+Profile and ordinary Pocket author `params.stages`. Both discriminators require
+`main` and a present nullable `finishing`; Finishing OFF is `null`, not an inferred
+wall-path tag. Each stage owns actual `tool_id` and required nullable `rpm`,
+`feed_mm_min`, `plunge_mm_min`, `depth_per_pass_mm`. Null values preserve incomplete
+editing; generation requires positive integral rates and positive constant DOC.
+Redundant operation tool assignments must agree. Legacy rate/depth fields cannot
+coexist with stages. Other families retain `params.cutting.rates` and their exact
+actual-role/tool set within the V10 envelope; no synthetic Main/Finishing conversion.
 
-The new editor refuses v1–9/future portable projects before state/history mutation;
-original files are not rewritten. Old readers reject new v10 documents/requests.
-No automatic legacy machining conversion. Tool defaults seed creation only;
-generation uses explicit authored stage/role values and refuses known limit violations.
+| Nested contract | Supported operation / Finishing fields |
+| --- | --- |
+| `main_finishing_v1` | Profile and existing ordinary Pocket. Explicit Main and optional Finishing with stage, lateral/floor allowances; **no scope field** |
+| `pocket_finishing_v2` | Ordinary Pocket only. Finishing requires `scope`: `walls_only`, `floor_only` or `walls_and_floor`, alongside its stage/allowances |
 
-Rust JSON generation structures reject unknown fields. Frontend project-file loading
-explicitly rejects retired source/recipe keys, including null placeholders; unrelated
-extension fields retain existing file preservation behavior. WASM uses a pre-conversion
-Reflect guard for retired `fs_context`, `applied_cutting` and `fs_full_width` keys because
-serde-wasm-bindgen does not enforce Rust unknown-field behavior generally. This guard
-covers simple, two-sided, streaming and drawing-machining entry points before events;
-the same boundary checks required Main/Finishing shape/keys before serde conversion.
-It is not a claim that every unknown JS property is rejected everywhere.
+Mixed/missing/unknown discriminators, missing keys, wrong family, a scope added to
+v1 or contradictory v2 allowances refuse. V10 is retained for both discriminators;
+new nested semantics are not smuggled into v1. No automatic v1-to-v2 normalization.
+Tool defaults seed creation once; generation never fills missing authored rates.
+Known machine/tool violations refuse, unknown ratings remain disclosed; specialized
+families may require known ratings to prove their own constraints.
 
-Generic library physical IDs are preserved. If a generic old library entry lacks a
-physicalId but has fsLocalIdentity.id, that same ID is retained; reference bindings
-are otherwise inert metadata. This is not a v1–8 project migration or source resolver.
-MaterialIdentity is the neutral exact material id/revision pair. MAT-1 taxonomy,
-aliases and presentation stay independent of calculation.
+Rust generation JSON structs reject unknown fields. Frontend file loading explicitly
+rejects retired source/recipe fields, including null placeholders, while retaining
+its existing unrelated extension-field preservation. WASM guards retired keys and
+required nested stage shapes before serde conversion for ordinary, paired, streaming
+and drawing generation. Do not claim every unrelated unknown JS property is rejected.
 
-## Actual milling roles
+## Main, Finishing and retained stock
 
-| Family | Required assignment / effective emission |
-|---|---|
-| Profile | Required Main; optional explicit Finishing on its own authored tool/rates/schedule |
-| Pocket (ordinary) | Required Main includes wall and fill; optional explicit Finishing; legacy nocontour refuses |
-| Drill | Drill plus enabled Spot and Chamfer roles on their actual selected tools |
-| Chamfer | Rough, and Finish when the operation has a finishing pass |
-| Halfpipe | Rough on its supported cutter; radius/reach restrictions retained |
-| PlanarSurface, V-Carve, Engrave | Rough; their existing explicit strategy/entry constraints remain |
-| Relief, Waterline | Rough; explicit model/depth and compatible cutter restrictions remain |
-| Thread, TSlot, Dovetail | Rough; specialized geometry/process restrictions remain |
-| Front/back | Same authored operation roles on each side; automatic dowel injection excluded |
-| Program controls / non-milling processes | No invented milling rate slots; their separate process validators remain |
+Main Cutting always exists on Profile/Pocket; Finishing is OFF on new operations.
+Enabling it requires authored tool/rates/DOC and relevant allowances. Copy Main is
+an explicit editor action, not a calculation. Positive finishing allowances must be
+at least **0.05 mm**; zero means an explicit repeat. Retained-for-later stock `R`
+is separate: Main targets cutter radius + R + lateral allowance and final Z + floor
+allowance; Finishing targets its own radius + R and final Z where its scope applies.
+When Finishing is OFF its allowances cannot influence Main.
 
-The immutable 23-case historical corpus, controlled ALPHA-3 differences and `pipeline/cutting_v9_tests.rs` compare actual spindle,
-feed, plunge, tools, provenance and program transitions, with negative structural/
-limit tests in `cutting_parameters.rs`. Current output fixtures are immutable references,
-not workshop recommendations.
+| Pocket v2 scope | Main target / finishing obligation |
+| --- | --- |
+| Walls | Main leaves lateral finishing stock, reaches final floor; Finishing covers outer/island walls at every authored axial level; no finishing interior clearing fill |
+| Floor | Main reaches final walls and leaves floor stock; Finishing clears the reachable final floor |
+| Walls and floor | Main leaves both applicable reserves; Finishing proves both wall and reachable floor coverage |
 
-## Tested collections
+Scope changes use explicit Apply, Cancel and atomic Undo/Redo. Irrelevant allowances
+must be zero; changing a label alone cannot silently reinterpret a contract. Combined
+Pocket finishing re-clears the reachable target; it is not optimized rest machining.
 
-`fabcam-preset-collection` **v2** stores new staged configurations; historical v1
-is preserved/inspectable and cannot implicitly apply Profile/Pocket Rough/Finish to
-v10 Main. Unchanged families retain exact compatible role matching. Both formats keep
-the 2 MiB / 256-preset limits, original identities, context and explicit attestation.
-No automatic v1 rewrite, context transfer, physical-claim renewal or live link. Loaded
-snapshots survive collection changes; private notes are not copied into projects.
-Native/browser storage retain explicit collision/stale-write checks and file scopes.
+## Qualified geometry and explicit refusals
 
-## Qualified finishing and output attribution
+[ALPHA-3.1](releases/ALPHA_3_1_GENERALIZED_FINISHING.md) extends the initial rectangle
+scope: v1 accepts one exactly closed straight polygon with 3–256 edges, no islands.
+Profile Inside/Outside lateral finishing requires equal effective cutter diameters
+and lateral allowance no greater than cutter radius; Profile On/floor finishing
+refuses. Ordinary Pocket remains bounded to its proven clearing/coverage domain.
 
-The first implementation proves one selected, exactly closed, axis-aligned four-line
-rectangle with flat endmill/direct entry and no authored tabs, approach, leads,
-patterns, helix/overcut or whirling. Profile Inside/Outside lateral finishing requires
-equal effective cutter diameters and allowance <= radius; Profile On/floor finishing
-refuses. Ordinary Pocket Cascade/Zigzag/Spiral can finish walls/floors using its own
-cutter; it re-clears the full reachable target, not optimized rest-only material.
-Selected islands, arbitrary contours, Trochoidal and unsupported proof/output cases refuse.
+[ALPHA-3.2](releases/ALPHA_3_2_POCKET_FINISHING.md) qualifies Pocket v2 polygons and
+bounded tangent line/arc joins or circles: one connected region, at most eight
+simple disjoint single-level islands and 2–256 source primitives per boundary.
+Non-tangent curved joins, self-intersections/touching/ambiguous containment, nested
+islands, disconnected regions, unsupported trimming and collapsed offsets refuse.
+Flat endmills with known usable flute length, direct entry and ordinary Cascade,
+Zigzag or bounded Spiral are required. Tabs, authored approach/leads, ramp/helix,
+Trochoidal/whirling, generated frame and Boolean-source proof are excluded.
+Single-surface scopes require equal effective cutter diameters; wall lateral reserve
+cannot exceed cutter radius. Combined scopes can accept different cutters only
+when the entire Main/Finishing proof succeeds. Some concave Spiral cases correctly
+refuse the decoded proof budget; no strategy fallback or relaxed tolerance occurs.
 
-Retained-for-later lateral stock R stays distinct: Main targets radius + R + L and
-Z + F; Finish targets its own radius + R and Z. OFF means no L/F influence. A positive
-allowance below 0.05 mm refuses under the bounded 0.02 mm-per-stage representation
-budget; zero explicitly means a repeat. This is software precision, not shop accuracy.
+Proof budgets include 1,000 axial levels/stage, 5,000 paths/chords per proof set,
+eight distinct planar geometries/stage and 5,000,000 checked work units/invocation.
+Planned/decoded planar bounds remain 0.003/0.02 mm, with chord/enclosure/arc-rounding
+costs charged. Continuous intervals/cells and complete axial coverage are checked;
+finite sample points are not represented as a global proof. These are software
+representation/proof budgets, not machine accuracy or universal latency guarantees.
 
-Complete wall/area coverage is established before emission using bounded swept-strip
-union/convex capsule proof. No finite point sampling is represented as a global proof.
-Decoded-output regressions independently check sweeps, retained stock and stage rates.
-Response stage bindings carry actual operation/tool/parameters and resolved output
-line/segment intervals where supported. Other bundled CPS Main-only paths may be
-explicitly Planned; they cannot claim decoded Finishing. Same-tool ShopBot RPM changes
-still refuse; no fake boundary or new post commands. Simulation/report consume actual
-emission. Distinct-tool remaining-material UI remains explicitly unsupported.
+## Other actual milling roles
 
-## Safety owners and regression entry points
+Drill retains Drill plus enabled Spot/Chamfer roles; Chamfer retains Rough and
+Finish where its own finishing pass exists. Halfpipe, PlanarSurface, V-Carve,
+Engrave, Relief, Waterline, Thread, TSlot and Dovetail retain their actual Rough
+assignment and specialized geometry/entry rules. Program controls and non-milling
+processes do not acquire invented milling slots. Front/back uses authored roles;
+automatic dowel injection is excluded. “Rough” in an unchanged family is not the
+new Profile/Pocket Main Cutting model.
 
-| Responsibility | Retained owner and regression entry points |
-|---|---|
-| Explicit roles/positive values, known ratings, no mutation | `cutting_parameters.rs`, `cutting_stages.rs`; `tests/alpha3_v10.rs`; `pipeline/cutting_v9_tests.rs`; `tests/explicit_contract.rs`; `cutting-v9-wasm.test.ts` |
-| Geometry/reach/specialized mandatory limits | Neutral validator, setup resolver and op drivers; specialized core tests; `ux3_qualification.rs` |
-| Numeric/resource limits | `tests/numsafe.rs`, `numsafe2.rs`, NUMSAFE3 core/CLI regressions; `scripts/numsafe3-cli-check.py` |
-| SAFE-Z, origin, fixtures, cutting direction | Existing SAFE-Z/simulation tests; `shopbot_m2_post.rs`, CAM3/UX qualification matrices |
-| Tool identity, setup transitions and stock simulation | `tests/tool_provenance.rs`, full-program simulation/export frontend tests; fixed output corpus |
-| Preset context, immutable reviewed copy, bounded parser | `presets.rs`, `preset_collections.rs`, `cutting-workflow.test.ts`, `preset-library-v9.test.ts` |
-| Save/reopen, Undo/Redo and stale export | `project-v10.test.ts`, document lifecycle, `cutting-workflow.test.ts`, `test1-lifecycle.test.ts` |
-| Native authorization and publication | Tauri canonical path + existing filesystem scope; `ivac-file-export` 11 tests; SEC1 probes/static ACL regressions |
-| CPS trust, streams, cancellation/recovery | Bundled-only CPS, CLI/HTTP/core stream tests, PERF1 regressions and TEST1 watchdog including C2 |
-| Removed APIs cannot reappear / fresh WASM | `removed-legacy-contract.test.ts`, `explicit_contract.rs`, `wasm-package-state.test.mjs` |
+## Presets, metadata and provenance
 
-See the [final exclusion/replacement ledger](releases/fs-reset-3-evidence/final-test-ownership.json)
-for obsolete behavior retirement and [results](releases/FS_RESET_3_RESULTS.md) for actual
-pass/fail counts. A retained test location does not by itself claim that every external
-platform or latency target passed.
+[Collection V2](TESTED_PRESETS.md) stores staged records; historical V1 Profile/Pocket
+records remain inspectable but cannot apply Rough/Finish to V10 stages. Unchanged
+families can retain exact compatible V1 matching. Both formats keep 2 MiB / 256
+record limits, exact signatures/identities and explicit author attestation. No
+implicit conversion, live link or attestation renewal.
 
-## Publication and qualification boundaries
+ALPHA-4 is a separate explicit selective copy of RPM/feed/plunge/DOC from V2 staged
+Profile/Pocket into Main or already-enabled Finishing. Cross-context starting values
+can be reviewed without claiming compatibility/testing. `fabcamPresetValueReuse`
+is advisory file metadata, not CAM input or target attestation. Stepover reuse is
+unsupported. Strict tested-preset matching remains unchanged.
 
-Tauri authorizes the canonical program destination through its existing fs scope
-before staging. Existing configured/dialog scopes remain unchanged; this is not a new
-dialog-only policy. `fs:allow-stat` and bounded collection file-size inspection remain.
-`ivac-file-export` preserves old bytes on preflight/publish failure and atomically
-publishes a single staged file where the platform supports the existing implementation.
-Two-sided export buffers/stages both programs with fresh destinations, then publishes
-front and back separately. Failure of the second publication reports the surviving
-front and missing back; the pair is not atomic and existing files are not overwritten.
+TOOL-META substrate/coating are optional descriptive strings; absent/empty is unknown,
+not an assertion of uncoated tooling. They do not calculate or override cutting rates.
+Output stage bindings/provenance describe actual tool/rates and supported emitted
+intervals; planned-only CPS attribution cannot be called decoded Finishing. Same-tool
+ShopBot RPM transitions can refuse. Full-program simulation, not playback position,
+owns qualification; distinct-tool remaining-material diagnostics remain bounded.
 
-Canonical `generate --request` uses the common buffered validator/pipeline. Its stdout
-write/shell redirection is not transactional. CLI streaming retains resource/preflight
-refusals and staged file publication, but is not equivalent to application full-program
-simulation qualification; stdout cannot be rolled back. Bundled-only CPS and ShopBot
-restrictions are unchanged. Static ACL and mocked/unit filesystem tests do not establish
-installed-native acceptance. Browser/three-platform/physical acceptance remain separate.
+## Safety, publication and security owners
+
+[SAFETY-FIX-1](releases/SAFETY_FIX_1_MOTION_GUARDS.md) refuses unproven Helix entry,
+implicit Trochoidal Pocket helix and legacy Profile overcut. Thread's intrinsic
+machining helix is distinct. Front through-cut holding needs the narrowly resolved
+Profile/MaterialV1 bridge proof; empty/ineffective tabs and affected combined Front
+or untransformed Back text/approach/pattern/raster configurations refuse. GEOM1 edited
+two-sided generation remains refused. Effective start and final depths count.
+
+[SEC-HARDEN-1](releases/SEC_HARDEN_1_APPLICATION_SECURITY.md) removes broad ambient
+raw FS grants and adds restrictive CSP. Custom import/watch commands authorize
+canonical dynamic dialog-granted paths; trusted OS-open grants are internal.
+Source reload/recent open reacquire missing grants through a native picker. Custom
+export retains its separate canonical destination/symlink/dynamic-scope checks and
+per-file transactional publication; paired export is not pair-atomic.
+
+HTTP defaults to loopback, enforces explicit Origin admission and two heavy jobs,
+returns 429 without queueing excess work, and signals cooperative cancellation on
+disconnect/deadline. No universal preemption or authenticated remote mode is claimed.
+Import XML/reference/block/primitive/font/STL budgets refuse complete unsafe inputs
+rather than publish a successful partial drawing. See architecture for limits.
+
+Regression owners include `tests/alpha3_v10.rs`, `tests/alpha32`, `presets.rs`,
+`security_cancellation.rs`, `import_security.rs`, current V10 frontend lifecycle/reuse
+tests and source-bound CNC comparisons. Historical test filenames containing `v9`
+do not define the current wire version. Software, installed-native and physical
+acceptance remain separate; [STATUS](shopbot-modernization/STATUS.md) owns the gates.

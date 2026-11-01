@@ -10,20 +10,13 @@ completed successfully; the retained local RC1 receipt `V1_RC1_CANDIDATES_RESULT
 is untracked evidence, not included by this documentation commit. Signing/platform
 and supervised workshop limits remain; no final V1 acceptance is recorded here.
 
-The separate `FabCAM-v1.1` branch now uses explicit role parameters, project v9,
-local tested collections and independent CAM validators after FS-RESET.
-[Current STATUS](../shopbot-modernization/STATUS.md) and [qualification roadmap](RELEASE_ROADMAP.md)
-own its current gates. QUAL-1A.4/1B software work is complete; QUAL-1C built the
-macOS app with native user acceptance still pending. SEC-1 owns the current
-Tokio correction/consolidation. The later [local placement integration](V11_LOCAL_INTEGRATION_2026_10_24.md)
-owns current V1.1 software/build source `1f353ef`, 20/20 gates and the fresh native
-test bundle; native human acceptance remains open.
-Historical FS/PRESET implementation and size-guard snapshots remain in their dated
-reports. Its current target is a limited **macOS Personal Alpha**, followed by
-supervised ShopBot cases; general public/fablab distribution and Windows/Linux
-qualification are deferred for V1.1, without changing this frozen V1 register.
-Optional V1.2 FabSpeed integration is not a V1/V1.1 blocker. No V1 scope,
-freeze, platform/physical acceptance or release state changes in this cleanup.
+Current V1.1/accepted-feature state belongs to [STATUS](../shopbot-modernization/STATUS.md)
+and [RELEASE_ROADMAP](RELEASE_ROADMAP.md). The accepted V10/security descendant is
+not automatically merged into canonical V1.1 and does not retroactively change
+this frozen V1 evidence register. Installed-native, platform and physical acceptance
+remain separate. Optional FabSpeed integration is planned, not implemented or a
+V1/V1.1 requirement. The table below is explicitly the historical 2026-10-20 snapshot;
+its OPEN/pending/version claims must not be read as current feature-branch state.
 
 ## Historical V1-FREEZE register — retained evidence and gates
 

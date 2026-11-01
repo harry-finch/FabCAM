@@ -1,37 +1,58 @@
 # FabCAM Architecture
 
-FabCAM derives from [ivaCAM](https://github.com/aalarchiv/ivacam). The inherited
-`ivac-*` names retain upstream attribution. V1.1 uses the explicit v9 cutting contract;
-legacy recommendation transports and source stores have been removed. Earlier
-milestones are recorded in [the modernization architecture](shopbot-modernization/ARCHITECTURE.md).
+FabCAM derives from [ivaCAM](https://github.com/aalarchiv/ivacam); inherited `ivac-*`
+names and upstream attribution remain. [STATUS](shopbot-modernization/STATUS.md)
+owns the current source/qualification identity. [CUTTING_CONTRACT](CUTTING_CONTRACT.md)
+owns V10 and staged milling; [fork architecture](shopbot-modernization/ARCHITECTURE.md)
+owns process/security boundaries; [HISTORY](releases/HISTORY.md) owns chronology.
 
 ## V1.1 operation and safety ownership
 
-`ivac-core::cutting_parameters` validates authored actual-role values and known limits;
-`pipeline::setup_resolver` carries those values into the existing CAM setup. No
-recommendation resolver, live tool-rate fallback or FabSpeed client participates.
-Tool defaults may seed operation creation once. `project::MaterialIdentity` owns exact
-material id/revision; generic machine/tool inventories own physical identities and ratings.
-`presets` validates bounded tested collections and reviewed context-exact value copies.
-See [current contract and safety/test inventory](CUTTING_CONTRACT.md).
+ProjectFile 10 and native cutting version 10 are current. Profile/ordinary Pocket
+use explicit Main Cutting and optional Finishing: `main_finishing_v1`, or scoped
+Pocket `pocket_finishing_v2`. The latter supports Walls / Floor / Walls and floor
+with bounded polygon/curve/island proof; this is not rectangle-only or universal
+finishing. Other families retain their actual role sets. Readers refuse old project
+versions, malformed nested contracts and retired calculation fields before mutation.
 
-The pipeline, operation drivers, numeric budgets, post restrictions, provenance and
-simulation qualification remain independent safety owners. Transport success alone
-is not full-program qualification. `ivac-file-export` stages and publishes individual
-files; Tauri authorizes the canonical destination against its existing filesystem scope.
-Two-sided publication can be partial and reports which side exists; it is not pair-atomic.
-Filesystem scopes were not broadened. Static ACL/unit checks are not installed acceptance.
+`cutting_parameters`, `cutting_stages` and the setup resolver validate authored
+values, actual tools and known limits. Geometry drivers, numeric budgets, posts,
+provenance and full-program simulation are independent safety owners. Tool defaults
+seed creation once; no runtime calculator or silent rate fallback participates.
+Material identities are exact id/revision pairs. TOOL-META substrate/coating is
+optional descriptive metadata, not rate calculation or compatibility evidence.
 
-The Svelte Cutting parameters inspector, MAT-1 and tested library remain the product UX.
-File persistence accepts v9 only; incomplete authored values can be saved but cannot
-silently become executable values. Old user projects/packs remain untouched on disk.
-[FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md) distinguishes implemented removal
-from the remaining release, cross-runtime and platform qualification gaps.
+Collection V2 and strict tested matching are distinct from [ALPHA-4 reviewed
+starting-value reuse](TESTED_PRESETS.md#reviewed-starting-value-reuse--alpha-4).
+Copied advisory provenance never transfers physical testing. No stepover reuse.
+FabSpeed owns independent calculations/experiments; optional V1.2 exchange remains
+proposed. The removed integrated recommendation crate/source-pack APIs are historical.
 
-This is the map. CONTRIBUTING.md tells you how to set up the toolchain
-and walks two extension recipes (new op kind, new post-processor); this
-file tells you **how the pieces fit together** so you know what to read
-and what to leave alone.
+`ivac-file-export` stages and publishes individual files. Tauri raw plugin access
+has no ambient home/temp scope; native dialogs grant individual paths. Custom
+source/export/watch authorization is separate and canonical-target checked. HTTP
+is loopback-only with explicit Origin admission, two heavy-job slots and cooperative
+cancellation. Parser expansion is bounded. See the [security boundary](shopbot-modernization/ARCHITECTURE.md#security-and-untrusted-data).
+Per-file transactional publication is not pair-atomic; software/mock/CSP evidence
+is not installed-native, authenticated remote or physical acceptance.
+
+### Actual Cargo workspace
+
+| Member | Responsibility |
+| --- | --- |
+| `ivac-core` | Source models/readers, CAM, validation, simulation, output semantics and preset contracts |
+| `ivac-cps` | Budgeted CPS runtime/recorder; no geometry ownership or external calculation |
+| `ivac-file-export` | Validated transactional individual-file publication |
+| `ivac-cli` | Headless explicit-request commands over core |
+| `ivac-server` | Loopback HTTP adapters/admission |
+| `ivac-tauri` | Native IPC, dialogs/scopes, persistence and watchers |
+| `ivac-wasm` | Browser bindings/worker-facing core adapter; default build has no CPS |
+| `xtask` | Schema/version developer checks |
+
+The frontend is Svelte/TypeScript/Three.js, with EN/DE catalogs. Generated OpenAPI
+and TypeScript derive from Rust types; do not hand-edit them. Existing drawing
+storage/GEOM1 generation is V1; scoped geometry Analyze/Preview/Apply is V2, independent
+of the project/cutting versions. Local edit acceptance does not certify machining.
 
 ## Big picture
 
@@ -72,9 +93,10 @@ UI; the only difference is the **transport** wiring them together.
                     (re-codegen'd into frontend/src/lib/api/generated.ts)
 ```
 
-**Rule of thumb:** if it touches geometry, post-processing, or anything a
-post-processor would care about, it lives in `ivac-core`. The transports
-are dumb adapters; the UI is dumber still. The schema is the contract.
+**Ownership:** geometry and machining semantics live in `ivac-core`; budgeted CPS
+execution lives in `ivac-cps`, individual-file publication in `ivac-file-export`.
+Transports own their authorization/admission and wire adaptation. The UI owns
+authoring/history, presentation and evidence review, not an alternate CAM planner.
 
 ## Data flow: one user click
 
@@ -145,8 +167,8 @@ growing `run_per_op`'s shared envelope.**
 
 ### Transports (`ivac-cli` / `-server` / `-tauri` / `-wasm`)
 
-Each is a thin adapter over `ivac-core`. They all serialize the same
-`PipelineRequest` / `PipelineResponse` from `project.rs`, just over a
+Each is a thin adapter over `ivac-core`. They share `pipeline::PipelineRequest` / `PipelineResponse`, using the common
+project/tool/machine models, over a
 different channel:
 
 - **ivac-cli** — no channel; calls `run_pipeline` directly.
@@ -157,9 +179,9 @@ different channel:
 - **ivac-wasm** — wasm-bindgen functions exported under
   `crates/ivac-wasm/src/lib.rs`; the browser calls them like local fns.
 
-**A transport never decides what the math is.** If you find yourself
-adding business logic in `commands.rs` or `wasm/lib.rs`, push it into
-`ivac-core` instead.
+**Keep CAM rules in core.** Native filesystem grants, HTTP Origin/admission and
+transport cancellation are adapter-specific defensive controls; do not move them
+into geometry or bypass them through a second transport path.
 
 ### `frontend/`
 
@@ -266,7 +288,8 @@ belongs to before writing it.
 Type that crosses the wire? Derive `JsonSchema` in `ivac-core::project`
 (or `ivac-core::lib.rs` for top-level request/response). Regen, commit
 both files, done. **Don't** define a TypeScript wire type by hand —
-`generated.ts` is the source of truth and your manual one will drift.
+Rust types are the source of truth; generated schema/API artifacts must remain
+in sync, and an independent manual wire type will drift.
 
 ### 6. Test co-location
 
@@ -352,9 +375,9 @@ post-processor) end-to-end. The smaller recipes:
 2. Inline two-step "discard changes?" confirm — never `window.confirm`.
 3. Triggered from `App.svelte`'s menu; the pure menu/shortcut decision
    logic lives in `lib/state/app-menu.ts`.
-4. UI strings are hardcoded English (svelte-i18n was dropped in a9e1f27);
-   write them in plain English — no Estlcam German terms (Whirling, not
-   Wirbeln; Tapered, not Kegel).
+4. Route display text through the current typed i18n catalog. Frontend locales
+   are English/German; preserve keys/placeholders and do not hardcode UI strings.
+   The removed third-party i18n package is not the current catalog boundary.
 
 ### A new wire type
 

@@ -1,81 +1,77 @@
-# Cutting values and tested preset collections — V1.1 ALPHA-3
+# Cutting values and tested preset collections
 
-Enter cutting values in each operation's **Cutting parameters** inspector. Select the
-actual pass role for unchanged operation families when several are shown. RPM, feed and plunge are operation-owned;
-changing a library default later does not change them. New operations may be seeded
-once from the chosen tool's defaults. Review every value before generation.
+## Author explicit operation values
 
-Profile and ordinary Pocket show **Main Cutting** directly. **Add a finishing stage**
-is OFF for new operations. Enabling it requires explicit rates/tool/pass depth and
-relevant lateral/floor allowances; Copy Main values is a separate action. Pocket
-may use another finishing cutter. Coverage restrictions and ShopBot same-cutter RPM
-refusals remain mandatory; see [ALPHA-3 limits](releases/ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md). Drill can have Drill, Spot and Chamfer
-roles. An incomplete operation can be saved and edited; generation refuses missing,
-non-positive or mismatched values and known machine/tool-limit violations. Values
-are never reduced silently to fit a rating. Unknown limits are disclosed, not inferred;
-specialized operations can still require specific ratings or geometry.
+FabCAM owns explicit RPM, feed, plunge and depth per pass. Tool defaults may seed
+new operations once; editing a library default does not rewrite existing operations.
+Machine/tool validation is independent of any tested record or calculation service.
+Profile and ordinary Pocket show **Main Cutting**, with **Add a finishing stage** OFF
+by default. Finishing needs its own actual tool, rates, DOC and applicable allowances.
+Pocket supports Walls / Floor / Walls and floor under the strict v2 stage contract.
+Other families retain their actual role assignments. See [CUTTING_CONTRACT](CUTTING_CONTRACT.md).
+
+Incomplete values may be saved for editing but cannot generate. Known limit violations
+refuse; unknown limits are disclosed, not silently invented. Geometry, entry, coverage
+and ShopBot transition restrictions still apply after loading any numbers.
 
 ## Save a tested configuration
 
-Set the workshop machine and tool identities in their libraries, choose the exact
-Stock material, and enter complete operation values. **Save preset** explains missing
-context. Give the configuration a meaningful name and select or create a named
-collection. Review the context and explicitly attest workshop testing only when it
-really occurred. Software validation is a separate check and cannot establish that
-physical test. Synthetic QA entries must be clearly marked and never presented as
-workshop recommendations.
+Set stable workshop machine/tool identities, choose the actual Stock material and
+complete the operation values. **Save preset** explains missing context. Select or
+create a named collection and meaningful entry name. Explicitly attest a workshop
+test only if it actually occurred on that recorded context. Software validation and
+another author's claim do not establish physical testing on this machine. Synthetic
+QA records must never be advertised as workshop recommendations.
 
-Collections contain tested configurations; they have no Draft/Trial promotion,
-manufacturer ranking, automatic interpolation or enable-source switch. FabSpeed is
-an independent possible future service; no connection is implemented here.
+There is no Draft/Trial promotion, manufacturer ranking, interpolation or source-pack
+recommendation runtime. FabSpeed is independent; optional exchange is planned only.
 
-## Load and review
+## Strict tested loading
 
-**Load preset** shows the compatible context and the values that will replace the
-operation's current values. Confirm the reviewed copy. The tool, machine and material
-are not silently replaced. A matching local tool number alone is not matching physical
-tool identity or geometry. Different context is refused; there is no automatic transfer.
+**Load preset** reviews recorded context and proposed replacement values. Strict
+loading requires exact compatible machine/tool/material/operation signatures and
+actual stage/role assignments; a matching local tool number is insufficient. It does
+not silently switch machine, cutter or material. A context refusal preserves the
+original record and author claim; Recorded compatibility context is read-only saved
+information, not reconstructed current machine data. Imported attestations are not
+renewed by viewing/loading.
 
-A refusal titled **Preset context needs review** preserves the original record,
-signature and author claim. Open **Recorded compatibility context** in the load
-review or library details to inspect the saved machine configuration, physical
-cutter geometry/roles, material revision and operation strategy. This read-only
-view uses the saved record, never the current operation. Unknown or unsafe-to-display
-contexts get an explanation; they are not reconstructed or made compatible.
+Loaded numerical snapshots survive library edits/deletion. Modified values are
+marked as modified from the preset; Undo/Redo restores the authored state. Regenerate
+and requalify the full program after changes before export.
 
-You can inspect the recorded rates after a refusal and explicitly enter chosen
-values in the operation editor. This remains manual authoring, not workshop testing.
-Create a new tested preset only after testing the exact current configuration and
-providing a fresh explicit attestation. Even a small context difference still refuses;
-there is no numeric normalization, automatic migration or renewed test claim.
+## Reviewed starting-value reuse — ALPHA-4
 
-After copying, the operation shows **Loaded preset**. Editing values shows **Modified
-from preset**. Undo/Redo restores the authored state. Editing, duplicating or deleting
-the library entry does not change values already copied into a project. A context
-change preserves authored values while refreshing validation and generation status.
-Generate and complete the required simulation qualification again before export.
+The separate reviewed-copy path makes a **numerical starting point**, including
+across differing contexts; it does not loosen strict tested loading. It accepts
+supported **V2 staged Profile/Pocket** sources and explicitly selected RPM/feed/plunge/
+DOC fields from source Main or Finishing. Choose target Main or an already-enabled
+Finishing stage. It does not create Finishing, replace tools/material/geometry,
+scale numbers, calculate chipload, change finishing scope/allowances or reuse stepover.
+
+The comparison/explicit review precedes one atomic history command. V10 save/reopen
+preserves advisory `fabcamPresetValueReuse` metadata. That metadata is not CAM input,
+a live library reference, a compatibility certificate or a target physical attestation.
+Source-context testing never transfers. A new tested target preset requires a fresh,
+truthful explicit attestation after the actual target trial. See
+[ALPHA-4 qualification](releases/ALPHA_4_REVIEWED_PRESET_REUSE.md).
 
 ## Manage and transfer collections
 
-Open **Presets** to inspect named collections and edit, duplicate or delete entries.
-Import/export preserves historical `fabcam-preset-collection` v1 and uses **v2** for
-new Main/Finishing data. V1 Profile/Pocket records are historical and cannot be applied
-automatically to v10 stages. New staged records require a v2 collection; existing v1
-collections are never silently rewritten. Unchanged families may keep exact matching.
-For both formats,
-maximum size is 2 MiB and maximum count is 256 presets per collection. Import collision
-choices are explicit and stored updates detect stale writes. An imported attestation
-records somebody's statement; it is not proof of testing on this workshop's machine.
-Review the identity, geometry, operation and values before copying.
+**Presets** manages named local collections and import/export. Current staged data
+uses `fabcam-preset-collection` **V2**. Historical V1 is preserved/inspectable;
+V1 Profile/Pocket Rough/Finish cannot apply to V10 Main/Finishing. Unchanged families
+may retain their exact matching behavior. Existing V1 collections are not silently
+converted. Neither format is an old recommendation source pack or experimental recipe.
 
-Project files use version 10 on this isolated ALPHA-3 branch. Versions 1–9, old source packs and experimental recipes
-are not migrated. Original user files remain untouched. Keep them for historical
-reference; they are not current collection imports.
+Both versions are limited to **2 MiB and 256 presets per collection**. Collision
+choices are explicit; updates detect stale writes. Browser storage and native fixed
+application-data storage use their existing bounded persistence contracts. Native
+file selection grants remain subject to SEC-HARDEN-1; installed-native acceptance
+is still unqualified. Keep backups and original author/provenance/licensing context.
 
-Actual browser v10 and v1/v2 empty-collection transfers were exercised in
-[ALPHA-3 qualification](releases/ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md); populated
-record copying has real-WASM/frontend regression coverage. No physical attestation
-was fabricated for the browser walkthrough. Installed native dialogs still need
-separate acceptance in the authorized macOS test account. The
-[developer contract](CUTTING_CONTRACT.md) distinguishes saved files from generation
-requests and documents safety/export limitations.
+ProjectFile **10** is distinct from collection V2 and native cutting V10. Portable
+V1–9 projects are refused, with originals untouched; suffix compatibility does not
+mean old content is migrated. [STATUS](shopbot-modernization/STATUS.md) and the
+[security report](releases/SEC_HARDEN_1_APPLICATION_SECURITY.md) distinguish software
+qualification from native/platform/physical acceptance.

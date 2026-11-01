@@ -1,6 +1,7 @@
 # Engineering reports and historical navigation
 
-Current source/acceptance: [2026-10-20 reconciliation](PROJECT_STATE_RECONCILIATION_2026_10_20.md).
+Current source/acceptance: [STATUS](../shopbot-modernization/STATUS.md).
+Historical baseline: [2026-10-20 reconciliation](PROJECT_STATE_RECONCILIATION_2026_10_20.md).
 NUMSAFE [numeric/runtime report](NUMERICAL_RUNTIME_SAFETY_RESULTS_2026_10_20.md) →
 [NUMSAFE2 pass limits](NUMSAFE2_PASS_LIMITS_RESULTS_2026_10_20.md): the latter resolves
 NS-6b and explicitly invalid supplied steps; original report wording remains historical.
@@ -13,7 +14,33 @@ report can supersede its current disposition without erasing its failures, limit
 human-review record. "No commit" / "OPEN" in an old report describes that checkpoint;
 consult current readiness and explicit acceptance records before acting.
 
-## Current evidence chains
+## Accepted V1.1 feature chronology
+
+This ledger replaces the milestone-banner stacks formerly kept in active plans.
+Original report headers such as “uncommitted”, “planned” or “human review pending”
+remain historical checkpoint statements, not today's disposition. Reports are not
+copied or rewritten; their qualified source, refusals and physical limits remain.
+
+| Sequence | Source-bound report | Later accepted disposition |
+| --- | --- | --- |
+| FS-RESET / separation | [ADR-0030](../shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md), [FS-RESET-3](FS_RESET_3_RESULTS.md) | Removed calculator/source-pack ownership; explicit values and independent FabSpeed |
+| ALPHA-1 | [Stock/import diagnostics](ALPHA_1_STOCK_IMPORT_DIAGNOSTICS.md) | Inherited by accepted ALPHA-4/integration chain |
+| ALPHA-2 | [Geometry repair](ALPHA_2_GEOMETRY_REPAIR_RESULTS.md) | Bounded protocol/geometry acceptance, not universal repair |
+| ALPHA-3 | [Main and optional Finishing](ALPHA_3_MAIN_CUT_OPTIONAL_FINISHING.md) | Accepted/committed V10 and collection V2 foundation; initial rectangle scope later extended |
+| ALPHA-3.1 | [Generalized finishing](ALPHA_3_1_GENERALIZED_FINISHING.md) | Accepted bounded polygon implementation; original failures/limits retained |
+| ALPHA-3.2 | [Pocket scope](ALPHA_3_2_POCKET_FINISHING.md) | Accepted/committed ADR-0033 scoped implementation; curves/islands and explicit proof refusals |
+| ALPHA-4 | [Reviewed reuse](ALPHA_4_REVIEWED_PRESET_REUSE.md) | Accepted/committed selective advisory copy; strict matching preserved, stepover unsupported |
+| INT-ALPHA-1 / TOOL-META | [Integration](INT_ALPHA_1_INTEGRATION.md) | Accepted integrated V10 chain and descriptive tool metadata; no calculator sync |
+| SAFETY-FIX-1 | [Motion guards](SAFETY_FIX_1_MOTION_GUARDS.md) | Accepted/committed containment; excluded machining features not requalified |
+| SEC-HARDEN-1 | [Application security](SEC_HARDEN_1_APPLICATION_SECURITY.md) | Accepted/committed bounded security hardening; native/remote/physical exclusions remain |
+| DOC-CONSOLIDATION-1 | [Documentation reconciliation](DOC_CONSOLIDATION_1.md) | Accepted documentation-only reconciliation; locally consolidated, no executable change |
+
+The current source provenance is recorded once in STATUS. The canonical V1.1
+checkout, frozen V1 and accepted security descendant remain distinct. Earlier
+local integration/build receipts do not prove a fresh installed candidate of the
+later feature source. No milestone in this ledger authorizes the next one.
+
+## Historical evidence chains through 2026-10-20
 
 | Topic | Investigation / original result | Later disposition |
 |---|---|---|

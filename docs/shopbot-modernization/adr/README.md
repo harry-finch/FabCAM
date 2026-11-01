@@ -9,12 +9,13 @@ is superseded within ADR-0030's scope, not unfinished work to restart.
 
 
 [Documentation index](../../README.md) · [Fork architecture](../ARCHITECTURE.md) ·
-[Current gates](../../releases/V1_READINESS.md).
+[Frozen V1 gates](../../releases/V1_READINESS.md).
 
-Decisions ADR-0001–0033 are indexed below. The recorded state is quoted from each ADR,
-including historical pending-review wording. An accepted architecture, implemented
+Decisions ADR-0001–0033 are indexed below. Original decision text and historical pending-review wording remain unchanged.
+The index retains recorded decisions and identifies later explicit acceptance
+where known; the source-bound reports remain authoritative for implementation. An accepted architecture, implemented
 code, software evidence and human checkpoint acceptance are separate states.
-Use current readiness/explicit acceptance records to resolve later dispositions;
+Use [current STATUS](../STATUS.md) and explicit acceptance records to resolve later dispositions;
 this index does not approve, revoke or rewrite a decision.
 
 [V1-FREEZE acceptance matrix](../../releases/V1_FREEZE_READINESS_2026_10_20.md#4-compact-human-acceptance-matrix)
@@ -26,7 +27,7 @@ Include context, alternatives, evidence, compatibility, validation and approval.
 Preserve accepted reasoning and history; future WJ semantics require their own
 qualification. M0–M4 are retained; later work uses named tracks, not global M5.
 
-| ADR | Decision | Recorded state in the decision document |
+| ADR | Decision | Recorded decision / later disposition |
 |---|---|---|
 | [ADR-0001](ADR-0001-shopbot-cps.md) | ADR-0001: ShopBot MVP through the existing CPS recorder/runtime | Accepted for the approved M2 implementation; milestone review pending |
 | [ADR-0002](ADR-0002-feeds-speeds-boundary.md) | ADR-0002: Milling recommendation boundary and explicit applied parameters | Accepted — FS0 user approval on 2026-10-12; pure FS1 implementation authorized |
@@ -59,7 +60,7 @@ qualification. M0–M4 are retained; later work uses named tracks, not global M5
 | [ADR-0029](ADR-0029-manual-inactive-recipes.md) | Manually editable inactive recipes from presets | User-authorized policy 2026-10-21; supersedes ADR-0028 context/value restrictions; implementation UX acceptance pending |
 | [ADR-0030](ADR-0030-fabcam-fabspeed-separation.md) | FabCAM explicit parameters and independent FabSpeed calculation | Accepted; FS-RESET implemented; final qualification/human acceptance remain separate |
 | [ADR-0031](ADR-0031-optional-one-way-fabspeed-catalogue.md) | Optional One-Way FabSpeed Catalogue for FabCAM | Proposed; product ownership/direction approved, INT-0 transport/storage and implementation contract OPEN |
-| [ADR-0032](ADR-0032-explicit-main-and-optional-finishing.md) | Explicit Main Cutting and optional Finishing | Accepted; project/cutting v10 and preset v2 implemented, bounded ALPHA-3 software qualification complete; human acceptance/commits pending |
+| [ADR-0032](ADR-0032-explicit-main-and-optional-finishing.md) | Explicit Main Cutting and optional Finishing | Accepted; project/cutting V10 and collection V2 implemented and locally consolidated; bounded ALPHA-3 acceptance retained, extended by accepted ALPHA-3.1/3.2 |
 | [ADR-0033](ADR-0033-explicit-pocket-finishing-scope.md) | Versioned Pocket Walls/Floor finishing scope | Accepted; bounded ALPHA-3.2 software qualification and human acceptance recorded; native/physical excluded |
 
 For current V1.1 architecture, ADR-0030 supersedes the historical recommendation,

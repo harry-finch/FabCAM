@@ -1,97 +1,37 @@
-# FabCAM roadmap navigation
+# FabCAM technical workstreams
 
-**SEC-HARDEN-1 — accepted bounded software-qualified security milestone; locally consolidated (2026-11-01).**
-Isolated `feature/sec-harden-1` inherits accepted SAFETY-FIX-1 `c33f69f`.
-Software `32b5fbb` matches all 1,330 accepted source files; 20/20 canonical gates
-and 109 exact fixed CNC comparisons remain source-bound to the qualification.
-[Report, commit receipt and limitations](../releases/SEC_HARDEN_1_APPLICATION_SECURITY.md).
-Canonical V1.1 remains `16eb34fd07354627b3c3c2f48a227b30ba1cc3c2`.
-Installed-native file workflows, authenticated remote HTTP access and physical
-machining remain unqualified. **HARD STOP; no merge, push, installer or release.**
+## Current state
 
-The single active plan is [RELEASE_ROADMAP](../releases/RELEASE_ROADMAP.md).
-Use [STATUS](STATUS.md) for current source/ownership and [V1 readiness](../releases/V1_READINESS.md)
-for frozen V1 gates; dated reports retain source-bound facts and acceptance limits.
+The accepted security descendant inherits ALPHA-1–4 and TOOL-META; canonical V1.1
+is a separate, older checkout. [STATUS](STATUS.md) owns source identity, software
+qualification and blockers. [RELEASE_ROADMAP](../releases/RELEASE_ROADMAP.md) owns
+release gates; [HISTORY](../releases/HISTORY.md) owns chronology. This document
+classifies technical work, not release permission. Update this section in place.
 
-| Track | Authoritative entry | Boundary |
-|---|---|---|
-| Frozen V1 / RC1 | [V1 scope](../releases/FABCAM_V1_SCOPE.md), [readiness](../releases/V1_READINESS.md) | Existing frozen baseline; no inferred physical/publication acceptance |
-| V1.1 macOS Personal Alpha | [Qualification path](../releases/RELEASE_ROADMAP.md#v11--explicit-cutting-parameters-and-qualification) | QUAL-1A.4/1B complete; QUAL-1C built; SEC-1 → actual native Personal Alpha walkthrough → separately authorized QUAL-2; public/multiplatform release deferred |
-| Optional V1.2 | [INT-0–3](../releases/RELEASE_ROADMAP.md#v12--optional-one-way-fabspeed-integration), [proposed ADR-0031](adr/ADR-0031-optional-one-way-fabspeed-catalogue.md) | One-way FabSpeed → FabCAM; no sync implemented, no V1.1 blocker |
-| FabApps portfolio | [Vision](../FABAPPS_VISION.md) | Independent lifecycles; future design principles and website, no shared-package mandate or implementation |
-| Later CAM / WJ / VINYL | [Deferred backlog](../releases/RELEASE_ROADMAP.md#later-cam-enhancements) | Separate architecture/process/software/platform/physical approvals; no automatic launch |
-| Historical FS/PRESET | [Disposition ledger](../releases/ROADMAP_CONSOLIDATION.md#milestone-disposition) | Completed engineering subsequently superseded by ADR-0030; no restart or migration requirement |
+| Workstream | Implemented / accepted software scope | Remaining or excluded scope |
+| --- | --- | --- |
+| M0–M4 ShopBot foundation | Existing CPS runtime, restricted OpenSBP output and source-bound historical evidence | No general controller/physical qualification; preserve attribution and operator boundaries |
+| FS-RESET / ADR-0030 | Removed integrated recommendation engine; explicit authored cutting and tested collections | FabSpeed is independent; no automatic rate calculation or active source-pack engine |
+| ALPHA-1 | Manual stock/import placement and diagnostic refinements | Imported artwork is not automatically safe manufacturing geometry |
+| ALPHA-2 / drawing | Bounded Analyze/Preview/Apply, geometry protocol V2 and fail-closed topology checks | No universal repair, silent cleanup or local-edit-to-CAM certificate |
+| ALPHA-3 / ADR-0032 | Project/cutting V10, Main Cutting and optional Finishing, collection V2 | No implicit V9 or V1 staged-preset migration |
+| ALPHA-3.1 | Bounded polygon finishing beyond rectangles | Not arbitrary geometry; preserve topology/cutter/output proof limits |
+| ALPHA-3.2 / ADR-0033 | Pocket Walls / Floor / Walls and floor, bounded curves/simple islands | No unsupported strategy fallback, non-tangent/complex topology or unrestricted entries |
+| ALPHA-4 | Explicit selective starting-value reuse, advisory provenance and atomic history | Strict tested matching unchanged; no stepover/attestation transfer |
+| TOOL-META / INT-ALPHA-1 | Descriptive substrate/coating ported onto V10; cross-feature integration accepted | No live rate calculation or catalogue synchronization |
+| SAFETY-FIX-1 | Motion containment refusals accepted | Helix, legacy overcut and unrestricted two-sided functional requalification remain separate |
+| SEC-HARDEN-1 | CSP/file authorization, loopback admission/cancellation and import bounds accepted | Native installed workflows, authenticated remote access and physical machining unqualified |
+| Documentation / agent guidance | Reconciliation accepted; active prose/skills aligned with source | Local documentation consolidation only; no implementation change |
+| PERF-1 | **Planned, not started**: measured finishing-proof, DXF-chaining and frontend/WASM optimization against recorded baselines | Separate implementation approval; preserve CNC output, proof/numeric budgets and security guards; no work authorized by this consolidation |
+| Optional V1.2 / ADR-0031 | Proposed one-way FabSpeed catalogue direction | INT-0 contract review before implementation; no dependency of CAM generation/export |
+| Future CAM / architecture | Existing deferred plans retain their own contracts | Rest machining, expanded entries/registration, STEP/ARCH-MACH/FabSBP require separate approval |
+| WJ / VINYL | ProtoMAX/waterjet and drag-knife concepts remain separate | No inferred implementation or qualification from milling infrastructure |
 
-M0–M4 remain the completed ShopBot foundation, baseline
-`e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1`; retain bounded physical evidence.
-[Historical roadmap](history/ROADMAP_2026_10_20.md) and
-[pre-consolidation release roadmap](../releases/history/RELEASE_ROADMAP_BEFORE_FABSPEED_CONSOLIDATION.md)
-retain earlier scope/decisions; they are not active implementation instructions.
+## Acceptance criteria for future changes
 
-<a id="future-fabcam--fabsbp-workflow"></a>
-
-[FabCAM/FabSBP planning](FABCAM_FABSBP_WORKFLOW.md) remains deferred and independently
-reviewed. FabSpeed one-way integration does not authorize controller communication.
-
-<details>
-<summary>Historical milestone checkpoints — superseded sequencing</summary>
-
-**INT-ALPHA-1 — accepted bounded software candidate; locally consolidated (2026-11-01).**
-Accepted ALPHA-4 `78be459` already inherits ALPHA-1–3.2. TOOL-META descriptive
-specifications are ported onto V10 without machining changes or catalogue sync.
-109 exact CNC cases, 8 exact WASM cases and 4 exact native/HTTP cases pass.
-20/20 mandatory gates PASS; 1662 Rust/Tauri and 1565 frontend tests.
-[Source-bound integration report](../releases/INT_ALPHA_1_INTEGRATION.md). Three authorized local commits; no primary integration.
-**HARD STOP after local consolidation. Native/platform/physical acceptance remains separate.**
-
-**ALPHA-4 accepted as bounded software-qualified implementation; locally consolidated.**
-The 1315-file qualified inventory is unchanged. Selective cross-context values,
-advisory provenance, atomic history, V10 persistence and strict matching are accepted.
-Stepover remains unsupported; source physical attestation never transfers.
-[Report and commit receipt](../releases/ALPHA_4_REVIEWED_PRESET_REUSE.md). Earlier pending statements below are historical.
-No merge, push, installer, TOOL-META/FabSpeed integration or physical acceptance.
-**HARD STOP after the three authorized local commits.**
-
-**ALPHA-4 — reviewed preset reuse software-qualified; human acceptance pending (2026-10-30).**
-Isolated `feature/alpha-4-preset-reuse`, accepted ALPHA-3.2 base `38fc911`.
-Separate selective numerical copy into V10 Main / already-enabled Finishing;
-strict tested-preset matching stays unchanged. Advisory origin carries no target
-physical attestation. 20/20 mandatory gates PASS; 1659 Rust / 1559 frontend tests.
-[Source-bound report](../releases/ALPHA_4_REVIEWED_PRESET_REUSE.md).
-Earlier ALPHA-4 “planned/not authorized” statements below describe preceding
-checkpoints. No commit, integration, installer, release or physical acceptance.
-**HARD STOP after this checkpoint for human review.**
-
-**ALPHA-3.2 accepted and locally consolidated.** Software `610d35d6031cb94e4b93473ce1cff661b2b85421`
-exactly matches all 1,308 qualified files. Earlier pending-review statements are
-historical. Bounded software acceptance only; native/workshop/physical exclusions
-remain. No integration or next milestone. **HARD STOP.**
-
-**ALPHA-3.2 — bounded implementation qualified; human acceptance pending (2026-10-30).**
-ADR-0033 is approved; historical executable preservation was waived. The isolated
-worktree adds explicit Walls / Floor / Both scope, checked axial coverage, reachable
-floor proof, curves/simple islands and revision-safe UI. Project/cutting v10 stays;
-new `pocket_finishing_v2` and capability are strict. Conservative geometry, cutter,
-entry and resource refusals remain. [Report and limitations](../releases/ALPHA_3_2_POCKET_FINISHING.md).
-All changes are uncommitted on baseline `81e8d47d3ca6860303d534393bad37056ea0cfb2`.
-20/20 mandatory gates PASS; 1,659 Rust / 1,549 frontend tests, 79 real transport
-cases and three actual flipped pairs. **HARD STOP for human acceptance.**
-No commit, push, merge, installer, release, ALPHA-4 or physical operation.
-
-**ALPHA-3.1 accepted and locally consolidated — 2026-10-30.** Human acceptance
-covers the bounded polygon implementation and documented limitations.
-Core `59d8e233fa54facb9873b7203068ed45ad291011`; software/tests `56743de13a1f66005d7e24519fc298e66bf9c224`;
-all 1,302 qualified software files match the final fingerprint exactly.
-[Acceptance receipt](../releases/evidence/alpha31/consolidation.json).
-Earlier pending-review/uncommitted statements are historical. ALPHA-3.2 proceeds
-under accepted ADR-0033; its current human gate is documented above.
-No merge, push, installer, release or physical operation.
-
-Latest isolated software checkpoint:
-[ALPHA-3.1 bounded polygon finishing](../releases/ALPHA_3_1_GENERALIZED_FINISHING.md).
-20/20 gates pass; convex/concave Profile and simple Pocket finishing are qualified
-within explicit proof/strategy limits. Human review and commits are pending;
-no integration, native installation, physical acceptance or next-milestone authority.
-
-
-</details>
+Use [CONTRIBUTING](../CONTRIBUTING.md), [current cutting contract](../CUTTING_CONTRACT.md)
+and [ADRs](adr/README.md). Identify the actual accepted source, preserve existing
+refusals and source-bound evidence, implement only the approved scope, validate
+appropriate transports and stop for human review. Architecture approval, software
+qualification, native/platform acceptance and physical operation are separate.
+Do not restart historical FS0–FS3.9 or treat old pending banners as current work.
