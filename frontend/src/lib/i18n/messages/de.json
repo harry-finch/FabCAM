@@ -2102,5 +2102,6 @@
   "error.safety.back_source": "Bearbeitete Rückseitengeometrie erfordert eine qualifizierte Spiegelung der Quelle.",
   "error.safety.two_sided_depth": "Der spezialisierte zweiseitige Materialabtrag erfordert eine qualifizierte Tiefenbegrenzung.",
   "error.safety.two_sided_holding": "Der vorderseitige Durchschnitt erfordert wirksame Haltestege. Leere, nicht aufgelöste oder unwirksame Platzierungen halten das Teil nicht.",
-  "error.safety.hint": "Die abgelehnte Einrichtung prüfen und neu erzeugen. Es wurde kein Programm erzeugt; gespeicherte Parameter bleiben erhalten."
+  "error.safety.hint": "Die abgelehnte Einrichtung prüfen und neu erzeugen. Es wurde kein Programm erzeugt; gespeicherte Parameter bleiben erhalten.",
+  "source.watch.permissions": "Einige Quelldateien benötigen nach dem erneuten Öffnen eine Freigabe. Quelle neu laden und im Öffnen-Dialog auswählen; bereits freigegebene Dateien bleiben überwacht."
 }

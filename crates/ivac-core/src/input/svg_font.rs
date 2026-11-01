@@ -82,6 +82,7 @@ pub struct Glyph {
 /// Returns `Error::misconfigured` on non-UTF8 input, missing
 /// `<font>` / `<font-face>` markup, or malformed glyph path data.
 pub fn parse(bytes: &[u8]) -> Result<SvgFont> {
+    super::limits::check_bytes(bytes)?;
     let src = std::str::from_utf8(bytes).map_err(|e| {
         Error::misconfigured(format!("SVG font: not UTF-8 ({e})"))
             .with_hint("Pick a different font for this text layer.")
@@ -124,6 +125,7 @@ fn parse_str(src: &str) -> Result<SvgFont> {
 
     // Walk every `<glyph …/>` in source order.
     let mut glyphs: HashMap<char, Glyph> = HashMap::new();
+    let mut total_points = 0usize;
     let mut cursor = face_close;
     while let Some(g_open) = src[cursor..].find("<glyph") {
         let abs = cursor + g_open;
@@ -141,6 +143,10 @@ fn parse_str(src: &str) -> Result<SvgFont> {
         let d = attr(attrs, "d").unwrap_or_default();
         let chord_tolerance = (units_per_em / 4000.0).max(0.05);
         let subpaths = parse_path_d(&d, chord_tolerance)?;
+        total_points = total_points.saturating_add(subpaths.iter().map(Vec::len).sum::<usize>());
+        if total_points > super::limits::MAX_PRIMITIVES {
+            return Err(Error::limit("SVG font total outline budget exceeded"));
+        }
         glyphs.insert(
             ch,
             Glyph {
@@ -221,9 +227,13 @@ fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
     let mut current: Vec<Point2> = Vec::new();
     let mut cursor = Point2::new(0.0, 0.0);
     let mut i = 0;
+    let mut completed_points = 0usize;
     let mut last_cmd = None;
     let mut subpath_start = cursor;
     while i < tokens.len() {
+        if completed_points.saturating_add(current.len()) > super::limits::MAX_PRIMITIVES {
+            return Err(Error::limit("SVG font glyph outline budget exceeded"));
+        }
         let cmd = match tokens[i] {
             Token::Cmd(c) => {
                 i += 1;
@@ -246,6 +256,7 @@ fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
             'M' => {
                 // New subpath.
                 if !current.is_empty() {
+                    completed_points = completed_points.saturating_add(current.len());
                     subpaths.push(std::mem::take(&mut current));
                 }
                 let x = next_num(&tokens, &mut i, d)?;
@@ -280,7 +291,7 @@ fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
                     sweep,
                     chord_tolerance,
                     &mut current,
-                );
+                )?;
                 cursor = end;
             }
             'Z' => {
@@ -300,6 +311,9 @@ fn parse_path_d(d: &str, chord_tolerance: f64) -> Result<Vec<Vec<Point2>>> {
             }
         }
     }
+    if completed_points.saturating_add(current.len()) > super::limits::MAX_PRIMITIVES {
+        return Err(Error::limit("SVG font glyph outline budget exceeded"));
+    }
     if !current.is_empty() {
         subpaths.push(current);
     }
@@ -317,6 +331,9 @@ fn tokenize_path(d: &str) -> Result<Vec<Token>> {
     let bytes = d.as_bytes();
     let mut i = 0;
     while i < bytes.len() {
+        if out.len() >= super::limits::MAX_PRIMITIVES {
+            return Err(Error::limit("SVG font path token budget exceeded"));
+        }
         let b = bytes[i];
         if b.is_ascii_alphabetic() {
             out.push(Token::Cmd(b as char));
@@ -396,7 +413,12 @@ fn next_flag(tokens: &[Token], i: &mut usize, d: &str) -> Result<bool> {
 // W3C Appendix F.6.5 names — `rx_in`/`ry_in`, `cxp`/`cyp`,
 // `ux`/`uy`/`vx`/`vy` follow the spec exactly; renaming for clippy
 // would obscure the algorithm vs the source standard.
-#[allow(clippy::too_many_arguments, clippy::similar_names)]
+#[allow(
+    clippy::too_many_arguments,
+    clippy::similar_names,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss
+)]
 fn tessellate_arc(
     start: Point2,
     end: Point2,
@@ -407,11 +429,20 @@ fn tessellate_arc(
     sweep: bool,
     tolerance: f64,
     out: &mut Vec<Point2>,
-) {
+) -> Result<()> {
+    if ![start.x, start.y, end.x, end.y, rx_in, ry_in, phi, tolerance]
+        .iter()
+        .all(|v| v.is_finite())
+        || tolerance <= 0.
+    {
+        return Err(Error::bad_input(
+            "SVG font arc requires finite values and positive tolerance",
+        ));
+    }
     // Degenerate radii → straight line.
     if rx_in.abs() < 1e-12 || ry_in.abs() < 1e-12 {
         out.push(end);
-        return;
+        return Ok(());
     }
     let rx = rx_in.abs();
     let ry = ry_in.abs();
@@ -465,7 +496,16 @@ fn tessellate_arc(
     // integer (≤ a few thousand even for the densest font tessellation
     // we care about), so the f64 → usize cast is by construction safe.
     #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-    let steps = ((dtheta.abs() / chord_step).ceil() as usize).max(4);
+    let prospective = (dtheta.abs() / chord_step).ceil().max(4.);
+    if !chord_step.is_finite()
+        || chord_step <= 0.
+        || !prospective.is_finite()
+        || prospective > 65_536.
+        || out.len().saturating_add(prospective as usize) > super::limits::MAX_PRIMITIVES
+    {
+        return Err(Error::limit("SVG font arc subdivision budget exceeded"));
+    }
+    let steps = prospective as usize;
     for k in 1..=steps {
         let theta = theta1 + dtheta * (k as f64 / steps as f64);
         let local_x = rx * theta.cos();
@@ -474,6 +514,7 @@ fn tessellate_arc(
         let y = sin_phi * local_x + cos_phi * local_y + cy;
         out.push(Point2::new(x, y));
     }
+    Ok(())
 }
 
 /// SVG-spec angle: signed angle from (ux, uy) to (vx, vy). Returns in
@@ -764,5 +805,48 @@ mod audit_six {
         ] {
             assert!(parse_path_d(d, 0.1).is_err(), "{d}");
         }
+    }
+}
+
+#[cfg(test)]
+mod harden_arc_tests {
+    use super::*;
+    #[test]
+    fn prospective_arc_budget_refuses_before_iteration_or_allocation() {
+        for (radius, tolerance) in [
+            (1e200, 0.01),
+            (1., f64::MIN_POSITIVE),
+            (1., 0.),
+            (f64::INFINITY, 0.01),
+        ] {
+            let mut points = Vec::new();
+            assert!(tessellate_arc(
+                Point2::new(0., 0.),
+                Point2::new(1., 1.),
+                radius,
+                radius,
+                0.,
+                false,
+                true,
+                tolerance,
+                &mut points
+            )
+            .is_err());
+            assert!(points.is_empty());
+        }
+        let mut points = Vec::new();
+        tessellate_arc(
+            Point2::new(0., 0.),
+            Point2::new(1., 1.),
+            1.,
+            1.,
+            0.,
+            false,
+            true,
+            0.01,
+            &mut points,
+        )
+        .unwrap();
+        assert!(!points.is_empty());
     }
 }

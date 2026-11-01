@@ -672,6 +672,8 @@ pub type StlTriangle = [[f32; 3]; 3];
 /// Why an STL byte stream could not be parsed into triangles.
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
 pub enum StlError {
+    #[error("STL input budget exceeded: {0}")]
+    InputBudget(&'static str),
     /// The stream ended mid-record (binary) or mid-facet (ASCII): a vertex
     /// was missing a coordinate, or the ASCII vertex count wasn't a
     /// multiple of three.
@@ -721,6 +723,9 @@ pub fn parse_stl(bytes: &[u8]) -> Result<Vec<StlTriangle>, StlError> {
 }
 
 fn parse_stl_unchecked(bytes: &[u8]) -> Result<Vec<StlTriangle>, StlError> {
+    if bytes.len() > crate::input::limits::MAX_INPUT_BYTES {
+        return Err(StlError::InputBudget("64 MiB bytes"));
+    }
     if bytes.len() >= 84 {
         let count = u32::from_le_bytes([bytes[80], bytes[81], bytes[82], bytes[83]]) as usize;
         if count
@@ -728,6 +733,9 @@ fn parse_stl_unchecked(bytes: &[u8]) -> Result<Vec<StlTriangle>, StlError> {
             .and_then(|body| body.checked_add(84))
             .is_some_and(|expected| expected == bytes.len())
         {
+            if count > 1_000_000 {
+                return Err(StlError::InputBudget("one million triangles"));
+            }
             return Ok(parse_binary_stl(bytes, count));
         }
     }
@@ -777,6 +785,9 @@ fn parse_ascii_stl(bytes: &[u8]) -> Result<Vec<StlTriangle>, StlError> {
                 *slot = s
                     .parse::<f32>()
                     .map_err(|_| StlError::BadAscii(format!("bad vertex coordinate '{s}'")))?;
+            }
+            if verts.len() >= 3_000_000 {
+                return Err(StlError::InputBudget("one million triangles"));
             }
             verts.push(v);
         }

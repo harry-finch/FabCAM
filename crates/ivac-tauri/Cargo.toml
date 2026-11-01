@@ -68,6 +68,7 @@ libc = "0.2"
 webkit2gtk = { version = "2.0", features = ["v2_38"] }
 
 [dev-dependencies]
+tauri = { version = "2", features = ["test"] }
 tempfile = "3"
 
 [features]

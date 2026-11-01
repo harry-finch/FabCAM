@@ -53,10 +53,7 @@ const OCS_PARALLEL_TOL: f64 = 1e-9;
 /// underlying error from [`import_dxf_bytes`] if the DXF content is
 /// malformed.
 pub fn import_dxf_path(path: &Path, opts: &ImportOptions) -> crate::Result<ImportOutput> {
-    let bytes = std::fs::read(path).map_err(|e| {
-        Error::io(format!("read {}: {e}", path.display()))
-            .with_hint("Check the file exists and is readable.")
-    })?;
+    let bytes = super::limits::read(path)?;
     let filename = path
         .file_name()
         .and_then(|s| s.to_str())
@@ -74,11 +71,16 @@ pub fn import_dxf_path(path: &Path, opts: &ImportOptions) -> crate::Result<Impor
 ///
 /// Returns `Error::bad_input` if the bytes don't parse as a DXF
 /// drawing, or propagates any error from [`import_drawing`].
+#[allow(clippy::naive_bytecount)] // bounded input pass, no additional counting dependency
 pub fn import_dxf_bytes(
     filename: String,
     bytes: &[u8],
     opts: &ImportOptions,
 ) -> crate::Result<ImportOutput> {
+    super::limits::check_bytes(bytes)?;
+    if bytes.iter().filter(|b| **b == b'\n').count() > 1_000_000 {
+        return Err(Error::limit("DXF exceeds the input group-pair budget"));
+    }
     // DXF group keywords are ASCII even when names use a legacy encoding.
     // Do this before expansion/recovery, so no partial drawing can escape.
     if super::hatch::has_block_hatch(&String::from_utf8_lossy(bytes)) {
@@ -135,6 +137,9 @@ pub fn import_dxf_bytes(
             out.warnings
                 .push(format!("recovered {n} HATCH boundary path(s)"));
         }
+    }
+    if out.segments.len() > super::limits::MAX_PRIMITIVES {
+        return Err(Error::limit("DXF recovered segment budget exceeded"));
     }
     Ok(out)
 }
@@ -210,6 +215,8 @@ pub fn import_drawing(
         refusal: None,
         text_entities: Vec::new(),
         layer_intern: crate::input::intern::LayerIntern::new(),
+        visited: 0,
+        text_bytes: 0,
     };
 
     // Build a block index for INSERT expansion. Block lookup is by the
@@ -230,6 +237,9 @@ pub fn import_drawing(
         ctx.add_entity(entity, &blocks, &Transform2D::identity(), 0);
     }
 
+    if ctx.segments.len() > super::limits::MAX_PRIMITIVES {
+        return Err(Error::limit("DXF segment budget exceeded"));
+    }
     if let Some(reason) = ctx.refusal.take() {
         return Err(Error::bad_input(reason).with_hint(
             "Flatten the drawing to the XY plane (extrusion 0,0,1) and explode MINSERT arrays in the CAD tool, then import again.",
@@ -322,9 +332,31 @@ struct ImportCtx<'a> {
     /// layer string; every Segment on that layer reuses the cached
     /// Arc<str> instead of allocating a fresh one.
     layer_intern: crate::input::intern::LayerIntern,
+    visited: usize,
+    text_bytes: usize,
 }
 
 impl ImportCtx<'_> {
+    fn push_segment(&mut self, segment: Segment) {
+        if self.segments.len() >= super::limits::MAX_PRIMITIVES {
+            self.refusal =
+                Some("DXF emitted primitive budget exceeded; no partial drawing imported".into());
+            return;
+        }
+        self.segments.push(segment);
+    }
+    fn reserve_text(&mut self, bytes: usize) -> bool {
+        self.text_bytes = self.text_bytes.saturating_add(bytes);
+        if self.text_bytes > 16 * 1024 * 1024
+            || self.text_entities.len() >= super::limits::MAX_PRIMITIVES
+        {
+            self.refusal =
+                Some("DXF expanded text budget exceeded; no partial drawing imported".into());
+            return false;
+        }
+        true
+    }
+
     fn resolve_layer_and_color(&self, entity: &Entity) -> (String, i32) {
         let common = &entity.common;
         let layer = common.layer.clone();
@@ -353,9 +385,18 @@ impl ImportCtx<'_> {
         xform: &Transform2D,
         depth: usize,
     ) {
-        if depth > 32 {
-            self.warnings
-                .push("INSERT depth limit (32) reached; cycle?".into());
+        if self.refusal.is_some() {
+            return;
+        }
+        self.visited += 1;
+        if depth > 32
+            || self.visited > super::limits::MAX_PRIMITIVES
+            || self.segments.len() > super::limits::MAX_PRIMITIVES
+        {
+            self.refusal = Some(
+                "DXF INSERT recursion/expansion budget exceeded; no partial drawing imported"
+                    .into(),
+            );
             return;
         }
         let (layer, color) = self.resolve_layer_and_color(entity);
@@ -471,8 +512,7 @@ impl ImportCtx<'_> {
 
     fn push_line(&mut self, start: Point2, end: Point2, layer: &std::sync::Arc<str>, color: i32) {
         if start.distance(end) > MIN_DIST {
-            self.segments
-                .push(Segment::line(start, end, layer.clone(), color));
+            self.push_segment(Segment::line(start, end, layer.clone(), color));
         }
     }
 
@@ -491,7 +531,7 @@ impl ImportCtx<'_> {
         let step = self.opts.arc_max_step_or_default();
         if step >= std::f64::consts::TAU || bulge.abs() < 1e-9 {
             // Single segment with bulge — preferred for the CAM core.
-            self.segments.push(Segment::arc(
+            self.push_segment(Segment::arc(
                 start,
                 end,
                 bulge,
@@ -520,7 +560,7 @@ impl ImportCtx<'_> {
         let sub_bulge = (per_step * 0.25).tan();
         let center_known = center.or_else(|| Some(math::bulge_to_arc(start, end, bulge).0));
         for i in 0..pts.len() - 1 {
-            self.segments.push(Segment::arc(
+            self.push_segment(Segment::arc(
                 pts[i],
                 pts[i + 1],
                 sub_bulge,
@@ -538,6 +578,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         let s = xform.apply(line.p1.x, line.p1.y);
         let e = xform.apply(line.p2.x, line.p2.y);
         self.push_line(self.scale(s), self.scale(e), layer, color);
@@ -550,8 +593,11 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         let pt = self.scale(xform.apply(p.location.x, p.location.y));
-        self.segments.push(Segment::point(pt, layer.clone(), color));
+        self.push_segment(Segment::point(pt, layer.clone(), color));
     }
 
     fn emit_circle(
@@ -561,6 +607,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         if ![circle.center.x, circle.center.y, circle.radius]
             .iter()
             .all(|v| v.is_finite())
@@ -591,7 +640,7 @@ impl ImportCtx<'_> {
         }
         let bulge = xform.orientation();
         for (start, end) in [(right, left), (left, right)] {
-            self.segments.push(Segment {
+            self.push_segment(Segment {
                 kind: crate::geometry::SegmentKind::Circle,
                 start,
                 end,
@@ -610,6 +659,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         if ![
             arc.center.x,
             arc.center.y,
@@ -661,7 +713,7 @@ impl ImportCtx<'_> {
             } else {
                 pts[i + 1]
             };
-            self.segments.push(Segment::arc(
+            self.push_segment(Segment::arc(
                 pts[i],
                 end,
                 (per / 4.0).tan() * xform.orientation(),
@@ -682,6 +734,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         let mut sweep = (e.end_parameter - e.start_parameter).rem_euclid(std::f64::consts::TAU);
         if sweep == 0.0 {
             sweep = std::f64::consts::TAU;
@@ -715,6 +770,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         let c = self.scale(xform.apply(center.x, center.y));
         let u = self.scale(xform.vector(major));
         let v = self.scale(xform.vector(minor));
@@ -745,8 +803,7 @@ impl ImportCtx<'_> {
             };
             // Do not discard short chords: doing so opens a valid boundary.
             if prev != end {
-                self.segments
-                    .push(Segment::line(prev, end, layer.clone(), color));
+                self.push_segment(Segment::line(prev, end, layer.clone(), color));
             }
             prev = end;
         }
@@ -761,6 +818,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         if bulge.abs() <= 1e-12 {
             self.push_line(
                 self.scale(xform.apply(s.x, s.y)),
@@ -806,6 +866,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         let n = poly.vertices.len();
         if n < 2 {
             return;
@@ -831,6 +894,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         let vertices: Vec<&Vertex> = poly.vertices().collect();
         let n = vertices.len();
         if n < 2 {
@@ -860,6 +926,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         if m.vertices.len() < 2 {
             return;
         }
@@ -908,10 +977,16 @@ impl ImportCtx<'_> {
     }
 
     fn emit_text(&mut self, t: &Text, layer: &str, _color: i32, xform: &Transform2D) {
+        if self.refusal.is_some() {
+            return;
+        }
         let origin_world = xform.apply(t.location.x, t.location.y);
         let origin = self.scale(origin_world);
         let height = t.text_height * self.unit_scale * xform.uniform_scale_factor();
         if height < 1e-6 || t.value.is_empty() {
+            return;
+        }
+        if !self.reserve_text(t.value.len()) {
             return;
         }
         // Phase 4: emit editable metadata instead of rendering glyphs.
@@ -938,10 +1013,16 @@ impl ImportCtx<'_> {
     }
 
     fn emit_mtext(&mut self, t: &MText, layer: &str, _color: i32, xform: &Transform2D) {
+        if self.refusal.is_some() {
+            return;
+        }
         let origin_world = xform.apply(t.insertion_point.x, t.insertion_point.y);
         let origin = self.scale(origin_world);
         let height = t.initial_text_height * self.unit_scale * xform.uniform_scale_factor();
         if height < 1e-6 || t.text.is_empty() {
+            return;
+        }
+        if !self.reserve_text(t.text.len()) {
             return;
         }
         // Normalize MTEXT's `\P` line break sentinel to `\n` — TextLayer
@@ -966,6 +1047,9 @@ impl ImportCtx<'_> {
         color: i32,
         xform: &Transform2D,
     ) {
+        if self.refusal.is_some() {
+            return;
+        }
         let degree = spline.degree_of_curve as usize;
         if degree == 0 || degree >= spline.control_points.len() {
             self.warnings.push(format!("SPLINE on layer '{layer}': invalid degree {degree}; control polygon imported, not the spline"));
@@ -1335,6 +1419,8 @@ mod audit_six {
             refusal: None,
             text_entities: vec![],
             layer_intern: crate::input::intern::LayerIntern::new(),
+            visited: 0,
+            text_bytes: 0,
         };
         ctx.add_entity(&Entity::new(entity), &HashMap::new(), &xf, 0);
         assert!(!ctx.curve_error);

@@ -160,7 +160,14 @@ export async function refreshSourceWatch(p: ProjectState): Promise<void> {
   }
   try {
     const mod = await import('../api/tauri');
-    await mod.watchSourcePaths(Array.from(paths));
+    const denied = await mod.watchSourcePaths(Array.from(paths));
+    if (Array.isArray(denied) && denied.length > 0) {
+      p.setError({
+        kind: 'misconfigured',
+        message: 'Source watching requires a file selection.',
+        params: { security_guard: 'source_watch' },
+      });
+    }
   } catch (e) {
     console.warn('source watch:', e);
   }
@@ -207,23 +214,36 @@ export async function reimportFromPath(p: ProjectState, path: string): Promise<b
     return false;
   }
   let after: ImportResponse;
+  let selectedPath = path;
+  let reauthorized = false;
   // A confirmed unit choice (ADR-0026) is part of the source: reload with it.
   const previous = p.data.imports[idx].source;
   const scale = previous.unit_status === 'explicit' ? previous.unit_scale : null;
   try {
     const { invoke } = await import('@tauri-apps/api/core');
-    after = await invoke<ImportResponse>('import_path', { path, scale });
+    try {
+      after = await invoke<ImportResponse>('import_path', { path, scale });
+    } catch (error) {
+      if (!String(error).includes('outside dialog-granted')) throw error;
+      const { open } = await import('@tauri-apps/plugin-dialog');
+      const selected = await open({ defaultPath: path, multiple: false, directory: false });
+      if (typeof selected !== 'string') return false;
+      selectedPath = selected;
+      reauthorized = true;
+      after = await invoke<ImportResponse>('import_path', { path: selectedPath, scale });
+    }
   } catch (e) {
     p.setError(`reload: ${e instanceof Error ? e.message : String(e)}`);
     return false;
   }
   const next = [...p.data.imports];
-  next[idx] = { ...next[idx], source: after };
+  next[idx] = { ...next[idx], source: after, lastImportPath: selectedPath };
   p.history.exec(
     fixedStockTransformCommand(p, setImportsCommand(p.data.imports, next, 'Reload drawing source')),
     p.target(),
   );
   p.sourceFileStaleNotice = null;
+  if (reauthorized) void refreshSourceWatch(p);
   // Orphan-source detection runs against the merged view (post-reload)
   // so ops keyed by ids from OTHER imports still see their objects.
   // The inline Re-pick chip on OperationsList rows surfaces the

@@ -44,31 +44,36 @@ export class TauriWiacClient implements WiacClient {
 
   /**
    * Tauri can take a real OS path. The web `File` object doesn't carry one,
-   * so we fall back to writing a tempfile from the buffer when necessary.
+   * so we use a bounded byte import when no OS path is available.
    * Most call sites should use `importFromPath` directly when running
    * inside Tauri (gated by `isTauri()`).
    */
   async importFile(file: File, _format?: string, scale?: number): Promise<ImportResponse> {
     // Prefer the path attribute when present (e.g. drag-and-drop in Tauri
     // surfaces the absolute path on `File.path` in some setups). Fallback:
-    // write an ArrayBuffer to a temp file via tauri-plugin-fs and import.
+    // import bytes directly without granting raw writes to a temporary directory.
     const path = (file as File & { path?: string }).path;
     if (typeof path === 'string' && path.length > 0) {
       return this.importFromPath(path, scale);
     }
-    const { tempDir } = await import('@tauri-apps/api/path');
-    const { writeFile } = await import('@tauri-apps/plugin-fs');
-    const { join } = await import('@tauri-apps/api/path');
-    const dir = await tempDir();
-    const fname = `ivac-${Date.now()}-${file.name}`;
-    const fullpath = await join(dir, fname);
-    const data = new Uint8Array(await file.arrayBuffer());
-    await writeFile(fullpath, data);
-    return this.importFromPath(fullpath, scale);
+    const bytes = Array.from(new Uint8Array(await file.arrayBuffer()));
+    return invoke<ImportResponse>('import_bytes_cmd', {
+      filename: file.name,
+      bytes,
+      scale: scale ?? null,
+    });
   }
 
-  importFromPath(path: string, scale?: number): Promise<ImportResponse> {
-    return invoke<ImportResponse>('import_path', { path, scale: scale ?? null });
+  async importFromPath(path: string, scale?: number): Promise<ImportResponse> {
+    try {
+      return await invoke<ImportResponse>('import_path', { path, scale: scale ?? null });
+    } catch (error) {
+      if (!String(error).includes('outside dialog-granted')) throw error;
+      const { open } = await import('@tauri-apps/plugin-dialog');
+      const selected = await open({ defaultPath: path, multiple: false, directory: false });
+      if (typeof selected !== 'string') throw new CancelledError();
+      return invoke<ImportResponse>('import_path', { path: selected, scale: scale ?? null });
+    }
   }
 
   async generate(request: GenerateRequest): Promise<GenerateResponse> {
@@ -238,8 +243,8 @@ export class TauriWiacClient implements WiacClient {
 /// Replace the active source-file watch set on the desktop shell. The
 /// backend (crates/ivac-tauri/src/watcher.rs) emits `source-file-changed`
 /// events whenever any of the supplied paths is rewritten.
-export async function watchSourcePaths(paths: string[]): Promise<void> {
-  await invoke('watch_source_paths', { paths });
+export async function watchSourcePaths(paths: string[]): Promise<string[]> {
+  return invoke<string[]>('watch_source_paths', { paths });
 }
 
 /// Drop every watch slot. Called on project close.

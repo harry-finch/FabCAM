@@ -1754,6 +1754,7 @@ export type MsgKey =
   | "shortcuts.view3d.orbit"
   | "shortcuts.view3d.pan"
   | "shortcuts.zoom"
+  | "source.watch.permissions"
   | "stages.allowance_help"
   | "stages.both_help"
   | "stages.copy"
@@ -4199,6 +4200,7 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "shortcuts.view3d.orbit",
   "shortcuts.view3d.pan",
   "shortcuts.zoom",
+  "source.watch.permissions",
   "stages.allowance_help",
   "stages.both_help",
   "stages.copy",

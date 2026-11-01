@@ -511,7 +511,22 @@ export async function loadProjectPath(path: string) {
   project.error = null;
   try {
     const { readTextFile } = await import('@tauri-apps/plugin-fs');
-    const text = await readTextFile(path);
+    let text: string;
+    try {
+      text = await readTextFile(path);
+    } catch {
+      // Session grants expire on restart; Recent is a suggestion, not authority.
+      const { open } = await import('@tauri-apps/plugin-dialog');
+      const selected = await open({
+        defaultPath: path,
+        multiple: false,
+        directory: false,
+        filters: [{ name: 'FabCAM project', extensions: ['json'] }],
+      });
+      if (typeof selected !== 'string') return;
+      path = selected;
+      text = await readTextFile(path);
+    }
     validateProjectFile(JSON.parse(text));
     await clearPipelineCacheOnReplace();
     await commitDocumentLoad(project, async () => {

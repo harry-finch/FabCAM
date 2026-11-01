@@ -14,6 +14,7 @@ import type { MsgKey } from '../i18n/keys';
 export type Translate = (key: MsgKey, params?: Record<string, string | number>) => string;
 
 export function errorMessage(e: WiacError, t: Translate): string {
+  if (e.params?.security_guard === 'source_watch') return t('source.watch.permissions');
   switch (e.params?.safety_guard) {
     case 'helical_entry':
       return t('error.safety.helical_entry', e.params);

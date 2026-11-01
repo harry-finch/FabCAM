@@ -2440,5 +2440,6 @@
   "error.safety.back_source": "Edited Back geometry requires qualified source mirroring.",
   "error.safety.two_sided_depth": "Two-sided specialized removal requires a qualified depth bound.",
   "error.safety.two_sided_holding": "The Front through-cut requires effective holding tabs. Empty, unresolved or ineffective placements cannot hold the part.",
-  "error.safety.hint": "Review the refused setup and regenerate. No program was generated; your saved parameters were kept."
+  "error.safety.hint": "Review the refused setup and regenerate. No program was generated; your saved parameters were kept.",
+  "source.watch.permissions": "Some source files need permission after reopening. Reload a source and select it in Open to enable watching; already authorized files stay watched."
 }

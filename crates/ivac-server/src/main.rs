@@ -3,6 +3,11 @@
 
 #[cfg(test)]
 mod qual1a2_tests;
+mod security;
+use axum::Extension;
+#[cfg(test)]
+use ivac_core::pipeline::run_pipeline;
+use security::Job;
 
 use std::collections::HashMap;
 use std::convert::Infallible;
@@ -14,8 +19,8 @@ use std::time::Duration;
 use anyhow::Result;
 use axum::body::{Body, Bytes};
 use axum::extract::{DefaultBodyLimit, Multipart, Path, State};
+use axum::http::Method;
 use axum::http::StatusCode;
-use axum::http::{HeaderValue, Method};
 use axum::response::sse::{Event as SseEvent, KeepAlive, Sse};
 use axum::response::{IntoResponse, Response};
 use axum::routing::{get, post};
@@ -33,9 +38,8 @@ use ivac_core::input::text::{
     RenderTextResponse,
 };
 use ivac_core::pipeline::{
-    generate_streaming, run_pipeline, run_pipeline_two_sided, stream_gcode_to_writer, CancelToken,
-    PipelineError, PipelineEvent, PipelineRequest, PipelineResponse, PostProcessorKind,
-    StreamGcodeError, TwoSidedResponse,
+    generate_streaming, CancelToken, PipelineError, PipelineEvent, PipelineRequest,
+    PipelineResponse, PostProcessorKind, StreamGcodeError, TwoSidedResponse,
 };
 use ivac_core::project::TextLayer;
 use ivac_core::{compute_helix_radius, HelixRadiusRequest, HelixRadiusResponse};
@@ -55,7 +59,8 @@ async fn main() -> Result<()> {
         .and_then(|v| v.parse().ok())
         .unwrap_or(8766);
 
-    let cors = build_cors_layer();
+    let policy = security::Policy::configured(&host, port)?;
+    let cors = build_cors_layer(&policy);
 
     let app = Router::new()
         .route("/healthz", get(healthz))
@@ -81,13 +86,15 @@ async fn main() -> Result<()> {
     let app = app
         .route("/posts", get(list_posts))
         .route("/posts/inspect", post(inspect_post_handler));
-    let app = app
-        .layer(DefaultBodyLimit::max(64 * 1024 * 1024))
-        .layer(cors)
-        .layer(TraceLayer::new_for_http())
-        .with_state(Arc::new(AppState::default()));
+    let app = security::protect(
+        app.layer(DefaultBodyLimit::max(64 * 1024 * 1024))
+            .layer(cors)
+            .layer(TraceLayer::new_for_http())
+            .with_state(Arc::new(AppState::default())),
+        policy,
+    );
 
-    let addr = format!("{host}:{port}").parse::<SocketAddr>()?;
+    let addr = SocketAddr::new(host.parse()?, port);
     tracing::info!("ivac-server listening on http://{addr}");
     let listener = TcpListener::bind(addr).await?;
     axum::serve(listener, app)
@@ -107,59 +114,32 @@ async fn shutdown_signal() {
 /// - `*` or `any`: permissive (origin: any). Methods/headers stay restricted
 ///   to what the JSON API actually uses.
 /// - otherwise: exact origin match against the supplied list.
-fn build_cors_layer() -> CorsLayer {
-    let methods = [Method::GET, Method::POST, Method::OPTIONS];
-    let headers = [
-        axum::http::header::CONTENT_TYPE,
-        axum::http::header::ACCEPT,
-        axum::http::header::AUTHORIZATION,
-    ];
-    let raw = std::env::var("IVAC_CORS_ORIGINS").unwrap_or_default();
-    let trimmed = raw.trim();
-    let origin = if trimmed.is_empty() {
-        let defaults: Vec<HeaderValue> = [
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-            "http://localhost:1420",
-            "http://127.0.0.1:1420",
-            "tauri://localhost",
-        ]
-        .into_iter()
-        .filter_map(|s| HeaderValue::from_str(s).ok())
-        .collect();
-        AllowOrigin::list(defaults)
-    } else if trimmed == "*" || trimmed.eq_ignore_ascii_case("any") {
-        AllowOrigin::any()
-    } else {
-        let list: Vec<HeaderValue> = trimmed
-            .split(',')
-            .map(str::trim)
-            .filter(|s| !s.is_empty())
-            .filter_map(|s| HeaderValue::from_str(s).ok())
-            .collect();
-        if list.is_empty() {
-            tracing::warn!(
-                "IVAC_CORS_ORIGINS contained no valid entries; falling back to localhost defaults"
-            );
-            AllowOrigin::list(
-                ["http://localhost:5173", "http://127.0.0.1:5173"]
-                    .into_iter()
-                    .filter_map(|s| HeaderValue::from_str(s).ok())
-                    .collect::<Vec<_>>(),
-            )
-        } else {
-            AllowOrigin::list(list)
-        }
-    };
+fn build_cors_layer(policy: &security::Policy) -> CorsLayer {
     CorsLayer::new()
-        .allow_methods(methods)
-        .allow_headers(headers)
-        .allow_origin(origin)
+        .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
+        .allow_headers([
+            axum::http::header::CONTENT_TYPE,
+            axum::http::header::ACCEPT,
+            axum::http::header::AUTHORIZATION,
+        ])
+        .allow_origin(AllowOrigin::list(policy.origins.clone()))
 }
 
 #[derive(Default)]
 struct AppState {
     cancel_tokens: Mutex<HashMap<u32, CancelToken>>,
+}
+
+struct Registration {
+    state: Arc<AppState>,
+    id: u32,
+}
+impl Drop for Registration {
+    fn drop(&mut self) {
+        if let Ok(mut map) = self.state.cancel_tokens.lock() {
+            map.remove(&self.id);
+        }
+    }
 }
 
 static TOKEN_COUNTER: AtomicU32 = AtomicU32::new(1);
@@ -231,6 +211,7 @@ async fn version() -> Json<VersionResponse> {
 }
 
 async fn import(
+    Extension(job): Extension<Job>,
     State(_state): State<Arc<AppState>>,
     mut multipart: Multipart,
 ) -> Result<Json<serde_json::Value>, AppError> {
@@ -274,17 +255,18 @@ async fn import(
     }
     // The format is a validated hint, never part of a filesystem path.
     let import_name = format!("upload.{suffix}");
-    let result = tokio::task::spawn_blocking(move || {
-        let opts = ivac_core::ImportOptions {
-            scale: scale.unwrap_or(0.0),
-            ..ivac_core::ImportOptions::default()
-        };
-        let mut result = ivac_core::input::import_bytes(&import_name, &bytes, &opts)?;
-        result.filename = filename;
-        Ok::<_, ivac_core::Error>(result)
-    })
-    .await
-    .map_err(|e| AppError::internal(e.to_string()))??;
+    let result = job
+        .spawn(move |_cancel| {
+            let opts = ivac_core::ImportOptions {
+                scale: scale.unwrap_or(0.0),
+                ..ivac_core::ImportOptions::default()
+            };
+            let mut result = ivac_core::input::import_bytes(&import_name, &bytes, &opts)?;
+            result.filename = filename;
+            Ok::<_, ivac_core::Error>(result)
+        })
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))??;
 
     let resp = ImportResponse {
         filename: &result.filename,
@@ -319,42 +301,48 @@ fn reject_cps_path(req: &GenerateRequest) -> Result<(), AppError> {
 }
 
 async fn generate(
+    Extension(job): Extension<Job>,
     State(_state): State<Arc<AppState>>,
     Json(req): Json<GenerateRequest>,
 ) -> Result<Json<GenerateResponse>, AppError> {
     reject_cps_path(&req)?;
-    tokio::task::spawn_blocking(move || run_pipeline(req, |_phase, _fraction, _msg| {}))
-        .await
-        .map_err(|e| AppError::internal(e.to_string()))?
-        .map(Json)
-        .map_err(AppError::from)
+    job.spawn(move |cancel| {
+        ivac_core::pipeline::run_pipeline_cancellable(req, |_phase, _fraction, _msg| {}, &cancel)
+    })
+    .await
+    .map_err(|e| AppError::internal(e.to_string()))?
+    .map(Json)
+    .map_err(AppError::from)
 }
 
 /// Bundled-post listing for the frontend picker. Metadata comes from a
 /// real `inspect_post` run per post (sandboxed, budgeted); a bundled
 /// post failing inspection is an ivac build bug → 500.
 #[cfg(feature = "cps")]
-async fn list_posts() -> Result<Json<Vec<ivac_cps::meta::PostListEntry>>, AppError> {
-    let entries = tokio::task::spawn_blocking(|| {
-        ivac_cps::library::BUNDLED
-            .iter()
-            .map(|post| {
-                ivac_cps::run::inspect_bundled(post.id, server_cps_limits()).map(|meta| {
-                    ivac_cps::meta::PostListEntry {
-                        id: post.id.to_string(),
-                        meta,
-                    }
+async fn list_posts(
+    Extension(job): Extension<Job>,
+) -> Result<Json<Vec<ivac_cps::meta::PostListEntry>>, AppError> {
+    let entries = job
+        .spawn(move |_cancel| {
+            ivac_cps::library::BUNDLED
+                .iter()
+                .map(|post| {
+                    ivac_cps::run::inspect_bundled(post.id, server_cps_limits()).map(|meta| {
+                        ivac_cps::meta::PostListEntry {
+                            id: post.id.to_string(),
+                            meta,
+                        }
+                    })
                 })
-            })
-            .collect::<Result<Vec<_>, _>>()
-    })
-    .await
-    .map_err(|e| AppError::from_core(ivac_core::Error::internal(e.to_string())))?
-    .map_err(|e| {
-        AppError::from_core(ivac_core::Error::internal(format!(
-            "bundled post failed inspection: {e}"
-        )))
-    })?;
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .await
+        .map_err(|e| AppError::from_core(ivac_core::Error::internal(e.to_string())))?
+        .map_err(|e| {
+            AppError::from_core(ivac_core::Error::internal(format!(
+                "bundled post failed inspection: {e}"
+            )))
+        })?;
     Ok(Json(entries))
 }
 
@@ -371,6 +359,7 @@ struct InspectPostRequest {
 /// under tightened execution budgets, top level only.
 #[cfg(feature = "cps")]
 async fn inspect_post_handler(
+    Extension(job): Extension<Job>,
     Json(req): Json<InspectPostRequest>,
 ) -> Result<Json<ivac_cps::meta::PostMeta>, AppError> {
     const MAX_SCRIPT_BYTES: usize = 1024 * 1024;
@@ -380,13 +369,14 @@ async fn inspect_post_handler(
             req.script.len()
         ))));
     }
-    let meta = tokio::task::spawn_blocking(move || {
-        let name = req.filename.as_deref().unwrap_or("inline.cps");
-        ivac_cps::inspect_post_with_limits(&req.script, name, server_cps_limits())
-    })
-    .await
-    .map_err(|e| AppError::from_core(ivac_core::Error::internal(e.to_string())))?
-    .map_err(|e| AppError::bad_request(e.to_string()))?;
+    let meta = job
+        .spawn(move |_cancel| {
+            let name = req.filename.as_deref().unwrap_or("inline.cps");
+            ivac_cps::inspect_post_with_limits(&req.script, name, server_cps_limits())
+        })
+        .await
+        .map_err(|e| AppError::from_core(ivac_core::Error::internal(e.to_string())))?
+        .map_err(|e| AppError::bad_request(e.to_string()))?;
     Ok(Json(meta))
 }
 
@@ -405,15 +395,22 @@ fn server_cps_limits() -> ivac_cps::RunLimits {
 /// [`run_pipeline_two_sided`]). A single-sided project comes back with
 /// `back: null` and a front byte-identical to `/generate`.
 async fn generate_two_sided(
+    Extension(job): Extension<Job>,
     State(_state): State<Arc<AppState>>,
     Json(req): Json<GenerateRequest>,
 ) -> Result<Json<TwoSidedResponse>, AppError> {
     reject_cps_path(&req)?;
-    tokio::task::spawn_blocking(move || run_pipeline_two_sided(req, |_phase, _fraction, _msg| {}))
-        .await
-        .map_err(|e| AppError::internal(e.to_string()))?
-        .map(Json)
-        .map_err(AppError::from)
+    job.spawn(move |cancel| {
+        ivac_core::pipeline::run_pipeline_two_sided_cancellable(
+            req,
+            |_phase, _fraction, _msg| {},
+            &cancel,
+        )
+    })
+    .await
+    .map_err(|e| AppError::internal(e.to_string()))?
+    .map(Json)
+    .map_err(AppError::from)
 }
 
 /// A `std::io::Write` that forwards each buffered chunk to an async response
@@ -422,11 +419,18 @@ async fn generate_two_sided(
 /// program buffer unboundedly, and a disconnected client (receiver dropped)
 /// surfaces as a `BrokenPipe`, which aborts the emit loop early.
 struct ChannelWriter {
+    cancel: CancelToken,
     tx: tokio::sync::mpsc::Sender<Result<Bytes, std::io::Error>>,
 }
 
 impl std::io::Write for ChannelWriter {
     fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        if self.cancel.is_cancelled() {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::BrokenPipe,
+                "client disconnected",
+            ));
+        }
         self.tx
             .blocking_send(Ok(Bytes::copy_from_slice(buf)))
             .map_err(|_| {
@@ -457,6 +461,7 @@ impl std::io::Write for ChannelWriter {
 ///     observes a truncated transfer / broken stream). Such failures are
 ///     logged server-side; there is no way to retroactively change the status.
 async fn generate_gcode_stream(
+    Extension(job): Extension<Job>,
     State(_state): State<Arc<AppState>>,
     Json(req): Json<GenerateRequest>,
 ) -> Result<Response, AppError> {
@@ -476,11 +481,16 @@ async fn generate_gcode_stream(
     // thread) to the async response body. Small buffer + blocking_send =
     // backpressure, so a slow reader never lets the program pile up in memory.
     let (tx, rx) = tokio::sync::mpsc::channel::<Result<Bytes, std::io::Error>>(16);
-    tokio::task::spawn_blocking(move || {
+    job.spawn(move |cancel| {
         // BufWriter coalesces the sink's line-at-a-time writes into larger
         // channel frames; its final flush (in finish_stream) drains it.
-        let writer = std::io::BufWriter::new(ChannelWriter { tx: tx.clone() });
-        if let Err(e) = stream_gcode_to_writer(req, Box::new(writer)) {
+        let writer = std::io::BufWriter::new(ChannelWriter {
+            tx: tx.clone(),
+            cancel: cancel.clone(),
+        });
+        if let Err(e) =
+            ivac_core::pipeline::stream_gcode_to_writer_cancellable(req, Box::new(writer), &cancel)
+        {
             tracing::warn!("streaming g-code aborted mid-emit: {e}");
             // Terminal error frame: ends the body stream in an error so the
             // client sees an aborted transfer rather than a clean-but-truncated
@@ -504,10 +514,11 @@ async fn generate_gcode_stream(
 /// by the `AddTextDialog`; the WASM and Tauri transports expose the same
 /// shape so the frontend's `WiacClient.renderText` is transport-agnostic.
 async fn render_text_handler(
+    Extension(job): Extension<Job>,
     State(_state): State<Arc<AppState>>,
     Json(req): Json<RenderTextRequest>,
 ) -> Result<Json<RenderTextResponse>, AppError> {
-    tokio::task::spawn_blocking(move || render_text_api(&req))
+    job.spawn(move |_cancel| render_text_api(&req))
         .await
         .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
@@ -521,10 +532,11 @@ async fn render_text_handler(
 /// server-side regardless; this endpoint only feeds the on-canvas
 /// preview tessellation.
 async fn render_text_layer_handler(
+    Extension(job): Extension<Job>,
     State(_state): State<Arc<AppState>>,
     Json(layer): Json<TextLayer>,
 ) -> Result<Json<RenderTextLayerResponse>, AppError> {
-    tokio::task::spawn_blocking(move || render_text_layer_api(&layer))
+    job.spawn(move |_cancel| render_text_layer_api(&layer))
         .await
         .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
@@ -535,10 +547,12 @@ async fn render_text_layer_handler(
 /// generator does at run time, so the `OpPropertiesPanel` can show the
 /// detected radius before the user clicks Generate.
 async fn helix_radius_handler(
+    Extension(job): Extension<Job>,
     State(_state): State<Arc<AppState>>,
     Json(req): Json<HelixRadiusRequest>,
 ) -> Result<Json<HelixRadiusResponse>, AppError> {
-    let resp = tokio::task::spawn_blocking(move || compute_helix_radius(req))
+    let resp = job
+        .spawn(move |_cancel| compute_helix_radius(req))
         .await
         .map_err(|e| AppError::internal(e.to_string()))?;
     Ok(Json(resp))
@@ -550,7 +564,10 @@ async fn helix_radius_handler(
 /// Mirrors the `rasterizeStl` `WiacClient` method (see ivac-fm06). Returns
 /// the serialized `SurfaceField`, or `204 No Content` when the mesh has no
 /// XY footprint to sample (a fully vertical model — nothing to surface).
-async fn relief_stl_handler(mut multipart: Multipart) -> Result<Response, AppError> {
+async fn relief_stl_handler(
+    Extension(job): Extension<Job>,
+    mut multipart: Multipart,
+) -> Result<Response, AppError> {
     let mut bytes: Vec<u8> = Vec::new();
     let mut max_dim: u32 = 256;
     while let Some(field) = multipart.next_field().await? {
@@ -568,12 +585,13 @@ async fn relief_stl_handler(mut multipart: Multipart) -> Result<Response, AppErr
     if bytes.is_empty() {
         return Err(AppError::bad_request("file field missing or empty"));
     }
-    let field = tokio::task::spawn_blocking(move || {
-        ivac_core::cam::surface::SurfaceField::from_stl_capped(&bytes, max_dim)
-    })
-    .await
-    .map_err(|e| AppError::internal(e.to_string()))?
-    .map_err(|e| AppError::bad_request(e.to_string()))?;
+    let field = job
+        .spawn(move |_cancel| {
+            ivac_core::cam::surface::SurfaceField::from_stl_capped(&bytes, max_dim)
+        })
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
+        .map_err(|e| AppError::bad_request(e.to_string()))?;
     match field {
         Some(f) => Ok(Json(f).into_response()),
         None => Ok(StatusCode::NO_CONTENT.into_response()),
@@ -586,13 +604,14 @@ async fn relief_stl_handler(mut multipart: Multipart) -> Result<Response, AppErr
 /// frame. Frontend reads via `fetch` + a hand-rolled SSE parser
 /// because `EventSource` is GET-only.
 async fn generate_stream(
+    Extension(job): Extension<Job>,
     State(state): State<Arc<AppState>>,
     Json(req): Json<GenerateRequest>,
 ) -> Result<Sse<impl Stream<Item = Result<SseEvent, Infallible>>>, AppError> {
     reject_cps_path(&req)?;
     let (tx, rx) = tokio::sync::mpsc::channel::<SseEvent>(64);
     let token_id = next_token_id();
-    let cancel = CancelToken::new();
+    let cancel = job.cancel.clone();
     if let Ok(mut map) = state.cancel_tokens.lock() {
         map.insert(token_id, cancel.clone());
     }
@@ -607,9 +626,15 @@ async fn generate_stream(
         )
         .await;
 
-    tokio::task::spawn_blocking(move || {
+    job.spawn(move |_cancel| {
+        let _registration = Registration {
+            state: state_for_worker.clone(),
+            id: token_id,
+        };
         let send = |ev: SseEvent| {
-            let _ = tx.blocking_send(ev);
+            if tx.blocking_send(ev).is_err() {
+                cancel.cancel();
+            }
         };
         let mut sink = |pe: PipelineEvent| {
             send(
@@ -782,47 +807,53 @@ impl From<axum::extract::multipart::MultipartError> for AppError {
 }
 
 async fn preset_command_handler(
+    Extension(job): Extension<Job>,
     Json(req): Json<ivac_core::presets::PresetCommand>,
 ) -> Result<Json<serde_json::Value>, AppError> {
-    ivac_core::presets::command(req)
+    job.spawn(move |_| ivac_core::presets::command(req))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
         .map_err(AppError::bad_request)
 }
 
 async fn corner_relief_handler(
+    Extension(job): Extension<Job>,
     Json(req): Json<ivac_core::corner_relief::CornerReliefRequest>,
 ) -> Result<Json<ivac_core::corner_relief::CornerReliefResponse>, AppError> {
-    let resp = tokio::task::spawn_blocking(move || ivac_core::corner_relief::preview(&req))
+    let resp = job
+        .spawn(move |_cancel| ivac_core::corner_relief::preview(&req))
         .await
         .map_err(|e| AppError::internal(e.to_string()))?;
     Ok(Json(resp))
 }
 
 async fn drawing_handler(
+    Extension(job): Extension<Job>,
     Json(req): Json<ivac_core::drawing::api::DrawingRequest>,
 ) -> Result<Json<ivac_core::drawing::api::DrawingResponse>, AppError> {
-    tokio::task::spawn_blocking(move || ivac_core::drawing::api::evaluate(req))
+    job.spawn(move |_cancel| ivac_core::drawing::api::evaluate(req))
         .await
         .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
         .map_err(AppError::bad_request)
 }
 async fn drawing_v2_handler(
+    Extension(job): Extension<Job>,
     Json(req): Json<ivac_core::drawing::scoped::ScopedRequest>,
 ) -> Result<Json<ivac_core::drawing::scoped::ScopedResponse>, AppError> {
-    tokio::task::spawn_blocking(move || {
-        ivac_core::drawing::scoped::evaluate(req, &ivac_core::cancel::CancelToken::default())
-    })
-    .await
-    .map_err(|e| AppError::internal(e.to_string()))?
-    .map(Json)
-    .map_err(AppError::bad_request)
+    job.spawn(move |cancel| ivac_core::drawing::scoped::evaluate(req, &cancel))
+        .await
+        .map_err(|e| AppError::internal(e.to_string()))?
+        .map(Json)
+        .map_err(AppError::bad_request)
 }
 async fn generate_drawing_handler(
+    Extension(job): Extension<Job>,
     Json(req): Json<ivac_core::drawing::api::DrawingGenerationRequest>,
 ) -> Result<Json<PipelineResponse>, AppError> {
     reject_cps_path(&req.machining)?;
-    tokio::task::spawn_blocking(move || ivac_core::pipeline::generate_drawing(req))
+    job.spawn(move |_cancel| ivac_core::pipeline::generate_drawing(req))
         .await
         .map_err(|e| AppError::internal(e.to_string()))?
         .map(Json)
@@ -833,6 +864,7 @@ async fn generate_drawing_handler(
 mod tests {
     use super::*;
     use axum::body::to_bytes;
+    use ivac_core::pipeline::run_pipeline;
     use ivac_core::{AutoFix, Error as WiacError, ErrorKind, SourceSpan};
 
     async fn body_json(resp: Response) -> serde_json::Value {
@@ -872,7 +904,7 @@ mod tests {
         use tower::ServiceExt;
 
         // GET /posts lists the bundled library with real metadata.
-        let app = Router::new().route("/posts", get(list_posts));
+        let app = security::test_router(Router::new().route("/posts", get(list_posts)));
         let resp = app
             .oneshot(
                 Request::builder()
@@ -889,7 +921,9 @@ mod tests {
         assert!(list[0]["meta"]["properties"].is_array());
 
         // Even an exact external copy of bundled source is refused.
-        let inspect = || Router::new().route("/posts/inspect", post(inspect_post_handler));
+        let inspect = || {
+            security::test_router(Router::new().route("/posts/inspect", post(inspect_post_handler)))
+        };
         let happy = serde_json::json!({
             "script": ivac_cps::library::bundled("grbl").unwrap().source,
             "filename": "grbl.cps",
@@ -940,13 +974,15 @@ mod tests {
     #[tokio::test]
     async fn generate_rejects_cps_path_source() {
         use tower::ServiceExt;
-        let app = Router::new()
-            .route("/generate", post(generate))
-            .route("/generate/two-sided", post(generate_two_sided))
-            .route("/drawing/generate", post(generate_drawing_handler))
-            .route("/generate/stream", post(generate_stream))
-            .route("/generate/gcode", post(generate_gcode_stream))
-            .with_state(Arc::new(AppState::default()));
+        let app = security::test_router(
+            Router::new()
+                .route("/generate", post(generate))
+                .route("/generate/two-sided", post(generate_two_sided))
+                .route("/drawing/generate", post(generate_drawing_handler))
+                .route("/generate/stream", post(generate_stream))
+                .route("/generate/gcode", post(generate_gcode_stream))
+                .with_state(Arc::new(AppState::default())),
+        );
         let mut req = a_request(PostProcessorKind::Cps);
         req.cps_post = Some(ivac_core::pipeline::CpsPostSelection {
             source: ivac_core::pipeline::CpsPostSource::Path {
@@ -982,9 +1018,11 @@ mod tests {
     #[tokio::test]
     async fn audit_15_16_import_memory_and_format_validation() {
         use tower::ServiceExt;
-        let app = Router::new()
-            .route("/import", post(import))
-            .with_state(Arc::new(AppState::default()));
+        let app = security::test_router(
+            Router::new()
+                .route("/import", post(import))
+                .with_state(Arc::new(AppState::default())),
+        );
         for (format, expected) in [
             ("svg", StatusCode::OK),
             ("../svg", StatusCode::BAD_REQUEST),
@@ -1024,10 +1062,12 @@ mod tests {
     #[tokio::test]
     async fn safe_z_refusal_is_structured_and_stream_has_no_program() {
         use tower::ServiceExt;
-        let app = Router::new()
-            .route("/generate", post(generate))
-            .route("/generate/gcode", post(generate_gcode_stream))
-            .with_state(Arc::new(AppState::default()));
+        let app = security::test_router(
+            Router::new()
+                .route("/generate", post(generate))
+                .route("/generate/gcode", post(generate_gcode_stream))
+                .with_state(Arc::new(AppState::default())),
+        );
         let mut req = a_request(PostProcessorKind::Linuxcnc);
         req.project.stock = Some(ivac_core::project::StockConfig {
             top_z_mm: 18.,
@@ -1149,7 +1189,8 @@ mod tests {
     }
 
     async fn post_relief_stl(stl: &str, max_dim: &str) -> Response {
-        let app = Router::new().route("/relief/stl", post(relief_stl_handler));
+        let app =
+            security::test_router(Router::new().route("/relief/stl", post(relief_stl_handler)));
         let (content_type, body) = stl_multipart(stl, max_dim);
         let req = Request::builder()
             .method("POST")
@@ -1205,9 +1246,11 @@ mod tests {
     // program), and HPGL must be rejected before any streaming begins.
 
     async fn post_generate_gcode(req: &PipelineRequest) -> Response {
-        let app = Router::new()
-            .route("/generate/gcode", post(generate_gcode_stream))
-            .with_state(Arc::new(AppState::default()));
+        let app = security::test_router(
+            Router::new()
+                .route("/generate/gcode", post(generate_gcode_stream))
+                .with_state(Arc::new(AppState::default())),
+        );
         let body = serde_json::to_vec(req).unwrap();
         let http_req = Request::builder()
             .method("POST")
@@ -1220,12 +1263,14 @@ mod tests {
 
     #[tokio::test]
     async fn every_generation_http_route_refuses_legacy_before_emission() {
-        let app = Router::new()
-            .route("/generate", post(generate))
-            .route("/generate/two-sided", post(generate_two_sided))
-            .route("/generate/gcode", post(generate_gcode_stream))
-            .route("/generate/stream", post(generate_stream))
-            .with_state(Arc::new(AppState::default()));
+        let app = security::test_router(
+            Router::new()
+                .route("/generate", post(generate))
+                .route("/generate/two-sided", post(generate_two_sided))
+                .route("/generate/gcode", post(generate_gcode_stream))
+                .route("/generate/stream", post(generate_stream))
+                .with_state(Arc::new(AppState::default())),
+        );
         let mut req = a_request(PostProcessorKind::Linuxcnc);
         req.project.cutting_version = None;
         for path in [
@@ -1289,9 +1334,11 @@ mod tests {
                 depth: 1000.,
             },
         });
-        let app = Router::new()
-            .route("/generate", post(generate))
-            .with_state(Arc::new(AppState::default()));
+        let app = security::test_router(
+            Router::new()
+                .route("/generate", post(generate))
+                .with_state(Arc::new(AppState::default())),
+        );
         let response = app
             .oneshot(
                 Request::builder()

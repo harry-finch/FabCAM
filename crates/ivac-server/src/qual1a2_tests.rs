@@ -24,12 +24,14 @@ async fn alpha3_http_matches_complete_v10_stage_output_and_refuses_v9() {
             .header("content-type", "application/json")
             .body(Body::from(value.to_string()))
             .unwrap();
-        let response = Router::new()
-            .route("/generate", post(generate))
-            .with_state(Arc::new(AppState::default()))
-            .oneshot(request)
-            .await
-            .unwrap();
+        let response = super::security::test_router(
+            Router::new()
+                .route("/generate", post(generate))
+                .with_state(Arc::new(AppState::default())),
+        )
+        .oneshot(request)
+        .await
+        .unwrap();
         if version == 10 {
             assert_eq!(response.status(), StatusCode::OK);
             let bytes = axum::body::to_bytes(response.into_body(), 16 * 1024 * 1024)
@@ -70,11 +72,12 @@ async fn numeric_text_reaches_authoritative_http_inspector() {
             .header("content-type", "application/json")
             .body(Body::from(template.replace("\"__LEXEME__\"", lexeme)))
             .unwrap();
-        let response = Router::new()
-            .route("/presets/command", post(preset_command_handler))
-            .oneshot(request)
-            .await
-            .unwrap();
+        let response = super::security::test_router(
+            Router::new().route("/presets/command", post(preset_command_handler)),
+        )
+        .oneshot(request)
+        .await
+        .unwrap();
         if let Some(bits) = expected {
             assert_eq!(response.status(), StatusCode::OK);
             let bytes = axum::body::to_bytes(response.into_body(), 64 * 1024)
@@ -120,12 +123,14 @@ async fn corrected_http_generation_matches_buffered_pipeline_and_refuses_invalid
             .header("content-type", "application/json")
             .body(Body::from(body.clone()))
             .unwrap();
-        let response = Router::new()
-            .route("/generate", post(generate))
-            .with_state(Arc::new(AppState::default()))
-            .oneshot(request)
-            .await
-            .unwrap();
+        let response = super::security::test_router(
+            Router::new()
+                .route("/generate", post(generate))
+                .with_state(Arc::new(AppState::default())),
+        )
+        .oneshot(request)
+        .await
+        .unwrap();
         if invalid {
             assert!(response.status().is_client_error());
         } else {
@@ -161,12 +166,14 @@ async fn alpha31_http_polygon_finishing_and_coverage_refusal_match_core() {
                 .header("content-type", "application/json")
                 .body(Body::from(value.to_string()))
                 .unwrap();
-            let response = Router::new()
-                .route("/generate", post(generate))
-                .with_state(Arc::new(AppState::default()))
-                .oneshot(request)
-                .await
-                .unwrap();
+            let response = super::security::test_router(
+                Router::new()
+                    .route("/generate", post(generate))
+                    .with_state(Arc::new(AppState::default())),
+            )
+            .oneshot(request)
+            .await
+            .unwrap();
             if refuse {
                 assert!(expected.is_err());
                 assert!(response.status().is_client_error());
@@ -208,12 +215,14 @@ async fn alpha32_http_scopes_preserve_exact_stage_output_and_refuse_contradictio
             .header("content-type", "application/json")
             .body(Body::from(value.to_string()))
             .unwrap();
-        let response = Router::new()
-            .route("/generate", post(generate))
-            .with_state(Arc::new(AppState::default()))
-            .oneshot(request)
-            .await
-            .unwrap();
+        let response = super::security::test_router(
+            Router::new()
+                .route("/generate", post(generate))
+                .with_state(Arc::new(AppState::default())),
+        )
+        .oneshot(request)
+        .await
+        .unwrap();
         if scope == "contradictory" {
             assert!(response.status().is_client_error());
             continue;

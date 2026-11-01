@@ -49,6 +49,9 @@ skrifa = "0.36"
 # wasm bundle doesn't grow needlessly — the SVG importer treats <text>
 # as text-to-paths-already, which is fine for CAM input where
 # text-to-stroke conversion happens upstream.
+# Reuse existing locked parser dependencies for bounded SVG admission.
+flate2 = "1.1"
+svgtypes = "0.15"
 usvg = { version = "0.45", default-features = false }
 voronator = { workspace = true }
 seahash = "4"

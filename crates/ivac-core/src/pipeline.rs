@@ -71,7 +71,9 @@ pub fn validate_clearance(project: &Project) -> Result<(), PipelineError> {
     safe_z::validate(project)
 }
 
-pub use two_sided_emit::{run_pipeline_two_sided, TwoSidedResponse};
+pub use two_sided_emit::{
+    run_pipeline_two_sided, run_pipeline_two_sided_cancellable, TwoSidedResponse,
+};
 
 // Re-export the op-source selection helpers so child modules can
 // keep doing `use super::ordered_selection;` etc. without caring that
@@ -637,6 +639,22 @@ pub fn run_pipeline<F: Fn(&str, f64, &str)>(
         &progress,
         &mut no_events,
         None,
+        Some(global_cache()),
+        None,
+    )
+}
+
+/// Same authoritative buffered pipeline with caller-owned cancellation.
+pub fn run_pipeline_cancellable<F: Fn(&str, f64, &str)>(
+    req: PipelineRequest,
+    progress: F,
+    cancel: &CancelToken,
+) -> Result<PipelineResponse, PipelineError> {
+    run_pipeline_impl(
+        req,
+        &progress,
+        &mut |_| {},
+        Some(cancel),
         Some(global_cache()),
         None,
     )
@@ -1295,8 +1313,26 @@ pub enum StreamGcodeError {
 /// [`run_pipeline`] raises; [`StreamGcodeError::Write`] when the sink errors.
 pub fn stream_gcode_to_writer(
     request: PipelineRequest,
-    mut writer: Box<dyn std::io::Write + Send>,
+    writer: Box<dyn std::io::Write + Send>,
 ) -> Result<StreamGcodeOutcome, StreamGcodeError> {
+    stream_gcode_to_writer_impl(request, writer, None)
+}
+/// Direct output with cooperative per-op cancellation and unchanged emission.
+pub fn stream_gcode_to_writer_cancellable(
+    request: PipelineRequest,
+    writer: Box<dyn std::io::Write + Send>,
+    cancel: &CancelToken,
+) -> Result<StreamGcodeOutcome, StreamGcodeError> {
+    stream_gcode_to_writer_impl(request, writer, Some(cancel))
+}
+fn stream_gcode_to_writer_impl(
+    request: PipelineRequest,
+    mut writer: Box<dyn std::io::Write + Send>,
+    cancel: Option<&CancelToken>,
+) -> Result<StreamGcodeOutcome, StreamGcodeError> {
+    if cancelled(cancel) {
+        return Err(PipelineError::Cancelled.into());
+    }
     // New polygon finishing must pass the final decoded-motion gate BEFORE
     // any bytes reach the writer. Existing Main-only/rectangle streaming stays
     // write-through. Only the new capability uses bounded buffered generation.
@@ -1314,8 +1350,15 @@ pub fn stream_gcode_to_writer(
         })
         .then(|| request.clone());
     let (prep, mut warnings) = prepare_stream(request)?;
+    if cancelled(cancel) {
+        return Err(PipelineError::Cancelled.into());
+    }
     if op_drivers::stage_polygon::needs_decoded_gate(&prep.project, &prep.objects) {
-        let response = run_pipeline(original.expect("finishing request preserved"), |_, _, _| {})?;
+        let original = original.expect("finishing request preserved");
+        let response = match cancel {
+            Some(c) => run_pipeline_cancellable(original, |_, _, _| {}, c),
+            None => run_pipeline(original, |_, _, _| {}),
+        }?;
         writer.write_all(response.gcode.as_bytes())?;
         writer.flush()?;
         return Ok(StreamGcodeOutcome {
@@ -1331,6 +1374,7 @@ pub fn stream_gcode_to_writer(
         writer,
         crate::gcode::sink::DEFAULT_STREAM_TEE_CAP_LINES,
         Some(global_cache()),
+        cancel,
     )?;
 
     let (total_closed, total_offsets, _) = *stats_collector.borrow();
@@ -1390,6 +1434,7 @@ pub(crate) fn stream_gcode_to_writer_capped(
         writer,
         tee_cap,
         Some(cache),
+        None,
     )?;
     let (total_closed, total_offsets, _) = *stats_collector.borrow();
     Ok(StreamGcodeOutcome {
@@ -1489,6 +1534,7 @@ pub fn stream_gcode_with_preview(
         Box::new(tee),
         crate::gcode::sink::DEFAULT_STREAM_TEE_CAP_LINES,
         Some(global_cache()),
+        None,
     )?;
     let (toolpath, gcode_index) = handle
         .take()
@@ -1624,6 +1670,7 @@ fn run_stream_emit(
     writer: Box<dyn std::io::Write + Send>,
     tee_cap: usize,
     cache: Option<&PipelineCache>,
+    cancel: Option<&CancelToken>,
 ) -> Result<(), StreamGcodeError> {
     let post_tag = prep.post_kind.cache_tag();
     let progress = |_: &str, _: f64, _: &str| {};
@@ -1642,7 +1689,7 @@ fn run_stream_emit(
                 prep.n_ops,
                 warnings,
                 &mut no_events,
-                None,
+                cancel,
                 cache,
                 post_tag,
             )?;

@@ -229,12 +229,83 @@ pub fn version() -> VersionResponse {
     }
 }
 
+/// Resolve first, then require the same dialog-granted target. Replacing a
+/// selected symlink must not redirect custom IPC to an ungranted file.
+fn authorized_source<R: tauri::Runtime>(
+    app: &AppHandle<R>,
+    path: &std::path::Path,
+) -> Result<PathBuf, String> {
+    use tauri_plugin_fs::FsExt;
+    let path = match path.canonicalize() {
+        Ok(p) => p,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+            let name = path.file_name().ok_or("source needs a filename")?;
+            path.parent()
+                .ok_or("source needs a parent")?
+                .canonicalize()
+                .map_err(|e| e.to_string())?
+                .join(name)
+        }
+        Err(e) => return Err(e.to_string()),
+    };
+    if !app.fs_scope().is_allowed(&path) {
+        return Err(
+            "Source is outside dialog-granted filesystem scope. Select it with Open first.".into(),
+        );
+    }
+    Ok(path)
+}
+
+/// Trusted native launch only. Not registered as a renderer command.
+pub(crate) fn grant_os_open<R: tauri::Runtime>(
+    app: &AppHandle<R>,
+    path: &std::path::Path,
+) -> Result<(), String> {
+    use tauri_plugin_fs::FsExt;
+    let target = path.canonicalize().map_err(|e| e.to_string())?;
+    if !target.is_file() {
+        return Err("OS-open source is not a file".into());
+    }
+    app.fs_scope().allow_file(target).map_err(|e| e.to_string())
+}
+
+/// Browser File fallback carries bytes, never a renderer-selected temp path.
+#[tauri::command]
+pub async fn import_bytes_cmd(
+    filename: String,
+    bytes: Vec<u8>,
+    scale: Option<f64>,
+) -> Result<ImportOutput, String> {
+    let scale = scale
+        .map(ivac_core::input::checked_import_scale)
+        .transpose()
+        .map_err(serialize_error)?
+        .unwrap_or(0.0);
+    tokio::task::spawn_blocking(move || {
+        ivac_core::input::import_bytes(
+            &filename,
+            &bytes,
+            &ImportOptions {
+                scale,
+                ..ImportOptions::default()
+            },
+        )
+    })
+    .await
+    .map_err(|e| internal(e.to_string()))?
+    .map_err(serialize_error)
+}
+
 /// Import a DXF/SVG/HPGL file by path. Counterpart of the HTTP `/import`
 /// multipart endpoint; the desktop shell can hand a real OS path so we
 /// avoid an upload round-trip.
 #[tauri::command]
-pub async fn import_path(path: String, scale: Option<f64>) -> Result<ImportOutput, String> {
-    let path = PathBuf::from(path);
+pub async fn import_path(
+    app: AppHandle,
+    path: String,
+    scale: Option<f64>,
+) -> Result<ImportOutput, String> {
+    let path = authorized_source(&app, std::path::Path::new(&path))?;
     // Explicit source-unit choice (ADR-0026), mm per source unit.
     let scale = match scale {
         Some(v) => ivac_core::input::checked_import_scale(v).map_err(serialize_error)?,
@@ -552,15 +623,35 @@ pub async fn write_workspace_file(app: AppHandle, json: String) -> Result<(), St
 /// listens for. Called on project load / when sources change.
 #[tauri::command]
 pub async fn watch_source_paths(
+    app: AppHandle,
     state: tauri::State<'_, AppState>,
     paths: Vec<String>,
-) -> Result<(), String> {
-    let paths: Vec<PathBuf> = paths.into_iter().map(PathBuf::from).collect();
+) -> Result<Vec<String>, String> {
+    if paths.len() > 128 {
+        return Err("Too many source watches (maximum 128)".into());
+    }
+    let (authorized, denied) = authorized_watches(&app, paths);
     state
         .watcher
         .lock()
         .map_err(|e| format!("watcher mutex poisoned: {e}"))?
-        .set_paths(paths)
+        .set_paths(authorized)?;
+    Ok(denied)
+}
+
+fn authorized_watches<R: tauri::Runtime>(
+    app: &AppHandle<R>,
+    paths: Vec<String>,
+) -> (Vec<PathBuf>, Vec<String>) {
+    let mut denied = Vec::new();
+    let mut authorized = Vec::new();
+    for path in paths {
+        match authorized_source(app, std::path::Path::new(&path)) {
+            Ok(p) => authorized.push(p),
+            Err(_) => denied.push(path),
+        }
+    }
+    (authorized, denied)
 }
 
 /// Drop every watch slot. Called on project close.
@@ -979,5 +1070,92 @@ mod alpha2_native_tests {
         })
         .await
         .is_err());
+    }
+}
+
+#[cfg(test)]
+mod harden_security_tests {
+    use super::*;
+    use tauri_plugin_fs::FsExt;
+    #[test]
+    fn native_sources_require_dynamic_target_grants_and_reject_retargeted_aliases() {
+        let app = tauri::test::mock_builder()
+            .plugin(tauri_plugin_fs::init())
+            .build(tauri::test::mock_context(tauri::test::noop_assets()))
+            .unwrap();
+        let dir = tempfile::tempdir().unwrap();
+        let selected = dir.path().join("selected.svg");
+        let outside = dir.path().join("outside.svg");
+        std::fs::write(&selected, "selected").unwrap();
+        std::fs::write(&outside, "private synthetic control").unwrap();
+        assert!(authorized_source(app.handle(), &selected).is_err());
+        app.fs_scope().allow_file(&selected).unwrap();
+        assert_eq!(
+            authorized_source(app.handle(), &selected).unwrap(),
+            selected.canonicalize().unwrap()
+        );
+        assert!(authorized_source(app.handle(), &outside).is_err());
+        let (watched, denied) = authorized_watches(
+            app.handle(),
+            vec![
+                selected.to_string_lossy().into_owned(),
+                outside.to_string_lossy().into_owned(),
+            ],
+        );
+        assert_eq!(watched, vec![selected.canonicalize().unwrap()]);
+        assert_eq!(denied.len(), 1);
+        let launched = dir.path().join("os-open.svg");
+        std::fs::write(&launched, "synthetic").unwrap();
+        grant_os_open(app.handle(), &launched).unwrap();
+        assert!(authorized_source(app.handle(), &launched).is_ok());
+
+        // Existing custom export permission remains dynamic and independent of ACL.
+        assert!(app
+            .fs_scope()
+            .is_allowed(ivac_file_export::destination(&selected).unwrap()));
+        assert!(!app
+            .fs_scope()
+            .is_allowed(ivac_file_export::destination(&outside).unwrap()));
+        #[cfg(unix)]
+        {
+            let link = dir.path().join("alias.svg");
+            std::os::unix::fs::symlink(&selected, &link).unwrap();
+            assert!(authorized_source(app.handle(), &link).is_ok());
+            std::fs::remove_file(&link).unwrap();
+            std::os::unix::fs::symlink(&outside, &link).unwrap();
+            assert!(authorized_source(app.handle(), &link).is_err());
+            assert!(ivac_file_export::destination(&link).is_err());
+        }
+        assert_eq!(
+            std::fs::read_to_string(outside).unwrap(),
+            "private synthetic control"
+        );
+    }
+    #[test]
+    fn native_static_acl_has_no_ambient_file_scope_and_csp_is_explicit() {
+        let acl: serde_json::Value =
+            serde_json::from_str(include_str!("../capabilities/default.json")).unwrap();
+        let text = serde_json::to_string(&acl).unwrap();
+        for forbidden in [
+            "$HOME",
+            "$TEMP",
+            "$DOCUMENT",
+            "$DESKTOP",
+            "$DOWNLOAD",
+            "fs:default",
+        ] {
+            assert!(!text.contains(forbidden));
+        }
+        assert!(acl["permissions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(serde_json::Value::is_string));
+        let config: serde_json::Value =
+            serde_json::from_str(include_str!("../tauri.conf.json")).unwrap();
+        let csp = config["app"]["security"]["csp"].as_str().unwrap();
+        assert!(csp.contains("'wasm-unsafe-eval'"));
+        assert!(!csp.contains("'unsafe-eval'"));
+        assert!(csp.contains("object-src 'none'"));
     }
 }

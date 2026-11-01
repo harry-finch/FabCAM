@@ -56,8 +56,16 @@ pub fn import_svg_bytes(
     // resolver, so a bare-`viewBox` SVG with no real-world size still maps
     // user units → mm at 1:1 — preserving the DXF-style convention the
     // unitless-viewBox path (and the tests below) rely on.
+    let admitted = super::limits::svg(bytes)?;
+    let bytes = admitted.as_slice();
     let usvg_opts = usvg::Options {
         dpi: 25.4,
+        // Images are not CAM geometry. Never load external files or decompress
+        // embedded rasters merely to discard them during path extraction.
+        image_href_resolver: usvg::ImageHrefResolver {
+            resolve_data: Box::new(|_, _, _| None),
+            resolve_string: Box::new(|_, _| None),
+        },
         ..usvg::Options::default()
     };
     let tree = Tree::from_data(bytes, &usvg_opts).map_err(|e| {
@@ -173,6 +181,13 @@ struct SvgCtx {
 
 fn walk(group: &usvg::Group, ctx: &mut SvgCtx) {
     for child in group.children() {
+        if ctx.tolerance_failed {
+            return;
+        }
+        if ctx.segments.len() >= super::limits::MAX_PRIMITIVES {
+            ctx.tolerance_failed = true;
+            return;
+        }
         match child {
             Node::Group(g) => walk(g, ctx),
             Node::Path(p) => emit_path(p, ctx),
@@ -201,6 +216,9 @@ fn emit_path(path: &usvg::Path, ctx: &mut SvgCtx) {
     let mut subpath_start: Option<Point2> = None;
 
     for seg in path.data().segments() {
+        if ctx.tolerance_failed {
+            return;
+        }
         match seg {
             PathSegment::MoveTo(p) => {
                 let pt = map(p.x, p.y);
@@ -244,6 +262,10 @@ fn emit_path(path: &usvg::Path, ctx: &mut SvgCtx) {
 }
 
 fn push_line(ctx: &mut SvgCtx, from: Point2, to: Point2) {
+    if ctx.segments.len() >= super::limits::MAX_PRIMITIVES {
+        ctx.tolerance_failed = true;
+        return;
+    }
     if ![from.x, from.y, to.x, to.y].iter().all(|v| v.is_finite()) {
         ctx.tolerance_failed = true;
         return;

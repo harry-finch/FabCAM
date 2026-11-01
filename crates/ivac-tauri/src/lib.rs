@@ -196,6 +196,8 @@ fn run_app() -> tauri::Result<()> {
             if let Some(arg) = std::env::args().nth(1) {
                 let p = std::path::PathBuf::from(&arg);
                 if p.is_file() {
+                    // argv is delivered by the OS/user launch, never a renderer IPC grant.
+                    commands::grant_os_open(app.handle(), &p)?;
                     if let Some(window) = app.get_webview_window("main") {
                         let path_str = arg.clone();
                         // Wait for the frontend to settle before emitting.
@@ -214,6 +216,7 @@ fn run_app() -> tauri::Result<()> {
             commands::publish_program_file,
             commands::version,
             commands::import_path,
+            commands::import_bytes_cmd,
             commands::generate,
             commands::generate_two_sided,
             commands::generate_streaming_cmd,

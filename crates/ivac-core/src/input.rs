@@ -16,6 +16,7 @@ use std::path::Path;
 pub mod dxf_in;
 pub mod hatch;
 pub mod intern;
+pub mod limits;
 pub mod nurbs;
 pub mod svg_font;
 pub mod svg_in;
@@ -185,7 +186,7 @@ pub fn import_path(path: &Path, opts: &ImportOptions) -> Result<ImportOutput> {
     match suffix.as_str() {
         "dxf" => dxf_in::import_dxf_path(path, opts),
         "svg" => {
-            let bytes = std::fs::read(path)?;
+            let bytes = limits::read(path)?;
             let filename = path
                 .file_name()
                 .and_then(|s| s.to_str())

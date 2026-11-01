@@ -109,18 +109,46 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
     req: PipelineRequest,
     progress: F,
 ) -> Result<TwoSidedResponse, PipelineError> {
+    run_pipeline_two_sided_impl(req, progress, None)
+}
+/// Cancellation-aware wrapper; validation and side publication policy are identical.
+pub fn run_pipeline_two_sided_cancellable<F: Fn(&str, f64, &str)>(
+    req: PipelineRequest,
+    progress: F,
+    cancel: &super::CancelToken,
+) -> Result<TwoSidedResponse, PipelineError> {
+    run_pipeline_two_sided_impl(req, progress, Some(cancel))
+}
+fn run_side<F: Fn(&str, f64, &str)>(
+    req: PipelineRequest,
+    progress: F,
+    cancel: Option<&super::CancelToken>,
+) -> Result<super::PipelineResponse, PipelineError> {
+    match cancel {
+        Some(c) => super::run_pipeline_cancellable(req, progress, c),
+        None => run_pipeline(req, progress),
+    }
+}
+fn run_pipeline_two_sided_impl<F: Fn(&str, f64, &str)>(
+    req: PipelineRequest,
+    progress: F,
+    cancel: Option<&super::CancelToken>,
+) -> Result<TwoSidedResponse, PipelineError> {
+    if super::cancelled(cancel) {
+        return Err(PipelineError::Cancelled);
+    }
     let post_kind = req.post_processor.unwrap_or_default();
 
     // HPGL or non-two-sided → the ordinary single program, unchanged.
     let Some((stock, axis)) = two_sided_registration(&req.project) else {
         return Ok(TwoSidedResponse {
-            front: run_pipeline(req, &progress)?,
+            front: run_side(req, &progress, cancel)?,
             back: None,
         });
     };
     if post_kind == PostProcessorKind::Hpgl {
         return Ok(TwoSidedResponse {
-            front: run_pipeline(req, &progress)?,
+            front: run_side(req, &progress, cancel)?,
             back: None,
         });
     }
@@ -183,13 +211,14 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
             inject_dowel_op(&mut front_project, &stock, &dowel_centres, d)?;
         }
     }
-    let mut front = run_pipeline(
+    let mut front = run_side(
         PipelineRequest {
             project: front_project,
             post_processor: Some(post_kind),
             cps_post: req.cps_post.clone(),
         },
         &progress,
+        cancel,
     )?;
     // Attach the whole-project overlap warnings to the front program (the one
     // the operator reads first).
@@ -202,13 +231,14 @@ pub fn run_pipeline_two_sided<F: Fn(&str, f64, &str)>(
         .operations
         .retain(|o| o.side == WorkpieceSide::Back);
     flip_segments_xy(&mut back_project.segments, axis, &stock);
-    let mut back = run_pipeline(
+    let mut back = run_side(
         PipelineRequest {
             project: back_project,
             post_processor: Some(post_kind),
             cps_post: req.cps_post.clone(),
         },
         &progress,
+        cancel,
     )
     .map_err(|error| match error {
         PipelineError::FixtureCollision(mut preview) => {
