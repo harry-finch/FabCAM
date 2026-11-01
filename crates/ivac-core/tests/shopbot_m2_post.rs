@@ -659,13 +659,22 @@ fn ux1_unqualified_entry_and_origin_combinations_fail_explicitly() {
         assert!(
             err.contains(if scenario == "wcs-z" {
                 "work origin"
+            } else if scenario == "helix" || scenario == "unfittable" {
+                "cannot be proven clear"
             } else {
                 "ShopBot MVP"
             }),
             "{scenario}: {err}"
         );
         if scenario != "G55" && scenario != "wcs-z" {
-            assert!(err.contains("operation 1"), "{scenario}: {err}");
+            assert!(
+                err.contains(if scenario == "helix" || scenario == "unfittable" {
+                    "operation #1"
+                } else {
+                    "operation 1"
+                }),
+                "{scenario}: {err}"
+            );
         }
         assert_eq!(serde_json::to_value(&p).unwrap(), before);
     }
@@ -887,7 +896,7 @@ fn ux1_final_preview_matches_emitted_xyz_lines_for_profile_and_pocket() {
 }
 
 #[test]
-fn ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct() {
+fn ux1_generic_and_shopbot_helix_refuse_without_clearance_proof() {
     use ivac_core::project::{CutDirection, PlungeStrategy};
     for kind in [
         profile(),
@@ -897,82 +906,33 @@ fn ux1_generic_helix_geometry_direction_depth_and_shopbot_refusal_are_distinct()
             pocket: PocketParams::default(),
         },
     ] {
-        let mut winding = Vec::new();
         for direction in [CutDirection::Climb, CutDirection::Conventional] {
-            let mut p = ux1_fixture("square_100", kind.clone());
-            p.segments = common::closed_rectangle(10., 10., 40., 40.);
-            p.operations[0].contour_params_mut().unwrap().cut_direction = direction;
-            p.operations[0]
-                .contour_params_mut()
-                .unwrap()
-                .finish_cut_direction = direction;
-            p.operations[0].params.plunge = PlungeStrategy::Helix {
-                angle_deg: 3.,
-                radius_mm: Some(5.),
-            };
-            let bytes = serde_json::to_vec(&p).unwrap();
-            let reloaded: Project = serde_json::from_slice(&bytes).unwrap();
-            assert!(matches!(
-                reloaded.operations[0].params.plunge,
-                PlungeStrategy::Helix {
-                    radius_mm: Some(5.),
-                    ..
-                }
-            ));
-            let generic = run_pipeline(
-                crate::fixture_support::request(PipelineRequest {
-                    project: reloaded.clone(),
-                    post_processor: Some(PostProcessorKind::Linuxcnc),
-                    cps_post: None,
-                }),
-                |_, _, _| {},
-            )
-            .unwrap();
-            let descent: Vec<_> = generic
-                .toolpath
-                .iter()
-                .filter(|s| s.arc.is_some() && s.to.z < s.from.z)
-                .collect();
-            assert!(
-                !descent.is_empty(),
-                "valid local helix geometry must remain machine-independent"
-            );
-            assert!(descent.iter().all(|s| s.to.z >= -5.0001));
-            assert!(descent.iter().any(|s| (s.to.z + 2.).abs() < 0.0001));
-            winding.push(descent[0].arc.unwrap().ccw);
-            let error = post(reloaded).unwrap_err().to_string();
-            assert!(
-                error.contains("not qualified") || error.contains("not geometrically realized"),
-                "{error}"
-            );
-            assert_eq!(serde_json::to_vec(&p).unwrap(), bytes);
+            for radius in [None, Some(5.), Some(500.)] {
+                let mut p = ux1_fixture("square_100", kind.clone());
+                p.segments = common::closed_rectangle(10., 10., 40., 40.);
+                p.operations[0].contour_params_mut().unwrap().cut_direction = direction;
+                p.operations[0].params.plunge = PlungeStrategy::Helix {
+                    angle_deg: 3.,
+                    radius_mm: radius,
+                };
+                let before = serde_json::to_vec(&p).unwrap();
+                let err = run_pipeline(
+                    crate::fixture_support::request(PipelineRequest {
+                        project: p.clone(),
+                        post_processor: Some(PostProcessorKind::Linuxcnc),
+                        cps_post: None,
+                    }),
+                    |_, _, _| {},
+                )
+                .unwrap_err();
+                assert!(matches!(
+                    err,
+                    ivac_core::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+                ));
+                assert!(post(p.clone()).is_err());
+                assert_eq!(serde_json::to_vec(&p).unwrap(), before);
+            }
         }
-        assert_ne!(
-            winding[0], winding[1],
-            "helix follows requested contour winding"
-        );
-        // The requested large radius cannot fit; do not disguise this as post syntax.
-        let mut too_large = ux1_fixture("square_100", kind);
-        too_large.segments = common::closed_rectangle(10., 10., 40., 40.);
-        too_large.operations[0].params.plunge = PlungeStrategy::Helix {
-            angle_deg: 3.,
-            radius_mm: Some(500.),
-        };
-        let generic = run_pipeline(
-            crate::fixture_support::request(PipelineRequest {
-                project: too_large.clone(),
-                post_processor: Some(PostProcessorKind::Linuxcnc),
-                cps_post: None,
-            }),
-            |_, _, _| {},
-        )
-        .unwrap();
-        assert!(generic.gcode.contains("ENTRY: requested Helix; resolved"));
-        let err = post(too_large).unwrap_err().to_string();
-        assert!(
-            err.contains("not geometrically realized") && err.contains("refuses this fallback"),
-            "{err}"
-        );
     }
 }
 
@@ -988,7 +948,7 @@ fn ux1_pocket_islands_and_open_profile_helix_never_gain_silent_machine_fallback(
         let before = serde_json::to_value(&p).unwrap();
         let error = post(p.clone()).unwrap_err().to_string();
         assert!(
-            error.contains("operation 1") && error.contains("Operation parameters were kept"),
+            error.contains("operation #1") && error.contains("cannot be proven clear"),
             "{error}"
         );
         assert_eq!(serde_json::to_value(&p).unwrap(), before);
@@ -1006,10 +966,7 @@ fn ux1_pocket_islands_and_open_profile_helix_never_gain_silent_machine_fallback(
         radius_mm: Some(5.),
     };
     let error = post(p).unwrap_err().to_string();
-    assert!(
-        error.contains("not geometrically realized") && error.contains("refuses this fallback"),
-        "{error}"
-    );
+    assert!(error.contains("cannot be proven clear"), "{error}");
 }
 
 #[test]

@@ -1246,7 +1246,7 @@ mod tests {
 
     /// Helix entry: arcs with monotonically descending Z.
     #[test]
-    fn helix_plunge_emits_arc_arcs_descending_z() {
+    fn helix_plunge_emits_arc_arcs_descending_z_refused_before_unqualified_fallback() {
         let mut params = OpParams::mill_default();
         params.depth = -1.0;
         params.step = Some(-1.0);
@@ -1285,7 +1285,7 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let resp = run_pipeline(
+        let error = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
@@ -1293,44 +1293,17 @@ mod tests {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        let path: Vec<_> = resp.toolpath.iter().filter(|s| s.op_id == 1).collect();
-        assert!(!path.is_empty(), "expected toolpath segments");
-        let mut arc_count = 0;
-        let mut last_z = f64::INFINITY;
-        let mut reached_depth = false;
-        for s in &path {
-            if matches!(
-                s.kind,
-                crate::gcode::preview::MoveKind::Rapid | crate::gcode::preview::MoveKind::Plunge
-            ) {
-                continue;
-            }
-            if matches!(s.kind, crate::gcode::preview::MoveKind::Arc) {
-                arc_count += 1;
-                assert!(
-                    s.to.z <= last_z + 1e-6,
-                    "helix Z should descend monotonically, but {} → {}",
-                    last_z,
-                    s.to.z,
-                );
-                last_z = s.to.z;
-            }
-            if s.to.z <= -0.999 {
-                reached_depth = true;
-                break;
-            }
-        }
-        assert!(reached_depth, "Z never reached cut depth via helix");
-        assert!(
-            arc_count >= 2,
-            "helix should emit ≥2 arc moves before reaching depth; got {arc_count}",
-        );
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+        ));
     }
 
     /// Helix radius < `tool_radius` → falls back to Ramp.
     #[test]
-    fn helix_falls_back_to_ramp_when_radius_smaller_than_tool() {
+    fn helix_falls_back_to_ramp_when_radius_smaller_than_tool_refused_before_unqualified_fallback()
+    {
         let mut params = OpParams::mill_default();
         params.depth = -1.0;
         params.step = Some(-1.0);
@@ -1369,7 +1342,7 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let resp = run_pipeline(
+        let error = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
@@ -1377,39 +1350,17 @@ mod tests {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        let first_cutting = resp
-            .toolpath
-            .iter()
-            .find(|s| {
-                s.op_id == 1
-                    && matches!(
-                        s.kind,
-                        crate::gcode::preview::MoveKind::Cut | crate::gcode::preview::MoveKind::Arc
-                    )
-            })
-            .expect("expected at least one cut/arc move");
-        assert!(
-            first_cutting.from.z > -0.001,
-            "ramp fallback should start at Z≈0, got {}",
-            first_cutting.from.z,
-        );
-        let helix_arc_present = resp.toolpath.iter().any(|s| {
-            s.op_id == 1
-                && matches!(s.kind, crate::gcode::preview::MoveKind::Arc)
-                && s.from.z > -0.001
-                && (s.from.x - 50.0).hypot(s.from.y - 50.0) < 5.0
-        });
-        assert!(
-            !helix_arc_present,
-            "fallback should not emit a helix-entry arc near the polygon centroid",
-        );
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+        ));
     }
 
     /// Auto-fit helix on a pocket too small for the tool: emits
     /// `helix_radius_unfittable` and falls through to Ramp.
     #[test]
-    fn auto_helix_falls_back_when_pocket_too_small() {
+    fn auto_helix_falls_back_when_pocket_too_small_refused_before_unqualified_fallback() {
         let mut params = OpParams::mill_default();
         params.depth = -1.0;
         params.step = Some(-1.0);
@@ -1448,7 +1399,7 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let resp = run_pipeline(
+        let error = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
@@ -1456,32 +1407,17 @@ mod tests {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        let warned = resp
-            .warnings
-            .iter()
-            .any(|w| w.kind == "helix_radius_unfittable" && w.op_id == Some(1));
-        assert!(
-            warned,
-            "expected helix_radius_unfittable warning; got: {:?}",
-            resp.warnings,
-        );
-        let helix_arc_present = resp.toolpath.iter().any(|s| {
-            s.op_id == 1
-                && matches!(s.kind, crate::gcode::preview::MoveKind::Arc)
-                && s.from.z > -0.001
-                && (s.from.x - 4.0).hypot(s.from.y - 4.0) < 3.0
-        });
-        assert!(
-            !helix_arc_present,
-            "auto-fit should not emit a helix arc when pocket is too small",
-        );
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+        ));
     }
 
     /// Auto-fit helix on a roomy pocket: picks a radius and emits
     /// descending helix arcs.
     #[test]
-    fn auto_helix_emits_arcs_when_pocket_fits() {
+    fn auto_helix_emits_arcs_when_pocket_fits_refused_before_unqualified_fallback() {
         let mut params = OpParams::mill_default();
         params.depth = -1.0;
         params.step = Some(-1.0);
@@ -1520,7 +1456,7 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let resp = run_pipeline(
+        let error = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
@@ -1528,29 +1464,11 @@ mod tests {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        let arc_count = resp
-            .toolpath
-            .iter()
-            .filter(|s| {
-                s.op_id == 1
-                    && matches!(s.kind, crate::gcode::preview::MoveKind::Arc)
-                    && s.to.z <= s.from.z
-                    && s.from.z > -0.999
-            })
-            .count();
-        assert!(
-            arc_count >= 2,
-            "auto-fit roomy pocket should emit helix arcs; got {arc_count}",
-        );
-        assert!(
-            !resp
-                .warnings
-                .iter()
-                .any(|w| w.kind == "helix_radius_unfittable"),
-            "no unfit warning expected: {:?}",
-            resp.warnings,
-        );
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+        ));
     }
 
     /// Helix `radius_mm: null` round-trips through JSON and the
@@ -1593,7 +1511,7 @@ mod tests {
     /// Tabs active → helix entry suppressed; falls back to the tabs
     /// straight-plunge walker.
     #[test]
-    fn helix_with_tabs_active_falls_back() {
+    fn helix_with_tabs_active_falls_back_refused_before_unqualified_fallback() {
         let mut params = OpParams::mill_default();
         params.depth = -2.0;
         params.step = Some(-2.0);
@@ -1650,7 +1568,7 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let resp = run_pipeline(
+        let error = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
@@ -1658,21 +1576,11 @@ mod tests {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        let helix_arc_present = resp.toolpath.iter().any(|s| {
-            s.op_id == 1
-                && matches!(s.kind, crate::gcode::preview::MoveKind::Arc)
-                && (s.from.x - 50.0).hypot(s.from.y - 50.0) < 10.0
-        });
-        assert!(
-            !helix_arc_present,
-            "tabs-active path should not emit a helical entry arc near the polygon centroid",
-        );
-        assert!(
-            resp.gcode.contains("Z-1"),
-            "expected tab Z-lift in gcode: {}",
-            resp.gcode,
-        );
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+        ));
     }
 
     /// Direct plunge (default): first cut starts at cut depth.
@@ -4289,7 +4197,7 @@ mod tests {
     /// up a small loop, but it shouldn't blow up the path length by
     /// more than 50%.
     #[test]
-    fn trochoidal_pocket_path_length_within_envelope_of_spiral() {
+    fn spiral_and_trochoidal_helix_refused_without_region_proof() {
         let p0 = Point2::new(0.0, 0.0);
         let p1 = Point2::new(100.0, 0.0);
         let p2 = Point2::new(100.0, 60.0);
@@ -4336,61 +4244,33 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let cut_total = |toolpath: &[preview::ToolpathSegment]| -> f64 {
-            toolpath
-                .iter()
-                .filter(|s| matches!(s.kind, crate::gcode::preview::MoveKind::Cut))
-                .map(|s| {
-                    let dx = s.to.x - s.from.x;
-                    let dy = s.to.y - s.from.y;
-                    (dx * dx + dy * dy).sqrt()
-                })
-                .sum()
-        };
-        let spiral = run_pipeline(
-            crate::fixture_support::request(PipelineRequest {
-                project: mk(PocketStrategy::Spiral),
-                post_processor: None,
-                cps_post: None,
-            }),
-            |_, _, _| {},
-        )
-        .unwrap();
-        let trochoidal = run_pipeline(
-            crate::fixture_support::request(PipelineRequest {
-                project: mk(PocketStrategy::Trochoidal {
-                    engagement_angle_deg: 30.0,
-                    loop_radius_factor: 0.6,
+        for strategy in [
+            PocketStrategy::Spiral,
+            PocketStrategy::Trochoidal {
+                engagement_angle_deg: 30.0,
+                loop_radius_factor: 0.6,
+            },
+        ] {
+            let error = run_pipeline(
+                crate::fixture_support::request(PipelineRequest {
+                    project: mk(strategy),
+                    post_processor: None,
+                    cps_post: None,
                 }),
-                post_processor: None,
-                cps_post: None,
-            }),
-            |_, _, _| {},
-        )
-        .unwrap();
-        let s_len = cut_total(&spiral.toolpath);
-        let t_len = cut_total(&trochoidal.toolpath);
-        assert!(s_len > 0.0, "spiral baseline empty");
-        assert!(t_len > 0.0, "trochoidal toolpath empty");
-        // Trochoidal IS longer than spiral by design (loops add
-        // distance), so we expect t_len > s_len. Cap it at 5× to
-        // catch obvious blow-ups; the brief's 1.5× bound applies to
-        // the centerline-only portion which is hard to extract from
-        // the toolpath stream — keep the integration check loose.
-        assert!(
-            t_len > s_len * 0.5,
-            "trochoidal path {t_len} too short vs spiral {s_len}"
-        );
-        assert!(
-            t_len < s_len * 5.0,
-            "trochoidal path {t_len} blew up vs spiral {s_len}"
-        );
+                |_, _, _| {},
+            )
+            .unwrap_err();
+            assert!(matches!(
+                error,
+                crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+            ));
+        }
     }
 
     /// Pipeline emits a `tabs_with_trochoidal_unsupported` warning
     /// when an op asks for both at once.
     #[test]
-    fn trochoidal_with_tabs_emits_unsupported_warning() {
+    fn trochoidal_with_tabs_emits_unsupported_warning_refused_before_unqualified_fallback() {
         let segments = closed_square_offset(50.0, 0.0, 0.0);
         let mut params = OpParams::mill_default();
         params.plunge = crate::project::PlungeStrategy::Helix {
@@ -4437,7 +4317,7 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let resp = run_pipeline(
+        let error = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
@@ -4445,20 +4325,18 @@ mod tests {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "tabs_with_trochoidal_unsupported" && w.op_id == Some(7)),
-            "expected tabs_with_trochoidal_unsupported, got {:?}",
-            resp.warnings
-        );
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+        ));
     }
 
     /// Pipeline overrides Direct/Ramp plunges to Helix on Trochoidal
     /// pockets and emits `plunge_overridden`.
     #[test]
-    fn trochoidal_with_direct_plunge_emits_plunge_overridden_warning() {
+    fn trochoidal_with_direct_plunge_emits_plunge_overridden_warning_refused_before_unqualified_fallback(
+    ) {
         let segments = closed_square_offset(50.0, 0.0, 0.0);
         let project = Project {
             cutting_version: None,
@@ -4496,7 +4374,7 @@ mod tests {
             group_ops_by_tool: false,
             material: None,
         };
-        let resp = run_pipeline(
+        let error = run_pipeline(
             crate::fixture_support::request(PipelineRequest {
                 project,
                 post_processor: None,
@@ -4504,14 +4382,11 @@ mod tests {
             }),
             |_, _, _| {},
         )
-        .unwrap();
-        assert!(
-            resp.warnings
-                .iter()
-                .any(|w| w.kind == "plunge_overridden" && w.op_id == Some(9)),
-            "expected plunge_overridden warning, got {:?}",
-            resp.warnings
-        );
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            crate::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+        ));
     }
 
     #[test]

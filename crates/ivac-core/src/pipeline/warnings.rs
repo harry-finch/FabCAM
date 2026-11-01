@@ -2502,6 +2502,8 @@ mod tests {
             top_z_mm: 0.,
             flip: None,
         });
+        p.cutting_version = None;
+        p = crate::fixture_support::project(p);
         let mut objects = crate::cam::chaining::segments_to_objects(&p.segments);
         crate::cam::chaining::classify_containment(&mut objects);
         let mut ws = Vec::new();
@@ -2514,15 +2516,22 @@ mod tests {
                 height_mm: 40.,
                 margin_mm: 0.,
                 overtravel_mm: 0.,
-                stepover_mm: 0.1,
+                stepover_mm: 0.05,
                 direction: crate::cam::surface_mill::ScanDirection::AlongX,
             },
         };
-        p.operations[0].params.start_depth = -5.;
+        p.operations[0].params.start_depth = 0.;
         p.operations[0].params.depth = -10.;
-        assert!(matches!(
-            two_sided_guard(&p, &objects, &mut Vec::new()),
-            Err(PipelineError::TwoSidedThrough { op_id: 1, .. })
-        ));
+        p.cutting_version = None;
+        p = crate::fixture_support::project(p);
+        let result = two_sided_guard(&p, &objects, &mut Vec::new());
+        assert!(
+            matches!(
+                result,
+                Err(PipelineError::TwoSidedThrough { op_id: 1, .. }
+                    | PipelineError::PlanarSurface(1, _))
+            ),
+            "{result:?}"
+        );
     }
 }

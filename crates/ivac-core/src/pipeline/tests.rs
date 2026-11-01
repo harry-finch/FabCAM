@@ -7843,7 +7843,7 @@ mod two_sided_guard {
     /// A tabbed front through-cut keeps the part bridged across the flip, so
     /// it is allowed (no refuse) even though it reaches the far face.
     #[test]
-    fn tabbed_front_through_cut_is_allowed() {
+    fn unproven_pocket_tabs_do_not_bypass_front_through_cut_guard() {
         let mut through = pocket_depth(1, WorkpieceSide::Front, -12.0);
         if let OpKind::Pocket { contour, .. } = &mut through.kind {
             contour.tab_mode = crate::project::TabPlacementMode::Auto { count: 4 };
@@ -7854,8 +7854,8 @@ mod two_sided_guard {
         );
         project.stock = Some(stock_10mm());
         assert!(
-            run(project).is_ok(),
-            "a tabbed front through-cut holds the part — must not refuse"
+            matches!(run(project), Err(PipelineError::TwoSidedThrough { .. })),
+            "authored Pocket tab mode is not effective holding proof"
         );
     }
 }

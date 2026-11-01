@@ -292,29 +292,19 @@ fn snapshot_profile_rectangle_tabs_and_helix_entry() {
         group_ops_by_tool: false,
         material: None,
     };
-    let actual = run_to_gcode(project);
-    assert!(actual.contains("; OP 1"), "missing op marker:\n{actual}");
-    // Helix entry → at least one G2/G3 arc on the plunge before the
-    // first straight cut.
-    assert!(
-        actual
-            .lines()
-            .any(|l| l.starts_with("G2 ") || l.starts_with("G3 ")),
-        "missing helix entry arc:\n{actual}",
-    );
-    // Rectangle tab → cutter lifts to tab Z then drops back.
-    // The op's tab_z = depth + height = -2 + 1 = -1, which renders
-    // as "Z-1" in the gcode.
-    assert!(
-        actual.lines().filter(|l| l.contains("Z-1")).count() >= 1,
-        "expected tab lift to Z-1:\n{actual}",
-    );
-    let digest = seahash_hex(&fixture_support::historical_profile_comments(&actual));
-    assert_snapshot(
-        "profile_rectangle_tabs_helix",
-        &digest,
-        EXPECTED_PROFILE_RECTANGLE_TABS_HELIX_DIGEST,
-    );
+    let error = ivac_core::pipeline::run_pipeline(
+        fixture_support::request(PipelineRequest {
+            project,
+            post_processor: None,
+            cps_post: None,
+        }),
+        |_, _, _| {},
+    )
+    .unwrap_err();
+    assert!(matches!(
+        error,
+        ivac_core::pipeline::PipelineError::MotionGuard(_, "helical_entry", _)
+    ));
 }
 
 /// Profile with Ramp tabs.
@@ -468,6 +458,8 @@ fn snapshot_whirl_walks_closed_contour() {
 
 const EXPECTED_DRILL_STUFENFASE_TOOLCHANGE_DIGEST: &str = "b296d632f465ec0e";
 // CAM3: configured width now controls the footprint instead of tool diameter.
+// Historical unsafe-output digest retained; SAFETY-FIX-1 now asserts refusal.
+#[allow(dead_code)]
 const EXPECTED_PROFILE_RECTANGLE_TABS_HELIX_DIGEST: &str = "bd8da588978d347f";
 const EXPECTED_PROFILE_RAMP_TABS_DIGEST: &str = "6c86059cda6991b5";
 const EXPECTED_WIRBELN_CLOSED_CONTOUR_DIGEST: &str = "4558fbc3397c27eb";

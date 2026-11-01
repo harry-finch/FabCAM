@@ -1,0 +1,201 @@
+{
+  "post_processor": "linuxcnc",
+  "project": {
+    "cutting_version": 10,
+    "machine": {
+      "arcs": true,
+      "comments": true,
+      "mode": "mill",
+      "tool_change": "manual_m0_pause",
+      "unit": "mm"
+    },
+    "operations": [
+      {
+        "enabled": true,
+        "id": 1,
+        "kind": {
+          "contour": {
+            "leads": {
+              "in": "off",
+              "in_lenght": 5.0,
+              "out": "off",
+              "out_lenght": 5.0
+            },
+            "tab_mode": {
+              "kind": "manual"
+            },
+            "tab_placements": [],
+            "tabs": {
+              "active": true,
+              "height": 1.0,
+              "tab_type": "rectangle",
+              "width": 10.0
+            }
+          },
+          "offset": "on",
+          "type": "profile"
+        },
+        "name": "TEST1 SOFTWARE ONLY",
+        "params": {
+          "depth": -2.0,
+          "fast_move_z": 5.0,
+          "objectorder": "nearest",
+          "stages": {
+            "contract": "main_finishing_v1",
+            "finishing": null,
+            "main": {
+              "depth_per_pass_mm": 1.0,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "rpm": 18000,
+              "tool_id": 1
+            }
+          },
+          "start_depth": 0.0
+        },
+        "source": {
+          "kind": "all"
+        },
+        "tool_id": 1
+      },
+      {
+        "enabled": true,
+        "id": 2,
+        "kind": {
+          "contour": {
+            "leads": {
+              "in": "off",
+              "in_lenght": 5.0,
+              "out": "off",
+              "out_lenght": 5.0
+            },
+            "tabs": {
+              "active": false,
+              "height": 1.0,
+              "tab_type": "rectangle",
+              "width": 10.0
+            }
+          },
+          "offset": "on",
+          "type": "profile"
+        },
+        "name": "TEST1 SOFTWARE ONLY",
+        "params": {
+          "depth": -0.5,
+          "fast_move_z": 5.0,
+          "objectorder": "nearest",
+          "stages": {
+            "contract": "main_finishing_v1",
+            "finishing": null,
+            "main": {
+              "depth_per_pass_mm": 0.25,
+              "feed_mm_min": 1200,
+              "plunge_mm_min": 200,
+              "rpm": 18000,
+              "tool_id": 1
+            }
+          },
+          "start_depth": 0.0
+        },
+        "side": "back",
+        "source": {
+          "kind": "all"
+        },
+        "tool_id": 1
+      }
+    ],
+    "segments": [
+      {
+        "color": 7,
+        "end": {
+          "x": 36,
+          "y": 12
+        },
+        "layer": "0",
+        "start": {
+          "x": 10,
+          "y": 10
+        },
+        "type": "LINE"
+      },
+      {
+        "color": 7,
+        "end": {
+          "x": 44,
+          "y": 27
+        },
+        "layer": "0",
+        "start": {
+          "x": 36,
+          "y": 12
+        },
+        "type": "LINE"
+      },
+      {
+        "color": 7,
+        "end": {
+          "x": 27,
+          "y": 43
+        },
+        "layer": "0",
+        "start": {
+          "x": 44,
+          "y": 27
+        },
+        "type": "LINE"
+      },
+      {
+        "color": 7,
+        "end": {
+          "x": 12,
+          "y": 32
+        },
+        "layer": "0",
+        "start": {
+          "x": 27,
+          "y": 43
+        },
+        "type": "LINE"
+      },
+      {
+        "color": 7,
+        "end": {
+          "x": 10,
+          "y": 10
+        },
+        "layer": "0",
+        "start": {
+          "x": 12,
+          "y": 32
+        },
+        "type": "LINE"
+      }
+    ],
+    "stock": {
+      "flip": {
+        "axis": "y"
+      },
+      "height_mm": 100.0,
+      "origin": [
+        0.0,
+        0.0
+      ],
+      "thickness_mm": 2.0,
+      "width_mm": 100.0
+    },
+    "tools": [
+      {
+        "coolant": "off",
+        "diameter": 2.0,
+        "feed_rate": 1200,
+        "flutes": 2,
+        "id": 1,
+        "kind": "endmill",
+        "name": "2mm endmill",
+        "plunge_rate": 200,
+        "speed": 18000,
+        "tip_angle_deg": 60.0
+      }
+    ]
+  }
+}
