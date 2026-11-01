@@ -1,5 +1,10 @@
 # Build your own Feeds & Speeds data source
 
+> Historical integrated Feeds & Speeds/source-pack documentation. ADR-0030 removed
+> that runtime from current FabCAM. Do not follow the old recommendation/recipe
+> instructions as current UI. Use [current tested presets](../TESTED_PRESETS.md) and
+> current STATUS; formulas, attribution and original source-bound evidence remain.
+
 This guide is for fablabs and CNC milling workshops that want to keep reusable
 cutting knowledge. You can capture local presets in FabCAM, or author an external
 JSON source pack. These are different workflows with different editing tools.
@@ -234,9 +239,9 @@ examples; schema 2 adds the reserved lab authoring/history workflow; schema 3 ad
 optional bounded adaptation declarations. The three version fields above belong to
 different models: do not change them all to 3. Unknown fields and dangling or
 duplicate identities are rejected. Author against the real
-[Rust pack types/loader](../../crates/ivac-feeds-speeds/src/source_pack.rs),
-[dataset contract](../../crates/ivac-feeds-speeds/src/dataset.rs) and
-[profile model](../../crates/ivac-feeds-speeds/src/model.rs), not an invented format.
+former `crates/ivac-feeds-speeds/src/source_pack.rs`, `dataset.rs` and `model.rs`.
+Those sources were removed by ADR-0030; these are historical paths, not available
+current source files or a supported format to author for current FabCAM.
 
 For a generic imported reference use `distribution:"local_only"`. Public
 redistribution rights, private visibility and installation-local storage are
@@ -416,10 +421,11 @@ limit. See [storage/capture contract](../shopbot-modernization/feeds-speeds/PRES
 
 ## Planned library and adaptation workflows
 
-The [V1.1 release plan](../releases/RELEASE_ROADMAP.md#fabcam-11--presets-and-materials-ux)
-adds PRESET-1 cross-source browsing, PRESET-2 explicit Duplicate & Adapt into a new
-Draft, and MAT-1 material search/taxonomy. These are **planned and unavailable**;
-existing named-pack capture/review workflows above remain the implemented contract.
+The historical V1.1 plan described PRESET-1 cross-source browsing, PRESET-2
+Duplicate & Adapt and MAT-1. That integrated-calculator plan was superseded by
+ADR-0030. The [current release plan](../releases/RELEASE_ROADMAP.md#release-lines)
+and [current presets](../TESTED_PRESETS.md) describe the implemented replacement;
+the named-pack/recipe instructions above are preserved historical material.
 Future copies must respect transformation rights, retain source/revision provenance
 and never inherit physical validation. Material aliases must preserve record IDs
 and grade distinctions; persistent taxonomy needs a separate architecture decision.

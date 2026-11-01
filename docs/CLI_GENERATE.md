@@ -1,64 +1,79 @@
-# Explicit buffered CLI generation — V1.1
+# Explicit buffered CLI generation — V10
+
+## Current request and examples
+
+Run from the repository root on the source identified by [STATUS](shopbot-modernization/STATUS.md).
+Build the native CLI with `cargo build --locked -p ivac-cli`. Set `IVAC` to the
+binary from that source and `DOC_OUT` to a disposable output directory:
 
 ```sh
-ivac generate --request reviewed-request.json > response.json
-ivac generate part.dxf --request reviewed-template.json > response.json
+IVAC=./target/debug/ivac
+DOC_OUT=$(mktemp -d)
+"$IVAC" --help
+"$IVAC" generate --request tests/fixtures/alpha32/scoped-pocket.request.json > "$DOC_OUT/pocket.response.json"
+"$IVAC" generate --request tests/fixtures/alpha3-v10/profile.request.json > "$DOC_OUT/profile.response.json"
 ```
 
-The JSON is a `PipelineRequest`: `project` with `cutting_version: 9`, geometry,
-machine, tools and operations; optional `post_processor` and `cps_post`. This is
-not a saved frontend ProjectFile envelope. Old versions and missing v9 contracts
-are refused. No migration, recommendation calculation or rate seeding occurs.
+These are existing **V10 software fixtures**, not a V9 fixture renamed or a
+physically tested recipe. The Profile fixture uses bundled CPS and needs a
+CPS-enabled native build; Pocket uses LinuxCNC and explicit scoped Finishing.
+Output is JSON, not an instruction to run any machine. Review geometry, actual
+tools, stock, work origin, fixtures and every cutting value before actual use.
 
-Each enabled milling operation supplies `params.cutting.rates` with the exact
-role/tool assignments: positive integer `rpm`, `feed_mm_min`, `plunge_mm_min`.
-Profile stores Rough and Finish and emits its contour with Finish. Pocket, Drill,
-Spot and Chamfer preserve their actual assignments through the same validator as
-the application. Missing/invalid values, duplicate/mismatched slots and known
-machine/tool limit violations fail; unknown ratings remain warnings, never invented
-limits. Other operation schedule/geometry and specialized mandatory constraints
-remain those of the neutral CAM pipeline.
+A request is a `PipelineRequest`, **not** the saved frontend ProjectFile envelope.
+It contains `project.cutting_version: 10`, geometry, tools, machine and operations,
+plus optional `post_processor`/`cps_post`. Profile/ordinary Pocket require explicit
+Main and nullable optional Finishing under `main_finishing_v1` or Pocket-only
+`pocket_finishing_v2`; other families retain their actual rate roles. See the
+[cutting contract](CUTTING_CONTRACT.md) for nested discriminators, scopes and refusals.
 
-The request alone selects post and properties. Omitted `post_processor` retains
-the shared PipelineRequest LinuxCNC default; this does not supply cutting values.
-`cps_post` with a non-CPS post is rejected. CPS requires an explicit bundled selection
-and typed JSON properties; external paths/source/exact copies never execute.
-All old geometry/post flags (including diameter/depth/step/offset/overcut) and
-unknown/duplicate flags are rejected. Modify and review the request instead.
+V9/missing/future contracts and retired `fs_context`, `applied_cutting`,
+`fs_full_width` fields refuse. No implicit migration, rate seeding or calculation.
+Some CLI parse/usage diagnostics still contain the historical text “v9”; the actual
+reader calls the current V10 validator. That diagnostic wording is a known source
+prose gap, not permission to submit V9 or a documentation-only code correction.
 
-Geometry convenience is bounded to a template containing no segments, text layers
-or relief sources and exactly one enabled Profile with `source: {"kind":"all"}`.
-Machine, assigned tool ID, source, depth, step and SAFE-Z (`fast_move_z`) must be
-written explicitly, along with valid actual-role cutting values. Object/layer
-selections and pre-existing geometry are rejected rather than remapped. Import
-supplies only segments, never an operation, tool, cutting values or machine.
-The canonical request form supports the pipeline's broader supported operations.
+## Explicit geometry template
 
-[Request fixture](../tests/fixtures/cli-v9/profile.request.json) and
-[geometry template](../tests/fixtures/cli-v9/profile.template.json) are **software-only
-examples**, not physically tested presets or recommended feeds/speeds. Review machine,
-tool, geometry, depth, fixture, stock, origin and all role values before real use.
+Convenience import supports exactly one enabled Profile with explicit source All;
+segments, text layers and relief sources must initially be empty. Machine, tool,
+source, depth, Main DOC and SAFE-Z must be spelled out. Import supplies only geometry,
+not tools, cutting values or a machine. No implicit object/layer remapping.
 
-On success stdout is one JSON `PipelineResponse`: `gcode`, `toolpath`, `stats`,
-plus authoritative provenance, warnings, gcode index, timing and supported diagnostics.
-Stats now come from the pipeline. The old always-zero `cut_distance` and
-`travel_distance` placeholders are removed; counts retain their names but describe
-pipeline planning. Preview now uses the pipeline's recorded/interpreted path instead
-of the old CLI-specific interpretation. No JSON/program is written before successful
-validation and generation. Diagnostics/tracing go to stderr. Output I/O errors can
-still interrupt writing; shell redirection itself is not transactional publication.
+The following prepares an explicit V10 template and small synthetic physical-unit
+SVG in the disposable directory, leaving tracked fixtures untouched:
 
-`stream-gcode request.json --output file` retains its existing transactional per-file
-publication, resource/refusal rules and incomplete full-program simulation qualification.
-`--two-sided` stays on stream-gcode; it requires an output base and can report partial
-publication if the second side fails. Buffered generate does not add a two-sided CLI
-mode. Automatic double-sided dowel injection remains excluded. No controller support,
-installed-native acceptance or physical qualification is added by this CLI change.
+```sh
+python3 - "$DOC_OUT" <<'PYDOC'
+import json, pathlib, sys
+out = pathlib.Path(sys.argv[1])
+r = json.loads(pathlib.Path('tests/fixtures/alpha3-v10/profile.request.json').read_text())
+r['project']['segments'] = []
+r['project']['text_layers'] = []
+r['project']['relief_sources'] = []
+r['post_processor'] = 'linuxcnc'
+r['cps_post'] = None
+(out / 'profile.template.json').write_text(json.dumps(r))
+(out / 'square.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" width="20mm" height="20mm"><path d="M2 2L12 2L12 12L2 12Z"/></svg>')
+PYDOC
+"$IVAC" generate "$DOC_OUT/square.svg" --request "$DOC_OUT/profile.template.json" > "$DOC_OUT/import.response.json"
+```
 
-FS-RESET-3 removes the legacy transport fields `fs_context`, `applied_cutting` and
-`fs_full_width`; JSON requests containing them are refused. Current v9 examples remain
-explicit software fixtures. [Final contract and qualification](CUTTING_CONTRACT.md)
-and [output comparisons](releases/FS_RESET_3_RESULTS.md) record the fixed corpus and
-remaining native/WASM parity limits. The old direct-emitter G2/G3 winding difference
-remains the deliberate pipeline-adoption change documented in the CLI modernization
-receipt; the removed direct path is not restored.
+The request alone selects post/properties. Omitted post uses the shared LinuxCNC
+default; `cps_post` conflicts with a non-CPS post. External CPS paths/source never
+execute through this command. Removed geometry/post flags and unknown/duplicate
+flags refuse; edit/review the request instead.
+
+## Output and safety boundary
+
+Successful stdout is one `PipelineResponse` with program, decoded/planned path,
+stats, warnings, provenance/index and supported diagnostics. Tracing goes to stderr.
+No JSON/program is published before generation succeeds. Shell redirection itself
+is not transactional; output I/O failure can interrupt the response file.
+
+`stream-gcode request.json --output file` retains per-file transactional publication
+and its existing stream/refusal/resource limits. `--two-sided` requires an output
+base, retains motion restrictions and may report partial publication if a later
+side fails; it is not pair-atomic. Buffered generate adds no two-sided CLI mode.
+SAFETY-FIX-1 refusals, output/simulation limits and post restrictions remain.
+No controller, installed-native or physical acceptance follows from CLI success.

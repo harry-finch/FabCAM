@@ -188,8 +188,10 @@ cd frontend && pnpm install && pnpm build   # → frontend/dist/
 A **production build defaults to the in-browser wasm engine** when no
 backend is configured, so the bare URL just works for a static deploy.
 `?api=wasm` forces it explicitly (handy in dev); set
-`VITE_IVAC_API=https://your-server` at build time to point at a
-`ivac-server` instead. The wasm chunk stays lazy — only fetched when the
+`VITE_IVAC_API=http://127.0.0.1:8766` for a separately running local
+`ivac-server`. SEC-HARDEN-1 rejects unauthenticated non-loopback binds and enforces
+Origin/admission checks; this is not authenticated remote HTTP. Remote hosting would
+need a separately reviewed access design and acceptance. The wasm chunk stays lazy — only fetched when the
 wasm transport is actually selected. No CORS, no API server, no
 TLS-on-API, no auth to manage, because there is no backend.
 
@@ -440,11 +442,11 @@ refreshes), build them locally, and attach them to the draft out-of-band
 cargo test --workspace
 
 # Frontend type check (svelte-check) must be clean:
-cd frontend && pnpm check
+pnpm --dir frontend check
 
 # Smoke test the binary you just built:
 ./target/release/ivac --help
-./target/release/ivac generate --request tests/fixtures/cli-v9/profile.request.json > out.json
+./target/release/ivac generate --request tests/fixtures/alpha32/scoped-pocket.request.json > out.json
 ```
 
 For Tauri builds, launching the bundled app should open a window titled
@@ -452,7 +454,7 @@ For Tauri builds, launching the bundled app should open a window titled
 
 ### Explicit CLI generation (V1.1)
 
-`ivac generate --request request.json` accepts a serialized v9 `PipelineRequest`,
+`ivac generate --request request.json` accepts a serialized V10 `PipelineRequest`,
 not the frontend saved-project envelope. See [CLI request contract](CLI_GENERATE.md)
 for reviewed geometry templates, input refusals, response fields and security boundaries.
 The example above is a software-only fixture, not workshop-qualified machining data.
@@ -568,7 +570,9 @@ GitHub setting was configured by SEC1. Merely naming an environment is insuffici
 
 The workspace no longer contains `ivac-feeds-speeds`; no source-pack asset is needed
 to build or generate. Preserve old user data. Current request fixtures are in
-`tests/fixtures/cli-v9`, `tests/fixtures/fs-reset3-output` and `tests/fixtures/perf-v9`.
+`tests/fixtures/alpha3-v10`, `tests/fixtures/alpha32` and the other current V10
+qualification fixtures. `cli-v9`, `fs-reset3-output` and `perf-v9` are historical
+source-bound evidence; do not use them as current executable requests.
 Historical PERF1 records stay immutable. Test-only authoring helpers are not supported
 project migrators and must never become generation defaults.
 
@@ -583,11 +587,26 @@ Build the TEST1 release worker separately with
 then pass its reported executable to
 `python3 scripts/test1/run.py --binary <executable> --output <new-directory> --frontend`.
 Do not omit C2, increase watchdog limits, or count the ignored worker as a regular PASS.
-Use the current v9 performance fixtures with the PERF1 probe/cancellation/WASM scripts;
-retain their strict parity and timing thresholds even when baseline comparisons fail.
+Historical PERF1 scripts/fixtures retain their original source binding; do not run
+old V9 requests as current V10 examples or weaken thresholds to obtain a PASS.
+Current representative CLI commands are verified in [CLI_GENERATE](CLI_GENERATE.md).
 
 `frontend/scripts/wasm-package-state.mjs` fingerprints the retained source closure.
 Source edits require a fresh verified package; removing old assets did not disable
-freshness or size checks. This run used Node 26.10.0 and local pnpm 10 (CI remains Node24).
+freshness or size checks. Use `.nvmrc` (Node 24) and the committed pnpm lockfile; historical report
+environments do not override current pins.
 [FS-RESET-3 results](releases/FS_RESET_3_RESULTS.md) gives exact commands, results and
 host limitations. None of these commands establishes installed-native or physical safety.
+
+## Current security and documentation checks
+
+Select the accepted source via [STATUS](shopbot-modernization/STATUS.md). Tauri
+production CSP and per-file dynamic selection grants are part of that source;
+old local installers may lack them. Installed-native file workflows, authenticated
+remote HTTP and physical machining remain unqualified. See
+[SEC-HARDEN-1](releases/SEC_HARDEN_1_APPLICATION_SECURITY.md).
+
+For documentation-only changes, run `scripts/check-readme-parity.sh`, validate active
+Markdown targets/anchors and skill frontmatter/references, and execute supported V10
+CLI examples in a disposable directory. Verify all executable/generated blobs remain
+identical. No full CNC/release gate is required solely for Markdown changes.

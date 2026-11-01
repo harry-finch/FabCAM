@@ -1,107 +1,120 @@
 # FabCAM
 
-Aktuelle Entwicklungsversion: siehe [Versionspolitik und Release-Status](docs/releases/VERSIONING.md) (Beta zur V1-Stabilisierung); Desktop-Installation und Werkstattvalidierung stehen noch aus.
+Entwicklungslinie: V1.1; Paketversion: [Versionsregeln](docs/releases/VERSIONING.md).
+[Aktueller STATUS](docs/shopbot-modernization/STATUS.md) nennt den akzeptierten Stand
+und die älteren kanonischen/eingefrorenen Linien. Diese Anleitung beschreibt diesen
+Feature-Stand; ein Installer oder der entfernte Standardbranch kann davon abweichen.
 
 [English](./README.md) | **Deutsch**
 
-**Quelloffene CAM-Software für praktische digitale Fertigung.**
+**Open-Source-CAM für praktische digitale Fertigung.**
 
 ![FabCAM A1 Optical Balance](assets/branding/fabcam/source/fabcam-a1-app-icon.svg)
 
-[Dokumentationsübersicht](docs/README.md) — aktueller Status, V1-Freigaben, Architektur, Entwicklung und Qualifikationsnachweise.
+[Dokumentationsübersicht](docs/README.md) — aktuelle Verträge, Architektur und Qualifikationsnachweise.
 
 ## Überblick
 
-FabCAM bereitet 2D-Zeichnungen für CNC-Bearbeitung vor: Geometrie, Rohmaterial, Werkzeuge, Operationen, Schnittwerte, Vorschau und Maschinenausgabe. Der aktuelle Schwerpunkt liegt auf Fräsabläufen in Werkstätten und Fablabs einschließlich eines begrenzten ShopBot-OpenSBP-Umfangs. FabCAM ist eine aktiv entwickelte Weiterentwicklung von [ivaCAM](https://github.com/aalarchiv/ivacam), keine pauschale Produktionsfreigabe.
+FabCAM ist ein fräsorientierter Fork von [ivaCAM](https://github.com/aalarchiv/ivacam).
+Geometrie, Rohmaterial, Werkzeuge, Operationen und explizite Schnittwerte vorbereiten,
+dann unterstützte Programme erzeugen, simulieren und exportieren. Die Softwarequalifikation
+ist begrenzt; native Installation und physische Bearbeitung bleiben getrennte Abnahmen.
 
 ## Hauptfunktionen
 
-- SVG/DXF-Import, Ebenen, Zeichnungstransformationen sowie Speichern/Wiederöffnen von Projekten.
-- Profil, Tasche und Bohren; Haltestege, Ein-/Ausfahrten und Eintauchsteuerung mit maschinen-/postspezifischen Prüfungen. Geerbte Operationen umfassen außerdem Gravur/Text, V-Carve, Fase, Gewinde, Schwalbenschwanz und T-Nut; ihr Vorhandensein qualifiziert nicht jede Maschine oder Kombination.
-- Rohmaterial- und Arbeitsnullpunkt-Konfiguration, Maschinenprofile, Werkzeugbibliotheken, Spannmittel-Erstellung und Kollisionswarnungen für erzeugte Werkzeugwege.
-- Frässpezifische Schnittwertempfehlungen (Feeds & Speeds) mit Quellenangaben, begrenztem Abgleich mit Referenzdaten, expliziter Übernahme, maßgeblichen manuellen Werten und privaten lokalen Voreinstellungen.
-- 2D/3D-Vorschau und Materialabtrag-Simulation. Eine begrenzte Restmaterialanalyse je Tasche/Tiefe ist implementiert; Restbearbeitung (Rest Machining) nicht.
-- Eingebaute G-Code-/HPGL-Dialekte und native CPS-Posts, einschließlich eines eingeschränkten ShopBot-OpenSBP-Teilumfangs. Nicht unterstützte Ausgabekombinationen werden abgelehnt.
-- Kompakte Atelier-Oberfläche mit Startbildschirm, Neu/Öffnen/Import/Speichern/Schließen, letzten Projekten und Maschinen-/Werkzeugkontext.
+- SVG/DXF-Import, Ebenen, quellenerhaltende Zeichnungsbearbeitung, Verschieben per Maus und proportionale Abmessungen; V10-Projekte speichern/öffnen.
+- Profile/Pocket mit Hauptbearbeitung und optionaler Schlichtstufe; Pocket mit Wände / Boden / Wände und Boden innerhalb begrenzter Polygon-, Tangentialkurven- und Inselnachweise.
+- Explizite Drehzahl/Vorschub/Eintauchvorschub/Zustellung, Maschinen-/Werkzeugprüfung, lokal getestete Presets mit exakter Zuordnung und bewusst geprüfte Übernahme von Ausgangswerten ohne Testbescheinigung.
+- Beschreibende Werkzeugdaten für Substrat/Beschichtung, Rohmaterial-/Nullpunktkonfiguration und begrenzte Spannmittelprüfungen.
+- 2D/3D-Vorschau und Gesamtprogrammsimulation; begrenzte Restmaterialdiagnose, kein implementiertes optimiertes Restfräsen.
+- Eingebaute G-Code-/HPGL-Ausgabe und native CPS-Posts, einschließlich eingeschränktem ShopBot OpenSBP. Weitere übernommene Operationen behalten eigene Grenzen.
+- Native Dateiautorisierung/CSP, lokale HTTP-Zulassung und Importbudgets. Nicht unterstützte oder nicht nachgewiesene Kombinationen werden abgewiesen.
 
-Der Rust-CAM-Kern, die unabhängige Schnittwert-Engine und die Svelte-Oberfläche bleiben getrennt. Siehe [Architektur](docs/ARCHITECTURE.md) und [Fork-Architektur](docs/shopbot-modernization/ARCHITECTURE.md).
+Keine integrierte Schnittwertempfehlung und keine automatische Spanlastberechnung.
+FabSpeed ist unabhängig; optionaler Datenaustausch ist geplant, nicht implementiert.
+Siehe [Architektur](docs/ARCHITECTURE.md) und [Schnittwertvertrag](docs/CUTTING_CONTRACT.md).
 
-## Screenshots
+## Bildschirmansichten
 
-Tatsächliche UX2.2-Oberfläche mit dem freigegebenen A1-Branding:
+Historische UX2.2-Ansicht als Referenz, kein Nachweis aktueller nativer Abnahme:
 
-![FabCAM-Arbeitsbereich](docs/shopbot-modernization/ux/A1-branding-project.jpg)
+![FabCAM-Bearbeitungsansicht](docs/shopbot-modernization/ux/A1-branding-project.jpg)
 
-[Prüfung von Startbildschirm/Icon](docs/shopbot-modernization/ux/A1_BRANDING_INTEGRATION.md) und [Prüfung von Produktidentität/Info-Dialog](docs/shopbot-modernization/ux/PRODUCT_IDENTITY.md).
+[Gestaltungsprüfung](docs/shopbot-modernization/ux/A1_BRANDING_INTEGRATION.md).
 
 ## Unterstützte Plattformen
 
-| Ziel | Aktuelle Verifikation |
+| Ziel | Grenze der Qualifikation |
 | --- | --- |
-| macOS | Lokaler optimierter Tauri-Build gebaut und gestartet; Branding/Anzeigename geprüft. Signierung und Installer-Upgrades erfordern eine separate Qualifikation. |
-| Windows | Build-Ziel und Icon-Ressourcen vorhanden; dieser Checkpoint enthält keinen Windows-Paket-/Laufzeittest. |
-| Linux | Build-Ziel und Icon-Ressourcen vorhanden; dieser Checkpoint enthält keinen Linux-Paket-/Laufzeittest. |
-| Browser | Entwicklungs- und Produktionsoberfläche geprüft. Das aktuelle eigenständige WASM-Paket unterstützt keine CPS-Posts; ShopBot benötigt einen nativen Server oder die Desktop-App. |
+| macOS | Natives Build-Ziel vorhanden; aktuelle Sicherheitsprüfung auf Kommando-/Mock-Ebene. Installierte native Dateiabläufe bleiben unqualifiziert. |
+| Windows / Linux | Build-Ziele vorhanden; aktuelle installierte Plattformabnahme nicht nachgewiesen. |
+| Browser | UI-/WASM-Softwareprüfungen vorhanden; Standard-WASM ohne CPS. ShopBot benötigt einen nativen Adapter mit CPS. |
 
-Geerbte Android-Werkzeuge liegen außerhalb der aktuellen Desktop-Qualifikation. Diese Identitätsaktualisierung erzeugt keine Veröffentlichung und keine Binärdateien.
+Frontend-Sprachen sind Englisch und Deutsch; kein vollständiger französischer Katalog.
+Mobile Werkzeuge liegen außerhalb dieser Desktop-Abnahme. Kein Installer/Release zugesagt.
 
 ## Einstieg
 
-Voraussetzungen: [gepinntes Rust](rust-toolchain.toml), Node 20.19+ oder 22.12+, pnpm 10+, wasm-pack und für das Desktop-Paket Tauri-CLI 2. Systembibliotheken, sccache und passende WASM-Werkzeuge stehen in [BUILDING.md](docs/BUILDING.md); [Windows-Anleitung](docs/BUILDING_WINDOWS.md).
+Die festgelegten Versionen von [Rust](rust-toolchain.toml), [Node](.nvmrc), pnpm 10+
+und wasm-pack sowie [BUILDING](docs/BUILDING.md) / [Windows](docs/BUILDING_WINDOWS.md)
+verwenden. Vor Nutzung der Beispiele den in STATUS genannten Quellstand auswählen.
 
 ```sh
-git clone https://github.com/harry-finch/FabCAM.git
-cd FabCAM
 cargo build --locked
 wasm-pack build crates/ivac-wasm --target web --release
 pnpm --dir frontend install --frozen-lockfile
 pnpm --dir frontend dev
 ```
 
-Für ein Desktop-Bundle, nachdem die Plattformvoraussetzungen erfüllt sind:
+Für Browserentwicklung mit CPS `cargo run --locked -p ivac-server` parallel zu Vite
+starten. Der nicht authentifizierte Dienst bleibt auf Loopback beschränkt und ist
+kein qualifiziertes entferntes Backend. BUILDING erklärt Transportwahl und native
+Builds. Paketierung erfordert getrennte Freigabe/Abnahme. Interne Namen `ivac`/`ivaCAM`
+bleiben gemäß [Identitätsentscheidung](docs/shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md) kompatibel.
 
-```sh
-cd crates/ivac-tauri
-cargo tauri build
-```
+## Grundablauf
 
-Für CPS-gestützte Browser-Entwicklung `cargo run --locked -p ivac-server` im Wurzelverzeichnis parallel zu Vite starten; die Auswahl des Transports steht in der Build-Anleitung. Namen von Programm-/Installerdateien können aus Kompatibilitätsgründen weiterhin `ivac`/`ivaCAM` enthalten; die [Identitätsentscheidung](docs/shopbot-modernization/adr/ADR-0012-fabcam-product-identity.md) erklärt den Grund.
+1. V10-Projekt anlegen/öffnen und Importeinheiten sowie Abmessungen prüfen.
+2. Rohmaterial, Arbeitsnullpunkt, Maschine, tatsächliche Werkzeuge und Spannmittel festlegen.
+3. Operationen mit Hauptbearbeitung und optional expliziter Schlichtstufe beziehungsweise den tatsächlichen Rollen konfigurieren.
+4. Drehzahl/Vorschub/Eintauchvorschub/Zustellung eingeben; exakt getestetes Preset laden oder ausgewählte Ausgangswerte bewusst übernehmen.
+5. Programm erzeugen und Gesamtprogrammsimulation, Herkunft und Warnungen/Ablehnungen prüfen.
+6. Nur unterstützte qualifizierte Ausgabe exportieren; reale Steuerungs-/Einrichtungs-/Materialprüfungen getrennt durchführen.
 
-## Arbeitsablauf
+[Kurzanleitung](docs/QUICKSTART.md). FabCAM setzt keinen physischen Maschinennullpunkt und steuert keine Maschine.
 
-1. Projekt erstellen/öffnen und SVG/DXF-Geometrie importieren.
-2. Rohmaterial, Arbeitsnullpunkt, Maschine und Spannmittel konfigurieren.
-3. Werkzeuge wählen und Operationen konfigurieren.
-4. Schnittwerte prüfen; eine Empfehlung bewusst übernehmen oder manuelle Werte verwenden.
-5. Werkzeugwege erzeugen und Vorschau sowie Warnungen prüfen.
-6. Ein unterstütztes Programm exportieren, anschließend maschinenspezifische Einrichtung sowie Steuerungs-/physische Prüfungen durchführen.
+## Aktueller Stand und Grenzen
 
-[Schnellstart](docs/QUICKSTART.md). FabCAM legt den physischen Maschinennullpunkt nicht fest und steuert die Maschine nicht direkt.
+- SAFETY-FIX-1 weist unbewiesene Helix-Einfahrten, alten Profile-Overcut und betroffene zweiseitige Halte-/Rückseitenkonfigurationen ab. Die Gewindefräshelix ist davon zu unterscheiden.
+- Schlichten unterliegt Grenzen für Geometrie, direkten Einstieg, Werkzeuge, Nachweisbudgets und Posts; kein universelles Schlichten oder vollständige Geometriereparatur.
+- Strikte Preset-Zuordnung bleibt trotz beratender Werteübernahme unverändert; Überlappung und physische Testbescheinigungen werden nicht übertragen. ShopBot-Drehzahlwechsel am selben Werkzeug können abgewiesen werden.
+- Installierte native Dateiabläufe, authentifizierter HTTP-Fernzugriff und physische Bearbeitung bleiben unqualifiziert. Historische M4-Quadratversuche qualifizieren keinen neuen Auftrag.
 
-## Status und Einschränkungen
+[STATUS](docs/shopbot-modernization/STATUS.md) führt Quellstand, Blocker und Nachweisgrenzen.
 
-- Softwarequalifikation ist von physischen Nachweisen getrennt. M4 dokumentiert eine begrenzte, vom Bediener berichtete ShopBot-Quadratprüfung samt Vergleich, keine pauschale Fräsvalidierung.
-- ShopBot-CPS ist eingeschränkt: Helix-Einstieg, nicht qualifizierte zweiseitige/verschobene Registrierung und ein Arbeitsnullpunkt-Z ungleich null bleiben begrenzt bzw. werden abgelehnt. Der Wechsel der Spindeldrehzahl zwischen Schruppen/Schlichten ist eine bekannte Exportgrenze.
-- Spannmittel-Diagnosen und Restmaterial-Überlagerungen haben begrenzte geometrische Geltungsbereiche; sie belegen nicht alle physischen Freiräume.
-- Herstellerreferenzdaten und daraus abgeleitete Empfehlungen sind keine physisch validierten Laborwerte. **Die physische FS4-Validierung der Schnittwerte bleibt zurückgestellt.**
-- Menschliche CAM/FS/UX-Übergabeprüfungen sind weiterhin offen. Ein älterer CPS-Test, der bei zweiseitiger Bearbeitung Erfolg erwartet, muss an die explizite Ablehnung angepasst werden.
+## Roadmap
 
-[STATUS](docs/shopbot-modernization/STATUS.md) und [CAM-Qualifikation](docs/shopbot-modernization/CAM_VALIDATION.md) sind maßgeblich für unterstützte Kombinationen und Nachweisgrenzen.
+Siehe [technische Arbeitsstränge](docs/shopbot-modernization/ROADMAP.md) und
+[Freigabestufen](docs/releases/RELEASE_ROADMAP.md). FabSpeed-Austausch, breiteres CAM,
+ProtoMAX/Wasserstrahl und Vinyl bleiben geplant/zurückgestellt. Akzeptierte begrenzte
+Softwaremeilensteine autorisieren nicht automatisch die nächste Phase.
 
-## Planung
+## Projektursprung
 
-Vorrangige Verbesserungen von Fräsablauf und -abdeckung erfolgen weiterhin innerhalb menschlicher Freigabeschritte. Eckfreistellungen (Dogbone/T-Bone) und Planfräsen haben begrenzte lokale Software-Übergaben. Wiederverwendbare Vorlagen für Profil/Tasche/Planfläche haben eine akzeptierte, begrenzte Software-Übergabe ([UX4.1-Qualifikation](docs/shopbot-modernization/UX4_1_QUALIFICATION.md)); fortgeschrittene Strategien bleiben spätere Arbeit. FabSBP ist reine Planung; ProtoMAX/Wasserstrahl und Vinyl sind zurückgestellt. Siehe die maßgebliche [ROADMAP](docs/shopbot-modernization/ROADMAP.md); geplante Arbeit ist keine implementierte Funktionalität.
-
-## Herkunft
-
-FabCAM basiert auf **ivaCAM von Soenke J. Peters**: [aalarchiv/ivacam](https://github.com/aalarchiv/ivacam). Der Fork entwickelt ShopBot-Vorbereitung, Schnittwertempfehlungen, Rohmaterial-/Nullpunkt-/Spannmittel-Abläufe und eine eigene Werkstatt-Oberfläche. Ursprüngliche Autorenschaft und Beiträge bleiben gewürdigt; FabCAM ist ein eigenständiges abgeleitetes Projekt.
-
-Der CAM-Kern von ivaCAM ist teilweise eine Rust-Portierung der Geometrie-/Werkzeugweg-Routinen von [viaConstructor](https://github.com/multigcs/viaconstructor) (`calc.py`, `machine_cmd.py`, `setupdefaults.py`). [Estlcam](https://www.estlcam.de/) inspirierte die Funktionsterminologie, steuert aber keinen Code bei. Bestehende Quell-Copyright-Hinweise und Danksagungen an Abhängigkeiten bleiben erhalten, darunter dxf-rs, cavalier_contours, clipper2-rust, usvg, Svelte, Three.js und Tauri.
+FabCAM basiert auf **ivaCAM von Soenke J. Peters**, [aalarchiv/ivacam](https://github.com/aalarchiv/ivacam).
+Der Kern ist teilweise eine Rust-Portierung von [viaConstructor](https://github.com/multigcs/viaconstructor).
+[Estlcam](https://www.estlcam.de/) inspirierte Begriffe und liefert keinen Code.
+Urheberrechts- und Abhängigkeitshinweise bleiben erhalten, einschließlich dxf-rs,
+cavalier_contours, clipper2-rust, usvg, Svelte, Three.js und Tauri.
 
 ## Lizenz
 
-**GPL-3.0-or-later**, siehe unveränderte [LICENSE](LICENSE). Abhängigkeiten, importierte Referenzdaten und separat lizenzierte Ressourcen behalten ihre eigenen Hinweise. [Lizenzangaben der Datenquellen](docs/shopbot-modernization/feeds-speeds/DATA_SOURCES.md). Lokale/private Herstellerpakete sind nicht automatisch weiterverteilbar und werden durch diese Aktualisierung nicht Teil der öffentlichen Distribution.
+**GPL-3.0-or-later**; [LICENSE](LICENSE). Abhängigkeiten und separat lizenzierte Ressourcen
+behalten ihre Hinweise. [Historische Datenlizenzen](docs/shopbot-modernization/feeds-speeds/DATA_SOURCES.md)
+bleiben dokumentiert; sie bewerben keine aktive Datenpaket-Engine und erteilen keine Weitergaberechte.
 
 ## Mitwirken
 
-[Beitragsrichtlinien](docs/CONTRIBUTING.md), Architektur sowie aktuellen STATUS/ROADMAP lesen, bevor Änderungen vorgeschlagen werden. Das Repository nutzt Beads zur lokalen Nachverfolgung. Kompatibilität und Urheberangaben bewahren und für CAM-Änderungen angemessene Nachweise beifügen. Quelle: [harry-finch/FabCAM](https://github.com/harry-finch/FabCAM).
+Zuerst [CONTRIBUTING](docs/CONTRIBUTING.md), Architektur und STATUS lesen. Kompatibilität,
+Attribution, historische Nachweise und menschliche Freigaben erhalten. Aufgabenverwaltung
+mit Beads. Quellcode: [harry-finch/FabCAM](https://github.com/harry-finch/FabCAM).

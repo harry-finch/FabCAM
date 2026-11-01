@@ -27,24 +27,39 @@ evidence. Stage explicit reviewed paths; never commit another agent's files.
 Do not infer qualification of uncommitted work from the branch's historical tests.
 
 STATUS owns current state, RELEASE_ROADMAP owns release priorities, V1_READINESS
-owns acceptance/blocker dispositions, DEVLOG owns history and dated reports own
+owns the historical frozen V1 gate register, DEVLOG owns history and dated reports own
 exact evidence. See [document roles](README.md#canonical-document-responsibilities).
 A milestone owner updates the relevant contract/result together; human acceptance,
 platform acceptance and physical qualification remain separate. Evidence deletion,
 relocation or retention changes require explicit approval.
+
+## Current contracts before extension
+
+Production source and accepted versioned ADRs take precedence over historical
+examples. Use [CUTTING_CONTRACT](CUTTING_CONTRACT.md) for ProjectFile/native V10,
+Main/Finishing discriminators, scoped Pocket proof/refusal domains and readers;
+[TESTED_PRESETS](TESTED_PRESETS.md) for collection V2, historical V1 and separate
+reviewed starting-value reuse. Do not port old Rough/Finish to new Profile/Pocket,
+transfer test attestation or restore the removed calculator/source-pack runtime.
+TOOL-META substrate/coating is descriptive. FabSpeed exchange remains proposed.
+Preserve motion and security guards; software tests do not establish installed-native
+or physical acceptance. Documentation changes update current sections in place,
+with chronology in HISTORY and immutable source-bound reports retained.
 
 ## Repository layout
 
 ```
 crates/
   ivac-core/      DXF/SVG import, CAM math, gcode generation (lib)
+  ivac-cps/       budgeted postprocessor runtime/recorder
+  ivac-file-export/ validated transactional individual-file publication
   ivac-cli/       headless converter binary
   ivac-server/    axum HTTP server binary
   ivac-tauri/     Tauri desktop shell binary
   ivac-wasm/      wasm-bindgen browser bindings (cdylib)
 xtask/            cargo-xtask for dev workflows
 frontend/         Svelte + Vite + TypeScript web UI
-schema/           OpenAPI / JSON Schema source-of-truth contracts
+schema/           generated OpenAPI / JSON Schema seam, derived from Rust types
 tests/            integration corpus + bench baselines
 refs/             upstream viaConstructor + dxf-rs (read-only references,
                   gitignored — clone yourself per the comment in .gitignore)

@@ -1,5 +1,10 @@
 # Feeds & Speeds Assistant — planning contract
 
+> Historical integrated Feeds & Speeds/source-pack documentation. ADR-0030 removed
+> that runtime from current FabCAM. Do not follow the old recommendation/recipe
+> instructions as current UI. Use [current tested presets](../../TESTED_PRESETS.md) and
+> current STATUS; formulas, attribution and original source-bound evidence remain.
+
 Practical workshop tutorial: [Create your own cutting-data sources](../../feeds-speeds/CUSTOM_DATA_SOURCES.md)
 (local presets, external JSON, validated synthetic examples, backup and limitations).
 

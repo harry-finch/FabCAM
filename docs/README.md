@@ -1,76 +1,47 @@
 # FabCAM documentation
 
-Current isolated checkpoint: [SEC-HARDEN-1](releases/SEC_HARDEN_1_APPLICATION_SECURITY.md) (accepted bounded software milestone; locally consolidated, no canonical integration).
+## Start here
 
-Historical reference: [ALPHA-4 reviewed preset reuse](releases/ALPHA_4_REVIEWED_PRESET_REUSE.md).
-Dated reports retain their source-bound qualification and acceptance limits.
+[STATUS](shopbot-modernization/STATUS.md) is the single current source/provenance,
+implementation and blocker summary. It distinguishes accepted security feature source,
+older canonical V1.1 and frozen V1. Active documentation describes V10, authored
+cutting values and independent validation; the integrated recommendation engine is removed.
+[DOC-CONSOLIDATION-1](releases/DOC_CONSOLIDATION_1.md) records this documentation-only
+accepted reconciliation and its local consolidation. No merge, installer or release follows from it.
 
-Current focus: **FabCAM V1.1 — macOS Personal Alpha**, on the maintainer's own
-Mac, with supervised ShopBot cases accepted progressively. General fablab/public
-distribution, Windows/Linux installers and public signing/notarization are deferred;
-canonical safety gates and actual failures remain. [FabApps vision](FABAPPS_VISION.md)
-records independent product maturity and future shared design/website initiatives.
-
-Current V1.1 implementation uses explicit operation values and local tested
-collections; the integrated recommendation engine is removed.
-[QUAL-1A.4](releases/QUAL_1A_4_PRODUCTION_INTEGRATION.md) and
-[QUAL-1B](releases/QUAL_1B_COOPERATIVE_CANCELLATION.md) are implemented and qualified
-within their recorded software limits. [QUAL-1C](releases/QUAL_1C_MACOS_PERSONAL_ALPHA.md)
-built the macOS app; native user acceptance remains pending. SEC-1 corrects Tokio
-and consolidates this source. [SEC-1](releases/SEC_1_REPOSITORY_CONSOLIDATION.md)
-records 20/20 canonical gates, the rebuilt local app and publication receipt;
-[latest local integration](releases/V11_LOCAL_INTEGRATION_2026_10_24.md) now adds
-qualified drawing drag/proportional sizing, fixed stock, pocket diagnostics and
-header UI, with a fresh native test build. Native human acceptance is still open;
-[STATUS](shopbot-modernization/STATUS.md) owns current source/limits.
-[Release roadmap](releases/RELEASE_ROADMAP.md) separates frozen V1, V1.1
-Personal Alpha qualification, planned optional V1.2 FabSpeed integration and deferred CAM work.
-[Accepted ADR-0030](shopbot-modernization/adr/ADR-0030-fabcam-fabspeed-separation.md)
-records separation; [proposed ADR-0031](shopbot-modernization/adr/ADR-0031-optional-one-way-fabspeed-catalogue.md)
-records approved one-way product principles and OPEN technical contracts.
-No synchronization, release or physical acceptance is implied.
-
-Start with [current STATUS](shopbot-modernization/STATUS.md), then select a route.
-Frozen V1 evidence remains in [V1 readiness](releases/V1_READINESS.md). Historical
-FS/PRESET reports describe their original sources; they are not current user guides.
-
-## Read by task
-
-| Need | Entry points |
-|---|---|
-| Understand/install/build FabCAM | [Project README](../README.md), [build guide](BUILDING.md), [Windows](BUILDING_WINDOWS.md), [quickstart](QUICKSTART.md) |
-| Contribute or work as an AI agent | [Contributing](CONTRIBUTING.md), [AGENTS](../AGENTS.md), [CLAUDE](../CLAUDE.md); repository skills under `.agents/skills/` |
-| Understand architecture and compatibility | [General architecture](ARCHITECTURE.md), [fork-specific contracts](shopbot-modernization/ARCHITECTURE.md), [upstream analysis](shopbot-modernization/UPSTREAM_ANALYSIS.md), [ADRs](shopbot-modernization/adr/README.md) |
-| Add CAM, machine or post functionality | [Extension recipes](CONTRIBUTING.md#extension-recipes), [machine guide](development/ADDING_A_MACHINE.md), [machine template](development/MACHINE_INTEGRATION_TEMPLATE.md), [CPS](CPS_POSTS.md) |
-| Author workshop cutting data | [Tested preset collections](TESTED_PRESETS.md), [current cutting/API contract](CUTTING_CONTRACT.md) |
-| Validate a change | [Testing strategy](shopbot-modernization/TESTING_STRATEGY.md), [CAM validation register](shopbot-modernization/CAM_VALIDATION.md), [TEST1 contracts](releases/TEST1_CONTRACTS.md), [SAFE-Z contracts](releases/SAFE_Z_CONTRACTS.md) |
-| Assess V1 / prepare candidates | [Release scope/priorities](releases/RELEASE_ROADMAP.md), [V1 readiness](releases/V1_READINESS.md), [candidate process](releases/DESKTOP_CANDIDATES.md), [version policy](releases/VERSIONING.md), [signing](SIGNING.md) |
-| Find a result or qualification artifact | [Historical/report catalogue](releases/HISTORY.md), [local-only evidence register](releases/LOCAL_EVIDENCE_2026_10_19.md), [beta.3 delivery](releases/beta3-delivery-2026-10-18/README.md) |
+| Goal | Authoritative route |
+| --- | --- |
+| Start / build | [Quickstart](QUICKSTART.md), [BUILDING](BUILDING.md), [Windows](BUILDING_WINDOWS.md), [CLI V10 examples](CLI_GENERATE.md) |
+| Understand current cutting / presets | [CUTTING_CONTRACT](CUTTING_CONTRACT.md), [TESTED_PRESETS](TESTED_PRESETS.md) |
+| Understand layers / process boundaries | [General architecture](ARCHITECTURE.md), [fork architecture](shopbot-modernization/ARCHITECTURE.md), [ADRs](shopbot-modernization/adr/README.md) |
+| Contribute / use agents | [CONTRIBUTING](CONTRIBUTING.md), [AGENTS](../AGENTS.md), [CLAUDE](../CLAUDE.md), versioned `.agents/skills/` |
+| Plan technical work / acceptance | [Technical roadmap](shopbot-modernization/ROADMAP.md), [release gates](releases/RELEASE_ROADMAP.md), [frozen V1 readiness](releases/V1_READINESS.md) |
+| Find qualified evidence / chronology | [HISTORY](releases/HISTORY.md), [local evidence](releases/LOCAL_EVIDENCE_2026_10_19.md), [SAFETY-FIX-1](releases/SAFETY_FIX_1_MOTION_GUARDS.md), [SEC-HARDEN-1](releases/SEC_HARDEN_1_APPLICATION_SECURITY.md) |
+| Extend / validate | [Extension recipes](CONTRIBUTING.md#extension-recipes), [machine guide](development/ADDING_A_MACHINE.md), [CPS](CPS_POSTS.md), [testing strategy](shopbot-modernization/TESTING_STRATEGY.md), [CAM register](shopbot-modernization/CAM_VALIDATION.md) |
 
 ## Canonical document responsibilities
 
 | Document | Owns | Does not imply |
-|---|---|---|
-| `README.md` / `README_de.md` | Product entry, build pointers, capabilities, limits and attribution | Current qualification of every advertised inherited operation |
-| `shopbot-modernization/STATUS.md` | Current inspected source, active work, blockers, next authorized action | A history of all milestones |
-| `releases/RELEASE_ROADMAP.md` | One authoritative release plan, dependencies and deferred scope | Permission to implement future work |
-| `releases/FABCAM_V1_SCOPE.md` | V1 scope and acceptance criteria | Evidence that each criterion is satisfied |
-| `releases/V1_READINESS.md` | Criterion/gate disposition, evidence and next decision | Human/platform/physical acceptance from tests alone |
-| `shopbot-modernization/ROADMAP.md` | Track navigation and historical milestone references | A competing release plan |
-| `shopbot-modernization/DEVLOG.md` | Chronological engineering decisions and result summaries | A second current-status source |
-| Architecture / ADRs | Stable boundaries, decisions, compatibility and their acceptance history | New approval by an index edit |
-| Dated reports / evidence | Exact source, commands, observations, failures and limits | Qualification of newer revisions |
+| --- | --- | --- |
+| README EN/DE | Product entry, existing capabilities, limits, setup and attribution | Every inherited operation/platform is qualified |
+| STATUS | Current implementation, accepted source/provenance, blockers and next human action | A milestone diary |
+| Technical ROADMAP | Workstreams and their implemented/deferred status | A second release plan or automatic permission |
+| RELEASE_ROADMAP | Release milestones and independent acceptance gates | Permission to merge/build/publish |
+| V1_READINESS | Separate historical frozen V1 register and routing to current gates | Current V10 feature status from old OPEN claims |
+| Architecture / CUTTING_CONTRACT / TESTED_PRESETS | Stable boundaries, current versions, reader/refusal and authoring semantics | Physical qualification or future integration |
+| ADR index / accepted ADRs | Decision navigation and original accepted reasoning | Rewriting history to describe today's architecture |
+| HISTORY / DEVLOG | Chronology and links to source-bound reports | Another competing current-state summary |
+| Dated reports / receipts | Exact original source, tests, failures, acceptance and limits | Qualification of newer revisions |
 
 ## Navigation and ownership
 
-Contributors update the relevant contract and a dated result together; the milestone
-owner records its source/evidence; the human maintainer owns approvals and release
-acceptance. Link to authoritative reports rather than copying their full contents.
-Use [history](releases/HISTORY.md) when a document has been superseded.
+Update each current-state section in place rather than adding milestone-banner
+stacks. Link to original reports instead of duplicating them. Preserve accepted ADR
+text, upstream attribution, failed/refused cases, private data and local-only evidence.
+A clean isolated worktree is not an inventory of every qualification artifact.
 
-NUMSAFE/NUMSAFE2 are integrated; use the [reconciliation checkpoint](releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md)
-for its historical integrated source, bounded Feeds & Speeds acceptance and gates.
-Use current STATUS for the post-FS-RESET source; the earlier engine is superseded. No evidence retention policy is
-changed by this index; [retention options](releases/DOCUMENTATION_CHECKPOINT_2026_10_20.md)
-are proposals requiring approval. Preserve GPL/upstream attribution and separate
-manufacturer/local data rights in the [licensing matrix](shopbot-modernization/feeds-speeds/DATA_SOURCES.md).
+Old FS/source-pack/recipe guides are historical; use current cutting/preset contracts.
+FabSpeed is independent and optional exchange remains Proposed. No retention,
+relocation or deletion is authorized by documentation cleanup; [retention options](releases/DOCUMENTATION_CHECKPOINT_2026_10_20.md)
+remain proposals. Software, installed-native, platform and physical acceptance are
+separate. English/German are the current frontend locales.

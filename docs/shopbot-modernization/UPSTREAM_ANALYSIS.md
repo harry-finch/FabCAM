@@ -1,3 +1,21 @@
+# Upstream analysis and fork dispositions
+
+## Current boundary
+
+The actual workspace and source lineage are described in [architecture](../ARCHITECTURE.md)
+and [STATUS](STATUS.md). KEEP upstream attribution, generic CAM/process boundaries
+and source-bound historical evidence. EXTEND through the existing core, thin
+transports, budgeted CPS and per-file export seams. The integrated Feeds & Speeds
+crate/source-pack engine is removed under ADR-0030, not an extension to recreate.
+V10 staged cutting, collection V2, scoped Pocket and advisory preset reuse supersede
+old model assumptions. FabSpeed exchange remains Proposed; WJ/VINYL remain deferred.
+
+## Historical investigation ledger
+
+The original per-milestone observations below are retained historical dispositions,
+not active implementation instructions. A former EXTEND/recommendation plan may now
+be superseded; consult current source and accepted versioned ADRs before changes.
+
 # Upstream feature audit
 
 Audited code: `9168104b4fc4e02e916740a54bd1e56b5019f662`. Paths below are relative

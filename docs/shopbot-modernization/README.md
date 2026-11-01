@@ -1,3 +1,25 @@
+# FabCAM modernization navigation
+
+Use [STATUS](STATUS.md) for actual source/qualification and blockers,
+[technical roadmap](ROADMAP.md) for workstreams and
+[release gates](../releases/RELEASE_ROADMAP.md) for acceptance. The accepted V10
+security descendant is distinct from older canonical V1.1 and frozen V1. Current
+scope is bounded macOS Personal Alpha software, not a multiplatform/physical claim.
+
+Current contracts: [cutting](../CUTTING_CONTRACT.md), [tested presets](../TESTED_PRESETS.md),
+[architecture](ARCHITECTURE.md), [ADRs](adr/README.md) and [documentation index](../README.md).
+FabSpeed is independent; the old FS engine/source-pack workflow is removed.
+
+## Historical modernization navigation
+
+The original navigation below retains milestone chronology, design ideas and report
+links. Its target dates, platform requirements, FS plans and pending/uncommitted
+wording are historical, superseded for current state by STATUS and ADR-0030/32/33.
+Do not restart an old plan or infer acceptance from its link. See [HISTORY](../releases/HISTORY.md).
+
+<details>
+<summary>Preserved historical modernization index</summary>
+
 # ShopBot modernization
 
 This is the detailed fork/history index. Start with the [central documentation index](../README.md),
@@ -146,3 +168,5 @@ Source presence and passing UI tests do not establish machining correctness.
   [STEP source/extraction plan](../releases/STEP_PLAN.md) and
   [Smart Workshop contracts](../releases/SMART_WORKSHOP_PLAN.md): PLANNED STEP1/2,
   SMART1/2, FIT1 and refined REST1; MULTI1 links existing ARCH-MACH.
+
+</details>

@@ -1,4 +1,4 @@
-# CPS posts in FabCAM V1
+# CPS posts in current FabCAM
 
 **V1 executes only the compiled bundled registry (`grbl`, `shopbot`).** External
 CPS inspection and execution are refused before JavaScript evaluation, including
@@ -14,36 +14,19 @@ there is no production feature switch. JSON properties cannot supply JS source.
 
 [V1 policy and future confinement roadmap](releases/SEC1_FOLLOWUP_ROADMAP.md).
 
-## Historical authoring reference (not an available V1 workflow)
+## Using a bundled post
 
-FabCAM runs Autodesk-`.cps`-compatible post-processors: ES5 JavaScript
-files that declare config globals, user properties, and entry-point
-callbacks (`onOpen`, `onSection`, `onLinear`, `onCircular`,
-`onCyclePoint`, `onClose`, …). If you have written or tuned a Fusion 360
-post, the same file shape works here.
-
-The runtime lives in [`crates/ivac-cps`](../crates/ivac-cps): a JS
-engine ([boa], pure Rust, so every transport can run it) plus a runtime
-prelude implementing the kernel API the posts call.
-
-## Using a post
-
-- **Bundled**: pick one in *Machine settings → G-code dialect → CPS
-  post*. `ivac posts` lists them from the CLI.
-- **Your own file**: *Open .cps file…* in the same place. The script is
-  **embedded into the project**, so a saved `.ivac-project` stays
-  self-contained and reproduces byte-identical output on another
-  machine.
-- Whatever the post declares in `properties` shows up as a form
-  (checkbox / number / dropdown / text). Only values you actually change
-  are stored, so a post updating its own defaults takes effect.
+Select a bundled registry post in the current machine Program output controls.
+CPS requires a CPS-enabled native CLI/server/Tauri build; the default standalone
+WASM package has no CPS. Source identity and acceptance belong to
+[STATUS](shopbot-modernization/STATUS.md). ShopBot keeps SAFETY-FIX-1 refusals,
+manual spindle assumptions and its source-bound output limits.
 
 Current V1.1 CLI (explicit request only):
 
 ```sh
 ivac posts
-ivac generate --request tests/fixtures/cli-v9/profile.request.json
-ivac generate part.dxf --request tests/fixtures/cli-v9/profile.template.json
+ivac generate --request tests/fixtures/alpha3-v10/profile.request.json
 ```
 
 Review all example values before use. In the request set `post_processor: "cps"`,
@@ -54,7 +37,14 @@ scripts and exact copies of bundled scripts are refused before evaluation.
 `ivac posts inspect external.cps` is also refused by the bundled-only policy.
 See [CLI contract](CLI_GENERATE.md). The authoring material below is historical.
 
-## Writing one
+## Historical authoring reference — not a current file-post workflow
+
+The callback/prelude material below explains the inherited CPS runtime. It does
+not enable external-file/source execution or imply CPS is in the default WASM
+bundle. Authoring a new bundled post requires a separately reviewed code change.
+The runtime lives in [`ivac-cps`](../crates/ivac-cps), retaining upstream attribution.
+
+### Writing one
 
 Start from [`crates/ivac-cps/posts/grbl.cps`](../crates/ivac-cps/posts/grbl.cps)
 — it is deliberately small and covers the whole shape: config globals,

@@ -1,57 +1,80 @@
 # FabCAM — quickstart
 
-A milling-oriented introduction to the current Atelier shell. Build the app using [BUILDING](BUILDING.md) or [Windows instructions](BUILDING_WINDOWS.md). Target platforms are Windows, macOS and Linux; the current fork's local desktop qualification is macOS. This checkpoint publishes no installer or release.
+Use [STATUS](shopbot-modernization/STATUS.md) to select the accepted source, then
+[BUILDING](BUILDING.md) / [Windows setup](BUILDING_WINDOWS.md). Historical builds can
+lack later features. Current software qualification does not establish installed-native
+file workflow or physical machining acceptance. Frontend languages are EN/DE.
 
 ## 1. Create or open a project
 
-Welcome offers New project, Open project, Import SVG/DXF, recent projects and an example. Save projects through the existing File/Save actions. Legacy `.ivac-project.json` / `.vc-project.json` naming and serialization stay supported; the FabCAM name does not migrate files or storage.
+Welcome offers New/Open/Import and an example. Save/open a **ProjectFile version 10**;
+legacy `.ivac-project.json` / `.vc-project.json` suffixes do not make V9 content
+compatible. Older/future versions refuse without rewriting originals. Keep backups;
+there is no implicit machining-data migration.
 
-## 2. Import and select geometry
+## 2. Import and place geometry
 
-Import SVG or DXF, inspect units/scale and drawing bounds, and select the required geometry/layers. Existing import and editing behavior is unchanged. Do not assume imported artwork has machining-safe dimensions.
+Import SVG/DXF and review units, scale, dimensions, layers and warnings. Unitless DXF
+or non-physical SVG prompts for the drawing unit; physical declarations retain their
+true scale. Source unit choice is saved and reused on reload. Do not double-convert
+physical units. Tilted DXF/MINSERT or inputs exceeding parser/expansion limits refuse.
 
-When a file does not say what one drawing unit measures (DXF without `$INSUNITS`,
-SVG sized in `px` or without a size), or the importer skipped something, an
-**Import summary** opens before anything is added: it shows the units found in
-the file, the resulting drawing size in mm and grouped import warnings. Choose
-the drawing units (1 unit = 1 mm by default, 96 or 72 dpi pixels, inch or a
-custom mm-per-unit value), check the size, then import. The choice is saved with
-the project and reused when the source is reloaded. Files with declared or
-physical units (DXF `$INSUNITS`, SVG in mm/cm/in/pt) import at their true size
-without a choice. A warning badge next to an imported file reopens its summary.
-Tilted 3D DXF entities and MINSERT arrays are refused; flatten or explode them
-in the CAD tool first.
+Mouse drawing placement and proportional dimensions are available. Original source
+coordinates, explicit transforms, manual stock and work origin are separate. Import
+must not silently rebase manually configured stock/zero. Cleanup Analyze/Preview/Apply
+has bounded continuity/topology checks; local repair acceptance does not certify CAM.
+Crossings/touching/ambiguous topology may require CAD editing; no universal repair.
 
 ## 3. Configure stock and work origin
 
-Set stock dimensions and placement, work-origin reference and fixture obstacles. These declare job intent; they do not establish physical machine zero. Nonzero work-origin Z is currently rejected in the bounded qualified setup. Work-origin/stock/geometry dragging remains deferred; fixture interaction has its own supported controls.
+Set stock dimensions/placement and work origin; inspect their relation to the drawing
+and fixtures. These are job coordinates, not physical machine zero. Nonzero work-origin
+Z remains outside the bounded qualified setup. Establish physical work zero separately.
 
 ## 4. Configure machine and tools
 
-Use the active-machine area and tool library. Machine profiles declare capabilities and limits; SOFTWARE ONLY/unvalidated qualifiers are meaningful. Select the operation's actual tool and check its diameter/type and machine suitability. A profile is not proof of physical machine state.
+Choose the actual machine/tool and check diameter, usable flute length, limits and
+process suitability. SOFTWARE ONLY/unvalidated labels matter. Substrate/coating is
+optional descriptive metadata, not an automatic cutting calculation or machine proof.
 
-## 5. Add operations and review cutting values
+## 5. Author cutting values or review a preset
 
-Select geometry and configure profile, pocket or drilling operations. Inspect depth, compensation, allowances and supported leads/tabs/entry. Additional inherited operation types require their own machine/post qualification.
+Profile/Pocket require Main Cutting; optional Finishing is OFF by default. Add explicit
+finishing tool/rates/DOC and applicable reserves. Scoped Pocket offers Walls / Floor /
+Walls and floor within supported geometry/entry/proof budgets. Other families retain
+their actual roles. Enter RPM/feed/plunge/DOC; the app validates known limits and
+reports missing/unknown information. It does not calculate rates from chipload.
 
-Manual cutting values remain authoritative. Feeds & Speeds recommends from traceable data; Apply is explicit. Imported ReferenceData and derived matches are not physical lab evidence. Local preset capture starts as Draft unless actual trial evidence is supplied. FS4 physical validation remains deferred.
-
-Build your own local presets or import a versioned JSON source using the
-[custom cutting-data guide](feeds-speeds/CUSTOM_DATA_SOURCES.md), including synthetic
-examples, evidence levels, backups and current UI limitations.
+[TESTED_PRESETS](TESTED_PRESETS.md) explains named collections, exact tested loading
+and the distinct reviewed starting-value copy. The latter can copy selected numbers
+across contexts without transferring testing or stepover. A new target attestation
+requires a real target trial. FabSpeed is independent; optional exchange is planned.
 
 ## 6. Generate and inspect
 
-Generate the program, inspect 2D/3D preview and warnings, and verify work frame, stock, clearances and fixtures. Critical errors can block export; changes can make the preview stale. Bounded remaining-material analysis is a per-pocket/depth diagnostic, not an implemented cleanup operation or complete machine simulation.
+Generate, then inspect full-program simulation, provenance, work frame, stock,
+clearances and diagnostics. Changes stale the old output. Bounded remaining-material
+diagnostics are not optimized rest machining or full machine simulation. Restricted
+Helix, legacy Profile overcut and affected two-sided setups refuse. Never bypass a
+refusal by relabelling a source or using an old fixture/installer.
 
 ## 7. Export a supported program
 
-ShopBot uses the native CPS runtime; the current standalone browser WASM package cannot run CPS. Use the Tauri desktop app or a CPS-enabled native server for ShopBot review. Helix, unqualified two-sided CPS/translated registration and some RPM-transition combinations reject. Consult [STATUS](shopbot-modernization/STATUS.md) and the operation/post qualification records before relying on a combination.
+ShopBot OpenSBP requires a CPS-enabled native adapter; default standalone WASM has no
+CPS. Posts and same-tool RPM transitions have explicit limitations. Native selection
+grants file access dynamically; a recent/reloaded source can require selecting it
+again. Export checks are separate from raw FS plugin authorization. Per-file
+transactional output is not pair-atomic. See [cutting/export contract](CUTTING_CONTRACT.md).
 
 ## 8. Set up and validate on the machine
 
-Review controller preview, tool, stock, work zero, safe travel, fixture clearance and spindle assumptions. Conduct appropriate supervised air-cut/material/measurement checks. FabCAM does not directly operate the machine. The historical M4 square evidence does not qualify every future job or operation.
+Separately review actual controller, tool/spindle, stock, holding, work zero, travel
+and fixtures, then conduct authorized supervised air/material/measurement checks.
+FabCAM does not operate the machine. Historical M4 evidence is not physical
+qualification of the current software/job.
 
 ## More information
 
-[Current limitations](shopbot-modernization/STATUS.md), [roadmap](shopbot-modernization/ROADMAP.md), [CAM validation](shopbot-modernization/CAM_VALIDATION.md), [project origins and license](../README.md#project-origins). FabCAM is derived from ivaCAM; legal attribution and internal compatibility identifiers are retained.
+[STATUS](shopbot-modernization/STATUS.md), [technical roadmap](shopbot-modernization/ROADMAP.md),
+[release gates](releases/RELEASE_ROADMAP.md), [architecture](ARCHITECTURE.md),
+[origins/license](../README.md#project-origins). Preserve original attribution and evidence.
