@@ -405,6 +405,13 @@ fn guard<T>(f: impl FnOnce() -> Result<T, JsValue>) -> Result<T, JsValue> {
 // alive past the conversion.
 #[allow(clippy::needless_pass_by_value)]
 pub(crate) fn structured_error_to_js(err: ivac_core::Error) -> JsValue {
+    // Safety diagnostics cross the worker's JSON channel. A JS Map would lose
+    // its entries there, hiding the stable reason used by EN/DE rendering.
+    if err.params.contains_key("safety_guard") {
+        return err
+            .serialize(&serde_wasm_bindgen::Serializer::json_compatible())
+            .unwrap_or_else(|_| JsValue::from_str(&err.to_string()));
+    }
     serde_wasm_bindgen::to_value(&err).unwrap_or_else(|_| JsValue::from_str(&err.to_string()))
 }
 

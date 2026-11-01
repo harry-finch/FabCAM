@@ -51,6 +51,7 @@ mod regions;
 mod remaining;
 mod safe_z;
 pub use remaining::RemainingMaterial;
+mod motion_guards;
 mod selection;
 mod setup_resolver;
 #[cfg(feature = "cps")]
@@ -330,6 +331,7 @@ pub struct DiagnosticPreview {
 
 /// Direct output cannot be retracted after a collision is discovered.
 pub fn validate_direct_output(project: &Project) -> Result<(), PipelineError> {
+    motion_guards::validate_parameters(project)?;
     if !project.fixtures.is_empty() {
         return Err(PipelineError::Fixture("Declared fixtures require buffered generation and validation; direct executable streaming is unavailable. Use /generate or progress streaming.".into()));
     }
@@ -338,6 +340,8 @@ pub fn validate_direct_output(project: &Project) -> Result<(), PipelineError> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError {
+    #[error("operation #{0}: {2}. No program generated.")]
+    MotionGuard(u32, &'static str, &'static str),
     #[error("operation #{0}: {1} cannot be emitted by CPS; disable it or choose a supported post. No program generated.")]
     UnsupportedCpsMotion(u32, String),
     #[error("Program blocked: tool path intersects a declared fixture. Diagnostic preview only.")]
@@ -416,6 +420,7 @@ impl PipelineError {
     pub fn to_structured(&self, project: Option<&Project>) -> Option<crate::Error> {
         use crate::errors::{AutoFix, Error as Structured, ErrorCode};
         match self {
+            PipelineError::MotionGuard(id, reason, message) => Some(Structured::misconfigured(*message).with_param("op_id", *id).with_param("safety_guard", *reason).with_hint("Review the refused entry, holding or transformation. No program generated; saved parameters were not changed.")),
             PipelineError::FixtureCollision(preview) => {
                 let mut error = Structured::misconfigured(format!("{}{}", preview.side.map_or(String::new(), |side| format!("{side:?} setup: ")), self)).with_hint("Move the fixture or change the tool/path, then regenerate. Warning preferences cannot enable export.");
                 error.diagnostic_preview = Some(preview.clone());
@@ -508,6 +513,7 @@ impl PipelineError {
                 .with_param("op_id", op_id)
                 .with_param("thickness_mm", thickness_mm)
                 .with_param("removal_mm", removal_mm)
+                .with_param("safety_guard", "two_sided_holding")
                 .with_hint(
                     "Reduce the front op's depth below the stock thickness, add holding tabs, \
                      or move the through-cut to the back (last) side.",
@@ -697,6 +703,7 @@ fn run_pipeline_impl<F: Fn(&str, f64, &str)>(
     }
     // Fail an unusable CPS request before any real work happens.
     validate_cps_request(&req)?;
+    motion_guards::validate_parameters(&req.project)?;
     if req.post_processor == Some(PostProcessorKind::Hpgl) {
         if let Some(op) = req
             .project
@@ -1534,6 +1541,7 @@ fn prepare_stream(
     if matches!(post_kind, PostProcessorKind::Hpgl | PostProcessorKind::Cps) {
         return Err(StreamGcodeError::Unsupported(post_kind));
     }
+    motion_guards::validate_parameters(&request.project)?;
     validate_direct_output(&request.project)?;
     let mut project = request.project;
     crate::cutting_parameters::validate_project(&project)?;
@@ -3858,6 +3866,16 @@ pub fn generate_drawing(
         .map_err(PipelineError::Drawing)?;
     let evaluated = request.drawing.evaluate().map_err(PipelineError::Drawing)?;
     let mut req = request.machining;
+    if req.project.stock.as_ref().is_some_and(|s| s.flip.is_some()) {
+        if let Some(op) = req
+            .project
+            .operations
+            .iter()
+            .find(|o| o.enabled && o.side == crate::project::WorkpieceSide::Back)
+        {
+            return Err(PipelineError::MotionGuard(op.id, "back_source", "Edited Back geometry requires qualified source mirroring before two-sided generation"));
+        }
+    }
     let has_stock_outline = req
         .project
         .segments

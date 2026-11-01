@@ -14,11 +14,42 @@ import type { MsgKey } from '../i18n/keys';
 export type Translate = (key: MsgKey, params?: Record<string, string | number>) => string;
 
 export function errorMessage(e: WiacError, t: Translate): string {
+  switch (e.params?.safety_guard) {
+    case 'helical_entry':
+      return t('error.safety.helical_entry', e.params);
+    case 'legacy_overcut':
+      return t('error.safety.legacy_overcut', e.params);
+    case 'back_text':
+      return t('error.safety.back_text', e.params);
+    case 'back_approach':
+      return t('error.safety.back_approach', e.params);
+    case 'back_pattern':
+      return t('error.safety.back_pattern', e.params);
+    case 'back_source':
+      return t('error.safety.back_source', e.params);
+    case 'two_sided_depth':
+      return t('error.safety.two_sided_depth', e.params);
+    case 'two_sided_holding':
+      return t('error.safety.two_sided_holding', e.params);
+  }
   return e.code ? t(`error.code.${e.code}`, e.params ?? {}) : e.message;
 }
 
 export function errorHint(e: WiacError, t: Translate): string | null {
   if (!e.recovery_hint) return null;
+  if (
+    [
+      'helical_entry',
+      'legacy_overcut',
+      'back_text',
+      'back_approach',
+      'back_pattern',
+      'back_source',
+      'two_sided_depth',
+      'two_sided_holding',
+    ].includes(String(e.params?.safety_guard))
+  )
+    return t('error.safety.hint');
   return e.code ? t(`error.hint.${e.code}`, e.params ?? {}) : e.recovery_hint;
 }
 

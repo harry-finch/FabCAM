@@ -316,6 +316,15 @@ export type MsgKey =
   | "error.hint.two_sided_through"
   | "error.hint.unimplemented_op_kind"
   | "error.hint.unknown_post_processor"
+  | "error.safety.back_approach"
+  | "error.safety.back_pattern"
+  | "error.safety.back_source"
+  | "error.safety.back_text"
+  | "error.safety.helical_entry"
+  | "error.safety.hint"
+  | "error.safety.legacy_overcut"
+  | "error.safety.two_sided_depth"
+  | "error.safety.two_sided_holding"
   | "error.span"
   | "fs.material"
   | "fs35.add_library"
@@ -2752,6 +2761,15 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "error.hint.two_sided_through",
   "error.hint.unimplemented_op_kind",
   "error.hint.unknown_post_processor",
+  "error.safety.back_approach",
+  "error.safety.back_pattern",
+  "error.safety.back_source",
+  "error.safety.back_text",
+  "error.safety.helical_entry",
+  "error.safety.hint",
+  "error.safety.legacy_overcut",
+  "error.safety.two_sided_depth",
+  "error.safety.two_sided_holding",
   "error.span",
   "fs.material",
   "fs35.add_library",

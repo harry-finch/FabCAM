@@ -12,7 +12,7 @@ use crate::cam::two_sided::{self, Conflict, SideExtent};
 use crate::cam::VcObject;
 use crate::geometry::BBox;
 use crate::project::{Op, OpKind, OpSource, PocketStrategy, Project, StockConfig};
-use crate::project::{TabPlacementMode, ToolChangeStrategy, ToolOffset, WorkpieceSide};
+use crate::project::{ToolChangeStrategy, ToolOffset, WorkpieceSide};
 
 use super::{op_includes_object, resolve_op_segment_refs, PipelineError, PipelineWarning};
 
@@ -601,6 +601,26 @@ pub(super) fn two_sided_guard(
         ));
     }
 
+    let mut removals = std::collections::HashMap::new();
+    for op in project
+        .operations
+        .iter()
+        .filter(|o| o.enabled && !o.is_program_only())
+    {
+        let reach = super::motion_guards::removal_mm(project, op)?;
+        if op.side == WorkpieceSide::Front
+            && reach >= thickness - 1e-6
+            && !super::motion_guards::effective_holding(project, op, objects, thickness)
+        {
+            return Err(PipelineError::TwoSidedThrough {
+                op_id: op.id,
+                thickness_mm: thickness,
+                removal_mm: reach,
+            });
+        }
+        removals.insert(op.id, reach);
+    }
+
     let extents: Vec<SideExtent> = project
         .operations
         .iter()
@@ -652,11 +672,55 @@ pub(super) fn two_sided_guard(
                 op_id: op.id,
                 side: op.side,
                 footprint,
-                removal_mm: op_removal_mm(op),
-                tabbed: op_has_tabs(op),
+                removal_mm: removals[&op.id],
+                tabbed: op.side == WorkpieceSide::Front && removals[&op.id] >= thickness - 1e-6,
             })
         })
         .collect();
+
+    // Independent tab proofs cannot establish cumulative holding: another
+    // Front cut may remove the first operation's bridge. Bounding-box overlap
+    // is conservative; unknown placement/source also cannot establish disjointness.
+    for held in extents.iter().filter(|e| e.tabbed) {
+        for other in project.operations.iter().filter(|o| {
+            o.enabled
+                && !o.is_program_only()
+                && o.side == WorkpieceSide::Front
+                && o.id != held.op_id
+        }) {
+            let unproven = other.pattern().is_some()
+                || matches!(
+                    other.kind,
+                    OpKind::RasterEngrave { .. }
+                        | OpKind::Thread { .. }
+                        | OpKind::Drill {
+                            spot_first: Some(_),
+                            ..
+                        }
+                )
+                || other.contour_params().is_some_and(|c| {
+                    !matches!(c.leads.r#in, crate::project::LeadKind::Off)
+                        || !matches!(c.leads.out, crate::project::LeadKind::Off)
+                })
+                || !project.text_layers.is_empty();
+            let overlaps = extents
+                .iter()
+                .find(|e| e.op_id == other.id)
+                .map_or(true, |e| {
+                    e.footprint.min_x <= held.footprint.max_x
+                        && e.footprint.max_x >= held.footprint.min_x
+                        && e.footprint.min_y <= held.footprint.max_y
+                        && e.footprint.max_y >= held.footprint.min_y
+                });
+            if unproven || overlaps {
+                return Err(PipelineError::MotionGuard(
+                    held.op_id,
+                    "two_sided_holding",
+                    "Overlapping or unproven Front cuts require a joint retained-material proof",
+                ));
+            }
+        }
+    }
 
     for conflict in two_sided::analyze(&extents, thickness) {
         match conflict {
@@ -690,26 +754,6 @@ pub(super) fn two_sided_guard(
         }
     }
     Ok(())
-}
-
-/// How far an op removes material below its own face (mm, positive),
-/// derived from the universal depth schedule: from `start_depth` down to
-/// `depth`, extended by `through_depth`. Op kinds that carry their cut
-/// depth elsewhere (V-Carve, Halfpipe, Thread) report their common depth
-/// only — see the module note on [`crate::cam::two_sided`].
-fn op_removal_mm(op: &Op) -> f64 {
-    let p = &op.params;
-    // Reach below the face, not just the incremental removal from start_depth.
-    let depth = p.depth_list.iter().copied().fold(p.depth, f64::min);
-    (-depth).max(0.0) + p.through_depth.max(0.0)
-}
-
-/// Whether an op leaves holding tabs (bridges). Tabs are emitted for any
-/// `tab_mode` other than `Off`; a tabbed front through-cut keeps the part
-/// bridged across the flip, so the guard doesn't treat it as a sever.
-fn op_has_tabs(op: &Op) -> bool {
-    op.contour_params()
-        .is_some_and(|c| !matches!(c.tab_mode, TabPlacementMode::Off))
 }
 
 /// Scan the enabled-op sequence for obviously wrong orderings —
