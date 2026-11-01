@@ -1,0 +1,73 @@
+{
+  "phase": "authorized local consolidation",
+  "implementation_commit": "73371e001e920ee422089887f8ba3b2d0569afbd",
+  "software_commit": "32b5fbbb6fb2b6a170c0531549fc081e5d0c2c10",
+  "documentation_commit": "Containing commit; exact SHA recorded in final local receipt and human handoff.",
+  "software_file_count": 1330,
+  "software_fingerprint_sha256": "498fe344f19035d8b6e9fc1d874790373c212aa5073f693774a4fa9ac289c6d0",
+  "committed_software_verified_at": "32b5fbbb6fb2b6a170c0531549fc081e5d0c2c10",
+  "byte_identical_to_accepted_inventory": true,
+  "canonical_gate_rerun": false,
+  "reason": "No qualified executable-source bytes changed",
+  "original_checkpoint_receipts_preserved": true,
+  "exact_path_groups": {
+    "1_implementation": [
+      "Cargo.lock",
+      "crates/ivac-core/Cargo.toml",
+      "crates/ivac-core/src/input.rs",
+      "crates/ivac-core/src/input/dxf_in.rs",
+      "crates/ivac-core/src/input/limits.rs",
+      "crates/ivac-core/src/input/svg_font.rs",
+      "crates/ivac-core/src/input/svg_in.rs",
+      "crates/ivac-core/src/pipeline.rs",
+      "crates/ivac-core/src/pipeline/two_sided_emit.rs",
+      "crates/ivac-core/src/sim/stl.rs",
+      "crates/ivac-server/src/main.rs",
+      "crates/ivac-server/src/qual1a2_tests.rs",
+      "crates/ivac-server/src/security.rs",
+      "crates/ivac-tauri/Cargo.toml",
+      "crates/ivac-tauri/capabilities/default.json",
+      "crates/ivac-tauri/src/commands.rs",
+      "crates/ivac-tauri/src/lib.rs",
+      "crates/ivac-tauri/tauri.conf.json",
+      "frontend/src/lib/api/tauri.ts",
+      "frontend/src/lib/components/error-display.ts",
+      "frontend/src/lib/i18n/keys.ts",
+      "frontend/src/lib/i18n/messages/de.json",
+      "frontend/src/lib/i18n/messages/en.json",
+      "frontend/src/lib/services/file_ops.ts",
+      "frontend/src/lib/state/import-ops.ts"
+    ],
+    "2_focused_regressions": [
+      "crates/ivac-core/tests/import_security.rs",
+      "crates/ivac-core/tests/security_cancellation.rs",
+      "frontend/src/lib/api/tauri-import-security.test.ts",
+      "frontend/src/lib/state/import-reload.test.ts"
+    ],
+    "3_sanitized_documentation": [
+      "docs/README.md",
+      "docs/releases/RELEASE_ROADMAP.md",
+      "docs/releases/SEC_HARDEN_1_APPLICATION_SECURITY.md",
+      "docs/releases/evidence/sec-harden1/consolidation.json",
+      "docs/releases/evidence/sec-harden1/http.json",
+      "docs/releases/evidence/sec-harden1/preservation.json",
+      "docs/releases/evidence/sec-harden1/proposed-commits.json",
+      "docs/releases/evidence/sec-harden1/qualification.json",
+      "docs/releases/evidence/sec-harden1/runtime-comparison.json",
+      "docs/releases/evidence/sec-harden1/software-files.json",
+      "docs/releases/evidence/sec-harden1/wasm.json",
+      "docs/shopbot-modernization/ROADMAP.md",
+      "docs/shopbot-modernization/STATUS.md"
+    ]
+  },
+  "coherence_note": "Existing HTTP test-router adapters moved into implementation group; inline tests remain with their implementation modules. No software byte change.",
+  "other_worktrees_heads_statuses_and_historical_refs_unchanged": true,
+  "audit_artifacts_verified": 133,
+  "accepted_safety_source_files_verified": 1325,
+  "unqualified": [
+    "installed-native file workflows",
+    "authenticated remote HTTP access",
+    "physical machining"
+  ],
+  "merge_push_installer_release_hardware": false
+}

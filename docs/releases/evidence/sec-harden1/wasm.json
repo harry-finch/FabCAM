@@ -1,0 +1,92 @@
+{
+  "sha256": "c7458ca7b547e8131487548c3521c0dd74d1a16f1f55c9ec1806ad756d53d634",
+  "cps": false,
+  "rows": [
+    {
+      "name": "helix-island",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1",
+          "safety_guard": "helical_entry"
+        },
+        "message": "Helical entry/descent cannot be proven clear of retained geometry. Use a separately supported Direct or Ramp setup; no strategy was substituted",
+        "recovery_hint": "Review the refused entry, holding or transformation. No program generated; saved parameters were not changed."
+      },
+      "no_program": true
+    },
+    {
+      "name": "helix-profile",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1",
+          "safety_guard": "helical_entry"
+        },
+        "message": "Helical entry/descent cannot be proven clear of retained geometry. Use a separately supported Direct or Ramp setup; no strategy was substituted",
+        "recovery_hint": "Review the refused entry, holding or transformation. No program generated; saved parameters were not changed."
+      },
+      "no_program": true
+    },
+    {
+      "name": "overcut",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1",
+          "safety_guard": "legacy_overcut"
+        },
+        "message": "Legacy Profile overcut requires renewed winding and retained-side geometric qualification. Explicit CAD geometry is unaffected",
+        "recovery_hint": "Review the refused entry, holding or transformation. No program generated; saved parameters were not changed."
+      },
+      "no_program": true
+    },
+    {
+      "name": "ordinary-profile",
+      "accepted": true,
+      "moves": 20,
+      "native_program_and_decoded_moves_exact": true
+    },
+    {
+      "name": "holding",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "code": "two_sided_through",
+        "params": {
+          "op_id": "1",
+          "removal_mm": "2",
+          "safety_guard": "two_sided_holding",
+          "thickness_mm": "2"
+        },
+        "message": "two-sided job: operation #1 cuts clean through the 2 mm stock from the front, so it can't be flipped and re-registered",
+        "recovery_hint": "Reduce the front op's depth below the stock thickness, add holding tabs, or move the through-cut to the back (last) side."
+      },
+      "no_program": true
+    },
+    {
+      "name": "shallow-pair",
+      "accepted": true
+    },
+    {
+      "name": "deep-start-thread",
+      "refused": true,
+      "no_program": true,
+      "error": {
+        "kind": "misconfigured",
+        "code": "two_sided_through",
+        "params": {
+          "op_id": "1",
+          "removal_mm": "3",
+          "safety_guard": "two_sided_holding",
+          "thickness_mm": "2"
+        },
+        "message": "two-sided job: operation #1 cuts clean through the 2 mm stock from the front, so it can't be flipped and re-registered",
+        "recovery_hint": "Reduce the front op's depth below the stock thickness, add holding tabs, or move the through-cut to the back (last) side."
+      }
+    }
+  ]
+}

@@ -1,14 +1,13 @@
 # FabCAM release roadmap
 
-**SAFETY-FIX-1 — accepted bounded software-qualified containment; locally consolidated (2026-11-01).**
+**SEC-HARDEN-1 — accepted bounded software-qualified security milestone; locally consolidated (2026-11-01).**
+Isolated `feature/sec-harden-1` inherits accepted SAFETY-FIX-1 `c33f69f`.
+Software `32b5fbb` matches all 1,330 accepted source files; 20/20 canonical gates
+and 109 exact fixed CNC comparisons remain source-bound to the qualification.
+[Report, commit receipt and limitations](SEC_HARDEN_1_APPLICATION_SECURITY.md).
 Canonical V1.1 remains `16eb34fd07354627b3c3c2f48a227b30ba1cc3c2`.
-Backend refusals contain unproven helical entry, ineffective two-sided holding /
-untransformed Back inputs, and legacy Profile overcut. No schema migration.
-[Source-bound qualification and limitations](SAFETY_FIX_1_MOTION_GUARDS.md).
-Software `e09fdca` matches all 1,325 accepted source files.
-Three local commits authorized; no functional requalification of Helix, unrestricted
-two-sided machining or legacy overcut. **HARD STOP; no canonical integration,
-installer, release or physical acceptance.**
+Installed-native file workflows, authenticated remote HTTP access and physical
+machining remain unqualified. **HARD STOP; no merge, push, installer or release.**
 
 <details>
 <summary>Historical checkpoint banners — preserved, not current authorization</summary>

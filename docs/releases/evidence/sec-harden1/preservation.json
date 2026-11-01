@@ -1,0 +1,39 @@
+{
+  "other_worktrees": [
+    {
+      "worktree": "ivacam",
+      "head": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_sha256": "4308140e2259fdd50285156ea1b6edda881e4d0814ca3dd9691375bf8adcdadb",
+      "unchanged": true
+    },
+    {
+      "worktree": "FabCAM-safety-audit-1",
+      "head": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_sha256": "855f0f5c632343761895e46536022fba829c6616102e95786db2d58228ccd7d9",
+      "unchanged": true
+    },
+    {
+      "worktree": "FabCAM-safety-fix-1",
+      "head": "c33f69f6d6181f7bac2b1cebcdfe5b830f2d5b1c",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "worktree": "FabCAM-v1-freeze",
+      "head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    }
+  ],
+  "audit_evidence_files_unchanged": 133,
+  "accepted_safety_software_files_unchanged": 1325,
+  "real_index_empty": true,
+  "commits_created": 0,
+  "merge_push_installer_release_physical_operations": false,
+  "disposable_servers_stopped": [
+    19872,
+    19873,
+    19867
+  ],
+  "existing_user_servers_untouched": true
+}

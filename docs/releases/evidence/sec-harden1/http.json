@@ -1,0 +1,67 @@
+{
+  "rows": [
+    {
+      "case": "baseline-foreign-multipart",
+      "status": 200
+    },
+    {
+      "case": "multipart",
+      "origin": null,
+      "status": 200
+    },
+    {
+      "case": "multipart",
+      "origin": "http://localhost:5173",
+      "status": 200
+    },
+    {
+      "case": "multipart",
+      "origin": "http://127.0.0.1:19873",
+      "status": 200
+    },
+    {
+      "case": "multipart",
+      "origin": "null",
+      "status": 403
+    },
+    {
+      "case": "multipart",
+      "origin": "https://foreign.invalid",
+      "status": 403
+    },
+    {
+      "case": "json-preflight",
+      "origin": "http://localhost:5173",
+      "status": 200
+    },
+    {
+      "case": "json-preflight",
+      "origin": "https://foreign.invalid",
+      "status": 403
+    },
+    {
+      "case": "originless-cross-site",
+      "status": 403
+    },
+    {
+      "case": "bounded-admission-third-request",
+      "status": 429
+    },
+    {
+      "case": "normal-import-after-disconnect",
+      "status": 200
+    },
+    {
+      "case": "/generate/stream-disconnect-and-recovery",
+      "status": 200,
+      "headers_received": true
+    },
+    {
+      "case": "/generate/gcode-disconnect-and-recovery",
+      "status": 200,
+      "headers_received": true
+    }
+  ],
+  "synthetic_only": true,
+  "worker_cancellation_proof": "server unit sentinel test; live short jobs can finish before close"
+}

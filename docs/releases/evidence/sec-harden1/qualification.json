@@ -1,0 +1,89 @@
+{
+  "base_sha": "c33f69f6d6181f7bac2b1cebcdfe5b830f2d5b1c",
+  "branch": "feature/sec-harden-1",
+  "software_files": 1330,
+  "software_fingerprint_sha256": "498fe344f19035d8b6e9fc1d874790373c212aa5073f693774a4fa9ac289c6d0",
+  "source_unchanged_after_gate": true,
+  "canonical_runs": 1,
+  "canonical_exit_code": 0,
+  "mandatory_groups": [
+    "cargo fmt --check",
+    "cargo clippy -Dwarnings (with pedantic)",
+    "cargo test --workspace",
+    "xtask schema-check",
+    "xtask version-check",
+    "readme parity",
+    "pnpm install",
+    "codegen drift",
+    "i18n keys drift",
+    "pnpm run lint",
+    "pnpm run check",
+    "pnpm run test",
+    "pnpm run build",
+    "wasm-pack build (web)",
+    "wasm cps size guard",
+    "cargo-deny check",
+    "ui smoke (headless)",
+    "CLI trust and transactional export",
+    "SEC1 release boundary regressions",
+    "candidate identity regressions"
+  ],
+  "rust_tests_passed": 1686,
+  "frontend_tests_passed": 1570,
+  "fixed_corpus": {
+    "total": 109,
+    "accepted": 96,
+    "refused": 13,
+    "exact": true
+  },
+  "http_real_checks": 13,
+  "wasm_import_svg_stl_refusals": true,
+  "browser_csp": {
+    "production_policy_literal_http_header": true,
+    "example_dxf_import": true,
+    "profile_worker_moves": 187,
+    "program_lines": 107,
+    "blocking_diagnostics_retained": true,
+    "console_errors_warnings": 0,
+    "screenshot_sha256": "b3d7c28ceb58dd4510293bf3303eab3d22ad4bef9ccf8dc4f6cb69aec24b1005",
+    "installed_native_acceptance": false
+  },
+  "independent_review": {
+    "model": "Astra",
+    "effort": "Medium",
+    "scope": "targeted read-only; final limited HTTP follow-up",
+    "findings_closed": [
+      "SVG duplicate-ID and href ambiguity",
+      "point clone work charging",
+      "native launch/recent/watch/reload authorization recovery"
+    ],
+    "final_result": "No further concrete blocker identified within reviewed corrections; no installed-native acceptance claim"
+  },
+  "binaries_local_only": {
+    "native_cli_sha256": "98a1e5c7f0225afad72d457430f18ddf569f12f523955d3991413c33a5361438",
+    "native_server_sha256": "882bfbf414f3b28d78fa482f8619d0671c137fc8b4cb4ce1dc8e1d4e3a33d826",
+    "wasm_sha256": "c7458ca7b547e8131487548c3521c0dd74d1a16f1f55c9ec1806ad756d53d634"
+  },
+  "raw_log_sha256": {
+    "sec-harden-core-targeted3.log": "1e14cba0e00d8dc4bcf8aad255ebdd51b768e0420042a8a493d2680822e2b5b7",
+    "sec-harden-http-final2.log": "ca4e16600b68795bbc985220ad7a3f8994a33ab378284edaf0d4ce8d6c62c684",
+    "sec-harden-tauri-tests2.log": "80bd54e5fe48018828e0aee12d6e6738b62674029117c23aaa09b8ff9e80f272",
+    "sec-harden-frontend-targeted4.log": "d4d7f706b0d67d78e6dfee4d764ac968935a384bf9d93a90cb64debe30b2e524",
+    "sec-harden-runtime.log": "1ffbd03d797cc98320f286ea98c3813a1beb70d5bb4ce4f1ba49cf010f6a8f27",
+    "sec-harden-wasm.log": "c1a9a4df1bd609b81a979bec43bf1e7c450231da13a3a6eb03dbc71992a3e883",
+    "sec-harden-clippy6.log": "f5a25801affa97fcc84383c1d88a9ed4e322271e7b84245007b53504aad84830",
+    "canonical-gate.log": "5b7a8793f380ff5982d48e8243d3bd2d28b879b0261e58a1c8a2f62a0b608508"
+  },
+  "private_index": "Only generated keys.ts staged in a disposable alternate index for unchanged codegen drift comparison; real index empty",
+  "decision": "CONDITIONAL GO for bounded software hardening; human and installed-native acceptance pending",
+  "commits_created": 0,
+  "release_installer_physical": false,
+  "runner_skips": {
+    "rust_ignored": 1,
+    "frontend_skipped": 1,
+    "note": "Existing canonical suite policy retained; no gate skipped or weakened."
+  },
+  "final_binary_runtime_recheck": true,
+  "documentation_link_targets_checked": 139,
+  "documentation_broken_targets": 0
+}

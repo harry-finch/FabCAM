@@ -1,0 +1,59 @@
+{
+  "staged": false,
+  "created": false,
+  "dependency_order": [
+    1,
+    2,
+    3
+  ],
+  "groups": {
+    "1_implementation": [
+      "Cargo.lock",
+      "crates/ivac-core/Cargo.toml",
+      "crates/ivac-core/src/input.rs",
+      "crates/ivac-core/src/input/dxf_in.rs",
+      "crates/ivac-core/src/input/svg_font.rs",
+      "crates/ivac-core/src/input/svg_in.rs",
+      "crates/ivac-core/src/pipeline.rs",
+      "crates/ivac-core/src/pipeline/two_sided_emit.rs",
+      "crates/ivac-core/src/sim/stl.rs",
+      "crates/ivac-server/src/main.rs",
+      "crates/ivac-tauri/Cargo.toml",
+      "crates/ivac-tauri/capabilities/default.json",
+      "crates/ivac-tauri/src/commands.rs",
+      "crates/ivac-tauri/src/lib.rs",
+      "crates/ivac-tauri/tauri.conf.json",
+      "frontend/src/lib/api/tauri.ts",
+      "frontend/src/lib/components/error-display.ts",
+      "frontend/src/lib/i18n/keys.ts",
+      "frontend/src/lib/i18n/messages/de.json",
+      "frontend/src/lib/i18n/messages/en.json",
+      "frontend/src/lib/services/file_ops.ts",
+      "frontend/src/lib/state/import-ops.ts",
+      "crates/ivac-core/src/input/limits.rs",
+      "crates/ivac-server/src/security.rs"
+    ],
+    "2_focused_regressions": [
+      "crates/ivac-core/tests/import_security.rs",
+      "crates/ivac-core/tests/security_cancellation.rs",
+      "crates/ivac-server/src/qual1a2_tests.rs",
+      "frontend/src/lib/api/tauri-import-security.test.ts",
+      "frontend/src/lib/state/import-reload.test.ts"
+    ],
+    "3_sanitized_documentation": [
+      "docs/README.md",
+      "docs/releases/RELEASE_ROADMAP.md",
+      "docs/releases/SEC_HARDEN_1_APPLICATION_SECURITY.md",
+      "docs/releases/evidence/sec-harden1/http.json",
+      "docs/releases/evidence/sec-harden1/preservation.json",
+      "docs/releases/evidence/sec-harden1/proposed-commits.json",
+      "docs/releases/evidence/sec-harden1/qualification.json",
+      "docs/releases/evidence/sec-harden1/runtime-comparison.json",
+      "docs/releases/evidence/sec-harden1/software-files.json",
+      "docs/releases/evidence/sec-harden1/wasm.json",
+      "docs/shopbot-modernization/ROADMAP.md",
+      "docs/shopbot-modernization/STATUS.md"
+    ]
+  },
+  "inline_tests": "Tests embedded in implementation modules stay with group 1; no intermediate broken module split."
+}

@@ -1,7 +1,9 @@
 # FabCAM documentation
 
-Latest isolated checkpoint: [ALPHA-4 reviewed preset reuse](releases/ALPHA_4_REVIEWED_PRESET_REUSE.md),
-software qualification and human review tracked separately.
+Current isolated checkpoint: [SEC-HARDEN-1](releases/SEC_HARDEN_1_APPLICATION_SECURITY.md) (accepted bounded software milestone; locally consolidated, no canonical integration).
+
+Historical reference: [ALPHA-4 reviewed preset reuse](releases/ALPHA_4_REVIEWED_PRESET_REUSE.md).
+Dated reports retain their source-bound qualification and acceptance limits.
 
 Current focus: **FabCAM V1.1 — macOS Personal Alpha**, on the maintainer's own
 Mac, with supervised ShopBot cases accepted progressively. General fablab/public
