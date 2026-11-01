@@ -1,0 +1,120 @@
+{
+  "accepted_source": "6bfecf3339524cc86e8c2bd83f168c63cbdd2860",
+  "accepted_inventory_files": 1330,
+  "accepted_full_inventory_fingerprint": "498fe344f19035d8b6e9fc1d874790373c212aa5073f693774a4fa9ac289c6d0",
+  "full_inventory_unchanged": false,
+  "reason": "Qualified inventory includes documentation and agent Markdown; explicit documentation exceptions below. No executable or generated contract changes.",
+  "non_markdown_inventory_files_unchanged": 1271,
+  "non_markdown_inventory_fingerprint": "944844dc715cca22f02bf6cbcdccd27e14eed2411cce93bb0c7fddac320423b2",
+  "markdown_exceptions": [
+    {
+      "path": ".agents/skills/cam-ux-ui/SKILL.md",
+      "accepted_sha256": "facf27f6f949f1ab88adbe9d37e4c390c48e8503216e8bde7051910f019e36a4",
+      "current_sha256": "07fecbd15be3cf7d7517494062ba32d2f36bf7430936c67945fd9fb38732e549"
+    },
+    {
+      "path": ".agents/skills/feeds-speeds/SKILL.md",
+      "accepted_sha256": "1153cbb44e337ba4c0d486be2bef76cc3d99767ead330f2995571e46c9124356",
+      "current_sha256": "52d0f4dbfdc6269779c58795d360e3dbd27cb785ac31b6a8c8188ade56cfb238"
+    },
+    {
+      "path": ".agents/skills/feeds-speeds/references/calculation-model.md",
+      "accepted_sha256": "bc38e3a1d7fb17fd32c514257aa73ebc34eb36efe0ca4237d7e955c6c76fa1ca",
+      "current_sha256": "e85ffcbc4e7bf05aa1f935450e072ad6cefe70745e759a5d82ebc55e96d261b8"
+    },
+    {
+      "path": ".agents/skills/feeds-speeds/references/data-and-provenance.md",
+      "accepted_sha256": "1fe39db0e1cbd257d2353dbfed2c4777e96e836d38de73505a87c4c108827ede",
+      "current_sha256": "78a2aa0a5c48ae374959ee3ac60f4cb94e250120cece6626bf58f4eee34bbbf8"
+    },
+    {
+      "path": ".agents/skills/feeds-speeds/references/fs0-checklist.md",
+      "accepted_sha256": "2150e66b5e610b6c50fcd87e35dd1dc71092894c17e3cfdaac9a7153ac6f6dd2",
+      "current_sha256": "8da0603b0a395547d557ff2fe781853ca6791084d31f7993de8ec5009a682ca0"
+    },
+    {
+      "path": ".agents/skills/feeds-speeds/references/operation-context.md",
+      "accepted_sha256": "a18487ee1a3a273d20a71e021bd5e27df6c33ed157f0f74b97f0576b4ef5f936",
+      "current_sha256": "1bacf52df8fa53d2b2fe5dfd5dcb9157d942948e3d599d7a36802eeb918a3f30"
+    },
+    {
+      "path": ".agents/skills/feeds-speeds/references/validation-and-calibration.md",
+      "accepted_sha256": "8fad296ece6a825eba532c188bbf7f6ab0c598441fe7ae2cea565181cf56a697",
+      "current_sha256": "d40333aa6024be9cac25a8113ab8e84d0537f498c3a30cc60f8b2f0f89913d87"
+    },
+    {
+      "path": ".agents/skills/ivacam-architecture/SKILL.md",
+      "accepted_sha256": "22b8ac0e61d348513262812a32ad07c22872e71251782ca53e0eaba1a51b37cd",
+      "current_sha256": "fb6cf3cd0a45d8e28a58278410e3ff4a68cd25650fcb5b9eceadfa47261f238c"
+    },
+    {
+      "path": ".agents/skills/professional-workshop-ui/SKILL.md",
+      "accepted_sha256": "93a91aadac72903e6bda6fb2ddfbd12e9420a66f9b2745e6b49d744413c19c87",
+      "current_sha256": "8e7372046aa130b68e1dc43eee3e04c810330635e026d7ff8e0df974b48f4a9a"
+    },
+    {
+      "path": ".agents/skills/project-documentation/SKILL.md",
+      "accepted_sha256": "4d28fd2144f6bbb25de958ed59898f5e0dad0844bf830231d2eff75335065fbe",
+      "current_sha256": "cb1ef2393e6d11be1ecf4ee9b24afc6d71923a66a3734d41e81e579c2241d00a"
+    },
+    {
+      "path": "AGENTS.md",
+      "accepted_sha256": "1bb913672a37e6694ca10354918de2d1bbba69e3456790e93e3ff15f3985f757",
+      "current_sha256": "334c6a5b1bc46511de4297b795d1584c4bf26bf64d6e140e6db006522172656d"
+    },
+    {
+      "path": "CLAUDE.md",
+      "accepted_sha256": "de80df61c56819b7f155b193d26cf5e1c6957d81094f2d30cc396852c4671105",
+      "current_sha256": "cd7441d718ea95fc0a228d71ff32daea816a145b6d00801fabfbe359bc074913"
+    },
+    {
+      "path": "README.md",
+      "accepted_sha256": "9f5a6bb6b88e6fd766915584d60a45532a3171e5a937d1e7bfcdc0599c565c1c",
+      "current_sha256": "b46e2f604900f8c6799d64201a811957d6b9a6138edb6a1b3c82dc0562b87fdb"
+    },
+    {
+      "path": "README_de.md",
+      "accepted_sha256": "7640e710ba6bf93ccf0ac21302520289109449377619a0d4f253b18eaad47ba0",
+      "current_sha256": "38e8eb8052488c8e4bc175426e39ac33eedf56166d1b70d813c1fc96abc75b60"
+    }
+  ],
+  "tracked_changes_markdown_only": true,
+  "other_worktrees_heads_and_statuses_unchanged": [
+    {
+      "worktree": "ivacam",
+      "head": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_sha256": "4308140e2259fdd50285156ea1b6edda881e4d0814ca3dd9691375bf8adcdadb",
+      "status_entries": 8481
+    },
+    {
+      "worktree": "FabCAM-safety-audit-1",
+      "head": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_sha256": "855f0f5c632343761895e46536022fba829c6616102e95786db2d58228ccd7d9",
+      "status_entries": 17
+    },
+    {
+      "worktree": "FabCAM-safety-fix-1",
+      "head": "c33f69f6d6181f7bac2b1cebcdfe5b830f2d5b1c",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "worktree": "FabCAM-sec-harden-1",
+      "head": "6bfecf3339524cc86e8c2bd83f168c63cbdd2860",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    },
+    {
+      "worktree": "FabCAM-v1-freeze",
+      "head": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status_entries": 0
+    }
+  ],
+  "real_index_empty": true,
+  "commits_created": 0,
+  "current_full_inventory_fingerprint_documentation_changed": "1d9f357f7127e7d00c7a4340a9ccbbc967b008827e3bc0ce2b0d5179a39426b4",
+  "all_tracked_non_markdown_files_git_unchanged": 3503,
+  "original_audit_artifacts_verified_unchanged": 133,
+  "security_raw_logs_and_qualification_binaries_unchanged": true
+}

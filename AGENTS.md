@@ -1,78 +1,62 @@
-# Agent Instructions
+# FabCAM agent entry point
 
-## Fork governance after M4
+## Authority and onboarding
 
-This section takes precedence over the upstream Git/session assumptions below.
-Read `docs/shopbot-modernization/STATUS.md` and `ROADMAP.md` before new work.
-M0–M4 are the completed ShopBot foundation; M4 baseline is
-`e7aeebdc43294bbfe3fdead8e6d6b7eb15e1b2f1`. Preserve their names and evidence limits.
-Use named future tracks: FS (Feeds & Speeds), UX (milling workflow), CAD
-(geometry preparation), WJ (ProtoMAX/waterjet), VINYL (drag knife, lower priority).
-The FS foundation is historical/completed; current sequencing follows the canonical
-release plan (V1.1 macOS Personal Alpha, optional V1.2 integration, deferred CAM/WJ/VINYL).
-Personal evaluation, supervised physical acceptance, Workshop Beta and public release
-are separate decisions. Public/multiplatform distribution is deferred for V1.1;
-canonical safety tests and failed outcomes are not waived by the limited alpha scope.
-Every milestone ends at human approval; recording a roadmap does not authorize
-restarting completed FS0 or implementing any later milestone.
+Current production source and accepted versioned contracts override historical
+reports, old examples and superseded skill instructions. Check the actual branch,
+HEAD, worktrees and dirty state before interpreting a document as current.
 
-Current V1.1 follows Accepted ADR-0030 and FS-RESET: explicit operation cutting
-values per actual role, independent CAM validation, project v9 and local tested
-preset collections. The integrated recommendation/source-pack engine is removed.
-FS0–FS3.9 and older PRESET reports remain historical completed/superseded work, not
-instructions to recreate that engine. FabSpeed owns independent calculation and
-experiments. Optional one-way FabSpeed → FabCAM integration is planned for V1.2;
-ADR-0031 is Proposed and implementation contracts require INT-0 review. CAM
-operation values stay authoritative, and generation/simulation/export must work
-without FabSpeed. Post-processors never call a live calculation engine. Consult
-current STATUS and RELEASE_ROADMAP; qualification, human, platform and physical
-gates remain distinct. Frozen V1 keeps its original source-bound contracts.
-Use architecture/documentation skills for these boundaries.
+Start with [STATUS](docs/shopbot-modernization/STATUS.md), the
+[documentation index](docs/README.md), [cutting contract](docs/CUTTING_CONTRACT.md),
+[architecture](docs/ARCHITECTURE.md) and [accepted ADRs](docs/shopbot-modernization/adr/README.md).
+STATUS owns the current accepted source/provenance and blockers; the
+[technical roadmap](docs/shopbot-modernization/ROADMAP.md) owns workstreams;
+[RELEASE_ROADMAP](docs/releases/RELEASE_ROADMAP.md) owns release/acceptance gates.
+[Frozen V1 readiness](docs/releases/V1_READINESS.md) is a separate historical line.
+[HISTORY](docs/releases/HISTORY.md) and dated reports retain source-bound evidence.
+Update current sections in place; never prepend another status-banner stack.
 
-The published baseline is now `main`; `feature/shopbot-mvp` is retained historically.
-Origin is `harry-finch/FabCAM`, upstream is
-`aalarchiv/ivacam`. Commits and pushes require explicit user authorization;
-M4 publication approval does not authorize publication of subsequent work.
-No automatic merge, PR, upstream sync or force-push. A reviewable documentation
-handoff may remain uncommitted pending approval.
+## Current contracts
 
-## Navigation and authority
+ProjectFile version 10 and native `project.cutting_version: 10` are current.
+Profile/ordinary Pocket use explicit Main Cutting and optional Finishing under
+ADR-0032/0033; other families retain their validated actual-role assignments.
+Preset collection V2, strict tested matching and separate ALPHA-4 reviewed starting
+values are described in [TESTED_PRESETS](docs/TESTED_PRESETS.md). Do not migrate V9,
+map Rough/Finish to Main/Finishing, transfer physical attestation or invent defaults.
 
-Start with the [documentation index](docs/README.md), [current STATUS](docs/shopbot-modernization/STATUS.md)
-and [V1 readiness](docs/releases/V1_READINESS.md). The single release plan is
-[RELEASE_ROADMAP](docs/releases/RELEASE_ROADMAP.md); the track ROADMAP links historical
-milestone contracts. Dated reports preserve their tested source and limits.
-Accepted ADRs and qualification evidence must not be silently rewritten.
+ADR-0030 separates FabCAM from FabSpeed. The integrated recommendation/source-pack
+engine is removed. FabCAM owns explicit cutting values, CAM validation and presets;
+FabSpeed calculation/experiments and optional V1.2 exchange remain independent/planned.
+Postprocessors never call a live calculator. FS0–FS3.9 reports/formulas are historical
+references, not instructions to recreate the deleted engine.
 
-Use relevant versioned skills in `.agents/skills/`; read their `SKILL.md` and
-referenced contracts. A host-provided skill catalogue can point outside this repo:
-inspect the supplied path and note any divergence instead of overwriting either copy.
-Use [CONTRIBUTING](docs/CONTRIBUTING.md) for extension recipes and [BUILDING](docs/BUILDING.md)
-for toolchain/setup. Significant architecture changes follow the ADR workflow.
+Preserve SAFETY-FIX-1 motion refusals and SEC-HARDEN-1 authorization/resource limits.
+Software qualification, installed-native acceptance, release approval and physical
+ShopBot qualification are separate gates. M0–M4 evidence keeps its original limits;
+waterjet/ProtoMAX and vinyl remain deferred. Never weaken a guard to satisfy an example.
 
-## Git and parallel-work boundaries
+## Skills and implementation
 
-`origin` is the FabCAM fork, `upstream` is ivaCAM; inspect `git remote -v` rather
-than assuming a remote is absent. Do not change remotes during ordinary tasks.
-Commits require explicit task authorization; push, merge, rebase, reset, clean,
-history rewriting and publication require their own authorization. Never infer
-publication permission from an accepted milestone or a passing test suite.
+Use the relevant **versioned** `.agents/skills/` and its referenced contracts.
+A host catalogue may point at a separate copy: note divergence and consult the
+versioned skill; do not overwrite another checkout or treat an obsolete skill as authority.
+See [CONTRIBUTING](docs/CONTRIBUTING.md) and [BUILDING](docs/BUILDING.md).
+Keep transports thin, CAM neutral and dialect differences in posts. Use command/history
+mutations. Never hand-edit generated schemas/API types. Significant changes require
+the ADR workflow and appropriate source-bound validation.
 
-When another agent has unfinished changes, prefer an isolated branch/worktree
-from the agreed committed revision. Preserve the primary checkout and local-only
-evidence; do not stage, stash, clean, restore or commit another agent's work.
-A clean isolated branch does not imply that all qualification evidence is in Git.
-Record the inspected revision and what must be resynchronized after parallel work.
+## Git, evidence and human gates
 
-## Tracking and handoff
+`origin` is the FabCAM fork, `upstream` is ivaCAM; inspect actual remotes. Preserve
+upstream attribution. Do not change remotes or synchronize upstream incidentally.
+Use an isolated authorized worktree when work is concurrent. Preserve unrelated
+changes, untracked user data and ignored qualification evidence; never stash, clean,
+reset or stage another agent's files. A clean worktree is not a complete evidence archive.
+Commits need explicit task authorization. Merge, push, rebase, destructive cleanup,
+publication and installers each require their own scope/approval; no automatic PR.
 
-Use `bd` for task tracking; run `bd prime` for the installed workflow. Typical
-commands: `bd ready`, `bd show <id>`, `bd update <id> --claim`, `bd close <id>`.
-Do not create Markdown task lists as a substitute for issue tracking. Preserve
-other active tasks and do not close human-review gates merely because code is done.
-
-Before handoff: review your scoped diff; run checks appropriate to the change;
-commit only reviewed authorized files when commits are requested; report commit IDs,
-remaining changes, evidence limits and the next human decision. Leave unrelated
-uncommitted work untouched. Do not push automatically. Every milestone ends at the
-requested human checkpoint / HARD STOP; do not start a subsequent milestone.
+Use `bd prime` and Beads for tracking; preserve other tasks and leave human gates
+open until accepted. Before handoff, review exact paths, validate relevant checks,
+record source/limits and remaining changes, and stop at the requested human checkpoint.
+Do not start the next milestone merely because it appears in a roadmap.

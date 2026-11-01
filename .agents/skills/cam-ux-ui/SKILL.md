@@ -68,3 +68,13 @@ excessive rounding, decorative borders and oversized spacing. Preserve labels,
 units, visible keyboard focus and text/icon status while increasing density.
 Reuse the shared style/token layer before isolated component CSS.
 See [persistent desktop design guidance](../../../docs/shopbot-modernization/ux/DESIGN_DIRECTION.md).
+
+## Current workflow contracts
+
+Use [CUTTING_CONTRACT](../../../docs/CUTTING_CONTRACT.md) and
+[TESTED_PRESETS](../../../docs/TESTED_PRESETS.md). Profile/Pocket expose Main Cutting
+and an explicit optional Finishing stage; scoped Pocket has Walls / Floor / Walls
+and floor. Keep strict tested loading distinct from reviewed starting-value reuse.
+Do not restore removed recommendation/Draft interfaces or transfer attestation.
+Frontend locales are EN/DE; keep strings in catalogs and maintain units, compact
+shared typography, visible refusal reasons and atomic Undo/Redo.

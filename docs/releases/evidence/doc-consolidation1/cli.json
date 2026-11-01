@@ -1,0 +1,47 @@
+{
+  "qualified_binary_sha256": "98a1e5c7f0225afad72d457430f18ddf569f12f523955d3991413c33a5361438",
+  "no_build_or_source_mutation": true,
+  "synthetic_disposable_outputs": true,
+  "rows": [
+    {
+      "documented_block": 0,
+      "exit_code": 0
+    },
+    {
+      "documented_block": 1,
+      "exit_code": 0
+    },
+    {
+      "case": "pocket",
+      "response_json": true,
+      "program_sha256": "7147402dd7dccf53a3286b9e8f9f2731807aa2917ccd598b238e70ba5647164b",
+      "toolpath_entries": 465
+    },
+    {
+      "case": "profile",
+      "response_json": true,
+      "program_sha256": "b168766782fb9023c17ad0db433a8df9114e7f2d77d1cfed6853d27cb7e66d84",
+      "toolpath_entries": 60
+    },
+    {
+      "case": "import",
+      "response_json": true,
+      "program_sha256": "6d0d9a9632cfcdda179c4b065076554d4736999dbe5c2cacab7fb0489de5f7ff",
+      "toolpath_entries": 63
+    },
+    {
+      "case": "v9-refusal",
+      "exit_code": 1,
+      "stdout_bytes": 0
+    },
+    {
+      "case": "documented bundled registry listing",
+      "command": "ivac posts",
+      "exit_code": 0,
+      "bundled_ids": [
+        "grbl",
+        "shopbot"
+      ]
+    }
+  ]
+}

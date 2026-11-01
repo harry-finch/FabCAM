@@ -30,3 +30,14 @@ Record verified facts as facts, mark hypotheses or unknowns clearly, prefer file
 ## Milestone handoff
 
 At a hard stop, ensure persistent docs contain enough context that a fresh Codex session can resume without relying on chat history.
+
+## Current-state reconciliation
+
+Production source/generated contracts, then accepted versioned ADRs, then source-bound
+qualification evidence and tests take precedence over old prose. Use
+[STATUS](../../../docs/shopbot-modernization/STATUS.md) as the single source/provenance
+summary; [CUTTING_CONTRACT](../../../docs/CUTTING_CONTRACT.md) owns V10/stage semantics.
+Update STATUS/technical roadmap/release gates **in place**, with distinct roles;
+put chronology in HISTORY/DEVLOG, not stacked banners. Preserve dated reports and
+accepted ADR text. Software qualification does not imply native or physical acceptance.
+English/German README headings and reciprocal links must remain in parity.

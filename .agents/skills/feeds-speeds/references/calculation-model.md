@@ -1,5 +1,10 @@
 # Calculation model
 
+> Historical/reference material from the removed integrated calculator. Current
+> [cutting contracts](../../../../docs/CUTTING_CONTRACT.md) and
+> [preset workflows](../../../../docs/TESTED_PRESETS.md) take precedence. Preserve
+> formulas and safety context; this is not an instruction to implement that engine.
+
 Use this reference when designing or changing Feeds & Speeds mathematics.
 
 ## Core quantities

@@ -1,0 +1,61 @@
+{
+  "source": "6bfecf3339524cc86e8c2bd83f168c63cbdd2860",
+  "branch": "docs/doc-consolidation-1",
+  "checks": {
+    "markdown_and_anchors": {
+      "active_markdown_files": 61,
+      "local_targets_checked": 516,
+      "anchors_checked": 21,
+      "skills_frontmatter_checked": 10,
+      "broken": [],
+      "historical_release_reports_not_globally_scanned": true
+    },
+    "readme_parity": {
+      "exit_code": 0,
+      "headings": 12,
+      "reciprocal_language_links": true
+    },
+    "documented_cli_blocks": {
+      "exit_code": 0,
+      "cases": [
+        "help",
+        "V10 scoped Pocket LinuxCNC",
+        "V10 Profile bundled CPS",
+        "V10 template + physical-unit SVG",
+        "V9 refused, zero stdout"
+      ]
+    },
+    "git_diff_check": {
+      "exit_code": 0
+    },
+    "locales_from_source": [
+      "en",
+      "de"
+    ],
+    "runtime_locale_files_unchanged": true,
+    "production_dependencies_generated_contracts_fixtures_unchanged": true
+  },
+  "reviewers": {
+    "count": 2,
+    "mode": "independent targeted read-only",
+    "scopes": [
+      "current contracts/architecture/skills",
+      "public docs/navigation/examples"
+    ],
+    "primary_owned_all_edits": true
+  },
+  "obsolete_term_findings": {
+    "active_V9_or_rectangle_only_claims_removed": true,
+    "integrated_recommendation_claims_removed": true,
+    "historical_occurrences_deliberately_retained": true,
+    "ADR_0032_0033_links_already_existed": true,
+    "three_removed_FS_source_links_labelled_historical_unavailable": true,
+    "obsolete_release_anchor_corrected": true
+  },
+  "original_argon_audit": "Unavailable in targeted inspected locations; no claim of full original-audit reproduction",
+  "full_release_gate_rerun": false,
+  "reason": "Documentation only; exact executable/generated blob preservation",
+  "commits_created": 0,
+  "staged": false,
+  "hard_stop": "human documentation review"
+}

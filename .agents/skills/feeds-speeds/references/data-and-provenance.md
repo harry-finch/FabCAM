@@ -1,5 +1,10 @@
 # Data and provenance
 
+> Historical/reference material from the removed integrated calculator. Current
+> [cutting contracts](../../../../docs/CUTTING_CONTRACT.md) and
+> [preset workflows](../../../../docs/TESTED_PRESETS.md) take precedence. Preserve
+> formulas and safety context; this is not an instruction to implement that engine.
+
 Cutting recommendations are engineering data. Treat provenance as part of the data model.
 
 ## Data categories

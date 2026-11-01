@@ -1,5 +1,10 @@
 # FS0 checklist — Architecture and data-model qualification
 
+> Historical/reference material from the removed integrated calculator. Current
+> [cutting contracts](../../../../docs/CUTTING_CONTRACT.md) and
+> [preset workflows](../../../../docs/TESTED_PRESETS.md) take precedence. Preserve
+> formulas and safety context; this is not an instruction to implement that engine.
+
 FS0 is analysis/design. Do not implement the recommendation engine.
 
 ## 1. Inspect current ownership

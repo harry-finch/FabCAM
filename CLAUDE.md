@@ -9,11 +9,11 @@ weaken those rules in agent-specific notes.
 
 ## Current source and parallel work
 
-NUMSAFE and NUMSAFE2 are committed in `e1a0c95` and `2c6e4e1`; they are no longer
-paused/uncommitted. Use [STATUS](docs/shopbot-modernization/STATUS.md) and the
-[reconciliation report](docs/releases/PROJECT_STATE_RECONCILIATION_2026_10_20.md)
-for the integrated baseline, actual checks and still-open human gates.
-Inspect Git/worktrees/tracker before new work and preserve all local-only evidence.
+The accepted security descendant and canonical V1.1 may be different branches.
+[STATUS](docs/shopbot-modernization/STATUS.md) owns their current identities and
+qualification provenance. Project/cutting V10, collection V2 and ADR-0032/0033
+supersede older V9 and Rough/Finish guidance for new Profile/Pocket operations.
+Inspect Git/worktrees/tracker before work; preserve other changes and local evidence.
 
 ## Build, tests and compatibility
 

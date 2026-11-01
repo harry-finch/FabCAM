@@ -30,3 +30,13 @@ Read `references/process-boundaries.md` when changing machine/process kinds, IR 
 For an architecture review, report the existing implementation, proposed change, affected boundaries, compatibility risks, upstream delta, tests needed, and whether an ADR is warranted.
 
 Do not redesign unrelated subsystems.
+
+## Current source authority
+
+Read [current architecture](../../../docs/ARCHITECTURE.md),
+[cutting contract](../../../docs/CUTTING_CONTRACT.md) and
+[STATUS](../../../docs/shopbot-modernization/STATUS.md). V10 and nested stage
+contracts supersede V9 for current authoring; collection V2 and ALPHA-4 reuse are
+separate from historical recipe/source-pack APIs. The Cargo workspace has no
+recommendation crate. Preserve SAFETY-FIX-1 and SEC-HARDEN-1 boundaries and the
+separate frozen V1 lineage; historical reports are not current source contracts.

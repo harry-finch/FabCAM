@@ -1,0 +1,56 @@
+{
+  "starting_source": "6bfecf3339524cc86e8c2bd83f168c63cbdd2860",
+  "branch": "docs/doc-consolidation-1",
+  "total_paths": 39,
+  "staged": false,
+  "commits_created": 0,
+  "proposed_groups": {
+    "1_current_contracts_and_roles": [
+      "docs/ARCHITECTURE.md",
+      "docs/CUTTING_CONTRACT.md",
+      "docs/TESTED_PRESETS.md",
+      "docs/releases/HISTORY.md",
+      "docs/releases/RELEASE_ROADMAP.md",
+      "docs/releases/V1_READINESS.md",
+      "docs/shopbot-modernization/ARCHITECTURE.md",
+      "docs/shopbot-modernization/ROADMAP.md",
+      "docs/shopbot-modernization/STATUS.md",
+      "docs/shopbot-modernization/adr/README.md"
+    ],
+    "2_public_onboarding_and_navigation": [
+      "README.md",
+      "README_de.md",
+      "docs/BUILDING.md",
+      "docs/CLI_GENERATE.md",
+      "docs/CONTRIBUTING.md",
+      "docs/CPS_POSTS.md",
+      "docs/QUICKSTART.md",
+      "docs/README.md",
+      "docs/feeds-speeds/CUSTOM_DATA_SOURCES.md",
+      "docs/shopbot-modernization/README.md",
+      "docs/shopbot-modernization/UPSTREAM_ANALYSIS.md",
+      "docs/shopbot-modernization/feeds-speeds/README.md"
+    ],
+    "3_agent_guidance_and_final_receipt": [
+      ".agents/skills/cam-ux-ui/SKILL.md",
+      ".agents/skills/feeds-speeds/SKILL.md",
+      ".agents/skills/feeds-speeds/references/calculation-model.md",
+      ".agents/skills/feeds-speeds/references/data-and-provenance.md",
+      ".agents/skills/feeds-speeds/references/fs0-checklist.md",
+      ".agents/skills/feeds-speeds/references/operation-context.md",
+      ".agents/skills/feeds-speeds/references/validation-and-calibration.md",
+      ".agents/skills/ivacam-architecture/SKILL.md",
+      ".agents/skills/professional-workshop-ui/SKILL.md",
+      ".agents/skills/project-documentation/SKILL.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "docs/releases/DOC_CONSOLIDATION_1.md",
+      "docs/releases/evidence/doc-consolidation1/cli.json",
+      "docs/releases/evidence/doc-consolidation1/source-preservation.json",
+      "docs/releases/evidence/doc-consolidation1/updated-files.json",
+      "docs/releases/evidence/doc-consolidation1/verification.json"
+    ]
+  },
+  "only_documentary_changes": true,
+  "raw_logs_binaries_caches_private_projects_excluded": true
+}
