@@ -13,23 +13,27 @@ import {
 import { countCriticalPipelineWarnings, type PipelineWarning } from '../api/pipeline-warnings';
 import { simWarningSeverity } from '../sim/warnings';
 
-/** Recomputed at every export, including after a Save dialog. No effect timing dependency. */
-export function qualificationKey(p: ProjectState, post: string): string | null {
-  if (
-    !p.gen.generated?.gcode.trim() ||
-    p.gen.pipelineState !== 'idle' ||
-    p.loading ||
-    !p.gen.inputContextKey ||
-    p.gen.inputContextKey !== generationContextKey(p, post)
-  )
-    return null;
+/** Each public call checks fresh content, including after a Save dialog. */
+function canQualify(p: ProjectState): boolean {
+  return Boolean(
+    p.gen.generated?.gcode.trim() &&
+    p.gen.pipelineState === 'idle' &&
+    !p.loading &&
+    p.gen.inputContextKey,
+  );
+}
+
+// The context is shared only within one synchronous diagnostics call. It is never
+// retained across an edit, async boundary, document replacement or another export.
+function qualificationKeyForContext(p: ProjectState, context: string | null): string | null {
+  if (!canQualify(p) || p.gen.inputContextKey !== context) return null;
   const s = p.data.settings;
   return JSON.stringify([
     QUALIFICATION_REVISION,
     p.documentEpoch,
     p.gen.generatedVersion,
     p.gen.inputContextKey,
-    p.gen.generated.tool_provenance,
+    p.gen.generated!.tool_provenance,
     p.gen.generatedBack?.tool_provenance,
     s.cellResolutionMode,
     s.cellResolutionMm,
@@ -37,14 +41,19 @@ export function qualificationKey(p: ProjectState, post: string): string | null {
     isWasmTransport(),
   ]);
 }
-export function qualificationPhase(p: ProjectState, post: string): QualificationPhase {
+export function qualificationKey(p: ProjectState, post: string): string | null {
+  return canQualify(p) ? qualificationKeyForContext(p, generationContextKey(p, post)) : null;
+}
+function phaseForKey(p: ProjectState, key: string | null): QualificationPhase {
   const q = p.gen.qualification;
-  const key = qualificationKey(p, post);
   if (!key) return p.gen.generated ? 'stale' : 'unavailable';
   if (!q) return 'pending';
   if (q.key !== key) return 'stale';
   if (q.phase === 'current' && (!q.front || (p.gen.generatedBack && !q.back))) return 'failed';
   return q.phase;
+}
+export function qualificationPhase(p: ProjectState, post: string): QualificationPhase {
+  return phaseForKey(p, qualificationKey(p, post));
 }
 export function qualifiedDiagnostics(
   p: ProjectState,
@@ -94,13 +103,13 @@ export function verificationInput(p: ProjectState, key: string): VerificationInp
 export function programExportStatus(p: ProjectState, post: string) {
   const front = (p.gen.generated?.warnings ?? []) as PipelineWarning[];
   const back = (p.gen.generatedBack?.warnings ?? []) as PipelineWarning[];
+  const context = p.gen.inputContextKey ? generationContextKey(p, post) : null;
+  const phase = phaseForKey(p, qualificationKeyForContext(p, context));
+  const q = phase === 'current' ? p.gen.qualification : null;
   const critical = (side: 'front' | 'back') =>
-    (qualifiedDiagnostics(p, post, side)?.warnings ?? []).filter(
-      (w) => simWarningSeverity(w) === 'critical',
-    ).length;
-  const phase = qualificationPhase(p, post);
+    (q?.[side]?.warnings ?? []).filter((w) => simWarningSeverity(w) === 'critical').length;
   return {
-    stale: !p.gen.inputContextKey || p.gen.inputContextKey !== generationContextKey(p, post),
+    stale: !p.gen.inputContextKey || p.gen.inputContextKey !== context,
     qualification: phase,
     critical: countCriticalPipelineWarnings(front) + critical('front'),
     backCritical: countCriticalPipelineWarnings(back) + critical('back'),
@@ -113,7 +122,8 @@ export function programExportStatus(p: ProjectState, post: string) {
 
 /** Both warning surfaces describe the complete front/back programs. */
 export function programWarningSummary(p: ProjectState, post: string) {
-  const phase = qualificationPhase(p, post);
+  const context = p.gen.generated && p.gen.inputContextKey ? generationContextKey(p, post) : null;
+  const phase = phaseForKey(p, qualificationKeyForContext(p, context));
   const q = phase === 'current' ? p.gen.qualification : null;
   return summarizeWarnings({
     verification: phase,
@@ -124,6 +134,6 @@ export function programWarningSummary(p: ProjectState, post: string) {
     ],
     hasGenerated: p.gen.generated != null,
     hasSimDiagnostics: phase === 'current',
-    dirty: p.gen.generated != null && p.gen.inputContextKey !== generationContextKey(p, post),
+    dirty: p.gen.generated != null && (!p.gen.inputContextKey || p.gen.inputContextKey !== context),
   });
 }
