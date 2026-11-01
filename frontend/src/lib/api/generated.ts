@@ -3049,6 +3049,8 @@ export interface components {
             whirl_stepover: number;
         };
         ToolEntry: {
+            /** @description Authored surface coating. Absent/empty is unspecified, not explicit `uncoated`. */
+            coating?: string | null;
             /** @description Free-text comment / description. Surfaced as the tooltip on the tool dropdown in `OpPropertiesPanel` and as an expandable text area in `ToolLibraryDialog`. Empty / None = no comment; doesn't affect any pipeline output. */
             comment?: string | null;
             /**
@@ -3203,6 +3205,8 @@ export interface components {
              * @description Free shank length between the top of the cutting flutes and the bottom of the holder/collet (mm). Models the real-world case where the collet doesn't grip right above the flutes — common for reach-extension tooling. Defaults to 0 (collet sits directly on the flutes). None = same as `Some(0.0)` for the sim.
              */
             stickout_length_mm?: number | null;
+            /** @description Authored cutter substrate, independent of workpiece material. Absent means unknown. Extensible text/code; never inferred or used to calculate cutting parameters. */
+            substrate?: string | null;
             /**
              * Format: double
              * @description Thread pitch (mm) for a thread mill (Estlcam `Pitch`) — the axial advance per orbit. Honored only when `kind == ThreadMill`. Drives the helical Z-advance of the Thread op and a label in the tool library. None = the Thread op must specify its own pitch.

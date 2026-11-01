@@ -47,6 +47,13 @@ macro_rules! tool_entry_model {
 }
 
 tool_entry_model! {
+    /// Authored cutter substrate, independent of workpiece material. Absent means unknown.
+    /// Extensible text/code; never inferred or used to calculate cutting parameters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub substrate: Option<String>,
+    /// Authored surface coating. Absent/empty is unspecified, not explicit `uncoated`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub coating: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub physical_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -379,6 +386,8 @@ fn is_default_spindle_direction(d: &SpindleDirection) -> bool {
 impl Default for ToolEntry {
     fn default() -> Self {
         Self {
+            substrate: None,
+            coating: None,
             physical_id: None,
             max_rpm: None,
             id: 1,
@@ -865,5 +874,44 @@ mod audit_11_12 {
                 .tip_angle_deg,
             60.
         );
+    }
+}
+
+#[cfg(test)]
+mod metadata_tests {
+    use super::ToolEntry;
+
+    #[test]
+    fn optional_specifications_preserve_old_serialization_and_custom_text() {
+        let original = serde_json::to_value(ToolEntry::default()).unwrap();
+        assert!(original.get("substrate").is_none());
+        assert!(original.get("coating").is_none());
+        for (substrate, coating) in [
+            ("carbide", "uncoated"),
+            ("HSS-Co custom", "TiAlN / custom"),
+            ("", ""),
+        ] {
+            let mut value = original.clone();
+            value["substrate"] = substrate.into();
+            value["coating"] = coating.into();
+            let tool: ToolEntry = serde_json::from_value(value.clone()).unwrap();
+            assert_eq!(serde_json::to_value(tool.clone()).unwrap(), value);
+            assert_eq!(tool.substrate.as_deref(), Some(substrate));
+            assert_eq!(tool.coating.as_deref(), Some(coating));
+            value.as_object_mut().unwrap().remove("substrate");
+            value.as_object_mut().unwrap().remove("coating");
+            assert_eq!(value, original);
+        }
+        for field in ["substrate", "coating"] {
+            for invalid in [
+                serde_json::json!(42),
+                serde_json::json!(["carbide"]),
+                serde_json::json!({"name":"DLC"}),
+            ] {
+                let mut value = original.clone();
+                value[field] = invalid;
+                assert!(serde_json::from_value::<ToolEntry>(value).is_err());
+            }
+        }
     }
 }

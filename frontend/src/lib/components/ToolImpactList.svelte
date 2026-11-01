@@ -14,12 +14,16 @@
             name: impact.before,
             kind: impact.kindBefore,
             diameter: impact.diameterBefore,
+            substrate: impact.substrateBefore,
+            coating: impact.coatingBefore,
           }}
           after={{
             label: t('uxb.after'),
             name: impact.after,
             kind: impact.kindAfter,
             diameter: impact.diameterAfter,
+            substrate: impact.substrateAfter,
+            coating: impact.coatingAfter,
           }}
         />
         <p>

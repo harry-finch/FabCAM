@@ -3003,6 +3003,8 @@ mod tests {
     #[test]
     fn pocket_with_drill_bit_refuses() {
         let drill = ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,

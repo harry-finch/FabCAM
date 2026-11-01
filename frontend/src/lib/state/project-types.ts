@@ -160,6 +160,9 @@ export interface FormProfileSample {
 }
 
 export interface ToolEntry {
+  /** Cutter specifications, not workpiece material or calculated rates. Missing is unknown. */
+  substrate?: string | null;
+  coating?: string | null;
   physicalId?: string;
   maxRpm?: number;
   id: number;

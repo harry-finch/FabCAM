@@ -2425,5 +2425,11 @@
   "reuse.context.material_revision": "Material revision",
   "reuse.context.tool_id": "Local tool number",
   "reuse.context.tool_physical_id": "Physical tool identity",
-  "reuse.strict_action": "Apply matching tested preset"
+  "reuse.strict_action": "Apply matching tested preset",
+  "toolmeta.substrate": "Substrate",
+  "toolmeta.coating": "Coating",
+  "toolmeta.unspecified": "Unspecified",
+  "toolmeta.substrate_help": "Cutter material, such as carbide or HSS. Not the workpiece material. Custom values are allowed.",
+  "toolmeta.coating_help": "Surface coating, such as TiAlN or DLC. Enter uncoated for a known uncoated cutter; leave blank if unknown.",
+  "toolmeta.help": "Descriptive specifications only. Editing them does not change cutting values and may invalidate a tested preset context."
 }

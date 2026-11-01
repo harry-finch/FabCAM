@@ -161,6 +161,8 @@ mod tests {
         holder: Option<HolderShape>,
     ) -> ToolEntry {
         ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,

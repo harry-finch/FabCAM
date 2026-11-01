@@ -1,3 +1,4 @@
+import { validateToolMetadata } from '../state/tool-metadata';
 import { validateDrawingSnapshot } from '../state/drawing-load';
 import { clearForDrawingImport } from '../state/stock-placement';
 import { programExportStatus } from '../state/program-qualification';
@@ -1068,6 +1069,12 @@ export async function importToolset(
     !Array.isArray(env.payload)
   ) {
     project.setError('toolset load: not a .ivac-toolset.json file');
+    return null;
+  }
+  try {
+    env.payload.forEach(validateToolMetadata);
+  } catch (e) {
+    project.setError(`toolset load: ${notificationText(e)}`);
     return null;
   }
   const incoming = env.payload.map(migrateLegacyToolTerms);

@@ -541,6 +541,8 @@ mod tests {
 
     fn endmill() -> ToolEntry {
         ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,

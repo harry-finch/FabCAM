@@ -51,6 +51,8 @@ use ivac_core::sim::sweep::sweep_range;
 /// Callers override the kind-specific fields they care about.
 fn base_tool(id: u32, name: &str, kind: ToolKind, diameter_mm: f64) -> ToolEntry {
     ToolEntry {
+        substrate: None,
+        coating: None,
         physical_id: None,
         max_rpm: None,
         id,

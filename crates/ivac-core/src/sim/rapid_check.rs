@@ -333,6 +333,8 @@ mod tests {
         // from z_above_tip = 25 (top of flutes) upward.
         use crate::project::{Coolant, HolderShape, ToolEntry, ToolKind};
         let t = ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,
@@ -493,6 +495,8 @@ mod tests {
     fn laser_tool_skips_shank_pass_entirely() {
         use crate::project::{Coolant, HolderShape, ToolEntry, ToolKind};
         let t = ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,
@@ -567,6 +571,8 @@ mod tests {
     fn drill_no_flute_length_uses_diameter_times_six_body() {
         use crate::project::{Coolant, ToolEntry, ToolKind};
         let t = ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,
@@ -639,6 +645,8 @@ mod tests {
     fn laser_rapid_over_walls_does_not_alarm() {
         use crate::project::{Coolant, HolderShape, ToolEntry, ToolKind};
         let laser = ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,

@@ -57,6 +57,17 @@
           >{/each}</select
       ></label
     >
+    {#each ['substrate', 'coating'] as const as field (field)}
+      <label title={t(field === 'substrate' ? 'toolmeta.substrate_help' : 'toolmeta.coating_help')}>
+        {t(field === 'substrate' ? 'toolmeta.substrate' : 'toolmeta.coating')}
+        <input
+          value={tool[field] ?? ''}
+          placeholder={t('toolmeta.unspecified')}
+          oninput={(e) => onUpdateField(field, e.currentTarget.value || undefined)}
+        />
+      </label>
+    {/each}
+    <p class="metadata-help">{t('toolmeta.help')}</p>
     {#each geometry as field (field.key)}
       {#if fieldApplies(field.key, tool.kind)}
         <label
@@ -128,6 +139,11 @@
 </div>
 
 <style>
+  .metadata-help {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin: 0 0 4px;
+  }
   .field-error {
     color: var(--danger, #e87979);
     margin: 0;

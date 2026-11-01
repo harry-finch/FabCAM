@@ -1,12 +1,27 @@
 <script lang="ts">
+  import { t } from '../i18n';
   import { KIND_DISPLAY_LABELS } from '../state/tool_family';
   import type { ToolKind } from '../state/op_types';
   let {
     before,
     after,
   }: {
-    before: { label: string; name: string; kind: ToolKind; diameter: number };
-    after: { label: string; name: string; kind: ToolKind; diameter: number };
+    before: {
+      label: string;
+      name: string;
+      kind: ToolKind;
+      diameter: number;
+      substrate?: string | null;
+      coating?: string | null;
+    };
+    after: {
+      label: string;
+      name: string;
+      kind: ToolKind;
+      diameter: number;
+      substrate?: string | null;
+      coating?: string | null;
+    };
   } = $props();
 </script>
 
@@ -16,6 +31,8 @@
       <small>{copy.label}</small><strong>{copy.name}</strong><span
         >{KIND_DISPLAY_LABELS[copy.kind]} · Ø{copy.diameter} mm</span
       >
+      <span>{t('toolmeta.substrate')}: {copy.substrate || t('toolmeta.unspecified')}</span>
+      <span>{t('toolmeta.coating')}: {copy.coating || t('toolmeta.unspecified')}</span>
     </div>
   {/each}
 </div>

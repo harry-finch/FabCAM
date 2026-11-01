@@ -2087,5 +2087,11 @@
   "reuse.context.material_revision": "Materialrevision",
   "reuse.context.tool_id": "Lokale Werkzeugnummer",
   "reuse.context.tool_physical_id": "Physische Werkzeugidentität",
-  "reuse.strict_action": "Passenden getesteten Preset anwenden"
+  "reuse.strict_action": "Passenden getesteten Preset anwenden",
+  "toolmeta.substrate": "Schneidstoff",
+  "toolmeta.coating": "Beschichtung",
+  "toolmeta.unspecified": "Nicht angegeben",
+  "toolmeta.substrate_help": "Werkstoff des Fräsers, etwa Hartmetall oder HSS. Nicht der Werkstückwerkstoff. Eigene Angaben sind möglich.",
+  "toolmeta.coating_help": "Oberflächenbeschichtung, etwa TiAlN oder DLC. Für einen nachweislich unbeschichteten Fräser uncoated eingeben; bei unbekannter Beschichtung leer lassen.",
+  "toolmeta.help": "Nur beschreibende Angaben. Änderungen verändern keine Schnittwerte und können den Kontext eines getesteten Presets ungültig machen."
 }

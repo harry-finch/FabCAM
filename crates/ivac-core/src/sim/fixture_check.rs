@@ -600,6 +600,8 @@ mod tests {
         // holder (35) = 60 mm.
         use crate::project::{Coolant, HolderShape, ToolEntry, ToolKind};
         let t = ToolEntry {
+            substrate: None,
+            coating: None,
             max_rpm: None,
             physical_id: None,
             id: 1,

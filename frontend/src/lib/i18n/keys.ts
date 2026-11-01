@@ -1953,6 +1953,12 @@ export type MsgKey =
   | "toolform.tslot_head_dia"
   | "toolform.tslot_head_dia.title"
   | "toolform.z_above_tip"
+  | "toolmeta.coating"
+  | "toolmeta.coating_help"
+  | "toolmeta.help"
+  | "toolmeta.substrate"
+  | "toolmeta.substrate_help"
+  | "toolmeta.unspecified"
   | "tools.apply.invalid.title"
   | "tools.bullnose"
   | "tools.bullnose.corner_radius"
@@ -4383,6 +4389,12 @@ export const MSG_KEYS: readonly MsgKey[] = [
   "toolform.tslot_head_dia",
   "toolform.tslot_head_dia.title",
   "toolform.z_above_tip",
+  "toolmeta.coating",
+  "toolmeta.coating_help",
+  "toolmeta.help",
+  "toolmeta.substrate",
+  "toolmeta.substrate_help",
+  "toolmeta.unspecified",
   "tools.apply.invalid.title",
   "tools.bullnose",
   "tools.bullnose.corner_radius",

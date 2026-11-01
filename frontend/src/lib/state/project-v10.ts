@@ -1,3 +1,4 @@
+import { validateToolMetadata } from './tool-metadata';
 import { isProgramOnlyOp } from './op_types';
 import type { ProjectFile } from './project-types';
 import { validateCuttingStructure } from './cutting-parameters';
@@ -20,6 +21,7 @@ export function validateProjectV10(input: unknown): asserts input is ProjectFile
   validateProjectGeometry(value);
   const ids = new Set<number>();
   for (const t of value.tools) {
+    validateToolMetadata(t);
     if (!Number.isInteger(t.id) || t.id <= 0 || ids.has(t.id))
       throw new Error('Invalid or duplicate tool ID');
     ids.add(t.id);

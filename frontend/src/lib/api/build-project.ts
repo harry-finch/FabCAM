@@ -899,6 +899,8 @@ export function buildProject(
     },
     tools: state.tools.map((t) => ({
       ...buildTool(t),
+      substrate: t.substrate,
+      coating: t.coating,
       physical_id: t.physicalId,
       max_rpm: t.maxRpm,
     })),

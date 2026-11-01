@@ -73,6 +73,8 @@ pub(in crate::pipeline) fn closed_circle(center: Point2, radius: f64) -> Vec<Seg
 
 pub(in crate::pipeline) fn endmill(id: u32, diameter: f64) -> ToolEntry {
     ToolEntry {
+        substrate: None,
+        coating: None,
         max_rpm: None,
         physical_id: None,
         id,
@@ -128,6 +130,8 @@ pub(in crate::pipeline) fn endmill(id: u32, diameter: f64) -> ToolEntry {
 
 pub(in crate::pipeline) fn vbit() -> ToolEntry {
     ToolEntry {
+        substrate: None,
+        coating: None,
         max_rpm: None,
         physical_id: None,
         id: 1,
