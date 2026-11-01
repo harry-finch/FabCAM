@@ -4,9 +4,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ImportResponse } from '../api/types';
 import type { ProjectState } from './project.svelte';
 
-const io = vi.hoisted(() => ({ invoke: vi.fn() }));
+const io = vi.hoisted(() => ({ invoke: vi.fn(), open: vi.fn() }));
 vi.mock('../api/env', () => ({ isTauri: () => true }));
 vi.mock('@tauri-apps/api/core', () => ({ invoke: io.invoke }));
+vi.mock('@tauri-apps/plugin-dialog', () => ({ open: io.open }));
 vi.mock('./text_preview.svelte', () => ({ resetPreviewCache: vi.fn() }));
 
 import { History } from './history';
@@ -118,4 +119,20 @@ it('keeps the manual footprint fixed through source reload and atomic Undo/Redo'
   p.history.redo(p.target());
   expect(p.data.imports[0].source.bbox.min_x).toBe(80);
   expect(computeFootprint(p.stockSizingImport, p.data.stock)).toEqual(before);
+});
+
+it('reacquires a denied restored source and updates the actual selected path atomically', async () => {
+  const p = project(source({}));
+  io.invoke.mockRejectedValueOnce('Source is outside dialog-granted filesystem scope.');
+  io.invoke.mockResolvedValueOnce(source({ filename: 'selected.svg' }));
+  io.open.mockResolvedValueOnce('/w/selected.svg');
+  expect(await reimportFromPath(p, '/w/part.svg')).toBe(true);
+  expect(io.open).toHaveBeenCalledWith({
+    defaultPath: '/w/part.svg',
+    multiple: false,
+    directory: false,
+  });
+  expect(p.data.imports[0].lastImportPath).toBe('/w/selected.svg');
+  p.history.undo(p.target());
+  expect(p.data.imports[0].lastImportPath).toBe('/w/part.svg');
 });
