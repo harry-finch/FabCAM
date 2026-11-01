@@ -1,0 +1,36 @@
+{
+  "canonical_head": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+  "canonical_software_fingerprint": "974de18341dd476e16699b0dcf9bf76bd5fdc6eaf5b4b70ba11aa5a01be5377d",
+  "canonical_software_files_unchanged": 1318,
+  "worktrees": [
+    {
+      "worktree": "ivacam",
+      "HEAD": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_unchanged": true,
+      "implementation_worktree": false
+    },
+    {
+      "worktree": "FabCAM-safety-audit-1",
+      "HEAD": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_unchanged": true,
+      "implementation_worktree": false
+    },
+    {
+      "worktree": "FabCAM-safety-fix-1",
+      "HEAD": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_unchanged": false,
+      "implementation_worktree": true
+    },
+    {
+      "worktree": "FabCAM-v1-freeze",
+      "HEAD": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "status_unchanged": true,
+      "implementation_worktree": false
+    }
+  ],
+  "audit_files_unchanged": 133,
+  "real_index_empty": true,
+  "commits_created": 0,
+  "software_files_exact": 1325,
+  "software_fingerprint": "367d27b7864caa6a30fb35625e75530ac5024b2ef612303ac8ed1d3cf3f66b4e"
+}

@@ -1,5 +1,21 @@
 # FabCAM — current status
 
+**SAFETY-FIX-1 — accepted bounded software-qualified containment; locally consolidated (2026-11-01).**
+Canonical V1.1 remains `16eb34fd07354627b3c3c2f48a227b30ba1cc3c2`.
+Backend refusals contain unproven helical entry, ineffective two-sided holding /
+untransformed Back inputs, and legacy Profile overcut. No schema migration.
+[Source-bound qualification and limitations](../releases/SAFETY_FIX_1_MOTION_GUARDS.md).
+Software `e09fdca` matches all 1,325 accepted source files.
+Three local commits authorized; no functional requalification of Helix, unrestricted
+two-sided machining or legacy overcut. **HARD STOP; no canonical integration,
+installer, release or physical acceptance.**
+
+Inherited ALPHA-1–4 and TOOL-META remain source-bound to the accepted integration
+report. Software, human/native and physical acceptance are separate gates.
+
+<details>
+<summary>Historical status checkpoints — original source-bound claims and sequencing</summary>
+
 **INT-ALPHA-1 — accepted bounded software candidate; locally consolidated (2026-11-01).**
 Accepted ALPHA-4 `78be459` already inherits ALPHA-1–3.2. TOOL-META descriptive
 specifications are ported onto V10 without machining changes or catalogue sync.
@@ -167,3 +183,5 @@ Acceptance**, using the separate macOS test account and the newly rebuilt
 Older QUAL-1C/SEC-1 bundles remain preserved. No launch in the usual application-data
 profile. Supervised QUAL-2 follows only by separate authorization.
 **HARD STOP after local integration, native rebuild and report. No push.**
+
+</details>

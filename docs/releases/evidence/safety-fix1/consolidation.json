@@ -1,0 +1,88 @@
+{
+  "milestone": "SAFETY-FIX-1",
+  "acceptance": "Human accepted bounded software-qualified safety containment and authorized exactly three local commits.",
+  "base": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+  "branch": "feature/safety-fix-1-motion-guards",
+  "implementation_commit": "aac60647e3206bd27f5d30aae083fa634ca3e470",
+  "software_commit": "e09fdca4fe884af7ff5cec48d473c86b42829f6a",
+  "documentation_commit": "The commit adding this receipt; resolve with Git history. Final full SHA is returned to the user after commit.",
+  "qualified_file_count": 1325,
+  "qualified_software_fingerprint": "367d27b7864caa6a30fb35625e75530ac5024b2ef612303ac8ed1d3cf3f66b4e",
+  "indexed_and_committed_logical_files_exact": true,
+  "preserved_symbolic_links": 11,
+  "release_gate_rerun": false,
+  "reason": "Qualified executable-source and test bytes remain unchanged; documentation and Git consolidation only.",
+  "commit_groups": [
+    {
+      "group": 1,
+      "paths": [
+        "crates/ivac-core/src/pipeline.rs",
+        "crates/ivac-core/src/pipeline/motion_guards.rs",
+        "crates/ivac-core/src/pipeline/two_sided_emit.rs",
+        "crates/ivac-core/src/pipeline/warnings.rs",
+        "crates/ivac-wasm/src/lib.rs",
+        "frontend/src/lib/components/error-display.ts",
+        "frontend/src/lib/i18n/keys.ts",
+        "frontend/src/lib/i18n/messages/de.json",
+        "frontend/src/lib/i18n/messages/en.json"
+      ],
+      "note": "Production hunks only in warnings.rs."
+    },
+    {
+      "group": 2,
+      "paths": [
+        "crates/ivac-core/src/pipeline/offset_builder.rs",
+        "crates/ivac-core/src/pipeline/tests.rs",
+        "crates/ivac-core/src/pipeline/warnings.rs",
+        "crates/ivac-core/tests/safety_motion_guards.rs",
+        "crates/ivac-core/tests/shopbot_m2_post.rs",
+        "crates/ivac-core/tests/snapshots_drill_tabs_whirl.rs",
+        "frontend/src/lib/components/error-display.test.ts",
+        "tests/fixtures/safety-fix1/island-helix.json",
+        "tests/fixtures/safety-fix1/profile-helix.json",
+        "tests/fixtures/safety-fix1/profile-overcut.json",
+        "tests/fixtures/safety-fix1/two-sided.json"
+      ],
+      "depends_on": 1,
+      "note": "Remaining test-only hunks in warnings.rs."
+    }
+  ],
+  "other_worktrees": [
+    {
+      "worktree": "ivacam",
+      "HEAD": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_unchanged": true
+    },
+    {
+      "worktree": "FabCAM-safety-audit-1",
+      "HEAD": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+      "status_unchanged": true
+    },
+    {
+      "worktree": "FabCAM-v1-freeze",
+      "HEAD": "85a93c4a467ff5965655d5737354d9500c2e94fc",
+      "status_unchanged": true
+    }
+  ],
+  "excluded": [
+    "private data",
+    "raw logs",
+    "local binaries",
+    "compiled assets",
+    "caches",
+    "unrelated changes"
+  ],
+  "scope_exclusions": [
+    "functional requalification of Helix",
+    "unrestricted two-sided machining",
+    "legacy overcut re-enablement",
+    "canonical integration",
+    "merge",
+    "push",
+    "installer",
+    "release",
+    "physical machining",
+    "next milestone"
+  ],
+  "checkpoint": "HARD STOP after three local commits; final clean state and documentation SHA verified after commit."
+}

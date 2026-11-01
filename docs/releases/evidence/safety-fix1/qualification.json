@@ -1,0 +1,154 @@
+{
+  "base": "16eb34fd07354627b3c3c2f48a227b30ba1cc3c2",
+  "branch": "feature/safety-fix-1-motion-guards",
+  "software_files": 1325,
+  "software_fingerprint": "367d27b7864caa6a30fb35625e75530ac5024b2ef612303ac8ed1d3cf3f66b4e",
+  "final_canonical_run_exit_code": 0,
+  "canonical_runs": 2,
+  "superseded_run_reason": "First 20/20 run predates final synthesized-start-depth and additional Front envelope corrections; executable source changed, then canonical gate reran once on final stable fingerprint.",
+  "mandatory_groups": [
+    "cargo fmt --check",
+    "cargo clippy -Dwarnings (with pedantic)",
+    "cargo test --workspace",
+    "xtask schema-check",
+    "xtask version-check",
+    "readme parity",
+    "pnpm install",
+    "codegen drift",
+    "i18n keys drift",
+    "pnpm run lint",
+    "pnpm run check",
+    "pnpm run test",
+    "pnpm run build",
+    "wasm-pack build (web)",
+    "wasm cps size guard",
+    "cargo-deny check",
+    "ui smoke (headless)",
+    "CLI trust and transactional export",
+    "SEC1 release boundary regressions",
+    "candidate identity regressions"
+  ],
+  "rust_passed": 1675,
+  "rust_failed": 0,
+  "rust_intentionally_ignored": 1,
+  "frontend_passed": 1567,
+  "frontend_existing_skipped": 1,
+  "focused_safety_regressions": 13,
+  "fixed_cnc_cases": 109,
+  "accepted_exact_complete_responses": 96,
+  "existing_exact_refusals": 13,
+  "targeted_native_http_entries": 14,
+  "wasm_checks": [
+    {
+      "name": "helix-island",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1",
+          "safety_guard": "helical_entry"
+        },
+        "message": "Helical entry/descent cannot be proven clear of retained geometry. Use a separately supported Direct or Ramp setup; no strategy was substituted",
+        "recovery_hint": "Review the refused entry, holding or transformation. No program generated; saved parameters were not changed."
+      },
+      "no_program": true
+    },
+    {
+      "name": "helix-profile",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1",
+          "safety_guard": "helical_entry"
+        },
+        "message": "Helical entry/descent cannot be proven clear of retained geometry. Use a separately supported Direct or Ramp setup; no strategy was substituted",
+        "recovery_hint": "Review the refused entry, holding or transformation. No program generated; saved parameters were not changed."
+      },
+      "no_program": true
+    },
+    {
+      "name": "overcut",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "params": {
+          "op_id": "1",
+          "safety_guard": "legacy_overcut"
+        },
+        "message": "Legacy Profile overcut requires renewed winding and retained-side geometric qualification. Explicit CAD geometry is unaffected",
+        "recovery_hint": "Review the refused entry, holding or transformation. No program generated; saved parameters were not changed."
+      },
+      "no_program": true
+    },
+    {
+      "name": "ordinary-profile",
+      "accepted": true,
+      "moves": 20,
+      "native_program_and_decoded_moves_exact": true
+    },
+    {
+      "name": "holding",
+      "refused": true,
+      "error": {
+        "kind": "misconfigured",
+        "code": "two_sided_through",
+        "params": {
+          "op_id": "1",
+          "removal_mm": "2",
+          "safety_guard": "two_sided_holding",
+          "thickness_mm": "2"
+        },
+        "message": "two-sided job: operation #1 cuts clean through the 2 mm stock from the front, so it can't be flipped and re-registered",
+        "recovery_hint": "Reduce the front op's depth below the stock thickness, add holding tabs, or move the through-cut to the back (last) side."
+      },
+      "no_program": true
+    },
+    {
+      "name": "shallow-pair",
+      "accepted": true
+    },
+    {
+      "name": "deep-start-thread",
+      "refused": true,
+      "no_program": true,
+      "error": {
+        "kind": "misconfigured",
+        "code": "two_sided_through",
+        "params": {
+          "op_id": "1",
+          "removal_mm": "3",
+          "safety_guard": "two_sided_holding",
+          "thickness_mm": "2"
+        },
+        "message": "two-sided job: operation #1 cuts clean through the 2 mm stock from the front, so it can't be flipped and re-registered",
+        "recovery_hint": "Reduce the front op's depth below the stock thickness, add holding tabs, or move the through-cut to the back (last) side."
+      }
+    }
+  ],
+  "binary_sha256": {
+    "candidate-ivac-final": "3d60da221ad568eb3e2788bef11cba1614854d0eeb76d6c3d16952f68feb99eb",
+    "candidate-server-final": "d7e6ec575d2f2b8b1fffb4fb32394411dc357ca24ffdcdd19ea7378e6842ea5b",
+    "ivac_wasm_bg.wasm": "d8b2093de173475f5cd0cacfe0a005f727e746f529e2270f72008b618a07ec71"
+  },
+  "raw_log_sha256": {
+    "pre-release-superseded.log": "2cb5fe89346013238afb2eba4157f138eaf69b3820fd4a9718b7e41ad4e2c991",
+    "pre-release-final.log": "e24d7f1f38a42f2d3a18569de34b3c8edff1bacfa70d2f6b656a7c1c3df51f9f",
+    "targeted-final.log": "31420ef8f60582df48f1cdf49c42f20f2f1fab03c55215a4f551a9d98e5cb695",
+    "runtime-final.log": "1ffbd03d797cc98320f286ea98c3813a1beb70d5bb4ce4f1ba49cf010f6a8f27",
+    "pair-stream-final.log": "8c967d37bc14582c0ec24d1a967078efeae11fbf38307978b5da8e0423fc6a78",
+    "wasm-final.log": "add98c68c5ce52e91bbc4c27d6a46f7cb85368849d69145979f9aacc04a15b76"
+  },
+  "independent_review": {
+    "model": "Astra",
+    "effort": "Medium",
+    "mode": "read-only",
+    "concrete_findings_closed": 6,
+    "final_rereview": "No remaining concrete bypass found within these corrections; tests inspected, not run by reviewer."
+  },
+  "commits_created": 0,
+  "installer_built": false,
+  "physical_qualification": false,
+  "human_acceptance": "pending",
+  "decision": "CONDITIONAL GO for bounded software containment review only; HARD STOP"
+}
